@@ -4,10 +4,6 @@ if (!defined('ROOT_PAGE')) { die('not allowed'); }
 
 $claim = LBRY::findTopPublicFreeClaim($name);
 
-//echo '<pre>';
-//print_r($claim);
-//die('over');
-
 if ($claim)
 {
   $getResult = LBRY::api('get', ['name' => $name, 'claim_id' => $claim['claim_id']]);
@@ -15,6 +11,8 @@ if ($claim)
   if (isset($getResult['completed']) && $getResult['completed'] && isset($getResult['download_path']))
   {
     $path = $getResult['download_path'];
+    //TODO, verify it is an image
+    //TODO: serve the correct content type!
     header('Content-type: image/jpeg');
     header('Content-length: ' . filesize($path));
     readfile($getResult['download_path']);

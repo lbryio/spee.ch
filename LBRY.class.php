@@ -37,7 +37,7 @@ class LBRY
     $freePublicClaims = array_filter($claims['claims'], function($claim) {
       $metadata = json_decode($claim['value'], true);
       return
-        //TODO: Expand these checks
+        //TODO: Expand these checks AND verify it is an image claim!
         ($metadata['license'] == "Public Domain" || stripos($metadata['license'], 'Creative Commons') !== false) &&
         !isset($metadata['fee']);
     });
