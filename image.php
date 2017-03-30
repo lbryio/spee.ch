@@ -11,9 +11,7 @@ if ($claim)
   if (isset($getResult['completed']) && $getResult['completed'] && isset($getResult['download_path']))
   {
     $path = $getResult['download_path'];
-    //TODO, verify it is an image
-    //TODO: serve the correct content type!
-    header('Content-type: image/jpeg');
+    header('Content-type: ' . $getResult['metadata']['content_type']);
     header('Content-length: ' . filesize($path));
     readfile($getResult['download_path']);
   }
