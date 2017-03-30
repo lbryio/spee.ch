@@ -20,12 +20,12 @@ class LBRY
     {
       $responseData = json_decode($serverOutput, true);
 
-      if (isset($responseData['result'])) {
-        return $responseData['result'];
+      if (isset($responseData['error'])) {
+        throw new Exception($responseData['error']);
       }
 
-      if (isset($responseData[0])) {
-        return $responseData[0];
+      if (isset($responseData['result'])) {
+        return $responseData['result'];
       }
     }
   }
@@ -44,6 +44,7 @@ class LBRY
       return
         //TODO: Expand these checks
         ($metadata['license'] == "Public Domain" || stripos($metadata['license'], 'Creative Commons') !== false) &&
+        in_array($metadata['content_type'], ['image/jpeg', 'image/png']) &&
         !isset($metadata['fee']);
     });
 
