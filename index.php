@@ -1,24 +1,43 @@
 <?php
 
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 define('ROOT_PAGE', 1);
 
 require_once './LBRY.class.php';
 
 $name = ltrim(urldecode($_SERVER['REQUEST_URI']), '/');
-
 if ($name)
 {
-  error_reporting(E_ALL);
-  ini_set('display_errors', 1);
-  
   include './image.php';
+  exit(0);
+}
+if (isset($_POST['publish']) && isset($_POST['name']) && isset($_FILES['file']))
+{
+  $success = LBRY::publishPublicClaim($_POST['name'], $_FILES['file']['tmp_name']);
+  if ($success)
+  {
+    header('Location: /' . $_POST['name'] . '?new=1');
+  }
+  else
+  {
+    echo '<p>Something went wrong publishing your content. We are only somewhat sorry.</p>';
+  }
   exit(0);
 }
 ?>
 <!DOCTYPE html>
 <h1>spee.ch</h1>
-<p>OMG we are live, it is actually happening. It is still happening.</p>
-<p>In just a few hours, this site will morph from this utterly bare 6 lines of HTML into a decentralized, censorship-resistant, truly free image sharing site powered by <a href="https://lbry.io">LBRY</a>.
-<p>You can watch it happen in real time, starting at 6pm EST tonight (March 29th):</p>
+<p>spee.ch is a single-serving site that read and publish images to and from the LBRY blockchain.</p>
+<p>Examples:</p>
+<ul>
+  <?php foreach(['thailand', 'doitlive', 'coconuts', 'cow-air-balloon'] as $sampleName): ?>
+    <li><a href="/<?php echo $sampleName ?>">spee.ch/<?php echo $sampleName ?></a></li>
+  <?php endforeach ?>
+</ul>
+<h3>Publish Your Own</h3>
+<?php include './publish.php' ?>
+<h3>About This Site</h3>
+<p>It was built live in a little over 2 hours on March 29th, 2017. You can watch the video here:</p>
 <iframe width="560" height="315" src="https://www.youtube.com/embed/C9LCapt_OYw" frameborder="0" allowfullscreen></iframe>
-<p><a href="https://github.com/lbryio/spee.ch">GitHub repo</a></p>
