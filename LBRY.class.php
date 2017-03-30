@@ -13,21 +13,22 @@ class LBRY
     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['method' => $function, 'params' => $params]));
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-    $server_output = curl_exec($ch);
+    $serverOutput = curl_exec($ch);
+    curl_close($ch);
 
-    if ($server_output)
+    if ($serverOutput)
     {
-      $responseData = json_decode($server_output, true);
+      $responseData = json_decode($serverOutput, true);
       if (isset($responseData['error']))
       {
         throw new Exception($responseData['error']['message'] ?? 'Something unknown went wrong');
       }
-      return $responseData['result'];
+      if (isset($responseData['result'])) 
+      {
+        return $responseData['result'];
+      }
+      throw new Exception('Received unknown response format.');
     }
-
-    curl_close ($ch);
-
-    return $server_output;
   }
 
   public static function publishPublicClaim($name, $tmpFileName)
@@ -54,6 +55,7 @@ class LBRY
   public static function findTopPublicFreeClaim($name)
   {
     $claims = LBRY::api('claim_list', ['name' => $name]);
+
     if (!$claims || !isset($claims['claims']))
     {
       return null;
