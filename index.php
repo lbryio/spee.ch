@@ -8,26 +8,36 @@ define('ROOT_PAGE', 1);
 require_once './LBRY.class.php';
 
 $name = ltrim(urldecode($_SERVER['REQUEST_URI']), '/');
-if ($name == 'publish')
-{
-  include './publish.php';
-  exit(0);
-}
-elseif ($name)
+if ($name)
 {
   include './image.php';
+  exit(0);
+}
+if (isset($_POST['publish']) && isset($_POST['name']) && isset($_FILES['file']))
+{
+  $success = LBRY::publishPublicClaim($_POST['name'], $_FILES['file']['tmp_name']);
+  if ($success)
+  {
+    header('Location: /' . $_POST['name'] . '?new=1');
+  }
+  else
+  {
+    echo '<p>Something went wrong publishing your content. We are only somewhat sorry.</p>';
+  }
   exit(0);
 }
 ?>
 <!DOCTYPE html>
 <h1>spee.ch</h1>
-<p>spee.ch is a single-serving site that reads (and will soon publish) images to and from the LBRY blockchain.</p>
-<p>You can watch live right now as it is being built!</p>
-<iframe width="560" height="315" src="https://www.youtube.com/embed/C9LCapt_OYw" frameborder="0" allowfullscreen></iframe>
-<p>Here are some sample images:</p>
+<p>spee.ch is a single-serving site that read and publish images to and from the LBRY blockchain.</p>
+<p>Examples:</p>
 <ul>
-  <?php foreach(['thailand', 'doitlive', 'coconuts', 'cow-air-balloon'] as $name): ?>
-    <li><a href="/<?php echo $name ?>">spee.ch/<?php echo $name ?></a></li>
+  <?php foreach(['thailand', 'doitlive', 'coconuts', 'cow-air-balloon'] as $sampleName): ?>
+    <li><a href="/<?php echo $sampleName ?>">spee.ch/<?php echo $sampleName ?></a></li>
   <?php endforeach ?>
 </ul>
-<p>Publishing coming in just a few minutes!</p>
+<h3>Publish Your Own</h3>
+<?php include './publish.php' ?>
+<h3>About This Site</h3>
+<p>It was built live in a little over 2 hours on March 29th, 2017. You can watch the video here:</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/C9LCapt_OYw" frameborder="0" allowfullscreen></iframe>

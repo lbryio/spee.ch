@@ -19,7 +19,7 @@ if ($claim)
   }
   elseif (isset($getResult['written_bytes']))
   {
-    echo 'This image is on it\'s way... maybe.<br/>';
+    echo 'This image is on it\'s way...<br/>';
     echo 'Received: ' . $getResult['written_bytes'] . " / " . $getResult['total_bytes'] . ' bytes';
   }
   else
@@ -27,9 +27,14 @@ if ($claim)
     echo 'There seems to be a valid claim, but are having trouble retrieving the content.';
   }
 }
+elseif (isset($_GET['new']) && $_GET['new'])
+{
+  echo 'Your image is on the way. It can take a few minutes to reach the blockchain and be public. You can refresh this page to check the progress.';
+}
 else
 {
-  echo 'No valid claim for this name. Make one! https://lbry.io/quickstart';
+  echo 'No valid claim for this name. Make one!';
+  include './publish.php';
 }
 
 exit(0);

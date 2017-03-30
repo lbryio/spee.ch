@@ -18,12 +18,37 @@ class LBRY
     if ($server_output)
     {
       $responseData = json_decode($server_output, true);
+      if (isset($responseData['error']))
+      {
+        throw new Exception($responseData['error']['message'] ?? 'Something unknown went wrong');
+      }
       return $responseData['result'];
     }
 
     curl_close ($ch);
 
     return $server_output;
+  }
+
+  public static function publishPublicClaim($name, $tmpFileName)
+  {
+    $filePath = '/home/lbry/spee.ch/publishes/newupload-' . random_int(1, PHP_INT_MAX);
+
+    move_uploaded_file($tmpFileName, $filePath);
+
+    $apiResult = LBRY::api('publish', [
+      'name' => $name,
+      'bid' => 1,
+      'file_path' => $filePath,
+      'description' => 'An image published from spee.ch',
+      'author' => 'https://spee.ch',
+      'language' => 'en',
+      'license' => 'Public Domain',
+      'nsfw' => 0,
+      'title' => 'Image published from spee.ch'
+    ]);
+
+    return isset($apiResult['claim_id']);
   }
 
   public static function findTopPublicFreeClaim($name)

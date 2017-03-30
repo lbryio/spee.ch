@@ -1,15 +1,14 @@
-<?php
-
-if (isset($_POST['file']))
-{
-  print_r($_POST['file']);
-}
-?>
-<!DOCTYPE html>
-<h1>Publish</h1>
-<form method="POST" action="/publish" enctype="multipart/form-data">
+<form method="POST" action="/" enctype="multipart/form-data">
   <div>
     <input type="file" name="file" />
   </div>
-  <input type="submit" name="key" value="Go" />
+  <?php if (isset($name) && $name != ''): ?>
+    <input type="hidden" name="name" value="<?php echo $name ?>" />
+  <?php else: ?>
+    <div>
+      lbry://<input type="text" name="name" />
+    </div>
+  <?php endif ?>
+  <input type="submit" name="publish" value="Go" />
+  <p>Publishing can take a few moments. Please be patient.</p>
 </form>
