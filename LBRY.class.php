@@ -13,22 +13,27 @@ class LBRY
     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['method' => $function, 'params' => $params]));
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-    $server_output = curl_exec($ch);
+    $serverOutput = curl_exec($ch);
+    curl_close($ch);
 
-    if ($server_output)
+    if ($serverOutput)
     {
-      $responseData = json_decode($server_output, true);
-      return $responseData['result'];
+      $responseData = json_decode($serverOutput, true);
+
+      if (isset($responseData['error'])) {
+        throw new Exception($responseData['error']);
+      }
+
+      if (isset($responseData['result'])) {
+        return $responseData['result'];
+      }
     }
-
-    curl_close ($ch);
-
-    return $server_output;
   }
 
   public static function findTopPublicFreeClaim($name)
   {
     $claims = LBRY::api('claim_list', ['name' => $name]);
+
     if (!$claims || !isset($claims['claims']))
     {
       return null;
@@ -39,6 +44,7 @@ class LBRY
       return
         //TODO: Expand these checks AND verify it is an image claim!
         ($metadata['license'] == "Public Domain" || stripos($metadata['license'], 'Creative Commons') !== false) &&
+        in_array($metadata['content_type'], ['image/jpeg', 'image/png']) &&
         !isset($metadata['fee']);
     });
 
