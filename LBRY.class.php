@@ -23,7 +23,7 @@ class LBRY
       {
         throw new Exception($responseData['error']['message'] ?? 'Something unknown went wrong');
       }
-      if (isset($responseData['result'])) 
+      if (isset($responseData['result']))
       {
         return $responseData['result'];
       }
@@ -66,7 +66,6 @@ class LBRY
       return
         //TODO: Expand these checks AND verify it is an image claim!
         ($metadata['license'] == "Public Domain" || stripos($metadata['license'], 'Creative Commons') !== false) &&
-        in_array($metadata['content_type'], ['image/jpeg', 'image/png']) &&
         !isset($metadata['fee']);
     });
 
