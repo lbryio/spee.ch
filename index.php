@@ -29,7 +29,7 @@ if (isset($_POST['publish']) && isset($_POST['name']) && isset($_FILES['file']))
 ?>
 <!DOCTYPE html>
 <h1>spee.ch</h1>
-<p>spee.ch is a single-serving site that reads and publishes images to and from the LBRY blockchain.</p>
+<p>spee.ch is a single-serving site that reads and publishes images to and from the <a href="https://lbry.io">LBRY</a> blockchain.</p>
 <p>Examples:</p>
 <ul>
   <?php foreach(['thailand', 'doitlive', 'coconuts', 'cow-air-balloon'] as $sampleName): ?>
