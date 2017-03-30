@@ -33,7 +33,7 @@ class LBRY
 
   public static function publishPublicClaim($name, $tmpFileName)
   {
-    $filePath = '/home/lbry/spee.ch/publishes/newupload-' . random_int(1, PHP_INT_MAX);
+    $filePath = '/home/lbry/publishes/newupload-' . random_int(1, PHP_INT_MAX);
 
     move_uploaded_file($tmpFileName, $filePath);
 
