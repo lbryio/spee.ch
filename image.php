@@ -11,14 +11,29 @@ if ($claim)
   if (isset($getResult['completed']) && $getResult['completed'] && isset($getResult['download_path']))
   {
     $path = $getResult['download_path'];
-//    $validType = isset($getResult['content_type']) && in_array($getResult['content_type'], ['image/jpeg', 'image/png']);
-    header('Content-type: image/jpeg');
-    header('Content-length: ' . filesize($path));
-    readfile($getResult['download_path']);
+    $validType = isset($getResult['content_type']) && in_array($getResult['content_type'], ['image/jpeg', 'video/mp4']);
+    if ($validType){
+      $image = isset($getResult['content_type']) && in_array($getResult['content_type'], ['image/jpeg']);
+      $mp4 = isset($getResult['content_type']) && in_array($getResult['content_type'], ['video/mp4']);
+        if ($image) {
+          header('Content-type: image/jpeg');
+          header('Content-length: ' . filesize($path));
+          readfile($getResult['download_path']);
+        } elseif ($mp4) {
+          header('Content-type: video/mp4');
+          header('Content-length: ' . filesize($path));
+          readfile($getResult['download_path']);  
+        }
+        else 
+        {
+          echo 'not valid jpeg or mp4...<br/>';
+        }//endif imagemp4
+      
+    }//endif validType
   }
   elseif (isset($getResult['written_bytes']))
   {
-    echo 'This image is on it\'s way...<br/>';
+    echo 'This image/mp4 is on it\'s way...<br/>';
     echo 'Received: ' . $getResult['written_bytes'] . " / " . $getResult['total_bytes'] . ' bytes';
   }
   else
