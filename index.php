@@ -28,7 +28,7 @@ if (isset($_POST['publish']) && isset($_POST['name']) && isset($_FILES['file']))
 }
 ?>
 <!DOCTYPE html>
-<h1>spee.ch</h1>
+<h1><img src="https://spee.ch/speechlogo" alt="spee.ch logo" style="max-height: 36px; vertical-align: middle; max-width: 36px;" />spee.ch</h1>
 <p>spee.ch is a single-serving site that reads and publishes images to and from the <a href="https://lbry.io">LBRY</a> blockchain.</p>
 <p>Examples:</p>
 <ul>
