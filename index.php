@@ -27,13 +27,13 @@ if (isset($name) && $name != '')
 {
   $tpl->select('//has-name/input')[0]
     ->setAttribute('value', $name);
-  $node = $tpl->select('//needs-name')[0];
-  $node->parentNode->removeChild($node);
+  $tpl->select('//has-name')[0]->extractNode();
+  $tpl->select('//needs-name')[0]->removeNode();
 }
 else
 {
-  $node = $tpl->select('//has-name')[0];
-  $node->parentNode->removeChild($node);
+  $tpl->select('//has-name')[0]->removeNode();
+  $tpl->select('//needs-name')[0]->extractNode();
 }
 
 echo "<!DOCTYPE html>\n", $tpl->saveHtml();
