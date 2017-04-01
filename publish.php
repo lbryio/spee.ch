@@ -8,7 +8,7 @@ if (isset($_POST['publish']) && isset($_POST['name']) && isset($_FILES['file']))
 
   if ($success)
   {
-    header('Location: /' . $_POST['name'] . '?new=1');
+    header('Location: /' . $_POST['name'] . '?new');
   }
   else
   {

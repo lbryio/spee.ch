@@ -6,17 +6,19 @@
         <li class="example"><a href="">spee.ch<id/></a></li>
     </ul>
 </header>
-<section>
+<section class="publish">
     <h1>Publish your own</h1>
 
+    <success>
+        <p>Your image is on the way. It can take a few minutes to reach the blockchain and be public. You can refresh this page to check the progress.</p>
+    </success>
+
     <form method="POST" action="/" enctype="multipart/form-data">
-        <has-name>
+        <unclaimed>
             <p>No valid claim for this name. Make one!</p>
-            <input type="hidden" name="name" value="" />
-        </has-name>
-        <needs-name>
-            <div>lbry://<input type="text" name="name" /></div>
-        </needs-name>
+        </unclaimed>
+
+        <div>lbry://<input type="text" name="name" /></div>
 
         <div><input type="file" name="file" /></div>
 

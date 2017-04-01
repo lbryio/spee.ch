@@ -14,6 +14,7 @@ require 'image.php';
 require 'publish.php';
 
 $tpl = (new DocumentFactory)->createFromUri('templates/home.html');
+$publish = $tpl->select('//section[@class = "publish"]')[0];
 
 // Create list of examples:
 $tpl->select('//li[@class = "example"]')->repeatNode(EXAMPLES, function($node, $item) {
@@ -22,18 +23,27 @@ $tpl->select('//li[@class = "example"]')->repeatNode(EXAMPLES, function($node, $
   $link->append("/{$item}");
 });
 
-// If we have a name, don't show the name field in the form:
-if (isset($name))
+// The publish was completed:
+if (isset($name) && isset($_GET['new']))
 {
-  $tpl->select('//has-name/input')[0]
-    ->setAttribute('value', $name);
-  $tpl->select('//has-name')[0]->extractNode();
-  $tpl->select('//needs-name')[0]->removeNode();
+  $publish->select('success')[0]->extractNode();
+  $publish->select('form')[0]->removeNode();
 }
 else
 {
-  $tpl->select('//has-name')[0]->removeNode();
-  $tpl->select('//needs-name')[0]->extractNode();
+  $publish->select('success')[0]->removeNode();
+
+  // Pre-fill the name field:
+  if (isset($name))
+  {
+    $publish->select('form/unclaimed')[0]->extractNode();
+    $publish->select('form//input[@name = "name"]')[0]
+      ->setAttribute('value', $name);
+  }
+  else
+  {
+    $publish->select('form/unclaimed')[0]->removeNode();
+  }
 }
 
 echo "<!DOCTYPE html>\n", $tpl->saveHtml();
