@@ -23,7 +23,7 @@ $tpl->select('//li[@class = "example"]')->repeatNode(EXAMPLES, function($node, $
 });
 
 // If we have a name, don't show the name field in the form:
-if (isset($name) && $name != '')
+if (isset($name))
 {
   $tpl->select('//has-name/input')[0]
     ->setAttribute('value', $name);

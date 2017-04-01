@@ -4,7 +4,10 @@ if (!defined('ROOT_PAGE')) { die('not allowed'); }
 
 $name = ltrim(urldecode($_SERVER['REQUEST_URI']), '/');
 
-if (!$name) return;
+if (!$name) {
+  unset($name);
+  return;
+}
 
 $claim = LBRY::findTopPublicFreeClaim($name);
 
