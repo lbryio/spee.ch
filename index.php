@@ -7,7 +7,9 @@ define('ROOT_PAGE', 1);
 
 require_once './LBRY.class.php';
 
-$name = ltrim(urldecode($_SERVER['REQUEST_URI']), '/');
+$urlParts = parse_url($_SERVER['REQUEST_URI']);
+$name = ltrim($urlParts['path'], '/');
+
 if ($name)
 {
   include './image.php';
