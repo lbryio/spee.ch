@@ -9,11 +9,10 @@ if (isset($_POST['publish']) && isset($_POST['name']) && isset($_FILES['file']))
   if ($success)
   {
     header('Location: /' . $_POST['name'] . '?new');
+    exit;
   }
   else
   {
-    echo '<p>Something went wrong publishing your content. We are only somewhat sorry.</p>';
+    $publishFailed = true;
   }
-
-  exit;
 }

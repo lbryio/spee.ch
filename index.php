@@ -27,11 +27,20 @@ $tpl->select('//li[@class = "example"]')->repeatNode(EXAMPLES, function($node, $
 if (isset($name) && isset($_GET['new']))
 {
   $publish->select('success')[0]->extractNode();
+  $publish->select('failure')[0]->removeNode();
   $publish->select('form')[0]->removeNode();
 }
+// The publish failed:
+else if (isset($publishFailed)) {
+  $publish->select('success')[0]->removeNode();
+  $publish->select('failure')[0]->extractNode();
+  $publish->select('form')[0]->removeNode();
+}
+// SHow the publish form:
 else
 {
   $publish->select('success')[0]->removeNode();
+  $publish->select('failure')[0]->removeNode();
 
   // Pre-fill the name field:
   if (isset($name))
