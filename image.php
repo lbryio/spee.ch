@@ -4,7 +4,8 @@ use Stoatally\Dom\DocumentFactory;
 
 if (!defined('ROOT_PAGE')) { die('not allowed'); }
 
-$name = ltrim(urldecode($_SERVER['REQUEST_URI']), '/');
+$urlParts = parse_url($_SERVER['REQUEST_URI']);
+$name = ltrim($urlParts['path'], '/');
 
 if (!$name)
 {
