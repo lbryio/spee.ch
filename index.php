@@ -1,45 +1,58 @@
 <?php
 
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+use Stoatally\Dom\DocumentFactory;
 
-define('ROOT_PAGE', 1);
+const EXAMPLES = ['thailand', 'doitlive', 'coconuts', 'cow-air-balloon'];
+const ROOT_PAGE = true;
 
+error_reporting(-1);
+ini_set('display_errors', true);
+
+require 'vendor/autoload.php';
 require_once './LBRY.class.php';
+require 'image.php';
+require 'publish.php';
 
-$urlParts = parse_url($_SERVER['REQUEST_URI']);
-$name = ltrim($urlParts['path'], '/');
+$tpl = (new DocumentFactory)->createFromUri('templates/home.html');
+$publish = $tpl->select('//section[@class = "publish"]')[0];
 
-if ($name)
+// Create list of examples:
+$tpl->select('//li[@class = "example"]')->repeatNode(EXAMPLES, function($node, $item) {
+  $link = $node->select('a')[0];
+  $link->setAttribute('href', "/{$item}");
+  $link->append("/{$item}");
+});
+
+// The publish was completed:
+if (isset($name) && isset($_GET['new']))
 {
-  include './image.php';
-  exit(0);
+  $publish->select('success')[0]->extractNode();
+  $publish->select('failure')[0]->removeNode();
+  $publish->select('form')[0]->removeNode();
 }
-if (isset($_POST['publish']) && isset($_POST['name']) && isset($_FILES['file']))
+// The publish failed:
+else if (isset($publishFailed)) {
+  $publish->select('success')[0]->removeNode();
+  $publish->select('failure')[0]->extractNode();
+  $publish->select('form')[0]->removeNode();
+}
+// SHow the publish form:
+else
 {
-  $success = LBRY::publishPublicClaim($_POST['name'], $_FILES['file']['tmp_name']);
-  if ($success)
+  $publish->select('success')[0]->removeNode();
+  $publish->select('failure')[0]->removeNode();
+
+  // Pre-fill the name field:
+  if (isset($name))
   {
-    header('Location: /' . $_POST['name'] . '?new=1');
+    $publish->select('form/unclaimed')[0]->extractNode();
+    $publish->select('form//input[@name = "name"]')[0]
+      ->setAttribute('value', $name);
   }
   else
   {
-    echo '<p>Something went wrong publishing your content. We are only somewhat sorry.</p>';
+    $publish->select('form/unclaimed')[0]->removeNode();
   }
-  exit(0);
 }
-?>
-<!DOCTYPE html>
-<h1><img src="https://spee.ch/speechlogo" alt="spee.ch logo" style="max-height: 36px; vertical-align: middle; max-width: 36px;" />spee.ch</h1>
-<p>spee.ch is a single-serving site that reads and publishes images to and from the <a href="https://lbry.io">LBRY</a> blockchain.</p>
-<p>Examples:</p>
-<ul>
-  <?php foreach(['thailand', 'doitlive', 'coconuts', 'cow-air-balloon'] as $sampleName): ?>
-    <li><a href="/<?php echo $sampleName ?>">spee.ch/<?php echo $sampleName ?></a></li>
-  <?php endforeach ?>
-</ul>
-<h3>Publish Your Own</h3>
-<?php include './publish.php' ?>
-<h3>About This Site</h3>
-<p>It was built live in a little over 2 hours on March 29th, 2017. You can watch the video here:</p>
-<iframe width="560" height="315" src="https://www.youtube.com/embed/C9LCapt_OYw" frameborder="0" allowfullscreen></iframe>
+
+echo "<!DOCTYPE html>\n", $tpl->saveHtml();

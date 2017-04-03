@@ -1,0 +1,6 @@
+{
+    "require": {
+        "php": ">=7.1.0",
+        "stoatally/dom": ">=0.1"
+    }
+}

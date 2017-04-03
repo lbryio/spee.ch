@@ -1,0 +1,36 @@
+<header>
+    <h1><img src="https://spee.ch/speechlogo" alt="spee.ch logo" style="max-height: 36px; vertical-align: middle; max-width: 36px;" />spee.ch</h1>
+    <p>spee.ch is a single-serving site that reads and publishes images to and from the <a href="https://lbry.io">LBRY</a> blockchain.</p>
+    <p>Examples:</p>
+    <ul>
+        <li class="example"><a href="">spee.ch<id/></a></li>
+    </ul>
+</header>
+<section class="publish">
+    <h1>Publish your own</h1>
+
+    <success>
+        <p>Your image is on the way. It can take a few minutes to reach the blockchain and be public. You can refresh this page to check the progress.</p>
+    </success>
+    <failure>
+        <p>Something went wrong publishing your content. We are only somewhat sorry.</p>
+    </failure>
+
+    <form method="POST" action="/" enctype="multipart/form-data">
+        <unclaimed>
+            <p>No valid claim for this name. Make one!</p>
+        </unclaimed>
+
+        <div>lbry://<input type="text" name="name" /></div>
+
+        <div><input type="file" name="file" /></div>
+
+        <input type="submit" name="publish" value="Go" />
+        <p>Publishing can take a few moments. Please be patient.</p>
+    </form>
+</section>
+<section>
+    <h1>About this site</h1>
+    <p>It was built live in a little over 2 hours on March 29th, 2017. You can watch the video here:</p>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/C9LCapt_OYw" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
+</section>

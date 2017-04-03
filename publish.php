@@ -1,14 +1,18 @@
-<form method="POST" action="/" enctype="multipart/form-data">
-  <div>
-    <input type="file" name="file" />
-  </div>
-  <?php if (isset($name) && $name != ''): ?>
-    <input type="hidden" name="name" value="<?php echo $name ?>" />
-  <?php else: ?>
-    <div>
-      lbry://<input type="text" name="name" />
-    </div>
-  <?php endif ?>
-  <input type="submit" name="publish" value="Go" />
-  <p>Publishing can take a few moments. Please be patient.</p>
-</form>
+<?php
+
+if (!defined('ROOT_PAGE')) { die('not allowed'); }
+
+if (isset($_POST['publish']) && isset($_POST['name']) && isset($_FILES['file']))
+{
+  $success = LBRY::publishPublicClaim($_POST['name'], $_FILES['file']['tmp_name']);
+
+  if ($success)
+  {
+    header('Location: /' . $_POST['name'] . '?new');
+    exit;
+  }
+  else
+  {
+    $publishFailed = true;
+  }
+}
