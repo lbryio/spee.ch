@@ -8,6 +8,8 @@
       <h2 class="subtitle">
         Universal Vue.js Application
       </h2>
+      <publish/>
+      <explore/>
       <div class="links">
         <a href="https://nuxtjs.org/" target="_blank" class="button--green">Documentation</a>
         <a href="https://github.com/nuxt/nuxt.js" target="_blank" class="button--grey">Github</a>
@@ -18,10 +20,14 @@
 
 <script>
 import Logo from '~components/Logo.vue'
+import Publish from '~components/Publish.vue'
+import Explore from '~components/Explore.vue'
 
 export default {
   components: {
-    Logo
+    Logo,
+    Publish,
+    Explore
   }
 }
 </script>
