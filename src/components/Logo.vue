@@ -6,6 +6,6 @@
   .logo {
     max-height: 256px;
     max-width: 256px;
-    vertical-align: middle; 
+    vertical-align: middle;
   }
 </style>

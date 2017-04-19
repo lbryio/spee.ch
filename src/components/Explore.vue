@@ -25,16 +25,15 @@ export default {
 </script>
 
 <style>
-.explore-wrapper
-{
+.explore-wrapper {
   text-align: left;
   margin: 10px 0px 10px 0px;
-}
-.explore-body
-{
-  background: #D3D3D3;
-  border-radius: 0px 10px 0px 10px;
-  color: white;
-  padding: 20px;
+
+  .explore-body {
+    background: #D3D3D3;
+    border-radius: 0px 10px 0px 10px;
+    color: white;
+    padding: 20px;
+  }
 }
 </style>

@@ -15,20 +15,20 @@
 </template>
 
 <style>
-.publish-wrapper
-{
+.publish-wrapper {
   text-align: left;
   margin: 10px 0px 10px 0px;
-}
-.publish-form{
-  background: #D3D3D3;
-  border-radius: 0px 10px 0px 10px;
-  padding: 20px;
-}
-.help-text
-{
-  font-style: italic;
-  font-size: small;
-  color: #333;
+
+  .publish-form {
+    background: #D3D3D3;
+    border-radius: 0px 10px 0px 10px;
+    padding: 20px;
+  }
+
+  .help-text {
+    font-style: italic;
+    font-size: small;
+    color: #333;
+  }
 }
 </style>
