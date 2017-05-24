@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Spee.ch</title>
+</head>
+<body>
+	<h1>spee.ch</h1>
+	<p>spee.ch is a single-serving site that reads and publishes images to and from the <a href="https://lbry.io">LBRY</a> blockchain.</p>
+	<h3>Examples:</h3>
+	<ul>
+		<li><a href="/coconuts">spee.ch/coconuts</a></li>
+		<li><a href="/test">spee.ch/test</a></li>
+		<li><a href="/doitlive">spee.ch/doitlive</a></li>
+		<li><a href="/doitlive/all">spee.ch/doitlive/all</a></li>
+		<li><a href="/doitlive/ca3023187e901df9e9aabd95d6ae09b6cc69b3f0">spee.ch/doitlive/ca3023187e901df9e9aabd95d6ae09b6cc69b3f0</a></li>
+	</ul>
+	<h3>Publish Your Own</h3>
+	<form id="publish-form" action="/publish" method="post" enctype="multipart/form-data">
+		<input type="file" name="file" accept="video/*,image/*" onchange="previewFile()" enctype="multipart/form-data"/>
+		<br/>
+		<img src="" height="200" alt="Image preview..."/>
+		<br/>
+		Title: <input type="text" name="title" value="title"/>
+		<br/>
+		Description: <input type="text" name="description" value="description"/>
+		<br/>
+		Author: <input type="text" name="author" value="author"/>
+		<br/>
+		Language: <input type="text" name="language" value="en"/>
+		<br/>
+		License: <select type="text" name="license" value="license">
+			<option value="Creative Commons">Creative Commons</option>
+  			<option value="Public Domain">Public Domain</option>
+		</select>
+		<br/>
+		NSFW: <select type="text" name="nsfw" value="nsfw">
+			<option value="true">True</option>
+  			<option value="false">False</option>
+		</select>
+		<br/>
+		<button type="submit">Submit</button>
+	</form>
+	
+	<h3>Help</h3>
+	<h4>Site Navigation</h4>
+	<ul>
+		<li><strong><a href="/">spee.ch</a></strong>.
+			<ul>
+				<li>To publish a file, navigate to the homepage.</li>
+			</ul>
+		</li>
+		<li><strong>spee.ch/&ltthe name of the claim&gt</strong>
+			<ul>
+				<li>To view the file with the largest bid at a claim.</li>
+				<li>E.g. <a href="/doitlive">spee.ch/doitlive</a>.</li>
+			</ul>
+		</li>
+		<li><strong>spee.ch/&lt the name of the claim &gt/&lt the claim_id &gt</strong>
+			<ul>
+				<li>To view a specific file at a claim</li>
+				<li>E.g. <a href="/doitlive/c496c8c55ed79816fec39e36a78645aa4458edb5">spee.ch/doitlive/c496c8c55ed79816fec39e36a78645aa4458edb5</a></li>
+			</ul>
+		</li>
+		<li><strong>spee.ch/&ltthe name of the claim&gt/all</strong>
+			<ul>
+				<li>To view a batch of files at a claim</li>
+				<li>E.g. <a href="/doitlive/all">spee.ch/doitlive/all</a></li>
+			</ul>
+		</li>
+	</ul>
+	<h4>API</h4>
+	<p>Note: these are being used for testing durring spee.ch development and may not be maintained</p>
+	<ul>		
+		<li>A GET request to <strong>spee.ch/claim_list/&ltthe name of the claim&gt</strong> 
+			<ul>
+				<li>Will return the claim_list for the claim in json format. </li> 
+				<li>E.g. <a href="/claim_list/doitlive">spee.ch/claim_list/doitlive</a></li>
+			</ul>
+		</li>
+	</ul>
+
+	<script>
+		function previewFile(){
+			var preview = document.querySelector('img'); //selects the query named img
+			var file    = document.querySelector('input[type=file]').files[0]; //sames as here
+			var reader  = new FileReader();
+
+			reader.onloadend = function () {
+				preview.src = reader.result;
+			}
+
+			if (file) {
+				reader.readAsDataURL(file); //reads the data as a URL
+			} else {
+				preview.src = "";
+			}
+		}
+		previewFile();  //calls the function named previewFile()
+
+	</script>
+
+</body>
+</html>
