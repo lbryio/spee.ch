@@ -1,0 +1,33 @@
+{
+  "name": "spee.ch-backend",
+  "version": "0.0.1",
+  "description": "a back end for spee.ch",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/billbitt/spee.ch-backend.git"
+  },
+  "keywords": [
+    "spee.ch",
+    "lbry",
+    "blockchain"
+  ],
+  "author": "@billbitt @vxn",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/billbitt/spee.ch-backend/issues"
+  },
+  "homepage": "https://github.com/billbitt/spee.ch-backend#readme",
+  "dependencies": {
+    "amqplib": "^0.5.1",
+    "axios": "^0.16.1",
+    "body-parser": "^1.17.1",
+    "connect-multiparty": "^2.0.0",
+    "express": "^4.15.2",
+    "nodemon": "^1.11.0"
+  }
+}
