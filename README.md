@@ -1,5 +1,5 @@
-# spee.ch (js)
-this is a clone of spee.ch with a javascript backend
+# spee.ch
+spee.ch is a single-serving site that reads and publishes images to and from the [LBRY](https://lbry.io/) blockchain.
 
 ## how to use this repository
 * start lbry
