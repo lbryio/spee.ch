@@ -11,7 +11,7 @@ spee.ch is a single-serving site that reads and publishes images to and from the
 * run `npm install`
 * from your terminal, run `npm start`
 	* to run hot, run `nodemon server.js`
-* start at least one worker by running `node worker.js`
+* start a worker by running `node worker.js` in a separate session in your terminal
 * visit [localhost:80](http://localhost:80) 
 
 ## site navigation
