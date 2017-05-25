@@ -18,7 +18,7 @@ module.exports = function(app){
 		// receive the request 
 		console.log(" >> POST request on /publish");
 		//console.log(">> req.files:", req.files)
-		console.log(" >> req.body:", req.body)
+		//console.log(" >> req.body:", req.body)
 		
 		// build the data needed to publish the file
 		var publishObject = {
@@ -64,10 +64,9 @@ module.exports = function(app){
 	app.get("/:name", function(req, res){
     	var name = req.params.name;
 		console.log(">> GET request on /" + name)
-		// publish a message to the cue
-		// queueApi.addNewTaskToQueue("return claim for " + req.params.name + " ...")
 		// retrieve the claim
-		lbryApi.serveClaimBasedOnNameOnly(name, res);
+		//lbryApi.serveClaimBasedOnNameOnly(name, res);
+		res.status(200).sendFile(path.join(__dirname, '../public', 'claim.html'));
 	});
 	// route for the home page
 	app.get("/", function(req, res){
