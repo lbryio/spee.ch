@@ -56,83 +56,56 @@ module.exports = {
 			//res.status(500).send(JSON.stringify({msg: "your file was not published", err: error.response.data.error.message}));
 		})
 	},
-	getClaimBasedOnNameOnly: function(claimName){
-		// 1. create a promise
-		var deferred = new Promise(function (resolve, reject){
-			// 2. code to resolve or reject the promise
-			// make a call to the daemon to get the claims list 
-			axios.post('http://localhost:5279/lbryapi', {
+	serveClaimBasedOnNameOnly: function(claimName, res){
+		// make a call to the daemon to get the claims list 
+		axios.post('http://localhost:5279/lbryapi', {
 				method: "claim_list",
-				params: { name: claimName }
-			})
-			.then(function (response) {
-				console.log(">> Claim_list success");
-				console.log(">> Number of claims:", response.data.result.claims.length)
-				// return early if no claims were found
-				if (response.data.result.claims.length === 0){
-					reject({
-						msg: "no claims", 
-						err: "no claims"
-					});
-					return;
+				params: {
+					name: claimName
 				}
-				// filter the claims to return free, public claims 
-				var freePublicClaims = filterForFreePublicClaims(response.data.result.claims);
-				// return early if no free, public claims were found
-				if (!freePublicClaims || (freePublicClaims.length === 0)){
-					reject({
-						msg: "no free, public claims", 
-						err: "no free, public claims"
-					});
-					return;
-				}
-				// order the claims
-				var orderedPublcClaims = orderTopClaims(freePublicClaims);
-				// create the uri for the first (selected) claim 
-				console.log(">> ordered free public claims", orderedPublcClaims);
-				var freePublicClaimUri = "lbry://" + orderedPublcClaims[0].name + "#" + orderedPublcClaims[0].claim_id;
-				console.log(">> your free public claim uri:", freePublicClaimUri);
-				// fetch the image to display
-				axios.post('http://localhost:5279/lbryapi', {
-						method: "get",
-						params: { uri: freePublicClaimUri }
+			}
+		).then(function (response) {
+			console.log(">> Claim_list success");
+			console.log(">> Number of claims:", response.data.result.claims.length)
+			// return early if no claims were found
+			if (response.data.result.claims.length === 0){
+				res.status(200).sendFile(path.join(__dirname, '../public', 'noClaims.html'));
+				return;
+			}
+			// filter the claims to return free, public claims 
+			var freePublicClaims = filterForFreePublicClaims(response.data.result.claims);
+			// return early if no free, public claims were found
+			if (!freePublicClaims || (freePublicClaims.length === 0)){
+				res.status(200).sendFile(path.join(__dirname, '../public', 'noClaims.html'));
+				return;
+			}
+			// order the claims
+			var orderedPublcClaims = orderTopClaims(freePublicClaims);
+			// create the uri for the first (selected) claim 
+			console.log(">> ordered free public claims", orderedPublcClaims);
+			var freePublicClaimUri = "lbry://" + orderedPublcClaims[0].name + "#" + orderedPublcClaims[0].claim_id;
+			console.log(">> your free public claim uri:", freePublicClaimUri);
+			// fetch the image to display
+			axios.post('http://localhost:5279/lbryapi', {
+					method: "get",
+					params: {
+						uri: freePublicClaimUri
 					}
-				).then(function (getResponse) {
-					console.log(">> 'get claim' success...");
-					console.log(">> response data:", getResponse.data);
-					console.log(">> dl path =", getResponse.data.result.download_path)
-					// resolve the promise with the download path for the claim we got
-					resolve(getResponse.data.result.download_path);
-				}).catch(function(getError){
-					console.log(">> 'get' error:", getError.response.data);
-					// reject the promise with an error message
-					reject({
-						msg: "An error occurred while fetching the free, public claim by URI.", 
-						err: getError.response.data.error.message
-					});
-				});
-			})
-			.catch(function(error){
-				console.log(">> error:", error.response.data);
-				// check to see what kind of error came back from lbry
-				// reject the promise with an approriate message
-				if (error.response.data){
-					reject({
-						msg: "An error occurred while getting the claim list.", 
-						err: error.response.data.error.message
-					});
-				} else {
-					reject({
-						msg: "An error occurred while getting the claim list.", 
-						err: error.response
-					});
 				}
-				
-			});
-		});
-		// 3. return the promise
-		return deferred;
-		
+			).then(function (getResponse) {
+				console.log(">> 'get claim' success...");
+				console.log(">> response data:", getResponse.data);
+				console.log(">> dl path =", getResponse.data.result.download_path)
+				// return the claim we got 
+				res.status(200).sendFile(getResponse.data.result.download_path);
+			}).catch(function(getError){
+				console.log(">> /c/ 'get' error:", getError.response.data);
+				res.status(500).send(JSON.stringify({msg: "An error occurred while fetching the free, public claim by URI.", err: getError.response.data.error.message}));
+			})
+		}).catch(function(error){
+			console.log(">> /c/ error:", error.response.data);
+			res.status(500).send(JSON.stringify({msg: "An error occurred while getting the claim list.", err: error.response.data.error.message}));
+		})
 	},
 	serveClaimBasedOnUri: function(uri, res){  
 		/* 

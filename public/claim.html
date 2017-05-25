@@ -11,6 +11,7 @@
 	<p>spee.ch is a single-serving site that reads and publishes images to and from the <a href="https://lbry.io">LBRY</a> blockchain.</p>
 	<h3>Status:</h3>
 	<p id="status">your image is being retrieved</p>
+	<div id="image"></div>
 	<script src="/socket.io/socket.io.js"></script>
 	<script>
 		var socket = io();
@@ -18,10 +19,18 @@
 		var url = document.URL.substring(document.URL.indexOf('3000/') + 5); // get from the window?
 		// request the image through the socket
 		socket.emit("image-request", url);
+
+		socket.on("image-update", function(data){
+			console.log("data:", data);
+			document.getElementById("status").innerHTML = data;
+		})
 		
 		// receive the image through the socket
 		socket.on("image-send", function(data){
-			console.log("data", data);
+			if (data.image) {
+				var base64Image = 'data:image/jpeg;base64,' + data.buffer;
+				document.getElementById("image").innerHTML = '<img src="' + base64Image + '"/>';
+			}
 		})
 	</script>
 </body>
