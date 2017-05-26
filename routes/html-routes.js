@@ -6,6 +6,27 @@ var multipartMiddleware = multipart();
 var lbryApi = require('../helpers/lbryApi.js');
 var queueApi = require('../helpers/queueApi.js');
 
+// helper functions
+function createPublishObject(req){
+	var publishObject = {
+		"method":"publish", 
+		"params": {
+			"name": req.body.name,
+			"file_path": req.files.file.path,
+			"bid": 0.1,
+			"metadata":  {
+				"description": req.body.description,
+				"title": req.body.title,
+				"author": req.body.author,
+				"language": req.body.language,
+				"license": req.body.license,
+				"nsfw": req.body.nsfw
+			}
+		}
+	};
+	return publishObject;
+}
+
 // routes to export
 module.exports = function(app){
 	// route to fetch one free public claim 
@@ -15,25 +36,10 @@ module.exports = function(app){
 	});
 	// route to publish a new claim
 	app.post("/publish", multipartMiddleware, function(req, res){
-		// receive the request 
 		console.log(" >> POST request on /publish");
 		// build the data needed to publish the file
-		var publishObject = {
-			"method":"publish", 
-			"params": {
-				"name": req.body.title,
-				"file_path": req.files.file.path,
-				"bid": 0.1,
-				"metadata":  {
-					"description": req.body.description,
-					"title": req.body.title,
-					"author": req.body.author,
-					"language": req.body.language,
-					"license": req.body.license,
-					"nsfw": req.body.nsfw.value
-				}
-			}
-		};
+		var publishObject = createPublishObject(req);
+		console.log("publish", publishObject);
 		// post the task to the que
 		queueApi.addNewTaskToQueue(JSON.stringify({
 			type: 'publish',
@@ -64,6 +70,7 @@ module.exports = function(app){
 	app.get("/", function(req, res){
 		res.sendFile(path.join(__dirname, '../public', 'index.html'));
 	});
+
 	// a catch-all route if someone visits a page that does not exist
 	app.use("*", function(req, res){
 		res.sendFile(path.join(__dirname, '../public', 'fourOhfour.html'));
