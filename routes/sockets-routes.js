@@ -1,5 +1,3 @@
-
-// routes to export
 module.exports = function(app) {
 	var http = require('http').Server(app);
 	var io = require('socket.io')(http);
@@ -10,12 +8,12 @@ module.exports = function(app) {
 	function sendTheImage(socket, filePath){
 		fs.readFile(filePath, function(err, buff){
 			if (err) {
-				console.log("fs err", err);
+				console.log("socket: fs err:", err);
 				return;
 			};
 			//console.log("buff", buff);
-			socket.emit('image-send', { image: true, buffer: buff.toString('base64') });
-			console.log('image file has been sent via sockets');
+			socket.emit('claim-send', { image: true, buffer: buff.toString('base64') });
+			console.log('socket: the image file has been sent via sockets');
 		});
 	}
 
@@ -23,30 +21,30 @@ module.exports = function(app) {
 		console.log('a user connected');
 		
 		// serve an image file from the server
-		socket.on('image-request', function(name){
+		socket.on('claim-request', function(query){
 			// 1. retrieve the image from lbry via daemon
-			console.log("received image request for:", name)
-			var promise = lbryApi.getClaimBasedOnNameOnly(name);
+			console.log("socket: received claim request for:", query)
+			if (query.indexOf("/") === -1){
+				var promise = lbryApi.getClaimBasedOnNameOnly(query)
+			} else {
+				var uri = query.replace("/", "#");
+				var promise = lbryApi.getClaimBasedOnUri(uri)
+			}
 			promise.then(function(data){
-				console.log("socket-routes / image-request - success:", data)
+				console.log("socket: claim-request - success:", data)
 				// 3. serve the image back once it is retrieved
 				sendTheImage(socket, data);
+				return;
 			})
 			.catch(function(error){
-				console.log("socket-routes / image-request - error:", error)
-				// handle the errors
-				if (error.msg === "no claims"){
-					socket.emit("image-update", "no claims were found for " + name);
-				} else if (error.msg === "no free, public claims"){
-					socket.emit("image-update", "no free, public claims were found for " + name);
-				} else {
-					socket.emit("image-update", "an unknown error occured with fetching claim");
-				};
+				console.log("socket: claim-request - error:", error)
+				// handle the error
+				socket.emit("claim-update", error);
 				return;
 			});
 				
 			// 2. emit updates as the image is being retrieved
-			socket.emit("image-update", "we are getting your image for " + name);
+			socket.emit("claim-update", "We are getting your claim for " + query);
 		})
 
 		// handle disconnect

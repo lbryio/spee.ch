@@ -17,9 +17,6 @@ module.exports = function(app){
 	app.post("/publish", multipartMiddleware, function(req, res){
 		// receive the request 
 		console.log(" >> POST request on /publish");
-		//console.log(">> req.files:", req.files)
-		//console.log(" >> req.body:", req.body)
-		
 		// build the data needed to publish the file
 		var publishObject = {
 			"method":"publish", 
@@ -37,8 +34,6 @@ module.exports = function(app){
 				}
 			}
 		};
-		//console.log(">> publishObject:", publishObject)
-
 		// post the task to the que
 		queueApi.addNewTaskToQueue(JSON.stringify({
 			type: 'publish',
@@ -46,7 +41,6 @@ module.exports = function(app){
 		}));
 		// respond to the client that the task has been queued
 		res.status(200).sendFile(path.join(__dirname, '../public', 'publishingClaim.html'));
-		
 	});
 	// route to fetch one free public claim 
 	app.get("/:name/all", function(req, res){
@@ -56,16 +50,14 @@ module.exports = function(app){
 	});
 	// route to fetch one free public claim 
 	app.get("/:name/:claim_id", function(req, res){
-    	var uri = "lbry://" + req.params.name + "#" + req.params.claim_id;
-		console.log(">> GET request on /" + uri);
-		lbryApi.serveClaimBasedOnUri(uri, res);
+		console.log(">> GET request on /" + req.params.name + "#" + req.params.claim_id);
+		res.status(200).sendFile(path.join(__dirname, '../public', 'claim.html'));
 	});
 	// route to fetch one free public claim 
 	app.get("/:name", function(req, res){
     	var name = req.params.name;
 		console.log(">> GET request on /" + name)
-		// retrieve the claim
-		//lbryApi.serveClaimBasedOnNameOnly(name, res);
+		// send page (includes a socket to get the file)
 		res.status(200).sendFile(path.join(__dirname, '../public', 'claim.html'));
 	});
 	// route for the home page

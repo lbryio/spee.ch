@@ -18,15 +18,15 @@
 		console.log(document.URL)
 		var url = document.URL.substring(document.URL.indexOf('3000/') + 5); // get from the window?
 		// request the image through the socket
-		socket.emit("image-request", url);
+		socket.emit("claim-request", url);
 
-		socket.on("image-update", function(data){
+		socket.on("claim-update", function(data){
 			console.log("data:", data);
 			document.getElementById("status").innerHTML = data;
 		})
 		
 		// receive the image through the socket
-		socket.on("image-send", function(data){
+		socket.on("claim-send", function(data){
 			if (data.image) {
 				var base64Image = 'data:image/jpeg;base64,' + data.buffer;
 				document.getElementById("image").innerHTML = '<img src="' + base64Image + '"/>';
