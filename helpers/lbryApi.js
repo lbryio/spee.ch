@@ -38,24 +38,29 @@ function orderTopClaims(claimsListArray){
 }
 
 function getClaimWithUri(uri, resolve, reject){
+	console.log(">> making get request to lbry daemon")
 	axios.post('http://localhost:5279/lbryapi', {
 			method: "get",
 			params: { uri: uri }
 		}
 	).then(function (getUriResponse) {
 		console.log(">> 'get claim' success...");
+		//check to make sure the daemon didn't just time out
+		if (getUriResponse.data.result.error === "Timeout"){
+			reject("get request to lbry daemon timed out");
+		}
 		console.log(">> response data:", getUriResponse.data);
 		console.log(">> dl path =", getUriResponse.data.result.download_path)
 		// resolve the promise with the download path for the claim we got
-		/* note: do not resolve until the download is actually complete */
+		/* 
+			note: put in a check to make sure we do not resolve until the download is actually complete 
+		*/
 		resolve(getUriResponse.data.result.download_path);
 	}).catch(function(getUriError){
 		console.log(">> 'get' error:", getUriError.response.data);
 		// reject the promise with an error message
-		reject({
-			msg: "An error occurred while fetching the free, public claim by URI.", 
-			err: getUriError.response.data.error.message
-		});
+		reject(getUriError.response.data.error.message);
+		return;
 	});
 }
 
@@ -142,7 +147,6 @@ module.exports = {
 		*/
 		var deferred = new Promise(function (resolve, reject){
 			console.log(">> your uri:", uri);
-
 			// fetch the image to display
 			getClaimWithUri(uri, resolve, reject);
 		});
@@ -150,7 +154,7 @@ module.exports = {
 
 	},
 
-	serveAllClaims: function(claimName, res){
+	serveAllClaims: function(claimName, res){  // note: work in progress
 		// make a call to the daemon to get the claims list 
 		axios.post('http://localhost:5279/lbryapi', {
 				method: "claim_list",
