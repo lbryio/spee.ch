@@ -16,7 +16,7 @@
 	<script src="/socket.io/socket.io.js"></script>
 	<script>
 		var socket = io();
-		var url = document.URL.substring(document.URL.indexOf('spee.ch/') + 5);
+		var url = document.URL.substring(document.URL.indexOf('spee.ch/') + 8);
 		// request the claim through the socket
 		socket.emit("claim-request", url);
 		// listen for updates
