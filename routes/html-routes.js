@@ -20,7 +20,7 @@ function createPublishObject(req){
 				"author": req.body.author,
 				"language": req.body.language,
 				"license": req.body.license,
-				"nsfw": req.body.nsfw
+				"nsfw": (req.body.nsfw.toLowerCase() === "true")
 			}
 		}
 	};
