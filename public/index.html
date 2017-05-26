@@ -23,9 +23,11 @@
 		<br/>
 		<img src="" height="200" alt="Image preview..."/>
 		<br/>
+		Name: <input type="text" name="name" value="name"/>
+		<br/>
 		Title: <input type="text" name="title" value="title"/>
 		<br/>
-		Description: <input type="text" name="description" value="description"/>
+		Description: <input type="text" name="description" value="I love spee.ch!"/>
 		<br/>
 		Author: <input type="text" name="author" value="author"/>
 		<br/>
@@ -36,9 +38,9 @@
   			<option value="Public Domain">Public Domain</option>
 		</select>
 		<br/>
-		NSFW: <select type="text" name="nsfw" value="nsfw">
+		NSFW: <select type="text" name="nsfw" value="false">
+			<option value="false">False</option>
 			<option value="true">True</option>
-  			<option value="false">False</option>
 		</select>
 		<br/>
 		<button type="submit">Submit</button>
@@ -101,6 +103,9 @@
 		previewFile();  //calls the function named previewFile()
 
 	</script>
-
+	<script src="/socket.io/socket.io.js"></script>
+	<script>
+		var socket = io();
+	</script>
 </body>
 </html>
