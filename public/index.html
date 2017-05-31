@@ -18,33 +18,35 @@
 		<li><a href="/doitlive/ca3023187e901df9e9aabd95d6ae09b6cc69b3f0">spee.ch/doitlive/ca3023187e901df9e9aabd95d6ae09b6cc69b3f0</a></li>
 	</ul>
 	<h3>Publish Your Own</h3>
-	<form id="publish-form" action="/publish" method="post" enctype="multipart/form-data">
-		<input type="file" name="file" accept="video/*,image/*" onchange="previewFile()" enctype="multipart/form-data"/>
-		<br/>
-		<img src="" height="200" alt="Image preview..."/>
-		<br/>
-		Name: <input type="text" name="name" value="name"/>
-		<br/>
-		Title: <input type="text" name="title" value="title"/>
-		<br/>
-		Description: <input type="text" name="description" value="I love spee.ch!"/>
-		<br/>
-		Author: <input type="text" name="author" value="author"/>
-		<br/>
-		Language: <input type="text" name="language" value="en"/>
-		<br/>
-		License: <select type="text" name="license" value="license">
-			<option value="Creative Commons">Creative Commons</option>
-  			<option value="Public Domain">Public Domain</option>
-		</select>
-		<br/>
-		NSFW: <select type="text" name="nsfw" value="false">
-			<option value="false">False</option>
-			<option value="true">True</option>
-		</select>
-		<br/>
-		<button type="submit">Submit</button>
-	</form>
+	<div id="publish">
+		<form id="publish-form" action="" method="" enctype="multipart/form-data">
+			<input type="file" id="file-upload-input" name="file" accept="video/*,image/*" onchange="previewFile()" enctype="multipart/form-data"/>
+			<br/>
+			<img id="image-preview" src="" height="200" alt="Image preview..."/>
+			<br/>
+			Name: <input type="text" id="publish-name" name="name" value="name"/>
+			<br/>
+			Title: <input id="publish-title" type="text" name="title" value="title"/>
+			<br/>
+			Description: <input id="publish-description" type="text" name="description" value="I love spee.ch!"/>
+			<br/>
+			Author: <input type="text" id="publish-author" name="author" value="author"/>
+			<br/>
+			Language: <input type="text" id="publish-language" name="language" value="en"/>
+			<br/>
+			License: <select type="text" id="publish-license" name="license" value="license">
+				<option value="Creative Commons">Creative Commons</option>
+				<option value="Public Domain">Public Domain</option>
+			</select>
+			<br/>
+			NSFW: <select type="text" id="publish-nsfw" name="nsfw" value="false">
+				<option value="false">False</option>
+				<option value="true">True</option>
+			</select>
+			<br/>
+			<button type="submit" id="publish-submit">Submit</button>
+		</form>
+	</div>
 	
 	<h3>Help</h3>
 	<h4>Site Navigation</h4>
@@ -84,28 +86,95 @@
 		</li>
 	</ul>
 
-	<script>
-		function previewFile(){
-			var preview = document.querySelector('img'); //selects the query named img
-			var file    = document.querySelector('input[type=file]').files[0]; //sames as here
-			var reader  = new FileReader();
-
-			reader.onloadend = function () {
-				preview.src = reader.result;
-			}
-
-			if (file) {
-				reader.readAsDataURL(file); //reads the data as a URL
-			} else {
-				preview.src = "";
-			}
-		}
-		previewFile();  //calls the function named previewFile()
-
-	</script>
 	<script src="/socket.io/socket.io.js"></script>
 	<script>
+		// define global variables
 		var socket = io();
+		var selectedFile;
+		var uploadReader = new FileReader();
+		// function to handle image preview
+		function previewFile(){
+			var preview = document.querySelector('img'); //selects the query named img
+			selectedFile = document.querySelector('input[name=file]').files[0];
+			var previewReader = new FileReader();
+			
+			previewReader.onloadend = function () {
+				preview.src = previewReader.result;
+			}
+
+			if (selectedFile) {
+				previewReader.readAsDataURL(selectedFile); // reads the data as a URL
+			} else {
+				preview.src = "";
+			};
+		}
+		// function for updating progress bar
+		function updateProgressBar(percent){
+			document.getElementById('progress-bar').style.width = percent + '%';
+			document.getElementById('percent').innerHTML = (Math.round(percent*100)/100) + '%';
+			document.getElementById('MB').innerHTML = Math.round(((percent / 100.0 ) * selectedFile.size) / 1048576);
+		}
+		// call the previewFile function
+		previewFile();
+		// publish through the socket
+		document.getElementById('publish-submit').addEventListener('click', function(event) {
+			console.log("upload event:", event);
+			event.preventDefault();
+			
+			var fileName = document.getElementById('publish-name').value;
+			var description = document.getElementById('publish-description').value;
+			var title = document.getElementById('publish-title').value;
+			var author = document.getElementById('publish-author').value;
+			var language = document.getElementById('publish-language').value;
+			var license = document.getElementById('publish-license').value;
+			var nsfw = (document.getElementById('publish-nsfw').value.toLowerCase() === 'true');
+			
+			if (document.getElementById('file-upload-input').value != ""){
+				// build the upload visualizer 
+				var uploadVisualizer = '<div id="upload-visualizer">Uploading ' + fileName + '</div>';
+				uploadVisualizer += '<div id="progress-container"><div id="progress-bar"></div></div><span id="percent">0%</span>';
+				uploadVisualizer += "<span id='uploaded'> - <span id='MB'>0</span>/" + Math.round(selectedFile.size / 1048576) + "MB</span>";
+				// place upload visualizer in the HTML
+				document.getElementById("publish").innerHTML = uploadVisualizer;
+				// reade the file and emit socket msg 
+				uploadReader.onload = function(readerEvent){
+					socket.emit('upload', {
+						'name': fileName, 
+						'description': description,
+						'title': title,
+						'author': author,
+						'language': language,
+						'license': license,
+						'nsfw': nsfw,
+						'data': readerEvent.target.result 
+					});
+				}
+				socket.emit('upload-start', {'name': fileName, 'size' : selectedFile.size })
+			} else {
+				alert('Please select a file');
+			};
+
+		});
+		// provide more data
+		socket.on('moreData', function(data){
+			console.log("moreData");
+			console.log("data:", data);
+			updateProgressBar(data['percent']);
+			var place = data['place'] * 524288; // the next block's starting position
+			var newFile; // variable that will hold the new block of data
+			if (selectedFile.slice) {
+				newFile = selectedFile.slice(place, place + Math.min(524288, (selectedFile.size - place)));
+			} else {
+				newFile = selectedFile.mozSlice(place, place + Math.min(524288, (selectedFile.size - place)));
+			};
+			uploadReader.readAsBinaryString(newFile);
+		});
+		// listen for updates
+		socket.on('publish-update', function(data){
+			console.log('data:', data);
+			document.getElementById('status').innerHTML = data;
+		})
+		
 	</script>
 </body>
 </html>
