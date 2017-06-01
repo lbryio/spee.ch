@@ -14,7 +14,7 @@ module.exports = function(app) {
 			"file_path": filepath,
 			"bid": 0.1,
 			"metadata":  {
-				"description": name + "published via spee.ch",
+				"description": name + " published via spee.ch",
 				"title": name,
 				"author": "spee.ch",
 				"language": "en",
@@ -53,7 +53,7 @@ module.exports = function(app) {
 		console.log('a user connected');
 		// listener for uploader
 		var uploader = new siofu();
-		uploader.dir = path.join(__dirname, '../temp');
+		uploader.dir = path.join(__dirname, '../../Uploads');
 		uploader.listen(socket);
 		// attach upload listeners
 		uploader.on("error", function(event){

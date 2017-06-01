@@ -27,8 +27,8 @@
 			Name: <input type="text" id="publish-name" name="name" value="name"/>
 			<br/>
 			License: <select type="text" id="publish-license" name="license" value="license">
-				<option value="Creative Commons">Creative Commons</option>
 				<option value="Public Domain">Public Domain</option>
+				<option value="Creative Commons">Creative Commons</option>
 			</select>
 			<br/>
 			NSFW: <select type="text" id="publish-nsfw" name="nsfw" value="false">
@@ -85,12 +85,10 @@
 		// define global variables
 		var socket = io();
 		var uploader = new SocketIOFileUpload(socket);
-		var name = document.getElementById('publish-name').value;
-		var license = document.getElementById('publish-license').value;
-		var nsfw = document.getElementById('publish-nsfw').value;
 		// function to handle image preview
 		function previewFile(){
 			var preview = document.querySelector('img'); //selects the query named img
+			var claimName = document.querySelector('input[name=name]'); 
 			var selectedFile = document.querySelector('input[name=file]').files[0];
 			var previewReader = new FileReader();
 			previewReader.onloadend = function () {
@@ -98,7 +96,8 @@
 			}
 
 			if (selectedFile) {
-				previewReader.readAsDataURL(selectedFile); // reads the data as a URL
+				previewReader.readAsDataURL(selectedFile); // reads the data and sets the img src
+				claimName.value = selectedFile.name.substring(0, selectedFile.name.indexOf("."));
 			} else {
 				preview.src = "";
 			};
@@ -117,6 +116,9 @@
 		uploader.listenOnSubmit(document.getElementById("publish-submit"), document.getElementById("siofu_input"));
 		// add listeners to the uploader
 		uploader.addEventListener("start", function(event){
+			var name = document.getElementById('publish-name').value;
+			var license = document.getElementById('publish-license').value;
+			var nsfw = document.getElementById('publish-nsfw').value;
 			// set meta data 
 			event.file.meta.name = name;
 			event.file.meta.license = license;
@@ -124,7 +126,6 @@
 		});
 		uploader.addEventListener("progress", function(event){
 			var percent = event.bytesLoaded / event.file.size * 100;
-        	console.log();
 			updatePublishStatus("File is " + percent.toFixed(2) + "% loaded to the server");
 		})
 		// add listener for publish status updates
