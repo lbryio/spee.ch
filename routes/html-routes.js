@@ -55,7 +55,7 @@ module.exports = function(app){
 			console.log("/name/claim_id/ promise error:", error)
 			// handle the error
 			if (error === "Invalid URI") {
-				res.status(400).sendFile(path.join(__dirname, '../public', 'invalidURI.html'));
+				res.status(400).sendFile(path.join(__dirname, '../public', 'invalidUri.html'));
 				return;
 			} else {
 				res.status(400).send(error);
@@ -83,10 +83,8 @@ module.exports = function(app){
 			if ((error === "NO_CLAIMS") || (error === "NO_FREE_PUBLIC_CLAIMS")){
 				res.status(307).sendFile(path.join(__dirname, '../public', 'noClaims.html'));
 				return;
-			} else {
-				res.status(400).send(error);
-				return;
 			};
+			res.status(400).send(error);
 		});
 	});
 
