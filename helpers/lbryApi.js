@@ -70,25 +70,31 @@ function findAllClaims(name, resolve, reject){
 
 module.exports = {
 
-	publishClaim: function(publishObject){
-		axios.post('http://localhost:5279/lbryapi', publishObject)
-		.then(function (response) {
-			// receive resonse from LBRY
-			// if successfull, (1) delete file (2) send response to the client
-			console.log(">> 'publish' success...");
-			console.log(">> 'publish' response.data:", response.data);
-			console.log(" [x] Done");
-			// return the claim we got 
-			//res.status(200).send(JSON.stringify({msg: "you succsessfully published!", txData: response.data}));
-			return;
-		}).catch(function(error){
-			// receive response from LBRY
-			// if not successfull, (1) delete file and (2) send response to the client
-			console.log(">> 'publish' error.response.data:", error.response.data);
-			console.log(" [x] Done");
-			//res.status(500).send(JSON.stringify({msg: "your file was not published", err: error.response.data.error.message}));
-			return;
+	publishClaim: function(publishParams){
+		console.log(publishParams);
+		var deferred = new Promise(function(resolve, reject){
+			axios.post('http://localhost:5279/lbryapi', {
+				"method": "publish", 
+				"params": publishParams
+			})
+			.then(function (response) {
+				// receive resonse from LBRY
+				console.log(">> 'publish' success");
+				// return the claim we got 
+				resolve(response.data);
+				return;
+			}).catch(function(error){
+				// receive response from LBRY
+				console.log(">> 'publish' error");
+				if (error.response.data.error){
+					reject(error.response.data.error);
+				} else {
+					reject(error);
+				}
+				return;
+			})
 		})
+		return deferred;
 	},
 
 	getClaimBasedOnNameOnly: function(claimName){
@@ -119,10 +125,10 @@ module.exports = {
 					return;
 				}
 				// order the claims
-				var orderedPublcClaims = orderTopClaims(freePublicClaims);
+				var orderedPublicClaims = orderTopClaims(freePublicClaims);
 				// create the uri for the first (selected) claim 
 				console.log(">> ordered free public claims");
-				var freePublicClaimUri = "lbry://" + orderedPublcClaims[0].name + "#" + orderedPublcClaims[0].claim_id;
+				var freePublicClaimUri = "lbry://" + orderedPublicClaims[0].name + "#" + orderedPublicClaims[0].claim_id;
 				console.log(">> your free public claim URI:", freePublicClaimUri);
 				// fetch the image to display
 				getClaimWithUri(freePublicClaimUri, resolve, reject);
@@ -187,7 +193,7 @@ module.exports = {
 					return;
 				}
 				// order the claims
-				var orderedPublcClaims = orderTopClaims(freePublicClaims);
+				var orderedPublicClaims = orderTopClaims(freePublicClaims);
 				// serve the response
 				/*
 					to do: rather than returning json, serve a page of all these claims 

@@ -12,7 +12,7 @@
 	<h3>Examples:</h3>
 	<ul>
 		<li><a href="/coconuts">spee.ch/coconuts</a></li>
-		<li><a href="/test">spee.ch/test</a></li>
+		<li><a href="/sunflower">spee.ch/sunflower</a></li>
 		<li><a href="/doitlive">spee.ch/doitlive</a></li>
 		<li><a href="/doitlive/all">spee.ch/doitlive/all</a></li>
 		<li><a href="/doitlive/ca3023187e901df9e9aabd95d6ae09b6cc69b3f0">spee.ch/doitlive/ca3023187e901df9e9aabd95d6ae09b6cc69b3f0</a></li>
@@ -20,7 +20,7 @@
 	<h3>Publish Your Own</h3>
 	<div id="publish">
 		<form id="publish-form" action="" method="" enctype="multipart/form-data">
-			<input type="file" id="file-upload-input" name="file" accept="video/*,image/*" onchange="previewFile()" enctype="multipart/form-data"/>
+			<input type="file"  id="siofu_input" name="file" accept="video/*,image/*" onchange="previewFile()" enctype="multipart/form-data"/>
 			<br/>
 			<img id="image-preview" src="" height="200" alt="Image preview..."/>
 			<br/>
@@ -36,8 +36,9 @@
 				<option value="true">True</option>
 			</select>
 			<br/>
-			<button type="submit" id="publish-submit">Submit</button>
+			<button id="publish-submit">Submit</button>
 		</form>
+		<p id="upload-status"></p>
 	</div>
 	
 	<h3>Help</h3>
@@ -79,17 +80,19 @@
 	</ul>
 
 	<script src="/socket.io/socket.io.js"></script>
+	<script src="/siofu/client.js"></script>
 	<script>
 		// define global variables
 		var socket = io();
-		var selectedFile;
-		var uploadReader = new FileReader();
+		var uploader = new SocketIOFileUpload(socket);
+		var name = document.getElementById('publish-name').value;
+		var license = document.getElementById('publish-license').value;
+		var nsfw = document.getElementById('publish-nsfw').value;
 		// function to handle image preview
 		function previewFile(){
 			var preview = document.querySelector('img'); //selects the query named img
-			selectedFile = document.querySelector('input[name=file]').files[0];
+			var selectedFile = document.querySelector('input[name=file]').files[0];
 			var previewReader = new FileReader();
-			
 			previewReader.onloadend = function () {
 				preview.src = previewReader.result;
 			}
@@ -100,63 +103,38 @@
 				preview.src = "";
 			};
 		}
-		// function for updating progress bar
-		function updateProgressBar(percent){
-			document.getElementById('progress-bar').style.width = percent + '%';
-			document.getElementById('percent').innerHTML = (Math.round(percent*100)/100) + '%';
-			document.getElementById('MB').innerHTML = Math.round(((percent / 100.0 ) * selectedFile.size) / 1048576);
+		// helper function to update status
+		function updatePublishStatus(msg){
+			document.getElementById("upload-status").innerHTML = msg;
 		}
 		// call the previewFile function
 		previewFile();
-		// publish through the socket
-		document.getElementById('publish-submit').addEventListener('click', function(event) {
-			console.log("upload event:", event);
+		// prevent default on the submit button
+		document.getElementById("publish-submit").addEventListener("click", function(event){
 			event.preventDefault();
-			
-			var fileName = document.getElementById('publish-name').value;
-			var license = document.getElementById('publish-license').value;
-			var nsfw = (document.getElementById('publish-nsfw').value.toLowerCase() === 'true');
-			
-			if (document.getElementById('file-upload-input').value != ""){
-				// build the upload visualizer 
-				var uploadVisualizer = '<div id="upload-visualizer">Uploading ' + fileName + '</div>';
-				uploadVisualizer += '<div id="progress-container"><div id="progress-bar"></div></div><span id="percent">0%</span>';
-				uploadVisualizer += "<span id='uploaded'> - <span id='MB'>0</span>/" + Math.round(selectedFile.size / 1048576) + "MB</span>";
-				// place upload visualizer in the HTML
-				document.getElementById("publish").innerHTML = uploadVisualizer;
-				// reade the file and emit socket msg 
-				uploadReader.onload = function(readerEvent){
-					socket.emit('upload', {
-						'name': fileName, 
-						'license': license,
-						'nsfw': nsfw,
-						'data': readerEvent.target.result 
-					});
-				}
-				socket.emit('upload-start', {'name': fileName, 'size' : selectedFile.size })
-			} else {
-				alert('Please select a file');
-			};
-
+		})
+		// upload through the socket
+		uploader.listenOnSubmit(document.getElementById("publish-submit"), document.getElementById("siofu_input"));
+		// add listeners to the uploader
+		uploader.addEventListener("start", function(event){
+			// set meta data 
+			event.file.meta.name = name;
+			event.file.meta.license = license;
+			event.file.meta.nsfw = nsfw;
 		});
-		// provide more data
-		socket.on('moreData', function(data){
-			console.log("moreData");
-			console.log("data:", data);
-			updateProgressBar(data['percent']);
-			var place = data['place'] * 524288; // the next block's starting position
-			var newFile; // variable that will hold the new block of data
-			if (selectedFile.slice) {
-				newFile = selectedFile.slice(place, place + Math.min(524288, (selectedFile.size - place)));
-			} else {
-				newFile = selectedFile.mozSlice(place, place + Math.min(524288, (selectedFile.size - place)));
-			};
-			uploadReader.readAsBinaryString(newFile);
-		});
-		// listen for updates
-		socket.on('publish-update', function(data){
-			console.log('data:', data);
-			document.getElementById('status').innerHTML = data;
+		uploader.addEventListener("progress", function(event){
+			var percent = event.bytesLoaded / event.file.size * 100;
+        	console.log();
+			updatePublishStatus("File is " + percent.toFixed(2) + "% loaded");
+		})
+		// add listener for publish status updates
+		socket.on("publish-status", function(msg){
+			updatePublishStatus(msg);
+		})
+		socket.on("publish-complete", function(msg){
+			console.log("publish complete", msg);
+			var publishResults = `<p>You're publish is complete!</p><p>The Claim Id is ${msg.result.claim_id}</p><p>The TX Id is ${msg.result.txid}</p><p>Note: the transaction still needs to be published by the network.  Click the tx id link to view the tx on the blockchain explorer</p><button id="reset-publish">Publish another</button>`;
+			document.getElementById("publish").innerHTML = publishResults; 
 		})
 		
 	</script>
