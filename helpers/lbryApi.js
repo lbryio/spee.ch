@@ -40,8 +40,8 @@ function orderTopClaims(claimsListArray){
 function getClaimWithUri(uri, resolve, reject){
 	console.log(">> making get request to lbry daemon");
 	axios.post('http://localhost:5279/lbryapi', {
-			method: "get",
-			params: { uri: uri }
+			"method": "get",
+			"params": { "uri": uri }
 		}
 	).then(function (getUriResponse) {
 		console.log(">> 'get claim' success...");
@@ -65,7 +65,7 @@ function getClaimWithUri(uri, resolve, reject){
 }
 
 function findAllClaims(name, resolve, reject){
-	// abstract claim_list function to here
+	// to do: abstract claim_list function to here
 }
 
 module.exports = {
@@ -102,9 +102,9 @@ module.exports = {
 		var deferred = new Promise(function (resolve, reject){
 			// 2. code to resolve or reject the promise
 			// make a call to the daemon to get the claims list 
-			axios.post('http://localhost:5279/lbryapi', {  // receives a promise
-				method: "claim_list", 
-				params: { name: claimName }
+			axios.post('http://localhost:5279/lbryapi', {
+				"method": "claim_list", 
+				"params": { "name": claimName }
 			})
 			.then(function (response) {
 				console.log(">> 'claim_list' success");
@@ -128,7 +128,7 @@ module.exports = {
 				var orderedPublicClaims = orderTopClaims(freePublicClaims);
 				// create the uri for the first (selected) claim 
 				console.log(">> ordered free public claims");
-				var freePublicClaimUri = "lbry://" + orderedPublicClaims[0].name + "#" + orderedPublicClaims[0].claim_id;
+				var freePublicClaimUri = orderedPublicClaims[0].name + "#" + orderedPublicClaims[0].claim_id;
 				console.log(">> your free public claim URI:", freePublicClaimUri);
 				// fetch the image to display
 				getClaimWithUri(freePublicClaimUri, resolve, reject);
