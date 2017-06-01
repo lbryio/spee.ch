@@ -6,13 +6,12 @@ module.exports = function(app) {
 	var lbryApi = require('../helpers/lbryApi.js');
 	var queueApi = require('../helpers/queueApi.js');
 	var siofu = require("socketio-file-upload");
-	var rootDirectory = "C:\\Users\\Bones\\development\\Lbry\\spee.ch\\";
 
 	// functions to create a publishing object
 	function createPublishParams(name, filepath, license, nsfw){
 		var publishParams = {
 			"name": name,
-			"file_path": rootDirectory + filepath,
+			"file_path": filepath,
 			"bid": 0.1,
 			"metadata":  {
 				"description": name + "published via spee.ch",
@@ -28,7 +27,7 @@ module.exports = function(app) {
 	// publish an image to lbry 
 	function publish(name, filepath, license, nsfw, socket){
 		// update the client
-		socket.emit("publish-status", "starting publishing...");
+		socket.emit("publish-status", "Your image is being published (this might take a second)...");
 		// create the publish object
 		var publishParams = createPublishParams(name, filepath, license, nsfw);
 		// get a promise to publish
@@ -54,7 +53,7 @@ module.exports = function(app) {
 		console.log('a user connected');
 		// listener for uploader
 		var uploader = new siofu();
-		uploader.dir = "./temp";
+		uploader.dir = path.join(__dirname, '../temp');
 		uploader.listen(socket);
 		// attach upload listeners
 		uploader.on("error", function(event){

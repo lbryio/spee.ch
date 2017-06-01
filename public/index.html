@@ -105,7 +105,7 @@
 		}
 		// helper function to update status
 		function updatePublishStatus(msg){
-			document.getElementById("upload-status").innerHTML = msg;
+			document.getElementById("publish").innerHTML = msg;
 		}
 		// call the previewFile function
 		previewFile();
@@ -125,7 +125,7 @@
 		uploader.addEventListener("progress", function(event){
 			var percent = event.bytesLoaded / event.file.size * 100;
         	console.log();
-			updatePublishStatus("File is " + percent.toFixed(2) + "% loaded");
+			updatePublishStatus("File is " + percent.toFixed(2) + "% loaded to the server");
 		})
 		// add listener for publish status updates
 		socket.on("publish-status", function(msg){
@@ -133,7 +133,11 @@
 		})
 		socket.on("publish-complete", function(msg){
 			console.log("publish complete", msg);
-			var publishResults = `<p>You're publish is complete!</p><p>The Claim Id is ${msg.result.claim_id}</p><p>The TX Id is ${msg.result.txid}</p><p>Note: the transaction still needs to be published by the network.  Click the tx id link to view the tx on the blockchain explorer</p><button id="reset-publish">Publish another</button>`;
+			var publishResults = `<p>You're publish is complete!</p>`;
+			publishResults += `<p>The Claim ID is: ${msg.result.claim_id}</p>`;
+			publishResults += `<p>The TX ID is: <a href="https://explorer.lbry.io/#!/transaction?id=${msg.result.txid}">${msg.result.txid}</a></p>`;
+			publishResults += `<p>Note: the transaction still needs to be published by the network.  Click the tx id link to view the tx on the blockchain explorer</p>`
+			publishResults += `<p><a href="/">Reload the page to publish another (fancy button coming soon)</a></p>`;
 			document.getElementById("publish").innerHTML = publishResults; 
 		})
 		
