@@ -4,48 +4,71 @@ module.exports = function(app) {
 	var fs = require('fs');
 	var path = require('path');
 	var lbryApi = require('../helpers/lbryApi.js');
+	var queueApi = require('../helpers/queueApi.js');
+	var siofu = require("socketio-file-upload");
 
-	function sendTheImage(socket, filePath){
-		fs.readFile(filePath, function(err, buff){
-			if (err) {
-				console.log("socket: fs err:", err);
-				return;
-			};
-			//console.log("buff", buff);
-			socket.emit('claim-send', { image: true, buffer: buff.toString('base64') });
-			console.log('socket: the image file has been sent via sockets');
-		});
+	// functions to create a publishing object
+	function createPublishParams(name, filepath, license, nsfw){
+		var publishParams = {
+			"name": name,
+			"file_path": filepath,
+			"bid": 0.1,
+			"metadata":  {
+				"description": name + " published via spee.ch",
+				"title": name,
+				"author": "spee.ch",
+				"language": "en",
+				"license": license,
+				"nsfw": (nsfw.toLowerCase() === "true")
+			}
+		};
+		return publishParams;
 	}
+	// publish an image to lbry 
+	function publish(name, filepath, license, nsfw, socket){
+		// update the client
+		socket.emit("publish-status", "Your image is being published (this might take a second)...");
+		// create the publish object
+		var publishParams = createPublishParams(name, filepath, license, nsfw);
+		// get a promise to publish
+		var promise = lbryApi.publishClaim(publishParams);
+		// handle promise
+		promise.then(function(data){
+			console.log("publish promise success. Tx info:", data)
+			socket.emit("publish-complete", data);
+			/* 
+				note: remember to delete the local file
+			*/
+		})
+		.catch(function(error){
+			console.log("error:", error);
+			socket.emit("publish-status", "publish failed");
+			/* 
+				note: remember to delete the local file
+			*/
+		});
+	};
 
 	io.on('connection', function(socket){
 		console.log('a user connected');
-		
-		// serve an image file from the server
-		socket.on('claim-request', function(query){
-			// 1. retrieve the image from lbry via daemon
-			console.log("socket: received claim request for:", query)
-			if (query.indexOf("/") === -1){
-				var promise = lbryApi.getClaimBasedOnNameOnly(query)
-			} else {
-				var uri = query.replace("/", "#");
-				var promise = lbryApi.getClaimBasedOnUri(uri)
-			}
-			promise.then(function(data){
-				console.log("socket: claim-request - success:", data)
-				// 3. serve the image back once it is retrieved
-				sendTheImage(socket, data);
-				return;
-			})
-			.catch(function(error){
-				console.log("socket: claim-request - error:", error)
-				// handle the error
-				socket.emit("claim-update", error);
-				return;
-			});
-				
-			// 2. emit updates as the image is being retrieved
-			socket.emit("claim-update", "We are getting your claim for " + query);
+		// listener for uploader
+		var uploader = new siofu();
+		uploader.dir = path.join(__dirname, '../../Uploads');
+		uploader.listen(socket);
+		// attach upload listeners
+		uploader.on("error", function(event){
+			console.log("an error occured while uploading", event.error);
+			socket.emit("publish-status", event.error)
 		})
+		uploader.on("saved", function(event){
+			console.log("saved " + event.file.name);
+			if (event.file.success){
+				socket.emit("publish-status", "file upload successfully completed");
+				publish(event.file.meta.name, event.file.pathName, event.file.meta.license,event.file.meta.nsfw, socket)
+			} else {
+				socket.emit("publish-status", "file saved, but with errors")
+			};
+		});
 
 		// handle disconnect
 		socket.on('disconnect', function(){

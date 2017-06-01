@@ -2,6 +2,7 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var path = require('path');
+var siofu = require("socketio-file-upload");
 
 // set port
 var PORT = 3000;
@@ -15,6 +16,7 @@ app.use(express.static(__dirname + '/public'));
 // configure express app
 app.use(bodyParser.json());  // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+app.use(siofu.router);
 
 // require express routes
 require("./routes/api-routes.js")(app);
