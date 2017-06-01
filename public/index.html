@@ -12,39 +12,34 @@
 	<h3>Examples:</h3>
 	<ul>
 		<li><a href="/coconuts">spee.ch/coconuts</a></li>
-		<li><a href="/test">spee.ch/test</a></li>
+		<li><a href="/wood">spee.ch/wood</a></li>
 		<li><a href="/doitlive">spee.ch/doitlive</a></li>
 		<li><a href="/doitlive/all">spee.ch/doitlive/all</a></li>
 		<li><a href="/doitlive/ca3023187e901df9e9aabd95d6ae09b6cc69b3f0">spee.ch/doitlive/ca3023187e901df9e9aabd95d6ae09b6cc69b3f0</a></li>
 	</ul>
 	<h3>Publish Your Own</h3>
-	<form id="publish-form" action="/publish" method="post" enctype="multipart/form-data">
-		<input type="file" name="file" accept="video/*,image/*" onchange="previewFile()" enctype="multipart/form-data"/>
-		<br/>
-		<img src="" height="200" alt="Image preview..."/>
-		<br/>
-		Name: <input type="text" name="name" value="name"/>
-		<br/>
-		Title: <input type="text" name="title" value="title"/>
-		<br/>
-		Description: <input type="text" name="description" value="I love spee.ch!"/>
-		<br/>
-		Author: <input type="text" name="author" value="author"/>
-		<br/>
-		Language: <input type="text" name="language" value="en"/>
-		<br/>
-		License: <select type="text" name="license" value="license">
-			<option value="Creative Commons">Creative Commons</option>
-  			<option value="Public Domain">Public Domain</option>
-		</select>
-		<br/>
-		NSFW: <select type="text" name="nsfw" value="false">
-			<option value="false">False</option>
-			<option value="true">True</option>
-		</select>
-		<br/>
-		<button type="submit">Submit</button>
-	</form>
+	<div id="publish">
+		<form id="publish-form" action="" method="" enctype="multipart/form-data">
+			<input type="file"  id="siofu_input" name="file" accept="video/*,image/*" onchange="previewFile()" enctype="multipart/form-data"/>
+			<br/>
+			<img id="image-preview" src="" height="200" alt="Image preview..."/>
+			<br/>
+			Name: <input type="text" id="publish-name" name="name" value="name"/>
+			<br/>
+			License: <select type="text" id="publish-license" name="license" value="license">
+				<option value="Public Domain">Public Domain</option>
+				<option value="Creative Commons">Creative Commons</option>
+			</select>
+			<br/>
+			NSFW: <select type="text" id="publish-nsfw" name="nsfw" value="false">
+				<option value="false">False</option>
+				<option value="true">True</option>
+			</select>
+			<br/>
+			<button id="publish-submit">Submit</button>
+		</form>
+		<p id="upload-status"></p>
+	</div>
 	
 	<h3>Help</h3>
 	<h4>Site Navigation</h4>
@@ -84,28 +79,69 @@
 		</li>
 	</ul>
 
+	<script src="/socket.io/socket.io.js"></script>
+	<script src="/siofu/client.js"></script>
 	<script>
+		// define global variables
+		var socket = io();
+		var uploader = new SocketIOFileUpload(socket);
+		// function to handle image preview
 		function previewFile(){
 			var preview = document.querySelector('img'); //selects the query named img
-			var file    = document.querySelector('input[type=file]').files[0]; //sames as here
-			var reader  = new FileReader();
-
-			reader.onloadend = function () {
-				preview.src = reader.result;
+			var claimName = document.querySelector('input[name=name]'); 
+			var selectedFile = document.querySelector('input[name=file]').files[0];
+			var previewReader = new FileReader();
+			previewReader.onloadend = function () {
+				preview.src = previewReader.result;
 			}
 
-			if (file) {
-				reader.readAsDataURL(file); //reads the data as a URL
+			if (selectedFile) {
+				previewReader.readAsDataURL(selectedFile); // reads the data and sets the img src
+				claimName.value = selectedFile.name.substring(0, selectedFile.name.indexOf("."));
 			} else {
 				preview.src = "";
-			}
+			};
 		}
-		previewFile();  //calls the function named previewFile()
-
-	</script>
-	<script src="/socket.io/socket.io.js"></script>
-	<script>
-		var socket = io();
+		// helper function to update status
+		function updatePublishStatus(msg){
+			document.getElementById("publish").innerHTML = msg;
+		}
+		// call the previewFile function
+		previewFile();
+		// prevent default on the submit button
+		document.getElementById("publish-submit").addEventListener("click", function(event){
+			event.preventDefault();
+		})
+		// upload through the socket
+		uploader.listenOnSubmit(document.getElementById("publish-submit"), document.getElementById("siofu_input"));
+		// add listeners to the uploader
+		uploader.addEventListener("start", function(event){
+			var name = document.getElementById('publish-name').value;
+			var license = document.getElementById('publish-license').value;
+			var nsfw = document.getElementById('publish-nsfw').value;
+			// set meta data 
+			event.file.meta.name = name;
+			event.file.meta.license = license;
+			event.file.meta.nsfw = nsfw;
+		});
+		uploader.addEventListener("progress", function(event){
+			var percent = event.bytesLoaded / event.file.size * 100;
+			updatePublishStatus("File is " + percent.toFixed(2) + "% loaded to the server");
+		})
+		// add listener for publish status updates
+		socket.on("publish-status", function(msg){
+			updatePublishStatus(msg);
+		})
+		socket.on("publish-complete", function(msg){
+			console.log("publish complete", msg);
+			var publishResults = `<p>You're publish is complete!</p>`;
+			publishResults += `<p>The Claim ID is: ${msg.result.claim_id}</p>`;
+			publishResults += `<p>The TX ID is: <a href="https://explorer.lbry.io/#!/transaction?id=${msg.result.txid}">${msg.result.txid}</a></p>`;
+			publishResults += `<p>Note: the transaction still needs to be published by the network.  Click the tx id link to view the tx on the blockchain explorer</p>`
+			publishResults += `<p><a href="/">Reload the page to publish another (fancy button coming soon)</a></p>`;
+			document.getElementById("publish").innerHTML = publishResults; 
+		})
+		
 	</script>
 </body>
 </html>
