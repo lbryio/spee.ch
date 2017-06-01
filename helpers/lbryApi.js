@@ -102,46 +102,40 @@ module.exports = {
 			})
 			.then(function (response) {
 				console.log(">> 'claim_list' success");
-
 				var claimsList = response.data.result.claims;
 				console.log(">> Number of claims:", claimsList.length)
-				
 				// return early if no claims were found
 				if (claimsList.length === 0){
 					reject("NO_CLAIMS");
 					console.log("exiting due to lack of claims");
 					return;
 				}
-				
 				// filter the claims to return only free, public claims 
 				var freePublicClaims = filterForFreePublicClaims(claimsList);
-
 				// return early if no free, public claims were found
 				if (!freePublicClaims || (freePublicClaims.length === 0)){
 					reject("NO_FREE_PUBLIC_CLAIMS");
 					console.log("exiting due to lack of free or public claims");
 					return;
 				}
-
 				// order the claims
 				var orderedPublcClaims = orderTopClaims(freePublicClaims);
-
 				// create the uri for the first (selected) claim 
 				console.log(">> ordered free public claims");
 				var freePublicClaimUri = "lbry://" + orderedPublcClaims[0].name + "#" + orderedPublcClaims[0].claim_id;
 				console.log(">> your free public claim URI:", freePublicClaimUri);
-
 				// fetch the image to display
 				getClaimWithUri(freePublicClaimUri, resolve, reject);
-
 			})
 			.catch(function(error){
 				console.log(">> 'claim_list' error:", error);
 				// reject the promise with an approriate message
 				if (error.code === "ECONNREFUSED"){
 					reject("Connection refused.  The daemon may not be running.")
-				} else {
+				} else if (error.response.data.error) {
 					reject(error.response.data.error);
+				} else {
+					reject(error);
 				};
 				return;
 			});
@@ -175,34 +169,41 @@ module.exports = {
 			).then(function (response) {
 				console.log(">> 'claim_list' success");
 				console.log(">> Number of claims:", response.data.result.claims.length)
+				console.log(">> 'claim_list' success");
+				var claimsList = response.data.result.claims;
+				console.log(">> Number of claims:", claimsList.length)
 				// return early if no claims were found
-				if (response.data.result.claims.length === 0){
-					res.status(307).sendFile(path.join(__dirname, '../public', 'noClaims.html'));
+				if (claimsList.length === 0){
+					reject("NO_CLAIMS");
+					console.log("exiting due to lack of claims");
 					return;
 				}
-				// filter the claims to return free, public claims 
-				var freePublicClaims = filterForFreePublicClaims(response.data.result.claims);
+				// filter the claims to return only free, public claims 
+				var freePublicClaims = filterForFreePublicClaims(claimsList);
 				// return early if no free, public claims were found
 				if (!freePublicClaims || (freePublicClaims.length === 0)){
-					res.status(307).sendFile(path.join(__dirname, '../public', 'noClaims.html'));
+					reject("NO_FREE_PUBLIC_CLAIMS");
+					console.log("exiting due to lack of free or public claims");
 					return;
 				}
-				console.log(">> Number of free public claims:", freePublicClaims.length);
 				// order the claims
-				var orderedPublicClaims = orderTopClaims(freePublicClaims);
+				var orderedPublcClaims = orderTopClaims(freePublicClaims);
 				// serve the response
 				/*
 					to do: rather than returning json, serve a page of all these claims 
 				*/
-				res.status(200).send(orderedPublicClaims); 
+				resolve(orderedPublicClaims); 
 			}).catch(function(error){
-				console.log(">> 'claim_list' error:", error.response.data);
-				// serve the response
-				res.status(500).send(JSON.stringify({msg: "An error occurred while finding the claim list.", err: error.response.data.error.message}));
+				console.log(">> 'claim_list' error:", error);
+				if (error.code === "ECONNREFUSED"){
+					reject("Connection refused.  The daemon may not be running.")
+				} else if (error.response.data.error) {
+					reject(error.response.data.error);
+				} else {
+					reject(error);
+				};
 			})
-			
 		});
-		return deffered;
-
+		return deferred;
 	}
 }

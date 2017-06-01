@@ -26,14 +26,6 @@
 			<br/>
 			Name: <input type="text" id="publish-name" name="name" value="name"/>
 			<br/>
-			Title: <input id="publish-title" type="text" name="title" value="title"/>
-			<br/>
-			Description: <input id="publish-description" type="text" name="description" value="I love spee.ch!"/>
-			<br/>
-			Author: <input type="text" id="publish-author" name="author" value="author"/>
-			<br/>
-			Language: <input type="text" id="publish-language" name="language" value="en"/>
-			<br/>
 			License: <select type="text" id="publish-license" name="license" value="license">
 				<option value="Creative Commons">Creative Commons</option>
 				<option value="Public Domain">Public Domain</option>
@@ -122,10 +114,6 @@
 			event.preventDefault();
 			
 			var fileName = document.getElementById('publish-name').value;
-			var description = document.getElementById('publish-description').value;
-			var title = document.getElementById('publish-title').value;
-			var author = document.getElementById('publish-author').value;
-			var language = document.getElementById('publish-language').value;
 			var license = document.getElementById('publish-license').value;
 			var nsfw = (document.getElementById('publish-nsfw').value.toLowerCase() === 'true');
 			
@@ -140,10 +128,6 @@
 				uploadReader.onload = function(readerEvent){
 					socket.emit('upload', {
 						'name': fileName, 
-						'description': description,
-						'title': title,
-						'author': author,
-						'language': language,
 						'license': license,
 						'nsfw': nsfw,
 						'data': readerEvent.target.result 
