@@ -1,7 +1,6 @@
 module.exports = function(app) {
 	var http = require('http').Server(app);
 	var io = require('socket.io')(http);
-	//var fs = require('fs');
 	var path = require('path');
 	var siofu = require("socketio-file-upload");
 	var socketHelpers = require('../helpers/socketHelpers.js');
@@ -22,7 +21,7 @@ module.exports = function(app) {
 				socket.emit("publish-status", "file upload successfully completed");
 				socketHelpers.publish(event.file.meta.name, event.file.pathName, event.file.meta.license,event.file.meta.nsfw, socket)
 			} else {
-				socket.emit("publish-status", "file saved, but with errors")
+				socket.emit("publish-failure", "file uploaded, but with errors")
 			};
 		});
 		// handle disconnect

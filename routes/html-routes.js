@@ -1,23 +1,7 @@
-// load dependencies
 var path = require('path');
-var multipart = require('connect-multiparty');
-var multipartMiddleware = multipart();
-// load helpers
+var routeHelpers = require('../helpers/routeHelpers.js');
 var lbryApi = require('../helpers/lbryApi.js');
-var queueApi = require('../helpers/queueApi.js');
 
-
-function handleRequestError(error, res) {
-	if ((error === "NO_CLAIMS") || (error === "NO_FREE_PUBLIC_CLAIMS")){
-		res.status(307).sendFile(path.join(__dirname, '../public', 'noClaims.html'));
-	} else if (error.response.status === 500) {
-		res.status(400).send(error.response.data.error.message);
-	} else {
-		res.status(400).send(error.toString());
-	};
-}
-
-// routes to export
 module.exports = function(app){
 	// route to fetch one free public claim 
 	app.get("/favicon.ico", function(req, res){
@@ -36,7 +20,7 @@ module.exports = function(app){
 		})
 		.catch(function(error){
 			console.log("/:name/all error:", error);
-			handleRequestError(error, res);
+			routeHelpers.handleRequestError(error, res);
 		})
 	});
 	// route to fetch one free public claim 
@@ -51,10 +35,9 @@ module.exports = function(app){
 		})
 		.catch(function(error){
 			console.log("/:name/:claim_id error.")
-			handleRequestError(error, res);
+			routeHelpers.handleRequestError(error, res);
 		});
 	});
-
 	// route to fetch one free public claim 
 	app.get("/:name", function(req, res){
 		console.log(">> GET request on /" + req.params.name);
@@ -65,15 +48,13 @@ module.exports = function(app){
 			res.status(200).sendFile(filePath);
 		}).catch(function(error){
 			console.log("/:name error.");
-			handleRequestError(error, res);
+			routeHelpers.handleRequestError(error, res);
 		});
 	});
-
 	// route for the home page
 	app.get("/", function(req, res){
 		res.status(200).sendFile(path.join(__dirname, '../public', 'index.html'));
 	});
-
 	// a catch-all route if someone visits a page that does not exist
 	app.use("*", function(req, res){
 		res.status(404).sendFile(path.join(__dirname, '../public', 'fourOhfour.html'));

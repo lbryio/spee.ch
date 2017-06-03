@@ -1,10 +1,7 @@
-// load dependencies
 var path = require('path');
 var axios = require('axios');
 
-// helper function to filter an array of claims for only free, public claims
 function filterForFreePublicClaims(claimsListArray){
-	//console.log(">> filterForFreePublicClaims, claimsListArray:", claimsListArray);
 	if (!claimsListArray) {
 		return null;
 	};
@@ -14,7 +11,7 @@ function filterForFreePublicClaims(claimsListArray){
 	});
 	return freePublicClaims;
 }
-// helper function to decide if a claim is free and public
+
 function isFreePublicClaim(claim){
 	console.log(">> isFreePublicClaim, claim:", claim);
 	if ((claim.value.stream.metadata.license === 'Public Domain' || claim.value.stream.metadata.license === 'Creative Commons') &&
@@ -24,7 +21,7 @@ function isFreePublicClaim(claim){
 		return false;
 	}
 }
-// helper function to order a set of claims
+
 function orderTopClaims(claimsListArray){
 	console.log(">> orderTopClaims, claimsListArray:");
 	claimsListArray.sort(function(claimA, claimB){

@@ -10,6 +10,7 @@ function handlePublishError(error) {
 		return error;
 	};
 }
+
 function createPublishParams(name, filepath, license, nsfw) {
 	var publishParams = {
 		"name": name,
@@ -26,6 +27,7 @@ function createPublishParams(name, filepath, license, nsfw) {
 	};
 	return publishParams;
 }
+
 function deleteTemporaryFile(filepath) {
 	fs.unlink(filepath, function(err) {
 		if (err) throw err;
@@ -43,12 +45,12 @@ module.exports = {
 		lbryApi.publishClaim(publishParams)
 		.then(function(data){
 			console.log("publish promise success. Tx info:", data)
-			socket.emit("publish-complete", data);
+			socket.emit("publish-complete", {name: name, result: data.result});
 			deleteTemporaryFile(filepath);
 		})
 		.catch(function(error){
 			console.log("error:", error);
-			socket.emit("publish-status", handlePublishError(error));
+			socket.emit("publish-failure", handlePublishError(error));
 			deleteTemporaryFile(filepath);
 		});
 	}
