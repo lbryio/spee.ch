@@ -57,9 +57,9 @@ function getClaimWithUri(uri, resolve, reject){
 		*/
 		resolve(getUriResponse.data.result.download_path);
 	}).catch(function(getUriError){
-		console.log(">> 'get' error:", getUriError.response.data);
+		console.log(">> 'get' error:", getUriError);
 		// reject the promise with an error message
-		reject(getUriError.response.data.error.message);
+		reject(getUriError);
 		return;
 	});
 }
@@ -82,16 +82,10 @@ module.exports = {
 				console.log(">> 'publish' success");
 				// return the claim we got 
 				resolve(response.data);
-				return;
 			}).catch(function(error){
 				// receive response from LBRY
 				console.log(">> 'publish' error");
-				if (error.response.data.error){
-					reject(error.response.data.error);
-				} else {
-					reject(error);
-				}
-				return;
+				reject(error);
 			})
 		})
 		return deferred;
@@ -134,16 +128,8 @@ module.exports = {
 				getClaimWithUri(freePublicClaimUri, resolve, reject);
 			})
 			.catch(function(error){
-				console.log(">> 'claim_list' error:", error);
-				// reject the promise with an approriate message
-				if (error.code === "ECONNREFUSED"){
-					reject("Connection refused.  The daemon may not be running.")
-				} else if (error.response.data.error) {
-					reject(error.response.data.error);
-				} else {
-					reject(error);
-				};
-				return;
+				console.log(">> 'claim_list' error.");
+				reject(error);
 			});
 		});
 		// 3. return the promise
@@ -200,14 +186,8 @@ module.exports = {
 				*/
 				resolve(orderedPublicClaims); 
 			}).catch(function(error){
-				console.log(">> 'claim_list' error:", error);
-				if (error.code === "ECONNREFUSED"){
-					reject("Connection refused.  The daemon may not be running.")
-				} else if (error.response.data.error) {
-					reject(error.response.data.error);
-				} else {
-					reject(error);
-				};
+				console.log(">> 'claim_list' error");
+				reject(error);
 			})
 		});
 		return deferred;

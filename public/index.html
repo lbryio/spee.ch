@@ -9,7 +9,8 @@
 <body>
 	<h1>spee.ch</h1>
 	<p>spee.ch is a single-serving site that reads and publishes images to and from the <a href="https://lbry.io">LBRY</a> blockchain.</p>
-	<h3>Examples:</h3>
+	
+	<h2>Examples:</h2>
 	<ul>
 		<li><a href="/coconuts">spee.ch/coconuts</a></li>
 		<li><a href="/wood">spee.ch/wood</a></li>
@@ -17,7 +18,8 @@
 		<li><a href="/doitlive/all">spee.ch/doitlive/all</a></li>
 		<li><a href="/doitlive/ca3023187e901df9e9aabd95d6ae09b6cc69b3f0">spee.ch/doitlive/ca3023187e901df9e9aabd95d6ae09b6cc69b3f0</a></li>
 	</ul>
-	<h3>Publish Your Own</h3>
+
+	<h2>Publish Your Own</h2>
 	<div id="publish">
 		<form id="publish-form" action="" method="" enctype="multipart/form-data">
 			<input type="file"  id="siofu_input" name="file" accept="video/*,image/*" onchange="previewFile()" enctype="multipart/form-data"/>
@@ -38,15 +40,14 @@
 			<br/>
 			<button id="publish-submit">Submit</button>
 		</form>
-		<p id="upload-status"></p>
 	</div>
 	
-	<h3>Help Wanted!</h3>
+	<h2>Help Wanted!</h2>
 	<p>If you would like to help make spee.ch amazing, join our slack channel.</p>
 	<p>We are currently in need of a designer to help with styling spee.ch's front end, but all help is welcome!</p>
 	
-	<h3>Help</h3>
-	<h4>Site Navigation</h4>
+	<h2>Documentation</h2>
+	<h3>Site Navigation</h3>
 	<ul>
 		<li><strong><a href="/">spee.ch</a></strong>.
 			<ul>
@@ -72,7 +73,7 @@
 			</ul>
 		</li>
 	</ul>
-	<h4>API</h4>
+	<h3>API</h3>
 	<p>Note: these are being used for testing durring spee.ch development and may not be maintained</p>
 	<ul>		
 		<li>A GET request to <strong>spee.ch/claim_list/&ltthe name of the claim&gt</strong> 
@@ -86,10 +87,29 @@
 	<script src="/socket.io/socket.io.js"></script>
 	<script src="/siofu/client.js"></script>
 	<script>
-		// define global variables
 		var socket = io();
 		var uploader = new SocketIOFileUpload(socket);
-		// function to handle image preview
+
+		function createProgressBar(element, size){
+			var x = 1;
+			var adder = 1;
+			function addOne(){
+				var bars = '<h3>|';
+				for (var i = 0; i < x; i++){
+					bars += ' | ';
+				}
+				bars += '</h3>';
+				element.innerHTML = bars;
+				if (x === size){
+					adder = -1;
+				} else if ( x === 0){
+					adder = 1;
+				}
+				x += adder;
+			};
+			setInterval(addOne, 300);
+		}
+
 		function previewFile(){
 			var preview = document.querySelector('img'); //selects the query named img
 			var claimName = document.querySelector('input[name=name]'); 
@@ -106,19 +126,17 @@
 				preview.src = "";
 			};
 		}
-		// helper function to update status
+
 		function updatePublishStatus(msg){
-			document.getElementById("publish").innerHTML = msg;
+			document.getElementById("publish-status").innerHTML = msg;
 		}
-		// call the previewFile function
-		previewFile();
-		// prevent default on the submit button
+
+		uploader.listenOnSubmit(document.getElementById("publish-submit"), document.getElementById("siofu_input"));
+
 		document.getElementById("publish-submit").addEventListener("click", function(event){
 			event.preventDefault();
 		})
-		// upload through the socket
-		uploader.listenOnSubmit(document.getElementById("publish-submit"), document.getElementById("siofu_input"));
-		// add listeners to the uploader
+
 		uploader.addEventListener("start", function(event){
 			var name = document.getElementById('publish-name').value;
 			var license = document.getElementById('publish-license').value;
@@ -127,12 +145,17 @@
 			event.file.meta.name = name;
 			event.file.meta.license = license;
 			event.file.meta.nsfw = nsfw;
+			// set the html of the publish area
+			document.getElementById("publish").innerHTML = '<div id="publish-status"></div><div id="progress-bar"></div>';
+			// start the progress bar
+			createProgressBar(document.getElementById("progress-bar"), 12);
 		});
+
 		uploader.addEventListener("progress", function(event){
 			var percent = event.bytesLoaded / event.file.size * 100;
 			updatePublishStatus("File is " + percent.toFixed(2) + "% loaded to the server");
 		})
-		// add listener for publish status updates
+
 		socket.on("publish-status", function(msg){
 			updatePublishStatus(msg);
 		})
@@ -145,7 +168,7 @@
 			publishResults += `<p><a href="/">Reload the page to publish another (fancy button coming soon)</a></p>`;
 			document.getElementById("publish").innerHTML = publishResults; 
 		})
-		
+	
 	</script>
 </body>
 </html>
