@@ -1,4 +1,4 @@
-//var fs = require('fs');
+var fs = require('fs');
 var lbryApi = require('../helpers/lbryApi.js');
 
 function handlePublishError(error) {
@@ -26,10 +26,10 @@ function createPublishParams(name, filepath, license, nsfw) {
 	};
 	return publishParams;
 }
-function deleteTemporaryFile(filepath, name){
-	fs.unlink(filepath, function(err){
+function deleteTemporaryFile(filepath) {
+	fs.unlink(filepath, function(err) {
 		if (err) throw err;
-		console.log('successfully deleted ' + name);
+		console.log('successfully deleted ' + filepath);
 	});
 }
 
@@ -44,12 +44,12 @@ module.exports = {
 		.then(function(data){
 			console.log("publish promise success. Tx info:", data)
 			socket.emit("publish-complete", data);
-			deleteTemporaryFile(filepath, name);
+			deleteTemporaryFile(filepath);
 		})
 		.catch(function(error){
 			console.log("error:", error);
 			socket.emit("publish-status", handlePublishError(error));
-			deleteTemporaryFile(filepath, name);
+			deleteTemporaryFile(filepath);
 		});
 	}
 }

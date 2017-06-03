@@ -1,10 +1,8 @@
 module.exports = function(app) {
 	var http = require('http').Server(app);
 	var io = require('socket.io')(http);
-	var fs = require('fs');
+	//var fs = require('fs');
 	var path = require('path');
-	var lbryApi = require('../helpers/lbryApi.js');
-	var queueApi = require('../helpers/queueApi.js');
 	var siofu = require("socketio-file-upload");
 	var socketHelpers = require('../helpers/socketHelpers.js');
 

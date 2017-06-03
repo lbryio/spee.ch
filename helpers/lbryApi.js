@@ -46,8 +46,8 @@ function getClaimWithUri(uri, resolve, reject){
 	).then(function (getUriResponse) {
 		console.log(">> 'get claim' success...");
 		//check to make sure the daemon didn't just time out
-		if (getUriResponse.data.result.error === "Timeout"){
-			reject("get request to lbry daemon timed out");
+		if (getUriResponse.data.result.error){
+			reject(getUriResponse.data.result.error);
 		}
 		console.log(">> response data:", getUriResponse.data);
 		console.log(">> dl path =", getUriResponse.data.result.download_path)
@@ -57,7 +57,7 @@ function getClaimWithUri(uri, resolve, reject){
 		*/
 		resolve(getUriResponse.data.result.download_path);
 	}).catch(function(getUriError){
-		console.log(">> 'get' error:", getUriError);
+		console.log(">> 'get' error.");
 		// reject the promise with an error message
 		reject(getUriError);
 		return;
