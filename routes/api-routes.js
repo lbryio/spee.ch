@@ -1,11 +1,7 @@
-// require dependencies 
 var path = require('path');
 var axios = require('axios');
-var multipart = require('connect-multiparty');
-var multipartMiddleware = multipart();
-// import helpers
+
 var lbryApi = require('../helpers/lbryApi.js');
-var queueApi = require('../helpers/queueApi.js');
 
 module.exports = function(app){
 	// route to return claim list in json
