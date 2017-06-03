@@ -1,10 +1,7 @@
-// load dependencies
 var path = require('path');
 var axios = require('axios');
 
-// helper function to filter an array of claims for only free, public claims
 function filterForFreePublicClaims(claimsListArray){
-	//console.log(">> filterForFreePublicClaims, claimsListArray:", claimsListArray);
 	if (!claimsListArray) {
 		return null;
 	};
@@ -14,7 +11,7 @@ function filterForFreePublicClaims(claimsListArray){
 	});
 	return freePublicClaims;
 }
-// helper function to decide if a claim is free and public
+
 function isFreePublicClaim(claim){
 	console.log(">> isFreePublicClaim, claim:", claim);
 	if ((claim.value.stream.metadata.license === 'Public Domain' || claim.value.stream.metadata.license === 'Creative Commons') &&
@@ -24,7 +21,7 @@ function isFreePublicClaim(claim){
 		return false;
 	}
 }
-// helper function to order a set of claims
+
 function orderTopClaims(claimsListArray){
 	console.log(">> orderTopClaims, claimsListArray:");
 	claimsListArray.sort(function(claimA, claimB){
@@ -46,8 +43,8 @@ function getClaimWithUri(uri, resolve, reject){
 	).then(function (getUriResponse) {
 		console.log(">> 'get claim' success...");
 		//check to make sure the daemon didn't just time out
-		if (getUriResponse.data.result.error === "Timeout"){
-			reject("get request to lbry daemon timed out");
+		if (getUriResponse.data.result.error){
+			reject(getUriResponse.data.result.error);
 		}
 		console.log(">> response data:", getUriResponse.data);
 		console.log(">> dl path =", getUriResponse.data.result.download_path)
@@ -57,9 +54,9 @@ function getClaimWithUri(uri, resolve, reject){
 		*/
 		resolve(getUriResponse.data.result.download_path);
 	}).catch(function(getUriError){
-		console.log(">> 'get' error:", getUriError.response.data);
+		console.log(">> 'get' error.");
 		// reject the promise with an error message
-		reject(getUriError.response.data.error.message);
+		reject(getUriError);
 		return;
 	});
 }
@@ -82,16 +79,10 @@ module.exports = {
 				console.log(">> 'publish' success");
 				// return the claim we got 
 				resolve(response.data);
-				return;
 			}).catch(function(error){
 				// receive response from LBRY
 				console.log(">> 'publish' error");
-				if (error.response.data.error){
-					reject(error.response.data.error);
-				} else {
-					reject(error);
-				}
-				return;
+				reject(error);
 			})
 		})
 		return deferred;
@@ -134,16 +125,8 @@ module.exports = {
 				getClaimWithUri(freePublicClaimUri, resolve, reject);
 			})
 			.catch(function(error){
-				console.log(">> 'claim_list' error:", error);
-				// reject the promise with an approriate message
-				if (error.code === "ECONNREFUSED"){
-					reject("Connection refused.  The daemon may not be running.")
-				} else if (error.response.data.error) {
-					reject(error.response.data.error);
-				} else {
-					reject(error);
-				};
-				return;
+				console.log(">> 'claim_list' error.");
+				reject(error);
 			});
 		});
 		// 3. return the promise
@@ -200,14 +183,8 @@ module.exports = {
 				*/
 				resolve(orderedPublicClaims); 
 			}).catch(function(error){
-				console.log(">> 'claim_list' error:", error);
-				if (error.code === "ECONNREFUSED"){
-					reject("Connection refused.  The daemon may not be running.")
-				} else if (error.response.data.error) {
-					reject(error.response.data.error);
-				} else {
-					reject(error);
-				};
+				console.log(">> 'claim_list' error");
+				reject(error);
 			})
 		});
 		return deferred;
