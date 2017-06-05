@@ -1,7 +1,7 @@
 # spee.ch
 spee.ch is a single-serving site that reads and publishes images to and from the [LBRY](https://lbry.io/) blockchain.
 
-## how to use this repository
+## how to run this repository locally
 * start lbry
 	* install the [`lbry`](https://github.com/lbryio/lbry) daemon
 	* start the `lbry` daemon
@@ -10,7 +10,7 @@ spee.ch is a single-serving site that reads and publishes images to and from the
 * run `npm install`
 * from your terminal, run `npm start`
 	* to run hot, run `nodemon server.js`
-* visit [localhost:3000](http://localhost:3000) 
+* visit [localhost:3000](http://localhost:3000)
 
 ## site navigation
 * spee.ch
@@ -25,12 +25,12 @@ spee.ch is a single-serving site that reads and publishes images to and from the
 	* To view a batch of files at a claim
 	* E.g. spee.ch/doitlive/all
 
-## development to-do's
+## development road map (to do's)
 * discover/explore functionality for home page
 * display a list of claims at /:name/all
 * fetching: a temporary page while the request is being made (with a loading bar?)
-* publishing: a temporary page while the request is being handled by the server (with a loading bar?)
-* publishing: after publishing, take the user to a temp page with the tx info and status of the tx (then redirect when the tx is complete)
+* eslint with style guidelines
+* implement a design for the front end
 
 ## API
 

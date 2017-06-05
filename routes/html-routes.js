@@ -34,7 +34,7 @@ module.exports = function(app){
 			res.status(200).sendFile(filePath);
 		})
 		.catch(function(error){
-			console.log("/:name/:claim_id error.")
+			console.log("/:name/:claim_id error:", error)
 			routeHelpers.handleRequestError(error, res);
 		});
 	});
@@ -47,7 +47,7 @@ module.exports = function(app){
 			console.log("/:name success.")
 			res.status(200).sendFile(filePath);
 		}).catch(function(error){
-			console.log("/:name error.");
+			console.log("/:name error:", error);
 			routeHelpers.handleRequestError(error, res);
 		});
 	});
