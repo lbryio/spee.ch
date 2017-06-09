@@ -3,6 +3,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var path = require('path');
 var siofu = require("socketio-file-upload");
+var expressHandlebars = require("express-handlebars");
 
 // set port
 var PORT = 3000;
@@ -14,16 +15,19 @@ var app = express();
 app.use(express.static(__dirname + '/public'));
 
 // configure express app
-app.use(bodyParser.json());  // for parsing application/json
+app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 app.use(siofu.router);
+
+// configure handlebars
+app.engine('handlebars', expressHandlebars({defaultLayout: 'main'}));
+app.set('view engine', 'handlebars');
 
 // require express routes
 require("./routes/api-routes.js")(app);
 require("./routes/html-routes.js")(app);
 
-// include socket.io functionality
-// this wraps the server in sockets, to intercept incoming sockets requests
+// wrap the server in socket.io to intercept incoming sockets requests
 var http = require("./routes/sockets-routes.js")(app);
 
 // start server

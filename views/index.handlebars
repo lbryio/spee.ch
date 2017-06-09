@@ -1,0 +1,100 @@
+<h1>spee.ch</h1>
+<p>spee.ch is a single-serving site that reads and publishes images to and from the <a href="https://lbry.io">LBRY</a> blockchain.</p>
+
+{{> examples}}
+{{> publish}}
+{{> links}}
+{{> documentation}}
+{{> bugs}}
+{{> contribute}}
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/siofu/client.js"></script>
+<script>
+	var socket = io();
+	var uploader = new SocketIOFileUpload(socket);
+
+	function createProgressBar(element, size){
+		var x = 1;
+		var adder = 1;
+		function addOne(){
+			var bars = '<p>|';
+			for (var i = 0; i < x; i++){
+				bars += ' | ';
+			}
+			bars += '</p>';
+			element.innerHTML = bars;
+			if (x === size){
+				adder = -1;
+			} else if ( x === 0){
+				adder = 1;
+			}
+			x += adder;
+		};
+		setInterval(addOne, 300);
+	}
+
+	function previewFile(){
+		var preview = document.querySelector('img'); //selects the query named img
+		var claimName = document.querySelector('input[name=name]'); 
+		var selectedFile = document.querySelector('input[name=file]').files[0];
+		var previewReader = new FileReader();
+		previewReader.onloadend = function () {
+			preview.src = previewReader.result;
+		};
+		if (selectedFile) {
+			previewReader.readAsDataURL(selectedFile); // reads the data and sets the img src
+			claimName.value = selectedFile.name.substring(0, selectedFile.name.indexOf('.'));
+		} else {
+			preview.src = '';
+		}
+	}
+
+	function updatePublishStatus(msg){
+		document.getElementById('publish-status').innerHTML = msg;
+	}
+
+	uploader.listenOnSubmit(document.getElementById('publish-submit'), document.getElementById('siofu_input'));
+
+	document.getElementById('publish-submit').addEventListener('click', function(event){
+		event.preventDefault();
+	})
+
+	uploader.addEventListener('start', function(event){
+		var name = document.getElementById('publish-name').value;
+		var license = document.getElementById('publish-license').value;
+		var nsfw = document.getElementById('publish-nsfw').value;
+		// set meta data 
+		event.file.meta.name = name;
+		event.file.meta.license = license;
+		event.file.meta.nsfw = nsfw;
+		// set the html of the publish area
+		document.getElementById('publish').innerHTML = '<div id="publish-status"></div><div id="progress-bar"></div>';
+		// start the progress bar
+		createProgressBar(document.getElementById('progress-bar'), 12);
+	});
+
+	uploader.addEventListener('progress', function(event){
+		var percent = event.bytesLoaded / event.file.size * 100;
+		updatePublishStatus('File is ' + percent.toFixed(2) + '% loaded to the server');
+	})
+
+	socket.on('publish-status', function(msg){
+		updatePublishStatus(msg);
+	})
+
+	socket.on('publish-failure', function(msg){
+		document.getElementById('publish').innerHTML = '<p>' + msg + '</p><p> --(✖╭╮✖)→ </p>';
+	})
+
+	socket.on('publish-complete', function(msg){
+		var publishResults = '<p>Your publish is complete!</p>';
+		publishResults += '<p>Your Claim ID is: ' + msg.result.claim_id + '</p>';
+		publishResults += '<p>Your Transaction ID is: <a href="https://explorer.lbry.io/#!/transaction?id=' + msg.result.txid + '">' + msg.result.txid + '</a></p>';
+		publishResults += '<p>Here is a link to the claim where your asset was published: <a href="https://spee.ch/' + msg.name + '">spee.ch/' + msg.name + '</a></p>';
+		publishResults += '<p>Here is a direct link to your asset: <a href="https://spee.ch/' + msg.name + '/' + msg.result.claim_id + '">spee.ch/' + msg.name + '/' + msg.result.claim_id + '</a></p>';
+		publishResults += '<p><i>NOTE: the transaction still needs to be mined by the network before you can access it! This may take a few minutes. To to view the transaction on the blockchain explorer click the Transaction ID link above.</i></p>';
+		publishResults += '<p><a href="/">Reload to publish another asset</a></p>';
+		document.getElementById('publish').innerHTML = publishResults; 
+	})
+</script>
