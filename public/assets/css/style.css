@@ -1,3 +1,14 @@
+#drop-zone {
+	border: 1px dashed lightgrey;
+	padding: 1em;
+	height: 200px;
+	width: 300px;
+}
+
 .all-claims-img {
 	height: 200px;
+}
+
+#image-preview {
+	display: none;
 }

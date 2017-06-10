@@ -5,23 +5,25 @@
 {{> publish}}
 {{> links}}
 {{> documentation}}
-{{> bugs}}
 {{> contribute}}
+{{> bugs}}
 
 <script src="/socket.io/socket.io.js"></script>
 <script src="/siofu/client.js"></script>
 <script>
+	// define variables
 	var socket = io();
 	var uploader = new SocketIOFileUpload(socket);
+	var stagedFile = null;
 
-	function createProgressBar(element, size){
+	/* helper functions */
+	// create a progress animation
+	function createProgressBar(element, size){ 
 		var x = 1;
 		var adder = 1;
 		function addOne(){
 			var bars = '<p>|';
-			for (var i = 0; i < x; i++){
-				bars += ' | ';
-			}
+			for (var i = 0; i < x; i++){ bars += ' | '; }
 			bars += '</p>';
 			element.innerHTML = bars;
 			if (x === size){
@@ -33,60 +35,97 @@
 		};
 		setInterval(addOne, 300);
 	}
-
-	function previewFile(){
-		var preview = document.querySelector('img'); //selects the query named img
-		var claimName = document.querySelector('input[name=name]'); 
-		var selectedFile = document.querySelector('input[name=file]').files[0];
+	// preview file and stage the image for upload
+	function previewAndStageFile(selectedFile){ 
+		var preview = document.getElementById('image-preview');
+		var dropzone = document.getElementById('drop-zone');
 		var previewReader = new FileReader();
+
+		preview.style.display = 'block';
+		dropzone.style.display = 'none';
+		
 		previewReader.onloadend = function () {
 			preview.src = previewReader.result;
 		};
+
 		if (selectedFile) {
 			previewReader.readAsDataURL(selectedFile); // reads the data and sets the img src
-			claimName.value = selectedFile.name.substring(0, selectedFile.name.indexOf('.'));
+			document.getElementById('publish-name').value = selectedFile.name.substring(0, selectedFile.name.indexOf('.')); // updates metadata inputs
+			stagedFile = [selectedFile]; // stores the selected file for upload
 		} else {
 			preview.src = '';
 		}
 	}
-
+	// update the publish status
 	function updatePublishStatus(msg){
 		document.getElementById('publish-status').innerHTML = msg;
 	}
+	// process the drop-zone drop
+	function drop_handler(ev) {
+		console.log("drop");
+		ev.preventDefault();
+		// if dropped items aren't files, reject them
+		var dt = ev.dataTransfer;
+		if (dt.items) {
+			if (dt.items[0].kind == 'file') {
+				var droppedFile = dt.items[0].getAsFile();
+				previewAndStageFile(droppedFile);
+			} else {
+				console.log("no files were found")
+			}
+		} else {
+			console.log("no items were found")
+		}
+	}
+	// prevent the browser's default drag behavior
+	function dragover_handler(ev) {
+		ev.preventDefault();
+	}
+	// remove all of the drag data
+	function dragend_handler(ev) {
+		var dt = ev.dataTransfer;
+		if (dt.items) {
+			for (var i = 0; i < dt.items.length; i++) {
+				dt.items.remove(i);
+			}
+		} else {
+			ev.dataTransfer.clearData();
+		}
+	}
 
-	uploader.listenOnSubmit(document.getElementById('publish-submit'), document.getElementById('siofu_input'));
-
+	/* configure the submit button */
 	document.getElementById('publish-submit').addEventListener('click', function(event){
 		event.preventDefault();
+		if (stagedFile) {
+			uploader.submitFiles(stagedFile);
+		};
 	})
-
+	
+	/* socketio-file-upload listeners */
 	uploader.addEventListener('start', function(event){
 		var name = document.getElementById('publish-name').value;
 		var license = document.getElementById('publish-license').value;
 		var nsfw = document.getElementById('publish-nsfw').value;
-		// set meta data 
 		event.file.meta.name = name;
 		event.file.meta.license = license;
 		event.file.meta.nsfw = nsfw;
-		// set the html of the publish area
-		document.getElementById('publish').innerHTML = '<div id="publish-status"></div><div id="progress-bar"></div>';
-		// start the progress bar
+		// re-set the html in the publish area
+		document.getElementById('publish-active-area').innerHTML = '<div id="publish-status"></div><div id="progress-bar"></div>';
+		// start a progress animation
 		createProgressBar(document.getElementById('progress-bar'), 12);
 	});
-
 	uploader.addEventListener('progress', function(event){
 		var percent = event.bytesLoaded / event.file.size * 100;
 		updatePublishStatus('File is ' + percent.toFixed(2) + '% loaded to the server');
-	})
+	});
 
+	/* socket.io message listeners */
 	socket.on('publish-status', function(msg){
 		updatePublishStatus(msg);
-	})
-
+	});
 	socket.on('publish-failure', function(msg){
-		document.getElementById('publish').innerHTML = '<p>' + msg + '</p><p> --(✖╭╮✖)→ </p>';
-	})
-
+		document.getElementById('publish-active-area').innerHTML = '<p>' + msg + '</p><p> --(✖╭╮✖)→ </p>';
+	});
 	socket.on('publish-complete', function(msg){
 		var publishResults = '<p>Your publish is complete!</p>';
 		publishResults += '<p>Your Claim ID is: ' + msg.result.claim_id + '</p>';
@@ -95,6 +134,6 @@
 		publishResults += '<p>Here is a direct link to your asset: <a href="https://spee.ch/' + msg.name + '/' + msg.result.claim_id + '">spee.ch/' + msg.name + '/' + msg.result.claim_id + '</a></p>';
 		publishResults += '<p><i>NOTE: the transaction still needs to be mined by the network before you can access it! This may take a few minutes. To to view the transaction on the blockchain explorer click the Transaction ID link above.</i></p>';
 		publishResults += '<p><a href="/">Reload to publish another asset</a></p>';
-		document.getElementById('publish').innerHTML = publishResults; 
-	})
+		document.getElementById('publish-active-area').innerHTML = publishResults; 
+	});
 </script>
