@@ -14,8 +14,8 @@ module.exports = function(app){
 		// create promise
 		lbryApi.getAllClaims(req.params.name)
 		.then(function(orderedFreePublicClaims){
-			console.log("/:name/all success.")
-			res.status(200).send(orderedFreePublicClaims); 
+			console.log("/:name/all success.");
+			res.status(200).render('allClaims', { claims: orderedFreePublicClaims });
 			return;
 		})
 		.catch(function(error){
@@ -34,7 +34,7 @@ module.exports = function(app){
 			res.status(200).sendFile(filePath);
 		})
 		.catch(function(error){
-			console.log("/:name/:claim_id error.")
+			console.log("/:name/:claim_id error:", error)
 			routeHelpers.handleRequestError(error, res);
 		});
 	});
@@ -47,16 +47,16 @@ module.exports = function(app){
 			console.log("/:name success.")
 			res.status(200).sendFile(filePath);
 		}).catch(function(error){
-			console.log("/:name error.");
+			console.log("/:name error:", error);
 			routeHelpers.handleRequestError(error, res);
 		});
 	});
 	// route for the home page
 	app.get("/", function(req, res){
-		res.status(200).sendFile(path.join(__dirname, '../public', 'index.html'));
+		res.status(200).render('index');
 	});
 	// a catch-all route if someone visits a page that does not exist
 	app.use("*", function(req, res){
-		res.status(404).sendFile(path.join(__dirname, '../public', 'fourOhfour.html'));
+		res.status(404).render('fourOhFour');
 	});
 }

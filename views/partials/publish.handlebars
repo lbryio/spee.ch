@@ -1,0 +1,28 @@
+<div id="publish">
+	<h2>Publish Your Own</h2>
+	<div id="publish-active-area">
+		<form id="publish-form" action="" method="" enctype="multipart/form-data">
+			<div id="drop-zone" ondrop="drop_handler(event);" ondragover="dragover_handler(event);" ondragend="dragend_handler(event)">
+				<p>Drag and drop your file here, or choose your file below.</p>
+				
+				<input type="file"  id="siofu_input" name="file" accept="video/*,image/*" onchange="previewAndStageFile(event.target.files[0])" enctype="multipart/form-data"/>
+			</div>
+			<img id="image-preview" src="" height="200" alt="Image preview..."/>
+			<br/>
+			Name: <input type="text" id="publish-name" name="name" value="name"/>
+			<br/>
+			License: <select type="text" id="publish-license" name="license" value="license">
+				<option value="Public Domain">Public Domain</option>
+				<option value="Creative Commons">Creative Commons</option>
+			</select>
+			<br/>
+			NSFW: <select type="text" id="publish-nsfw" name="nsfw" value="false">
+				<option value="false">False</option>
+				<option value="true">True</option>
+			</select>
+			<p><i>By clicking 'Publish' I attest that I have read and agree to the <a href="https://lbry.io/termsofservice" target="_blank">LBRY terms of service</a>.</i></p>
+			<button id="publish-submit">Publish</button>
+			<button id="publish-reset">Reset</button>
+		</form>
+	</div>
+</div>
