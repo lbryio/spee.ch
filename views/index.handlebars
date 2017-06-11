@@ -1,12 +1,28 @@
-<h1>spee.ch</h1>
-<p>spee.ch is a single-serving site that reads and publishes images to and from the <a href="https://lbry.io">LBRY</a> blockchain.</p>
-
-{{> examples}}
-{{> publish}}
-{{> links}}
-{{> documentation}}
-{{> contribute}}
-{{> bugs}}
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="card">
+				<div class="card-title card-block default-color-dark white-text">
+					<h1>Spee.ch</h1>
+				</div>
+				<div class="card-block">
+					<p>Spee.ch is a single-serving site that reads and publishes images to and from the <a href="https://lbry.io">LBRY</a> blockchain.</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		{{> examples}}
+		{{> publish}}
+	</div>
+	<div class="row">
+		{{> documentation}}
+	</div>
+	<div class="row">
+		{{> contribute}}
+		{{> bugs}}
+	</div>
+</div>
 
 <script src="/socket.io/socket.io.js"></script>
 <script src="/siofu/client.js"></script>
