@@ -3,11 +3,11 @@ var routeHelpers = require('../helpers/routeHelpers.js');
 var lbryApi = require('../helpers/lbryApi.js');
 
 module.exports = function(app){
-	// route to fetch one free public claim 
-	app.get("/favicon.ico", function(req, res){
-		console.log(" >> GET request on favicon.ico");
-		res.sendFile(path.join(__dirname, '../public/assets/img', 'favicon.ico'));
-	});
+	// route for favicon
+	// app.get("/favicon.ico", function(req, res){
+	// 	console.log(" >> GET request on favicon.ico");
+	// 	res.sendFile(path.join(__dirname, '../public/assets/img', 'favicon.ico'));
+	// });
 	// route to fetch one free public claim 
 	app.get("/:name/all", function(req, res){
 		console.log(">> GET request on /" + req.params.name + " (all)");

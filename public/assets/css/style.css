@@ -2,7 +2,7 @@
 	border: 1px dashed lightgrey;
 	padding: 1em;
 	height: 200px;
-	width: 300px;
+	width: 100%;
 }
 
 .all-claims-img {
@@ -11,4 +11,8 @@
 
 #image-preview {
 	display: none;
+}
+
+.row {
+	margin: 10px 0px 10px 0px;
 }
