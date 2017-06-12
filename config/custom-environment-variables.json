@@ -1,0 +1,8 @@
+{
+	"WalletConfig": {
+		"lbryAddress": "LBRY_WALLET_ADDRESS"
+	},
+	"AnalyticsConfig":{
+		"googleId": "GOOGLE_ANALYTICS_ID"
+	}
+}

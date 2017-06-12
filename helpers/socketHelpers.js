@@ -1,5 +1,7 @@
 var fs = require('fs');
 var lbryApi = require('../helpers/lbryApi.js');
+var config = require('config');
+var walledAddress = config.get('WalletConfig.lbryAddress');
 
 function handlePublishError(error) {
 	if (error.code === "ECONNREFUSED"){
@@ -24,8 +26,8 @@ function createPublishParams(name, filepath, license, nsfw) {
 			"license": license,
 			"nsfw": (nsfw.toLowerCase() === "true")
 		},
-		"claim_address": "", // fill in wallet address
-		"change_address": "" // fill in wallet address; requires daemon 0.12.2rc1 or above
+		"claim_address": walledAddress,
+		"change_address": walledAddress //requires daemon 0.12.2rc1 or above
 	};
 	return publishParams;
 }
