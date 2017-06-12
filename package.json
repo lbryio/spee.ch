@@ -30,6 +30,7 @@
     "express-handlebars": "^3.0.0",
     "nodemon": "^1.11.0",
     "socket.io": "^2.0.1",
-    "socketio-file-upload": "^0.6.0"
+    "socketio-file-upload": "^0.6.0",
+    "universal-analytics": "^0.4.13"
   }
 }

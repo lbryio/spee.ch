@@ -4,6 +4,11 @@ var bodyParser = require('body-parser');
 var path = require('path');
 var siofu = require("socketio-file-upload");
 var expressHandlebars = require("express-handlebars");
+var ua = require('universal-analytics');
+var config = require('config');
+
+var googleAnalyticsId = config.get('AnalyticsConfig.googleId');
+var visitor = ua(googleAnalyticsId, {https: true});
 
 // set port
 var PORT = 3000;
@@ -24,11 +29,11 @@ app.engine('handlebars', expressHandlebars({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
 
 // require express routes
-require("./routes/api-routes.js")(app);
-require("./routes/html-routes.js")(app);
+require("./routes/api-routes.js")(app, visitor);
+require("./routes/html-routes.js")(app, visitor);
 
 // wrap the server in socket.io to intercept incoming sockets requests
-var http = require("./routes/sockets-routes.js")(app);
+var http = require("./routes/sockets-routes.js")(app, visitor);
 
 // start server
 http.listen(PORT, function() {

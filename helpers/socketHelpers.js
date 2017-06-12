@@ -1,6 +1,7 @@
 var fs = require('fs');
 var lbryApi = require('../helpers/lbryApi.js');
 var config = require('config');
+
 var walledAddress = config.get('WalletConfig.lbryAddress');
 
 function handlePublishError(error) {
