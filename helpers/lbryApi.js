@@ -68,7 +68,7 @@ function findAllClaims(name, resolve, reject){
 module.exports = {
 
 	publishClaim: function(publishParams){
-		console.log(publishParams);
+		console.log("publish params:>", publishParams);
 		var deferred = new Promise(function(resolve, reject){
 			axios.post('http://localhost:5279/lbryapi', {
 				"method": "publish", 
@@ -89,9 +89,7 @@ module.exports = {
 	},
 
 	getClaimBasedOnNameOnly: function(claimName){
-		// 1. create a promise
 		var deferred = new Promise(function (resolve, reject){
-			// 2. code to resolve or reject the promise
 			// make a call to the daemon to get the claims list 
 			axios.post('http://localhost:5279/lbryapi', {
 				"method": "claim_list", 
@@ -129,9 +127,7 @@ module.exports = {
 				reject(error);
 			});
 		});
-		// 3. return the promise
 		return deferred;
-		
 	},
 
 	getClaimBasedOnUri: function(uri){  

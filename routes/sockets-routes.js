@@ -19,7 +19,7 @@ module.exports = function(app) {
 			console.log("saved " + event.file.name);
 			if (event.file.success){
 				socket.emit("publish-status", "file upload successfully completed");
-				socketHelpers.publish(event.file.meta.name, event.file.pathName, event.file.meta.license,event.file.meta.nsfw, socket)
+				socketHelpers.publish(event.file.meta.name, event.file.pathName, event.file.meta.license, event.file.meta.nsfw, socket)
 			} else {
 				socket.emit("publish-failure", "file uploaded, but with errors")
 			};

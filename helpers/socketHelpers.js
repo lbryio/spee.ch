@@ -15,7 +15,7 @@ function createPublishParams(name, filepath, license, nsfw) {
 	var publishParams = {
 		"name": name,
 		"file_path": filepath,
-		"bid": 0.1,
+		"bid": 0.01,
 		"metadata":  {
 			"description": name + " published via spee.ch",
 			"title": name,
@@ -23,7 +23,9 @@ function createPublishParams(name, filepath, license, nsfw) {
 			"language": "en",
 			"license": license,
 			"nsfw": (nsfw.toLowerCase() === "true")
-		}
+		},
+		"claim_address": "", // fill in wallet address
+		"change_address": "" // fill in wallet address; requires daemon 0.12.2rc1 or above
 	};
 	return publishParams;
 }
