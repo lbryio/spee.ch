@@ -12,6 +12,7 @@ var ua = require('universal-analytics');
 var socketHelpers = require('./helpers/socketHelpers.js');
 var routeHelpers = require('./helpers/routeHelpers.js');
 var lbryApi = require('./helpers/lbryApi.js');
+var lbryHelpers = require('./helpers/lbryHelpers.js');
 
 var googleAnalyticsId = config.get('AnalyticsConfig.googleId');
 
@@ -52,8 +53,8 @@ app.set('view engine', 'handlebars');
 
 // require express routes
 require("./routes/api-routes.js")(app, routeHelpers, lbryApi);
-require("./routes/show-routes.js")(app, routeHelpers, lbryApi, ua, googleAnalyticsId);
-require("./routes/serve-routes.js")(app, routeHelpers, lbryApi, ua, googleAnalyticsId);
+require("./routes/show-routes.js")(app, routeHelpers, lbryHelpers, ua, googleAnalyticsId);
+require("./routes/serve-routes.js")(app, routeHelpers, lbryHelpers, ua, googleAnalyticsId);
 require("./routes/home-routes.js")(app);
 
 // wrap the server in socket.io to intercept incoming sockets requests

@@ -66,25 +66,6 @@ function findAllClaims(name, resolve, reject){
 }
 
 module.exports = {
-
-	publishClaim: function(publishParams){
-		console.log("publish params:>", publishParams);
-		var deferred = new Promise(function(resolve, reject){
-			axios.post('http://localhost:5279/lbryapi', {
-				"method": "publish", 
-				"params": publishParams
-			})
-			.then(function (response) {
-				console.log(">> 'publish' success");
-				resolve(response.data);
-			}).catch(function(error){
-				console.log(">> 'publish' error");
-				reject(error);
-			})
-		})
-		return deferred;
-	},
-
 	getClaimBasedOnNameOnly: function(claimName){
 		var deferred = new Promise(function (resolve, reject){
 			// make a call to the daemon to get the claims list 
@@ -126,7 +107,6 @@ module.exports = {
 		});
 		return deferred;
 	},
-
 	getClaimBasedOnUri: function(uri){  
 		/* 
 			to do: need to pass the URI through a test (use 'resolve') to see if it is free and public. Right now it is jumping straight to 'get'ing and serving the asset.
@@ -139,7 +119,6 @@ module.exports = {
 		return deferred;
 
 	},
-
 	getAllFreePublicClaims: function(claimName, res){  // note: work in progress
 		var deferred = new Promise(function(resolve, reject){
 			console.log(">> get all claims data for", claimName)
@@ -176,38 +155,4 @@ module.exports = {
 		});
 		return deferred;
 	},
-
-	getClaimsList: function(claimName){
-		var deferred = new Promise(function(resolve, reject){
-			console.log(">> claims_list for", claimName)
-			axios.post('http://localhost:5279/lbryapi', {
-				method: "claim_list",
-				params: { name: claimName }
-			}).then(function (response) {
-				console.log(">> claim_list success");
-				resolve(response.data); 
-			}).catch(function(error){
-				console.log(">> claim_list error");
-				reject(error);
-			});
-		});
-		return deferred;
-	},
-
-	resolveUri: function(uri){
-		var deferred = new Promise(function(resolve, reject){
-			console.log(">> resolve uri for", uri)
-			axios.post('http://localhost:5279/lbryapi', {
-				"method": "resolve",
-				"params": { "uri": uri}
-			}).then(function(response){
-				console.log(response.data);
-				resolve(response.data);
-			}).catch(function(error){
-				console.log(">> 'resolve' error");
-				reject(error);
-			});
-		});
-		return deferred;
-	}
 }
