@@ -1,0 +1,8 @@
+{
+	"WalletConfig": {
+		"lbryAddress": "none"
+	},
+	"AnalyticsConfig":{
+		"googleId": "UA-60403362-2"
+	}
+}
