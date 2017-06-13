@@ -1,21 +1,25 @@
 
-module.exports = function(app, axios){
-	// route to return claim list in json
-	app.get("/api/claim_list/:claim", function(req, res){  
-		var claim = req.params.claim;
-		// make a call to the daemon
-		axios.post('http://localhost:5279/lbryapi', {  // to do: extrapolate into lbryApi 'claim list' method and call that 
-				method: "claim_list",
-				params: {
-					name: claim
-				}
-			}
-		).then(function (response) {
-			console.log("success");
-			res.send(response.data);
-		}).catch(function(error){
-			console.log(error.data);
-			res.send(error.data);
+module.exports = function(app, routeHelpers, lbryApi){
+	// route to run a claim_list request on the daemon
+	app.get("/api/claim_list/:claim", function(req, res){
+		lbryApi.getClaimsList(req.params.claim)
+		.then(function(orderedFreePublicImages){
+			console.log("/api/claim_list/:claim success.");
+			res.status(200).json(orderedFreePublicImages);
 		})
+		.catch(function(error){
+			console.log("/api/claim_list/:name error:", error);
+			routeHelpers.handleRequestError(error, res);
+		});
+	});
+	// route to run a resolve request on the daemon
+	app.get("/api/resolve/:uri", function(req, res){
+		lbryApi.resolveUri(req.params.uri)
+		.then(function(resolvedUri){
+			console.log("/api/resolve/:claim success.");
+			res.status(200).json(resolvedUri);
+		}).catch(function(error){
+			routeHelpers.handleRequestError(error, res);
+		});
 	});
 }

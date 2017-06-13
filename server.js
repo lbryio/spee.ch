@@ -51,7 +51,7 @@ app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
 
 // require express routes
-require("./routes/api-routes.js")(app, axios);
+require("./routes/api-routes.js")(app, routeHelpers, lbryApi);
 require("./routes/show-routes.js")(app, routeHelpers, lbryApi, ua, googleAnalyticsId);
 require("./routes/serve-routes.js")(app, routeHelpers, lbryApi, ua, googleAnalyticsId);
 require("./routes/home-routes.js")(app);

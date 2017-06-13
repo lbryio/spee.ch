@@ -5,7 +5,7 @@ module.exports = function(app, routeHelpers, lbryApi, ua, googleAnalyticsId){
 		console.log(">> GET request on /" + req.params.name + " (all)");
 		ua(googleAnalyticsId, {https: true}).event("Show Routes", "/name/all", req.params.name + "/all").send();
 		// create promise
-		lbryApi.getAllClaims(req.params.name)
+		lbryApi.getAllFreePublicClaims(req.params.name)
 		.then(function(orderedFreePublicClaims){
 			console.log("/:name/all success.");
 			res.status(200).render('allClaims', { claims: orderedFreePublicClaims });
