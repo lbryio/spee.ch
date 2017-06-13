@@ -47,7 +47,7 @@ module.exports = {
 	publish: function(name, filepath, license, nsfw, socket) {
 		// update the client
 		socket.emit("publish-status", "Your image is being published (this might take a second)...");
-		visitor.event("Publish", "Publish Request", name, {filepath, license, nsfw}).send();
+		visitor.event("Publish Route", "Publish Request", name, {filepath, license, nsfw}).send();
 		// create the publish object
 		var publishParams = createPublishParams(name, filepath, license, nsfw);
 		// get a promise to publish
@@ -59,7 +59,7 @@ module.exports = {
 			deleteTemporaryFile(filepath);
 		})
 		.catch(function(error){
-			visitor.event("Publish", "Publish Failure", name, {filepath, license, nsfw}).send();
+			visitor.event("Publish Route", "Publish Failure", name, {filepath, license, nsfw}).send();
 			console.log("error:", error);
 			socket.emit("publish-failure", handlePublishError(error));
 			deleteTemporaryFile(filepath);

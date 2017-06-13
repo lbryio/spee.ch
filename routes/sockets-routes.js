@@ -1,13 +1,4 @@
-var path = require('path');
-var siofu = require("socketio-file-upload");
-var socketHelpers = require('../helpers/socketHelpers.js');
-var ua = require('universal-analytics');
-var config = require('config');
-
-var googleAnalyticsId = config.get('AnalyticsConfig.googleId');
-var visitor = ua(googleAnalyticsId, {https: true});
-
-module.exports = function(app) {
+module.exports = function(app, path, siofu, socketHelpers) {
 	var http = require('http').Server(app);
 	var io = require('socket.io')(http);
 	
@@ -23,7 +14,6 @@ module.exports = function(app) {
 		})
 		uploader.on("saved", function(event){
 			console.log("saved " + event.file.name);
-			visitor.event("Publish", "Publish Request", event.file.name).send();
 			if (event.file.success){
 				socket.emit("publish-status", "file upload successfully completed");
 				socketHelpers.publish(event.file.meta.name, event.file.pathName, event.file.meta.license, event.file.meta.nsfw, socket)

@@ -1,13 +1,10 @@
-var path = require('path');
-var axios = require('axios');
-var lbryApi = require('../helpers/lbryApi.js');
 
-module.exports = function(app){
+module.exports = function(app, axios){
 	// route to return claim list in json
-	app.get("/claim_list/:claim", function(req, res){
+	app.get("/api/claim_list/:claim", function(req, res){  
 		var claim = req.params.claim;
 		// make a call to the daemon
-		axios.post('http://localhost:5279/lbryapi', {
+		axios.post('http://localhost:5279/lbryapi', {  // to do: extrapolate into lbryApi 'claim list' method and call that 
 				method: "claim_list",
 				params: {
 					name: claim
