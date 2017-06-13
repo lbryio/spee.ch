@@ -1,12 +1,17 @@
 var path = require('path');
 var routeHelpers = require('../helpers/routeHelpers.js');
 var lbryApi = require('../helpers/lbryApi.js');
+var ua = require('universal-analytics');
+var config = require('config');
 
-module.exports = function(app, visitor){
+var googleAnalyticsId = config.get('AnalyticsConfig.googleId');
+var visitor = ua(googleAnalyticsId, {https: true});
+
+module.exports = function(app){
 	// route to fetch all free public claims 
 	app.get("/:name/all", function(req, res){
 		console.log(">> GET request on /" + req.params.name + " (all)");
-		visitor.pageview(req.url).send();
+		visitor.event("Claim Request", "Name/all", req.params.name + "/all").send();
 		// create promise
 		lbryApi.getAllClaims(req.params.name)
 		.then(function(orderedFreePublicClaims){
@@ -21,7 +26,7 @@ module.exports = function(app, visitor){
 	});
 	// route to fetch one free public claim 
 	app.get("/:name/:claim_id", function(req, res){
-		
+		visitor.event("Claim Request", "Name/ClaimId", req.params.name + "/" + req.params.claim_id).send();
 		var uri = req.params.name + "#" + req.params.claim_id;
 		console.log(">> GET request on /" + uri);
 		// create promise
@@ -37,7 +42,7 @@ module.exports = function(app, visitor){
 	});
 	// route to fetch one free public claim 
 	app.get("/:name", function(req, res){
-		
+		visitor.event("Claim Request", "Name", req.params.name).send();
 		console.log(">> GET request on /" + req.params.name);
 		// create promise
 		lbryApi.getClaimBasedOnNameOnly(req.params.name)
@@ -51,12 +56,10 @@ module.exports = function(app, visitor){
 	});
 	// route for the home page
 	app.get("/", function(req, res){
-		visitor.pageview(req.url).send();
 		res.status(200).render('index');
 	});
 	// a catch-all route if someone visits a page that does not exist
 	app.use("*", function(req, res){
-		visitor.pageview(req.url).send();
 		res.status(404).render('fourOhFour');
 	});
 }

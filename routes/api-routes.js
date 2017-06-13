@@ -1,6 +1,5 @@
 var path = require('path');
 var axios = require('axios');
-
 var lbryApi = require('../helpers/lbryApi.js');
 
 module.exports = function(app){
