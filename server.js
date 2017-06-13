@@ -57,7 +57,7 @@ require("./routes/serve-routes.js")(app, routeHelpers, lbryApi, ua, googleAnalyt
 require("./routes/home-routes.js")(app);
 
 // wrap the server in socket.io to intercept incoming sockets requests
-var http = require("./routes/sockets-routes.js")(app, path, siofu, socketHelpers);
+var http = require("./routes/sockets-routes.js")(app, path, siofu, socketHelpers, ua, googleAnalyticsId);
 
 // start server
 http.listen(PORT, function() {

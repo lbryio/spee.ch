@@ -1,11 +1,8 @@
 var fs = require('fs');
 var lbryApi = require('../helpers/lbryApi.js');
 var config = require('config');
-var ua = require('universal-analytics');
 
 var walledAddress = config.get('WalletConfig.lbryAddress');
-var googleAnalyticsId = config.get('AnalyticsConfig.googleId');
-var visitor = ua(googleAnalyticsId, {https: true});
 
 function handlePublishError(error) {
 	if (error.code === "ECONNREFUSED"){
@@ -44,22 +41,22 @@ function deleteTemporaryFile(filepath) {
 }
 
 module.exports = {
-	publish: function(name, filepath, license, nsfw, socket) {
+	publish: function(name, filepath, license, nsfw, socket, visitor) {
 		// update the client
 		socket.emit("publish-status", "Your image is being published (this might take a second)...");
-		visitor.event("Publish Route", "Publish Request", name, filepath).send();
+		visitor.event("Publish Route", "Publish Request", filepath).send();
 		// create the publish object
 		var publishParams = createPublishParams(name, filepath, license, nsfw);
 		// get a promise to publish
 		lbryApi.publishClaim(publishParams)
 		.then(function(data){
-			visitor.event("Publish", "Publish Success", name, filepath).send();
+			visitor.event("Publish Route", "Publish Success", filepath).send();
 			console.log("publish promise success. Tx info:", data)
 			socket.emit("publish-complete", {name: name, result: data.result});
 			deleteTemporaryFile(filepath);
 		})
 		.catch(function(error){
-			visitor.event("Publish Route", "Publish Failure", name, filepath).send();
+			visitor.event("Publish Route", "Publish Failure", filepath).send();
 			console.log("error:", error);
 			socket.emit("publish-failure", handlePublishError(error));
 			deleteTemporaryFile(filepath);
