@@ -10,10 +10,15 @@ module.exports = function(app, path, siofu, socketHelpers, ua, googleAnalyticsId
 		var uploader = new siofu();
 		uploader.dir = path.join(__dirname, '../../Uploads');
 		uploader.listen(socket);
+		uploader.on("start", function(event){
+			if (/\.exe$/.test(event.file.name)) {
+				uploader.abort(event.file.id, socket);
+			}
+		});
 		uploader.on("error", function(event){
 			console.log("an error occured while uploading", event.error);
 			socket.emit("publish-status", event.error)
-		})
+		});
 		uploader.on("saved", function(event){
 			console.log("saved " + event.file.name);
 			if (event.file.success){

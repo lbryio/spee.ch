@@ -73,17 +73,20 @@ function getAllFreePublicClaims(claimName){  // note: work in progress
 module.exports = {
 	getClaimBasedOnNameOnly: function(claimName){
 		var deferred = new Promise(function (resolve, reject){
-			console.log(">> get all free claims for", claimName);
+			console.log(">> lbryHelpers >> getClaim BasedOnNameOnly:", claimName);
 			// promise to get all free public claims 
 			getAllFreePublicClaims(claimName)
 			.then(function(freePublicClaimList){
 				var freePublicClaimUri = freePublicClaimList[0].name + "#" + freePublicClaimList[0].claim_id;
-				console.log(">> your free public claim URI:", freePublicClaimUri);
+				console.log(">> successfully received free public claim URI:", freePublicClaimUri);
 				// promise to get the chosen uri
 				lbryApi.getClaim(freePublicClaimUri)
 				.then(function(data){
-					console.log(">> dl path =", data.result.download_path)
-					resolve(data.result.download_path)
+					resolve({
+						fileName: data.result.file_name,
+						directory: data.result.download_directory,
+						contentType: data.result.metadata.stream.source.contentType
+					});
 				}).catch(function(error){
 					reject(error)
 				});
@@ -98,12 +101,15 @@ module.exports = {
 			to do: need to pass the URI through a test to see if it is free and public. Right now it is jumping straight to 'get'ing and serving the asset.
 		*/
 		var deferred = new Promise(function (resolve, reject){
-			console.log(">> get claim based on URI:", uri);
+			console.log(">> lbryHelpers >> getClaimBasedOnUri:", uri);
 			// promise to get the chosen uri
 			lbryApi.getClaim(uri)
 			.then(function(data){
-				console.log(">> dl path =", data.result.download_path)
-				resolve(data.result.download_path)
+				resolve({
+					fileName: data.result.file_name,
+					directory: data.result.download_directory,
+					contentType: data.result.metadata.stream.source.contentType
+				});
 			}).catch(function(error){
 				reject(error)
 			});
