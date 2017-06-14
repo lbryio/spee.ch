@@ -18,7 +18,7 @@ function filterForFreePublicClaims(claimsListArray){
 }
 
 function isFreePublicClaim(claim){
-	console.log(">> isFreePublicClaim, claim:", claim);
+	console.log(">> isFreePublicClaim? claim:", claim);
 	if ((claim.value.stream.metadata.license === 'Public Domain' || claim.value.stream.metadata.license === 'Creative Commons') &&
 		(!claim.value.stream.metadata.fee || claim.value.stream.metadata.fee.amount === 0)) {
 		return true;
@@ -28,7 +28,7 @@ function isFreePublicClaim(claim){
 }
 
 function orderTopClaims(claimsListArray){
-	console.log(">> orderTopClaims, claimsListArray:");
+	console.log(">> orderTopClaims");
 	claimsListArray.sort(function(claimA, claimB){
 		if (claimA.amount === claimB.amount){
 			return (claimA.height > claimB.height);
@@ -41,11 +41,9 @@ function orderTopClaims(claimsListArray){
 
 function getAllFreePublicClaims(claimName){
 	var deferred = new Promise(function(resolve, reject){
-		console.log(">> get all claims data for", claimName)
 		// make a call to the daemon to get the claims list
 		lbryApi.getClaimsList(claimName)
 		.then(function(data){
-			console.log(">> 'claim_list' success");
 			var claimsList = data.result.claims;
 			console.log(">> Number of claims:", claimsList.length)
 			// return early if no claims were found
@@ -106,9 +104,9 @@ module.exports = {
 			// resolve the claim
 			lbryApi.resolveUri(uri)
 			.then(function(resolvedUri){
-				console.log("result >>", resolvedUri)
+				//console.log("result >>", resolvedUri)
 				// check to make sure it is free and public
-				if (isFreePublicClaim(resolvedUri.result.claim)){
+				if (isFreePublicClaim(resolvedUri.result[uri].claim)){
 					// promise to get the chosen uri
 					lbryApi.getClaim(uri)
 					.then(function(data){

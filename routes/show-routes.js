@@ -2,7 +2,7 @@
 module.exports = function(app, routeHelpers, lbryHelpers, ua, googleAnalyticsId){
 	// route to fetch all free public claims 
 	app.get("/:name/all", function(req, res){
-		console.log(">> GET request on /" + req.params.name + " (all)");
+		console.log(">> GET request on /" + req.params.name + "/all");
 		ua(googleAnalyticsId, {https: true}).event("Show Routes", "/name/all", req.params.name + "/all").send();
 		// create promise
 		lbryHelpers.getAllClaims(req.params.name)
