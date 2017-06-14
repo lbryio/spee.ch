@@ -22,4 +22,5 @@ module.exports = function(app, routeHelpers, lbryApi){
 			routeHelpers.handleRequestError(error, res);
 		});
 	});
+	
 }

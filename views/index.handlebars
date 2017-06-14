@@ -20,7 +20,7 @@
 	// define variables
 	var socket = io();
 	var uploader = new SocketIOFileUpload(socket);
-	var stagedFile = null;
+	var stagedFiles = null;
 
 	/* helper functions */
 	// create a progress animation
@@ -57,7 +57,7 @@
 		if (selectedFile) {
 			previewReader.readAsDataURL(selectedFile); // reads the data and sets the img src
 			document.getElementById('publish-name').value = selectedFile.name.substring(0, selectedFile.name.indexOf('.')); // updates metadata inputs
-			stagedFile = [selectedFile]; // stores the selected file for upload
+			stagedFiles = [selectedFile]; // stores the selected file for upload
 		} else {
 			preview.src = '';
 		}
@@ -102,9 +102,26 @@
 	/* configure the submit button */
 	document.getElementById('publish-submit').addEventListener('click', function(event){
 		event.preventDefault();
-		if (stagedFile) {
-			uploader.submitFiles(stagedFile);
-		};
+		// make sure a file was selected
+		if (stagedFiles) {
+			// make sure only 1 file was selected
+			if (stagedFiles.length > 1) {
+				alert("Only one file allowed at a time");
+				return;
+			}
+			// make sure the content type is acceptable
+			switch (stagedFiles[0].type) {
+				case "image/png":
+				case "image/jpeg":
+				case "image/gif":
+				case "video/mp4":
+					uploader.submitFiles(stagedFiles);
+					break;
+				default:
+					alert("Only images and videos are supported");
+					break;
+			}
+		}
 	})
 	
 	/* socketio-file-upload listeners */
