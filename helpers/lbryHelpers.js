@@ -1,5 +1,6 @@
 var path = require('path');
 var axios = require('axios');
+var lbryApi = require('./lbryApi');
 
 function filterForFreePublicClaims(claimsListArray){
 	if (!claimsListArray) {
@@ -34,125 +35,83 @@ function orderTopClaims(claimsListArray){
 	return claimsListArray;
 }
 
-function getClaimWithUri(uri, resolve, reject){
-	console.log(">> making get request to lbry daemon");
-	axios.post('http://localhost:5279/lbryapi', {
-			"method": "get",
-			"params": { "uri": uri }
-		}
-	).then(function (getUriResponse) {
-		console.log(">> 'get claim' success...");
-		//check to make sure the daemon didn't just time out
-		if (getUriResponse.data.result.error){
-			reject(getUriResponse.data.result.error);
-		}
-		console.log(">> response data:", getUriResponse.data);
-		console.log(">> dl path =", getUriResponse.data.result.download_path)
-		// resolve the promise with the download path for the claim we got
-		/* 
-			note: put in a check to make sure we do not resolve until the download is actually complete 
-		*/
-		resolve(getUriResponse.data.result.download_path);
-	}).catch(function(getUriError){
-		console.log(">> 'get' error.");
-		// reject the promise with an error message
-		reject(getUriError);
-		return;
+function getAllFreePublicClaims(claimName){  // note: work in progress
+	var deferred = new Promise(function(resolve, reject){
+		console.log(">> get all claims data for", claimName)
+		// make a call to the daemon to get the claims list
+		lbryApi.getClaimsList(claimName)
+		.then(function(data){
+			console.log(">> 'claim_list' success");
+			var claimsList = data.result.claims;
+			console.log(">> Number of claims:", claimsList.length)
+			// return early if no claims were found
+			if (claimsList.length === 0){
+				reject("NO_CLAIMS");
+				console.log("exiting due to lack of claims");
+				return;
+			}
+			// filter the claims to return only free, public claims 
+			var freePublicClaims = filterForFreePublicClaims(claimsList);
+			// return early if no free, public claims were found
+			if (!freePublicClaims || (freePublicClaims.length === 0)){
+				reject("NO_FREE_PUBLIC_CLAIMS");
+				console.log("exiting due to lack of free or public claims");
+				return;
+			}
+			// order the claims
+			var orderedPublicClaims = orderTopClaims(freePublicClaims);
+			// resolve the promise
+			resolve(orderedPublicClaims); 
+		}).catch(function(error){
+			console.log(">> 'claim_list' error");
+			reject(error);
+		});
 	});
-}
-
-function findAllClaims(name, resolve, reject){
-	// to do: abstract claim_list function to here
+	return deferred;
 }
 
 module.exports = {
 	getClaimBasedOnNameOnly: function(claimName){
 		var deferred = new Promise(function (resolve, reject){
-			// make a call to the daemon to get the claims list 
-			axios.post('http://localhost:5279/lbryapi', {
-				"method": "claim_list", 
-				"params": { "name": claimName }
-			})
-			.then(function (response) {
-				console.log(">> 'claim_list' success");
-				var claimsList = response.data.result.claims;
-				console.log(">> Number of claims:", claimsList.length)
-				// return early if no claims were found
-				if (claimsList.length === 0){
-					reject("NO_CLAIMS");
-					console.log("exiting due to lack of claims");
-					return;
-				}
-				// filter the claims to return only free, public claims 
-				var freePublicClaims = filterForFreePublicClaims(claimsList);
-				// return early if no free, public claims were found
-				if (!freePublicClaims || (freePublicClaims.length === 0)){
-					reject("NO_FREE_PUBLIC_CLAIMS");
-					console.log("exiting due to lack of free or public claims");
-					return;
-				}
-				// order the claims
-				var orderedPublicClaims = orderTopClaims(freePublicClaims);
-				// create the uri for the first (selected) claim 
-				console.log(">> ordered free public claims");
-				var freePublicClaimUri = orderedPublicClaims[0].name + "#" + orderedPublicClaims[0].claim_id;
+			console.log(">> get all free claims for", claimName);
+			// promise to get all free public claims 
+			getAllFreePublicClaims(claimName)
+			.then(function(freePublicClaimList){
+				var freePublicClaimUri = freePublicClaimList[0].name + "#" + freePublicClaimList[0].claim_id;
 				console.log(">> your free public claim URI:", freePublicClaimUri);
-				// fetch the image to display
-				getClaimWithUri(freePublicClaimUri, resolve, reject);
-			})
-			.catch(function(error){
-				console.log(">> 'claim_list' error.");
+				// promise to get the chosen uri
+				lbryApi.getClaim(freePublicClaimUri)
+				.then(function(data){
+					console.log(">> dl path =", data.result.download_path)
+					resolve(data.result.download_path)
+				}).catch(function(error){
+					reject(error)
+				});
+			}).catch(function(error){
 				reject(error);
 			});
 		});
 		return deferred;
 	},
+
 	getClaimBasedOnUri: function(uri){  
 		/* 
-			to do: need to pass the URI through a test (use 'resolve') to see if it is free and public. Right now it is jumping straight to 'get'ing and serving the asset.
+			to do: need to pass the URI through a test to see if it is free and public. Right now it is jumping straight to 'get'ing and serving the asset.
 		*/
 		var deferred = new Promise(function (resolve, reject){
 			console.log(">> get claim based on URI:", uri);
-			// fetch the image to display
-			getClaimWithUri(uri, resolve, reject);
-		});
-		return deferred;
-
-	},
-	getAllFreePublicClaims: function(claimName, res){  // note: work in progress
-		var deferred = new Promise(function(resolve, reject){
-			console.log(">> get all claims data for", claimName)
-			// make a call to the daemon to get the claims list 
-			axios.post('http://localhost:5279/lbryapi', {
-				method: "claim_list",
-				params: { name: claimName }
-			}).then(function (response) {
-				console.log(">> 'claim_list' success");
-				var claimsList = response.data.result.claims;
-				console.log(">> Number of claims:", claimsList.length)
-				// return early if no claims were found
-				if (claimsList.length === 0){
-					reject("NO_CLAIMS");
-					console.log("exiting due to lack of claims");
-					return;
-				}
-				// filter the claims to return only free, public claims 
-				var freePublicClaims = filterForFreePublicClaims(claimsList);
-				// return early if no free, public claims were found
-				if (!freePublicClaims || (freePublicClaims.length === 0)){
-					reject("NO_FREE_PUBLIC_CLAIMS");
-					console.log("exiting due to lack of free or public claims");
-					return;
-				}
-				// order the claims
-				var orderedPublicClaims = orderTopClaims(freePublicClaims);
-				// resolve the promise
-				resolve(orderedPublicClaims); 
+			// promise to get the chosen uri
+			lbryApi.getClaim(uri)
+			.then(function(data){
+				console.log(">> dl path =", data.result.download_path)
+				resolve(data.result.download_path)
 			}).catch(function(error){
-				console.log(">> 'claim_list' error");
-				reject(error);
+				reject(error)
 			});
 		});
 		return deferred;
 	},
+	getAllClaims: function(claimName){  // note: work in progress
+		return getAllFreePublicClaims(claimName);
+	}
 }
