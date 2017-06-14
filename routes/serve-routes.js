@@ -1,4 +1,5 @@
 function serveFile(fileInfo, res){
+	// set default options
 	var options = {
 		root: fileInfo.directory,
 		headers: { 
@@ -6,25 +7,22 @@ function serveFile(fileInfo, res){
 			"Content-Type": fileInfo.contentType
 		}
 	};
+	// adjust default options as needed
 	switch (fileInfo.contentType){
 		case "image/jpeg":
-			console.log("sending jpeg");
 			break;
 		case "image/gif":
-			console.log("sending gif");
 			break;
 		case "image/png":
-			console.log("sending png");
 			break;
 		case "video/mp4":
-			console.log("sending mp4");
 			break;
 		default:
 			console.log("sending unknown file type as .jpeg");
 			options["headers"]["Content-Type"] = "image/jpeg";
 			break;
 	}
-	console.log('options', options);
+	// send file
 	res.status(200).sendFile(fileInfo.fileName, options);
 }
 

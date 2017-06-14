@@ -3,10 +3,14 @@ var axios = require('axios');
 var lbryApi = require('./lbryApi');
 
 function filterForFreePublicClaims(claimsListArray){
+	//console.log("claims list:", claimsListArray)
 	if (!claimsListArray) {
 		return null;
 	};
 	var freePublicClaims = claimsListArray.filter(function(claim){
+		if (!claim.value){
+			return false;
+		}
 		return (((claim.value.stream.metadata.license.indexOf('Public Domain') != -1) || (claim.value.stream.metadata.license.indexOf('Creative Commons') != -1)) &&
 		(!claim.value.stream.metadata.fee || claim.value.stream.metadata.fee === 0)); 
 	});
@@ -35,7 +39,7 @@ function orderTopClaims(claimsListArray){
 	return claimsListArray;
 }
 
-function getAllFreePublicClaims(claimName){  // note: work in progress
+function getAllFreePublicClaims(claimName){
 	var deferred = new Promise(function(resolve, reject){
 		console.log(">> get all claims data for", claimName)
 		// make a call to the daemon to get the claims list
@@ -96,23 +100,33 @@ module.exports = {
 		});
 		return deferred;
 	},
-	getClaimBasedOnUri: function(uri){  
-		/* 
-			to do: need to pass the URI through a test to see if it is free and public. Right now it is jumping straight to 'get'ing and serving the asset.
-		*/
+	getClaimBasedOnUri: function(uri){
 		var deferred = new Promise(function (resolve, reject){
 			console.log(">> lbryHelpers >> getClaimBasedOnUri:", uri);
-			// promise to get the chosen uri
-			lbryApi.getClaim(uri)
-			.then(function(data){
-				resolve({
-					fileName: data.result.file_name,
-					directory: data.result.download_directory,
-					contentType: data.result.metadata.stream.source.contentType
-				});
+			// resolve the claim
+			lbryApi.resolveUri(uri)
+			.then(function(resolvedUri){
+				console.log("result >>", resolvedUri)
+				// check to make sure it is free and public
+				if (isFreePublicClaim(resolvedUri.result.claim)){
+					// promise to get the chosen uri
+					lbryApi.getClaim(uri)
+					.then(function(data){
+						resolve({
+							fileName: data.result.file_name,
+							directory: data.result.download_directory,
+							contentType: data.result.metadata.stream.source.contentType
+						});
+					}).catch(function(error){
+						reject(error)
+					});
+				} else {
+					reject("NO_FREE_PUBLIC_CLAIMS");
+				}
 			}).catch(function(error){
 				reject(error)
 			});
+			
 		});
 		return deferred;
 	},
