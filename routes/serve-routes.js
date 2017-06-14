@@ -1,7 +1,10 @@
 function serveFile(fileInfo, res){
 	var options = {
 		root: fileInfo.directory,
-		headers: { "Content-Type": fileInfo.contentType}
+		headers: { 
+			"X-Content-Type-Options": "nosniff",
+			"Content-Type": fileInfo.contentType
+		}
 	};
 	switch (fileInfo.contentType){
 		case "image/jpeg":
