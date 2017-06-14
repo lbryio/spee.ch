@@ -61,7 +61,7 @@ module.exports = {
 	},
 	resolveUri: function(uri){
 		var deferred = new Promise(function(resolve, reject){
-			console.log(">> lbryApi >> resolveUri:", claimName);
+			console.log(">> lbryApi >> resolveUri:", uri);
 			axios.post('http://localhost:5279/lbryapi', {
 				"method": "resolve",
 				"params": { "uri": uri}
