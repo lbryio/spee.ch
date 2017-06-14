@@ -17,22 +17,20 @@ module.exports = {
 		});
 		return deferred;
 	},
-	getClaim: function(uri){  // note: move to lbryApi
+	getClaim: function(uri){
 		var deferred = new Promise(function(resolve, reject){
-			console.log(">> making get request to lbry daemon");
 			axios.post('http://localhost:5279/lbryapi', {
 				"method": "get",
-				"params": { "uri": uri }
+				"params": { "uri": uri, "timeout": 30}
 			}).then(function (getResponse) {
 				console.log(">> 'get claim' success...");
-				//check to make sure the daemon didn't just time out (or otherwise send an error that appears to be a success?)
-				// if (getResponse.data.result.error){
-				// 	reject(getResponse.data.result.error);
-				// }
-				console.log(">> response data:", getResponse.data);
+				//check to make sure the daemon didn't just time out (or otherwise send an error that appears to be a success response)
+				if (getResponse.data.result.error){
+					reject(getResponse.data.result.error);
+				}
 				// resolve the promise with the download path for the claim we got
 				/* 
-					note: put in a check to make sure we do not resolve until the download is actually complete (total_bytes should match written_bytes)
+					note: put in a check to make sure we do not resolve until the download is actually complete (response.data.completed === true)
 				*/
 				resolve(getResponse.data);
 			}).catch(function(getUriError){

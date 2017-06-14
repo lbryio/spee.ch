@@ -93,7 +93,6 @@ module.exports = {
 		});
 		return deferred;
 	},
-
 	getClaimBasedOnUri: function(uri){  
 		/* 
 			to do: need to pass the URI through a test to see if it is free and public. Right now it is jumping straight to 'get'ing and serving the asset.
