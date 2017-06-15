@@ -61,6 +61,7 @@ module.exports = {
 				path: filePath,
 				file_type: fileType,
 				claim_id: data.result.claim_id,
+				outpoint: getResponse.data.result.outpoint,
 				nsfw: nsfw,
 			}).catch(function(error){
 				console.log('an error occurred when writing to the MySQL database. Check the logs.');
