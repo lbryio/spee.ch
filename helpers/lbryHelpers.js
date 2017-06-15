@@ -77,21 +77,41 @@ module.exports = {
 	getClaimBasedOnNameOnly: function(claimName){
 		var deferred = new Promise(function (resolve, reject){
 			console.log(">> lbryHelpers >> getClaim BasedOnNameOnly:", claimName);
-			// promise to get all free public claims 
+			// get all free public claims 
 			getAllFreePublicClaims(claimName)
 			.then(function(freePublicClaimList){
-				var freePublicClaimUri = freePublicClaimList[0].name + "#" + freePublicClaimList[0].claim_id;
-				console.log(">> successfully received free public claim URI:", freePublicClaimUri);
-				// promise to get the chosen uri
-				lbryApi.getClaim(freePublicClaimUri)
-				.then(function(data){
-					resolve({
-						fileName: data.result.file_name,
-						directory: data.result.download_directory,
-						contentType: data.result.metadata.stream.source.contentType
-					});
+				var claimName = freePublicClaimList[0].name;
+				var claimId = freePublicClaimList[0].claim_id;
+				var freePublicClaimUri = claimName + "#" + claimId;
+				console.log(">> Decided on public claim URI:", freePublicClaimUri);
+				// check to see if the file is available locally
+				db.File.findOne({where: { claim_id: claimId }})
+				.then(function(claim){
+					console.log("asset found locally >>", claim)
+					// if a record is found, return it
+					if (claim){
+						var fileInfo = {
+							file_name: claim.dataValues.name,
+							download_path: claim.dataValues.path,
+							content_type: claim.dataValues.file_type
+						}
+						resolve(fileInfo); 
+					// ... otherwise use daemon to retrieve it
+					} else {
+						// promise to get the chosen uri
+						lbryApi.getClaim(freePublicClaimUri)
+						.then(function(data){
+							resolve({
+								file_name: data.result.file_name,
+								download_path: data.result.download_path,
+								content_type: data.result.metadata.stream.source.contentType
+							});
+						}).catch(function(error){
+							reject(error)
+						});
+					}
 				}).catch(function(error){
-					reject(error)
+					reject(error);
 				});
 			}).catch(function(error){
 				reject(error);
@@ -116,7 +136,7 @@ module.exports = {
 					}
 					resolve(fileInfo); 
 				// ... otherwise use daemon to retrieve it
-			} else {
+				} else {
 					// get the claim info via 'resolve'
 					lbryApi.resolveUri(uri)
 					.then(function(resolvedUri){
@@ -142,7 +162,7 @@ module.exports = {
 				}
 			}).catch(function(error){
 				reject(error);
-			})
+			});
 		});
 		return deferred;
 	},
