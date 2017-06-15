@@ -87,7 +87,7 @@ module.exports = {
 				// check to see if the file is available locally
 				db.File.findOne({where: { claim_id: claimId }})
 				.then(function(claim){
-					console.log("asset found locally >>", claim)
+					console.log(">> Asset was found locally");
 					// if a record is found, return it
 					if (claim){
 						var fileInfo = {
@@ -126,15 +126,14 @@ module.exports = {
 			// check locally for the claim
 			db.File.findOne({where: { claim_id: claimId }})
 			.then(function(claim){
-				console.log("asset found locally >>", claim)
+				console.log(">> Asset was found locally");
 				// if a record is found, return it
 				if (claim){
-					var fileInfo = {
+					resolve({
 						file_name: claim.dataValues.name,
 						download_path: claim.dataValues.path,
 						content_type: claim.dataValues.file_type
-					}
-					resolve(fileInfo); 
+					}); 
 				// ... otherwise use daemon to retrieve it
 				} else {
 					// get the claim info via 'resolve'

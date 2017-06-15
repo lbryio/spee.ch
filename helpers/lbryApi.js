@@ -1,4 +1,5 @@
 var axios = require('axios');
+var db = require("../models");
 
 module.exports = {
 	publishClaim: function(publishParams){
@@ -33,7 +34,18 @@ module.exports = {
 				/* 
 					note: put in a check to make sure we do not resolve until the download is actually complete (response.data.completed === true)
 				*/
-				resolve(getResponse.data);
+				// save a record of the file to the Files table
+				db.File.create({
+					name: getResponse.data.result.file_name,
+					path: getResponse.data.result.download_path,
+					file_type: getResponse.data.result.mime_type,
+					claim_id: getResponse.data.result.claim_id,
+					nsfw: getResponse.data.result.metadata.stream.metadata.nsfw,
+				}).catch(function(error){
+					console.log('an error occurred when writing to the MySQL database. Check the logs.');
+				});
+				// resolve the promise
+				resolve(getResponse.data);  //to do: return the result 
 			}).catch(function(getUriError){
 				console.log(">> 'get' error");
 				// reject the promise with an error message
