@@ -24,7 +24,7 @@ module.exports = {
 				"method": "get",
 				"params": { "uri": uri, "timeout": 20}
 			}).then(function (getResponse) {
-				console.log(">> 'get' success");
+				console.log(">> 'get' success", getResponse.data);
 				//check to make sure the daemon didn't just time out (or otherwise send an error that appears to be a success response)
 				if (getResponse.data.result.error){
 					reject(getResponse.data.result.error);

@@ -1,6 +1,7 @@
 var path = require('path');
 var axios = require('axios');
 var lbryApi = require('./lbryApi');
+var db = require("../models");
 
 function filterForFreePublicClaims(claimsListArray){
 	//console.log("claims list:", claimsListArray)
@@ -98,33 +99,50 @@ module.exports = {
 		});
 		return deferred;
 	},
-	getClaimBasedOnUri: function(uri){
+	getClaimBasedOnUri: function(claimName, claimId){
 		var deferred = new Promise(function (resolve, reject){
+			var uri = claimName + "#" + claimId;
 			console.log(">> lbryHelpers >> getClaimBasedOnUri:", uri);
-			// resolve the claim
-			lbryApi.resolveUri(uri)
-			.then(function(resolvedUri){
-				//console.log("result >>", resolvedUri)
-				// check to make sure it is free and public
-				if (isFreePublicClaim(resolvedUri.result[uri].claim)){
-					// promise to get the chosen uri
-					lbryApi.getClaim(uri)
-					.then(function(data){
-						resolve({
-							fileName: data.result.file_name,
-							directory: data.result.download_directory,
-							contentType: data.result.metadata.stream.source.contentType
-						});
+			// check locally for the claim
+			db.File.findOne({where: { claim_id: claimId }})
+			.then(function(claim){
+				console.log("asset found locally >>", claim)
+				// if a record is found, return it
+				if (claim){
+					var fileInfo = {
+						file_name: claim.dataValues.name,
+						download_path: claim.dataValues.path,
+						content_type: claim.dataValues.file_type
+					}
+					resolve(fileInfo); 
+				// ... otherwise use daemon to retrieve it
+			} else {
+					// get the claim info via 'resolve'
+					lbryApi.resolveUri(uri)
+					.then(function(resolvedUri){
+						// check to make sure it is free and public
+						if (isFreePublicClaim(resolvedUri.result[uri].claim)){
+							// 'get' the claim
+							lbryApi.getClaim(uri)
+							.then(function(data){
+								resolve({
+									file_name: data.result.file_name,
+									download_path: data.result.download_path,
+									content_type: data.result.metadata.stream.source.contentType
+								});
+							}).catch(function(error){
+								reject(error)
+							});
+						} else {
+							reject("NO_FREE_PUBLIC_CLAIMS");
+						}
 					}).catch(function(error){
 						reject(error)
 					});
-				} else {
-					reject("NO_FREE_PUBLIC_CLAIMS");
 				}
 			}).catch(function(error){
-				reject(error)
-			});
-			
+				reject(error);
+			})
 		});
 		return deferred;
 	},

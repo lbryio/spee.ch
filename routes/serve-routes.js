@@ -1,14 +1,13 @@
 function serveFile(fileInfo, res){
 	// set default options
 	var options = {
-		root: fileInfo.directory,
 		headers: { 
 			"X-Content-Type-Options": "nosniff",
-			"Content-Type": fileInfo.contentType
+			"Content-Type": fileInfo.content_type
 		}
 	};
 	// adjust default options as needed
-	switch (fileInfo.contentType){
+	switch (fileInfo.content_type){
 		case "image/jpeg":
 			break;
 		case "image/gif":
@@ -23,19 +22,20 @@ function serveFile(fileInfo, res){
 			break;
 	}
 	// send file
-	res.status(200).sendFile(fileInfo.fileName, options);
+	res.status(200).sendFile(fileInfo.download_path, options);
 }
 
 module.exports = function(app, routeHelpers, lbryHelpers, ua, googleAnalyticsId){
 	// route to fetch one free public claim 
 	app.get("/:name/:claim_id", function(req, res){
-		ua(googleAnalyticsId, {https: true}).event("Serve Route", "/name/claimId", req.params.name + "/" + req.params.claim_id).send();
-		var uri = req.params.name + "#" + req.params.claim_id;
-		console.log(">> GET request on /" + uri);
-		// create promise
-		lbryHelpers.getClaimBasedOnUri(uri)
+		var routeString = req.params.name + "/" + req.params.claim_id;
+		// google analytics
+		ua(googleAnalyticsId, {https: true}).event("Serve Route", "/name/claimId", routeString).send();
+		// begin image-serve processes
+		console.log(">> GET request on /" + routeString);
+		lbryHelpers.getClaimBasedOnUri(req.params.name, req.params.claim_id)
 		.then(function(fileInfo){
-			console.log("/:name/:claim_id success.", fileInfo.fileName);
+			console.log("/:name/:claim_id success.", fileInfo.file_name);
 			serveFile(fileInfo, res);
 		}).catch(function(error){
 			console.log("/:name/:claim_id error:", error)
@@ -44,12 +44,13 @@ module.exports = function(app, routeHelpers, lbryHelpers, ua, googleAnalyticsId)
 	});
 	// route to fetch one free public claim 
 	app.get("/:name", function(req, res){
+		// google analytics
 		ua(googleAnalyticsId, {https: true}).event("Serve Route", "/name", req.params.name).send();
+		// begin image-serve processes
 		console.log(">> GET request on /" + req.params.name);
-		// create promise
 		lbryHelpers.getClaimBasedOnNameOnly(req.params.name)
 		.then(function(fileInfo){
-			console.log("/:name success.", fileInfo.fileName);
+			console.log("/:name success.", fileInfo.file_name);
 			serveFile(fileInfo, res);
 		}).catch(function(error){
 			console.log("/:name error:", error);
