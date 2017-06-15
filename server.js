@@ -9,18 +9,19 @@ var axios = require('axios');
 var config = require('config');
 var ua = require('universal-analytics');
 
-var socketHelpers = require('./helpers/socketHelpers.js');
 var routeHelpers = require('./helpers/routeHelpers.js');
 var lbryApi = require('./helpers/lbryApi.js');
 var lbryHelpers = require('./helpers/lbryHelpers.js');
 
 var googleAnalyticsId = config.get('AnalyticsConfig.googleId');
+var hostedContentPath = config.get('Database.DownloadAddress');
 
 // set port
 var PORT = 3000;
-
 // initialize express app
 var app = express();
+//require our models for syncing
+var db = require("./models");
 
 // make express look in the public directory for assets (css/js/img)
 app.use(express.static(__dirname + '/public'));
@@ -57,10 +58,15 @@ require("./routes/show-routes.js")(app, routeHelpers, lbryHelpers, ua, googleAna
 require("./routes/serve-routes.js")(app, routeHelpers, lbryHelpers, ua, googleAnalyticsId);
 require("./routes/home-routes.js")(app);
 
-// wrap the server in socket.io to intercept incoming sockets requests
-var http = require("./routes/sockets-routes.js")(app, path, siofu, socketHelpers, ua, googleAnalyticsId);
+// require socket.io routes
+var http = require("./routes/sockets-routes.js")(app, path, siofu, hostedContentPath, ua, googleAnalyticsId);
 
+// sync sequelize
+// wrap the server in socket.io to intercept incoming sockets requests
 // start server
-http.listen(PORT, function() {
-	console.log("Listening on PORT " + PORT);
-});
+db.sequelize.sync({}).then(function(){
+	http.listen(PORT, function() {
+		console.log("Listening on PORT " + PORT);
+	});
+})
+

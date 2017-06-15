@@ -1,6 +1,7 @@
 var fs = require('fs');
-var lbryApi = require('../helpers/lbryApi.js');
+var lbryApi = require('./lbryApi.js');
 var config = require('config');
+var db = require("../models");
 
 var walledAddress = config.get('WalletConfig.lbryAddress');
 
@@ -14,10 +15,10 @@ function handlePublishError(error) {
 	};
 }
 
-function createPublishParams(name, filepath, license, nsfw) {
+function createPublishParams(name, filePath, license, nsfw) {
 	var publishParams = {
 		"name": name,
-		"file_path": filepath,
+		"file_path": filePath,
 		"bid": 0.01,
 		"metadata":  {
 			"description": name + " published via spee.ch",
@@ -25,7 +26,7 @@ function createPublishParams(name, filepath, license, nsfw) {
 			"author": "spee.ch",
 			"language": "en",
 			"license": license,
-			"nsfw": (nsfw.toLowerCase() === "true")
+			"nsfw": nsfw
 		},
 		"claim_address": walledAddress,
 		"change_address": walledAddress //requires daemon 0.12.2rc1 or above
@@ -33,33 +34,41 @@ function createPublishParams(name, filepath, license, nsfw) {
 	return publishParams;
 }
 
-function deleteTemporaryFile(filepath) {
-	fs.unlink(filepath, function(err) {
+function deleteTemporaryFile(filePath) {
+	fs.unlink(filePath, function(err) {
 		if (err) throw err;
-		console.log('successfully deleted ' + filepath);
+		console.log('successfully deleted ' + filePath);
 	});
 }
 
 module.exports = {
-	publish: function(name, filepath, license, nsfw, socket, visitor) {
+	publish: function(name, filePath, fileType, license, nsfw, socket, visitor) {
+		nsfw = (nsfw.toLowerCase() === "true");
 		// update the client
 		socket.emit("publish-status", "Your image is being published (this might take a second)...");
-		visitor.event("Publish Route", "Publish Request", filepath).send();
+		// send to analytics
+		visitor.event("Publish Route", "Publish Request", filePath).send();
 		// create the publish object
-		var publishParams = createPublishParams(name, filepath, license, nsfw);
+		var publishParams = createPublishParams(name, filePath, license, nsfw);
 		// get a promise to publish
 		lbryApi.publishClaim(publishParams)
 		.then(function(data){
-			visitor.event("Publish Route", "Publish Success", filepath).send();
+			visitor.event("Publish Route", "Publish Success", filePath).send();
 			console.log("publish promise success. Tx info:", data)
 			socket.emit("publish-complete", {name: name, result: data.result});
-			deleteTemporaryFile(filepath);
+			db.File.create({
+				name: name,
+				path: filePath,
+				file_type: fileType,
+				claim_id: data.result.claim_id,
+				nsfw: nsfw,
+			});
 		})
 		.catch(function(error){
-			visitor.event("Publish Route", "Publish Failure", filepath).send();
+			visitor.event("Publish Route", "Publish Failure", filePath).send();
 			console.log("error:", error);
 			socket.emit("publish-failure", handlePublishError(error));
-			deleteTemporaryFile(filepath);
+			deleteTemporaryFile(filePath);
 		});
 	}
 }

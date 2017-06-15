@@ -6,6 +6,7 @@
 		"googleId": "UA-100747990-1"
 	},
 	"Database": {
-		"MySqlConnectionUri": "none"
+		"MySqlConnectionUri": "none",
+		"DownloadAddress": "~/Downloads/"
 	}
 }

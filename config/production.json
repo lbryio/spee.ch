@@ -4,5 +4,9 @@
 	},
 	"AnalyticsConfig":{
 		"googleId": "UA-60403362-2"
+	},
+	"Database": {
+		"MySqlConnectionUri": "none",
+		"DownloadAddress": "~/Downloads/"
 	}
 }

@@ -4,5 +4,9 @@
 	},
 	"AnalyticsConfig":{
 		"googleId": "none"
+	},
+	"Database": {
+		"MySqlConnectionUri": "none",
+		"DownloadAddress": "C:\\lbry\\speech\\hosted_content"
 	}
 }
