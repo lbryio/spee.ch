@@ -51,21 +51,11 @@ module.exports = {
 		// create the publish object
 		var publishParams = createPublishParams(name, filePath, license, nsfw);
 		// get a promise to publish
-		lbryApi.publishClaim(publishParams)
-		.then(function(data){
+		lbryApi.publishClaim(publishParams, fileType)
+		.then(function(result){
 			visitor.event("Publish Route", "Publish Success", filePath).send();
-			console.log("publish promise success. Tx info:", data)
-			socket.emit("publish-complete", {name: name, result: data.result});
-			db.File.create({
-				name: name,
-				path: filePath,
-				file_type: fileType,
-				claim_id: data.result.claim_id,
-				outpoint: getResponse.data.result.outpoint,
-				nsfw: nsfw,
-			}).catch(function(error){
-				console.log('an error occurred when writing to the MySQL database. Check the logs.');
-			});
+			console.log("publish promise success. Tx info:", result)
+			socket.emit("publish-complete", {name: name, result: result});
 		})
 		.catch(function(error){
 			visitor.event("Publish Route", "Publish Failure", filePath).send();

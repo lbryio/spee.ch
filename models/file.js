@@ -4,13 +4,6 @@ module.exports = function(sequelize, DataTypes){
 			type: DataTypes.STRING,
 			allowNull: false
 		},
-		path: {
-			type: DataTypes.STRING,
-			allowNull: false
-		},
-		file_type: {
-			type: DataTypes.STRING,
-		},
 		claim_id: {
 			type: DataTypes.STRING,
 			allowNull: false
@@ -18,6 +11,17 @@ module.exports = function(sequelize, DataTypes){
 		outpoint: {
 			type: DataTypes.STRING,
 			allowNull: false
+		},
+		file_name: {
+			type: DataTypes.STRING,
+			allowNull: false
+		},
+		file_path: {
+			type: DataTypes.STRING,
+			allowNull: false
+		},
+		file_type: {
+			type: DataTypes.STRING,
 		},
 		nsfw: {
 			type: DataTypes.BOOLEAN,

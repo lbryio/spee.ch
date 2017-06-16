@@ -90,21 +90,17 @@ module.exports = {
 					console.log(">> Asset was found locally");
 					// if a record is found, return it
 					if (claim){
-						var fileInfo = {
-							file_name: claim.dataValues.name,
-							download_path: claim.dataValues.path,
-							content_type: claim.dataValues.file_type
-						}
-						resolve(fileInfo); 
+						console.log("claim.dataValues", claim.dataValues);
+						resolve(claim.dataValues); 
 					// ... otherwise use daemon to retrieve it
 					} else {
 						// promise to get the chosen uri
 						lbryApi.getClaim(freePublicClaimUri)
-						.then(function(data){
+						.then(function(result){
 							resolve({
-								file_name: data.result.file_name,
-								download_path: data.result.download_path,
-								content_type: data.result.metadata.stream.source.contentType
+								file_name: result.file_name,
+								file_path: result.download_path,
+								file_type: result.mime_type
 							});
 						}).catch(function(error){
 							reject(error)
@@ -129,11 +125,7 @@ module.exports = {
 				console.log(">> Asset was found locally");
 				// if a record is found, return it
 				if (claim){
-					resolve({
-						file_name: claim.dataValues.name,
-						download_path: claim.dataValues.path,
-						content_type: claim.dataValues.file_type
-					}); 
+					resolve(claim.dataValues); 
 				// ... otherwise use daemon to retrieve it
 				} else {
 					// get the claim info via 'resolve'
@@ -143,11 +135,11 @@ module.exports = {
 						if (isFreePublicClaim(resolvedUri.result[uri].claim)){
 							// 'get' the claim
 							lbryApi.getClaim(uri)
-							.then(function(data){
+							.then(function(result){
 								resolve({
-									file_name: data.result.file_name,
-									download_path: data.result.download_path,
-									content_type: data.result.metadata.stream.source.contentType
+									file_name: result.file_name,
+									file_path: result.download_path,
+									file_type: result.mime_type
 								});
 							}).catch(function(error){
 								reject(error)

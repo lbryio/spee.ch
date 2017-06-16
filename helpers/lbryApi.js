@@ -2,15 +2,26 @@ var axios = require('axios');
 var db = require("../models");
 
 module.exports = {
-	publishClaim: function(publishParams){
+	publishClaim: function(publishParams, fileType){
 		var deferred = new Promise(function(resolve, reject){
 			console.log(">> lbryApi >> publishClaim:", publishParams);
 			axios.post('http://localhost:5279/lbryapi', {
 				"method": "publish", 
 				"params": publishParams
 			}).then(function (response) {
-				console.log(">> 'publish' success");
-				resolve(response.data);
+				console.log(">> 'publish' success", response);
+				db.File.create({
+					name: publishParams.name,
+					claim_id: response.data.result.claim_id,
+					outpoint: response.data.result.outpoint,
+					file_name: "test",
+					file_path: publishParams.filePath,
+					file_type: fileType,
+					nsfw: nsfw,
+				}).catch(function(error){
+					console.log('An error occurred when writing to the MySQL database:', error);
+				});
+				resolve(response.data.result);
 			}).catch(function(error){
 				console.log(">> 'publish' error");
 				reject(error);
@@ -24,32 +35,33 @@ module.exports = {
 			axios.post('http://localhost:5279/lbryapi', {
 				"method": "get",
 				"params": { "uri": uri, "timeout": 20}
-			}).then(function (getResponse) {
-				console.log(">> 'get' success", getResponse.data);
+			}).then(function (response) {
+				console.log(">> 'get' success", response.data);
 				//check to make sure the daemon didn't just time out
-				if (getResponse.data.result.error){
-					reject(getResponse.data.result.error);
+				if (response.data.result.error){
+					reject(response.data.result.error);
 				}
 				/* 
 					note: put in a check to make sure we do not resolve until the download is actually complete (response.data.completed === true)
 				*/
 				// save a record of the file to the Files table
 				db.File.create({
-					name: getResponse.data.result.file_name,
-					path: getResponse.data.result.download_path,
-					file_type: getResponse.data.result.mime_type,
-					claim_id: getResponse.data.result.claim_id,
-					outpoint: getResponse.data.result.outpoint,
-					nsfw: getResponse.data.result.metadata.stream.metadata.nsfw,
+					name: response.data.result.name,
+					claim_id: response.data.result.claim_id,
+					outpoint: response.data.result.outpoint,
+					file_name: response.data.result.file_name,
+					file_path: response.data.result.download_path,
+					file_type: response.data.result.mime_type,
+					nsfw: response.data.result.metadata.stream.metadata.nsfw,
 				}).catch(function(error){
-					console.log('an error occurred when writing to the MySQL database. Check the logs.');
+					console.log('An error occurred when writing to the MySQL database:', error);
 				});
 				// resolve the promise
-				resolve(getResponse.data);
-			}).catch(function(getUriError){
+				resolve(response.data.result);
+			}).catch(function(error){
 				console.log(">> 'get' error");
 				// reject the promise with an error message
-				reject(getUriError);
+				reject(error);
 				return;
 			});
 		});

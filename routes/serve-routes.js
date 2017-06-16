@@ -3,11 +3,11 @@ function serveFile(fileInfo, res){
 	var options = {
 		headers: { 
 			"X-Content-Type-Options": "nosniff",
-			"Content-Type": fileInfo.content_type
+			"Content-Type": fileInfo.file_type
 		}
 	};
 	// adjust default options as needed
-	switch (fileInfo.content_type){
+	switch (fileInfo.file_type){
 		case "image/jpeg":
 			break;
 		case "image/gif":
@@ -22,7 +22,7 @@ function serveFile(fileInfo, res){
 			break;
 	}
 	// send file
-	res.status(200).sendFile(fileInfo.download_path, options);
+	res.status(200).sendFile(fileInfo.file_path, options);
 }
 
 module.exports = function(app, routeHelpers, lbryHelpers, ua, googleAnalyticsId){
@@ -50,6 +50,7 @@ module.exports = function(app, routeHelpers, lbryHelpers, ua, googleAnalyticsId)
 		console.log(">> GET request on /" + req.params.name);
 		lbryHelpers.getClaimBasedOnNameOnly(req.params.name)
 		.then(function(fileInfo){
+			
 			console.log("/:name success.", fileInfo.file_name);
 			serveFile(fileInfo, res);
 		}).catch(function(error){
