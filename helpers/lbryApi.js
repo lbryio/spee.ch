@@ -91,7 +91,7 @@ module.exports = {
 				"params": { "uri": uri}
 			}).then(function(response){
 				console.log(">> 'resolve' success");
-				resolve(response.data);
+				resolve(response.data.result);
 			}).catch(function(error){
 				console.log(">> 'resolve' error");
 				reject(error);

@@ -73,6 +73,19 @@ function getAllFreePublicClaims(claimName){
 	return deferred;
 }
 
+function getClaimAndHandleResponse(claimUri, resolve, reject){
+	lbryApi.getClaim(claimUri)
+	.then(function(result){
+		resolve({
+			file_name: result.file_name,
+			file_path: result.download_path,
+			file_type: result.mime_type
+		});
+	}).catch(function(error){
+		reject(error)
+	});
+}
+
 module.exports = {
 	getClaimBasedOnNameOnly: function(claimName){
 		var deferred = new Promise(function (resolve, reject){
@@ -80,31 +93,28 @@ module.exports = {
 			// get all free public claims 
 			getAllFreePublicClaims(claimName)
 			.then(function(freePublicClaimList){
-				var claimName = freePublicClaimList[0].name;
-				var claimId = freePublicClaimList[0].claim_id;
-				var freePublicClaimUri = claimName + "#" + claimId;
-				console.log(">> Decided on public claim URI:", freePublicClaimUri);
+				console.log(">> Decided on public claim id:", freePublicClaimList[0].claim_id);
+				var freePublicClaimOutpoint = freePublicClaimList[0].txid + ":" + freePublicClaimList[0].nout;
+				var freePublicClaimUri = freePublicClaimList[0].name + "#" + freePublicClaimList[0].claim_id;
 				// check to see if the file is available locally
-				db.File.findOne({where: { claim_id: claimId }})
+				db.File.findOne({where: { claim_id: freePublicClaimList[0].claim_id }})
 				.then(function(claim){
-					console.log(">> Asset was found locally");
-					// if a record is found, return it
+					// if a found locally...
 					if (claim){
-						console.log("claim.dataValues", claim.dataValues);
-						resolve(claim.dataValues); 
+						console.log(">> A matching claim_id was found locally");
+						// if the outpoint's match return it
+						if (claim.dataValues.outpoint === freePublicClaimOutpoint){
+							console.log(">> Local outpoint matched");
+							resolve(claim.dataValues); 
+						// if the outpoint's don't match, fetch updated claim 	
+					} else {
+							console.log(">> local outpoint did not match");
+							getClaimAndHandleResponse(freePublicClaimUri, resolve, reject);
+						}
 					// ... otherwise use daemon to retrieve it
 					} else {
-						// promise to get the chosen uri
-						lbryApi.getClaim(freePublicClaimUri)
-						.then(function(result){
-							resolve({
-								file_name: result.file_name,
-								file_path: result.download_path,
-								file_type: result.mime_type
-							});
-						}).catch(function(error){
-							reject(error)
-						});
+						// 'get' the claim
+						getClaimAndHandleResponse(freePublicClaimUri, resolve, reject)
 					}
 				}).catch(function(error){
 					reject(error);
@@ -119,45 +129,46 @@ module.exports = {
 		var deferred = new Promise(function (resolve, reject){
 			var uri = claimName + "#" + claimId;
 			console.log(">> lbryHelpers >> getClaimBasedOnUri:", uri);
-			// check locally for the claim
-			db.File.findOne({where: { claim_id: claimId }})
-			.then(function(claim){
-				console.log(">> Asset was found locally");
-				// if a record is found, return it
-				if (claim){
-					resolve(claim.dataValues); 
-				// ... otherwise use daemon to retrieve it
-				} else {
-					// get the claim info via 'resolve'
-					lbryApi.resolveUri(uri)
-					.then(function(resolvedUri){
-						// check to make sure it is free and public
-						if (isFreePublicClaim(resolvedUri.result[uri].claim)){
+			// resolve the Uri
+			lbryApi.resolveUri(uri)  // note: use 'spread' and make parallel with db.File.findOne()
+			.then(function(result){  // note should just be 'result' returned.
+				// get the outpoint 
+				var resolvedOutpoint = result[uri].claim.txid + ":" + result[uri].claim.nout;
+				// check locally for the claim
+				db.File.findOne({where: { claim_id: claimId }})
+				.then(function(claim){
+					// if a found locally...
+					if (claim){
+						console.log(">> A matching claim_id was found locally");
+						// if the outpoint's match return it
+						if (claim.dataValues.outpoint === resolvedOutpoint){
+							console.log(">> Local outpoint matched");
+							resolve(claim.dataValues); 
+						// if the outpoint's don't match, fetch updated claim 	
+						} else {
+							console.log(">> Local outpoint did not match");
+							getClaimAndHandleResponse(uri, resolve, reject);
+						}
+					// ... otherwise use daemon to retrieve it
+					} else {
+						// check to make sure it is free and public  (note: no need for another resolve?)
+						if (isFreePublicClaim(result[uri].claim)){
 							// 'get' the claim
-							lbryApi.getClaim(uri)
-							.then(function(result){
-								resolve({
-									file_name: result.file_name,
-									file_path: result.download_path,
-									file_type: result.mime_type
-								});
-							}).catch(function(error){
-								reject(error)
-							});
+							getClaimAndHandleResponse(uri, resolve, reject);
 						} else {
 							reject("NO_FREE_PUBLIC_CLAIMS");
 						}
-					}).catch(function(error){
-						reject(error)
-					});
-				}
+					}
+				}).catch(function(error){
+					reject(error)
+				});
 			}).catch(function(error){
 				reject(error);
 			});
 		});
 		return deferred;
 	},
-	getAllClaims: function(claimName){  // note: work in progress
+	getAllClaims: function(claimName){
 		return getAllFreePublicClaims(claimName);
 	}
 }
