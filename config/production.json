@@ -7,6 +7,6 @@
 	},
 	"Database": {
 		"MySqlConnectionUri": "none",
-		"PublishUploadPath": "/home/ubuntu/Downloads/"
+		"PublishUploadPath": "/home/lbry/Downloads/"
 	}
 }
