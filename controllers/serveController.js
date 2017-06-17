@@ -26,14 +26,16 @@ module.exports = {
       // get all free public claims
       getAllFreePublicClaims(claimName)
         .then(freePublicClaimList => {
-          console.log('>> Decided on public claim id:', freePublicClaimList[0].claim_id)
+          const claimId = freePublicClaimList[0].claim_id
+          const name = freePublicClaimList[0].name
           const freePublicClaimOutpoint = `${freePublicClaimList[0].txid}:${freePublicClaimList[0].nout}`
-          const freePublicClaimUri = `${freePublicClaimList[0].name}#${freePublicClaimList[0].claim_id}`
+          const freePublicClaimUri = name + '#' + claimId
+          console.log('>> Decided on public claim id:', claimId)
           // check to see if the file is available locally
           db.File
-            .findOne({ where: { claim_id: freePublicClaimList[0].claim_id } })
+            .findOne({ where: { name: name, claim_id: claimId } })
             .then(claim => {
-              // if a found locally...
+              // if a matching claim is found locally...
               if (claim) {
                 console.log('>> A matching claim_id was found locally')
                 // if the outpoint's match return it
