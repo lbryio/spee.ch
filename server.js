@@ -9,10 +9,6 @@ var axios = require('axios');
 var config = require('config');
 var ua = require('universal-analytics');
 
-var routeHelpers = require('./helpers/routeHelpers.js');
-var lbryApi = require('./helpers/lbryApi.js');
-var lbryHelpers = require('./helpers/lbryHelpers.js');
-
 var googleAnalyticsId = config.get('AnalyticsConfig.googleId');
 var hostedContentPath = config.get('Database.DownloadAddress');
 
@@ -53,13 +49,13 @@ app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
 
 // require express routes
-require("./routes/api-routes.js")(app, routeHelpers, lbryApi);
-require("./routes/show-routes.js")(app, routeHelpers, lbryHelpers, ua, googleAnalyticsId);
-require("./routes/serve-routes.js")(app, routeHelpers, lbryHelpers, ua, googleAnalyticsId);
+require("./routes/api-routes.js")(app);
+require("./routes/show-routes.js")(app, ua, googleAnalyticsId);
+require("./routes/serve-routes.js")(app, ua, googleAnalyticsId);
 require("./routes/home-routes.js")(app);
 
 // require socket.io routes
-var http = require("./routes/sockets-routes.js")(app, path, siofu, hostedContentPath, ua, googleAnalyticsId);
+var http = require("./routes/sockets-routes.js")(app, siofu, hostedContentPath, ua, googleAnalyticsId);
 
 // sync sequelize
 // wrap the server in socket.io to intercept incoming sockets requests

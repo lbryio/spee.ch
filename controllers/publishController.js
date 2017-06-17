@@ -1,19 +1,9 @@
 var fs = require('fs');
-var lbryApi = require('./lbryApi.js');
+var lbryApi = require('../helpers/libraries/lbryApi.js');
 var config = require('config');
-var db = require("../models");
+var errorHandlers = require("../helpers/libraries/errorHandlers.js");
 
 var walledAddress = config.get('WalletConfig.lbryAddress');
-
-function handlePublishError(error) {
-	if (error.code === "ECONNREFUSED"){
-		return "Connection refused.  The daemon may not be running.";
-	} else if (error.response.data.error) {
-		return error.response.data.error;
-	} else {
-		return error;
-	};
-}
 
 function createPublishParams(name, filePath, license, nsfw) {
 	var publishParams = {
@@ -26,7 +16,7 @@ function createPublishParams(name, filePath, license, nsfw) {
 			"author": "spee.ch",
 			"language": "en",
 			"license": license,
-			"nsfw": nsfw
+			"nsfw": (nsfw.toLowerCase() === "true")
 		},
 		"claim_address": walledAddress,
 		"change_address": walledAddress //requires daemon 0.12.2rc1 or above
@@ -43,7 +33,6 @@ function deleteTemporaryFile(filePath) {
 
 module.exports = {
 	publish: function(name, filePath, fileType, license, nsfw, socket, visitor) {
-		nsfw = (nsfw.toLowerCase() === "true");
 		// update the client
 		socket.emit("publish-status", "Your image is being published (this might take a second)...");
 		// send to analytics
@@ -60,7 +49,7 @@ module.exports = {
 		.catch(function(error){
 			visitor.event("Publish Route", "Publish Failure", filePath).send();
 			console.log("error:", error);
-			socket.emit("publish-failure", handlePublishError(error));
+			socket.emit("publish-failure", errorHandlers.handlePublishError(error));
 			deleteTemporaryFile(filePath);
 		});
 	}

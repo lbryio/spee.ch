@@ -1,77 +1,8 @@
-var path = require('path');
-var axios = require('axios');
-var lbryApi = require('./lbryApi');
+var lbryApi = require('../helpers/libraries/lbryApi.js');
 var db = require("../models");
 
-function filterForFreePublicClaims(claimsListArray){
-	//console.log("claims list:", claimsListArray)
-	if (!claimsListArray) {
-		return null;
-	};
-	var freePublicClaims = claimsListArray.filter(function(claim){
-		if (!claim.value){
-			return false;
-		}
-		return (((claim.value.stream.metadata.license.indexOf('Public Domain') != -1) || (claim.value.stream.metadata.license.indexOf('Creative Commons') != -1)) &&
-		(!claim.value.stream.metadata.fee || claim.value.stream.metadata.fee === 0)); 
-	});
-	return freePublicClaims;
-}
-
-function isFreePublicClaim(claim){
-	console.log(">> isFreePublicClaim? claim:", claim);
-	if ((claim.value.stream.metadata.license === 'Public Domain' || claim.value.stream.metadata.license === 'Creative Commons') &&
-		(!claim.value.stream.metadata.fee || claim.value.stream.metadata.fee.amount === 0)) {
-		return true;
-	} else {
-		return false;
-	}
-}
-
-function orderTopClaims(claimsListArray){
-	console.log(">> orderTopClaims");
-	claimsListArray.sort(function(claimA, claimB){
-		if (claimA.amount === claimB.amount){
-			return (claimA.height > claimB.height);
-		} else {
-			return (claimA.amount < claimB.amount);
-		}
-	})
-	return claimsListArray;
-}
-
-function getAllFreePublicClaims(claimName){
-	var deferred = new Promise(function(resolve, reject){
-		// make a call to the daemon to get the claims list
-		lbryApi.getClaimsList(claimName)
-		.then(function(data){
-			var claimsList = data.result.claims;
-			console.log(">> Number of claims:", claimsList.length)
-			// return early if no claims were found
-			if (claimsList.length === 0){
-				reject("NO_CLAIMS");
-				console.log("exiting due to lack of claims");
-				return;
-			}
-			// filter the claims to return only free, public claims 
-			var freePublicClaims = filterForFreePublicClaims(claimsList);
-			// return early if no free, public claims were found
-			if (!freePublicClaims || (freePublicClaims.length === 0)){
-				reject("NO_FREE_PUBLIC_CLAIMS");
-				console.log("exiting due to lack of free or public claims");
-				return;
-			}
-			// order the claims
-			var orderedPublicClaims = orderTopClaims(freePublicClaims);
-			// resolve the promise
-			resolve(orderedPublicClaims); 
-		}).catch(function(error){
-			console.log(">> 'claim_list' error");
-			reject(error);
-		});
-	});
-	return deferred;
-}
+var getAllFreePublicClaims = require("../helpers/functions/getAllFreePublicClaims.js");
+var isFreePublicClaim = require("../helpers/functions/isFreePublicClaim.js");
 
 function getClaimAndHandleResponse(claimUri, resolve, reject){
 	lbryApi.getClaim(claimUri)
@@ -87,7 +18,7 @@ function getClaimAndHandleResponse(claimUri, resolve, reject){
 }
 
 module.exports = {
-	getClaimBasedOnNameOnly: function(claimName){
+	getClaimByName: function(claimName){
 		var deferred = new Promise(function (resolve, reject){
 			console.log(">> lbryHelpers >> getClaim BasedOnNameOnly:", claimName);
 			// get all free public claims 
@@ -125,7 +56,7 @@ module.exports = {
 		});
 		return deferred;
 	},
-	getClaimBasedOnUri: function(claimName, claimId){
+	getClaimByClaimId: function(claimName, claimId){
 		var deferred = new Promise(function (resolve, reject){
 			var uri = claimName + "#" + claimId;
 			console.log(">> lbryHelpers >> getClaimBasedOnUri:", uri);
@@ -167,8 +98,5 @@ module.exports = {
 			});
 		});
 		return deferred;
-	},
-	getAllClaims: function(claimName){
-		return getAllFreePublicClaims(claimName);
 	}
 }
