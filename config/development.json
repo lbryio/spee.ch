@@ -4,5 +4,9 @@
 	},
 	"AnalyticsConfig":{
 		"googleId": "UA-100747990-1"
+	},
+	"Database": {
+		"MySqlConnectionUri": "none",
+		"PublishUploadPath": "C:\\lbry\\speech\\hosted_content"
 	}
 }

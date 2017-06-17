@@ -1,4 +1,6 @@
-module.exports = function(app, path, siofu, socketHelpers, ua, googleAnalyticsId) {
+var publishController = require('../controllers/publishController.js');
+
+module.exports = function(app, siofu, hostedContentPath, ua, googleAnalyticsId) {
 	var http = require('http').Server(app);
 	var io = require('socket.io')(http);
 	
@@ -8,9 +10,10 @@ module.exports = function(app, path, siofu, socketHelpers, ua, googleAnalyticsId
 		var visitor = ua(googleAnalyticsId, {https: true});
 		// attach upload listeners
 		var uploader = new siofu();
-		uploader.dir = path.join(__dirname, '../../Uploads');
+		uploader.dir = hostedContentPath;
 		uploader.listen(socket);
 		uploader.on("start", function(event){
+			// server side test to make sure file is not a bad file type
 			if (/\.exe$/.test(event.file.name)) {
 				uploader.abort(event.file.id, socket);
 			}
@@ -20,12 +23,13 @@ module.exports = function(app, path, siofu, socketHelpers, ua, googleAnalyticsId
 			socket.emit("publish-status", event.error)
 		});
 		uploader.on("saved", function(event){
-			console.log("saved " + event.file.name);
+			console.log("uploaded ", event.file.name);
 			if (event.file.success){
 				socket.emit("publish-status", "file upload successfully completed");
-				socketHelpers.publish(event.file.meta.name, event.file.pathName, event.file.meta.license, event.file.meta.nsfw, socket, visitor)
+				publishController.publish(event.file.meta.name, event.file.name, event.file.pathName, event.file.meta.type, event.file.meta.license, event.file.meta.nsfw, socket, visitor)
 			} else {
 				socket.emit("publish-failure", "file uploaded, but with errors")
+				// to-do: remove the file
 			};
 		});
 		// handle disconnect

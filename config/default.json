@@ -4,5 +4,9 @@
 	},
 	"AnalyticsConfig":{
 		"googleId": "none"
+	},
+	"Database": {
+		"MySqlConnectionUri": "none",
+		"PublishUploadPath": "none"
 	}
 }

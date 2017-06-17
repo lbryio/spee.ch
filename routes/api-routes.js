@@ -1,15 +1,17 @@
+var errorHandlers = require("../helpers/libraries/errorHandlers.js");
+var lbryApi = require("../helpers/libraries/lbryApi.js");
 
-module.exports = function(app, routeHelpers, lbryApi){
+module.exports = function(app){
 	// route to run a claim_list request on the daemon
 	app.get("/api/claim_list/:claim", function(req, res){
 		lbryApi.getClaimsList(req.params.claim)
-		.then(function(orderedFreePublicImages){
+		.then(function(claimsList){
 			console.log("/api/claim_list/:claim success.");
-			res.status(200).json(orderedFreePublicImages);
+			res.status(200).json(claimsList);
 		})
 		.catch(function(error){
 			console.log("/api/claim_list/:name error:", error);
-			routeHelpers.handleRequestError(error, res);
+			errorHandlers.handleRequestError(error, res);
 		});
 	});
 	// route to run a resolve request on the daemon
@@ -19,7 +21,7 @@ module.exports = function(app, routeHelpers, lbryApi){
 			console.log("/api/resolve/:claim success.");
 			res.status(200).json(resolvedUri);
 		}).catch(function(error){
-			routeHelpers.handleRequestError(error, res);
+			errorHandlers.handleRequestError(error, res);
 		});
 	});
 	
