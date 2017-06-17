@@ -1,28 +1,30 @@
-var errorHandlers = require("../helpers/libraries/errorHandlers.js");
-var lbryApi = require("../helpers/libraries/lbryApi.js");
+const errorHandlers = require('../helpers/libraries/errorHandlers.js')
+const lbryApi = require('../helpers/libraries/lbryApi.js')
 
-module.exports = function(app){
-	// route to run a claim_list request on the daemon
-	app.get("/api/claim_list/:claim", function(req, res){
-		lbryApi.getClaimsList(req.params.claim)
-		.then(function(claimsList){
-			console.log("/api/claim_list/:claim success.");
-			res.status(200).json(claimsList);
-		})
-		.catch(function(error){
-			console.log("/api/claim_list/:name error:", error);
-			errorHandlers.handleRequestError(error, res);
-		});
-	});
-	// route to run a resolve request on the daemon
-	app.get("/api/resolve/:uri", function(req, res){
-		lbryApi.resolveUri(req.params.uri)
-		.then(function(resolvedUri){
-			console.log("/api/resolve/:claim success.");
-			res.status(200).json(resolvedUri);
-		}).catch(function(error){
-			errorHandlers.handleRequestError(error, res);
-		});
-	});
-	
+module.exports = app => {
+  // route to run a claim_list request on the daemon
+  app.get('/api/claim_list/:claim', ({ params }, res) => {
+    lbryApi
+      .getClaimsList(params.claim)
+      .then(claimsList => {
+        console.log('/api/claim_list/:claim success.')
+        res.status(200).json(claimsList)
+      })
+      .catch(error => {
+        console.log('/api/claim_list/:name error:', error)
+        errorHandlers.handleRequestError(error, res)
+      })
+  })
+  // route to run a resolve request on the daemon
+  app.get('/api/resolve/:uri', ({ params }, res) => {
+    lbryApi
+      .resolveUri(params.uri)
+      .then(resolvedUri => {
+        console.log('/api/resolve/:claim success.')
+        res.status(200).json(resolvedUri)
+      })
+      .catch(error => {
+        errorHandlers.handleRequestError(error, res)
+      })
+  })
 }
