@@ -1,5 +1,5 @@
 var errorHandlers = require("../helpers/libraries/errorHandlers.js");
-var showController = require("../controllers/serveController.js");
+var showController = require("../controllers/showController.js");
 
 module.exports = function(app, ua, googleAnalyticsId){
 	// route to fetch all free public claims

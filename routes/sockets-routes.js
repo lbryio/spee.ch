@@ -23,12 +23,13 @@ module.exports = function(app, siofu, hostedContentPath, ua, googleAnalyticsId) 
 			socket.emit("publish-status", event.error)
 		});
 		uploader.on("saved", function(event){
-			console.log("saved ", event.file.name, "deets:", event.file);
+			console.log("uploaded ", event.file.name);
 			if (event.file.success){
 				socket.emit("publish-status", "file upload successfully completed");
-				publishController.publish(event.file.meta.name, event.file.pathName, event.file.meta.type, event.file.meta.license, event.file.meta.nsfw, socket, visitor)
+				publishController.publish(event.file.meta.name, event.file.name, event.file.pathName, event.file.meta.type, event.file.meta.license, event.file.meta.nsfw, socket, visitor)
 			} else {
 				socket.emit("publish-failure", "file uploaded, but with errors")
+				// to-do: remove the file
 			};
 		});
 		// handle disconnect

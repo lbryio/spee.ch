@@ -2,6 +2,6 @@ var getAllFreePublicClaims = require("../helpers/functions/getAllFreePublicClaim
 
 module.exports = {
 	getAllClaims: function(claimName){
-		return getAllFreePublicClaims(claimName);  // to-do: does this need to be returned?
+		return getAllFreePublicClaims(claimName);
 	}
 }

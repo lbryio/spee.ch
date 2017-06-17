@@ -7,6 +7,6 @@
 	},
 	"Database": {
 		"MySqlConnectionUri": "none",
-		"DownloadAddress": "~/Downloads/"
+		"PublishUploadPath": "~/Downloads/"
 	}
 }

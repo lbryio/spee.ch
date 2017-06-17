@@ -10,7 +10,7 @@ var config = require('config');
 var ua = require('universal-analytics');
 
 var googleAnalyticsId = config.get('AnalyticsConfig.googleId');
-var hostedContentPath = config.get('Database.DownloadAddress');
+var hostedContentPath = config.get('Database.PublishUploadPath');
 
 // set port
 var PORT = 3000;

@@ -2,20 +2,20 @@ var axios = require('axios');
 var db = require("../../models");
 
 module.exports = {
-	publishClaim: function(publishParams, fileType){
+	publishClaim: function(publishParams, fileName, fileType){
 		var deferred = new Promise(function(resolve, reject){
 			console.log(">> lbryApi >> publishClaim:", publishParams);
 			axios.post('http://localhost:5279/lbryapi', {
 				"method": "publish", 
 				"params": publishParams
 			}).then(function (response) {
-				console.log(">> 'publish' success");
+				console.log(">> 'publish' success", response);
 				var result = response.data.result;
 				db.File.create({
 					name: publishParams.name,
 					claim_id: result.claim_id,
 					outpoint: result.txid + ":" + result.nout,
-					file_name: "test",
+					file_name: fileName,
 					file_path: publishParams.file_path,
 					file_type: fileType,
 					nsfw: publishParams.metadata.nsfw,
