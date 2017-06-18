@@ -1,16 +1,17 @@
 const errorHandlers = require('../helpers/libraries/errorHandlers.js')
 const serveController = require('../controllers/serveController.js')
 
-function serveFile ({ fileType, filePath }, res) {
+function serveFile ({ file_type, file_path }, res) {
   // set default options
   const options = {
     headers: {
       'X-Content-Type-Options': 'nosniff',
-      'Content-Type'          : fileType,
+      'Content-Type'          : file_type,
     },
   }
   // adjust default options as needed
-  switch (fileType) {
+  // eslint-disable-next-line camelcase
+  switch (file_type) {
     case 'image/jpeg':
       break
     case 'image/gif':
@@ -25,7 +26,7 @@ function serveFile ({ fileType, filePath }, res) {
       break
   }
   // send file
-  res.status(200).sendFile(filePath, options)
+  res.status(200).sendFile(file_path, options)
 }
 
 module.exports = (app, ua, googleAnalyticsId) => {
