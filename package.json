@@ -5,7 +5,10 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node server.js",
+    "lint": "eslint .",
+    "fix": "eslint . --fix",
+    "precommit": "eslint ."
   },
   "repository": {
     "type": "git",
@@ -34,5 +37,15 @@
     "socket.io": "^2.0.1",
     "socketio-file-upload": "^0.6.0",
     "universal-analytics": "^0.4.13"
+  },
+  "devDependencies": {
+    "eslint": "3.19.0",
+    "eslint-config-standard": "10.2.1",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-node": "^4.2.2",
+    "eslint-plugin-promise": "3.5.0",
+    "eslint-plugin-react": "6.10.3",
+    "eslint-plugin-standard": "3.0.1",
+    "husky": "^0.13.4"
   }
 }
