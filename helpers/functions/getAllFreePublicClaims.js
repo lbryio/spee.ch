@@ -1,8 +1,8 @@
 const isFreePublicClaim = require('./isFreePublicClaim.js');
 const lbryApi = require('../libraries/lbryApi.js');
+const logger = require('winston');
 
 function filterForFreePublicClaims (claimsListArray) {
-  // console.log("claims list:", claimsListArray)
   if (!claimsListArray) {
     return null;
   }
@@ -16,12 +16,12 @@ function filterForFreePublicClaims (claimsListArray) {
 }
 
 function orderTopClaims (claimsListArray) {
-  console.log('>> orderTopClaims');
-  claimsListArray.sort(({ amountA, heightA }, { amountB, heightB }) => {
-    if (amountA === amountB) {
-      return heightA > heightB;
+  logger.silly('ordering the top claims');
+  claimsListArray.sort((a, b) => {
+    if (a.amount === b.amount) {
+      return a.height < b.height;
     } else {
-      return amountA < amountB;
+      return a.amount < b.amount;
     }
   });
   return claimsListArray;
