@@ -42,7 +42,7 @@ module.exports = {
           params: { uri, timeout: 30 },
         })
         .then(({ data }) => {
-          logger.silly(`getClaim success for ${uri}`);
+          logger.silly(`getClaim success for ${uri}`, data);
           // check to make sure the daemon didn't just time out
           if (!data.result) {
             reject(JSON.stringify(data));
