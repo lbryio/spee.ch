@@ -8,5 +8,8 @@
 	"Database": {
 		"MySqlConnectionUri": "none",
 		"PublishUploadPath": "/home/ubuntu/Downloads/"
+	},
+	"Logging": {
+		"LogLevel": "info"
 	}
 }

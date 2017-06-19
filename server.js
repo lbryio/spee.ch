@@ -6,9 +6,15 @@ const expressHandlebars = require('express-handlebars');
 const Handlebars = require('handlebars');
 const config = require('config');
 const ua = require('universal-analytics');
+const winston = require('winston');
 
 const googleAnalyticsId = config.get('AnalyticsConfig.googleId');
 const hostedContentPath = config.get('Database.PublishUploadPath');
+
+// configure logging
+const logLevel = config.get('Logging.LogLevel');
+const logDir = config.get('Logging.LogDirectory');
+require('./helpers/logging/loggerSetup.js')(winston, logLevel, logDir);
 
 // set port
 const PORT = 3000;
@@ -63,6 +69,6 @@ const http = require('./routes/sockets-routes.js')(app, siofu, hostedContentPath
 // start server
 db.sequelize.sync({}).then(() => {
   http.listen(PORT, () => {
-    console.log(`Listening on PORT ${PORT}`);
+    winston.info(`Server is listening on PORT ${PORT}`);
   });
 });

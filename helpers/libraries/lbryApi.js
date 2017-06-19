@@ -41,7 +41,7 @@ module.exports = {
       axios
         .post('http://localhost:5279/lbryapi', {
           method: 'get',
-          params: { uri, timeout: 20 },
+          params: { uri, timeout: 60 },
         })
         .then(({ data }) => {
           console.log(">> 'get' success");

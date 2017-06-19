@@ -8,5 +8,8 @@
 	"Database": {
 		"MySqlConnectionUri": "none",
 		"PublishUploadPath": "/home/lbry/Downloads/"
+	},
+	"Logging": {
+		"LogLevel": "verbose"
 	}
 }
