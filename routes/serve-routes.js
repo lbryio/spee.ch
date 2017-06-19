@@ -1,5 +1,5 @@
-const errorHandlers = require('../helpers/libraries/errorHandlers.js')
-const serveController = require('../controllers/serveController.js')
+const errorHandlers = require('../helpers/libraries/errorHandlers.js');
+const serveController = require('../controllers/serveController.js');
 
 function serveFile ({ file_type, file_path }, res) {
   // set default options
@@ -8,61 +8,61 @@ function serveFile ({ file_type, file_path }, res) {
       'X-Content-Type-Options': 'nosniff',
       'Content-Type'          : file_type,
     },
-  }
+  };
   // adjust default options as needed
   // eslint-disable-next-line camelcase
   switch (file_type) {
     case 'image/jpeg':
-      break
+      break;
     case 'image/gif':
-      break
+      break;
     case 'image/png':
-      break
+      break;
     case 'video/mp4':
-      break
+      break;
     default:
-      console.log('sending unknown file type as .jpeg')
-      options['headers']['Content-Type'] = 'image/jpeg'
-      break
+      console.log('sending unknown file type as .jpeg');
+      options['headers']['Content-Type'] = 'image/jpeg';
+      break;
   }
   // send file
-  res.status(200).sendFile(file_path, options)
+  res.status(200).sendFile(file_path, options);
 }
 
 module.exports = (app, ua, googleAnalyticsId) => {
   // route to fetch one free public claim
   app.get('/:name/:claim_id', ({ params }, res) => {
-    const routeString = `${params.name}/${params.claim_id}`
+    const routeString = `${params.name}/${params.claim_id}`;
     // google analytics
-    ua(googleAnalyticsId, { https: true }).event('Serve Route', '/name/claimId', routeString).send()
+    ua(googleAnalyticsId, { https: true }).event('Serve Route', '/name/claimId', routeString).send();
     // begin image-serve processes
-    console.log(`>> GET request on /${routeString}`)
+    console.log(`>> GET request on /${routeString}`);
     serveController
       .getClaimByClaimId(params.name, params.claim_id)
       .then(fileInfo => {
-        console.log('/:name/:claim_id success.', fileInfo.file_name)
-        serveFile(fileInfo, res)
+        console.log('/:name/:claim_id success.', fileInfo.file_name);
+        serveFile(fileInfo, res);
       })
       .catch(error => {
-        console.log('/:name/:claim_id error:', error)
-        errorHandlers.handleRequestError(error, res)
-      })
-  })
+        console.log('/:name/:claim_id error:', error);
+        errorHandlers.handleRequestError(error, res);
+      });
+  });
   // route to fetch one free public claim
   app.get('/:name', ({ params }, res) => {
     // google analytics
-    ua(googleAnalyticsId, { https: true }).event('Serve Route', '/name', params.name).send()
+    ua(googleAnalyticsId, { https: true }).event('Serve Route', '/name', params.name).send();
     // begin image-serve processes
-    console.log(`>> GET request on /${params.name}`)
+    console.log(`>> GET request on /${params.name}`);
     serveController
       .getClaimByName(params.name)
       .then(fileInfo => {
-        console.log('/:name success.', fileInfo.file_name)
-        serveFile(fileInfo, res)
+        console.log('/:name success.', fileInfo.file_name);
+        serveFile(fileInfo, res);
       })
       .catch(error => {
-        console.log('/:name error:', error)
-        errorHandlers.handleRequestError(error, res)
-      })
-  })
-}
+        console.log('/:name error:', error);
+        errorHandlers.handleRequestError(error, res);
+      });
+  });
+};

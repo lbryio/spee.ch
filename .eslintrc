@@ -16,6 +16,11 @@
       "error",
       "always-multiline"
     ],
+    "semi": [
+      "error",
+      "always", 
+      { "omitLastInOneLineBlock": true }
+      ],
     "key-spacing": [
       "error",
       {

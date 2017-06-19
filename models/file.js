@@ -34,6 +34,6 @@ module.exports = (sequelize, { STRING, BOOLEAN }) => {
     {
       freezeTableName: true,
     }
-  )
-  return File
-}
+  );
+  return File;
+};

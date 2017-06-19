@@ -1,7 +1,7 @@
-const getAllFreePublicClaims = require('../helpers/functions/getAllFreePublicClaims.js')
+const getAllFreePublicClaims = require('../helpers/functions/getAllFreePublicClaims.js');
 
 module.exports = {
   getAllClaims (claimName) {
-    return getAllFreePublicClaims(claimName)
+    return getAllFreePublicClaims(claimName);
   },
-}
+};

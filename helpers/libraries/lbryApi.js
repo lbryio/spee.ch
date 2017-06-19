@@ -1,18 +1,18 @@
-const axios = require('axios')
-const db = require('../../models')
+const axios = require('axios');
+const db = require('../../models');
 
 module.exports = {
   publishClaim (publishParams, fileName, fileType) {
     const deferred = new Promise((resolve, reject) => {
-      console.log('>> lbryApi >> publishClaim:', publishParams)
+      console.log('>> lbryApi >> publishClaim:', publishParams);
       axios
         .post('http://localhost:5279/lbryapi', {
           method: 'publish',
           params: publishParams,
         })
         .then(response => {
-          console.log(">> 'publish' success", response)
-          const result = response.data.result
+          console.log(">> 'publish' success", response);
+          const result = response.data.result;
           db.File
             .create({
               name     : publishParams.name,
@@ -24,36 +24,36 @@ module.exports = {
               nsfw     : publishParams.metadata.nsfw,
             })
             .catch(error => {
-              console.log('An error occurred when writing to the MySQL database:', error)
-            })
-          resolve(result)
+              console.log('An error occurred when writing to the MySQL database:', error);
+            });
+          resolve(result);
         })
         .catch(error => {
-          console.log(">> 'publish' error")
-          reject(error)
-        })
-    })
-    return deferred
+          console.log(">> 'publish' error");
+          reject(error);
+        });
+    });
+    return deferred;
   },
   getClaim (uri) {
     const deferred = new Promise((resolve, reject) => {
-      console.log('>> lbryApi >> getClaim:', uri)
+      console.log('>> lbryApi >> getClaim:', uri);
       axios
         .post('http://localhost:5279/lbryapi', {
           method: 'get',
           params: { uri, timeout: 20 },
         })
         .then(({ data }) => {
-          console.log(">> 'get' success")
+          console.log(">> 'get' success");
           // check to make sure the daemon didn't just time out
           if (data.result.error) {
-            reject(data.result.error)
+            reject(data.result.error);
           }
           /*
             note: put in a check to make sure we do not resolve until the download is actually complete (response.data.completed === true)
           */
           // save a record of the file to the Files table
-          const result = data.result
+          const result = data.result;
           db.File
             .create({
               name     : result.name,
@@ -65,53 +65,53 @@ module.exports = {
               nsfw     : result.metadata.stream.metadata.nsfw,
             })
             .catch(error => {
-              console.log('An error occurred when writing to the MySQL database:', error)
-            })
-          resolve(result)
+              console.log('An error occurred when writing to the MySQL database:', error);
+            });
+          resolve(result);
         })
         .catch(error => {
-          console.log(">> 'get' error")
-          reject(error)
-        })
-    })
-    return deferred
+          console.log(">> 'get' error");
+          reject(error);
+        });
+    });
+    return deferred;
   },
   getClaimsList (claimName) {
     const deferred = new Promise((resolve, reject) => {
-      console.log('>> lbryApi >> getClaimList:', claimName)
+      console.log('>> lbryApi >> getClaimList:', claimName);
       axios
         .post('http://localhost:5279/lbryapi', {
           method: 'claim_list',
           params: { name: claimName },
         })
         .then(({ data }) => {
-          console.log(">> 'claim_list' success")
-          resolve(data.result)
+          console.log(">> 'claim_list' success");
+          resolve(data.result);
         })
         .catch(error => {
-          console.log(">> 'claim_list' error")
-          reject(error)
-        })
-    })
-    return deferred
+          console.log(">> 'claim_list' error");
+          reject(error);
+        });
+    });
+    return deferred;
   },
   resolveUri (uri) {
     const deferred = new Promise((resolve, reject) => {
-      console.log('>> lbryApi >> resolveUri:', uri)
+      console.log('>> lbryApi >> resolveUri:', uri);
       axios
         .post('http://localhost:5279/lbryapi', {
           method: 'resolve',
           params: { uri },
         })
         .then(({ data }) => {
-          console.log(">> 'resolve' success")
-          resolve(data.result)
+          console.log(">> 'resolve' success");
+          resolve(data.result);
         })
         .catch(error => {
-          console.log(">> 'resolve' error")
-          reject(error)
-        })
-    })
-    return deferred
+          console.log(">> 'resolve' error");
+          reject(error);
+        });
+    });
+    return deferred;
   },
-}
+};
