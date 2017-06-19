@@ -2,17 +2,18 @@ const errorHandlers = require('../helpers/libraries/errorHandlers.js');
 const serveController = require('../controllers/serveController.js');
 const logger = require('winston');
 
-function serveFile ({ file_type, file_path }, res) {
+function serveFile ({ fileName, fileType, filePath }, res) {
+  logger.info(`serving file ${fileName} from ${filePath}`);
   // set default options
   const options = {
     headers: {
       'X-Content-Type-Options': 'nosniff',
-      'Content-Type'          : file_type,
+      'Content-Type'          : fileType,
     },
   };
   // adjust default options as needed
   // eslint-disable-next-line camelcase
-  switch (file_type) {
+  switch (fileType) {
     case 'image/jpeg':
       break;
     case 'image/gif':
@@ -27,7 +28,7 @@ function serveFile ({ file_type, file_path }, res) {
       break;
   }
   // send file
-  res.status(200).sendFile(file_path, options);
+  res.status(200).sendFile(filePath, options);
 }
 
 module.exports = (app, ua, googleAnalyticsId) => {
@@ -41,11 +42,11 @@ module.exports = (app, ua, googleAnalyticsId) => {
     serveController
       .getClaimByClaimId(params.name, params.claim_id)
       .then(fileInfo => {
-        logger.info(`${originalUrl} returned successfully.`);
+        logger.debug(`${originalUrl} getClaimByClaimId returned successfully.`);
         serveFile(fileInfo, res);
       })
       .catch(error => {
-        logger.error(`${originalUrl} returned an error.`, error);
+        logger.error(`${originalUrl} getClaimByClaimId returned an error.`, error);
         errorHandlers.handleRequestError(error, res);
       });
   });
@@ -58,11 +59,11 @@ module.exports = (app, ua, googleAnalyticsId) => {
     serveController
       .getClaimByName(params.name)
       .then(fileInfo => {
-        logger.info(`${originalUrl} returned successfully.`);
+        logger.debug(`${originalUrl} getClaimByName returned successfully.`);
         serveFile(fileInfo, res);
       })
       .catch(error => {
-        logger.error(`${originalUrl} returned an error.`, error);
+        logger.error(`${originalUrl} getClaimByName returned an error.`, error);
         errorHandlers.handleRequestError(error, res);
       });
   });

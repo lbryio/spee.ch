@@ -9,9 +9,9 @@ function getClaimAndHandleResponse (claimUri, resolve, reject) {
     .getClaim(claimUri)
     .then(({ file_name, download_path, mime_type }) => {
       resolve({
-        file_name,
-        file_path: download_path,
-        file_type: mime_type,
+        fileName: file_name,
+        filePath: download_path,
+        fileType: mime_type,
       });
     })
     .catch(error => {
@@ -33,7 +33,7 @@ module.exports = {
           console.log('>> Decided on public claim id:', claimId);
           // check to see if the file is available locally
           db.File
-            .findOne({ where: { name: name, claim_id: claimId } })
+            .findOne({ where: { name: name, claimId: claimId } })
             .then(claim => {
               // if a matching claim is found locally...
               if (claim) {
@@ -76,7 +76,7 @@ module.exports = {
           const resolvedOutpoint = `${result[uri].claim.txid}:${result[uri].claim.nout}`;
           // check locally for the claim
           db.File
-            .findOne({ where: { claim_id: claimId } })
+            .findOne({ where: { name: claimName, claimId: claimId } })
             .then(claim => {
               // if a found locally...
               if (claim) {

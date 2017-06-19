@@ -6,7 +6,7 @@ module.exports = (sequelize, { STRING, BOOLEAN }) => {
         type     : STRING,
         allowNull: false,
       },
-      claim_id: {
+      claimId: {
         type     : STRING,
         allowNull: false,
       },
@@ -14,15 +14,15 @@ module.exports = (sequelize, { STRING, BOOLEAN }) => {
         type     : STRING,
         allowNull: false,
       },
-      file_name: {
+      fileName: {
         type     : STRING,
         allowNull: false,
       },
-      file_path: {
+      filePath: {
         type     : STRING,
         allowNull: false,
       },
-      file_type: {
+      fileType: {
         type: STRING,
       },
       nsfw: {

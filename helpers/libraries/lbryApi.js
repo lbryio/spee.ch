@@ -1,51 +1,52 @@
 const axios = require('axios');
 const db = require('../../models');
+const logger = require('winston');
+
+function createFilesRecord (name, claimId, outpoint, fileName, filePath, fileType, nsfw) {
+  db.File
+    .create({ name, claimId, outpoint, fileName, filePath, fileType, nsfw })
+    .catch(error => {
+      logger.error(`Sequelize File.create error`, error);
+    });
+}
 
 module.exports = {
   publishClaim (publishParams, fileName, fileType) {
+    logger.silly(`publishClaim start for ${fileName}`);
     const deferred = new Promise((resolve, reject) => {
-      console.log('>> lbryApi >> publishClaim:', publishParams);
       axios
         .post('http://localhost:5279/lbryapi', {
           method: 'publish',
           params: publishParams,
         })
         .then(response => {
-          console.log(">> 'publish' success", response);
+          logger.silly(`publishClaim success for ${fileName}`);
           const result = response.data.result;
-          db.File
-            .create({
-              name     : publishParams.name,
-              claim_id : result.claim_id,
-              outpoint : `${result.txid}:${result.nout}`,
-              file_name: fileName,
-              file_path: publishParams.file_path,
-              file_type: fileType,
-              nsfw     : publishParams.metadata.nsfw,
-            })
-            .catch(error => {
-              console.log('An error occurred when writing to the MySQL database:', error);
-            });
+          createFilesRecord(
+            publishParams.name, result.claim_id, `${result.txid}:${result.nout}`, fileName, publishParams.file_path, fileType, publishParams.metadata.nsfw);
           resolve(result);
         })
         .catch(error => {
-          console.log(">> 'publish' error");
+          logger.error(`publishClaim error for ${fileName}`, error);
           reject(error);
         });
     });
     return deferred;
   },
   getClaim (uri) {
+    logger.silly(`getClaim start for ${uri}`);
     const deferred = new Promise((resolve, reject) => {
-      console.log('>> lbryApi >> getClaim:', uri);
       axios
         .post('http://localhost:5279/lbryapi', {
           method: 'get',
-          params: { uri, timeout: 60 },
+          params: { uri, timeout: 30 },
         })
         .then(({ data }) => {
-          console.log(">> 'get' success");
+          logger.silly(`getClaim success for ${uri}`);
           // check to make sure the daemon didn't just time out
+          if (!data.result) {
+            reject(JSON.stringify(data));
+          }
           if (data.result.error) {
             reject(data.result.error);
           }
@@ -54,61 +55,50 @@ module.exports = {
           */
           // save a record of the file to the Files table
           const result = data.result;
-          db.File
-            .create({
-              name     : result.name,
-              claim_id : result.claim_id,
-              outpoint : result.outpoint,
-              file_name: result.file_name,
-              file_path: result.download_path,
-              file_type: result.mime_type,
-              nsfw     : result.metadata.stream.metadata.nsfw,
-            })
-            .catch(error => {
-              console.log('An error occurred when writing to the MySQL database:', error);
-            });
+          createFilesRecord(
+            result.name, result.claim_id, result.outpoint, result.file_name, result.download_path, result.mime_type, result.metadata.stream.metadata.nsfw);
           resolve(result);
         })
         .catch(error => {
-          console.log(">> 'get' error");
+          logger.error(`getClaim error for ${uri}`, error);
           reject(error);
         });
     });
     return deferred;
   },
   getClaimsList (claimName) {
+    logger.silly(`getClaimsList start for ${claimName}`);
     const deferred = new Promise((resolve, reject) => {
-      console.log('>> lbryApi >> getClaimList:', claimName);
       axios
         .post('http://localhost:5279/lbryapi', {
           method: 'claim_list',
           params: { name: claimName },
         })
         .then(({ data }) => {
-          console.log(">> 'claim_list' success");
+          logger.silly(`getClaimsList success for ${claimName}`);
           resolve(data.result);
         })
         .catch(error => {
-          console.log(">> 'claim_list' error");
+          logger.error(`getClaimsList error for ${claimName}`, error);
           reject(error);
         });
     });
     return deferred;
   },
   resolveUri (uri) {
+    logger.silly(`resolveUri start for ${uri}`);
     const deferred = new Promise((resolve, reject) => {
-      console.log('>> lbryApi >> resolveUri:', uri);
       axios
         .post('http://localhost:5279/lbryapi', {
           method: 'resolve',
           params: { uri },
         })
         .then(({ data }) => {
-          console.log(">> 'resolve' success");
+          logger.silly(`resolveUri success for ${uri}`);
           resolve(data.result);
         })
         .catch(error => {
-          console.log(">> 'resolve' error");
+          logger.error(`resolveUri error for ${uri}`, error);
           reject(error);
         });
     });

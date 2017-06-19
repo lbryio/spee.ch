@@ -12,11 +12,11 @@ module.exports = (app, ua, googleAnalyticsId) => {
     showController
       .getAllClaims(params.name)
       .then(orderedFreePublicClaims => {
-        logger.info(`${originalUrl} returned successfully.`);
+        logger.debug(`${originalUrl} getAllClaims returned successfully.`);
         res.status(200).render('allClaims', { claims: orderedFreePublicClaims });
       })
       .catch(error => {
-        logger.error(`${originalUrl} returned an error.`, error);
+        logger.error(`${originalUrl} getAllClaims returned an error.`, error);
         errorHandlers.handleRequestError(error, res);
       });
   });
