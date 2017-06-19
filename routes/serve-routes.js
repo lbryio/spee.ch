@@ -34,7 +34,7 @@ function serveFile ({ fileName, fileType, filePath }, res) {
 module.exports = (app, ua, googleAnalyticsId) => {
   // route to fetch one free public claim
   app.get('/:name/:claim_id', ({ originalUrl, params }, res) => {
-    logger.debug(`Get request on ${originalUrl}`);
+    logger.info(`Get request on ${originalUrl}`);
     const routeString = `${params.name}/${params.claim_id}`;
     // google analytics
     ua(googleAnalyticsId, { https: true }).event('Serve Route', '/name/claimId', routeString).send();
@@ -52,7 +52,7 @@ module.exports = (app, ua, googleAnalyticsId) => {
   });
   // route to fetch one free public claim
   app.get('/:name', ({ originalUrl, params }, res) => {
-    logger.debug(`Get request on ${originalUrl}`);
+    logger.info(`Get request on ${originalUrl}`);
     // google analytics
     ua(googleAnalyticsId, { https: true }).event('Serve Route', '/name', params.name).send();
     // begin image-serve processes

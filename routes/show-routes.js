@@ -5,14 +5,13 @@ const logger = require('winston');
 module.exports = (app, ua, googleAnalyticsId) => {
   // route to fetch all free public claims
   app.get('/:name/all', ({ originalUrl, params }, res) => {
-    logger.debug(`Get request on ${originalUrl}`);
+    logger.info(`Get request on ${originalUrl}`);
     // google analytics
     ua(googleAnalyticsId, { https: true }).event('Show Routes', '/name/all', `${params.name}/all`).send();
     // fetch all free public claims
     showController
       .getAllClaims(params.name)
       .then(orderedFreePublicClaims => {
-        logger.debug(`${originalUrl} getAllClaims returned successfully.`);
         res.status(200).render('allClaims', { claims: orderedFreePublicClaims });
       })
       .catch(error => {
