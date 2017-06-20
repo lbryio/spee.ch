@@ -1,12 +1,12 @@
 const fs = require('fs');
+const logger = require('winston');
 const lbryApi = require('../helpers/libraries/lbryApi.js');
 const config = require('config');
+const walledAddress = config.get('WalletConfig.lbryAddress');
 const errorHandlers = require('../helpers/libraries/errorHandlers.js');
 
-const walledAddress = config.get('WalletConfig.lbryAddress');
-
 function createPublishParams (claim, filePath, license, nsfw) {
-  console.log('nsfw:', nsfw, typeof nsfw);
+  logger.debug(`Creating Publish Parameters for "${claim}"`);
   const publishParams = {
     name     : claim,
     file_path: filePath,
@@ -28,7 +28,7 @@ function createPublishParams (claim, filePath, license, nsfw) {
 function deleteTemporaryFile (filePath) {
   fs.unlink(filePath, err => {
     if (err) throw err;
-    console.log(`successfully deleted ${filePath}`);
+    logger.debug(`successfully deleted ${filePath}`);
   });
 }
 
@@ -44,13 +44,12 @@ module.exports = {
     lbryApi
       .publishClaim(publishParams, fileName, fileType)
       .then(result => {
+        logger.info(`Successfully published ${fileName}`);
         visitor.event('Publish Route', 'Publish Success', filePath).send();
-        console.log('publish promise success. Tx info:', result);
         socket.emit('publish-complete', { name: claim, result });
       })
       .catch(error => {
         visitor.event('Publish Route', 'Publish Failure', filePath).send();
-        console.log('error:', error);
         socket.emit('publish-failure', errorHandlers.handlePublishError(error));
         deleteTemporaryFile(filePath);
       });

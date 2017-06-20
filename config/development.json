@@ -8,5 +8,9 @@
 	"Database": {
 		"MySqlConnectionUri": "none",
 		"PublishUploadPath": "C:\\lbry\\speech\\hosted_content"
+	},
+	"Logging": {
+		"LogLevel": "debug",
+		"LogDirectory": "C:\\lbry\\speech\\logs\\"
 	}
 }

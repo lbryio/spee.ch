@@ -1,5 +1,8 @@
+const logger = require('winston');
+
 module.exports = {
   handleRequestError (error, res) {
+    logger.error('Request Error,', error);
     if (error === 'NO_CLAIMS' || error === 'NO_FREE_PUBLIC_CLAIMS') {
       res.status(307).render('noClaims');
     } else if (error.response) {
@@ -11,6 +14,7 @@ module.exports = {
     }
   },
   handlePublishError (error) {
+    logger.error('Publish Error,', error);
     if (error.code === 'ECONNREFUSED') {
       return 'Connection refused.  The daemon may not be running.';
     } else if (error.response.data.error) {

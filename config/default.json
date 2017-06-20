@@ -8,5 +8,9 @@
 	"Database": {
 		"MySqlConnectionUri": "none",
 		"PublishUploadPath": "none"
+	},
+	"Logging": {
+		"LogLevel": "none",
+		"LogDirectory": "none"
 	}
 }
