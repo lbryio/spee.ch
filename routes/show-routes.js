@@ -4,7 +4,7 @@ const logger = require('winston');
 
 module.exports = (app, ua, googleAnalyticsId) => {
   // route to fetch all free public claims
-  app.get('/lbrymemefodder', ({ originalUrl }, res) => {
+  app.get('/meme-fodder/play', ({ originalUrl }, res) => {
     logger.debug(`GET request on ${originalUrl}`);
     res.status(200).render('memeFodder');
   });
