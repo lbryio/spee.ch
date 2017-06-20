@@ -44,6 +44,7 @@ module.exports = {
     lbryApi
       .publishClaim(publishParams, fileName, fileType)
       .then(result => {
+        logger.info(`Successfully published ${fileName}`);
         visitor.event('Publish Route', 'Publish Success', filePath).send();
         socket.emit('publish-complete', { name: claim, result });
       })

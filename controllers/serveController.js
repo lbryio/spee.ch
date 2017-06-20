@@ -35,13 +35,14 @@ module.exports = {
             .then(claim => {
               // if a matching claim is found locally...
               if (claim) {
+                logger.debug(`A mysql record was found for ${claimId}`);
                 // if the outpoint's match return it
                 if (claim.dataValues.outpoint === freePublicClaimOutpoint) {
-                  logger.debug(`local outpoint matched for ${name} ${claimId} `);
+                  logger.debug(`local outpoint matched for ${claimId}`);
                   resolve(claim.dataValues);
                 // if the outpoint's don't match, fetch updated claim
                 } else {
-                  logger.debug(`local outpoint did not match ${name} ${claimId}`);
+                  logger.debug(`local outpoint did not match for ${claimId}`);
                   getClaimAndHandleResponse(freePublicClaimUri, resolve, reject);
                 }
               // ... otherwise use daemon to retrieve it
@@ -73,14 +74,14 @@ module.exports = {
             .then(claim => {
               // if a found locally...
               if (claim) {
-                logger.debug(`A File record was found for ${claimName}/${claimId}`);
+                logger.debug(`A mysql record was found for ${claimId}`);
                 // if the outpoint's match return it
                 if (claim.dataValues.outpoint === resolvedOutpoint) {
-                  logger.debug('local outpoint matched');
+                  logger.debug(`local outpoint matched for ${claimId}`);
                   resolve(claim.dataValues);
                   // if the outpoint's don't match, fetch updated claim
                 } else {
-                  logger.debug('local outpoint did not match');
+                  logger.debug(`local outpoint did not match for ${claimId}`);
                   getClaimAndHandleResponse(uri, resolve, reject);
                 }
                 // ... otherwise use daemon to retrieve it

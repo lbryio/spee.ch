@@ -3,7 +3,7 @@ const serveController = require('../controllers/serveController.js');
 const logger = require('winston');
 
 function serveFile ({ fileName, fileType, filePath }, res) {
-  logger.info(`serving file ${fileName} from ${filePath}`);
+  logger.info(`serving file ${fileName}`);
   // set default options
   const options = {
     headers: {

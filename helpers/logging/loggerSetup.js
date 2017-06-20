@@ -1,5 +1,4 @@
 const fs = require('fs');
-const tsFormat = () => (new Date()).toLocaleTimeString();
 
 module.exports = (winston, logLevel, logDir) => {
   if (!fs.existsSync(logDir)) {
@@ -15,20 +14,17 @@ module.exports = (winston, logLevel, logDir) => {
         prettyPrint: true,
       }),
       new (winston.transports.File)({
-        filename   : `${logDir}speechLogs.log`,
-        level      : logLevel,
-        json       : false,
-        timestamp  : tsFormat,
-        colorize   : true,
-        prettyPrint: true,
+        filename                       : `${logDir}speechLogs.log`,
+        level                          : logLevel,
+        json                           : false,
+        timestamp                      : true,
+        colorize                       : true,
+        prettyPrint                    : true,
+        handleExceptions               : true,
+        humanReadableUnhandledException: true,
       }),
     ],
   });
-
-  winston.handleExceptions(new winston.transports.File({
-    filename                       : `${logDir}uncaughtExceptions.log`,
-    humanReadableUnhandledException: true,
-  }));
 
   winston.error('Level 0');
   winston.warn('Level 1');

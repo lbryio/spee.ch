@@ -10,6 +10,7 @@
 		"PublishUploadPath": "/home/ubuntu/Downloads/"
 	},
 	"Logging": {
-		"LogLevel": "info"
+		"LogLevel": "debug",
+		"LogDirectory": "/home/ubuntu/Logs"
 	}
 }

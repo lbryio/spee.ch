@@ -10,7 +10,7 @@
 		"PublishUploadPath": "none"
 	},
 	"Logging": {
-		"LogLevel": "silly",
-		"LogDirectory": "C:\\lbry\\speech\\logs\\"
+		"LogLevel": "none",
+		"LogDirectory": "none"
 	}
 }

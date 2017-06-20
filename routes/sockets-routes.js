@@ -14,7 +14,7 @@ module.exports = (app, siofu, hostedContentPath, ua, googleAnalyticsId) => {
     uploader.dir = hostedContentPath;
     uploader.listen(socket);
     uploader.on('start', ({ file }) => {
-      logger.info('Client started an upload', file);
+      logger.info('client started an upload:', file.name);
       // server side test to make sure file is not a bad file type
       if (/\.exe$/.test(file.name)) {
         uploader.abort(file.id, socket);
@@ -26,7 +26,7 @@ module.exports = (app, siofu, hostedContentPath, ua, googleAnalyticsId) => {
     });
     uploader.on('saved', ({ file }) => {
       if (file.success) {
-        logger.info(`Client successfully uploaded ${file.name}`);
+        logger.debug(`Client successfully uploaded ${file.name}`);
         socket.emit('publish-status', 'file upload successfully completed');
         publishController.publish(file.meta.name, file.name, file.pathName, file.meta.type, file.meta.license, file.meta.nsfw, socket, visitor);
       } else {
