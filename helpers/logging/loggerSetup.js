@@ -14,7 +14,7 @@ module.exports = (winston, logLevel, logDir) => {
         prettyPrint: true,
       }),
       new (winston.transports.File)({
-        filename                       : `${logDir}speechLogs.log`,
+        filename                       : `${logDir}/speechLogs.log`,
         level                          : logLevel,
         json                           : false,
         timestamp                      : true,
