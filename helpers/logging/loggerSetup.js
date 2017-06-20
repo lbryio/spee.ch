@@ -8,13 +8,13 @@ module.exports = (winston, logLevel, logDir) => {
 
   winston.configure({
     transports: [
-      new (winston.transports.Console)({ 
+      new (winston.transports.Console)({
         level      : logLevel,
         timestamp  : false,
         colorize   : true,
         prettyPrint: true,
       }),
-      new (winston.transports.File)({ 
+      new (winston.transports.File)({
         filename   : `${logDir}speechLogs.log`,
         level      : logLevel,
         json       : false,
@@ -22,7 +22,7 @@ module.exports = (winston, logLevel, logDir) => {
         colorize   : true,
         prettyPrint: true,
       }),
-    ]
+    ],
   });
 
   winston.handleExceptions(new winston.transports.File({
