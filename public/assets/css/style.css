@@ -16,3 +16,9 @@
 .row {
 	margin: 10px 0px 10px 0px;
 }
+
+canvas {
+  background-color: blue; 
+  width: 100%;
+  height: auto;
+}
