@@ -1,0 +1,90 @@
+<div class="container">
+	{{> topBar}}
+	<div class="row">
+		{{> memeMaker}}
+	</div>
+</div>
+
+<script>
+	var canvas = document.getElementById('meme-canvas');
+	ctx = canvas.getContext('2d');
+
+	// set the size
+	var img = document.getElementById('start-image');
+	var canvasWidth = 400;
+	var canvasHeight = 300;
+	canvas.width = canvasWidth;
+	canvas.height = canvasHeight;
+	
+	
+	var topText = document.getElementById('top-text');
+	var bottomText = document.getElementById('bottom-text');
+
+	img.onload = function() {
+		drawMeme()
+	}
+
+	topText.addEventListener('keydown', drawMeme);
+	topText.addEventListener('keyup', drawMeme);
+	topText.addEventListener('change', drawMeme);
+
+	bottomText.addEventListener('keydown', drawMeme);
+	bottomText.addEventListener('keyup', drawMeme);
+	bottomText.addEventListener('change', drawMeme);
+
+	function drawMeme() {
+		ctx.clearRect(0, 0,  canvasWidth, canvasHeight);
+		ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
+		ctx.lineWidth = 4;
+		ctx.font = '20pt sans-serif';
+		ctx.strokeStyle = 'black';
+		ctx.fillStyle = 'white';
+		ctx.textAlign = 'center';
+		ctx.textBaseline = 'top';
+
+		var text1 = document.getElementById('top-text').value;
+		text1 = text1.toUpperCase();
+		x = canvasWidth / 2;
+		y = 0;
+
+		wrapText(ctx, text1, x, y, 300, 28, false);
+
+		ctx.textBaseline = 'bottom';
+		var text2 = document.getElementById('bottom-text').value;
+		text2 = text2.toUpperCase();
+		y = canvasHeight;
+
+		wrapText(ctx, text2, x, y, 300, 28, true);
+
+	}
+
+	function wrapText(context, text, x, y, maxWidth, lineHeight, fromBottom) {
+		var pushMethod = (fromBottom)?'unshift':'push';
+
+		lineHeight = (fromBottom)?-lineHeight:lineHeight;
+
+		var lines = [];
+		var y = y;
+		var line ='';
+		var words = text.split(' ');
+		for (var i = 0; i < words.length; i++) {
+			var testLine = line + ' ' + words[i];
+			var metrics = context.measureText(testLine);
+			var testWidth = metrics.width;
+
+			if (testWidth > maxWidth) {
+				lines[pushMethod](line);
+				line = words[i] + ' ';
+			} else {
+				line = testLine;
+			}
+		}
+		lines[pushMethod](line);
+
+		for (var k in lines ) {
+			context.strokeText(lines[k], x, y + lineHeight * k);
+			context.fillText(lines[k], x, y + lineHeight * k);
+		}
+	}
+
+</script>
