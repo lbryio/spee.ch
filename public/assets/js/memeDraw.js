@@ -6,8 +6,7 @@ var fontSize = 28;
 var topText = document.getElementById('top-text');
 var bottomText = document.getElementById('bottom-text');
 var ctx = canvas.getContext('2d');
-var downloadLink = document.getElementById("meme-download-link");
-var memeFileName = document.getElementById("meme-file-name");
+var fileNameInput = document.getElementById("file-name-input");
 
 // create the canvas
 img.onload = function() {
@@ -60,12 +59,13 @@ function wrapText(context, text, x, y, maxWidth, lineHeight, fromBottom) {
 	lineHeight = (fromBottom)?-lineHeight:lineHeight;
 
 	var lines = [];
-	var y = y;
-	var line ='';
+	var y     = y;
+	var line  ='';
 	var words = text.split(' ');
+
 	for (var i = 0; i < words.length; i++) {
-		var testLine = line + ' ' + words[i];
-		var metrics = context.measureText(testLine);
+		var testLine  = line + ' ' + words[i];
+		var metrics   = context.measureText(testLine);
 		var testWidth = metrics.width;
 
 		if (testWidth > maxWidth) {
@@ -75,6 +75,7 @@ function wrapText(context, text, x, y, maxWidth, lineHeight, fromBottom) {
 			line = testLine;
 		}
 	}
+
 	lines[pushMethod](line);
 
 	for (var k in lines ) {
@@ -83,16 +84,33 @@ function wrapText(context, text, x, y, maxWidth, lineHeight, fromBottom) {
 	}
 }
 
-// save the meme 
-function downloadMeme() {
-    var dt = canvas.toDataURL('image/jpeg');
-    this.href = dt;
-};
+function dataURItoBlob(dataURI) {
+    // convert base64/URLEncoded data component to raw binary data held in a string
+    var byteString;
+    if (dataURI.split(',')[0].indexOf('base64') >= 0)
+        byteString = atob(dataURI.split(',')[1]);
+    else
+        byteString = unescape(dataURI.split(',')[1]);
 
-function updateFileName(){
-	downloadLink.download = this.value;
+    // separate out the mime component
+    var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+
+    // write the bytes of the string to a typed array
+    var ia = new Uint8Array(byteString.length);
+    for (var i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
+    }
+
+    return new Blob([ia], {type:mimeString});
 }
 
-memeFileName.addEventListener('keyup', updateFileName);
-
-downloadLink.addEventListener('click', downloadMeme, false);
+// save the meme
+function startPublish() {
+	//download the image 
+    var dataUrl = canvas.toDataURL('image/jpeg');
+	var blob = dataURItoBlob(dataUrl)
+	var filename = fileNameInput.value;
+	var file = new File([blob], filename, {type: 'image/jpeg', lastModified: Date.now()});
+	console.log(file);
+	publishMeme(file);  // note: this function is in memePublish.js
+};

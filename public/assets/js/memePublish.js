@@ -3,6 +3,9 @@
 var socket = io();
 var uploader = new SocketIOFileUpload(socket);
 var stagedFiles = null;
+var name = 'meme-fodder-entry';
+var license = 'Creative Commons';
+var nsfw = false;
 
 /* helper functions */
 // create a progress animation
@@ -23,67 +26,16 @@ function createProgressBar(element, size){
 	};
 	setInterval(addOne, 300);
 }
-// preview file and stage the image for upload
-function previewAndStageFile(selectedFile){ 
-	var preview = document.getElementById('image-preview');
-	var dropzone = document.getElementById('drop-zone');
-	var previewReader = new FileReader();
 
-	preview.style.display = 'block';
-	dropzone.style.display = 'none';
-	
-	previewReader.onloadend = function () {
-		preview.src = previewReader.result;
-	};
-
-	if (selectedFile) {
-		previewReader.readAsDataURL(selectedFile); // reads the data and sets the img src
-		document.getElementById('publish-name').value = selectedFile.name.substring(0, selectedFile.name.indexOf('.')); // updates metadata inputs
-		stagedFiles = [selectedFile]; // stores the selected file for upload
-	} else {
-		preview.src = '';
-	}
-}
-// update the publish status
-function updatePublishStatus(msg){
-	document.getElementById('publish-status').innerHTML = msg;
-}
-// process the drop-zone drop
-function drop_handler(ev) {
-	console.log("drop");
-	ev.preventDefault();
-	// if dropped items aren't files, reject them
-	var dt = ev.dataTransfer;
-	if (dt.items) {
-		if (dt.items[0].kind == 'file') {
-			var droppedFile = dt.items[0].getAsFile();
-			previewAndStageFile(droppedFile);
-		} else {
-			console.log("no files were found")
-		}
-	} else {
-		console.log("no items were found")
-	}
-}
-// prevent the browser's default drag behavior
-function dragover_handler(ev) {
-	ev.preventDefault();
-}
-// remove all of the drag data
-function dragend_handler(ev) {
-	var dt = ev.dataTransfer;
-	if (dt.items) {
-		for (var i = 0; i < dt.items.length; i++) {
-			dt.items.remove(i);
-		}
-	} else {
-		ev.dataTransfer.clearData();
-	}
-}
-
-/* configure the submit button */
-document.getElementById('publish-submit').addEventListener('click', function(event){
-	event.preventDefault();
+function publishMeme(file) {
+	// get image data
+	//var imgData = ctx.getImageData(0, 0, canvasWidth, canvasHeight);
+	//console.log(imgData);
+	// stage files 
+	stagedFiles = [file]; // stores the selected file for upload
+	//stagedFiles = [selectedFile.getAsFile()]; // stores the selected file for upload
+	console.log(stagedFiles[0]);
+	console.log('file staged');
 	// make sure a file was selected
 	if (stagedFiles) {
 		// make sure only 1 file was selected
@@ -104,13 +56,16 @@ document.getElementById('publish-submit').addEventListener('click', function(eve
 				break;
 		}
 	}
-})
+
+}
+
+// update the publish status
+function updatePublishStatus(msg){
+	document.getElementById('publish-status').innerHTML = msg;
+}
 
 /* socketio-file-upload listeners */
 uploader.addEventListener('start', function(event){
-	var name = document.getElementById('publish-name').value;
-	var license = document.getElementById('publish-license').value;
-	var nsfw = document.getElementById('publish-nsfw').value;
 	event.file.meta.name = name;
 	event.file.meta.license = license;
 	event.file.meta.nsfw = nsfw;

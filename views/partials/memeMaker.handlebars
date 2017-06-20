@@ -16,27 +16,27 @@
 					</canvas>
 					<img id="start-image" src="/meme-fodder" alt="a picture to make your meme with"/>
 				</div>
-				<div class="col-md-6">
+				<div class="col-md-6" id="publish-active-area">
 					<div class="row">
 						<div class="col-md-12">
 							<label for="top-text">Meme:</label>
-							<input id="top-text" type="text" value="Is it ready?" />
+							<input id="top-text" type="text" value="Ship it?" />
 						</div>
 					</div>
 					<div class="row">
 						<div class="col-md-12">
-							<input id="bottom-text" type="text" value="Who cares, ship it!" />
+							<input id="bottom-text" type="text" value="YAAAAASSSSSSS!" />
 						</div>
 					</div>
 					<div class="row">
 						<div class="col-md-12">
 							<label for="meme-name">File Name:</label>
-							<input id="meme-file-name" class="form-control" type="text" value="YourFileName.jpg" />
+							<input id="file-name-input" type="text" value="YourFileName.jpg" />
 						</div>
 					</div>
 					<div class="row">
 						<div class="col-md-12">
-							<a id="meme-download-link" download="YourFileName.jpg"><button>Save and Publish</button></a>
+							<button onclick="startPublish()">Save and Publish</button>
 						</div>
 					</div>
 				</div>
