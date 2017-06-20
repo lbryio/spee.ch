@@ -3,6 +3,7 @@ const lbryApi = require('../libraries/lbryApi.js');
 const logger = require('winston');
 
 function filterForFreePublicClaims (claimsListArray) {
+  logger.debug('filtering claims list for free, public claims');
   if (!claimsListArray) {
     return null;
   }
@@ -16,7 +17,7 @@ function filterForFreePublicClaims (claimsListArray) {
 }
 
 function orderTopClaims (claimsListArray) {
-  logger.silly('ordering the top claims');
+  logger.debug('ordering the top claims');
   claimsListArray.sort((a, b) => {
     if (a.amount === b.amount) {
       return a.height < b.height;
@@ -34,11 +35,11 @@ module.exports = claimName => {
       .getClaimsList(claimName)
       .then(({ claims }) => {
         const claimsList = claims;
-        console.log('>> Number of claims:', claimsList.length);
+        logger.debug(`Number of claims: ${claimsList.length}`);
         // return early if no claims were found
         if (claimsList.length === 0) {
           reject('NO_CLAIMS');
-          console.log('exiting due to lack of claims');
+          logger.debug('exiting due to lack of claims');
           return;
         }
         // filter the claims to return only free, public claims
@@ -46,7 +47,7 @@ module.exports = claimName => {
         // return early if no free, public claims were found
         if (!freePublicClaims || freePublicClaims.length === 0) {
           reject('NO_FREE_PUBLIC_CLAIMS');
-          console.log('exiting due to lack of free or public claims');
+          logger.debug('exiting due to lack of free or public claims');
           return;
         }
         // order the claims
@@ -55,7 +56,7 @@ module.exports = claimName => {
         resolve(orderedPublicClaims);
       })
       .catch(error => {
-        console.log(">> 'claim_list' error");
+        logger.error('error received from lbryApi.getClaimsList', error);
         reject(error);
       });
   });

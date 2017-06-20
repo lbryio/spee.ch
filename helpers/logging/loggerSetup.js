@@ -6,25 +6,29 @@ module.exports = (winston, logLevel, logDir) => {
     fs.mkdirSync(logDir);
   }
 
-  winston.level = logLevel;
-
-  winston.add(
-    winston.transports.File, {
-      filename   : `${logDir}speechLogs.log`,
-      level      : logLevel,
-      json       : true,
-      timestamp  : tsFormat,
-      colorize   : true,
-      prettyPrint: true,
-    }
-  );
+  winston.configure({
+    transports: [
+      new (winston.transports.Console)({ 
+        level      : logLevel,
+        timestamp  : false,
+        colorize   : true,
+        prettyPrint: true,
+      }),
+      new (winston.transports.File)({ 
+        filename   : `${logDir}speechLogs.log`,
+        level      : logLevel,
+        json       : false,
+        timestamp  : tsFormat,
+        colorize   : true,
+        prettyPrint: true,
+      }),
+    ]
+  });
 
   winston.handleExceptions(new winston.transports.File({
     filename                       : `${logDir}uncaughtExceptions.log`,
     humanReadableUnhandledException: true,
   }));
-
-  // winston.exitOnError = false;
 
   winston.error('Level 0');
   winston.warn('Level 1');

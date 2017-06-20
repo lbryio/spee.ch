@@ -6,7 +6,7 @@ const walledAddress = config.get('WalletConfig.lbryAddress');
 const errorHandlers = require('../helpers/libraries/errorHandlers.js');
 
 function createPublishParams (claim, filePath, license, nsfw) {
-  logger.debug(`createPublishParams for ${claim}`);
+  logger.debug(`Creating Publish Parameters for "${claim}"`);
   const publishParams = {
     name     : claim,
     file_path: filePath,
@@ -28,13 +28,12 @@ function createPublishParams (claim, filePath, license, nsfw) {
 function deleteTemporaryFile (filePath) {
   fs.unlink(filePath, err => {
     if (err) throw err;
-    logger.info(`successfully deleted ${filePath}`);
+    logger.debug(`successfully deleted ${filePath}`);
   });
 }
 
 module.exports = {
   publish (claim, fileName, filePath, fileType, license, nsfw, socket, visitor) {
-    logger.debug(`publish start for ${claim}`);
     // update the client
     socket.emit('publish-status', 'Your image is being published (this might take a second)...');
     // send to analytics

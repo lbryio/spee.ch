@@ -34,7 +34,7 @@ function serveFile ({ fileName, fileType, filePath }, res) {
 module.exports = (app, ua, googleAnalyticsId) => {
   // route to fetch one free public claim
   app.get('/:name/:claim_id', ({ originalUrl, params }, res) => {
-    logger.info(`Get request on ${originalUrl}`);
+    logger.debug(`GET request on ${originalUrl}`);
     const routeString = `${params.name}/${params.claim_id}`;
     // google analytics
     ua(googleAnalyticsId, { https: true }).event('Serve Route', '/name/claimId', routeString).send();
@@ -42,28 +42,24 @@ module.exports = (app, ua, googleAnalyticsId) => {
     serveController
       .getClaimByClaimId(params.name, params.claim_id)
       .then(fileInfo => {
-        logger.debug(`${originalUrl} getClaimByClaimId returned successfully.`);
         serveFile(fileInfo, res);
       })
       .catch(error => {
-        logger.error(`${originalUrl} getClaimByClaimId returned an error.`, error);
         errorHandlers.handleRequestError(error, res);
       });
   });
   // route to fetch one free public claim
   app.get('/:name', ({ originalUrl, params }, res) => {
-    logger.info(`Get request on ${originalUrl}`);
+    logger.debug(`GET request on ${originalUrl}`);
     // google analytics
     ua(googleAnalyticsId, { https: true }).event('Serve Route', '/name', params.name).send();
     // begin image-serve processes
     serveController
       .getClaimByName(params.name)
       .then(fileInfo => {
-        logger.debug(`${originalUrl} getClaimByName returned successfully.`);
         serveFile(fileInfo, res);
       })
       .catch(error => {
-        logger.error(`${originalUrl} getClaimByName returned an error.`, error);
         errorHandlers.handleRequestError(error, res);
       });
   });

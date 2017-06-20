@@ -5,7 +5,6 @@ const getAllFreePublicClaims = require('../helpers/functions/getAllFreePublicCla
 const isFreePublicClaim = require('../helpers/functions/isFreePublicClaim.js');
 
 function getClaimAndHandleResponse (claimUri, resolve, reject) {
-  logger.debug(`getClaimAndHandleResponse start for ${claimUri}`);
   lbryApi
     .getClaim(claimUri)
     .then(({ file_name, download_path, mime_type }) => {
@@ -16,14 +15,12 @@ function getClaimAndHandleResponse (claimUri, resolve, reject) {
       });
     })
     .catch(error => {
-      logger.error(`getClaimAndHandleResponse error for ${claimUri}`);
       reject(error);
     });
 }
 
 module.exports = {
   getClaimByName (claimName) {
-    logger.debug(`getClaimByName start for ${claimName}`);
     const deferred = new Promise((resolve, reject) => {
       // get all free public claims
       getAllFreePublicClaims(claimName)
@@ -53,19 +50,16 @@ module.exports = {
               }
             })
             .catch(error => {
-              logger.error('Sequelize encountered an error', error);
               reject(error);
             });
         })
         .catch(error => {
-          logger.debug(`getClaimByName failure for ${claimName}`);
           reject(error);
         });
     });
     return deferred;
   },
   getClaimByClaimId (claimName, claimId) {
-    logger.debug(`getClaimByClaimId start for ${claimName}`);
     const deferred = new Promise((resolve, reject) => {
       const uri = `${claimName}#${claimId}`;
       // resolve the Uri
@@ -79,14 +73,14 @@ module.exports = {
             .then(claim => {
               // if a found locally...
               if (claim) {
-                logger.debug(`A record was found for ${claimName} ${claimId}`);
+                logger.debug(`A File record was found for ${claimName}/${claimId}`);
                 // if the outpoint's match return it
                 if (claim.dataValues.outpoint === resolvedOutpoint) {
-                  logger.debug(`local outpoint matched for ${claimName} ${claimId}`);
+                  logger.debug('local outpoint matched');
                   resolve(claim.dataValues);
                   // if the outpoint's don't match, fetch updated claim
                 } else {
-                  logger.debug(`local outpoint did not match ${claimName} ${claimId}`);
+                  logger.debug('local outpoint did not match');
                   getClaimAndHandleResponse(uri, resolve, reject);
                 }
                 // ... otherwise use daemon to retrieve it
@@ -99,12 +93,10 @@ module.exports = {
               }
             })
             .catch(error => {
-              logger.error('Sequelize encountered an error', error);
               reject(error);
             });
         })
         .catch(error => {
-          logger.debug(`getClaimByClaimId error for ${claimName}`);
           reject(error);
         });
     });
