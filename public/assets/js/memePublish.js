@@ -89,11 +89,10 @@ socket.on('publish-failure', function(msg){
 });
 socket.on('publish-complete', function(msg){
 	var publishResults = '<p>Your publish is complete!</p>';
-	publishResults += '<p><strong>NOTE: the transaction still needs to be mined by the network before you can access it! This will take a few minutes. To view the transaction on the blockchain explorer click the Transaction ID link below.</strong></p>';
+	publishResults += '<p><strong>NOTE: the blockchain will need a few minutes to process your amazing work.  Please allow some time for your asset to appear in the entries below.</strong></p>';
+	publishResults += '<p>Your meme has been published to <a target="_blank" href="/' + msg.name + '">spee.ch/' + msg.name + '</a></p>';
+	publishResults += '<p>Here is a direct link to where your meme will be stored: <a target="_blank" href="/' + msg.name + '/' + msg.result.claim_id + '">spee.ch/' + msg.name + '/' + msg.result.claim_id + '</a></p>';
 	publishResults += '<p>Your Transaction ID is: <a target="_blank" href="https://explorer.lbry.io/#!/transaction?id=' + msg.result.txid + '">' + msg.result.txid + '</a></p>';
-	publishResults += '<p>Your Claim ID is: ' + msg.result.claim_id + '</p>';
-	publishResults += '<p>Here is a link to the claim where your asset will be published: <a target="_blank" href="https://spee.ch/' + msg.name + '">spee.ch/' + msg.name + '</a></p>';
-	publishResults += '<p>Here is a direct link to where your asset will be stored: <a target="_blank" href="https://spee.ch/' + msg.name + '/' + msg.result.claim_id + '">spee.ch/' + msg.name + '/' + msg.result.claim_id + '</a></p>';
-	publishResults += '<p><a href="/">Reload to publish another asset</a></p>';
+	publishResults += '<p><a href="/meme-fodder/play">Reload to publish another</a></p>';
 	document.getElementById('publish-active-area').innerHTML = publishResults; 
 });
