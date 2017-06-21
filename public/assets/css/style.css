@@ -1,3 +1,9 @@
+canvas {
+  background-color: blue; 
+  width: 100%;
+  height: auto;
+}
+
 #drop-zone {
 	border: 1px dashed lightgrey;
 	padding: 1em;
@@ -5,20 +11,22 @@
 	width: 100%;
 }
 
-.all-claims-img {
-	height: 200px;
-}
-
 #image-preview {
 	display: none;
+}
+
+#tweet-meme-button {
+	float: left;
+	margin-right: 5px;
 }
 
 .row {
 	margin: 10px 0px 10px 0px;
 }
 
-canvas {
-  background-color: blue; 
-  width: 100%;
-  height: auto;
+.all-claims-img {
+	height: 200px;
 }
+
+
+

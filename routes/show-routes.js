@@ -9,7 +9,7 @@ module.exports = (app, ua, googleAnalyticsId) => {
     logger.debug(`GET request on ${originalUrl}`);
     // get and serve content
     showController
-      .getAllClaims('meme-fodder-entry')
+      .getAllClaims('meme-fodder')
       .then(orderedFreePublicClaims => {
         res.status(200).render('memeFodder', { claims: orderedFreePublicClaims });
       })
