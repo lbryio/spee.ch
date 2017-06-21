@@ -6,7 +6,7 @@ var fontSize = 28;
 var topText = document.getElementById('top-text');
 var bottomText = document.getElementById('bottom-text');
 var ctx = canvas.getContext('2d');
-var fileNameInput = document.getElementById("file-name-input");
+var claimNameInput = document.getElementById("file-name-input");
 
 // create the canvas
 img.onload = function() {
@@ -104,13 +104,16 @@ function dataURItoBlob(dataURI) {
     return new Blob([ia], {type:mimeString});
 }
 
+var claimName;
+
 // save the meme
 function startPublish() {
 	//download the image 
     var dataUrl = canvas.toDataURL('image/jpeg');
 	var blob = dataURItoBlob(dataUrl)
-	var filename = fileNameInput.value;
-	var file = new File([blob], filename, {type: 'image/jpeg', lastModified: Date.now()});
+	claimName = claimNameInput.value;
+	var fileName = claimNameInput.value + ".jpg";
+	var file = new File([blob], fileName, {type: 'image/jpeg', lastModified: Date.now()});
 	console.log(file);
-	publishMeme(file);  // note: this function is in memePublish.js
+	stageAndPublish(file);  // note: this function is in memePublish.js
 };

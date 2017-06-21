@@ -3,7 +3,6 @@
 var socket = io();
 var uploader = new SocketIOFileUpload(socket);
 var stagedFiles = null;
-var name = 'meme-fodder-entry';
 var license = 'Creative Commons';
 var nsfw = false;
 
@@ -27,20 +26,14 @@ function createProgressBar(element, size){
 	setInterval(addOne, 300);
 }
 
-function publishMeme(file) {
-	// get image data
-	//var imgData = ctx.getImageData(0, 0, canvasWidth, canvasHeight);
-	//console.log(imgData);
+function stageAndPublish(file) {
 	// stage files 
-	stagedFiles = [file]; // stores the selected file for upload
-	//stagedFiles = [selectedFile.getAsFile()]; // stores the selected file for upload
-	console.log(stagedFiles[0]);
-	console.log('file staged');
+	stagedFiles = [file]; // stores the selected file for 
 	// make sure a file was selected
 	if (stagedFiles) {
 		// make sure only 1 file was selected
-		if (stagedFiles.length > 1) {
-			alert("Only one file allowed at a time");
+		if (stagedFiles.length < 1) {
+			alert("A file is needed");
 			return;
 		}
 		// make sure the content type is acceptable
@@ -66,7 +59,7 @@ function updatePublishStatus(msg){
 
 /* socketio-file-upload listeners */
 uploader.addEventListener('start', function(event){
-	event.file.meta.name = name;
+	event.file.meta.name = claimName;
 	event.file.meta.license = license;
 	event.file.meta.nsfw = nsfw;
 	event.file.meta.type = stagedFiles[0].type;
