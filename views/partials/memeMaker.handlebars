@@ -1,0 +1,53 @@
+<div class="col-md-12">
+	<div class="card" id="publish">
+		<div class="card-title card-block grey lighten-1 white-text">
+			<h2>#LBRYMemeFodder</h2>
+		</div>
+		<div class="card-block">
+			<div class="row">
+				<div class="col-md-12">
+					<h3>Congratulations, you found the /meme-fodder game! </h3>
+					<p>Here's how it's played...</p>
+					<p>(1) <i>/meme-fodder</i> will always use the winning public, free image published to <a href="LBRY://meme-fodder">LBRY://meme-fodder</a>.  (meaning the most recent, highest bid). Want to put a different image on the chopping block? Go publish it!</p>
+					<p>(2) Create a meme based on the current claim with the tool below.  Think you got a winner? <a href="https://twitter.com/hashtag/LBRYMemeFodder" target="_blank">Share it with the community</a> and see what they think!</p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-5">
+					<canvas id="meme-canvas">
+						If you can see this, canvas is not supported.
+					</canvas>
+					<img id="start-image" src="/meme-fodder" alt="a picture to make your meme with"/>
+				</div>
+				<div class="col-md-7">
+					<div id="publish-active-area">
+						<div class="row">
+							<div class="col-md-12">
+								<label for="top-text">Meme:</label>
+								<input id="top-text" type="text" value="Hello" />
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<input id="bottom-text" type="text" value="world!" />
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<label for="meme-name">Claim Name:</label>
+								<input id="file-name-input" type="text" value="My-Claim-Name" />
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<button onclick="startPublish()">Save and Publish</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>

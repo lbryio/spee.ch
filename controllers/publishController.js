@@ -7,6 +7,9 @@ const errorHandlers = require('../helpers/libraries/errorHandlers.js');
 
 function createPublishParams (claim, filePath, license, nsfw) {
   logger.debug(`Creating Publish Parameters for "${claim}"`);
+  if (typeof nsfw === 'string') {
+    nsfw = (nsfw.toLowerCase() === 'on');
+  }
   const publishParams = {
     name     : claim,
     file_path: filePath,
@@ -17,11 +20,12 @@ function createPublishParams (claim, filePath, license, nsfw) {
       author     : 'spee.ch',
       language   : 'en',
       license,
-      nsfw       : nsfw.toLowerCase() === 'on',
+      nsfw,
     },
     claim_address : walledAddress,
     change_address: walledAddress,
   };
+  logger.debug('publishParams:', publishParams);
   return publishParams;
 }
 
@@ -49,6 +53,7 @@ module.exports = {
         socket.emit('publish-complete', { name: claim, result });
       })
       .catch(error => {
+        logger.error(`Error publishing ${fileName}`, error);
         visitor.event('Publish Route', 'Publish Failure', filePath).send();
         socket.emit('publish-failure', errorHandlers.handlePublishError(error));
         deleteTemporaryFile(filePath);

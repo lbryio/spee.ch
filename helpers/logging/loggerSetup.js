@@ -8,10 +8,12 @@ module.exports = (winston, logLevel, logDir) => {
   winston.configure({
     transports: [
       new (winston.transports.Console)({
-        level      : logLevel,
-        timestamp  : false,
-        colorize   : true,
-        prettyPrint: true,
+        level                          : logLevel,
+        timestamp                      : false,
+        colorize                       : true,
+        prettyPrint                    : true,
+        handleExceptions               : true,
+        humanReadableUnhandledException: true,
       }),
       new (winston.transports.File)({
         filename                       : `${logDir}/speechLogs.log`,
