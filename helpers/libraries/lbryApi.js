@@ -1,14 +1,5 @@
 const axios = require('axios');
-const db = require('../../models');
 const logger = require('winston');
-
-function createFilesRecord (name, claimId, outpoint, fileName, filePath, fileType, nsfw) {
-  db.File
-    .create({ name, claimId, outpoint, fileName, filePath, fileType, nsfw })
-    .catch(error => {
-      logger.error(`Sequelize File.create error`, error);
-    });
-}
 
 module.exports = {
   publishClaim (publishParams, fileName, fileType) {
@@ -21,8 +12,6 @@ module.exports = {
         })
         .then(response => {
           const result = response.data.result;
-          createFilesRecord(
-            publishParams.name, result.claim_id, `${result.txid}:${result.nout}`, fileName, publishParams.file_path, fileType, publishParams.metadata.nsfw);
           resolve(result);
         })
         .catch(error => {
@@ -50,11 +39,7 @@ module.exports = {
           /*
             note: put in a check to make sure we do not resolve until the download is actually complete (response.data.completed === true)
           */
-          // save a record of the file to the Files table
-          const result = data.result;
-          createFilesRecord(
-            result.name, result.claim_id, result.outpoint, result.file_name, result.download_path, result.mime_type, result.metadata.stream.metadata.nsfw);
-          resolve(result);
+          resolve(data.result);
         })
         .catch(error => {
           reject(error);
@@ -88,6 +73,11 @@ module.exports = {
           params: { uri },
         })
         .then(({ data }) => {
+          // check for errors
+          if (data.result[uri].error) {
+            reject(data.result[uri].error);
+            return;
+          }
           resolve(data.result);
         })
         .catch(error => {

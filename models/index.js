@@ -14,10 +14,10 @@ const sequelize = new Sequelize(connectionUri, {
 sequelize
   .authenticate()
   .then(() => {
-    logger.info('Sequelize has has been established mysql connection successfully.');
+    logger.info('Sequelize has established mysql connection successfully.');
   })
   .catch(err => {
-    logger.error('Sequelize was nable to connect to the database:', err);
+    logger.error('Sequelize was unable to connect to the database:', err);
   });
 
 fs.readdirSync(__dirname).filter(file => file.indexOf('.') !== 0 && file !== basename && file.slice(-3) === '.js').forEach(file => {

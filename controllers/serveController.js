@@ -4,10 +4,92 @@ const logger = require('winston');
 const getAllFreePublicClaims = require('../helpers/functions/getAllFreePublicClaims.js');
 const isFreePublicClaim = require('../helpers/functions/isFreePublicClaim.js');
 
-function getClaimAndHandleResponse (claimUri, resolve, reject) {
+function updateFileIfNeeded (uri, claimName, claimId, localOutpoint, localHeight) {
+  logger.debug(`A mysql record was found for ${claimId}`);
+  logger.debug('initiating resolve on claim to check outpoint');
+  // 1. resolve claim
   lbryApi
-    .getClaim(claimUri)
-    .then(({ file_name, download_path, mime_type }) => {
+    .resolveUri(uri)
+    .then(result => {
+      // logger.debug('resolved result:', result);
+      const resolvedOutpoint = `${result[uri].claim.txid}:${result[uri].claim.nout}`;
+      const resolvedHeight = result[uri].claim.height;
+      logger.debug('database outpoint:', localOutpoint);
+      logger.debug('resolved outpoint:', resolvedOutpoint);
+      // 2. if the outpoint's match, no further work needed
+      if (localOutpoint === resolvedOutpoint) {
+        logger.debug('local outpoint matched');
+      // 2. if the outpoints don't match, check the height
+      } else if (localHeight > resolvedHeight) {
+        logger.debug('local height was greater than resolved height');
+      // 2. get the resolved claim
+      } else {
+        logger.debug(`local outpoint did not match for ${uri}.  Initiating update.`);
+        getClaimAndUpdate(uri, resolvedHeight);
+      }
+    })
+    .catch(error => {
+      logger.error(`error resolving "${uri}" >> `, error);
+    });
+}
+
+function getClaimAndUpdate (uri, height) {
+  // 1. get the claim
+  lbryApi
+    .getClaim(uri)
+    .then(({ name, claim_id, outpoint, file_name, download_path, mime_type, metadata }) => {
+      logger.debug(' Get returned outpoint: ', outpoint);
+      // 2. update the entry in db
+      db.File
+        .update({
+          outpoint,
+          height, // note: height is coming from 'resolve', not 'get'.
+          fileName: file_name,
+          filePath: download_path,
+          fileType: mime_type,
+          nsfw    : metadata.stream.metadata.nsfw,
+        }, {
+          where: {
+            name,
+            claimId: claim_id,
+          },
+        })
+        .then(result => {
+          logger.debug('successfully updated mysql record', result);
+        })
+        .catch(error => {
+          logger.error('sequelize error', error);
+        });
+    })
+    .catch(error => {
+      logger.error(`error while getting claim for ${uri} >> `, error);
+    });
+}
+
+function getClaimAndHandleResponse (uri, height, resolve, reject) {
+  lbryApi
+    .getClaim(uri)
+    .then(({ name, claim_id, outpoint, file_name, download_path, mime_type, metadata }) => {
+      // create entry in the db
+      logger.debug('creating new record in db');
+      db.File
+        .create({
+          name,
+          claimId : claim_id,
+          outpoint,
+          height,
+          fileName: file_name,
+          filePath: download_path,
+          fileType: mime_type,
+          nsfw    : metadata.stream.metadata.nsfw,
+        })
+        .then(result => {
+          logger.debug('successfully created mysql record');
+        })
+        .catch(error => {
+          logger.error('sequelize create error', error);
+        });
+      // resolve the request
       resolve({
         fileName: file_name,
         filePath: download_path,
@@ -22,35 +104,31 @@ function getClaimAndHandleResponse (claimUri, resolve, reject) {
 module.exports = {
   getClaimByName (claimName) {
     const deferred = new Promise((resolve, reject) => {
-      // get all free public claims
+      // 1. get the top free, public claims
       getAllFreePublicClaims(claimName)
         .then(freePublicClaimList => {
-          const claimId = freePublicClaimList[0].claim_id;
           const name = freePublicClaimList[0].name;
-          const freePublicClaimOutpoint = `${freePublicClaimList[0].txid}:${freePublicClaimList[0].nout}`;
-          const freePublicClaimUri = `${name}#${claimId}`;
-          // check to see if the file is available locally
+          const claimId = freePublicClaimList[0].claim_id;
+          const uri = `${name}#${claimId}`;
+          const height = freePublicClaimList[0].height;
+          // 2. check to see if the file is available locally
           db.File
-            .findOne({ where: { name: name, claimId: claimId } })
+            .findOne({ where: { name, claimId } })
             .then(claim => {
-              // if a matching claim is found locally...
+              // 3. if a matching claim_id is found locally, serve it
               if (claim) {
-                logger.debug(`A mysql record was found for ${claimId}`);
-                // if the outpoint's match return it
-                if (claim.dataValues.outpoint === freePublicClaimOutpoint) {
-                  logger.debug(`local outpoint matched for ${claimId}`);
-                  resolve(claim.dataValues);
-                // if the outpoint's don't match, fetch updated claim
-                } else {
-                  logger.debug(`local outpoint did not match for ${claimId}`);
-                  getClaimAndHandleResponse(freePublicClaimUri, resolve, reject);
-                }
-              // ... otherwise use daemon to retrieve it
+                // serve the file
+                resolve(claim.dataValues);
+                // trigger update if needed
+                updateFileIfNeeded(uri, name, claimId, claim.dataValues.outpoint, claim.dataValues.height);
+              // 3. otherwise use daemon to retrieve it
               } else {
-                getClaimAndHandleResponse(freePublicClaimUri, resolve, reject);
+                // get the claim and serve it
+                getClaimAndHandleResponse(uri, height, resolve, reject);
               }
             })
             .catch(error => {
+              logger.error('sequelize error', error);
               reject(error);
             });
         })
@@ -60,42 +138,37 @@ module.exports = {
     });
     return deferred;
   },
-  getClaimByClaimId (claimName, claimId) {
+  getClaimByClaimId (name, claimId) {
     const deferred = new Promise((resolve, reject) => {
-      const uri = `${claimName}#${claimId}`;
-      // resolve the Uri
-      lbryApi
-        .resolveUri(uri) // note: use 'spread' and make parallel with db.File.findOne()
-        .then(result => {
-          const resolvedOutpoint = `${result[uri].claim.txid}:${result[uri].claim.nout}`;
-          // check locally for the claim
-          db.File
-            .findOne({ where: { name: claimName, claimId: claimId } })
-            .then(claim => {
-              // if a found locally...
-              if (claim) {
-                logger.debug(`A mysql record was found for ${claimId}`);
-                // if the outpoint's match return it
-                if (claim.dataValues.outpoint === resolvedOutpoint) {
-                  logger.debug(`local outpoint matched for ${claimId}`);
-                  resolve(claim.dataValues);
-                  // if the outpoint's don't match, fetch updated claim
-                } else {
-                  logger.debug(`local outpoint did not match for ${claimId}`);
-                  getClaimAndHandleResponse(uri, resolve, reject);
-                }
-                // ... otherwise use daemon to retrieve it
-              } else {
+      const uri = `${name}#${claimId}`;
+      // 1. check locally for the claim
+      db.File
+        .findOne({ where: { name, claimId } })
+        .then(claim => {
+          // 2. if a match is found locally, serve it
+          if (claim) {
+            // serve the file
+            resolve(claim.dataValues);
+            // trigger an update if needed
+            updateFileIfNeeded(uri, name, claimId, claim.dataValues.outpoint, claim.dataValues.outpoint);
+          // 2. otherwise use daemon to retrieve it
+          } else {
+            // 3. resolve the Uri
+            lbryApi
+              .resolveUri(uri)
+              .then(result => {
+                // 4. check to see if the claim is free & public
                 if (isFreePublicClaim(result[uri].claim)) {
-                  getClaimAndHandleResponse(uri, resolve, reject);
+                  // 5. get claim and serve
+                  getClaimAndHandleResponse(uri, result[uri].claim.height, resolve, reject);
                 } else {
                   reject('NO_FREE_PUBLIC_CLAIMS');
                 }
-              }
-            })
-            .catch(error => {
-              reject(error);
-            });
+              })
+              .catch(error => {
+                reject(error);
+              });
+          }
         })
         .catch(error => {
           reject(error);

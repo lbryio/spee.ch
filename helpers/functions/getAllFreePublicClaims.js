@@ -16,8 +16,8 @@ function filterForFreePublicClaims (claimsListArray) {
   return freePublicClaims;
 }
 
-function orderTopClaims (claimsListArray) {
-  logger.debug('ordering the top claims');
+function orderClaims (claimsListArray) {
+  logger.debug('ordering the free public claims');
   claimsListArray.sort((a, b) => {
     if (a.amount === b.amount) {
       return a.height < b.height;
@@ -51,7 +51,7 @@ module.exports = claimName => {
           return;
         }
         // order the claims
-        const orderedPublicClaims = orderTopClaims(freePublicClaims);
+        const orderedPublicClaims = orderClaims(freePublicClaims);
         // resolve the promise
         resolve(orderedPublicClaims);
       })

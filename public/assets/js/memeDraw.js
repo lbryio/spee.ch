@@ -22,6 +22,18 @@ img.onload = function() {
 	drawMeme()
 }
 
+function newCanvas(image){
+	// hide start image
+	img = image;
+	// get dimensions of the start img
+	canvasHeight = canvasWidth * (img.height / img.width);
+	// size the canvas
+	canvas.width = canvasWidth;
+	canvas.height = canvasHeight;
+	// draw the meme
+	drawMeme()
+}
+
 // if the text changes, re-draw the meme
 topText.addEventListener('keyup', drawMeme);
 bottomText.addEventListener('keyup', drawMeme);
@@ -40,14 +52,14 @@ function drawMeme() {
 	var text1 = topText.value;
 	text1 = text1.toUpperCase();
 	x = canvasWidth / 2;
-	y = 0;
+	y = 5;
 
 	wrapText(ctx, text1, x, y, canvasWidth, fontSize, false);
 
 	ctx.textBaseline = 'bottom';
 	var text2 = bottomText.value;
 	text2 = text2.toUpperCase();
-	y = canvasHeight;
+	y = canvasHeight - 5;
 
 	wrapText(ctx, text2, x, y, canvasHeight, fontSize, true);
 

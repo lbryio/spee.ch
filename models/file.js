@@ -1,4 +1,4 @@
-module.exports = (sequelize, { STRING, BOOLEAN }) => {
+module.exports = (sequelize, { STRING, BOOLEAN, INTEGER }) => {
   const File = sequelize.define(
     'File',
     {
@@ -13,6 +13,11 @@ module.exports = (sequelize, { STRING, BOOLEAN }) => {
       outpoint: {
         type     : STRING,
         allowNull: false,
+      },
+      height: {
+        type     : INTEGER,
+        allowNull: false,
+        default  : 0,
       },
       fileName: {
         type     : STRING,
