@@ -129,7 +129,7 @@ socket.on('publish-complete', function(msg){
 			document.getElementById('tweet-meme-button'),
 			{
 				text: 'Check out my meme creation on the LBRY blockchain!',
-				hashtags: 'LBRYMemeFodder',
+				hashtags: 'MemeFodder',
 				via: 'lbryio'
 			})
 		.then( function( el ) {
