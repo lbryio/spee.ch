@@ -6,14 +6,13 @@
 		<div class="card-block" id="publish-active-area">
 			<div class="row">
 				<div class="col-md-12">
-					<p>Below are some of the most recent images that have been fuel for our enjoyment on /meme-fodder</p>
+					<p>Below are the images published to /meme-fodder.  Click one to choose it as your canvas.</p>
 				</div>
 			</div>
 			<div class="row">
 			{{#each claims}}
 				<div class="col-md-3">
-					<a href="/{{this.name}}/{{this.claim_id}}">
-					<img class="all-claims-img" src="/{{this.name}}/{{this.claim_id}}" /></a>
+					<img class="all-claims-img" src="/{{this.name}}/{{this.claim_id}}" onclick="newCanvas(this)"/>
 				</div>
 				<hr>
 			{{/each}}

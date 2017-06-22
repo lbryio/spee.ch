@@ -137,8 +137,7 @@ socket.on('publish-complete', function(msg){
 	var publishResults;
 	var directUrl = '/' + msg.name + '/' + msg.result.claim_id;
 	// build new publish area
-	publishResults = '<p><span id="tweet-meme-button"></span>Your publish is complete! Go ahead, share it with the world!</p>';
-	publishResults += '<p>Check it out, here: <a target="_blank" href="' + directUrl + '">view it here!</a></p>';
+	publishResults = '<p><span id="tweet-meme-button"></span>Your publish is complete! <a target="_blank" href="' + directUrl + '">View it here!</a></p>';
 	publishResults += '<p><a target="_blank" href="https://explorer.lbry.io/#!/transaction/' + msg.result.txid + '">View the transaction details</a></p>';
 	publishResults += '<a href="/"><button>Reload</button></a></p>';
 	// update publish area
