@@ -7,7 +7,23 @@ const isFreePublicClaim = require('../helpers/functions/isFreePublicClaim.js');
 function getClaimAndHandleResponse (claimUri, resolve, reject) {
   lbryApi
     .getClaim(claimUri)
-    .then(({ file_name, download_path, mime_type }) => {
+    .then(({ name, outpoint, claim_id, file_name, download_path, mime_type, metadata }) => {
+      // create entry in the db
+      logger.debug('creating new record in db');
+      db.File
+        .create({
+          name,
+          claimId : claim_id,
+          outpoint,
+          fileName: file_name,
+          filePath: download_path,
+          fileType: mime_type,
+          nsfw    : metadata.stream.metadata.nsfw,
+        })
+        .catch(error => {
+          logger.error('sequelize create error', error);
+        });
+      // resolve the request
       resolve({
         fileName: file_name,
         filePath: download_path,
@@ -77,31 +93,32 @@ function getClaimAndUpdate (uri, claimName, claimId) {
 module.exports = {
   getClaimByName (claimName) {
     const deferred = new Promise((resolve, reject) => {
-      // get all free public claims
+      // 1. get all free public claims
       getAllFreePublicClaims(claimName)
         .then(freePublicClaimList => {
           const claimId = freePublicClaimList[0].claim_id;
           const name = freePublicClaimList[0].name;
           const freePublicClaimOutpoint = `${freePublicClaimList[0].txid}:${freePublicClaimList[0].nout}`;
           const freePublicClaimUri = `${name}#${claimId}`;
-          // check to see if the file is available locally
+          // 2. check to see if the file is available locally
           db.File
-            .findOne({ where: { name: name, claimId: claimId } })
+            .findOne({ where: { name: name, claimId: claimId } })  // note: consolidate for es6?
             .then(claim => {
-              // if a matching claim is found locally...
+              // 3. if a matching claim_id is found locally, serve it
               if (claim) {
                 logger.debug(`A mysql record was found for ${claimId}`);
-                // if the outpoint's match return it
+                // trigger update if needed
                 if (claim.dataValues.outpoint === freePublicClaimOutpoint) {
                   logger.debug(`local outpoint matched for ${claimId}`);
-                  resolve(claim.dataValues);
-                // if the outpoint's don't match, fetch updated claim
                 } else {
                   logger.debug(`local outpoint did not match for ${claimId}`);
-                  getClaimAndHandleResponse(freePublicClaimUri, resolve, reject);
+                  getClaimAndUpdate(freePublicClaimUri, name, claimId);
                 }
-              // ... otherwise use daemon to retrieve it
-              } else {
+                // return the claim
+                resolve(claim.dataValues);
+              // 3. otherwise use daemon to retrieve it
+            } else {
+                // 4. get the claim and serve it
                 getClaimAndHandleResponse(freePublicClaimUri, resolve, reject);
               }
             })
@@ -121,9 +138,9 @@ module.exports = {
       const uri = `${claimName}#${claimId}`;
       // 1. check locally for the claim
       db.File
-        .findOne({ where: { name: claimName, claimId: claimId } })
+        .findOne({ where: { name: claimName, claimId: claimId } })  // note: consolidate for es6?
         .then(claim => {
-          // 2. if a found locally, serve
+          // 2. if a match is found locally, serve it
           if (claim) {
             logger.debug(`A mysql record was found for ${claimId}`);
             // trigger an update if needed

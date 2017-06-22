@@ -114,12 +114,10 @@ socket.on('publish-failure', function(msg){
 });
 socket.on('publish-complete', function(msg){
 	var publishResults;
-	var directUrl = 'https://spee.ch/' + msg.name + '/' + msg.result.claim_id;
+	var directUrl = '/' + msg.name + '/' + msg.result.claim_id;
 	// build new publish area
 	publishResults = '<p><span id="tweet-meme-button"></span>Your publish is complete! Go ahead, share it with the world!</p>';
-	publishResults += '<p><strong>NOTE: the blockchain will need a few minutes to process your amazing work.  Please allow some time for your meme to appear at your link.</strong></p>';
-	publishResults += '<p>Your meme has been published to <a target="_blank" href="/' + msg.name + '">http://spee.ch/' + msg.name + '</a></p>';
-	publishResults += '<p>Here is a direct link to where your meme will be stored: <a target="_blank" href="' + directUrl + '">' + directUrl + '</a></p>';
+	publishResults += '<p>Check it out, here: <a target="_blank" href="' + directUrl + '">spee.ch/' + directUrl + '</a>!</p>';
 	publishResults += '<p>Your Transaction ID is: <a target="_blank" href="https://explorer.lbry.io/#!/transaction?id=' + msg.result.txid + '">' + msg.result.txid + '</a></p>';
 	publishResults += '<p><a href="/meme-fodder/play">Reload to publish another</a></p>';
 	// update publish area

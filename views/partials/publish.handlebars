@@ -3,8 +3,7 @@
 		<div class="card-title card-block grey lighten-1 white-text">
 			<h2>Publish Your Own</h2>
 		</div>
-		<div class="card-block" id="publish-active-area">
-			<form id="publish-form" action="" method="" enctype="multipart/form-data">
+		<div class="card-block">
 			<div class="row">
 				<div class="col-md-6">
 					<div id="drop-zone" ondrop="drop_handler(event);" ondragover="dragover_handler(event);" ondragend="dragend_handler(event)">
@@ -13,7 +12,7 @@
 					</div>
 					<img id="image-preview" src="" height="200" alt="Image preview..."/>
 				</div>
-				<div class="col-md-6">
+				<div id="publish-active-area" class="col-md-6">
 					<div class="md-form">
 						<input type="text" id="publish-name" value="Name" class="form-control">
 					</div>
@@ -33,8 +32,6 @@
 					<button id="publish-reset">Reset</button>
 				</div>
 			</div>
-			</form>
-
 		</div>
 	</div>
 </div>

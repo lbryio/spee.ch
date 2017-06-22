@@ -1,10 +1,10 @@
 <div class="container">
 	{{> topBar}}
 	<div class="row">
-		{{> examples}}
+		{{> publish}}
 	</div>
 	<div class="row">
-		{{> publish}}
+		{{> examples}}
 	</div>
 	<div class="row">
 		{{> documentation}}
@@ -152,13 +152,13 @@
 		document.getElementById('publish-active-area').innerHTML = '<p>' + JSON.stringify(msg) + '</p><p> --(✖╭╮✖)→ </p><strong>For help, post the above error text in the #speech channel on the <a href="https://lbry.slack.com/" target="_blank">lbry slack</a></strong>';
 	});
 	socket.on('publish-complete', function(msg){
-		var publishResults = '<p>Your publish is complete!</p>';
-		publishResults += '<p><strong>NOTE: the transaction still needs to be mined by the network before you can access it! This will take a few minutes. To view the transaction on the blockchain explorer click the Transaction ID link below.</strong></p>';
-		publishResults += '<p>Your Transaction ID is: <a target="_blank" href="https://explorer.lbry.io/#!/transaction?id=' + msg.result.txid + '">' + msg.result.txid + '</a></p>';
-		publishResults += '<p>Your Claim ID is: ' + msg.result.claim_id + '</p>';
-		publishResults += '<p>Here is a link to the claim where your asset will be published: <a target="_blank" href="https://spee.ch/' + msg.name + '">spee.ch/' + msg.name + '</a></p>';
-		publishResults += '<p>Here is a direct link to where your asset will be stored: <a target="_blank" href="https://spee.ch/' + msg.name + '/' + msg.result.claim_id + '">spee.ch/' + msg.name + '/' + msg.result.claim_id + '</a></p>';
-		publishResults += '<p><a href="/">Reload to publish another asset</a></p>';
+		var publishResults;
+		var directUrl = '/' + msg.name + '/' + msg.result.claim_id;
+
+		publishResults = '<p>Your publish is complete!</p>';
+		publishResults += '<p>Check it out, here: <a target="_blank" href="' + directUrl + '">view it here!</a></p>';
+		publishResults += '<p><a target="_blank" href="https://explorer.lbry.io/#!/transaction/' + msg.result.txid + '">View the transaction details</a></p>';
+		publishResults += '<a href="/"><button>Reload</button></a></p>';
 		document.getElementById('publish-active-area').innerHTML = publishResults; 
 	});
 </script>
