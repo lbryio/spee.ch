@@ -146,10 +146,10 @@ socket.on('publish-complete', function(msg){
 	// add a tweet button
 	twttr.widgets
 		.createShareButton(
-			'https://spee.ch/' + directUrl,
 			document.getElementById('tweet-meme-button'),
 			{
 				text: 'Check out my image, hosted for free on the distributed awesomeness that is the LBRY blockchain!',
+				url: 'https://spee.ch/' + directUrl,
 				hashtags: 'LBRY',
 				via: 'lbryio'
 			})
