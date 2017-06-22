@@ -50,9 +50,10 @@ function upsert (Model, values, condition) {
 
 module.exports = {
   publish (name, fileName, filePath, fileType, license, nsfw, socket, visitor) {
+    console.log('nsfw:', nsfw);
     // validate nsfw
     if (typeof nsfw === 'string') {
-      nsfw = (nsfw.toLowerCase() === 'on');
+      nsfw = (nsfw.toLowerCase() === 'true');
     }
     // update the client
     socket.emit('publish-status', 'Your image is being published (this might take a second)...');
@@ -60,14 +61,14 @@ module.exports = {
     visitor.event('Publish Route', 'Publish Request', filePath).send();
     // create the publish object
     const publishParams = createPublishParams(name, filePath, license, nsfw);
-    // get a promise to publish
+    // 1. publish the file
     lbryApi
       .publishClaim(publishParams, fileName, fileType)
       .then(result => {
         logger.info(`Successfully published ${fileName}`, result);
         // google analytics
         visitor.event('Publish Route', 'Publish Success', filePath).send();
-        // update old record of create new one
+        // 2. update old record of create new one (update is in case the claim has been published before by this daemon)
         upsert(
           db.File,
           {

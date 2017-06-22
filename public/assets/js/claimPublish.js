@@ -110,7 +110,7 @@ document.getElementById('publish-submit').addEventListener('click', function(eve
 uploader.addEventListener('start', function(event){
 	var name = document.getElementById('publish-name').value;
 	var license = document.getElementById('publish-license').value;
-	var nsfw = document.getElementById('publish-nsfw').value;
+	var nsfw = document.getElementById('publish-nsfw').checked;
 	event.file.meta.name = name;
 	event.file.meta.license = license;
 	event.file.meta.nsfw = nsfw;

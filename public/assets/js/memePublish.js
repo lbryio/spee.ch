@@ -128,7 +128,7 @@ socket.on('publish-complete', function(msg){
 			{
 				text: 'Check out my meme creation on the LBRY blockchain!',
 				url: 'https://spee.ch/' + directUrl,
-				hashtags: 'MemeFodder',
+				hashtags: 'LBRYMemeFodder',
 				via: 'lbryio'
 			})
 		.then( function( el ) {
