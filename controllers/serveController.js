@@ -84,7 +84,7 @@ function getClaimAndHandleResponse (uri, height, resolve, reject) {
           nsfw    : metadata.stream.metadata.nsfw,
         })
         .then(result => {
-          logger.debug('successfully created mysql record', result);
+          logger.debug('successfully created mysql record');
         })
         .catch(error => {
           logger.error('sequelize create error', error);
@@ -113,14 +113,14 @@ module.exports = {
           const height = freePublicClaimList[0].height;
           // 2. check to see if the file is available locally
           db.File
-            .findOne({ where: { name: name, claimId: claimId } })  // note: destructure for es6?
+            .findOne({ where: { name, claimId } })
             .then(claim => {
               // 3. if a matching claim_id is found locally, serve it
               if (claim) {
-                // trigger update if needed
-                updateFileIfNeeded(uri, name, claimId, claim.dataValues.outpoint, claim.dataValues.height);
                 // serve the file
                 resolve(claim.dataValues);
+                // trigger update if needed
+                updateFileIfNeeded(uri, name, claimId, claim.dataValues.outpoint, claim.dataValues.height);
               // 3. otherwise use daemon to retrieve it
               } else {
                 // get the claim and serve it
@@ -138,19 +138,19 @@ module.exports = {
     });
     return deferred;
   },
-  getClaimByClaimId (claimName, claimId) {
+  getClaimByClaimId (name, claimId) {
     const deferred = new Promise((resolve, reject) => {
-      const uri = `${claimName}#${claimId}`;
+      const uri = `${name}#${claimId}`;
       // 1. check locally for the claim
       db.File
-        .findOne({ where: { name: claimName, claimId: claimId } })  // note: destructure?
+        .findOne({ where: { name, claimId } })
         .then(claim => {
           // 2. if a match is found locally, serve it
           if (claim) {
-            // trigger an update if needed
-            updateFileIfNeeded(uri, claimName, claimId, claim.dataValues.outpoint, claim.dataValues.outpoint);
             // serve the file
             resolve(claim.dataValues);
+            // trigger an update if needed
+            updateFileIfNeeded(uri, name, claimId, claim.dataValues.outpoint, claim.dataValues.outpoint);
           // 2. otherwise use daemon to retrieve it
           } else {
             // 3. resolve the Uri
