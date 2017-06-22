@@ -74,6 +74,7 @@ module.exports = {
             name,
             claimId : result.claim_id,
             outpoint: `${result.txid}:${result.nout}`,
+            height  : 0,
             fileName,
             filePath,
             fileType,

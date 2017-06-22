@@ -4,10 +4,10 @@ const logger = require('winston');
 const getAllFreePublicClaims = require('../helpers/functions/getAllFreePublicClaims.js');
 const isFreePublicClaim = require('../helpers/functions/isFreePublicClaim.js');
 
-function getClaimAndHandleResponse (claimUri, resolve, reject) {
+function getClaimAndHandleResponse (claimUri, height, resolve, reject) {
   lbryApi
     .getClaim(claimUri)
-    .then(({ name, outpoint, claim_id, file_name, download_path, mime_type, metadata }) => {
+    .then(({ name, claim_id, outpoint, file_name, download_path, mime_type, metadata }) => {
       // create entry in the db
       logger.debug('creating new record in db');
       db.File
@@ -15,6 +15,7 @@ function getClaimAndHandleResponse (claimUri, resolve, reject) {
           name,
           claimId : claim_id,
           outpoint,
+          height,
           fileName: file_name,
           filePath: download_path,
           fileType: mime_type,
@@ -35,7 +36,7 @@ function getClaimAndHandleResponse (claimUri, resolve, reject) {
     });
 }
 
-function resolveAndUpdateIfNeeded (uri, claimName, claimId, outpoint) {
+function resolveAndUpdateIfNeeded (uri, claimName, claimId, localOutpoint, localHeight) {
   logger.debug('initiating resolve on local record to check outpoint');
   // 1. resolve claim
   lbryApi
@@ -43,19 +44,23 @@ function resolveAndUpdateIfNeeded (uri, claimName, claimId, outpoint) {
     .then(result => {
       // logger.debug('resolved result:', result);
       const resolvedOutpoint = `${result[uri].claim.txid}:${result[uri].claim.nout}`;
-      logger.debug('database outpoint:', outpoint);
+      const resolvedHeight = result[uri].claim.height;
+      logger.debug('database outpoint:', localOutpoint);
       logger.debug('resolved outpoint:', resolvedOutpoint);
       // 2. if the outpoint's match, no further work needed
-      if (outpoint === resolvedOutpoint) {
-        logger.debug(`local outpoint matched`);
-      // 2. if the outpoints don't match, get claim and update records
+      if (localOutpoint === resolvedOutpoint) {
+        logger.debug('local outpoint matched');
+      // 2. if the outpoints don't match, check the height
+      } else if (localHeight > resolvedHeight) {
+        logger.debug('local height was greater than resolve height');
+      // 2. get the resolved claim
       } else {
         logger.debug(`local outpoint did not match for ${uri}.  Initiating update.`);
         getClaimAndUpdate(uri, claimName, claimId);
       }
     })
     .catch(error => {
-      logger.error(`error resolving ${uri}`, error);
+      logger.error(`error resolving "${uri}" >> `, error);
     });
 }
 
@@ -98,8 +103,9 @@ module.exports = {
         .then(freePublicClaimList => {
           const claimId = freePublicClaimList[0].claim_id;
           const name = freePublicClaimList[0].name;
-          const freePublicClaimOutpoint = `${freePublicClaimList[0].txid}:${freePublicClaimList[0].nout}`;
-          const freePublicClaimUri = `${name}#${claimId}`;
+          const outpoint = `${freePublicClaimList[0].txid}:${freePublicClaimList[0].nout}`;
+          const uri = `${name}#${claimId}`;
+          const height = freePublicClaimList[0].height;
           // 2. check to see if the file is available locally
           db.File
             .findOne({ where: { name: name, claimId: claimId } })  // note: consolidate for es6?
@@ -108,18 +114,18 @@ module.exports = {
               if (claim) {
                 logger.debug(`A mysql record was found for ${claimId}`);
                 // trigger update if needed
-                if (claim.dataValues.outpoint === freePublicClaimOutpoint) {
+                if (claim.dataValues.outpoint === outpoint) {
                   logger.debug(`local outpoint matched for ${claimId}`);
                 } else {
                   logger.debug(`local outpoint did not match for ${claimId}`);
-                  getClaimAndUpdate(freePublicClaimUri, name, claimId);
+                  getClaimAndUpdate(uri, name, claimId);
                 }
                 // return the claim
                 resolve(claim.dataValues);
               // 3. otherwise use daemon to retrieve it
               } else {
                 // 4. get the claim and serve it
-                getClaimAndHandleResponse(freePublicClaimUri, resolve, reject);
+                getClaimAndHandleResponse(uri, height, resolve, reject);
               }
             })
             .catch(error => {
@@ -144,7 +150,7 @@ module.exports = {
           if (claim) {
             logger.debug(`A mysql record was found for ${claimId}`);
             // trigger an update if needed
-            resolveAndUpdateIfNeeded(uri, claimName, claimId, claim.dataValues.outpoint);  // ok to just start asynch function, or need to add to a task cue?
+            resolveAndUpdateIfNeeded(uri, claimName, claimId, claim.dataValues.outpoint, claim.dataValues.outpoint);  // ok to just start asynch function, or need to add to a task cue?
             // resolve and send
             resolve(claim.dataValues);
           // 2. otherwise use daemon to retrieve it
@@ -156,7 +162,7 @@ module.exports = {
                 // 4. check to see if the claim is free & public
                 if (isFreePublicClaim(result[uri].claim)) {
                   // 5. get claim and serve
-                  getClaimAndHandleResponse(uri, resolve, reject);
+                  getClaimAndHandleResponse(uri, result[uri].claim.height, resolve, reject);
                 } else {
                   reject('NO_FREE_PUBLIC_CLAIMS');
                 }
