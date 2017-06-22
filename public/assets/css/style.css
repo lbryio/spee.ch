@@ -15,11 +15,6 @@ canvas {
 	display: none;
 }
 
-#tweet-meme-button {
-	float: left;
-	margin-right: 5px;
-}
-
 .row {
 	margin: 10px 0px 10px 0px;
 }
