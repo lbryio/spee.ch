@@ -117,7 +117,7 @@ module.exports = {
                 // return the claim
                 resolve(claim.dataValues);
               // 3. otherwise use daemon to retrieve it
-            } else {
+              } else {
                 // 4. get the claim and serve it
                 getClaimAndHandleResponse(freePublicClaimUri, resolve, reject);
               }

@@ -1,42 +1,7 @@
-
 // define variables
 var socket = io();
 var uploader = new SocketIOFileUpload(socket);
 var stagedFiles = null;
-var license = 'Creative Commons';
-var nsfw = false;
-var claimName;
-
-function dataURItoBlob(dataURI) {
-    // convert base64/URLEncoded data component to raw binary data held in a string
-    var byteString;
-    if (dataURI.split(',')[0].indexOf('base64') >= 0)
-        byteString = atob(dataURI.split(',')[1]);
-    else
-        byteString = unescape(dataURI.split(',')[1]);
-
-    // separate out the mime component
-    var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
-
-    // write the bytes of the string to a typed array
-    var ia = new Uint8Array(byteString.length);
-    for (var i = 0; i < byteString.length; i++) {
-        ia[i] = byteString.charCodeAt(i);
-    }
-
-    return new Blob([ia], {type:mimeString});
-}
-
-function startPublish() {
-	//download the image 
-    var dataUrl = canvas.toDataURL('image/jpeg');  // canvas defined in memeDraw.js
-	var blob = dataURItoBlob(dataUrl)
-	claimName = claimNameInput.value;  // claimNameInput.value defined in memeDraw.js
-	var fileName = claimNameInput.value + ".jpg";
-	var file = new File([blob], fileName, {type: 'image/jpeg', lastModified: Date.now()});
-	console.log(file);
-	stageAndPublish(file); 
-};
 
 /* helper functions */
 // create a progress animation
@@ -57,15 +22,73 @@ function createProgressBar(element, size){
 	};
 	setInterval(addOne, 300);
 }
+// preview file and stage the image for upload
+function previewAndStageFile(selectedFile){ 
+	var preview = document.getElementById('image-preview');
+	var dropzone = document.getElementById('drop-zone');
+	var previewReader = new FileReader();
 
-function stageAndPublish(file) {
-	// stage files 
-	stagedFiles = [file]; // stores the selected file for 
+	preview.style.display = 'block';
+	dropzone.style.display = 'none';
+	
+	previewReader.onloadend = function () {
+		preview.src = previewReader.result;
+	};
+
+	if (selectedFile) {
+		console.log(selectedFile);
+		previewReader.readAsDataURL(selectedFile); // reads the data and sets the img src
+		document.getElementById('publish-name').value = selectedFile.name.substring(0, selectedFile.name.indexOf('.')); // updates metadata inputs
+		stagedFiles = [selectedFile]; // stores the selected file for upload
+	} else {
+		preview.src = '';
+	}
+}
+// update the publish status
+function updatePublishStatus(msg){
+	document.getElementById('publish-status').innerHTML = msg;
+}
+// process the drop-zone drop
+function drop_handler(ev) {
+	console.log("drop");
+	ev.preventDefault();
+	// if dropped items aren't files, reject them
+	var dt = ev.dataTransfer;
+	if (dt.items) {
+		if (dt.items[0].kind == 'file') {
+			var droppedFile = dt.items[0].getAsFile();
+			previewAndStageFile(droppedFile);
+		} else {
+			console.log("no files were found")
+		}
+	} else {
+		console.log("no items were found")
+	}
+}
+// prevent the browser's default drag behavior
+function dragover_handler(ev) {
+	ev.preventDefault();
+}
+// remove all of the drag data
+function dragend_handler(ev) {
+	var dt = ev.dataTransfer;
+	if (dt.items) {
+		for (var i = 0; i < dt.items.length; i++) {
+			dt.items.remove(i);
+		}
+	} else {
+		ev.dataTransfer.clearData();
+	}
+}
+
+/* configure the submit button */
+document.getElementById('publish-submit').addEventListener('click', function(event){
+	event.preventDefault();
 	// make sure a file was selected
 	if (stagedFiles) {
 		// make sure only 1 file was selected
-		if (stagedFiles.length < 1) {
-			alert("A file is needed");
+		if (stagedFiles.length > 1) {
+			alert("Only one file allowed at a time");
 			return;
 		}
 		// make sure the content type is acceptable
@@ -81,17 +104,14 @@ function stageAndPublish(file) {
 				break;
 		}
 	}
-
-}
-
-// update the publish status
-function updatePublishStatus(msg){
-	document.getElementById('publish-status').innerHTML = msg;
-}
+})
 
 /* socketio-file-upload listeners */
 uploader.addEventListener('start', function(event){
-	event.file.meta.name = claimName;
+	var name = document.getElementById('publish-name').value;
+	var license = document.getElementById('publish-license').value;
+	var nsfw = document.getElementById('publish-nsfw').value;
+	event.file.meta.name = name;
 	event.file.meta.license = license;
 	event.file.meta.nsfw = nsfw;
 	event.file.meta.type = stagedFiles[0].type;
@@ -110,8 +130,9 @@ socket.on('publish-status', function(msg){
 	updatePublishStatus(msg);
 });
 socket.on('publish-failure', function(msg){
-	document.getElementById('publish-active-area').innerHTML = '<p>' + JSON.stringify(msg) + '</p><p> --(✖╭╮✖)→ </p><strong>For help, post the above error text in the #speech channel on the <a href="https://lbry.slack.com/" target="_blank">LBRY slack</a></strong>';
+	document.getElementById('publish-active-area').innerHTML = '<p>' + JSON.stringify(msg) + '</p><p> --(✖╭╮✖)→ </p><strong>For help, post the above error text in the #speech channel on the <a href="https://lbry.slack.com/" target="_blank">lbry slack</a></strong>';
 });
+
 socket.on('publish-complete', function(msg){
 	var publishResults;
 	var directUrl = '/' + msg.name + '/' + msg.result.claim_id;
@@ -128,8 +149,8 @@ socket.on('publish-complete', function(msg){
 			'https://spee.ch/' + directUrl,
 			document.getElementById('tweet-meme-button'),
 			{
-				text: 'Check out my meme creation on the LBRY blockchain!',
-				hashtags: 'LBRYMemeFodder',
+				text: 'Check out my image, hosted for free on the distributed awesomeness that is the LBRY blockchain!',
+				hashtags: 'LBRY',
 				via: 'lbryio'
 			})
 		.then( function( el ) {

@@ -1,17 +1,18 @@
 <div class="container">
 	{{> topBar}}
-	{{ image }}
 	<div class="row">
-		{{> memeMaker}}
+		{{> memeFodderMaker}}
 	</div>
 	<div class="row">
-		{{> memeResults}}
+		{{> memeFodderResults}}
 	</div>
 </div>
 
-<script src="/assets/js/memeDraw.js"></script>
+
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
 
 <script src="/socket.io/socket.io.js"></script>
 <script src="/siofu/client.js"></script>
 
+<script src="/assets/js/memeDraw.js"></script>
 <script src="/assets/js/memePublish.js"></script>
