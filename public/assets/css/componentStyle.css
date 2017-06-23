@@ -45,8 +45,17 @@ canvas {
 
 /* all claims */
 
+.all-claims-item {
+	margin-top: 2px;
+	padding-top: 2px;
+	border-top: 1px lightgrey solid;
+	overflow: auto;
+}
+
 .all-claims-img {
-	height: 200px;
+	width: 20%;
+	float: left;
+	margin: 5px 30px 5px 0px;
 }
 
 /* footer */
