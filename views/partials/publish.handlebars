@@ -5,7 +5,9 @@
 			<p>Drag and drop your file here, or choose your file below.</p>
 			<input type="file"  id="siofu_input" name="file" accept="video/*,image/*" onchange="previewAndStageFile(event.target.files[0])" enctype="multipart/form-data"/>
 		</div>
-		<img id="image-preview" src="" height="200" alt="Image preview..."/>
+		<div class="image-preview-holder">
+			<img id="image-preview" src="" width="100%" alt="Image preview..."/>
+		</div>
 	</div>
 	<div class="col-right">
 		<textarea id="direct-link-holder" hidden="true">No URL yet</textarea>
