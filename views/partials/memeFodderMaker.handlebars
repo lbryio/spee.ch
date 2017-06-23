@@ -1,50 +1,31 @@
-<div class="col-md-12">
-	<div class="card" id="publish">
-		<div class="card-title card-block grey lighten-1 white-text">
-			<h2>#LBRYMemeFodder</h2>
-		</div>
-		<div class="card-block">
-			<div class="row">
-				<div class="col-md-12">
-					<h3>Congratulations, you found the /meme-fodder game</h3>
-					<p>Create a meme based on the current <i>lbry://meme-fodder</i> claims using the tool below.  Got a masterpiece? <a href="https://twitter.com/hashtag/LBRYMemeFodder" target="_blank">Share it with the community</a> and see what they think!</p>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-5">
-					<canvas id="meme-canvas">
-						If you can see this, the meme generator is not supported by your browser.
-					</canvas>
-					<img id="start-image" src="/meme-fodder" alt="a picture to make your meme with"/>
-				</div>
-				<div class="col-md-7">
-					<textarea id="direct-link-holder" hidden="true">No URL yet</textarea>
-					<div id="publish-active-area">
-						<div class="row">
-							<div class="col-md-12">
-								<label for="top-text">Meme:</label>
-								<input id="top-text" type="text" value="Hello" />
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-md-12">
-								<input id="bottom-text" type="text" value="world!" />
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-md-12">
-								<label for="meme-name">Claim Name:</label>
-								<input id="file-name-input" type="text" value="My-Claim-Name" />
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-md-12">
-								<button onclick="startPublish()">Save and Publish</button>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
+<div class="card" id="publish">
+	<h2>#LBRYMemeFodder</h2>
+	<div class="col-md-12">
+		<h3>Congratulations, you found the /meme-fodder game!</h3>
+		<p>Create a meme based on the current <i>lbry://meme-fodder</i> claims using the tool below.</p>  
+	</div>
+	<div class="col-left">
+		<canvas id="meme-canvas">
+			If you can see this, the meme generator is not supported by your browser.
+		</canvas>
+		<img id="start-image" src="/meme-fodder" alt="a picture to make your meme with"/>
+	</div>
+	<div class="col-right">
+		<textarea id="direct-link-holder" hidden="true">No URL yet</textarea>
+		<div id="publish-active-area">
+			<p>
+				<label for="top-text">Meme:</label><br/>
+				<input id="top-text" type="text" value="Hello" /><br/>
+				<input id="bottom-text" type="text" value="world!" /><br/>
+			</p>
+			<p>
+				<label for="meme-name">Claim Name:</label></br>
+				<input id="file-name-input" type="text" value="My-Claim-Name" />
+			</p>
+			<p>
+				<button onclick="startPublish()">Save and Publish</button>
+			</p>
 		</div>
 	</div>
+	<p class="stop-float">Got a masterpiece? <a href="https://twitter.com/hashtag/LBRYMemeFodder" target="_blank">Share it with the community</a> and see what they think!</p>
 </div>

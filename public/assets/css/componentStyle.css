@@ -1,0 +1,74 @@
+
+/* top bar */
+#logo, #title {
+	display: inline-block;
+}
+
+#logo {
+	height: 1.5em;
+}
+
+#title {
+	margin: 2px 5px 2px 5px;
+}
+
+/* examples */
+.example {
+	display: inline-block;
+	width: 100%;
+	margin-bottom: 15px;
+}
+
+.example-image {
+	float: left;
+	width: 20%;
+	margin: 5px 15px 5px 0px;
+}
+
+/* meme */
+canvas {
+  background-color: white; 
+  width: 100%;
+  height: auto;
+}
+
+/* publish */
+#drop-zone {
+	border: 1px dashed lightgrey;
+	padding: 1em;
+	height: 6em;
+}
+
+#image-preview {
+	display: none;
+}
+
+/* all claims */
+
+.all-claims-img {
+	height: 200px;
+}
+
+/* footer */
+
+footer {
+	width: 100%;
+	margin-bottom: 2px;
+	padding-bottom: 2px;
+	border-bottom: 1px lightgrey solid;
+	margin-top: 2px;
+	padding-top: 2px;
+	border-top: 1px lightgrey solid;
+	text-align: center;
+	color: grey;
+}
+
+/* meme fodder */
+
+.meme-fodder-img {
+	width: 21%;
+	padding: 0px;
+	margin: 2% 4% 2% 0px;
+	float: left;
+}
+

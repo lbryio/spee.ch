@@ -1,40 +1,33 @@
-<div class="col-md-12">
-	<div class="card" id="publish">
-		<div class="card-title card-block grey lighten-1 white-text">
-			<h2>Publish Your Own</h2>
+<div class="panel">
+	<h2>Publish</h2>
+	<div class="col-left">
+		<div id="drop-zone" ondrop="drop_handler(event);" ondragover="dragover_handler(event);" ondragend="dragend_handler(event)">
+			<p>Drag and drop your file here, or choose your file below.</p>
+			<input type="file"  id="siofu_input" name="file" accept="video/*,image/*" onchange="previewAndStageFile(event.target.files[0])" enctype="multipart/form-data"/>
 		</div>
-		<div class="card-block">
-			<div class="row">
-				<div class="col-md-6">
-					<div id="drop-zone" ondrop="drop_handler(event);" ondragover="dragover_handler(event);" ondragend="dragend_handler(event)">
-						<p>Drag and drop your file here, or choose your file below.</p>
-						<input type="file"  id="siofu_input" name="file" accept="video/*,image/*" onchange="previewAndStageFile(event.target.files[0])" enctype="multipart/form-data"/>
-					</div>
-					<img id="image-preview" src="" height="200" alt="Image preview..."/>
-				</div>
-				<div class="col-md-6">
-					<textarea id="direct-link-holder" hidden="true">No URL yet</textarea>
-					<div id="publish-active-area">
-						<div class="md-form">
-							<input type="text" id="publish-name" value="Name" class="form-control">
-						</div>
-						<fieldset class="form-group">
-							License:
-							<select type="text" id="publish-license" name="license" value="license">
-								<option value="Public Domain">Public Domain</option>
-								<option value="Creative Commons">Creative Commons</option>
-							</select>
-						</fieldset>
-						<fieldset class="form-group">
-							<input type="checkbox" id="publish-nsfw">
-							<label for="publish-nsfw">NSFW</label>
-						</fieldset>
-						<p><i>By clicking 'Publish' I attest that I have read and agree to the <a href="https://lbry.io/termsofservice" target="_blank">LBRY terms of service</a>.</i></p>
-						<button id="publish-submit">Publish</button>
-						<button id="publish-reset">Reset</button>
-					</div>
-				</div>
-			</div>
+		<img id="image-preview" src="" height="200" alt="Image preview..."/>
+	</div>
+	<div class="col-right">
+		<textarea id="direct-link-holder" hidden="true">No URL yet</textarea>
+		<div id="publish-active-area">
+			<input type="text" id="publish-name" value="Name" class="form-control">
+			<p>
+			<label for="publish-license">License:</label>
+			<br/>
+			<select type="text" id="publish-license" name="license" value="license">
+				<option value="Public Domain">Public Domain</option>
+				<option value="Creative Commons">Creative Commons</option>
+			</select>
+			</p>
+			<p>
+			<input type="checkbox" id="publish-nsfw">
+			<label for="publish-nsfw">NSFW</label>
+			</p>
+			<p>
+			<button id="publish-submit">Publish</button>
+			<a href="/"><button id="publish-reset">Reset</button></a>
+			</p>
+			<p><i>By clicking 'Publish' I attest that I have read and agree to the <a href="https://lbry.io/termsofservice" target="_blank">LBRY terms of service</a>.</i></p>
 		</div>
 	</div>
 </div>

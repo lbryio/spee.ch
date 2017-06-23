@@ -1,10 +1,17 @@
-<div class="container">
-	{{> topBar}}
-	<div class="row">
-		{{> memeFodderMaker}}
+<div class="wrapper">
+	<div class="top-bar">
+		{{> topBar}}
 	</div>
-	<div class="row">
+	<div class="main"> 
+		{{> memeFodderMaker}}
 		{{> memeFodderResults}}
+	</div>
+	<div class="sidebar">
+		<p>Spee.ch is a single-serving site that reads and publishes images to and from the <a class="white-text" href="https://lbry.io">LBRY</a> blockchain.</p>
+		{{> contribute}}
+	</div>
+	<div class="footer">
+		{{> footer}}
 	</div>
 </div>
 

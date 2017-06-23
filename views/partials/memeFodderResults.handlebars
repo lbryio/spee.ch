@@ -1,23 +1,12 @@
-<div class="col-md-12">
-	<div class="card" id="publish">
-		<div class="card-title card-block grey lighten-1 white-text">
-			<h2>Recent Meme Fodder</h2>
-		</div>
-		<div class="card-block" id="publish-active-area">
-			<div class="row">
-				<div class="col-md-12">
-					<p>Below are the images published to /meme-fodder.  Click one to choose it as your canvas.</p>
-					<p>Spee.ch/meme-fodder/play uses the free, public images at the claim <a href="lbry://meme-fodder">lbry://meme-fodder</a>. Want to put a different image on the chopping block? Go publish it!</p>
-				</div>
-			</div>
-			<div class="row">
-			{{#each claims}}
-				<div class="col-md-3">
-					<img class="all-claims-img" src="/{{this.name}}/{{this.claim_id}}" onclick="newCanvas(this)"/>
-				</div>
-				<hr>
-			{{/each}}
-			</div>
-		</div>
+<div class="stop-float" id="publish">
+	<h2>Recent Meme Fodder</h2>
+	<div class="row">
+		<p>Below are the images published to /meme-fodder.  Click one to choose it as your canvas.</p>
+		<p>Spee.ch/meme-fodder/play uses the free, public images at the claim <a href="lbry://meme-fodder">lbry://meme-fodder</a>. Want to put a different image on the chopping block? Go publish it!</p>
+	</div>
+	<div class="row">
+		{{#each claims}}
+		<img class="meme-fodder-img" src="/{{this.name}}/{{this.claim_id}}" onclick="newCanvas(this)"/>
+		{{/each}}
 	</div>
 </div>
