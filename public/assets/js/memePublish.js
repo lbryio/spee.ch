@@ -124,7 +124,7 @@ socket.on('publish-complete', function(msg){
 	// update publish area
 	document.getElementById('publish-active-area').innerHTML = publishResults;
 	// update the link holder
-	document.getElementById('direct-link-holder').innerHTML = 'https://spee.ch' + directUrl;
+	document.getElementById('direct-link-holder').innerText = 'https://spee.ch' + directUrl;
 	// enable copy-to-clipboard
 	var copyBtn = document.querySelector('.copy-button');
 	copyBtn.addEventListener('click', function(event) {
