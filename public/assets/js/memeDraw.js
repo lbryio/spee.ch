@@ -6,7 +6,6 @@ var fontSize = 28;
 var topText = document.getElementById('top-text');
 var bottomText = document.getElementById('bottom-text');
 var ctx = canvas.getContext('2d');
-var claimNameInput = document.getElementById("file-name-input");
 
 // create the canvas
 img.onload = function() {
