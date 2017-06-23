@@ -5,7 +5,7 @@ var uploader = new SocketIOFileUpload(socket);
 var stagedFiles = null;
 var license = 'Creative Commons';
 var nsfw = false;
-var claimName;
+var nameInput = document.getElementById("publish-name");
 
 function dataURItoBlob(dataURI) {
     // convert base64/URLEncoded data component to raw binary data held in a string
@@ -31,8 +31,7 @@ function startPublish() {
 	//download the image 
     var dataUrl = canvas.toDataURL('image/jpeg');  // canvas defined in memeDraw.js
 	var blob = dataURItoBlob(dataUrl)
-	claimName = claimNameInput.value;  // claimNameInput.value defined in memeDraw.js
-	var fileName = claimNameInput.value + ".jpg";
+	var fileName = nameInput.value + ".jpg";  //note: need to dynamically grab type
 	var file = new File([blob], fileName, {type: 'image/jpeg', lastModified: Date.now()});
 	console.log(file);
 	stageAndPublish(file); 
@@ -59,6 +58,16 @@ function createProgressBar(element, size){
 }
 
 function stageAndPublish(file) {
+	var name = nameInput.value;
+	var invalidCharacters = /[^\w,-]/.exec(name);
+	// validate 'name'
+	if (invalidCharacters) {
+		alert(invalidCharacters + ' is not allowed. A-Z, a-z, 0-9, "_" and "-" only.');
+		return;
+	} else if (name.length < 1) {
+		alert("You must enter a name for your claim");
+		return;
+	}
 	// stage files 
 	stagedFiles = [file]; // stores the selected file for 
 	// make sure a file was selected
@@ -80,8 +89,9 @@ function stageAndPublish(file) {
 				alert("Only .png, .jpeg, .gif, and .mp4 files are currently supported");
 				break;
 		}
+	} else {
+		alert("Please select a file");
 	}
-
 }
 
 // update the publish status
@@ -91,7 +101,7 @@ function updatePublishStatus(msg){
 
 /* socketio-file-upload listeners */
 uploader.addEventListener('start', function(event){
-	event.file.meta.name = claimName;
+	event.file.meta.name = nameInput.value;
 	event.file.meta.license = license;
 	event.file.meta.nsfw = nsfw;
 	event.file.meta.type = stagedFiles[0].type;

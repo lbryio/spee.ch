@@ -27,6 +27,7 @@ function previewAndStageFile(selectedFile){
 	var preview = document.getElementById('image-preview');
 	var dropzone = document.getElementById('drop-zone');
 	var previewReader = new FileReader();
+	var nameInput = document.getElementById('publish-name'); 
 
 	preview.style.display = 'block';
 	dropzone.style.display = 'none';
@@ -36,9 +37,10 @@ function previewAndStageFile(selectedFile){
 	};
 
 	if (selectedFile) {
-		console.log(selectedFile);
 		previewReader.readAsDataURL(selectedFile); // reads the data and sets the img src
-		document.getElementById('publish-name').value = selectedFile.name.substring(0, selectedFile.name.indexOf('.')); // updates metadata inputs
+		if (nameInput.value === "") {
+			nameInput.value = selectedFile.name.substring(0, selectedFile.name.indexOf('.'));
+		}
 		stagedFiles = [selectedFile]; // stores the selected file for upload
 	} else {
 		preview.src = '';
@@ -84,11 +86,21 @@ function dragend_handler(ev) {
 /* configure the submit button */
 document.getElementById('publish-submit').addEventListener('click', function(event){
 	event.preventDefault();
+	var name = document.getElementById('publish-name').value;
+	var invalidCharacters = /[^\w,-]/.exec(name);
+	// validate 'name'
+	if (invalidCharacters) {
+		alert(invalidCharacters + ' is not allowed. A-Z, a-z, 0-9, "_" and "-" only.');
+		return;
+	} else if (name.length < 1) {
+		alert("You must enter a name for your claim");
+		return;
+	}
 	// make sure a file was selected
 	if (stagedFiles) {
 		// make sure only 1 file was selected
 		if (stagedFiles.length > 1) {
-			alert("Only one file allowed at a time");
+			alert("Only one file is allowed at a time");
 			return;
 		}
 		// make sure the content type is acceptable
@@ -103,6 +115,8 @@ document.getElementById('publish-submit').addEventListener('click', function(eve
 				alert("Only .png, .jpeg, .gif, and .mp4 files are currently supported");
 				break;
 		}
+	} else {
+		alert("Please select a file");
 	}
 })
 
