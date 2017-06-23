@@ -27,6 +27,7 @@ function previewAndStageFile(selectedFile){
 	var preview = document.getElementById('image-preview');
 	var dropzone = document.getElementById('drop-zone');
 	var previewReader = new FileReader();
+	var nameInput = document.getElementById('publish-name'); 
 
 	preview.style.display = 'block';
 	dropzone.style.display = 'none';
@@ -36,9 +37,10 @@ function previewAndStageFile(selectedFile){
 	};
 
 	if (selectedFile) {
-		console.log(selectedFile);
 		previewReader.readAsDataURL(selectedFile); // reads the data and sets the img src
-		document.getElementById('publish-name').value = selectedFile.name.substring(0, selectedFile.name.indexOf('.')); // updates metadata inputs
+		if (nameInput.value === "") {
+			nameInput.value = selectedFile.name.substring(0, selectedFile.name.indexOf('.'));
+		}
 		stagedFiles = [selectedFile]; // stores the selected file for upload
 	} else {
 		preview.src = '';
