@@ -79,3 +79,7 @@ h4 {
 .stop-float {
 	clear: both;
 }
+
+.toggle-link {
+	float: right;
+}
