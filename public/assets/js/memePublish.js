@@ -90,7 +90,7 @@ function stageAndPublish(file) {
 				break;
 		}
 	} else {
-			alert("Please select a file");
+		alert("Please select a file");
 	}
 }
 
