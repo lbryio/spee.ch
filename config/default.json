@@ -1,9 +1,9 @@
 {
 	"WalletConfig": {
-		"lbryAddress": "none"
+		"LbryAddress": "none"
 	},
 	"AnalyticsConfig":{
-		"googleId": "none"
+		"GoogleId": "none"
 	},
 	"Database": {
 		"MySqlConnectionUri": "none",

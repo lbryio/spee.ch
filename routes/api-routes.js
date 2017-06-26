@@ -1,10 +1,10 @@
-const errorHandlers = require('../helpers/libraries/errorHandlers.js');
-const lbryApi = require('../helpers/libraries/lbryApi.js');
 const logger = require('winston');
 const multipart = require('connect-multiparty');
 const multipartMiddleware = multipart();
-const publishController = require('../helpers/libraries/publishController.js');
+const publishController = require('../controllers/publishController.js');
+const lbryApi = require('../helpers/libraries/lbryApi.js');
 const publishHelpers = require('../helpers/libraries/publishHelpers.js');
+const errorHandlers = require('../helpers/libraries/errorHandlers.js');
 
 module.exports = app => {
   // route to run a claim_list request on the daemon
@@ -35,18 +35,24 @@ module.exports = app => {
   app.post('/api/publish', multipartMiddleware, ({ originalUrl, body, files }, res) => {
     logger.debug(`POST request on ${originalUrl}`);
     console.log('>> req.files:', files);
-    console.log(' >> req.body:', body);
-    const name = body.claimName;
-    const license = body.license;
-    const nsfw = body.nsfw;
-    const fileName = files.file1.name;
-    const filePath = files.file1.path;
-    const fileType = files.file1.type;
+    console.log('>> req.body:', body);
+    const file = files.file1;
+    if (!file) {
+      res.status(500).json({ 'error': 'No file was submitted.  Form submission must have key "speechFile"' });
+      return;
+    }
+    const name = body.claim || file.name.substring(0, file.name.indexOf('.'));
+    const license = body.license || 'No License Provided';
+    const nsfw = body.nsfw || true;
+    const fileName = file.name;
+    const filePath = file.path;
+    const fileType = file.type;
     /*
       make sure it's not a harmful file type
     */
     // prepare the publish parameters
     const publishParams = publishHelpers.createPublishParams(name, filePath, license, nsfw);
+    console.log('publish params', publishParams);
     // publish the file
     publishController
       .publish(publishParams, fileName, fileType)
@@ -57,10 +63,10 @@ module.exports = app => {
         errorHandlers.handleRequestError(error, res);
       });
 
-    if (files) {
-      res.status(200).json({'status': 'file(s) received'});
-    } else {
-      res.status(400).josn({'status': 'no files(s) received'});
-    }
+    // if (files) {
+    //   res.status(200).json({'status': 'file(s) received'});
+    // } else {
+    //   res.status(400).josn({'status': 'no files(s) received'});
+    // }
   });
 };

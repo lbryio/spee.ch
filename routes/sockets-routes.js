@@ -1,6 +1,6 @@
 const logger = require('winston');
 const publishController = require('../controllers/publishController.js');
-const publishHelpers = require('../controllers/publishHelpers.js');
+const publishHelpers = require('../helpers/libraries/publishHelpers.js');
 const errorHandlers = require('../helpers/libraries/errorHandlers.js');
 
 module.exports = (app, siofu, hostedContentPath, ua, googleAnalyticsId) => {
