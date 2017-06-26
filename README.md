@@ -32,5 +32,28 @@ spee.ch is a single-serving site that reads and publishes images to and from the
 	* To view a batch of files at a claim
 	* E.g. spee.ch/doitlive/all
 
+## API
+
+#### GET
+* spee.ch/api/resolve/:name
+	* a successfull request returns the resolve results for the claim at that name in JSON format
+* spee.ch/api/claim_list/:name
+	* a successfull request returns a list of claims at that claim name in JSON format
+
+#### POST
+* spee.ch/api/publish
+	* request parameters:
+		* header:
+			* Content-Type: multipart/form-data
+		* body:
+			* claim: string (optional, defults to the file's name sans extension)
+			* license: string (optional, defaults to "No License Provided")
+			* nsfw: string ("on"/"off") or boolean (true/false). (optional, defaults `true`)
+		* files:
+			* (the `files` object submitted must use "file1" or "null" as the key for the file's value object)
+	* a successfull request will return the transaction details resulting from your published claim in JSON format
+
+
+
 ## bugs
 If you find a bug or experience a problem, please report your issue here on github and find us in the lbry slack!
