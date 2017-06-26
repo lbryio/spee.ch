@@ -6,6 +6,14 @@ const walletAddress = config.get('WalletConfig.LbryAddress');
 module.exports = {
   createPublishParams (name, filePath, license, nsfw) {
     logger.debug(`Creating Publish Parameters for "${name}"`);
+    // ensure nsfw is a boolean
+    if (nsfw.toLowerCase === 'true') {
+      nsfw = true;
+    } else if (nsfw.toLowerCase === 'on') {
+      nsfw = true;
+    } else {
+      nsfw = false;
+    }
     const publishParams = {
       name,
       file_path: filePath,

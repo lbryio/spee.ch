@@ -34,11 +34,9 @@ module.exports = app => {
   // route to run a publish request on the daemon
   app.post('/api/publish', multipartMiddleware, ({ originalUrl, body, files }, res) => {
     logger.debug(`POST request on ${originalUrl}`);
-    console.log('>> req.files:', files);
-    console.log('>> req.body:', body);
-    const file = files.file1;
+    const file = files.file1 || files.null;
     if (!file) {
-      res.status(500).json({ 'error': 'No file was submitted.  Form submission must have key "speechFile"' });
+      res.status(500).json({ 'success': false, 'error': 'No file was submitted.  Form submission must have key "speechFile"', 'data': null });
       return;
     }
     const name = body.claim || file.name.substring(0, file.name.indexOf('.'));
@@ -52,7 +50,6 @@ module.exports = app => {
     */
     // prepare the publish parameters
     const publishParams = publishHelpers.createPublishParams(name, filePath, license, nsfw);
-    console.log('publish params', publishParams);
     // publish the file
     publishController
       .publish(publishParams, fileName, fileType)
@@ -62,11 +59,5 @@ module.exports = app => {
       .catch(error => {
         errorHandlers.handleRequestError(error, res);
       });
-
-    // if (files) {
-    //   res.status(200).json({'status': 'file(s) received'});
-    // } else {
-    //   res.status(400).josn({'status': 'no files(s) received'});
-    // }
   });
 };

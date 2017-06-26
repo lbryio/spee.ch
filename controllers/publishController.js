@@ -46,14 +46,22 @@ module.exports = {
               nsfw    : publishParams.metadata.nsfw,
             },
             { name: publishParams.name, claimId: result.claim_id }
-          ).catch(error => {
+          ).then(() => {
+            // resolve the promise with the result from lbryApi.publishClaim;
+            resolve(result);
+          })
+          .catch(error => {
             logger.error('Sequelize findOne error', error);
+            // reject the promise
+            reject(error);
           });
         })
         .catch(error => {
           logger.error(`Error publishing ${fileName}`, error);
           // delete the local file
           deleteTemporaryFile(publishParams.file_path);
+          // reject the promise
+          reject(error);
         });
     });
     return deferred;
