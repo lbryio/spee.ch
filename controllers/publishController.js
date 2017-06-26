@@ -26,33 +26,36 @@ function upsert (Model, values, condition) {
 
 module.exports = {
   publish: (publishParams, fileName, fileType) => {
-    // 1. publish the file
-    lbryApi
-      .publishClaim(publishParams)
-      .then(result => {
-        logger.info(`Successfully published ${fileName}`, result);
-        // 2. update old record of create new one (update is in case the claim has been published before by this daemon)
-        upsert(
-          db.File,
-          {
-            name    : publishParams.name,
-            claimId : result.claim_id,
-            outpoint: `${result.txid}:${result.nout}`,
-            height  : 0,
-            fileName,
-            filePath: publishParams.file_path,
-            fileType,
-            nsfw    : publishParams.metadata.nsfw,
-          },
-          { name: publishParams.name, claimId: result.claim_id }
-        ).catch(error => {
-          logger.error('Sequelize findOne error', error);
+    const deferred = new Promise((resolve, reject) => {
+      // 1. publish the file
+      lbryApi
+        .publishClaim(publishParams)
+        .then(result => {
+          logger.info(`Successfully published ${fileName}`, result);
+          // 2. update old record of create new one (update is in case the claim has been published before by this daemon)
+          upsert(
+            db.File,
+            {
+              name    : publishParams.name,
+              claimId : result.claim_id,
+              outpoint: `${result.txid}:${result.nout}`,
+              height  : 0,
+              fileName,
+              filePath: publishParams.file_path,
+              fileType,
+              nsfw    : publishParams.metadata.nsfw,
+            },
+            { name: publishParams.name, claimId: result.claim_id }
+          ).catch(error => {
+            logger.error('Sequelize findOne error', error);
+          });
+        })
+        .catch(error => {
+          logger.error(`Error publishing ${fileName}`, error);
+          // delete the local file
+          deleteTemporaryFile(publishParams.file_path);
         });
-      })
-      .catch(error => {
-        logger.error(`Error publishing ${fileName}`, error);
-        // delete the local file
-        deleteTemporaryFile(publishParams.file_path);
-      });
+    });
+    return deferred;
   },
 };
