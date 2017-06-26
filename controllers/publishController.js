@@ -1,31 +1,7 @@
 const fs = require('fs');
 const logger = require('winston');
 const lbryApi = require('../helpers/libraries/lbryApi.js');
-const config = require('config');
-const walledAddress = config.get('WalletConfig.lbryAddress');
-const errorHandlers = require('../helpers/libraries/errorHandlers.js');
 const db = require('../models');
-
-function createPublishParams (claim, filePath, license, nsfw) {
-  logger.debug(`Creating Publish Parameters for "${claim}"`);
-  const publishParams = {
-    name     : claim,
-    file_path: filePath,
-    bid      : 0.01,
-    metadata : {
-      description: `${claim} published via spee.ch`,
-      title      : claim,
-      author     : 'spee.ch',
-      language   : 'en',
-      license,
-      nsfw,
-    },
-    claim_address : walledAddress,
-    change_address: walledAddress,
-  };
-  logger.debug('publishParams:', publishParams);
-  return publishParams;
-}
 
 function deleteTemporaryFile (filePath) {
   fs.unlink(filePath, err => {
@@ -49,51 +25,34 @@ function upsert (Model, values, condition) {
 }
 
 module.exports = {
-  publish (name, fileName, filePath, fileType, license, nsfw, socket, visitor) {
-    console.log('nsfw:', nsfw);
-    // validate nsfw
-    if (typeof nsfw === 'string') {
-      nsfw = (nsfw.toLowerCase() === 'true');
-    }
-    // update the client
-    socket.emit('publish-status', 'Your image is being published (this might take a second)...');
-    // send to analytics
-    visitor.event('Publish Route', 'Publish Request', filePath).send();
-    // create the publish object
-    const publishParams = createPublishParams(name, filePath, license, nsfw);
+  publish: (publishParams, fileName, fileType) => {
     // 1. publish the file
     lbryApi
-      .publishClaim(publishParams, fileName, fileType)
+      .publishClaim(publishParams)
       .then(result => {
         logger.info(`Successfully published ${fileName}`, result);
-        // google analytics
-        visitor.event('Publish Route', 'Publish Success', filePath).send();
         // 2. update old record of create new one (update is in case the claim has been published before by this daemon)
         upsert(
           db.File,
           {
-            name,
+            name    : publishParams.name,
             claimId : result.claim_id,
             outpoint: `${result.txid}:${result.nout}`,
             height  : 0,
             fileName,
-            filePath,
+            filePath: publishParams.file_path,
             fileType,
-            nsfw,
+            nsfw    : publishParams.metadata.nsfw,
           },
-          { name, claimId: result.claim_id }
+          { name: publishParams.name, claimId: result.claim_id }
         ).catch(error => {
           logger.error('Sequelize findOne error', error);
         });
-        // update client
-        socket.emit('publish-complete', { name, result });
       })
       .catch(error => {
         logger.error(`Error publishing ${fileName}`, error);
-        // google analytics
-        visitor.event('Publish Route', 'Publish Failure', filePath).send();
-        socket.emit('publish-failure', errorHandlers.handlePublishError(error));
-        deleteTemporaryFile(filePath);
+        // delete the local file
+        deleteTemporaryFile(publishParams.file_path);
       });
   },
 };

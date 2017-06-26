@@ -2,8 +2,8 @@ const axios = require('axios');
 const logger = require('winston');
 
 module.exports = {
-  publishClaim (publishParams, fileName, fileType) {
-    logger.debug(`Publishing claim for "${fileName}"`);
+  publishClaim (publishParams) {
+    logger.debug(`Publishing claim to "${publishParams.name}"`);
     const deferred = new Promise((resolve, reject) => {
       axios
         .post('http://localhost:5279/lbryapi', {
