@@ -67,7 +67,7 @@ const http = require('./routes/sockets-routes.js')(app, siofu, hostedContentPath
 // sync sequelize
 // wrap the server in socket.io to intercept incoming sockets requests
 // start server
-db.sequelize.sync({}).then(() => {
+db.sequelize.sync().then(() => {
   http.listen(PORT, () => {
     winston.info(`Server is listening on PORT ${PORT}`);
   });

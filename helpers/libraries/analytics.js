@@ -1,11 +1,16 @@
 const db = require('../../models');
+const logger = require('winston');
 
 function createAnalyticsRecord (action, url, ipAddress, result) {
-  db.Usage.create({
+  db.Analytics.create({
     action,
     url,
     ipAddress,
     result,
+  })
+  .then()
+  .catch(error => {
+    logger.error('sequelize error', error);
   });
 };
 

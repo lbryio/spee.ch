@@ -1,6 +1,6 @@
 module.exports = (sequelize, { STRING }) => {
-  const Usage = sequelize.define(
-    'Usage',
+  const Analytics = sequelize.define(
+    'Analytics',
     {
       action: {
         type     : STRING,
@@ -23,5 +23,5 @@ module.exports = (sequelize, { STRING }) => {
       freezeTableName: true,
     }
   );
-  return Usage;
+  return Analytics;
 };
