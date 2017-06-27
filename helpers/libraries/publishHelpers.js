@@ -7,12 +7,18 @@ module.exports = {
   createPublishParams (name, filePath, license, nsfw) {
     logger.debug(`Creating Publish Parameters for "${name}"`);
     // ensure nsfw is a boolean
-    if (nsfw.toLowerCase === 'true') {
-      nsfw = true;
-    } else if (nsfw.toLowerCase === 'on') {
-      nsfw = true;
-    } else {
+    if (nsfw === false) {
       nsfw = false;
+    } else if (nsfw.toLowerCase === 'false') {
+      nsfw = false;
+    } else if (nsfw.toLowerCase === 'off') {
+      nsfw = false;
+    } else if (nsfw === 0) {
+      nsfw = false;
+    } else if (nsfw === '0') {
+      nsfw = false;
+    } else {
+      nsfw = true;
     }
     const publishParams = {
       name,

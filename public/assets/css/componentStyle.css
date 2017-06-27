@@ -25,24 +25,6 @@
 	margin: 5px 15px 5px 0px;
 }
 
-/* meme */
-canvas {
-  background-color: white; 
-  width: 100%;
-  height: auto;
-}
-
-/* publish */
-#drop-zone {
-	border: 1px dashed lightgrey;
-	padding: 1em;
-	height: 6em;
-}
-
-#image-preview {
-	display: none;
-}
-
 /* all claims */
 
 .all-claims-item {
@@ -58,21 +40,23 @@ canvas {
 	margin: 5px 30px 5px 0px;
 }
 
-/* footer */
-
-footer {
-	width: 100%;
-	margin-bottom: 2px;
-	padding-bottom: 2px;
-	border-bottom: 1px lightgrey solid;
-	margin-top: 2px;
-	padding-top: 2px;
-	border-top: 1px lightgrey solid;
-	text-align: center;
-	color: grey;
+/* publish */
+#drop-zone {
+	border: 1px dashed lightgrey;
+	padding: 1em;
+	height: 6em;
 }
 
-/* meme fodder */
+#image-preview {
+	display: none;
+}
+
+/* meme */
+canvas {
+  background-color: white; 
+  width: 100%;
+  height: auto;
+}
 
 .meme-fodder-img {
 	width: 21%;
