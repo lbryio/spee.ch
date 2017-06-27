@@ -7,7 +7,9 @@ module.exports = {
   createPublishParams (name, filePath, license, nsfw) {
     logger.debug(`Creating Publish Parameters for "${name}"`);
     // ensure nsfw is a boolean
-    if (nsfw.toLowerCase === 'false') {
+    if (nsfw === false) {
+      nsfw = false;
+    } else if (nsfw.toLowerCase === 'false') {
       nsfw = false;
     } else if (nsfw.toLowerCase === 'off') {
       nsfw = false;

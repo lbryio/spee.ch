@@ -34,7 +34,7 @@ module.exports = app => {
   // route to run a publish request on the daemon
   app.post('/api/publish', multipartMiddleware, ({ originalUrl, body, files }, res) => {
     logger.debug(`POST request on ${originalUrl}`);
-    // validate that a file was provided (note: need to validate it is not a potentially harmful file type)
+    // validate that a file was provided
     const file = files.speech || files.null;
     if (!file) {
       res.status(400).send('Error: No file was submitted or the key used was incorrect.  Files posted through this route must use a key of "speech" or null');
@@ -74,7 +74,7 @@ module.exports = app => {
     const filePath = file.path;
     const fileType = file.type;
     /*
-      make sure it's not a harmful file type
+      note: make sure it's not a harmful file type
     */
     // prepare the publish parameters
     const publishParams = publishHelpers.createPublishParams(name, filePath, license, nsfw);
