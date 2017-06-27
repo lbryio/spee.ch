@@ -50,9 +50,9 @@ spee.ch is a single-serving site that reads and publishes images to and from the
 			* license: string (optional)
 				* defaults to "No License Provided"
 				* only "Public Domain" or "Creative Commons" licenses are allowed
-			* nsfw: string or boolean (optional)
+			* nsfw: string, number, or boolean (optional)
 				* defaults `true`
-				* nsfw can be a string ("on"/"off") or boolean (`true`/`false`)
+				* nsfw can be a string ("on"/"off"), number (0 or 1), or boolean (`true`/`false`)
 		* files:
 			* the `files` object submitted must use "speech" or "null" as the key for the file's value object
 	* a successfull request will return the transaction details resulting from your published claim in JSON format
