@@ -1,5 +1,7 @@
-const publishController = require('../controllers/publishController.js');
 const logger = require('winston');
+const publishController = require('../controllers/publishController.js');
+const publishHelpers = require('../helpers/libraries/publishHelpers.js');
+const errorHandlers = require('../helpers/libraries/errorHandlers.js');
 
 module.exports = (app, siofu, hostedContentPath, ua, googleAnalyticsId) => {
   const http = require('http').Server(app);
@@ -7,8 +9,9 @@ module.exports = (app, siofu, hostedContentPath, ua, googleAnalyticsId) => {
 
   io.on('connection', socket => {
     logger.silly('a user connected via sockets');
-    // create visitor record
+    // google analytics
     const visitor = ua(googleAnalyticsId, { https: true });
+    visitor.event('Publish Route', 'Publish Request').send();
     // attach upload listeners
     const uploader = new siofu();
     uploader.dir = hostedContentPath;
@@ -27,8 +30,18 @@ module.exports = (app, siofu, hostedContentPath, ua, googleAnalyticsId) => {
     uploader.on('saved', ({ file }) => {
       if (file.success) {
         logger.debug(`Client successfully uploaded ${file.name}`);
-        socket.emit('publish-status', 'file upload successfully completed');
-        publishController.publish(file.meta.name, file.name, file.pathName, file.meta.type, file.meta.license, file.meta.nsfw, socket, visitor);
+        socket.emit('publish-status', 'file upload successfully completed. Your image is being published (this might take a second)...');
+        // prepare the publish parameters
+        const publishParams = publishHelpers.createPublishParams(file.meta.name, file.pathName, file.meta.license, file.meta.nsfw);
+        // publish the file
+        publishController
+          .publish(publishParams, file.name, file.meta.type)
+          .then(result => {
+            socket.emit('publish-complete', { name: publishParams.name, result });
+          })
+          .catch(error => {
+            socket.emit('publish-failure', errorHandlers.handlePublishError(error));
+          });
       } else {
         logger.error(`An error occurred in uploading the client's file`);
         socket.emit('publish-failure', 'file uploaded, but with errors');

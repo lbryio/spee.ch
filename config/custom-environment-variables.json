@@ -1,6 +1,6 @@
 {
 	"WalletConfig": {
-		"lbryAddress": "LBRY_WALLET_ADDRESS"
+		"LbryAddress": "LBRY_WALLET_ADDRESS"
 	},
 	"Database": {
 		"MySqlConnectionUri": "MYSQL_CONNECTION_STRING"

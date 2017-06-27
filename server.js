@@ -8,13 +8,13 @@ const config = require('config');
 const ua = require('universal-analytics');
 const winston = require('winston');
 
-const googleAnalyticsId = config.get('AnalyticsConfig.googleId');
+const googleAnalyticsId = config.get('AnalyticsConfig.GoogleId');
 const hostedContentPath = config.get('Database.PublishUploadPath');
 
 // configure logging
 const logLevel = config.get('Logging.LogLevel');
 const logDir = config.get('Logging.LogDirectory');
-require('./helpers/logging/loggerSetup.js')(winston, logLevel, logDir);
+require('./config/loggerSetup.js')(winston, logLevel, logDir);
 
 // set port
 const PORT = 3000;
@@ -38,7 +38,7 @@ const hbs = expressHandlebars.create({
   helpers      : {
     // define any extra helpers you may need
     googleAnalytics () {
-      const googleApiKey = config.get('AnalyticsConfig.googleId');
+      const googleApiKey = config.get('AnalyticsConfig.GoogleId');
       return new Handlebars.SafeString(
         `<script>
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
