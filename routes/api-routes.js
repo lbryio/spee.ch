@@ -34,14 +34,42 @@ module.exports = app => {
   // route to run a publish request on the daemon
   app.post('/api/publish', multipartMiddleware, ({ originalUrl, body, files }, res) => {
     logger.debug(`POST request on ${originalUrl}`);
-    const file = files.thumbnail || files.null;
+    // validate that a file was provided (note: need to validate it is not a potentially harmful file type)
+    const file = files.speech || files.null;
     if (!file) {
-      res.status(400).send('error: No file was submitted or the key used was incorrect.  Files posted through this route must use a key of "thumbnail" or null');
+      res.status(400).send('Error: No file was submitted or the key used was incorrect.  Files posted through this route must use a key of "speech" or null');
       return;
     }
-    const name = body.claim || file.name.substring(0, file.name.indexOf('.'));
+    // validate name
+    const name = body.name || file.name.substring(0, file.name.indexOf('.'));
+    const invalidCharacters = /[^\w,-]/.exec(name);
+    if (invalidCharacters) {
+      res.status(400).send('Error: The name you provided is not allowed.  Please use A-Z, a-z, 0-9, "_" and "-" only.');
+      return;
+    }
+    // validate license
     const license = body.license || 'No License Provided';
+    if ((license.indexOf('Public Domain') === -1) && (license.indexOf('Creative Commons') === -1)) {
+      res.status(400).send('Error: Only posts with a license of "Public Domain" or "Creative Commons" are eligible for publishing through spee.ch');
+      return;
+    }
     const nsfw = body.nsfw || true;
+    switch (nsfw) {
+      case true:
+      case false:
+      case 'true':
+      case 'false':
+      case 'on':
+      case 'off':
+      case 0:
+      case '0':
+      case 1:
+      case '1':
+        break;
+      default:
+        res.status(400).send('Error: NSFW value was not accepted.  NSFW must be set to either true, false, "on", or "off"');
+        return;
+    }
     const fileName = file.name;
     const filePath = file.path;
     const fileType = file.type;

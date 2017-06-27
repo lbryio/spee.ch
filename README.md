@@ -44,14 +44,18 @@ spee.ch is a single-serving site that reads and publishes images to and from the
 * /api/publish
 	* request parameters:
 		* body (form-data):
-			* claim: string (optional, defults to the file's name sans extension)
-			* license: string (optional, defaults to "No License Provided")
-			* nsfw: string ("on"/"off") or boolean (true/false). (optional, defaults `true`)
+			* name: string (optional)
+				* defaults to the file's name, sans extension
+				* names can only contain the following characters: `A-Z`, `a-z`, `_`, or `-`
+			* license: string (optional)
+				* defaults to "No License Provided"
+				* only "Public Domain" or "Creative Commons" licenses are allowed
+			* nsfw: string or boolean (optional)
+				* defaults `true`
+				* nsfw can be a string ("on"/"off") or boolean (`true`/`false`)
 		* files:
-			* (the `files` object submitted must use "file1" or "null" as the key for the file's value object)
+			* the `files` object submitted must use "speech" or "null" as the key for the file's value object
 	* a successfull request will return the transaction details resulting from your published claim in JSON format
-
-
 
 ## bugs
 If you find a bug or experience a problem, please report your issue here on github and find us in the lbry slack!
