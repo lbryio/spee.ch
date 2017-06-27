@@ -34,9 +34,9 @@ module.exports = app => {
   // route to run a publish request on the daemon
   app.post('/api/publish', multipartMiddleware, ({ originalUrl, body, files }, res) => {
     logger.debug(`POST request on ${originalUrl}`);
-    const file = files.file1 || files.null;
+    const file = files.thumbnail || files.null;
     if (!file) {
-      res.status(500).json({ 'success': false, 'error': 'No file was submitted.  Form submission must have key "speechFile"', 'data': null });
+      res.status(400).send('error: No file was submitted or the key used was incorrect.  Files posted through this route must use a key of "thumbnail" or null');
       return;
     }
     const name = body.claim || file.name.substring(0, file.name.indexOf('.'));

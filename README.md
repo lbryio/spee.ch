@@ -35,17 +35,15 @@ spee.ch is a single-serving site that reads and publishes images to and from the
 ## API
 
 #### GET
-* spee.ch/api/resolve/:name
+* /api/resolve/:name
 	* a successfull request returns the resolve results for the claim at that name in JSON format
-* spee.ch/api/claim_list/:name
+* /api/claim_list/:name
 	* a successfull request returns a list of claims at that claim name in JSON format
 
 #### POST
-* spee.ch/api/publish
+* /api/publish
 	* request parameters:
-		* header:
-			* Content-Type: multipart/form-data
-		* body:
+		* body (form-data):
 			* claim: string (optional, defults to the file's name sans extension)
 			* license: string (optional, defaults to "No License Provided")
 			* nsfw: string ("on"/"off") or boolean (true/false). (optional, defaults `true`)
