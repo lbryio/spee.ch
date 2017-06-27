@@ -1,14 +1,7 @@
-const fs = require('fs');
 const logger = require('winston');
-const lbryApi = require('../helpers/libraries/lbryApi.js');
 const db = require('../models');
-
-function deleteTemporaryFile (filePath) {
-  fs.unlink(filePath, err => {
-    if (err) throw err;
-    logger.debug(`successfully deleted ${filePath}`);
-  });
-}
+const lbryApi = require('../helpers/libraries/lbryApi.js');
+const publishHelpers = require('../helpers/libraries/publishHelpers.js');
 
 function upsert (Model, values, condition) {
   return Model
@@ -59,7 +52,7 @@ module.exports = {
         .catch(error => {
           logger.error(`Error publishing ${fileName}`, error);
           // delete the local file
-          deleteTemporaryFile(publishParams.file_path);
+          publishHelpers.deleteTemporaryFile(publishParams.file_path);
           // reject the promise
           reject(error);
         });
