@@ -2,7 +2,7 @@ const logger = require('winston');
 const publishController = require('../controllers/publishController.js');
 const publishHelpers = require('../helpers/libraries/publishHelpers.js');
 const errorHandlers = require('../helpers/libraries/errorHandlers.js');
-const { postPublishAnalytics } = require('../helpers/libraries/analytics');
+const postToAnalytics = require('../helpers/libraries/analytics');
 
 module.exports = (app, siofu, hostedContentPath) => {
   const http = require('http').Server(app);
@@ -25,7 +25,7 @@ module.exports = (app, siofu, hostedContentPath) => {
     // listener for when file upload encounters an error
     uploader.on('error', ({ error }) => {
       logger.error('an error occured while uploading', error);
-      postPublishAnalytics('spee.ch/', null, error);
+      postToAnalytics('publish', '/', null, error);
       socket.emit('publish-status', error);
     });
     // listener for when file has been uploaded
@@ -39,18 +39,18 @@ module.exports = (app, siofu, hostedContentPath) => {
         publishController
           .publish(publishParams, file.name, file.meta.type)
           .then(result => {
-            postPublishAnalytics('spee.ch/', null, 'success');
+            postToAnalytics('publish', '/', null, 'success');
             socket.emit('publish-complete', { name: publishParams.name, result });
           })
           .catch(error => {
             error = errorHandlers.handlePublishError(error);
-            postPublishAnalytics('spee.ch/', null, error);
+            postToAnalytics('publish', '/', null, error);
             socket.emit('publish-failure', error);
           });
       } else {
         logger.error(`An error occurred in uploading the client's file`);
         socket.emit('publish-failure', 'file uploaded, but with errors');
-        postPublishAnalytics('spee.ch/', null, 'file uploaded, but with errors');
+        postToAnalytics('publish', '/', null, 'file uploaded, but with errors');
         // to-do: remove the file if not done automatically
       }
     });

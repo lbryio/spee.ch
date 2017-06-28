@@ -1,7 +1,7 @@
 const errorHandlers = require('../helpers/libraries/errorHandlers.js');
 const serveController = require('../controllers/serveController.js');
 const logger = require('winston');
-const { postRequestAnalytics } = require('../helpers/libraries/analytics');
+const postToAnalytics = require('../helpers/libraries/analytics');
 
 function serveFile ({ fileName, fileType, filePath }, res) {
   logger.info(`serving file ${fileName}`);
@@ -38,14 +38,13 @@ module.exports = (app) => {
     logger.debug(`GET request on ${originalUrl} from ${ip}`);
     // begin image-serve processes
     serveController
-      .getClaimByClaimId(params.name, params.claim_id)
+      .getClaimByClaimId('serve', params.name, params.claim_id)
       .then(fileInfo => {
-        postRequestAnalytics(originalUrl, ip, 'success');
+        postToAnalytics(originalUrl, ip, 'success');
         serveFile(fileInfo, res);
       })
       .catch(error => {
-        postRequestAnalytics(originalUrl, ip, error);
-        errorHandlers.handleRequestError(error, res);
+        errorHandlers.handleRequestError('serve', originalUrl, ip, error, res);
       });
   });
   // route to fetch one free public claim
@@ -55,12 +54,11 @@ module.exports = (app) => {
     serveController
       .getClaimByName(params.name)
       .then(fileInfo => {
-        postRequestAnalytics(originalUrl, ip, 'success');
+        postToAnalytics('serve', originalUrl, ip, 'success');
         serveFile(fileInfo, res);
       })
       .catch(error => {
-        postRequestAnalytics(originalUrl, ip, error);
-        errorHandlers.handleRequestError(error, res);
+        errorHandlers.handleRequestError('serve', originalUrl, ip, error, res);
       });
   });
 };

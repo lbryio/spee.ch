@@ -1,7 +1,7 @@
 const errorHandlers = require('../helpers/libraries/errorHandlers.js');
 const showController = require('../controllers/showController.js');
 const logger = require('winston');
-const { postShowAnalytics } = require('../helpers/libraries/analytics');
+const postToAnalytics = require('../helpers/libraries/analytics');
 
 module.exports = (app) => {
   // route to fetch all free public claims
@@ -11,12 +11,11 @@ module.exports = (app) => {
     showController
       .getAllClaims('meme-fodder')
       .then(orderedFreePublicClaims => {
-        postShowAnalytics(originalUrl, ip, 'success');
+        postToAnalytics('show', originalUrl, ip, 'success');
         res.status(200).render('memeFodder', { claims: orderedFreePublicClaims });
       })
       .catch(error => {
-        postShowAnalytics(originalUrl, ip, error);
-        errorHandlers.handleRequestError(error, res);
+        errorHandlers.handleRequestError('show', originalUrl, ip, error, res);
       });
   });
   // route to fetch all free public claims
@@ -26,12 +25,11 @@ module.exports = (app) => {
     showController
       .getAllClaims(params.name)
       .then(orderedFreePublicClaims => {
-        postShowAnalytics(originalUrl, ip, 'success');
+        postToAnalytics('show', originalUrl, ip, 'success');
         res.status(200).render('allClaims', { claims: orderedFreePublicClaims });
       })
       .catch(error => {
-        postShowAnalytics(originalUrl, ip, error);
-        errorHandlers.handleRequestError(error, res);
+        errorHandlers.handleRequestError('show', originalUrl, ip, error, res);
       });
   });
 };
