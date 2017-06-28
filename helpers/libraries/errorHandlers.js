@@ -8,7 +8,7 @@ module.exports = {
       postToAnalytics(action, originalUrl, ip, 'success');
       res.status(307).render('noClaims');
     } else if (error.response) {
-      postToAnalytics(action, originalUrl, ip, 'error.response.data.error.messsage');
+      postToAnalytics(action, originalUrl, ip, error.response.data.error.messsage);
       res.status(error.response.status).send(error.response.data.error.message);
     } else if (error.code === 'ECONNREFUSED') {
       postToAnalytics(action, originalUrl, ip, 'Connection refused.  The daemon may not be running.');
