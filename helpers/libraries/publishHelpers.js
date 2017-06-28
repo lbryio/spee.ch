@@ -1,11 +1,13 @@
 const logger = require('winston');
 const config = require('config');
-const walletAddress = config.get('WalletConfig.LbryAddress');
 const fs = require('fs');
 
 module.exports = {
   createPublishParams: (name, filePath, license, nsfw) => {
     logger.debug(`Creating Publish Parameters for "${name}"`);
+    // const payAddress = config.get('WalletConfig.LbryPayAddress');
+    const claimAddress = config.get('WalletConfig.LbryClaimAddress');
+    const changeAddress = config.get('WalletConfig.LbryChangeAddress');
     // ensure nsfw is a boolean
     if (nsfw === false) {
       nsfw = false;
@@ -32,8 +34,8 @@ module.exports = {
         license,
         nsfw,
       },
-      claim_address : walletAddress,
-      change_address: walletAddress,
+      claim_address : claimAddress,
+      change_address: changeAddress,
     };
     logger.debug('publishParams:', publishParams);
     return publishParams;
