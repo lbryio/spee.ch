@@ -1,11 +1,11 @@
 const logger = require('winston');
-const postToAnalytics = require('../helpers/libraries/analytics');
+const { postToAnalytics } = require('./analytics');
 
 module.exports = {
   handleRequestError (action, originalUrl, ip, error, res) {
     logger.error('Request Error >>', error);
     if (error === 'NO_CLAIMS' || error === 'NO_FREE_PUBLIC_CLAIMS') {
-      postToAnalytics(action, originalUrl, ip, 'success (no claims)');
+      postToAnalytics(action, originalUrl, ip, 'success');
       res.status(307).render('noClaims');
     } else if (error.response) {
       postToAnalytics(action, originalUrl, ip, 'error.response.data.error.messsage');

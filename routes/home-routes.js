@@ -1,5 +1,5 @@
 const logger = require('winston');
-const postToAnalytics = require('../helpers/libraries/analytics');
+const { postToAnalytics } = require('../helpers/libraries/analytics');
 
 module.exports = app => {
   // route for the home page

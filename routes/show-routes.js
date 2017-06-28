@@ -1,7 +1,7 @@
 const errorHandlers = require('../helpers/libraries/errorHandlers.js');
 const showController = require('../controllers/showController.js');
 const logger = require('winston');
-const postToAnalytics = require('../helpers/libraries/analytics');
+const { postToAnalytics } = require('../helpers/libraries/analytics');
 
 module.exports = (app) => {
   // route to fetch all free public claims
