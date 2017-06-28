@@ -107,7 +107,6 @@ module.exports = {
       // 1. get the top free, public claims
       getAllFreePublicClaims(claimName)
         .then(freePublicClaimList => {
-          console.log('I got here!');
           const name = freePublicClaimList[0].name;
           const claimId = freePublicClaimList[0].claim_id;
           const uri = `${name}#${claimId}`;
@@ -134,7 +133,6 @@ module.exports = {
             });
         })
         .catch(error => {
-          console.log('I got here too!');
           reject(error);
         });
     });

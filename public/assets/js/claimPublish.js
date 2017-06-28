@@ -52,7 +52,6 @@ function updatePublishStatus(msg){
 }
 // process the drop-zone drop
 function drop_handler(ev) {
-	console.log("drop");
 	ev.preventDefault();
 	// if dropped items aren't files, reject them
 	var dt = ev.dataTransfer;
@@ -60,11 +59,7 @@ function drop_handler(ev) {
 		if (dt.items[0].kind == 'file') {
 			var droppedFile = dt.items[0].getAsFile();
 			previewAndStageFile(droppedFile);
-		} else {
-			console.log("no files were found")
 		}
-	} else {
-		console.log("no items were found")
 	}
 }
 // prevent the browser's default drag behavior
@@ -169,7 +164,6 @@ socket.on('publish-complete', function(msg){
 		try {
 			var successful = document.execCommand('copy');
 			var msg = successful ? 'successful' : 'unsuccessful';
-			console.log('Copying text command was ' + msg);
 		} catch (err) {
 			alert('Oops, unable to copy');
 		}

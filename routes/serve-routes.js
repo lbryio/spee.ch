@@ -55,12 +55,10 @@ module.exports = (app) => {
     serveController
       .getClaimByName(params.name)
       .then(fileInfo => {
-        console.log('hi there!');
         postRequestAnalytics(originalUrl, ip, 'success');
         serveFile(fileInfo, res);
       })
       .catch(error => {
-        console.log('hi there too!');
         postRequestAnalytics(originalUrl, ip, error);
         errorHandlers.handleRequestError(error, res);
       });
