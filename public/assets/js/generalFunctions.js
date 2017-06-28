@@ -15,5 +15,4 @@ function toggleSection(event){
 		masterElement.innerText = "[open]";
 		masterElement.dataset.open = "false";
 	}
-	console.log(status);
 }

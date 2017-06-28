@@ -33,7 +33,6 @@ function startPublish() {
 	var blob = dataURItoBlob(dataUrl)
 	var fileName = nameInput.value + ".jpg";  //note: need to dynamically grab type
 	var file = new File([blob], fileName, {type: 'image/jpeg', lastModified: Date.now()});
-	console.log(file);
 	stageAndPublish(file); 
 };
 
@@ -144,7 +143,6 @@ socket.on('publish-complete', function(msg){
 		try {
 			var successful = document.execCommand('copy');
 			var msg = successful ? 'successful' : 'unsuccessful';
-			console.log('Copying text command was ' + msg);
 		} catch (err) {
 			alert('Oops, unable to copy');
 		}
