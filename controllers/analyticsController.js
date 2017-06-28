@@ -21,7 +21,7 @@ module.exports = {
             let key = data[i].action + data[i].url;
             totalCount += 1;
             switch (data[i].action) {
-              case 'request':
+              case 'serve':
                 totalServe += 1;
                 break;
               case 'publish':
