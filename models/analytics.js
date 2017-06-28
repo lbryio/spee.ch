@@ -1,4 +1,4 @@
-module.exports = (sequelize, { STRING }) => {
+module.exports = (sequelize, { STRING, TEXT }) => {
   const Analytics = sequelize.define(
     'Analytics',
     {
@@ -16,7 +16,7 @@ module.exports = (sequelize, { STRING }) => {
         default  : null,
       },
       result: {
-        type     : STRING,
+        type     : TEXT('long'),
         allowNull: true,
         default  : null,
       },
