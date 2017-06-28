@@ -10,7 +10,7 @@ module.exports = {
         .findAll()
         .then(data => {
           const resultHashTable = {};
-          let totalRequests = 0;
+          let totalServe = 0;
           let totalPublish = 0;
           let totalShow = 0;
           let totalCount = 0;
@@ -22,7 +22,7 @@ module.exports = {
             totalCount += 1;
             switch (data[i].action) {
               case 'request':
-                totalRequests += 1;
+                totalServe += 1;
                 break;
               case 'publish':
                 totalPublish += 1;
@@ -60,7 +60,7 @@ module.exports = {
           }
           const percentSuccess = Math.round(totalSuccess / totalCount * 100);
           // return results
-          resolve({ records: resultHashTable, totals: { totalRequests, totalPublish, totalShow, totalCount, totalSuccess, totalFailure }, percentSuccess });
+          resolve({ records: resultHashTable, totals: { totalServe, totalPublish, totalShow, totalCount, totalSuccess, totalFailure }, percentSuccess });
         })
         .catch(error => {
           logger.error('sequelize error', error);
