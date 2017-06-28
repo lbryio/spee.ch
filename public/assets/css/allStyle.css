@@ -80,6 +80,10 @@ h4 {
 	padding: 3px;
 }
 
+.center-text {
+	text-align: center;
+}
+
 .code {
 	font-family: monospace;
 	color: darkgrey;
@@ -87,6 +91,10 @@ h4 {
 }
 
 /* other */
+table {
+	width: 100%;
+	text-align: left;
+}
 
 .stop-float {
 	clear: both;

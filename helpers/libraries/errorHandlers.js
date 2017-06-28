@@ -14,12 +14,14 @@ module.exports = {
     }
   },
   handlePublishError (error) {
-    logger.error('Publish Error >>', error);
     if (error.code === 'ECONNREFUSED') {
+      logger.error('Publish Error:', 'Connection refused.  The daemon may not be running.');
       return 'Connection refused.  The daemon may not be running.';
     } else if (error.response.data.error) {
-      return error.response.data.error;
+      logger.error('Publish Error:', error.response.data.error);
+      return error.response.data.error.message;
     } else {
+      logger.error('Unhandled Publish Error:', error);
       return error;
     }
   },

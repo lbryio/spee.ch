@@ -1,6 +1,7 @@
 const errorHandlers = require('../helpers/libraries/errorHandlers.js');
 const serveController = require('../controllers/serveController.js');
 const logger = require('winston');
+const { postRequestAnalytics } = require('../helpers/libraries/analytics');
 
 function serveFile ({ fileName, fileType, filePath }, res) {
   logger.info(`serving file ${fileName}`);
@@ -31,35 +32,34 @@ function serveFile ({ fileName, fileType, filePath }, res) {
   res.status(200).sendFile(filePath, options);
 }
 
-module.exports = (app, ua, googleAnalyticsId) => {
+module.exports = (app) => {
   // route to fetch one free public claim
-  app.get('/:name/:claim_id', ({ originalUrl, params }, res) => {
-    logger.debug(`GET request on ${originalUrl}`);
-    const routeString = `${params.name}/${params.claim_id}`;
-    // google analytics
-    ua(googleAnalyticsId, { https: true }).event('Serve Route', '/name/claimId', routeString).send();
+  app.get('/:name/:claim_id', ({ originalUrl, params, ip }, res) => {
+    logger.debug(`GET request on ${originalUrl} from ${ip}`);
     // begin image-serve processes
     serveController
       .getClaimByClaimId(params.name, params.claim_id)
       .then(fileInfo => {
+        postRequestAnalytics(originalUrl, ip, 'success');
         serveFile(fileInfo, res);
       })
       .catch(error => {
+        postRequestAnalytics(originalUrl, ip, error);
         errorHandlers.handleRequestError(error, res);
       });
   });
   // route to fetch one free public claim
-  app.get('/:name', ({ originalUrl, params }, res) => {
-    logger.debug(`GET request on ${originalUrl}`);
-    // google analytics
-    ua(googleAnalyticsId, { https: true }).event('Serve Route', '/name', params.name).send();
+  app.get('/:name', ({ originalUrl, params, ip }, res) => {
+    logger.debug(`GET request on ${originalUrl} from ${ip}`);
     // begin image-serve processes
     serveController
       .getClaimByName(params.name)
       .then(fileInfo => {
+        postRequestAnalytics(originalUrl, ip, 'success');
         serveFile(fileInfo, res);
       })
       .catch(error => {
+        postRequestAnalytics(originalUrl, ip, error);
         errorHandlers.handleRequestError(error, res);
       });
   });
