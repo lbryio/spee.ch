@@ -3,6 +3,7 @@ const db = require('../models');
 
 module.exports = {
   getAnalyticsSummary: () => {
+    logger.debug('retrieving analytics');
     const deferred = new Promise((resolve, reject) => {
       // get the raw analytics data
       db.Analytics
@@ -15,7 +16,6 @@ module.exports = {
           let totalCount = 0;
           let totalSuccess = 0;
           let totalFailure = 0;
-
           // sumarise the data
           for (let i = 0; i < data.length; i++) {
             let key = data[i].action + data[i].url;

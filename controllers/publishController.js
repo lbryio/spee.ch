@@ -50,7 +50,6 @@ module.exports = {
           });
         })
         .catch(error => {
-          logger.error(`Error publishing ${fileName}`, error);
           // delete the local file
           publishHelpers.deleteTemporaryFile(publishParams.file_path);
           // reject the promise

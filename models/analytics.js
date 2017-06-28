@@ -13,10 +13,12 @@ module.exports = (sequelize, { STRING }) => {
       ipAddress: {
         type     : STRING,
         allowNull: true,
+        default  : null,
       },
       result: {
         type     : STRING,
-        allowNull: false,
+        allowNull: true,
+        default  : null,
       },
     },
     {

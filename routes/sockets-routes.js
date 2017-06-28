@@ -43,8 +43,9 @@ module.exports = (app, siofu, hostedContentPath) => {
             socket.emit('publish-complete', { name: publishParams.name, result });
           })
           .catch(error => {
+            error = errorHandlers.handlePublishError(error);
             postPublishAnalytics('spee.ch/', null, error);
-            socket.emit('publish-failure', errorHandlers.handlePublishError(error));
+            socket.emit('publish-failure', error);
           });
       } else {
         logger.error(`An error occurred in uploading the client's file`);
