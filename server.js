@@ -5,10 +5,8 @@ const siofu = require('socketio-file-upload');
 const expressHandlebars = require('express-handlebars');
 const Handlebars = require('handlebars');
 const config = require('config');
-const ua = require('universal-analytics');
 const winston = require('winston');
 
-const googleAnalyticsId = config.get('AnalyticsConfig.GoogleId');
 const hostedContentPath = config.get('Database.PublishUploadPath');
 
 // configure logging
@@ -57,12 +55,13 @@ app.set('view engine', 'handlebars');
 
 // require express routes
 require('./routes/api-routes.js')(app);
-require('./routes/show-routes.js')(app, ua, googleAnalyticsId);
-require('./routes/serve-routes.js')(app, ua, googleAnalyticsId);
+require('./routes/analytics-routes.js')(app);
+require('./routes/show-routes.js')(app);
+require('./routes/serve-routes.js')(app);
 require('./routes/home-routes.js')(app);
 
 // require socket.io routes
-const http = require('./routes/sockets-routes.js')(app, siofu, hostedContentPath, ua, googleAnalyticsId);
+const http = require('./routes/sockets-routes.js')(app, siofu, hostedContentPath);
 
 // sync sequelize
 // wrap the server in socket.io to intercept incoming sockets requests

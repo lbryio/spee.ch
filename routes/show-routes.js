@@ -3,7 +3,7 @@ const showController = require('../controllers/showController.js');
 const logger = require('winston');
 const { postShowAnalytics } = require('../helpers/libraries/analytics');
 
-module.exports = (app, ua, googleAnalyticsId) => {
+module.exports = (app) => {
   // route to fetch all free public claims
   app.get('/meme-fodder/play', ({ originalUrl, ip }, res) => {
     logger.debug(`GET request on ${originalUrl} from ${ip}`);

@@ -4,7 +4,7 @@ const publishHelpers = require('../helpers/libraries/publishHelpers.js');
 const errorHandlers = require('../helpers/libraries/errorHandlers.js');
 const { postPublishAnalytics } = require('../helpers/libraries/analytics');
 
-module.exports = (app, siofu, hostedContentPath, ua, googleAnalyticsId) => {
+module.exports = (app, siofu, hostedContentPath) => {
   const http = require('http').Server(app);
   const io = require('socket.io')(http);
 
