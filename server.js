@@ -16,15 +16,16 @@ require('./config/loggerSetup.js')(winston, logLevel, logDir);
 
 // set port
 const PORT = 3000;
-// initialize express app
+// create an Express application
 const app = express();
 // require our models for syncing
 const db = require('./models');
 
-// make express look in the public directory for assets (css/js/img)
+// serve static files from public directory (css/js/img)
 app.use(express.static(`${__dirname}/public`));
 
 // configure express app
+app.enable('trust proxy');  // trust the proxy to get ip address for us
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 app.use(siofu.router);
@@ -68,6 +69,7 @@ const http = require('./routes/sockets-routes.js')(app, siofu, hostedContentPath
 // start server
 db.sequelize.sync().then(() => {
   http.listen(PORT, () => {
+    winston.info('Trusting proxy?', app.get('trust proxy'));
     winston.info(`Server is listening on PORT ${PORT}`);
   });
 });
