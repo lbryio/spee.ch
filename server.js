@@ -16,12 +16,12 @@ require('./config/loggerSetup.js')(winston, logLevel, logDir);
 
 // set port
 const PORT = 3000;
-// initialize express app
+// create an Express application
 const app = express();
 // require our models for syncing
 const db = require('./models');
 
-// make express look in the public directory for assets (css/js/img)
+// serve static files from public directory (css/js/img)
 app.use(express.static(`${__dirname}/public`));
 
 // configure express app
