@@ -3,7 +3,7 @@ spee.ch is a single-serving site that reads and publishes images to and from the
 
 ## how to run this repository locally
 * start lbry
-	* install the [`lbry`](https://github.com/lbryio/lbry) daemon (v0.13.1 or higher)
+	* install the [`lbry`](https://github.com/lbryio/lbry) daemon (0.14.2rc2 or higher)
 	* start the `lbry` daemon
 * start mysql
 	* install mysql
