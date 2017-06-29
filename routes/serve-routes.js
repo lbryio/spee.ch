@@ -34,9 +34,10 @@ function serveFile ({ fileName, fileType, filePath }, res) {
 
 module.exports = (app) => {
   // route to fetch one free public claim
-  app.get('/:name/:claim_id', ({ originalUrl, params, ips, headers }, res) => {
-    logger.debug(`GET request on ${originalUrl} from ${ips}`);
-    logger.debug(`headers ${headers}`);
+  app.get('/:name/:claim_id', ({ originalUrl, params, ip, ips, headers }, res) => {
+    logger.verbose(`GET request on ${originalUrl} from ${ip}`);
+    logger.debug(`ips >> ${JSON.stringify(ips)}`);
+    logger.debug(`headers >> ${JSON.stringify(headers)}`);
     // begin image-serve processes
     serveController
       .getClaimByClaimId(params.name, params.claim_id)
@@ -49,9 +50,10 @@ module.exports = (app) => {
       });
   });
   // route to fetch one free public claim
-  app.get('/:name', ({ originalUrl, params, ips, headers }, res) => {
-    logger.debug(`GET request on ${originalUrl} from ${ips}`);
-    logger.debug(`headers ${headers}`);
+  app.get('/:name', ({ originalUrl, params, ip, ips, headers }, res) => {
+    logger.verbose(`GET request on ${originalUrl} from ${ip}`);
+    logger.debug(`ips >> ${JSON.stringify(ips)}`);
+    logger.debug(`headers >> ${JSON.stringify(headers)}`);
     // begin image-serve processes
     serveController
       .getClaimByName(params.name)

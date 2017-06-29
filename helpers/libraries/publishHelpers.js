@@ -8,7 +8,7 @@ module.exports = {
     // const payAddress = config.get('WalletConfig.LbryPayAddress');
     const claimAddress = config.get('WalletConfig.LbryClaimAddress');
     // const changeAddress = config.get('WalletConfig.LbryChangeAddress');
-    // ensure nsfw is a boolean
+    // filter nsfw and ensure it is a boolean
     if (nsfw === false) {
       nsfw = false;
     } else if (nsfw.toLowerCase === 'false') {
@@ -35,7 +35,7 @@ module.exports = {
         nsfw,
       },
       claim_address: claimAddress,
-      //change_address: changeAddress,
+      // change_address: changeAddress,
     };
     logger.debug('publishParams:', publishParams);
     return publishParams;

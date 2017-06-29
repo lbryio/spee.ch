@@ -25,6 +25,7 @@ const db = require('./models');
 app.use(express.static(`${__dirname}/public`));
 
 // configure express app
+app.enable('trust proxy');  // trust the proxy to get ip address for us
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 app.use(siofu.router);
@@ -68,6 +69,7 @@ const http = require('./routes/sockets-routes.js')(app, siofu, hostedContentPath
 // start server
 db.sequelize.sync().then(() => {
   http.listen(PORT, () => {
+    winston.info('Trusting proxy?', app.get('trust proxy'));
     winston.info(`Server is listening on PORT ${PORT}`);
   });
 });
