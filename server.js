@@ -6,7 +6,8 @@ const expressHandlebars = require('express-handlebars');
 const Handlebars = require('handlebars');
 const config = require('config');
 const winston = require('winston');
-
+const ua = require('universal-analytics');
+const googleApiKey = config.get('AnalyticsConfig.GoogleId');
 const hostedContentPath = config.get('Database.PublishUploadPath');
 
 // configure logging
@@ -57,7 +58,7 @@ app.set('view engine', 'handlebars');
 // require express routes
 require('./routes/api-routes.js')(app);
 require('./routes/show-routes.js')(app);
-require('./routes/serve-routes.js')(app);
+require('./routes/serve-routes.js')(app, ua, googleApiKey);
 require('./routes/home-routes.js')(app);
 
 // require socket.io routes

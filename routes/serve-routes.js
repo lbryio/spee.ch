@@ -3,6 +3,20 @@ const serveController = require('../controllers/serveController.js');
 const logger = require('winston');
 const { postToStats } = require('../helpers/libraries/statsHelpers.js');
 
+function sendGoogleAnalytics (ua, googleApiKey, ip, originalUrl) {
+  const visitorId = ip.replace(/\./g, '-');
+  const visitor = ua(googleApiKey, visitorId, { strictCidFormat: false, https: true });
+  visitor.pageview(originalUrl, 'https://spee.ch', 'Serve Route', (err) => {
+    if (err) {
+      logger.error('Google Analytics Pageview Error >>', err);
+    }
+  }).event('Serve', originalUrl, (err) => {
+    if (err) {
+      logger.error('Google Analytics Event Error >>', err);
+    }
+  });
+}
+
 function serveFile ({ fileName, fileType, filePath }, res) {
   logger.info(`serving file ${fileName}`);
   // set default options
@@ -32,9 +46,12 @@ function serveFile ({ fileName, fileType, filePath }, res) {
   res.status(200).sendFile(filePath, options);
 }
 
-module.exports = (app) => {
+module.exports = (app, ua, googleApiKey) => {
   // route to fetch one free public claim
   app.get('/:name/:claim_id', ({ originalUrl, params, ip }, res) => {
+    // google analytics
+    sendGoogleAnalytics(ua, googleApiKey, ip, originalUrl);
+    // logging
     logger.verbose(`GET request on ${originalUrl} from ${ip}`);
     // begin image-serve processes
     serveController
@@ -49,6 +66,9 @@ module.exports = (app) => {
   });
   // route to fetch one free public claim
   app.get('/:name', ({ originalUrl, params, ip }, res) => {
+    // google analytics
+    sendGoogleAnalytics(ua, googleApiKey, ip, originalUrl);
+    // logging
     logger.verbose(`GET request on ${originalUrl} from ${ip}`);
     // begin image-serve processes
     serveController
