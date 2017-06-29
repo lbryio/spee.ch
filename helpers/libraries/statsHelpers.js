@@ -2,8 +2,8 @@ const db = require('../../models');
 const logger = require('winston');
 
 module.exports = {
-  postToAnalytics: (action, url, ipAddress, result) => {
-    logger.silly('creating record for analytics');
+  postToStats: (action, url, ipAddress, result) => {
+    logger.silly('creating record for statistics db');
     // make sure the result is a string
     if (result && (typeof result !== 'string')) {
       result = result.toString();
@@ -13,7 +13,7 @@ module.exports = {
       ipAddress = ipAddress.toString();
     }
     // create record in the db
-    db.Analytics.create({
+    db.Stats.create({
       action,
       url,
       ipAddress,

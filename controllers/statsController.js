@@ -2,11 +2,11 @@ const logger = require('winston');
 const db = require('../models');
 
 module.exports = {
-  getAnalyticsSummary: () => {
-    logger.debug('retrieving analytics');
+  getStatsSummary: () => {
+    logger.debug('retrieving site statistics');
     const deferred = new Promise((resolve, reject) => {
-      // get the raw analytics data
-      db.Analytics
+      // get the raw statistics data
+      db.Stats
         .findAll()
         .then(data => {
           const resultHashTable = {};

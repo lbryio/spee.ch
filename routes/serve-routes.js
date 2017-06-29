@@ -1,7 +1,21 @@
 const errorHandlers = require('../helpers/libraries/errorHandlers.js');
 const serveController = require('../controllers/serveController.js');
 const logger = require('winston');
-const { postToAnalytics } = require('../helpers/libraries/analytics');
+const { postToStats } = require('../helpers/libraries/statsHelpers.js');
+
+function sendGoogleAnalytics (ua, googleApiKey, ip, originalUrl) {
+  const visitorId = ip.replace(/\./g, '-');
+  const visitor = ua(googleApiKey, visitorId, { strictCidFormat: false, https: true });
+  visitor.pageview(originalUrl, 'https://spee.ch', 'Serve Route', (err) => {
+    if (err) {
+      logger.error('Google Analytics Pageview Error >>', err);
+    }
+  }).event('Serve', originalUrl, (err) => {
+    if (err) {
+      logger.error('Google Analytics Event Error >>', err);
+    }
+  });
+}
 
 function serveFile ({ fileName, fileType, filePath }, res) {
   logger.info(`serving file ${fileName}`);
@@ -32,37 +46,39 @@ function serveFile ({ fileName, fileType, filePath }, res) {
   res.status(200).sendFile(filePath, options);
 }
 
-module.exports = (app) => {
+module.exports = (app, ua, googleApiKey) => {
   // route to fetch one free public claim
-  app.get('/:name/:claim_id', ({ originalUrl, params, ip, ips, headers }, res) => {
+  app.get('/:name/:claim_id', ({ originalUrl, params, ip }, res) => {
+    // google analytics
+    sendGoogleAnalytics(ua, googleApiKey, ip, originalUrl);
+    // logging
     logger.verbose(`GET request on ${originalUrl} from ${ip}`);
-    logger.debug(`ips >> ${JSON.stringify(ips)}`);
-    logger.debug(`headers >> ${JSON.stringify(headers)}`);
     // begin image-serve processes
     serveController
       .getClaimByClaimId(params.name, params.claim_id)
       .then(fileInfo => {
-        postToAnalytics('serve', originalUrl, ips, 'success');
+        postToStats('serve', originalUrl, ip, 'success');
         serveFile(fileInfo, res);
       })
       .catch(error => {
-        errorHandlers.handleRequestError('serve', originalUrl, ips, error, res);
+        errorHandlers.handleRequestError('serve', originalUrl, ip, error, res);
       });
   });
   // route to fetch one free public claim
-  app.get('/:name', ({ originalUrl, params, ip, ips, headers }, res) => {
+  app.get('/:name', ({ originalUrl, params, ip }, res) => {
+    // google analytics
+    sendGoogleAnalytics(ua, googleApiKey, ip, originalUrl);
+    // logging
     logger.verbose(`GET request on ${originalUrl} from ${ip}`);
-    logger.debug(`ips >> ${JSON.stringify(ips)}`);
-    logger.debug(`headers >> ${JSON.stringify(headers)}`);
     // begin image-serve processes
     serveController
       .getClaimByName(params.name)
       .then(fileInfo => {
-        postToAnalytics('serve', originalUrl, ips, 'success');
+        postToStats('serve', originalUrl, ip, 'success');
         serveFile(fileInfo, res);
       })
       .catch(error => {
-        errorHandlers.handleRequestError('serve', originalUrl, ips, error, res);
+        errorHandlers.handleRequestError('serve', originalUrl, ip, error, res);
       });
   });
 };
