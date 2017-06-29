@@ -1,5 +1,5 @@
 const logger = require('winston');
-const { postToAnalytics } = require('../helpers/libraries/analytics');
+const { postToStats } = require('../helpers/libraries/statsHelpers.js');
 
 module.exports = app => {
   // route for the home page
@@ -11,7 +11,7 @@ module.exports = app => {
   // a catch-all route if someone visits a page that does not exist
   app.use('*', ({ originalUrl, ip }, res) => {
     logger.error(`Get request on ${originalUrl} from ${ip} which was a 404`);
-    postToAnalytics('post', originalUrl, ip, 'Error: 404');
+    postToStats('post', originalUrl, ip, 'Error: 404');
     res.status(404).render('fourOhFour');
   });
 };

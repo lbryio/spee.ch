@@ -5,7 +5,7 @@ const publishController = require('../controllers/publishController.js');
 const lbryApi = require('../helpers/libraries/lbryApi.js');
 const publishHelpers = require('../helpers/libraries/publishHelpers.js');
 const errorHandlers = require('../helpers/libraries/errorHandlers.js');
-const { postToAnalytics } = require('../helpers/libraries/analytics');
+const { postToStats } = require('../helpers/libraries/statsHelpers.js');
 
 module.exports = app => {
   // route to run a claim_list request on the daemon
@@ -14,7 +14,7 @@ module.exports = app => {
     lbryApi
       .getClaimsList(params.claim)
       .then(claimsList => {
-        postToAnalytics('publish', originalUrl, ip, 'success');
+        postToStats('publish', originalUrl, ip, 'success');
         res.status(200).json(claimsList);
       })
       .catch(error => {
@@ -27,7 +27,7 @@ module.exports = app => {
     lbryApi
       .resolveUri(params.uri)
       .then(resolvedUri => {
-        postToAnalytics('publish', originalUrl, ip, 'success');
+        postToStats('publish', originalUrl, ip, 'success');
         res.status(200).json(resolvedUri);
       })
       .catch(error => {
@@ -40,7 +40,7 @@ module.exports = app => {
     // validate that a file was provided
     const file = files.speech || files.null;
     if (!file) {
-      postToAnalytics('publish', originalUrl, ip, 'Error: file');
+      postToStats('publish', originalUrl, ip, 'Error: file');
       res.status(400).send('Error: No file was submitted or the key used was incorrect.  Files posted through this route must use a key of "speech" or null');
       return;
     }
@@ -48,14 +48,14 @@ module.exports = app => {
     const name = body.name || file.name.substring(0, file.name.indexOf('.'));
     const invalidCharacters = /[^\w,-]/.exec(name);
     if (invalidCharacters) {
-      postToAnalytics('publish', originalUrl, ip, 'Error: name');
+      postToStats('publish', originalUrl, ip, 'Error: name');
       res.status(400).send('Error: The name you provided is not allowed.  Please use A-Z, a-z, 0-9, "_" and "-" only.');
       return;
     }
     // validate license
     const license = body.license || 'No License Provided';
     if ((license.indexOf('Public Domain') === -1) && (license.indexOf('Creative Commons') === -1)) {
-      postToAnalytics('puplish', originalUrl, ip, 'Error: license');
+      postToStats('puplish', originalUrl, ip, 'Error: license');
       res.status(400).send('Error: Only posts with a license of "Public Domain" or "Creative Commons" are eligible for publishing through spee.ch');
       return;
     }
@@ -73,7 +73,7 @@ module.exports = app => {
       case '1':
         break;
       default:
-        postToAnalytics('publish', originalUrl, ip, 'Error: nsfw');
+        postToStats('publish', originalUrl, ip, 'Error: nsfw');
         res.status(400).send('Error: NSFW value was not accepted.  NSFW must be set to either true, false, "on", or "off"');
         return;
     }
@@ -89,7 +89,7 @@ module.exports = app => {
     publishController
       .publish(publishParams, fileName, fileType)
       .then(result => {
-        postToAnalytics('publish', originalUrl, ip, 'success');
+        postToStats('publish', originalUrl, ip, 'success');
         res.status(200).json(result);
       })
       .catch(error => {

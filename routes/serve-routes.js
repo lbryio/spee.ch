@@ -1,7 +1,7 @@
 const errorHandlers = require('../helpers/libraries/errorHandlers.js');
 const serveController = require('../controllers/serveController.js');
 const logger = require('winston');
-const { postToAnalytics } = require('../helpers/libraries/analytics');
+const { postToStats } = require('../helpers/libraries/statsHelpers.js');
 
 function serveFile ({ fileName, fileType, filePath }, res) {
   logger.info(`serving file ${fileName}`);
@@ -42,7 +42,7 @@ module.exports = (app) => {
     serveController
       .getClaimByClaimId(params.name, params.claim_id)
       .then(fileInfo => {
-        postToAnalytics('serve', originalUrl, ips, 'success');
+        postToStats('serve', originalUrl, ips, 'success');
         serveFile(fileInfo, res);
       })
       .catch(error => {
@@ -58,7 +58,7 @@ module.exports = (app) => {
     serveController
       .getClaimByName(params.name)
       .then(fileInfo => {
-        postToAnalytics('serve', originalUrl, ips, 'success');
+        postToStats('serve', originalUrl, ips, 'success');
         serveFile(fileInfo, res);
       })
       .catch(error => {
