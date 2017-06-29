@@ -34,35 +34,31 @@ function serveFile ({ fileName, fileType, filePath }, res) {
 
 module.exports = (app) => {
   // route to fetch one free public claim
-  app.get('/:name/:claim_id', ({ originalUrl, params, ip, ips, headers }, res) => {
+  app.get('/:name/:claim_id', ({ originalUrl, params, ip }, res) => {
     logger.verbose(`GET request on ${originalUrl} from ${ip}`);
-    logger.debug(`ips >> ${JSON.stringify(ips)}`);
-    logger.debug(`headers >> ${JSON.stringify(headers)}`);
     // begin image-serve processes
     serveController
       .getClaimByClaimId(params.name, params.claim_id)
       .then(fileInfo => {
-        postToStats('serve', originalUrl, ips, 'success');
+        postToStats('serve', originalUrl, ip, 'success');
         serveFile(fileInfo, res);
       })
       .catch(error => {
-        errorHandlers.handleRequestError('serve', originalUrl, ips, error, res);
+        errorHandlers.handleRequestError('serve', originalUrl, ip, error, res);
       });
   });
   // route to fetch one free public claim
-  app.get('/:name', ({ originalUrl, params, ip, ips, headers }, res) => {
+  app.get('/:name', ({ originalUrl, params, ip }, res) => {
     logger.verbose(`GET request on ${originalUrl} from ${ip}`);
-    logger.debug(`ips >> ${JSON.stringify(ips)}`);
-    logger.debug(`headers >> ${JSON.stringify(headers)}`);
     // begin image-serve processes
     serveController
       .getClaimByName(params.name)
       .then(fileInfo => {
-        postToStats('serve', originalUrl, ips, 'success');
+        postToStats('serve', originalUrl, ip, 'success');
         serveFile(fileInfo, res);
       })
       .catch(error => {
-        errorHandlers.handleRequestError('serve', originalUrl, ips, error, res);
+        errorHandlers.handleRequestError('serve', originalUrl, ip, error, res);
       });
   });
 };

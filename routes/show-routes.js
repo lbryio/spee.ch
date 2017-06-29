@@ -1,3 +1,4 @@
+const logger = require('winston');
 const errorHandlers = require('../helpers/libraries/errorHandlers.js');
 const showController = require('../controllers/showController.js');
 const { postToStats } = require('../helpers/libraries/statsHelpers.js');
@@ -6,6 +7,7 @@ const statsController = require('../controllers/statsController.js');
 module.exports = (app) => {
   // route to show the meme-fodder meme maker
   app.get('/meme-fodder/play', ({ originalUrl, ip }, res) => {
+    logger.verbose(`POST request on ${originalUrl} from ${ip}`);
     // get and serve the content
     showController
       .getAllClaims('meme-fodder')
@@ -19,6 +21,7 @@ module.exports = (app) => {
   });
   // route to show statistics for spee.ch
   app.get('/stats', ({ originalUrl, ip }, res) => {
+    logger.verbose(`POST request on ${originalUrl} from ${ip}`);
     // get and serve the content
     statsController
       .getStatsSummary()
@@ -32,6 +35,7 @@ module.exports = (app) => {
   });
   // route to display all free public claims at a given name
   app.get('/:name/all', ({ originalUrl, params, ip }, res) => {
+    logger.verbose(`POST request on ${originalUrl} from ${ip}`);
     // get and serve the content
     showController
       .getAllClaims(params.name)

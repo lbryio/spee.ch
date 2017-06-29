@@ -10,7 +10,7 @@ const { postToStats } = require('../helpers/libraries/statsHelpers.js');
 module.exports = app => {
   // route to run a claim_list request on the daemon
   app.get('/api/claim_list/:claim', ({ originalUrl, params, ip }, res) => {
-    logger.debug(`GET request on ${originalUrl} from ${ip}`);
+    logger.verbose(`GET request on ${originalUrl} from ${ip}`);
     lbryApi
       .getClaimsList(params.claim)
       .then(claimsList => {
@@ -23,7 +23,7 @@ module.exports = app => {
   });
   // route to run a resolve request on the daemon
   app.get('/api/resolve/:uri', ({ originalUrl, params, ip }, res) => {
-    logger.debug(`GET request on ${originalUrl} from ${ip}`);
+    logger.verbose(`GET request on ${originalUrl} from ${ip}`);
     lbryApi
       .resolveUri(params.uri)
       .then(resolvedUri => {
@@ -36,7 +36,7 @@ module.exports = app => {
   });
   // route to run a publish request on the daemon
   app.post('/api/publish', multipartMiddleware, ({ originalUrl, body, files, ip }, res) => {
-    logger.debug(`POST request on ${originalUrl} from ${ip}`);
+    logger.verbose(`POST request on ${originalUrl} from ${ip}`);
     // validate that a file was provided
     const file = files.speech || files.null;
     if (!file) {

@@ -5,7 +5,6 @@ module.exports = app => {
   // route for the home page
   app.get('/', ({ originalUrl, ip, headers }, res) => {
     logger.verbose(`GET request on ${originalUrl} from ${ip}`);
-    logger.debug(`headers ${JSON.stringify(headers)}`);
     res.status(200).render('index');
   });
   // a catch-all route if someone visits a page that does not exist
