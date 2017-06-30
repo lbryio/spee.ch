@@ -44,6 +44,10 @@ module.exports = (app) => {
     // get and render the content
     getAllClaims(params.name)
       .then(orderedFreePublicClaims => {
+        if (!orderedFreePublicClaims) {
+          res.status(307).render('noClaims');
+          return;
+        }
         postToStats('show', originalUrl, ip, 'success');
         res.status(200).render('allClaims', { claims: orderedFreePublicClaims });
       })

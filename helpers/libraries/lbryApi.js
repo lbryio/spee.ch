@@ -78,7 +78,7 @@ module.exports = {
             reject(data.result[uri].error);
             return;
           }
-          resolve(data.result);
+          resolve(data.result[uri]);
         })
         .catch(error => {
           reject(error);

@@ -4,10 +4,7 @@ const { postToStats } = require('../../controllers/statsController.js');
 module.exports = {
   handleRequestError (action, originalUrl, ip, error, res) {
     logger.error('Request Error >>', error);
-    if (error === 'NO_CLAIMS' || error === 'NO_FREE_PUBLIC_CLAIMS') {
-      postToStats(action, originalUrl, ip, 'success');
-      res.status(307).render('noClaims');
-    } else if (error.response) {
+    if (error.response) {
       postToStats(action, originalUrl, ip, error.response.data.error.messsage);
       res.status(error.response.status).send(error.response.data.error.message);
     } else if (error.code === 'ECONNREFUSED') {
