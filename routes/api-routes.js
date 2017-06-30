@@ -18,7 +18,7 @@ module.exports = app => {
     lbryApi
       .getClaimsList(params.claim)
       .then(claimsList => {
-        postToStats('publish', originalUrl, ip, 'success');
+        postToStats('serve', originalUrl, ip, 'success');
         res.status(200).json(claimsList);
       })
       .catch(error => {
@@ -35,7 +35,7 @@ module.exports = app => {
     lbryApi
       .resolveUri(params.uri)
       .then(resolvedUri => {
-        postToStats('publish', originalUrl, ip, 'success');
+        postToStats('serve', originalUrl, ip, 'success');
         res.status(200).json(resolvedUri);
       })
       .catch(error => {
