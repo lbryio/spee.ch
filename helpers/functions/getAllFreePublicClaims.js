@@ -38,7 +38,7 @@ module.exports = claimName => {
         logger.debug(`Number of claims: ${claimsList.length}`);
         // return early if no claims were found
         if (claimsList.length === 0) {
-          reject('NO_CLAIMS');
+          reject('NO_CLAIMS'); // note: should be a resolve not a reject! but I need routes to handle that properly. right now it is handled as an error.
           logger.debug('exiting due to lack of claims');
           return;
         }
@@ -46,7 +46,7 @@ module.exports = claimName => {
         const freePublicClaims = filterForFreePublicClaims(claimsList);
         // return early if no free, public claims were found
         if (!freePublicClaims || freePublicClaims.length === 0) {
-          reject('NO_FREE_PUBLIC_CLAIMS');
+          reject('NO_FREE_PUBLIC_CLAIMS'); // note: should be a resolve not a reject! but I need routes to handle that properly. right now it is handled as an error.
           logger.debug('exiting due to lack of free or public claims');
           return;
         }

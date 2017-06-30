@@ -5,15 +5,19 @@ const getAllFreePublicClaims = require('../helpers/functions/getAllFreePublicCla
 const isFreePublicClaim = require('../helpers/functions/isFreePublicClaim.js');
 
 function updateFileIfNeeded (uri, claimName, claimId, localOutpoint, localHeight) {
-  logger.debug(`A mysql record was found for ${claimId}`);
-  logger.debug('initiating resolve on claim to check outpoint');
+  logger.debug(`A mysql record was found for ${claimName}:${claimId}. Initiating resolve to check outpoint.`);
   // 1. resolve claim
   lbryApi
     .resolveUri(uri)
     .then(result => {
+      // check to make sure the result is a claim
+      if (!result.claim) {
+        logger.debug('resolve did not return a claim');
+        return;
+      }
       // logger.debug('resolved result:', result);
-      const resolvedOutpoint = `${result[uri].claim.txid}:${result[uri].claim.nout}`;
-      const resolvedHeight = result[uri].claim.height;
+      const resolvedOutpoint = `${result.claim.txid}:${result.claim.nout}`;
+      const resolvedHeight = result.claim.height;
       logger.debug('database outpoint:', localOutpoint);
       logger.debug('resolved outpoint:', resolvedOutpoint);
       // 2. if the outpoint's match, no further work needed
@@ -157,12 +161,18 @@ module.exports = {
             lbryApi
               .resolveUri(uri)
               .then(result => {
+                // check to make sure the result is a claim
+                if (!result.claim) {
+                  logger.debug('resolve did not return a claim');
+                  reject('NO_FREE_PUBLIC_CLAIMS');  // note: should be a resolve not a reject! but I need routes to handle that properly. right now it is handled as an error.
+                  return;
+                }
                 // 4. check to see if the claim is free & public
-                if (isFreePublicClaim(result[uri].claim)) {
+                if (isFreePublicClaim(result.claim)) {
                   // 5. get claim and serve
-                  getClaimAndHandleResponse(uri, result[uri].claim.height, resolve, reject);
+                  getClaimAndHandleResponse(uri, result.claim.height, resolve, reject);
                 } else {
-                  reject('NO_FREE_PUBLIC_CLAIMS');
+                  reject('NO_FREE_PUBLIC_CLAIMS');  // note: should be a resolve not a reject! but I need routes to handle that properly. right now it is handled as an error.
                 }
               })
               .catch(error => {
