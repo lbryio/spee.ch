@@ -34,20 +34,19 @@ module.exports = claimName => {
     lbryApi
       .getClaimsList(claimName)
       .then(({ claims }) => {
-        const claimsList = claims;
-        logger.debug(`Number of claims: ${claimsList.length}`);
+        logger.debug(`Number of claims: ${claims.length}`);
         // return early if no claims were found
-        if (claimsList.length === 0) {
-          reject('NO_CLAIMS'); // note: should be a resolve not a reject! but I need routes to handle that properly. right now it is handled as an error.
+        if (claims.length === 0) {
           logger.debug('exiting due to lack of claims');
+          resolve(null);
           return;
         }
         // filter the claims to return only free, public claims
-        const freePublicClaims = filterForFreePublicClaims(claimsList);
+        const freePublicClaims = filterForFreePublicClaims(claims);
         // return early if no free, public claims were found
         if (!freePublicClaims || freePublicClaims.length === 0) {
-          reject('NO_FREE_PUBLIC_CLAIMS'); // note: should be a resolve not a reject! but I need routes to handle that properly. right now it is handled as an error.
           logger.debug('exiting due to lack of free or public claims');
+          resolve(null);
           return;
         }
         // order the claims

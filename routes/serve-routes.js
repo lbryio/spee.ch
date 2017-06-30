@@ -47,6 +47,11 @@ module.exports = (app) => {
     serveController
       .getClaimByClaimId(params.name, params.claim_id)
       .then(fileInfo => {
+        // check to make sure a file was found
+        if (!fileInfo) {
+          res.status(307).render('noClaims');
+          return;
+        }
         postToStats('serve', originalUrl, ip, 'success');
         serveFile(fileInfo, res);
       })
@@ -61,6 +66,11 @@ module.exports = (app) => {
     serveController
       .getClaimByName(params.name)
       .then(fileInfo => {
+        // check to make sure a file was found
+        if (!fileInfo) {
+          res.status(307).render('noClaims');
+          return;
+        }
         postToStats('serve', originalUrl, ip, 'success');
         serveFile(fileInfo, res);
       })

@@ -111,6 +111,11 @@ module.exports = {
       // 1. get the top free, public claims
       getAllFreePublicClaims(claimName)
         .then(freePublicClaimList => {
+          // check to make sure some claims were found
+          if (!freePublicClaimList) {
+            resolve(null);
+            return;
+          }
           const name = freePublicClaimList[0].name;
           const claimId = freePublicClaimList[0].claim_id;
           const uri = `${name}#${claimId}`;
@@ -119,7 +124,7 @@ module.exports = {
           db.File
             .findOne({ where: { name, claimId } })
             .then(claim => {
-              // 3. if a matching claim_id is found locally, serve it
+              // 3. if a matching record is found locally, serve it
               if (claim) {
                 // serve the file
                 resolve(claim.dataValues);
@@ -164,7 +169,7 @@ module.exports = {
                 // check to make sure the result is a claim
                 if (!result.claim) {
                   logger.debug('resolve did not return a claim');
-                  reject('NO_FREE_PUBLIC_CLAIMS');  // note: should be a resolve not a reject! but I need routes to handle that properly. right now it is handled as an error.
+                  resolve(null);
                   return;
                 }
                 // 4. check to see if the claim is free & public
@@ -172,7 +177,7 @@ module.exports = {
                   // 5. get claim and serve
                   getClaimAndHandleResponse(uri, result.claim.height, resolve, reject);
                 } else {
-                  reject('NO_FREE_PUBLIC_CLAIMS');  // note: should be a resolve not a reject! but I need routes to handle that properly. right now it is handled as an error.
+                  reject(null);
                 }
               })
               .catch(error => {
