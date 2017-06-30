@@ -5,7 +5,7 @@ const publishController = require('../controllers/publishController.js');
 const lbryApi = require('../helpers/libraries/lbryApi.js');
 const publishHelpers = require('../helpers/libraries/publishHelpers.js');
 const errorHandlers = require('../helpers/libraries/errorHandlers.js');
-const { postToStats, sendGoogleAnalytics } = require('../helpers/libraries/statsHelpers.js');
+const { postToStats, sendGoogleAnalytics } = require('../helpers/libraries/statsController.js');
 
 module.exports = app => {
   // route to run a claim_list request on the daemon

@@ -1,7 +1,7 @@
 const errorHandlers = require('../helpers/libraries/errorHandlers.js');
 const serveController = require('../controllers/serveController.js');
 const logger = require('winston');
-const { postToStats, sendGoogleAnalytics } = require('../helpers/libraries/statsHelpers.js');
+const { postToStats, sendGoogleAnalytics } = require('../helpers/libraries/statsController.js');
 
 function serveFile ({ fileName, fileType, filePath }, res) {
   logger.info(`serving file ${fileName}`);

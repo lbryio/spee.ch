@@ -1,7 +1,7 @@
 const logger = require('winston');
 const errorHandlers = require('../helpers/libraries/errorHandlers.js');
 const showController = require('../controllers/showController.js');
-const { postToStats, sendGoogleAnalytics } = require('../helpers/libraries/statsHelpers.js');
+const { postToStats, sendGoogleAnalytics } = require('../helpers/libraries/statsController.js');
 const statsController = require('../controllers/statsController.js');
 
 function sendAnalyticsAndLog (ip, originalUrl) {
