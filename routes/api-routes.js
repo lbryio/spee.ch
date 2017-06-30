@@ -5,12 +5,16 @@ const publishController = require('../controllers/publishController.js');
 const lbryApi = require('../helpers/libraries/lbryApi.js');
 const publishHelpers = require('../helpers/libraries/publishHelpers.js');
 const errorHandlers = require('../helpers/libraries/errorHandlers.js');
-const { postToStats } = require('../helpers/libraries/statsHelpers.js');
+const { postToStats, sendGoogleAnalytics } = require('../helpers/libraries/statsHelpers.js');
 
 module.exports = app => {
   // route to run a claim_list request on the daemon
-  app.get('/api/claim_list/:claim', ({ originalUrl, params, ip }, res) => {
+  app.get('/api/claim_list/:claim', ({ ip, originalUrl, params }, res) => {
+    // google analytics
+    sendGoogleAnalytics('serve', ip, originalUrl);
+    // log
     logger.verbose(`GET request on ${originalUrl} from ${ip}`);
+    // serve the content
     lbryApi
       .getClaimsList(params.claim)
       .then(claimsList => {
@@ -22,8 +26,12 @@ module.exports = app => {
       });
   });
   // route to run a resolve request on the daemon
-  app.get('/api/resolve/:uri', ({ originalUrl, params, ip }, res) => {
+  app.get('/api/resolve/:uri', ({ ip, originalUrl, params }, res) => {
+    // google analytics
+    sendGoogleAnalytics('serve', ip, originalUrl);
+    // log
     logger.verbose(`GET request on ${originalUrl} from ${ip}`);
+    // serve content
     lbryApi
       .resolveUri(params.uri)
       .then(resolvedUri => {
@@ -35,7 +43,10 @@ module.exports = app => {
       });
   });
   // route to run a publish request on the daemon
-  app.post('/api/publish', multipartMiddleware, ({ originalUrl, body, files, ip }, res) => {
+  app.post('/api/publish', multipartMiddleware, ({ body, files, ip, originalUrl }, res) => {
+    // google analytics
+    sendGoogleAnalytics('publish', ip, originalUrl);
+    // log
     logger.verbose(`POST request on ${originalUrl} from ${ip}`);
     // validate that a file was provided
     const file = files.speech || files.null;
