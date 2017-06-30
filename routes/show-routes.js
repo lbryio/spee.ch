@@ -1,8 +1,7 @@
 const logger = require('winston');
 const errorHandlers = require('../helpers/libraries/errorHandlers.js');
-const showController = require('../controllers/showController.js');
-const { postToStats, sendGoogleAnalytics } = require('../helpers/libraries/statsController.js');
-const statsController = require('../controllers/statsController.js');
+const { getAllClaims } = require('../controllers/showController.js');
+const { getStatsSummary, postToStats, sendGoogleAnalytics } = require('../controllers/statsController.js');
 
 function sendAnalyticsAndLog (ip, originalUrl) {
   // google analytics
@@ -17,8 +16,7 @@ module.exports = (app) => {
   app.get('/meme-fodder/play', ({ ip, originalUrl }, res) => {
     sendAnalyticsAndLog(ip, originalUrl);
     // get and render the content
-    showController
-      .getAllClaims('meme-fodder')
+    getAllClaims('meme-fodder')
       .then(orderedFreePublicClaims => {
         postToStats('show', originalUrl, ip, 'success');
         res.status(200).render('memeFodder', { claims: orderedFreePublicClaims });
@@ -31,8 +29,7 @@ module.exports = (app) => {
   app.get('/stats', ({ ip, originalUrl }, res) => {
     sendAnalyticsAndLog(ip, originalUrl);
     // get and render the content
-    statsController
-      .getStatsSummary()
+    getStatsSummary()
       .then(result => {
         postToStats('show', originalUrl, ip, 'success');
         res.status(200).render('statistics', result);
@@ -45,8 +42,7 @@ module.exports = (app) => {
   app.get('/:name/all', ({ ip, originalUrl, params }, res) => {
     sendAnalyticsAndLog(ip, originalUrl);
     // get and render the content
-    showController
-      .getAllClaims(params.name)
+    getAllClaims(params.name)
       .then(orderedFreePublicClaims => {
         postToStats('show', originalUrl, ip, 'success');
         res.status(200).render('allClaims', { claims: orderedFreePublicClaims });

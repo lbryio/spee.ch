@@ -1,5 +1,5 @@
 const logger = require('winston');
-const { postToStats } = require('./statsController.js');
+const { postToStats } = require('../../controllers/statsController.js');
 
 module.exports = {
   handleRequestError (action, originalUrl, ip, error, res) {

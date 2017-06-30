@@ -1,5 +1,5 @@
 const logger = require('winston');
-const { postToStats, sendGoogleAnalytics } = require('../helpers/libraries/statsController.js');
+const { postToStats, sendGoogleAnalytics } = require('../controllers/statsController.js');
 
 module.exports = app => {
   // route for the home page

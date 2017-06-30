@@ -108,6 +108,12 @@ uploader.addEventListener('start', function(event){
 	document.getElementById('publish-active-area').innerHTML = '<div id="publish-status"></div><div id="progress-bar"></div>';
 	// start a progress animation
 	createProgressBar(document.getElementById('progress-bar'), 12);
+	// google analytics
+	ga('send', {
+		hitType: 'event',
+		eventCategory: 'publish',
+		eventAction: nameInput.value
+	});
 });
 uploader.addEventListener('progress', function(event){
 	var percent = event.bytesLoaded / event.file.size * 100;

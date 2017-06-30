@@ -2,7 +2,7 @@ const logger = require('winston');
 const publishController = require('../controllers/publishController.js');
 const publishHelpers = require('../helpers/libraries/publishHelpers.js');
 const errorHandlers = require('../helpers/libraries/errorHandlers.js');
-const { postToStats } = require('../helpers/libraries/statsController.js');
+const { postToStats } = require('../controllers/statsController.js');
 
 module.exports = (app, siofu, hostedContentPath) => {
   const http = require('http').Server(app);
@@ -16,6 +16,7 @@ module.exports = (app, siofu, hostedContentPath) => {
     uploader.listen(socket);
     // listener for when file upload starts
     uploader.on('start', ({ file }) => {
+      // log
       logger.info('client started an upload:', file.name);
       // server side test to make sure file is not a bad file type
       if (/\.exe$/.test(file.name)) {
