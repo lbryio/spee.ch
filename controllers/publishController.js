@@ -8,8 +8,10 @@ function upsert (Model, values, condition) {
     .findOne({ where: condition })
     .then(function (obj) {
       if (obj) {  // update
+        logger.silly(`updating ${values.name}:${values.claimId} in File db`);
         return obj.update(values);
       } else {  // insert
+        logger.silly(`creating ${values.name}:${values.claimId} in File db`);
         return Model.create(values);
       }
     }).catch(function (error) {
@@ -38,7 +40,10 @@ module.exports = {
               fileType,
               nsfw    : publishParams.metadata.nsfw,
             },
-            { name: publishParams.name, claimId: result.claim_id }
+            {
+              name   : publishParams.name,
+              claimId: result.claim_id,
+            }
           ).then(() => {
             // resolve the promise with the result from lbryApi.publishClaim;
             resolve(result);

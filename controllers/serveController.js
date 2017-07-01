@@ -75,7 +75,7 @@ function getClaimAndHandleResponse (uri, height, resolve, reject) {
     .getClaim(uri)
     .then(({ name, claim_id, outpoint, file_name, download_path, mime_type, metadata }) => {
       // create entry in the db
-      logger.debug('creating new record in db');
+      logger.silly(`creating "${name}" record in File db`);
       db.File
         .create({
           name,
