@@ -82,10 +82,10 @@ function dragend_handler(ev) {
 document.getElementById('publish-submit').addEventListener('click', function(event){
 	event.preventDefault();
 	var name = document.getElementById('publish-name').value;
-	var invalidCharacters = /[^\w,-]/.exec(name);
+	var invalidCharacters = /[^A-Za-z0-9,-]/.exec(name);
 	// validate 'name'
 	if (invalidCharacters) {
-		alert(invalidCharacters + ' is not allowed. A-Z, a-z, 0-9, "_" and "-" only.');
+		alert(invalidCharacters + ' is not allowed. A-Z, a-z, 0-9, and "-" only.');
 		return;
 	} else if (name.length < 1) {
 		alert("You must enter a name for your claim");

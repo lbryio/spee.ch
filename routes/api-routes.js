@@ -57,7 +57,7 @@ module.exports = app => {
     }
     // validate name
     const name = body.name || file.name.substring(0, file.name.indexOf('.'));
-    const invalidCharacters = /[^\w,-]/.exec(name);
+    const invalidCharacters = /[^A-Za-z0-9,-]/.exec(name);
     if (invalidCharacters) {
       postToStats('publish', originalUrl, ip, 'Error: name');
       res.status(400).send('Error: The name you provided is not allowed.  Please use A-Z, a-z, 0-9, "_" and "-" only.');

@@ -58,7 +58,7 @@ function createProgressBar(element, size){
 
 function stageAndPublish(file) {
 	var name = nameInput.value;
-	var invalidCharacters = /[^\w,-]/.exec(name);
+	var invalidCharacters = /[^A-Za-z0-9,-]/.exec(name);
 	// validate 'name'
 	if (invalidCharacters) {
 		alert(invalidCharacters + ' is not allowed. A-Z, a-z, 0-9, "_" and "-" only.');
