@@ -63,4 +63,18 @@ module.exports = {
     });
     return deferred;
   },
+  checkNameAvailability: (name) => {
+    const deferred = new Promise((resolve, reject) => {
+      // find any records where the name is used
+      db.File
+        .findAll({ where: { name } })
+        .then(result => {
+          resolve(result);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+    return deferred;
+  },
 };

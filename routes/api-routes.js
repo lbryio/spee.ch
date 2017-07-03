@@ -9,20 +9,38 @@ const { postToStats, sendGoogleAnalytics } = require('../controllers/statsContro
 
 module.exports = app => {
   // route to run a claim_list request on the daemon
-  app.get('/api/claim_list/:claim', ({ ip, originalUrl, params }, res) => {
+  app.get('/api/claim_list/:name', ({ ip, originalUrl, params }, res) => {
     // google analytics
     sendGoogleAnalytics('serve', ip, originalUrl);
     // log
     logger.verbose(`GET request on ${originalUrl} from ${ip}`);
     // serve the content
     lbryApi
-      .getClaimsList(params.claim)
+      .getClaimsList(params.name)
       .then(claimsList => {
         postToStats('serve', originalUrl, ip, 'success');
         res.status(200).json(claimsList);
       })
       .catch(error => {
         errorHandlers.handleRequestError('publish', originalUrl, ip, error, res);
+      });
+  });
+  // route to check whether spee.ch has published to a claim
+  app.get('/api/isClaimAvailable/:name', ({ ip, originalUrl, params }, res) => {
+    // log
+    logger.verbose(`GET request on ${originalUrl} from ${ip}`);
+    // send response
+    publishController
+      .checkNameAvailability(params.name)
+      .then(result => {
+        if (result.length >= 1) {
+          res.status(200).json(false);
+        } else {
+          res.status(200).json(true);
+        }
+      })
+      .catch(error => {
+        res.status(500).json(error);
       });
   });
   // route to run a resolve request on the daemon
