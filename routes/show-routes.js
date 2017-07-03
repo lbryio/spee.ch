@@ -12,6 +12,12 @@ function sendAnalyticsAndLog (ip, originalUrl) {
 }
 
 module.exports = (app) => {
+  // route to show 'about' page for spee.ch
+  app.get('/about', ({ ip, originalUrl }, res) => {
+    sendAnalyticsAndLog(ip, originalUrl);
+    // get and render the content
+    res.status(200).render('about');
+  });
   // route to show the meme-fodder meme maker
   app.get('/meme-fodder/play', ({ ip, originalUrl }, res) => {
     sendAnalyticsAndLog(ip, originalUrl);

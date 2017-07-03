@@ -84,13 +84,12 @@ h4 {
 	text-align: center;
 }
 
-.code {
-	font-family: monospace;
-	color: darkgrey;
-	word-wrap: break-word;
+/* other */
+
+input {
+	padding: 0.3em;
 }
 
-/* other */
 table {
 	width: 100%;
 	text-align: left;
