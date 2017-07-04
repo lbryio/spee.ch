@@ -39,6 +39,8 @@ spee.ch is a single-serving site that reads and publishes images to and from the
 	* a successfull request returns the resolve results for the claim at that name in JSON format
 * /api/claim_list/:name
 	* a successfull request returns a list of claims at that claim name in JSON format
+* /api/isClaimAvailable/:name
+	* a successfull request returns a boolean: `true` if the name is still available, `false` if the name has already been published to by spee.ch.
 
 #### POST
 * /api/publish

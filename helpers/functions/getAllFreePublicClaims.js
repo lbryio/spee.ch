@@ -28,7 +28,7 @@ function orderClaims (claimsListArray) {
   return claimsListArray;
 }
 
-module.exports = claimName => {
+module.exports = (claimName) => {
   const deferred = new Promise((resolve, reject) => {
     // make a call to the daemon to get the claims list
     lbryApi

@@ -83,7 +83,7 @@ document.getElementById('publish-submit').addEventListener('click', function(eve
 	event.preventDefault();
 	var name = document.getElementById('publish-name').value;
 	var invalidCharacters = /[^A-Za-z0-9,-]/.exec(name);
-	// validate 'name'
+	// validate 'name' field
 	if (invalidCharacters) {
 		alert(invalidCharacters + ' is not allowed. A-Z, a-z, 0-9, and "-" only.');
 		return;
@@ -91,28 +91,44 @@ document.getElementById('publish-submit').addEventListener('click', function(eve
 		alert("You must enter a name for your claim");
 		return;
 	}
-	// make sure a file was selected
-	if (stagedFiles) {
-		// make sure only 1 file was selected
-		if (stagedFiles.length > 1) {
-			alert("Only one file is allowed at a time");
-			return;
-		}
-		// make sure the content type is acceptable
-		switch (stagedFiles[0].type) {
-			case "image/png":
-			case "image/jpeg":
-			case "image/gif":
-			case "video/mp4":
-				uploader.submitFiles(stagedFiles);
-				break;
-			default:
-				alert("Only .png, .jpeg, .gif, and .mp4 files are currently supported");
-				break;
-		}
-	} else {
+	// make sure only 1 file was selected
+	if (!stagedFiles) {
 		alert("Please select a file");
+		return;
+	} else if (stagedFiles.length > 1) {
+		alert("Only one file is allowed at a time");
+		return;
 	}
+	// make sure the content type is acceptable
+	switch (stagedFiles[0].type) {
+		case "image/png":
+		case "image/jpeg":
+		case "image/gif":
+		case "video/mp4":
+			break;
+		default:
+			alert("Only .png, .jpeg, .gif, and .mp4 files are currently supported");
+			return;
+	}
+	// make sure the name is available
+	var xhttp;
+	xhttp = new XMLHttpRequest();
+	xhttp.open('GET', '/api/isClaimAvailable/' + name, true);
+	xhttp.responseType = 'json';
+	xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 ) {
+			if ( this.status == 200) {
+				if (this.response == true) {
+					uploader.submitFiles(stagedFiles);
+				} else {
+					alert("That name has already been claimed by spee.ch.  Please choose a different name.");
+				}
+			} else {
+				console.log("request to check claim name failed with status:", this.status);
+			};
+		}
+	};
+	xhttp.send();
 })
 
 /* socketio-file-upload listeners */

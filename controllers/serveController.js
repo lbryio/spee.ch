@@ -18,6 +18,7 @@ function updateFileIfNeeded (uri, claimName, claimId, localOutpoint, localHeight
       // logger.debug('resolved result:', result);
       const resolvedOutpoint = `${result.claim.txid}:${result.claim.nout}`;
       const resolvedHeight = result.claim.height;
+      const resolvedAddress = result.claim.address;
       logger.debug('database outpoint:', localOutpoint);
       logger.debug('resolved outpoint:', resolvedOutpoint);
       // 2. if the outpoint's match, no further work needed
@@ -29,7 +30,7 @@ function updateFileIfNeeded (uri, claimName, claimId, localOutpoint, localHeight
       // 2. get the resolved claim
       } else {
         logger.debug(`local outpoint did not match for ${uri}.  Initiating update.`);
-        getClaimAndUpdate(uri, resolvedHeight);
+        getClaimAndUpdate(uri, resolvedAddress, resolvedHeight);
       }
     })
     .catch(error => {
@@ -37,7 +38,7 @@ function updateFileIfNeeded (uri, claimName, claimId, localOutpoint, localHeight
     });
 }
 
-function getClaimAndUpdate (uri, height) {
+function getClaimAndUpdate (uri, address, height) {
   // 1. get the claim
   lbryApi
     .getClaim(uri)
@@ -47,7 +48,8 @@ function getClaimAndUpdate (uri, height) {
       db.File
         .update({
           outpoint,
-          height, // note: height is coming from 'resolve', not 'get'.
+          height, // note: height is coming from the 'resolve', not 'get'.
+          address,  // note: address is coming from the 'resolve', not 'get'.
           fileName: file_name,
           filePath: download_path,
           fileType: mime_type,
@@ -70,7 +72,7 @@ function getClaimAndUpdate (uri, height) {
     });
 }
 
-function getClaimAndHandleResponse (uri, height, resolve, reject) {
+function getClaimAndHandleResponse (uri, address, height, resolve, reject) {
   lbryApi
     .getClaim(uri)
     .then(({ name, claim_id, outpoint, file_name, download_path, mime_type, metadata }) => {
@@ -80,8 +82,9 @@ function getClaimAndHandleResponse (uri, height, resolve, reject) {
         .create({
           name,
           claimId : claim_id,
+          address,  // note: comes from parent 'resolve,' not this 'get' call
           outpoint,
-          height,
+          height, // note: comes from parent 'resolve,' not this 'get' call
           fileName: file_name,
           filePath: download_path,
           fileType: mime_type,
@@ -120,6 +123,7 @@ module.exports = {
           const claimId = freePublicClaimList[0].claim_id;
           const uri = `${name}#${claimId}`;
           const height = freePublicClaimList[0].height;
+          const address = freePublicClaimList[0].address;
           // 2. check to see if the file is available locally
           db.File
             .findOne({ where: { name, claimId } })
@@ -133,7 +137,7 @@ module.exports = {
               // 3. otherwise use daemon to retrieve it
               } else {
                 // get the claim and serve it
-                getClaimAndHandleResponse(uri, height, resolve, reject);
+                getClaimAndHandleResponse(uri, address, height, resolve, reject);
               }
             })
             .catch(error => {
@@ -175,7 +179,7 @@ module.exports = {
                 // 4. check to see if the claim is free & public
                 if (isFreePublicClaim(result.claim)) {
                   // 5. get claim and serve
-                  getClaimAndHandleResponse(uri, result.claim.height, resolve, reject);
+                  getClaimAndHandleResponse(uri, result.claim.address, result.claim.height, resolve, reject);
                 } else {
                   reject(null);
                 }
