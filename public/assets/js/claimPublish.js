@@ -119,8 +119,7 @@ document.getElementById('publish-submit').addEventListener('click', function(eve
 		if (this.readyState == 4 ) {
 			if ( this.status == 200) {
 				if (this.response == true) {
-					console.log(true);
-					//uploader.submitFiles(stagedFiles);
+					uploader.submitFiles(stagedFiles);
 				} else {
 					alert("That name has already been claimed by spee.ch.  Please choose a different name.");
 				}
