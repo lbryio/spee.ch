@@ -5,7 +5,7 @@ const db = require('../models');
 const googleApiKey = config.get('AnalyticsConfig.GoogleId');
 
 module.exports = {
-  postToStats: (action, url, ipAddress, result) => {
+  postToStats (action, url, ipAddress, result) {
     logger.silly(`creating ${action} record for statistics db`);
     // make sure the result is a string
     if (result && (typeof result !== 'string')) {
@@ -27,7 +27,7 @@ module.exports = {
       logger.error('sequelize error', error);
     });
   },
-  sendGoogleAnalytics: (action, ip, originalUrl) => {
+  sendGoogleAnalytics (action, ip, originalUrl) {
     const visitorId = ip.replace(/\./g, '-');
     const visitor = ua(googleApiKey, visitorId, { strictCidFormat: false, https: true });
     switch (action) {
@@ -55,7 +55,7 @@ module.exports = {
       default: break;
     }
   },
-  getStatsSummary: () => {
+  getStatsSummary () {
     logger.debug('retrieving site statistics');
     const deferred = new Promise((resolve, reject) => {
       // get the raw statistics data

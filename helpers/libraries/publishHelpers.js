@@ -3,7 +3,7 @@ const config = require('config');
 const fs = require('fs');
 
 module.exports = {
-  createPublishParams: (name, filePath, license, nsfw) => {
+  createPublishParams (name, filePath, license, nsfw) {
     logger.debug(`Creating Publish Parameters for "${name}"`);
     // const payAddress = config.get('WalletConfig.LbryPayAddress');
     const claimAddress = config.get('WalletConfig.LbryClaimAddress');
@@ -40,7 +40,7 @@ module.exports = {
     logger.debug('publishParams:', publishParams);
     return publishParams;
   },
-  deleteTemporaryFile: (filePath) => {
+  deleteTemporaryFile (filePath) {
     fs.unlink(filePath, err => {
       if (err) throw err;
       logger.debug(`successfully deleted ${filePath}`);

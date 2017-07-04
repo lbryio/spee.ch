@@ -33,10 +33,11 @@ module.exports = app => {
     publishController
       .checkNameAvailability(params.name)
       .then(result => {
-        if (result.length >= 1) {
-          res.status(200).json(false);
-        } else {
+        if (result === true) {
           res.status(200).json(true);
+        } else {
+          logger.debug(`Rejecting publish request because ${params.name} has already been published via spee.ch`);
+          res.status(200).json(false);
         }
       })
       .catch(error => {

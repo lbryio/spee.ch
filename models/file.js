@@ -10,6 +10,10 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER }) => {
         type     : STRING,
         allowNull: false,
       },
+      address: {
+        type     : STRING,
+        allowNull: false,
+      },
       outpoint: {
         type     : STRING,
         allowNull: false,

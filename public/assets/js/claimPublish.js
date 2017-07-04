@@ -118,8 +118,13 @@ document.getElementById('publish-submit').addEventListener('click', function(eve
 	xhttp.onreadystatechange = function() {
 		if (this.readyState == 4 ) {
 			if ( this.status == 200) {
-				console.log(this.response);
-				//uploader.submitFiles(stagedFiles);
+				if (this.response == true) {
+					console.log(true);
+					//uploader.submitFiles(stagedFiles);
+				} else {
+					alert("That name has already been claimed by spee.ch.  Please choose a different name.");
+				}
+				
 			} else {
 				console.log("request to check claim name failed with status:", this.status);
 			};
