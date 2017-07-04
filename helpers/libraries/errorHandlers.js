@@ -23,7 +23,7 @@ module.exports = {
       logger.error('Publish Error:', error.response.data.error);
       return error.response.data.error.message;
     } else {
-      logger.error('Unhandled Publish Error:', error);
+      logger.error('Unhandled Publish Error:', error.message);
       return error;
     }
   },
