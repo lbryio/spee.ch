@@ -123,7 +123,6 @@ document.getElementById('publish-submit').addEventListener('click', function(eve
 				} else {
 					alert("That name has already been claimed by spee.ch.  Please choose a different name.");
 				}
-				
 			} else {
 				console.log("request to check claim name failed with status:", this.status);
 			};
