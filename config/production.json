@@ -5,14 +5,14 @@
 		"LbryChangeAddress": "none"
 	},
 	"AnalyticsConfig":{
-		"GoogleId": "UA-60403362-2"
+		"GoogleId": "UA-60403362-3"
 	},
 	"Database": {
 		"MySqlConnectionUri": "none",
 		"PublishUploadPath": "/home/lbry/Downloads/"
 	},
 	"Logging": {
-		"LogLevel": "debug",
+		"LogLevel": "verbose",
 		"LogDirectory": "/home/lbry/Logs"
 	}
 }

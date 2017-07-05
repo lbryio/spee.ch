@@ -9,6 +9,7 @@
 	margin-bottom: 2px;
 	padding-bottom: 2px;
 	border-bottom: 1px lightgrey solid;
+	margin-top: 2em;
 }
 
 .main {
@@ -42,6 +43,7 @@ footer {
 .panel {
 	overflow: auto;
 	word-wrap: break-word;
+	margin-bottom: 1em;
 }
 
 .col-left, .col-right {
@@ -84,13 +86,12 @@ h4 {
 	text-align: center;
 }
 
-.code {
-	font-family: monospace;
-	color: darkgrey;
-	word-wrap: break-word;
+/* other */
+
+input {
+	padding: 0.3em;
 }
 
-/* other */
 table {
 	width: 100%;
 	text-align: left;

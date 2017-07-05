@@ -2,7 +2,7 @@ const logger = require('winston');
 const publishController = require('../controllers/publishController.js');
 const publishHelpers = require('../helpers/libraries/publishHelpers.js');
 const errorHandlers = require('../helpers/libraries/errorHandlers.js');
-const { postToAnalytics } = require('../helpers/libraries/analytics');
+const { postToStats } = require('../controllers/statsController.js');
 
 module.exports = (app, siofu, hostedContentPath) => {
   const http = require('http').Server(app);
@@ -16,6 +16,7 @@ module.exports = (app, siofu, hostedContentPath) => {
     uploader.listen(socket);
     // listener for when file upload starts
     uploader.on('start', ({ file }) => {
+      // log
       logger.info('client started an upload:', file.name);
       // server side test to make sure file is not a bad file type
       if (/\.exe$/.test(file.name)) {
@@ -25,7 +26,7 @@ module.exports = (app, siofu, hostedContentPath) => {
     // listener for when file upload encounters an error
     uploader.on('error', ({ error }) => {
       logger.error('an error occured while uploading', error);
-      postToAnalytics('publish', '/', null, error);
+      postToStats('publish', '/', null, error);
       socket.emit('publish-status', error);
     });
     // listener for when file has been uploaded
@@ -39,18 +40,18 @@ module.exports = (app, siofu, hostedContentPath) => {
         publishController
           .publish(publishParams, file.name, file.meta.type)
           .then(result => {
-            postToAnalytics('publish', '/', null, 'success');
+            postToStats('publish', '/', null, 'success');
             socket.emit('publish-complete', { name: publishParams.name, result });
           })
           .catch(error => {
             error = errorHandlers.handlePublishError(error);
-            postToAnalytics('publish', '/', null, error);
+            postToStats('publish', '/', null, error);
             socket.emit('publish-failure', error);
           });
       } else {
         logger.error(`An error occurred in uploading the client's file`);
         socket.emit('publish-failure', 'file uploaded, but with errors');
-        postToAnalytics('publish', '/', null, 'file uploaded, but with errors');
+        postToStats('publish', '/', null, 'file uploaded, but with errors');
         // to-do: remove the file if not done automatically
       }
     });

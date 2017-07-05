@@ -1,31 +1,52 @@
-const errorHandlers = require('../helpers/libraries/errorHandlers.js');
-const showController = require('../controllers/showController.js');
 const logger = require('winston');
-const { postToAnalytics } = require('../helpers/libraries/analytics');
+const errorHandlers = require('../helpers/libraries/errorHandlers.js');
+const { getAllClaims } = require('../controllers/showController.js');
+const { getStatsSummary, postToStats } = require('../controllers/statsController.js');
 
 module.exports = (app) => {
-  // route to fetch all free public claims
-  app.get('/meme-fodder/play', ({ originalUrl, ip }, res) => {
-    logger.debug(`GET request on ${originalUrl} from ${ip}`);
-    // get and serve content
-    showController
-      .getAllClaims('meme-fodder')
+  // route to show 'about' page for spee.ch
+  app.get('/about', ({ ip, originalUrl }, res) => {
+    logger.verbose(`POST request on ${originalUrl} from ${ip}`);
+    // get and render the content
+    res.status(200).render('about');
+  });
+  // route to show the meme-fodder meme maker
+  app.get('/meme-fodder/play', ({ ip, originalUrl }, res) => {
+    logger.verbose(`POST request on ${originalUrl} from ${ip}`);
+    // get and render the content
+    getAllClaims('meme-fodder')
       .then(orderedFreePublicClaims => {
-        postToAnalytics('show', originalUrl, ip, 'success');
+        postToStats('show', originalUrl, ip, 'success');
         res.status(200).render('memeFodder', { claims: orderedFreePublicClaims });
       })
       .catch(error => {
         errorHandlers.handleRequestError('show', originalUrl, ip, error, res);
       });
   });
-  // route to fetch all free public claims
-  app.get('/:name/all', ({ originalUrl, params, ip }, res) => {
-    logger.debug(`GET request on ${originalUrl} from ${ip}`);
-    // get and serve content
-    showController
-      .getAllClaims(params.name)
+  // route to show statistics for spee.ch
+  app.get('/stats', ({ ip, originalUrl }, res) => {
+    logger.verbose(`POST request on ${originalUrl} from ${ip}`);
+    // get and render the content
+    getStatsSummary()
+      .then(result => {
+        postToStats('show', originalUrl, ip, 'success');
+        res.status(200).render('statistics', result);
+      })
+      .catch(error => {
+        errorHandlers.handleRequestError(error, res);
+      });
+  });
+  // route to display all free public claims at a given name
+  app.get('/:name/all', ({ ip, originalUrl, params }, res) => {
+    logger.verbose(`POST request on ${originalUrl} from ${ip}`);
+    // get and render the content
+    getAllClaims(params.name)
       .then(orderedFreePublicClaims => {
-        postToAnalytics('show', originalUrl, ip, 'success');
+        if (!orderedFreePublicClaims) {
+          res.status(307).render('noClaims');
+          return;
+        }
+        postToStats('show', originalUrl, ip, 'success');
         res.status(200).render('allClaims', { claims: orderedFreePublicClaims });
       })
       .catch(error => {

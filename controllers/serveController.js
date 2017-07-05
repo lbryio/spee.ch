@@ -5,15 +5,20 @@ const getAllFreePublicClaims = require('../helpers/functions/getAllFreePublicCla
 const isFreePublicClaim = require('../helpers/functions/isFreePublicClaim.js');
 
 function updateFileIfNeeded (uri, claimName, claimId, localOutpoint, localHeight) {
-  logger.debug(`A mysql record was found for ${claimId}`);
-  logger.debug('initiating resolve on claim to check outpoint');
+  logger.debug(`A mysql record was found for ${claimName}:${claimId}. Initiating resolve to check outpoint.`);
   // 1. resolve claim
   lbryApi
     .resolveUri(uri)
     .then(result => {
+      // check to make sure the result is a claim
+      if (!result.claim) {
+        logger.debug('resolve did not return a claim');
+        return;
+      }
       // logger.debug('resolved result:', result);
-      const resolvedOutpoint = `${result[uri].claim.txid}:${result[uri].claim.nout}`;
-      const resolvedHeight = result[uri].claim.height;
+      const resolvedOutpoint = `${result.claim.txid}:${result.claim.nout}`;
+      const resolvedHeight = result.claim.height;
+      const resolvedAddress = result.claim.address;
       logger.debug('database outpoint:', localOutpoint);
       logger.debug('resolved outpoint:', resolvedOutpoint);
       // 2. if the outpoint's match, no further work needed
@@ -25,7 +30,7 @@ function updateFileIfNeeded (uri, claimName, claimId, localOutpoint, localHeight
       // 2. get the resolved claim
       } else {
         logger.debug(`local outpoint did not match for ${uri}.  Initiating update.`);
-        getClaimAndUpdate(uri, resolvedHeight);
+        getClaimAndUpdate(uri, resolvedAddress, resolvedHeight);
       }
     })
     .catch(error => {
@@ -33,7 +38,7 @@ function updateFileIfNeeded (uri, claimName, claimId, localOutpoint, localHeight
     });
 }
 
-function getClaimAndUpdate (uri, height) {
+function getClaimAndUpdate (uri, address, height) {
   // 1. get the claim
   lbryApi
     .getClaim(uri)
@@ -43,7 +48,8 @@ function getClaimAndUpdate (uri, height) {
       db.File
         .update({
           outpoint,
-          height, // note: height is coming from 'resolve', not 'get'.
+          height, // note: height is coming from the 'resolve', not 'get'.
+          address,  // note: address is coming from the 'resolve', not 'get'.
           fileName: file_name,
           filePath: download_path,
           fileType: mime_type,
@@ -66,18 +72,19 @@ function getClaimAndUpdate (uri, height) {
     });
 }
 
-function getClaimAndHandleResponse (uri, height, resolve, reject) {
+function getClaimAndHandleResponse (uri, address, height, resolve, reject) {
   lbryApi
     .getClaim(uri)
     .then(({ name, claim_id, outpoint, file_name, download_path, mime_type, metadata }) => {
       // create entry in the db
-      logger.debug('creating new record in db');
+      logger.silly(`creating "${name}" record in File db`);
       db.File
         .create({
           name,
           claimId : claim_id,
+          address,  // note: comes from parent 'resolve,' not this 'get' call
           outpoint,
-          height,
+          height, // note: comes from parent 'resolve,' not this 'get' call
           fileName: file_name,
           filePath: download_path,
           fileType: mime_type,
@@ -107,15 +114,21 @@ module.exports = {
       // 1. get the top free, public claims
       getAllFreePublicClaims(claimName)
         .then(freePublicClaimList => {
+          // check to make sure some claims were found
+          if (!freePublicClaimList) {
+            resolve(null);
+            return;
+          }
           const name = freePublicClaimList[0].name;
           const claimId = freePublicClaimList[0].claim_id;
           const uri = `${name}#${claimId}`;
           const height = freePublicClaimList[0].height;
+          const address = freePublicClaimList[0].address;
           // 2. check to see if the file is available locally
           db.File
             .findOne({ where: { name, claimId } })
             .then(claim => {
-              // 3. if a matching claim_id is found locally, serve it
+              // 3. if a matching record is found locally, serve it
               if (claim) {
                 // serve the file
                 resolve(claim.dataValues);
@@ -124,7 +137,7 @@ module.exports = {
               // 3. otherwise use daemon to retrieve it
               } else {
                 // get the claim and serve it
-                getClaimAndHandleResponse(uri, height, resolve, reject);
+                getClaimAndHandleResponse(uri, address, height, resolve, reject);
               }
             })
             .catch(error => {
@@ -157,12 +170,18 @@ module.exports = {
             lbryApi
               .resolveUri(uri)
               .then(result => {
+                // check to make sure the result is a claim
+                if (!result.claim) {
+                  logger.debug('resolve did not return a claim');
+                  resolve(null);
+                  return;
+                }
                 // 4. check to see if the claim is free & public
-                if (isFreePublicClaim(result[uri].claim)) {
+                if (isFreePublicClaim(result.claim)) {
                   // 5. get claim and serve
-                  getClaimAndHandleResponse(uri, result[uri].claim.height, resolve, reject);
+                  getClaimAndHandleResponse(uri, result.claim.address, result.claim.height, resolve, reject);
                 } else {
-                  reject('NO_FREE_PUBLIC_CLAIMS');
+                  reject(null);
                 }
               })
               .catch(error => {

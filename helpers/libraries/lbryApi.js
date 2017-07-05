@@ -2,6 +2,23 @@ const axios = require('axios');
 const logger = require('winston');
 
 module.exports = {
+  getWalletList () {
+    logger.debug('getting wallet list');
+    const deferred = new Promise((resolve, reject) => {
+      axios
+        .post('http://localhost:5279/lbryapi', {
+          method: 'wallet_list',
+        })
+        .then(response => {
+          const result = response.data.result;
+          resolve(result);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+    return deferred;
+  },
   publishClaim (publishParams) {
     logger.debug(`Publishing claim to "${publishParams.name}"`);
     const deferred = new Promise((resolve, reject) => {
@@ -78,7 +95,7 @@ module.exports = {
             reject(data.result[uri].error);
             return;
           }
-          resolve(data.result);
+          resolve(data.result[uri]);
         })
         .catch(error => {
           reject(error);

@@ -58,7 +58,7 @@ function createProgressBar(element, size){
 
 function stageAndPublish(file) {
 	var name = nameInput.value;
-	var invalidCharacters = /[^\w,-]/.exec(name);
+	var invalidCharacters = /[^A-Za-z0-9,-]/.exec(name);
 	// validate 'name'
 	if (invalidCharacters) {
 		alert(invalidCharacters + ' is not allowed. A-Z, a-z, 0-9, "_" and "-" only.');
@@ -108,6 +108,12 @@ uploader.addEventListener('start', function(event){
 	document.getElementById('publish-active-area').innerHTML = '<div id="publish-status"></div><div id="progress-bar"></div>';
 	// start a progress animation
 	createProgressBar(document.getElementById('progress-bar'), 12);
+	// google analytics
+	ga('send', {
+		hitType: 'event',
+		eventCategory: 'publish',
+		eventAction: nameInput.value
+	});
 });
 uploader.addEventListener('progress', function(event){
 	var percent = event.bytesLoaded / event.file.size * 100;

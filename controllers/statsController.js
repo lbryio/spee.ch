@@ -1,12 +1,68 @@
 const logger = require('winston');
+const ua = require('universal-analytics');
+const config = require('config');
 const db = require('../models');
+const googleApiKey = config.get('AnalyticsConfig.GoogleId');
 
 module.exports = {
-  getAnalyticsSummary: () => {
-    logger.debug('retrieving analytics');
+  postToStats (action, url, ipAddress, result) {
+    logger.silly(`creating ${action} record for statistics db`);
+    // make sure the result is a string
+    if (result && (typeof result !== 'string')) {
+      result = result.toString();
+    }
+    // // make sure the ip address(es) are a string
+    if (ipAddress && (typeof ipAddress !== 'string')) {
+      ipAddress = ipAddress.toString();
+    }
+    // create record in the db
+    db.Stats.create({
+      action,
+      url,
+      ipAddress,
+      result,
+    })
+    .then()
+    .catch(error => {
+      logger.error('sequelize error', error);
+    });
+  },
+  sendGoogleAnalytics (action, headers, ip, originalUrl) {
+    const visitorId = ip.replace(/\./g, '-');
+    const visitor = ua(googleApiKey, visitorId, { strictCidFormat: false, https: true });
+    let params;
+    switch (action) {
+      case 'serve':
+        params = {
+          ec : 'serve',
+          ea : originalUrl,
+          uip: ip,
+          ua : headers['user-agent'],
+          ul : headers['accept-language'],
+        };
+        break;
+      case 'publish':
+        params = {
+          ec : 'publish',
+          ea : originalUrl,
+          uip: ip,
+          ua : headers['user-agent'],
+          ul : headers['accept-language'],
+        };
+        break;
+      default: break;
+    }
+    visitor.event(params, (err) => {
+      if (err) {
+        logger.error('Google Analytics Event Error >>', err);
+      }
+    });
+  },
+  getStatsSummary () {
+    logger.debug('retrieving site statistics');
     const deferred = new Promise((resolve, reject) => {
-      // get the raw analytics data
-      db.Analytics
+      // get the raw statistics data
+      db.Stats
         .findAll()
         .then(data => {
           const resultHashTable = {};

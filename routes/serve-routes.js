@@ -1,7 +1,7 @@
 const errorHandlers = require('../helpers/libraries/errorHandlers.js');
 const serveController = require('../controllers/serveController.js');
 const logger = require('winston');
-const { postToAnalytics } = require('../helpers/libraries/analytics');
+const { postToStats, sendGoogleAnalytics } = require('../controllers/statsController.js');
 
 function serveFile ({ fileName, fileType, filePath }, res) {
   logger.info(`serving file ${fileName}`);
@@ -32,37 +32,50 @@ function serveFile ({ fileName, fileType, filePath }, res) {
   res.status(200).sendFile(filePath, options);
 }
 
+function sendAnalyticsAndLog (headers, ip, originalUrl) {
+  // google analytics
+  sendGoogleAnalytics('serve', headers, ip, originalUrl);
+  // logging
+  logger.verbose(`GET request on ${originalUrl} from ${ip}`);
+}
+
 module.exports = (app) => {
   // route to fetch one free public claim
-  app.get('/:name/:claim_id', ({ originalUrl, params, ip, ips, headers }, res) => {
-    logger.verbose(`GET request on ${originalUrl} from ${ip}`);
-    logger.debug(`ips >> ${JSON.stringify(ips)}`);
-    logger.debug(`headers >> ${JSON.stringify(headers)}`);
+  app.get('/:name/:claim_id', ({ headers, ip, originalUrl, params }, res) => {
+    sendAnalyticsAndLog(headers, ip, originalUrl);
     // begin image-serve processes
     serveController
       .getClaimByClaimId(params.name, params.claim_id)
       .then(fileInfo => {
-        postToAnalytics('serve', originalUrl, ips, 'success');
+        // check to make sure a file was found
+        if (!fileInfo) {
+          res.status(307).render('noClaims');
+          return;
+        }
+        postToStats('serve', originalUrl, ip, 'success');
         serveFile(fileInfo, res);
       })
       .catch(error => {
-        errorHandlers.handleRequestError('serve', originalUrl, ips, error, res);
+        errorHandlers.handleRequestError('serve', originalUrl, ip, error, res);
       });
   });
   // route to fetch one free public claim
-  app.get('/:name', ({ originalUrl, params, ip, ips, headers }, res) => {
-    logger.verbose(`GET request on ${originalUrl} from ${ip}`);
-    logger.debug(`ips >> ${JSON.stringify(ips)}`);
-    logger.debug(`headers >> ${JSON.stringify(headers)}`);
+  app.get('/:name', ({ headers, ip, originalUrl, params }, res) => {
+    sendAnalyticsAndLog(headers, ip, originalUrl);
     // begin image-serve processes
     serveController
       .getClaimByName(params.name)
       .then(fileInfo => {
-        postToAnalytics('serve', originalUrl, ips, 'success');
+        // check to make sure a file was found
+        if (!fileInfo) {
+          res.status(307).render('noClaims');
+          return;
+        }
+        postToStats('serve', originalUrl, ip, 'success');
         serveFile(fileInfo, res);
       })
       .catch(error => {
-        errorHandlers.handleRequestError('serve', originalUrl, ips, error, res);
+        errorHandlers.handleRequestError('serve', originalUrl, ip, error, res);
       });
   });
 };

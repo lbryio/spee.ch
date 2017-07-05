@@ -12,17 +12,44 @@
 	margin: 2px 5px 2px 5px;
 }
 
+/*  learn more */
+.learn-more {
+	text-align: center;
+	margin-top: 2px;
+	padding-top: 2px;
+	border-top: 1px lightgrey solid;
+}
+
 /* examples */
 .example {
-	display: inline-block;
+	clear: both;
 	width: 100%;
 	margin-bottom: 15px;
+	overflow: auto;
+}
+
+.example-image, .example-code {
+	float: left;
+	margin: 5px 15px 5px 0px;
 }
 
 .example-image {
-	float: left;
 	width: 20%;
-	margin: 5px 15px 5px 0px;
+}
+
+.example-code {
+	padding: 2em;
+	width: 60%;
+	background-color: lightgrey;
+	font-family: monospace;
+	color: #666;
+	word-wrap: break-word;
+}
+
+/*  contribute */
+#github-logo {
+	float: right;
+	height: 1em;
 }
 
 /* all claims */
@@ -38,6 +65,12 @@
 	width: 20%;
 	float: left;
 	margin: 5px 30px 5px 0px;
+}
+
+.all-claims-details {
+	word-wrap: break-word;
+	list-style: none;
+	list-style-type: none;
 }
 
 /* publish */
@@ -65,10 +98,29 @@ canvas {
 	float: left;
 }
 
-/* analytics */
+/* statistics */
 .totals-row {
 	border-top: 1px solid grey;
 	border-bottom: 1px solid grey;
 	font-weight: bold; 
 }
 
+@media (max-width: 750px) {
+	
+	.all-claims-img {
+		width:30%;
+	}
+
+	.all-claims-details {
+		font-size: small;
+	}
+
+}
+
+@media (max-width: 475px) {
+
+    .all-claims-img {
+		width:50%;
+	}
+
+}
