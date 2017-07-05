@@ -30,7 +30,6 @@ module.exports = {
   sendGoogleAnalytics (action, headers, ip, originalUrl) {
     const visitorId = ip.replace(/\./g, '-');
     const visitor = ua(googleApiKey, visitorId, { strictCidFormat: false, https: true });
-    logger.verbose('visitor', visitor);
     let params;
     switch (action) {
       case 'serve':
