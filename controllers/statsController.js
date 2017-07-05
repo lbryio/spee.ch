@@ -27,26 +27,37 @@ module.exports = {
       logger.error('sequelize error', error);
     });
   },
-  sendGoogleAnalytics (action, ip, originalUrl) {
+  sendGoogleAnalytics (action, headers, ip, originalUrl) {
     const visitorId = ip.replace(/\./g, '-');
     const visitor = ua(googleApiKey, visitorId, { strictCidFormat: false, https: true });
+    logger.verbose('visitor', visitor);
+    let params;
     switch (action) {
       case 'serve':
-        visitor.event('serve', originalUrl, (err) => {
-          if (err) {
-            logger.error('Google Analytics Event Error >>', err);
-          }
-        });
+        params = {
+          ec : 'serve',
+          ea : originalUrl,
+          uip: ip,
+          ua : headers['user-agent'],
+          ul : headers['accept-language'],
+        };
         break;
       case 'publish':
-        visitor.event('publish', originalUrl, (err) => {
-          if (err) {
-            logger.error('Google Analytics Event Error >>', err);
-          }
-        });
+        params = {
+          ec : 'publish',
+          ea : originalUrl,
+          uip: ip,
+          ua : headers['user-agent'],
+          ul : headers['accept-language'],
+        };
         break;
       default: break;
     }
+    visitor.event(params, (err) => {
+      if (err) {
+        logger.error('Google Analytics Event Error >>', err);
+      }
+    });
   },
   getStatsSummary () {
     logger.debug('retrieving site statistics');
