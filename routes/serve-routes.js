@@ -33,6 +33,7 @@ function serveFile ({ fileName, fileType, filePath }, res) {
 }
 
 function sendAnalyticsAndLog (headers, ip, originalUrl) {
+  logger.verbose('headers', headers);
   // google analytics
   sendGoogleAnalytics('serve', headers, ip, originalUrl);
   // logging
@@ -41,12 +42,7 @@ function sendAnalyticsAndLog (headers, ip, originalUrl) {
 
 module.exports = (app) => {
   // route to fetch one free public claim
-  app.get('/:name/:claim_id', ({ headers, ip, ips, originalUrl, params }, res) => {
-    logger.verbose('ip', ip);
-    logger.verbose('ips', ips);
-    logger.verbose('headers', headers);
-    logger.verbose('user-agent', headers['user-agent']);
-    logger.verbose('accept-language', headers['accept-language']);
+  app.get('/:name/:claim_id', ({ headers, ip, originalUrl, params }, res) => {
     sendAnalyticsAndLog(headers, ip, originalUrl);
     // begin image-serve processes
     serveController
