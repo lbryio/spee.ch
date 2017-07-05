@@ -1,4 +1,19 @@
 <div class="panel">
 	<p> asset goes here </p>
-	
+	<div id="asset-placeholder">
+		{{#if type.mp4}}
+		<p>It's a video!</p>
+		{{else}}
+		<p>It's not a video</p>
+		{{/if}}
+	</div>
+
 </div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script type="text/javascript">
+	var socket = io();
+
+	socket.emit('asset-request', 'ready for asset on 1234');
+
+</script>

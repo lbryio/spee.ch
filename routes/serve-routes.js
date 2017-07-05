@@ -6,14 +6,13 @@ const { postToStats, sendGoogleAnalytics } = require('../controllers/statsContro
 function serveFile ({ fileName, fileType, filePath }, res) {
   logger.info(`serving file ${fileName}`);
   // set default options
-  const options = {
+  let options = {
     headers: {
       'X-Content-Type-Options': 'nosniff',
       'Content-Type'          : fileType,
     },
   };
   // adjust default options as needed
-  // eslint-disable-next-line camelcase
   switch (fileType) {
     case 'image/jpeg':
       break;
@@ -35,10 +34,36 @@ function serveFile ({ fileName, fileType, filePath }, res) {
 function servePage ({ fileName, fileType, filePath }, res) {
   logger.info(`serving show page for ${fileName}`);
   // set default options
-  let showOptions;
-
+  let options = {
+    name: fileName,
+    type: {
+      jpeg: false,
+      gif : false,
+      png : false,
+      mp4 : false,
+    },
+    path: filePath,
+  };
+  switch (fileType) {
+    case 'image/jpeg':
+      options['type']['jpeg'] = true;
+      break;
+    case 'image/gif':
+      options['type']['gif'] = true;
+      break;
+    case 'image/png':
+      options['type']['png'] = true;
+      break;
+    case 'video/mp4':
+      options['type']['mp4'] = true;
+      break;
+    default:
+      options['type']['jpeg'] = true;
+      logger.warn('sending show page with unknown file type');
+      break;
+  }
   // send file
-  res.status(200).render('show', showOptions);
+  res.status(200).render('show', options);
 }
 
 function sendAnalyticsAndLog (headers, ip, originalUrl) {

@@ -61,13 +61,13 @@ require('./routes/serve-routes.js')(app);
 require('./routes/home-routes.js')(app);
 
 // require socket.io routes
-const http = require('./routes/sockets-routes.js')(app, siofu, hostedContentPath);
+const server = require('./routes/sockets-routes.js')(app, siofu, hostedContentPath);
 
 // sync sequelize
 // wrap the server in socket.io to intercept incoming sockets requests
 // start server
 db.sequelize.sync().then(() => {
-  http.listen(PORT, () => {
+  server.listen(PORT, () => {
     winston.info('Trusting proxy?', app.get('trust proxy'));
     winston.info(`Server is listening on PORT ${PORT}`);
   });
