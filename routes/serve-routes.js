@@ -32,17 +32,18 @@ function serveFile ({ fileName, fileType, filePath }, res) {
   res.status(200).sendFile(filePath, options);
 }
 
-function sendAnalyticsAndLog (ip, originalUrl) {
+function sendAnalyticsAndLog (headers, ip, originalUrl) {
+  logger.verbose('headers', headers);
   // google analytics
-  sendGoogleAnalytics('serve', ip, originalUrl);
+  sendGoogleAnalytics('serve', headers, ip, originalUrl);
   // logging
   logger.verbose(`GET request on ${originalUrl} from ${ip}`);
 }
 
 module.exports = (app) => {
   // route to fetch one free public claim
-  app.get('/:name/:claim_id', ({ ip, originalUrl, params }, res) => {
-    sendAnalyticsAndLog(ip, originalUrl);
+  app.get('/:name/:claim_id', ({ headers, ip, originalUrl, params }, res) => {
+    sendAnalyticsAndLog(headers, ip, originalUrl);
     // begin image-serve processes
     serveController
       .getClaimByClaimId(params.name, params.claim_id)
@@ -60,8 +61,8 @@ module.exports = (app) => {
       });
   });
   // route to fetch one free public claim
-  app.get('/:name', ({ ip, originalUrl, params }, res) => {
-    sendAnalyticsAndLog(ip, originalUrl);
+  app.get('/:name', ({ headers, ip, originalUrl, params }, res) => {
+    sendAnalyticsAndLog(headers, ip, originalUrl);
     // begin image-serve processes
     serveController
       .getClaimByName(params.name)
