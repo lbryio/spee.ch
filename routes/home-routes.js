@@ -1,11 +1,9 @@
 const logger = require('winston');
-const { postToStats, sendGoogleAnalytics } = require('../controllers/statsController.js');
+const { postToStats } = require('../controllers/statsController.js');
 
 module.exports = app => {
   // route for the home page
   app.get('/', ({ headers, ip, originalUrl }, res) => {
-    // google analytics
-    sendGoogleAnalytics('serve', ip, originalUrl);
     // logging
     logger.verbose(`GET request on ${originalUrl} from ${ip}`);
     // send response
@@ -13,8 +11,6 @@ module.exports = app => {
   });
   // a catch-all route if someone visits a page that does not exist
   app.use('*', ({ originalUrl, ip }, res) => {
-    // google analytics
-    sendGoogleAnalytics('serve', ip, originalUrl);
     // logging
     logger.error(`Get request on ${originalUrl} from ${ip} which was a 404`);
     // post to stats

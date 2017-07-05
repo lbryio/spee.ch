@@ -1,26 +1,18 @@
 const logger = require('winston');
 const errorHandlers = require('../helpers/libraries/errorHandlers.js');
 const { getAllClaims } = require('../controllers/showController.js');
-const { getStatsSummary, postToStats, sendGoogleAnalytics } = require('../controllers/statsController.js');
-
-function sendAnalyticsAndLog (ip, originalUrl) {
-  // google analytics
-  sendGoogleAnalytics('show', ip, originalUrl);
-  // logging
-  logger.verbose(`POST request on ${originalUrl} from ${ip}`);
-  // get and serve the content
-}
+const { getStatsSummary, postToStats } = require('../controllers/statsController.js');
 
 module.exports = (app) => {
   // route to show 'about' page for spee.ch
   app.get('/about', ({ ip, originalUrl }, res) => {
-    sendAnalyticsAndLog(ip, originalUrl);
+    logger.verbose(`POST request on ${originalUrl} from ${ip}`);
     // get and render the content
     res.status(200).render('about');
   });
   // route to show the meme-fodder meme maker
   app.get('/meme-fodder/play', ({ ip, originalUrl }, res) => {
-    sendAnalyticsAndLog(ip, originalUrl);
+    logger.verbose(`POST request on ${originalUrl} from ${ip}`);
     // get and render the content
     getAllClaims('meme-fodder')
       .then(orderedFreePublicClaims => {
@@ -33,7 +25,7 @@ module.exports = (app) => {
   });
   // route to show statistics for spee.ch
   app.get('/stats', ({ ip, originalUrl }, res) => {
-    sendAnalyticsAndLog(ip, originalUrl);
+    logger.verbose(`POST request on ${originalUrl} from ${ip}`);
     // get and render the content
     getStatsSummary()
       .then(result => {
@@ -46,7 +38,7 @@ module.exports = (app) => {
   });
   // route to display all free public claims at a given name
   app.get('/:name/all', ({ ip, originalUrl, params }, res) => {
-    sendAnalyticsAndLog(ip, originalUrl);
+    logger.verbose(`POST request on ${originalUrl} from ${ip}`);
     // get and render the content
     getAllClaims(params.name)
       .then(orderedFreePublicClaims => {

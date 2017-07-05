@@ -38,13 +38,6 @@ module.exports = {
           }
         });
         break;
-      case 'show':
-        visitor.pageview(originalUrl, 'https://spee.ch', 'show route', (err) => {
-          if (err) {
-            logger.error('Google Analytics Pageview Error >>', err);
-          }
-        });
-        break;
       case 'publish':
         visitor.event('publish', originalUrl, (err) => {
           if (err) {
