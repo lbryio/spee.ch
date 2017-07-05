@@ -32,7 +32,17 @@ function serveFile ({ fileName, fileType, filePath }, res) {
   res.status(200).sendFile(filePath, options);
 }
 
+function servePage ({ fileName, fileType, filePath }, res) {
+  logger.info(`serving show page for ${fileName}`);
+  // set default options
+  let showOptions;
+
+  // send file
+  res.status(200).render('show', showOptions);
+}
+
 function sendAnalyticsAndLog (headers, ip, originalUrl) {
+  logger.verbose('headers', headers);
   // google analytics
   sendGoogleAnalytics('serve', headers, ip, originalUrl);
   // logging
@@ -52,8 +62,15 @@ module.exports = (app) => {
           res.status(307).render('noClaims');
           return;
         }
-        postToStats('serve', originalUrl, ip, 'success');
-        serveFile(fileInfo, res);
+        // serve the file or the show route
+        const mimetypes = headers['accept'].split(',');
+        if (mimetypes.includes('text/html')) {
+          postToStats('show', originalUrl, ip, 'success');
+          servePage(fileInfo, res);
+        } else {
+          postToStats('serve', originalUrl, ip, 'success');
+          serveFile(fileInfo, res);
+        }
       })
       .catch(error => {
         errorHandlers.handleRequestError('serve', originalUrl, ip, error, res);
@@ -71,8 +88,15 @@ module.exports = (app) => {
           res.status(307).render('noClaims');
           return;
         }
-        postToStats('serve', originalUrl, ip, 'success');
-        serveFile(fileInfo, res);
+        // serve the file or the show route
+        const mimetypes = headers['accept'].split(',');
+        if (mimetypes.includes('text/html')) {
+          postToStats('show', originalUrl, ip, 'success');
+          servePage(fileInfo, res);
+        } else {
+          postToStats('serve', originalUrl, ip, 'success');
+          serveFile(fileInfo, res);
+        }
       })
       .catch(error => {
         errorHandlers.handleRequestError('serve', originalUrl, ip, error, res);
