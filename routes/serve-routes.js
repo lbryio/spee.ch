@@ -33,7 +33,6 @@ function serveFile ({ fileName, fileType, filePath }, res) {
 }
 
 function sendAnalyticsAndLog (headers, ip, originalUrl) {
-  logger.verbose('headers', headers);
   // google analytics
   sendGoogleAnalytics('serve', headers, ip, originalUrl);
   // logging
