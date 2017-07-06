@@ -31,10 +31,10 @@ function serveFile ({ fileName, fileType, filePath }, res) {
   res.status(200).sendFile(filePath, options);
 }
 
-function servePage ({ fileName, filePath }, res) {
-  logger.debug(`serving show page for ${fileName}`);
+function servePage (fileInfo, res) {
+  logger.debug(`serving show page for ${fileInfo.fileName}`);
   // set default options
-  res.status(200).render('show', { filePath });
+  res.status(200).render('show', { fileInfo });
 }
 
 function sendAnalyticsAndLog (headers, ip, originalUrl) {
@@ -61,6 +61,7 @@ module.exports = (app) => {
         const mimetypes = headers['accept'].split(',');
         if (mimetypes.includes('text/html')) {
           postToStats('show', originalUrl, ip, 'success');
+          logger.debug('fileInfo', fileInfo);
           servePage(fileInfo, res);
         } else {
           postToStats('serve', originalUrl, ip, 'success');

@@ -168,26 +168,9 @@ socket.on('publish-complete', function(msg){
 	var publishResults;
 	var directUrl = '/' + msg.name + '/' + msg.result.claim_id;
 	// build new publish area
-	publishResults = '<p>Your publish is complete! View it here:</p>';
-	publishResults += '<p><a target="_blank" href="' + directUrl + '">spee.ch' + directUrl + '</a></p>';
-	publishResults += '<p><button class="copy-button">Copy to clipboard</button></p>';
-	publishResults += '<p><a target="_blank" href="https://explorer.lbry.io/#!/transaction/' + msg.result.txid + '">View the transaction details</a></p>';
-	publishResults += '<a href="/"><button>Reload</button></a></p>';
+	publishResults = '<p>Your publish is complete! You are being redicted to it</p>';
+	publishResults += '<p><a target="_blank" href="' + directUrl + '">if you do not get redirected, click here</a></p>';
 	// update publish area
 	document.getElementById('publish-active-area').innerHTML = publishResults;
-	// update the link holder
-	document.getElementById('direct-link-holder').innerText = 'https://spee.ch' + directUrl;
-	// enable copy-to-clipboard
-	var copyBtn = document.querySelector('.copy-button');
-	copyBtn.addEventListener('click', function(event) {
-		// select the text
-		var text = document.getElementById('direct-link-holder');
-		text.select();
-		try {
-			var successful = document.execCommand('copy');
-			var msg = successful ? 'successful' : 'unsuccessful';
-		} catch (err) {
-			alert('Oops, unable to copy');
-		}
-	});
+	window.location.href = directUrl;
 });

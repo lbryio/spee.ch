@@ -16,7 +16,16 @@
 
 .show-image, .show-video {
 	width: 100%;
-	padding-top: 1em;
+}
+
+.table-metadata {
+	font-size: small;
+}
+
+.left-column {
+	width: 30%;
+	font-weight: bold;
+	vertical-align: top;
 }
 
 /*  learn more */
@@ -37,16 +46,17 @@
 
 .example-image, .example-code {
 	float: left;
-	margin: 5px 15px 5px 0px;
+	margin: 2%;
 }
 
 .example-image {
-	width: 20%;
+	width: 21%;
 }
 
 .example-code {
-	padding: 2em;
-	width: 60%;
+	float: right;
+	padding: 4%;
+	width: 62%;
 	background-color: lightgrey;
 	font-family: monospace;
 	color: #666;

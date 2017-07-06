@@ -14,7 +14,7 @@
 
 .main {
 	float: left;
-	width: 75%;
+	width: 65%;
 	margin-right: 1%;
 	padding-right: 1%;
 	border-right: 1px lightgrey solid;
@@ -23,7 +23,7 @@
 
 .sidebar {
 	float: left;
-	width: 22%;
+	width: 32%;
 }
 
 footer {
@@ -103,6 +103,10 @@ table {
 
 .toggle-link {
 	float: right;
+}
+
+.wrap-words {
+	word-wrap: break-word;
 }
 
 @media (max-width: 1250px) {
