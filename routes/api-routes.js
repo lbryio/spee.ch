@@ -9,9 +9,9 @@ const { postToStats, sendGoogleAnalytics } = require('../controllers/statsContro
 
 module.exports = app => {
   // route to run a claim_list request on the daemon
-  app.get('/api/claim_list/:name', ({ ip, originalUrl, params }, res) => {
+  app.get('/api/claim_list/:name', ({ headers, ip, originalUrl, params }, res) => {
     // google analytics
-    sendGoogleAnalytics('serve', ip, originalUrl);
+    sendGoogleAnalytics('serve', headers, ip, originalUrl);
     // log
     logger.verbose(`GET request on ${originalUrl} from ${ip}`);
     // serve the content
@@ -45,9 +45,9 @@ module.exports = app => {
       });
   });
   // route to run a resolve request on the daemon
-  app.get('/api/resolve/:uri', ({ ip, originalUrl, params }, res) => {
+  app.get('/api/resolve/:uri', ({ headers, ip, originalUrl, params }, res) => {
     // google analytics
-    sendGoogleAnalytics('serve', ip, originalUrl);
+    sendGoogleAnalytics('serve', headers, ip, originalUrl);
     // log
     logger.verbose(`GET request on ${originalUrl} from ${ip}`);
     // serve content
@@ -62,9 +62,9 @@ module.exports = app => {
       });
   });
   // route to run a publish request on the daemon
-  app.post('/api/publish', multipartMiddleware, ({ body, files, ip, originalUrl }, res) => {
+  app.post('/api/publish', multipartMiddleware, ({ body, files, headers, ip, originalUrl }, res) => {
     // google analytics
-    sendGoogleAnalytics('publish', ip, originalUrl);
+    sendGoogleAnalytics('publish', headers, ip, originalUrl);
     // log
     logger.verbose(`POST request on ${originalUrl} from ${ip}`);
     // validate that a file was provided

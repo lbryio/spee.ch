@@ -43,7 +43,6 @@ footer {
 .panel {
 	overflow: auto;
 	word-wrap: break-word;
-	margin-bottom: 1em;
 }
 
 .col-left, .col-right {
@@ -73,6 +72,7 @@ h1 {
 
 h2 {
 	font-size: medium;
+	margin-top: 1em;
 	border-top: 1px #999 solid;
 	background-color: lightgray;
 	padding: 6px;

@@ -12,6 +12,13 @@
 	margin: 2px 5px 2px 5px;
 }
 
+/* show routes */
+
+.show-image {
+	width: 100%;
+	padding-top: 1em;
+}
+
 /*  learn more */
 .learn-more {
 	text-align: center;
@@ -82,6 +89,7 @@
 
 #image-preview {
 	display: none;
+	margin-bottom: 1em;
 }
 
 /* meme */

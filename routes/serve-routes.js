@@ -23,7 +23,7 @@ function serveFile ({ fileName, fileType, filePath }, res) {
     case 'video/mp4':
       break;
     default:
-      logger.warn('sending unknown file type as .jpeg');
+      logger.warn('sending file with unknown type as .jpeg');
       options['headers']['Content-Type'] = 'image/jpeg';
       break;
   }
@@ -31,43 +31,13 @@ function serveFile ({ fileName, fileType, filePath }, res) {
   res.status(200).sendFile(filePath, options);
 }
 
-function servePage ({ fileName, fileType, filePath }, res) {
-  logger.info(`serving show page for ${fileName}`);
+function servePage ({ fileName, filePath }, res) {
+  logger.debug(`serving show page for ${fileName}`);
   // set default options
-  let options = {
-    name: fileName,
-    type: {
-      jpeg: false,
-      gif : false,
-      png : false,
-      mp4 : false,
-    },
-    path: filePath,
-  };
-  switch (fileType) {
-    case 'image/jpeg':
-      options['type']['jpeg'] = true;
-      break;
-    case 'image/gif':
-      options['type']['gif'] = true;
-      break;
-    case 'image/png':
-      options['type']['png'] = true;
-      break;
-    case 'video/mp4':
-      options['type']['mp4'] = true;
-      break;
-    default:
-      options['type']['jpeg'] = true;
-      logger.warn('sending show page with unknown file type');
-      break;
-  }
-  // send file
-  res.status(200).render('show', options);
+  res.status(200).render('show', { filePath });
 }
 
 function sendAnalyticsAndLog (headers, ip, originalUrl) {
-  logger.verbose('headers', headers);
   // google analytics
   sendGoogleAnalytics('serve', headers, ip, originalUrl);
   // logging
