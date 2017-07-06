@@ -1,7 +1,7 @@
-const errorHandlers = require('../helpers/libraries/errorHandlers.js');
-const serveController = require('../controllers/serveController.js');
 const logger = require('winston');
+const { getClaimByClaimId, getClaimByName } = require('../controllers/serveController.js');
 const { postToStats, sendGoogleAnalytics } = require('../controllers/statsController.js');
+const errorHandlers = require('../helpers/libraries/errorHandlers.js');
 
 function serveFile ({ fileName, fileType, filePath }, res) {
   logger.info(`serving file ${fileName}`);
@@ -31,26 +31,17 @@ function serveFile ({ fileName, fileType, filePath }, res) {
   res.status(200).sendFile(filePath, options);
 }
 
-function servePage (fileInfo, res) {
-  logger.debug(`serving show page for ${fileInfo.fileName}`);
-  // set default options
-  res.status(200).render('show', { fileInfo });
-}
-
 function sendAnalyticsAndLog (headers, ip, originalUrl) {
   // google analytics
   sendGoogleAnalytics('serve', headers, ip, originalUrl);
-  // logging
-  logger.verbose(`GET request on ${originalUrl} from ${ip}`);
 }
 
 module.exports = (app) => {
-  // route to fetch one free public claim
+  // route to serve a specific asset
   app.get('/:name/:claim_id', ({ headers, ip, originalUrl, params }, res) => {
     sendAnalyticsAndLog(headers, ip, originalUrl);
     // begin image-serve processes
-    serveController
-      .getClaimByClaimId(params.name, params.claim_id)
+    getClaimByClaimId(params.name, params.claim_id)
       .then(fileInfo => {
         // check to make sure a file was found
         if (!fileInfo) {
@@ -61,8 +52,7 @@ module.exports = (app) => {
         const mimetypes = headers['accept'].split(',');
         if (mimetypes.includes('text/html')) {
           postToStats('show', originalUrl, ip, 'success');
-          logger.debug('fileInfo', fileInfo);
-          servePage(fileInfo, res);
+          res.status(200).render('showLite', { fileInfo });
         } else {
           postToStats('serve', originalUrl, ip, 'success');
           serveFile(fileInfo, res);
@@ -72,12 +62,11 @@ module.exports = (app) => {
         errorHandlers.handleRequestError('serve', originalUrl, ip, error, res);
       });
   });
-  // route to fetch one free public claim
+  // route to serve the winning claim
   app.get('/:name', ({ headers, ip, originalUrl, params }, res) => {
     sendAnalyticsAndLog(headers, ip, originalUrl);
     // begin image-serve processes
-    serveController
-      .getClaimByName(params.name)
+    getClaimByName(params.name)
       .then(fileInfo => {
         // check to make sure a file was found
         if (!fileInfo) {
@@ -88,7 +77,7 @@ module.exports = (app) => {
         const mimetypes = headers['accept'].split(',');
         if (mimetypes.includes('text/html')) {
           postToStats('show', originalUrl, ip, 'success');
-          servePage(fileInfo, res);
+          res.status(200).render('showLite', { fileInfo });
         } else {
           postToStats('serve', originalUrl, ip, 'success');
           serveFile(fileInfo, res);

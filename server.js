@@ -29,6 +29,10 @@ app.enable('trust proxy');  // trust the proxy to get ip address for us
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 app.use(siofu.router);
+app.use((req, res, next) => {  // logging middleware
+  winston.verbose(`Request on ${req.originalUrl} from ${req.ip}`);
+  next();
+});
 
 // configure handlebars & register it with Express app
 const hbs = expressHandlebars.create({

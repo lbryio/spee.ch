@@ -12,8 +12,6 @@ module.exports = app => {
   app.get('/api/claim_list/:name', ({ headers, ip, originalUrl, params }, res) => {
     // google analytics
     sendGoogleAnalytics('serve', headers, ip, originalUrl);
-    // log
-    logger.verbose(`GET request on ${originalUrl} from ${ip}`);
     // serve the content
     lbryApi
       .getClaimsList(params.name)
@@ -27,8 +25,6 @@ module.exports = app => {
   });
   // route to check whether spee.ch has published to a claim
   app.get('/api/isClaimAvailable/:name', ({ ip, originalUrl, params }, res) => {
-    // log
-    logger.verbose(`GET request on ${originalUrl} from ${ip}`);
     // send response
     publishController
       .checkNameAvailability(params.name)
@@ -48,8 +44,6 @@ module.exports = app => {
   app.get('/api/resolve/:uri', ({ headers, ip, originalUrl, params }, res) => {
     // google analytics
     sendGoogleAnalytics('serve', headers, ip, originalUrl);
-    // log
-    logger.verbose(`GET request on ${originalUrl} from ${ip}`);
     // serve content
     lbryApi
       .resolveUri(params.uri)
@@ -65,8 +59,6 @@ module.exports = app => {
   app.post('/api/publish', multipartMiddleware, ({ body, files, headers, ip, originalUrl }, res) => {
     // google analytics
     sendGoogleAnalytics('publish', headers, ip, originalUrl);
-    // log
-    logger.verbose(`POST request on ${originalUrl} from ${ip}`);
     // validate that a file was provided
     const file = files.speech || files.null;
     logger.debug(file);

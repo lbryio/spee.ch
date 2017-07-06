@@ -14,8 +14,14 @@
 
 /* show routes */
 
-.show-image, .show-video {
+.show-asset {
 	width: 100%;
+	margin-bottom: 1em;
+	margin-top: 1em;
+}
+
+.show-asset-lite {
+	margin: 0px;
 }
 
 .table-metadata {
@@ -131,6 +137,10 @@ canvas {
 
 	.all-claims-details {
 		font-size: small;
+	}
+
+	.show-asset-lite {
+		width: 100%;
 	}
 
 }

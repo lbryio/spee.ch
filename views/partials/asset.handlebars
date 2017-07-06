@@ -1,33 +1,5 @@
 <div class="panel">
-	<h2>{{fileInfo.name}}</h2>
 	<div id="asset-placeholder" data-filepath="{{{fileInfo.filePath}}}">
 		<p> loading... </p>
 	</div>
 </div>
-
-<script src="/socket.io/socket.io.js"></script>
-<script type="text/javascript">
-	var socket = io();
-	var filePath = document.getElementById('asset-placeholder').dataset.filepath;
-	console.log(filePath);
-	if (filePath) {
-		// send request for the file
-		socket.emit('asset-request', filePath);
-	}
-	// wait for the file to be sent
-	socket.on('asset-transfer', function(data) {
-		switch (data.type) {
-			case 'image/jpeg':
-			case 'image/gif':
-			case 'image/png':
-				const base64Image = 'data:' + data.type + ';base64,' + data.buffer;
-				document.getElementById("asset-placeholder").innerHTML = '<img class="show-image" src="' + base64Image + '"/>';
-				break;
-			case 'video/mp4':
-				const base64video = 'data:' + data.type + ';base64,' + data.buffer;
-				document.getElementById("asset-placeholder").innerHTML = '<video controls class="show-video"> <source src="' + base64video + '"></video>';
-				break;
-			default: break;
-		}
-	});
-</script>
