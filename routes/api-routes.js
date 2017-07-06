@@ -74,6 +74,14 @@ module.exports = app => {
       res.status(400).send('Error: No file was submitted or the key used was incorrect.  Files posted through this route must use a key of "speech" or null');
       return;
     }
+    // check if the size is provided (note: some clients may send incorrect content length or leave off content length)
+    logger.debug(headers);
+    if (headers['content-length']) {
+      if (headers['content-length'] > 5000000) {
+        res.status(400).send('Error: only files of 5 megabytes or less are allowed');
+        return;
+      }
+    }
     // validate name
     const name = body.name || file.name.substring(0, file.name.indexOf('.'));
     const invalidCharacters = /[^A-Za-z0-9,-]/.exec(name);

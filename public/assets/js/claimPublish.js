@@ -132,6 +132,12 @@ document.getElementById('publish-submit').addEventListener('click', function(eve
 })
 
 /* socketio-file-upload listeners */
+uploader.maxFileSize = 5000000;
+uploader.addEventListener("error", function(data){
+    if (data.code === 1) {
+        alert("Sorry, uploading is limitted to 5 megabytes.");
+    }
+});
 uploader.addEventListener('start', function(event){
 	var name = document.getElementById('publish-name').value;
 	var license = document.getElementById('publish-license').value;
