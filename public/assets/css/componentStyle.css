@@ -14,7 +14,7 @@
 
 /* show routes */
 
-.show-image {
+.show-image, .show-video {
 	width: 100%;
 	padding-top: 1em;
 }

@@ -67,21 +67,22 @@ module.exports = (app, siofu, hostedContentPath) => {
         };
         // set the data
         const fileExtension = filePath.substring(filePath.lastIndexOf('.'));
+        console.log(fileExtension);
         let data = {
           type  : null,
           buffer: assetBuffer.toString('base64'),
         };
         switch (fileExtension) {
-          case 'jpeg' || 'jpg':
+          case '.jpeg' || '.jpg':
             data['type'] = 'image/jpeg';
             break;
-          case 'gif':
+          case '.gif':
             data['type'] = 'image/gif';
             break;
-          case 'png':
+          case '.png':
             data['type'] = 'image/png';
             break;
-          case 'mp4':
+          case '.mp4':
             data['type'] = 'video/mp4';
             break;
           default:
