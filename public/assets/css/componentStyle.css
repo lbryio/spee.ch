@@ -13,6 +13,9 @@
 }
 
 /* show routes */
+.asset-name {
+	font-size: large;
+}
 
 .show-asset {
 	width: 100%;
@@ -24,8 +27,28 @@
 	margin: 0px;
 }
 
-.table-metadata {
+.panel.links {
 	font-size: small;
+}
+
+input.link {
+	width: 80%;
+}
+
+button.copy-button {
+	padding: 4px;
+	float: right;
+}
+
+.metadata-table {
+	font-size: small;
+	border-collapse: collapse;
+	margin-bottom: 1em;
+}
+
+.metadata-row {
+	border-bottom: 1px solid lightgrey;
+	margin: 2px;
 }
 
 .left-column {
@@ -39,7 +62,7 @@
 	text-align: center;
 	margin-top: 2px;
 	padding-top: 2px;
-	border-top: 1px lightgrey solid;
+	border-top: 1px solid lightgrey;
 }
 
 /* examples */

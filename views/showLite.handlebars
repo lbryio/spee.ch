@@ -6,7 +6,6 @@
 <script type="text/javascript">
 	var socket = io();
 	var filePath = document.getElementById('asset-placeholder').dataset.filepath;
-	console.log(filePath);
 	if (filePath) {
 		// send request for the file
 		socket.emit('asset-request', filePath);

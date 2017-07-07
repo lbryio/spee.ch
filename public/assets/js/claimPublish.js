@@ -92,16 +92,16 @@ socket.on('publish-status', function(msg){
 	updatePublishStatus(msg);
 });
 socket.on('publish-failure', function(msg){
-	document.getElementById('publish-active-area').innerHTML = '<p>' + JSON.stringify(msg) + '</p><p> --(✖╭╮✖)→ </p><strong>For help, post the above error text in the #speech channel on the <a href="https://lbry.slack.com/" target="_blank">lbry slack</a></strong>';
+	document.getElementById('publish-active-area').innerHTML = '<p> --(✖╭╮✖)→ </p><p>' + JSON.stringify(msg) + '</p><strong>For help, post the above error text in the #speech channel on the <a href="https://lbry.slack.com/" target="_blank">lbry slack</a></strong>';
 });
 
 socket.on('publish-complete', function(msg){
 	var publishResults;
-	var directUrl = '/' + msg.name + '/' + msg.result.claim_id;
+	var showUrl = '/s/' + msg.name + '/' + msg.result.claim_id;
 	// build new publish area
-	publishResults = '<p>Your publish is complete! You are being redicted to it</p>';
-	publishResults += '<p><a target="_blank" href="' + directUrl + '">if you do not get redirected, click here</a></p>';
+	publishResults = '<p>Your publish is complete! You are being redirected to it now.</p>';
+	publishResults += '<p><a target="_blank" href="' + showUrl + '">If you do not get redirected, click here.</a></p>';
 	// update publish area
 	document.getElementById('publish-active-area').innerHTML = publishResults;
-	window.location.href = directUrl;
+	window.location.href = showUrl;
 });

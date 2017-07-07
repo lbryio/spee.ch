@@ -67,7 +67,6 @@ module.exports = (app, siofu, hostedContentPath) => {
         };
         // set the data
         const fileExtension = filePath.substring(filePath.lastIndexOf('.'));
-        console.log(fileExtension);
         let data = {
           type  : null,
           buffer: assetBuffer.toString('base64'),

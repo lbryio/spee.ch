@@ -53,6 +53,28 @@ const hbs = expressHandlebars.create({
         </script>`
       );
     },
+    ifConditional (varOne, operator, varTwo, options) {
+      switch (operator) {
+        case '===':
+          return (varOne === varTwo) ? options.fn(this) : options.inverse(this);
+        case '!==':
+          return (varOne !== varTwo) ? options.fn(this) : options.inverse(this);
+        case '<':
+          return (varOne < varTwo) ? options.fn(this) : options.inverse(this);
+        case '<=':
+          return (varOne <= varTwo) ? options.fn(this) : options.inverse(this);
+        case '>':
+          return (varOne > varTwo) ? options.fn(this) : options.inverse(this);
+        case '>=':
+          return (varOne >= varTwo) ? options.fn(this) : options.inverse(this);
+        case '&&':
+          return (varOne && varTwo) ? options.fn(this) : options.inverse(this);
+        case '||':
+          return (varOne || varTwo) ? options.fn(this) : options.inverse(this);
+        default:
+          return options.inverse(this);
+      }
+    },
   },
 });
 app.engine('handlebars', hbs.engine);
