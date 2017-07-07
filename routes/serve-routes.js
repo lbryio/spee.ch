@@ -49,10 +49,15 @@ module.exports = (app) => {
           return;
         }
         // serve the file or the show route
-        const mimetypes = headers['accept'].split(',');
-        if (mimetypes.includes('text/html')) {
-          postToStats('show', originalUrl, ip, 'success');
-          res.status(200).render('showLite', { fileInfo });
+        if (headers['accept']) { // note: added b/c some requests errored out due to no accept param in header
+          const mimetypes = headers['accept'].split(',');
+          if (mimetypes.includes('text/html')) {
+            postToStats('show', originalUrl, ip, 'success');
+            res.status(200).render('showLite', { fileInfo });
+          } else {
+            postToStats('serve', originalUrl, ip, 'success');
+            serveFile(fileInfo, res);
+          }
         } else {
           postToStats('serve', originalUrl, ip, 'success');
           serveFile(fileInfo, res);
@@ -74,10 +79,15 @@ module.exports = (app) => {
           return;
         }
         // serve the file or the show route
-        const mimetypes = headers['accept'].split(',');
-        if (mimetypes.includes('text/html')) {
-          postToStats('show', originalUrl, ip, 'success');
-          res.status(200).render('showLite', { fileInfo });
+        if (headers['accept']) { // note: added b/c some requests errored out due to no accept param in header
+          const mimetypes = headers['accept'].split(',');
+          if (mimetypes.includes('text/html')) {
+            postToStats('show', originalUrl, ip, 'success');
+            res.status(200).render('showLite', { fileInfo });
+          } else {
+            postToStats('serve', originalUrl, ip, 'success');
+            serveFile(fileInfo, res);
+          }
         } else {
           postToStats('serve', originalUrl, ip, 'success');
           serveFile(fileInfo, res);
