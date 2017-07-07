@@ -1,12 +1,14 @@
 const logger = require('winston');
+const fs = require('fs');
 const publishController = require('../controllers/publishController.js');
 const publishHelpers = require('../helpers/libraries/publishHelpers.js');
 const errorHandlers = require('../helpers/libraries/errorHandlers.js');
 const { postToStats } = require('../controllers/statsController.js');
 
 module.exports = (app, siofu, hostedContentPath) => {
-  const http = require('http').Server(app);
-  const io = require('socket.io')(http);
+  const http = require('http');
+  const server = http.Server(app);
+  const io = require('socket.io')(server);
 
   io.on('connection', socket => {
     logger.silly('a user connected via sockets');
@@ -55,11 +57,47 @@ module.exports = (app, siofu, hostedContentPath) => {
         // to-do: remove the file if not done automatically
       }
     });
+    // handle asset requests
+    socket.on('asset-request', filePath => {
+      logger.debug('received a request for the following file', filePath);
+      fs.readFile(filePath, (err, assetBuffer) => {
+        if (err) {
+          logger.error('fs.readFile error', err);
+          return;
+        };
+        // set the data
+        const fileExtension = filePath.substring(filePath.lastIndexOf('.'));
+        let data = {
+          type  : null,
+          buffer: assetBuffer.toString('base64'),
+        };
+        switch (fileExtension) {
+          case '.jpeg' || '.jpg':
+            data['type'] = 'image/jpeg';
+            break;
+          case '.gif':
+            data['type'] = 'image/gif';
+            break;
+          case '.png':
+            data['type'] = 'image/png';
+            break;
+          case '.mp4':
+            data['type'] = 'video/mp4';
+            break;
+          default:
+            data['type'] = 'image/jpeg';
+            logger.warn('showing file with unknown type as jpeg');
+            break;
+        }
+        // send the asset
+        socket.emit('asset-transfer', data);
+      });
+    });
     // handle disconnect
     socket.on('disconnect', () => {
       logger.silly('a user disconnected via sockets');
     });
   });
 
-  return http;
+  return server;
 };

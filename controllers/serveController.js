@@ -195,4 +195,7 @@ module.exports = {
     });
     return deferred;
   },
+  getAllClaims (claimName) {
+    return getAllFreePublicClaims(claimName);
+  },
 };

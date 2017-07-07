@@ -14,19 +14,17 @@
 
 .main {
 	float: left;
-	width: 75%;
-	margin-right: 1%;
-	padding-right: 1%;
-	border-right: 1px lightgrey solid;
-	margin-bottom: 5px;
+	width: 65%;
+	
 }
 
 .sidebar {
-	float: left;
-	width: 22%;
+	float: right;
+	width: 33%;
 }
 
 footer {
+	display: inline-block;
 	width: 100%;
 	margin-bottom: 2px;
 	padding-bottom: 2px;
@@ -43,7 +41,6 @@ footer {
 .panel {
 	overflow: auto;
 	word-wrap: break-word;
-	margin-bottom: 1em;
 }
 
 .col-left, .col-right {
@@ -64,7 +61,8 @@ footer {
 
 /* text */
 
-a {
+a, a:visited {
+	color: blue;
 	text-decoration: none;
 }
 h1 {
@@ -73,9 +71,14 @@ h1 {
 
 h2 {
 	font-size: medium;
+	margin-top: 1em;
 	border-top: 1px #999 solid;
 	background-color: lightgray;
 	padding: 6px;
+}
+
+.subheader {
+	margin-top: 0px;
 }
 
 h4 {
@@ -103,6 +106,10 @@ table {
 
 .toggle-link {
 	float: right;
+}
+
+.wrap-words {
+	word-wrap: break-word;
 }
 
 @media (max-width: 1250px) {
