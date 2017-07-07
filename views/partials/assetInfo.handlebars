@@ -1,29 +1,28 @@
 <div class="panel">
-	<h2>Title</h2>
-	<p class="asset-name">{{fileInfo.name}}</>
+	<h2>Name</h2>
+	<p>{{fileInfo.name}}</>
 </div>
 <div class="panel links">
 	<h2 class="subheader">Links</h2>
 	<a href="/{{fileInfo.name}}/{{fileInfo.claimId}}">Direct Link</a>
-	</br>
-	<input type="text" id="direct-link" class="link" readonly="true" spellcheck="false" value="spee.ch/{{fileInfo.name}}/{{fileInfo.claimId}}"/>
+	<input type="text" id="direct-link" class="link" readonly="true" spellcheck="false" value="https://spee.ch/{{fileInfo.name}}/{{fileInfo.claimId}}"/>
 	<button class="copy-button" data-elementtocopy="direct-link" onclick="copyToClipboard(event)">copy</button>
-	</br>
 	<br/>
-	<a href="/s/{{fileInfo.name}}/{{fileInfo.claimId}}">Details Link</a>
-	</br>
-	<input type="text" id="show-link" class="link" readonly="true" spellcheck="false" value="spee.ch/s/{{fileInfo.name}}/{{fileInfo.claimId}}"/>
-	<button class="copy-button" data-elementtocopy="show-link" onclick="copyToClipboard(event)">copy</button>
-	</br>
 	<br/>
 	Embed HTML
-	</br>
+	<br/>
 	{{#ifConditional fileInfo.fileType '===' 'video/mp4'}}
 		<input type="text" id="embed-text" class="link" readonly="true" spellcheck="false" value='&lt;video controls>&lt;source src="https://spee.ch/{{fileInfo.name}}/{{fileInfo.claimId}}" />&lt;/video>'/>
 	{{else}}
 		<input type="text" id="embed-text" class="link" readonly="true" spellcheck="false" value='&lt;img src="https://spee.ch/{{fileInfo.name}}/{{fileInfo.claimId}}" />'/>
 	{{/ifConditional}}
 	<button class="copy-button" data-elementtocopy="embed-text" onclick="copyToClipboard(event)">copy</button>
+	<br/>
+	<br/>
+	<a href="/show/{{fileInfo.name}}/{{fileInfo.claimId}}">Details</a>
+	</br>
+	<input type="text" id="show-link" class="link" readonly="true" spellcheck="false" value="https://spee.ch/show/{{fileInfo.name}}/{{fileInfo.claimId}}"/>
+	<button class="copy-button" data-elementtocopy="show-link" onclick="copyToClipboard(event)">copy</button>
 	<br/>
 	<br/>
 </div>

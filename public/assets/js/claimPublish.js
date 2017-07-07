@@ -97,7 +97,7 @@ socket.on('publish-failure', function(msg){
 
 socket.on('publish-complete', function(msg){
 	var publishResults;
-	var showUrl = '/s/' + msg.name + '/' + msg.result.claim_id;
+	var showUrl = '/show/' + msg.name + '/' + msg.result.claim_id;
 	// build new publish area
 	publishResults = '<p>Your publish is complete! You are being redirected to it now.</p>';
 	publishResults += '<p><a target="_blank" href="' + showUrl + '">If you do not get redirected, click here.</a></p>';

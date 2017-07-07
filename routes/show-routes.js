@@ -49,7 +49,7 @@ module.exports = (app) => {
       });
   });
   // route to show a specific asset
-  app.get('/s/:name/:claim_id', ({ ip, originalUrl, params }, res) => {
+  app.get('/show/:name/:claim_id', ({ ip, originalUrl, params }, res) => {
     // begin image-serve processes
     getClaimByClaimId(params.name, params.claim_id)
       .then(fileInfo => {
@@ -67,7 +67,7 @@ module.exports = (app) => {
       });
   });
   // route to show the winning free, public claim
-  app.get('/s/:name', ({ ip, originalUrl, params }, res) => {
+  app.get('/show/:name', ({ ip, originalUrl, params }, res) => {
     // get and render the content
     getClaimByName(params.name)
       .then(fileInfo => {
