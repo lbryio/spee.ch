@@ -3,30 +3,49 @@ function updatePublishStatus(msg){
 	document.getElementById('publish-status').innerHTML = msg;
 }
 
+function resetPublishArea(){
+	console.log("resetting publish area";)
+}
+
 /* regular publish helper functions */
 
 function previewAndStageFile(selectedFile){ 
-	var preview = document.getElementById('image-preview');
+	var preview = document.getElementById('asset-preview-holder');
 	var dropzone = document.getElementById('drop-zone');
 	var previewReader = new FileReader();
 	var nameInput = document.getElementById('publish-name'); 
 
 	preview.style.display = 'block';
 	dropzone.style.display = 'none';
-	
+
+	// set the preview after reading the asset
 	previewReader.onloadend = function () {
-		preview.src = previewReader.result;
+		if (selectedFile.type === 'video/mp4') {
+			preview.innerHTML = '<video controls width="100%"><source src="' + previewReader.result + '" alt="video preview"/></video>';
+		} else {
+			preview.innerHTML = '<img width="100%" src="' + previewReader.result + '" alt="image preview"/>';
+		}
 	};
 
 	if (selectedFile) {
-		previewReader.readAsDataURL(selectedFile); // reads the data and sets the img src
+		console.log(selectedFile);
+		if (selectedFile.size > 5000000){
+			alert("Sorry, uploading is limitted to 5 megabytes.");
+			resetPublishArea();
+			return;
+		}
+		// reads the data and sets the preview src
+		previewReader.readAsDataURL(selectedFile); 
+		// set the name input value to the image name if none is set yet
 		if (nameInput.value === "") {
 			nameInput.value = selectedFile.name.substring(0, selectedFile.name.indexOf('.'));
 		}
-		stagedFiles = [selectedFile]; // stores the selected file for upload
+		// store the selected file for upload
+		stagedFiles = [selectedFile];
 	} else {
 		preview.src = '';
 	}
+
 }
 
 /* drop zone function s*/
