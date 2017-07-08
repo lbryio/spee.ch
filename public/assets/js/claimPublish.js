@@ -14,26 +14,14 @@ function publishSelectedImage(event) {
 		alert(error.message);
 		return;
 	}
-	// make sure the name is available 	then start the upload
-	var xhttp;
-	xhttp = new XMLHttpRequest();
-	xhttp.open('GET', '/api/isClaimAvailable/' + name, true);
-	xhttp.responseType = 'json';
-	xhttp.onreadystatechange = function() {
-		if (this.readyState == 4 ) {
-			if ( this.status == 200) {
-				if (this.response == true) {
-					console.log("name is available");
-					//uploader.submitFiles(stagedFiles);  //note: must pass the file as part of an array.
-				} else {
-					alert("That name has already been claimed by spee.ch.  Please choose a different name.");
-				}
-			} else {
-				throw new Error("request to check claim name failed with status:" + this.status);
-			};
-		}
-	};
-	xhttp.send();
+	// make sure the name is available then start the upload
+	validateClaimName(name)
+		.done(function() {
+			uploader.submitFiles(stagedFiles); //note: must pass the file as part of an array.
+		})
+		.catch(function(error) {
+			alert(error);
+		})
 };
 
 /* socketio-file-upload listeners */

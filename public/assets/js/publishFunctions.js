@@ -42,10 +42,94 @@ function validateSubmission(stagedFiles, name){
 	}
 }
 
+function validateClaimName (name) {
+	var deferred = new Promise(function(resolve, reject) {
+		var xhttp;
+		xhttp = new XMLHttpRequest();
+		xhttp.open('GET', '/api/isClaimAvailable/' + name, true);
+		xhttp.responseType = 'json';
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 ) {
+				if ( this.status == 200) {
+					if (this.response == true) {
+						resolve();
+					} else {
+						reject("That name has already been claimed by spee.ch.  Please choose a different name.");
+					}
+				} else {
+					reject("request to check claim name failed with status:" + this.status);
+				};
+			}
+		};
+		xhttp.send();
+	});
+	return deferred;
+}
+
+function captureScreenshot(file){
+	console.log(file);
+	var deferred = new Promise(function(resolve, reject) {
+		// create elements
+		var canvas = document.createElement('canvas');
+		canvas.class="snapshot-generator" ;
+		canvas.id="canvasElem";
+		document.body.appendChild(canvas);
+		canvas = document.getElementById('canvasElem');
+		
+		var video = document.createElement('video');
+		video.class="snapshot-generator";
+		video.id="video";
+		video.muted = true;
+		document.body.appendChild(video);
+		video = document.getElementById('video');
+
+		// load the video
+		var metadataLoaded = false;
+		var dataLoaded = false;
+		var suspendDone = false;
+		function stepTwoCheck() {
+			if (metadataLoaded && dataLoaded && suspendDone) {
+				stepThree();
+			}
+		}
+		video.src = '#'; // file source here
+		video.addEventListener('loadedmetadata', function() {
+			metadataLoaded = true;
+			stepTwoCheck();
+		});
+		video.addEventListener('loadeddata', function() {
+			dataLoaded = true;
+			stepTwoCheck();
+		});
+		video.addEventListener('suspend', function() {
+			suspendDone = true;
+			stepTwoCheck();
+		});
+		video.addEventListener('seeked', function(){
+			stepFour();
+		})
+		// set the time
+		function stepThree(){
+			video.currentTime = 1;
+		};
+		// grab the snapshot
+		function stepFour(){
+			canvas.height = video.videoHeight;
+			canvas.width = video.videoWidth;
+			canvas.msGetInputContext('2d').drawImage(video, 0 , 0);
+			var snapshot = canvas.toDataUrl();
+			video.remove;
+			canvas.remove;
+			resolve(snapshot);
+		}
+	});
+	return deferred;
+}
+
 /* regular publish helper functions */
 
 function previewAndStageFile(selectedFile){ 
-	var preview = document.getElementById('asset-preview-holder');
+	var preview = document.getElementById('asset-preview');
 	var dropzone = document.getElementById('drop-zone');
 	var previewReader = new FileReader();
 	var nameInput = document.getElementById('publish-name'); 
@@ -53,11 +137,7 @@ function previewAndStageFile(selectedFile){
 	previewReader.onloadend = function () {
 		preview.style.display = 'block';
 		dropzone.style.display = 'none';
-		if (selectedFile.type === 'video/mp4') {
-			preview.innerHTML = '<video controls width="100%"><source src="' + previewReader.result + '" alt="video preview"/></video>';
-		} else {
-			preview.innerHTML = '<img width="100%" src="' + previewReader.result + '" alt="image preview"/>';
-		}
+		preview.src = previewReader.result;	
 	};
 	// validate the file
 	try {
@@ -67,7 +147,21 @@ function previewAndStageFile(selectedFile){
 		return;
 	}
 	// read the data (when completed, it will trigger the asset preview)
-	previewReader.readAsDataURL(selectedFile); 
+	if (selectedFile.type === 'video/mp4') {
+		captureScreenshot(selectedFile)
+		.then(function (snapshot) {
+			console.log(test)
+			preview.style.display = 'block';
+			dropzone.style.display = 'none';
+			preview.src = snapshot;
+		})
+		.catch(function (error) {
+			alert(error);
+		})
+	} else {
+		previewReader.readAsDataURL(selectedFile); 
+	}
+	
 	// set the name input value to the image name if none is set yet
 	if (nameInput.value === "") {
 		nameInput.value = selectedFile.name.substring(0, selectedFile.name.indexOf('.'));
