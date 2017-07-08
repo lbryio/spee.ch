@@ -25,7 +25,7 @@
 				break;
 			case 'video/mp4':
 				const base64video = 'data:' + data.type + ';base64,' + data.buffer;
-				document.getElementById("asset-placeholder").innerHTML = '<video class="show-asset-lite" controls> <source src="' + base64video + '"></video>';
+				document.getElementById("asset-placeholder").innerHTML = '<video class="show-asset-lite" autoplay controls> <source src="' + base64video + '"></video>';
 				break;
 			default: break;
 		}
