@@ -7,7 +7,15 @@ const { createPublishParams, validateFile } = require('../helpers/libraries/publ
 const errorHandlers = require('../helpers/libraries/errorHandlers.js');
 const { postToStats, sendGoogleAnalytics } = require('../controllers/statsController.js');
 
+const config = require('config');
+const hostedContentPath = config.get('Database.PublishUploadPath');
+
 module.exports = app => {
+  // route to run a claim_list request on the daemon
+  app.get('/api/streamFile/:name', ({ params, headers }, res) => {
+    const filePath = `${hostedContentPath}${params.name}`;
+    res.status(200).sendFile(filePath);
+  });
   // route to run a claim_list request on the daemon
   app.get('/api/claim_list/:name', ({ headers, ip, originalUrl, params }, res) => {
     // google analytics

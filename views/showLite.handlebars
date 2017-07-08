@@ -1,33 +1,11 @@
-<div id="asset-placeholder" data-filepath="{{{fileInfo.filePath}}}">
-	<p> loading... </p>
+<div id="asset-placeholder" data-filename="{{{fileInfo.fileName}}}">
+	{{#ifConditional fileInfo.fileType '===' 'video/mp4'}}
+		<video class="show-asset-lite" autoplay controls>
+			<source src="/api/streamFile/{{fileInfo.fileName}}">
+			{{!--fallback--}}
+			Your browser does not support the <code>video</code> element.
+		</video>
+	{{else}}
+		<img class="show-asset-lite" src="/api/streamFile/{{fileInfo.fileName}}" />
+	{{/ifConditional}}
 </div>
-
-<script src="/socket.io/socket.io.js"></script>
-<script type="text/javascript">
-	var socket = io();
-	var filePath = document.getElementById('asset-placeholder').dataset.filepath;
-	if (filePath) {
-		// send request for the file
-		socket.emit('asset-request', filePath);
-		// update the html
-		document.getElementById('asset-placeholder').innerHTML = '<p>Loading...</p><div id="progress-bar"></div>';
-		// start a progress animation
-		createProgressBar(document.getElementById('progress-bar'), 12);
-	}
-	// wait for the file to be sent
-	socket.on('asset-transfer', function(data) {
-		switch (data.type) {
-			case 'image/jpeg':
-			case 'image/gif':
-			case 'image/png':
-				const base64Image = 'data:' + data.type + ';base64,' + data.buffer;
-				document.getElementById("asset-placeholder").innerHTML = '<img class="show-asset-lite" src="' + base64Image + '"/>';
-				break;
-			case 'video/mp4':
-				const base64video = 'data:' + data.type + ';base64,' + data.buffer;
-				document.getElementById("asset-placeholder").innerHTML = '<video class="show-asset-lite" controls> <source src="' + base64video + '"></video>';
-				break;
-			default: break;
-		}
-	});
-</script>
