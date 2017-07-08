@@ -66,79 +66,13 @@ function validateClaimName (name) {
 	return deferred;
 }
 
-function captureScreenshot(file){
-	console.log(file);
-	var deferred = new Promise(function(resolve, reject) {
-		// create elements
-		var canvas = document.createElement('canvas');
-		canvas.class="snapshot-generator" ;
-		canvas.id="canvasElem";
-		document.body.appendChild(canvas);
-		canvas = document.getElementById('canvasElem');
-		
-		var video = document.createElement('video');
-		video.class="snapshot-generator";
-		video.id="video";
-		video.muted = true;
-		document.body.appendChild(video);
-		video = document.getElementById('video');
-
-		// load the video
-		var metadataLoaded = false;
-		var dataLoaded = false;
-		var suspendDone = false;
-		function stepTwoCheck() {
-			if (metadataLoaded && dataLoaded && suspendDone) {
-				stepThree();
-			}
-		}
-		video.src = '#'; // file source here
-		video.addEventListener('loadedmetadata', function() {
-			metadataLoaded = true;
-			stepTwoCheck();
-		});
-		video.addEventListener('loadeddata', function() {
-			dataLoaded = true;
-			stepTwoCheck();
-		});
-		video.addEventListener('suspend', function() {
-			suspendDone = true;
-			stepTwoCheck();
-		});
-		video.addEventListener('seeked', function(){
-			stepFour();
-		})
-		// set the time
-		function stepThree(){
-			video.currentTime = 1;
-		};
-		// grab the snapshot
-		function stepFour(){
-			canvas.height = video.videoHeight;
-			canvas.width = video.videoWidth;
-			canvas.msGetInputContext('2d').drawImage(video, 0 , 0);
-			var snapshot = canvas.toDataUrl();
-			video.remove;
-			canvas.remove;
-			resolve(snapshot);
-		}
-	});
-	return deferred;
-}
-
 /* regular publish helper functions */
 
 function previewAndStageFile(selectedFile){ 
-	var preview = document.getElementById('asset-preview');
+	var previewHolder = document.getElementById('asset-preview-holder');
 	var dropzone = document.getElementById('drop-zone');
 	var previewReader = new FileReader();
 	var nameInput = document.getElementById('publish-name'); 
-	// set the preview after reading the asset
-	previewReader.onloadend = function () {
-		preview.style.display = 'block';
-		dropzone.style.display = 'none';
-		preview.src = previewReader.result;	
-	};
 	// validate the file
 	try {
 		validateFile(selectedFile);
@@ -146,22 +80,18 @@ function previewAndStageFile(selectedFile){
 		alert(error.message);
 		return;
 	}
-	// read the data (when completed, it will trigger the asset preview)
+	// set the preview
 	if (selectedFile.type === 'video/mp4') {
-		captureScreenshot(selectedFile)
-		.then(function (snapshot) {
-			console.log(test)
-			preview.style.display = 'block';
-			dropzone.style.display = 'none';
-			preview.src = snapshot;
-		})
-		.catch(function (error) {
-			alert(error);
-		})
+		
 	} else {
-		previewReader.readAsDataURL(selectedFile); 
+		previewReader.readAsDataURL(selectedFile);
+		previewReader.onloadend = function () {
+			dropzone.style.display = 'none';
+			previewHolder.style.display = 'block';
+			previewHolder.innerHTML = '<img width="100%" src="' + previewReader.result + '" alt="image preview"/>';
+			
+		};
 	}
-	
 	// set the name input value to the image name if none is set yet
 	if (nameInput.value === "") {
 		nameInput.value = selectedFile.name.substring(0, selectedFile.name.indexOf('.'));
