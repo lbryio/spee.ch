@@ -34,7 +34,7 @@ module.exports = (app, siofu, hostedContentPath) => {
     uploader.on('saved', ({ file }) => {
       if (file.success) {
         logger.debug(`Client successfully uploaded ${file.name}`);
-        socket.emit('publish-status', 'file upload successfully completed. Your image is being published (this might take a second)...');
+        socket.emit('publish-status', 'File upload successfully completed. Your image is being published to LBRY (this might take a second)...');
         // prepare the publish parameters
         const publishParams = publishHelpers.createPublishParams(file.meta.name, file.pathName, file.meta.license, file.meta.nsfw);
         // publish the file
@@ -51,8 +51,8 @@ module.exports = (app, siofu, hostedContentPath) => {
           });
       } else {
         logger.error(`An error occurred in uploading the client's file`);
-        socket.emit('publish-failure', 'file uploaded, but with errors');
-        postToStats('publish', '/', null, 'file uploaded, but with errors');
+        socket.emit('publish-failure', 'File uploaded, but with errors');
+        postToStats('publish', '/', null, 'File uploaded, but with errors');
         // to-do: remove the file if not done automatically
       }
     });
