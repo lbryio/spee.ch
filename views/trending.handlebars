@@ -1,0 +1,26 @@
+<div class="wrapper">
+	{{> topBar}}
+	<div class="full"> 
+		<h2>Trending Images </h2>
+		{{#each trendingAssets}}
+			<img  class="asset-trending" src="/{{this.name}}/{{this.claimId}}" />
+		<div id="asset-trending" data-filename="{{{this.fileName}}}">
+			{{#ifConditional this.fileType '===' 'video/mp4'}}
+				<video class="show-asset" autoplay controls>
+					<source src="/api/streamFile/{{this.fileName}}">
+					{{!--fallback--}}
+					Your browser does not support the <code>video</code> element.
+				</video>
+			{{else}}
+				<img  class="show-asset" src="/api/streamFile/{{this.fileName}}" />
+			{{/ifConditional}}
+		</div>
+		{{/each}}
+	</div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/siofu/client.js"></script>
+
+<script src="/assets/js/publishFunctions.js"></script>
+<script src="/assets/js/index.js"></script>

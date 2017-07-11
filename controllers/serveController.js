@@ -98,6 +98,8 @@ function getClaimAndHandleResponse (uri, address, height, resolve, reject) {
         });
       // resolve the request
       resolve({
+        name,
+        claimId : claim_id,
         fileName: file_name,
         filePath: download_path,
         fileType: mime_type,

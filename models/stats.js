@@ -15,6 +15,16 @@ module.exports = (sequelize, { STRING, TEXT }) => {
         allowNull: true,
         default  : null,
       },
+      name: {
+        type     : STRING,
+        allowNull: true,
+        default  : null,
+      },
+      claimId: {
+        type     : STRING,
+        allowNull: true,
+        default  : null,
+      },
       result: {
         type     : TEXT('long'),
         allowNull: true,

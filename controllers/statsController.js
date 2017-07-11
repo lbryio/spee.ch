@@ -5,7 +5,7 @@ const db = require('../models');
 const googleApiKey = config.get('AnalyticsConfig.GoogleId');
 
 module.exports = {
-  postToStats (action, url, ipAddress, result) {
+  postToStats (action, url, ipAddress, name, claimId, result) {
     logger.silly(`creating ${action} record for statistics db`);
     // make sure the result is a string
     if (result && (typeof result !== 'string')) {
@@ -20,6 +20,8 @@ module.exports = {
       action,
       url,
       ipAddress,
+      name,
+      claimId,
       result,
     })
     .then()
@@ -58,12 +60,18 @@ module.exports = {
       }
     });
   },
-  getStatsSummary () {
-    logger.debug('retrieving site statistics');
+  getStatsSummary (startDate) {
+    logger.debug('retrieving statistics');
     const deferred = new Promise((resolve, reject) => {
       // get the raw statistics data
       db.Stats
-        .findAll()
+        .findAll({
+          where: {
+            createdAt: {
+              gt: startDate,
+            },
+          },
+        })
         .then(data => {
           const resultHashTable = {};
           let totalServe = 0;
@@ -117,6 +125,72 @@ module.exports = {
           const percentSuccess = Math.round(totalSuccess / totalCount * 100);
           // return results
           resolve({ records: resultHashTable, totals: { totalServe, totalPublish, totalShow, totalCount, totalSuccess, totalFailure }, percentSuccess });
+        })
+        .catch(error => {
+          logger.error('sequelize error', error);
+          reject(error);
+        });
+    });
+    return deferred;
+  },
+  getTrendingClaims (startDate) {
+    logger.debug('retrieving trending statistics');
+    const deferred = new Promise((resolve, reject) => {
+      // get the raw statistics data
+      db.Stats
+        .findAll({
+          where: {
+            createdAt: {
+              gt: startDate,
+            },
+            name: {
+              not: null,
+            },
+            claimId: {
+              not: null,
+            },
+          },
+        })
+        .then(data => {
+          const resultHashTable = {};
+          // summarise the data
+          for (let i = 0; i < data.length; i++) {
+            let key = `${data[i].name}#${data[i].claimId}`;
+            logger.debug(key);
+            console.log(resultHashTable[key]);
+            if (resultHashTable[key] === undefined) {
+              // console.log(resultHashTable[key]);
+              resultHashTable[key] = {
+                count  : 0,
+                details: {
+                  name   : data[i].name,
+                  claimId: data[i].claimId,
+                },
+              };
+            } else {
+              // console.log(resultHashTable[key]);
+              resultHashTable[key]['count'] += 1;
+            }
+          }
+          // order the results
+          let sortableArray = [];
+          for (let objKey in resultHashTable) {
+            if (resultHashTable.hasOwnProperty(objKey)) {
+              sortableArray.push([
+                resultHashTable[objKey]['count'],
+                resultHashTable[objKey]['details'],
+              ]);
+            }
+          }
+          sortableArray.sort((a, b) => {
+            return a[0] - b[0];
+          });
+          const sortedArray = sortableArray.map((a) => {
+            return a[1];
+          });
+          // return results
+          logger.debug(sortedArray);
+          resolve(sortedArray);
         })
         .catch(error => {
           logger.error('sequelize error', error);
