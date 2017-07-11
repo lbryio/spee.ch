@@ -12,7 +12,6 @@
 		"PublishUploadPath": "none"
 	},
 	"Logging": {
-		"LogLevel": "none",
-		"LogDirectory": "none"
+		"LogLevel": "none"
 	}
 }

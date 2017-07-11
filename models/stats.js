@@ -1,4 +1,4 @@
-module.exports = (sequelize, { STRING, TEXT }) => {
+module.exports = (sequelize, { STRING, BOOLEAN, TEXT }) => {
   const Stats = sequelize.define(
     'Stats',
     {
@@ -13,17 +13,26 @@ module.exports = (sequelize, { STRING, TEXT }) => {
       ipAddress: {
         type     : STRING,
         allowNull: true,
-        default  : null,
       },
       name: {
         type     : STRING,
         allowNull: true,
-        default  : null,
       },
       claimId: {
         type     : STRING,
         allowNull: true,
-        default  : null,
+      },
+      fileName: {
+        type     : STRING,
+        allowNull: true,
+      },
+      fileType: {
+        type     : STRING,
+        allowNull: true,
+      },
+      nsfw: {
+        type     : BOOLEAN,
+        allowNull: true,
       },
       result: {
         type     : TEXT('long'),

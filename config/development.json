@@ -9,10 +9,9 @@
 	},
 	"Database": {
 		"MySqlConnectionUri": "none",
-		"PublishUploadPath": "C:\\lbry\\speech\\hosted_content\\"
+		"PublishUploadPath": "C:\\Users\\Bones\\Downloads\\lbry\\"
 	},
 	"Logging": {
-		"LogLevel": "silly",
-		"LogDirectory": "C:\\lbry\\speech\\logs\\"
+		"LogLevel": "silly"
 	}
 }

@@ -11,8 +11,7 @@ const hostedContentPath = config.get('Database.PublishUploadPath');
 
 // configure logging
 const logLevel = config.get('Logging.LogLevel');
-const logDir = config.get('Logging.LogDirectory');
-require('./config/loggerSetup.js')(winston, logLevel, logDir);
+require('./config/loggerSetup.js')(winston, logLevel);
 
 // set port
 const PORT = 3000;
@@ -92,9 +91,13 @@ const server = require('./routes/sockets-routes.js')(app, siofu, hostedContentPa
 // sync sequelize
 // wrap the server in socket.io to intercept incoming sockets requests
 // start server
-db.sequelize.sync().then(() => {
-  server.listen(PORT, () => {
-    winston.info('Trusting proxy?', app.get('trust proxy'));
-    winston.info(`Server is listening on PORT ${PORT}`);
+db.sequelize.sync()
+  .then(() => {
+    server.listen(PORT, () => {
+      winston.info('Trusting proxy?', app.get('trust proxy'));
+      winston.info(`Server is listening on PORT ${PORT}`);
+    });
+  })
+  .catch((error) => {
+    winston.log('Error syncing sequelize db:', error);
   });
-});

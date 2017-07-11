@@ -1,8 +1,8 @@
-<div class="wrapper">
-	{{> topBar}}
-	<div class="full"> 
-		<h2>Trending Images </h2>
-		{{#each trendingAssets}}
+<div class="full"> 
+	<h2>Trending</h2>
+	{{#each trendingAssets}}
+		{{#if this.nsfw}}
+		{{else }}
 			{{#ifConditional this.fileType '===' 'video/mp4'}}
 				<video class="asset-small" controls>
 					<source src="/api/streamFile/{{this.fileName}}">
@@ -10,8 +10,10 @@
 					Your browser does not support the <code>video</code> element.
 				</video>
 			{{else}}
+			<a href="/show/{{this.name}}/{{this.claimId}}">
 				<img  class="asset-small" src="/api/streamFile/{{this.fileName}}" />
+			</a>
 			{{/ifConditional}}
-		{{/each}}
-	</div>
+		{{/if}}
+	{{/each}}
 </div>

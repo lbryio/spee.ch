@@ -5,7 +5,7 @@ const db = require('../models');
 const googleApiKey = config.get('AnalyticsConfig.GoogleId');
 
 module.exports = {
-  postToStats (action, url, ipAddress, name, claimId, result) {
+  postToStats (action, url, ipAddress, name, claimId, fileName, fileType, nsfw, result) {
     logger.silly(`creating ${action} record for statistics db`);
     // make sure the result is a string
     if (result && (typeof result !== 'string')) {
@@ -22,6 +22,9 @@ module.exports = {
       ipAddress,
       name,
       claimId,
+      fileName,
+      fileType,
+      nsfw,
       result,
     })
     .then()
@@ -73,13 +76,14 @@ module.exports = {
           },
         })
         .then(data => {
-          const resultHashTable = {};
+          let resultHashTable = {};
           let totalServe = 0;
           let totalPublish = 0;
           let totalShow = 0;
           let totalCount = 0;
           let totalSuccess = 0;
           let totalFailure = 0;
+          let percentSuccess;
           // sumarise the data
           for (let i = 0; i < data.length; i++) {
             let key = data[i].action + data[i].url;
@@ -122,7 +126,7 @@ module.exports = {
               }
             }
           }
-          const percentSuccess = Math.round(totalSuccess / totalCount * 100);
+          percentSuccess = Math.round(totalSuccess / totalCount * 100);
           // return results
           resolve({ records: resultHashTable, totals: { totalServe, totalPublish, totalShow, totalCount, totalSuccess, totalFailure }, percentSuccess });
         })
@@ -152,28 +156,27 @@ module.exports = {
           },
         })
         .then(data => {
-          const resultHashTable = {};
+          let resultHashTable = {};
+          let sortableArray = [];
+          let sortedArray;
           // summarise the data
           for (let i = 0; i < data.length; i++) {
             let key = `${data[i].name}#${data[i].claimId}`;
-            logger.debug(key);
-            console.log(resultHashTable[key]);
             if (resultHashTable[key] === undefined) {
-              // console.log(resultHashTable[key]);
               resultHashTable[key] = {
                 count  : 0,
                 details: {
-                  name   : data[i].name,
-                  claimId: data[i].claimId,
+                  name    : data[i].name,
+                  claimId : data[i].claimId,
+                  fileName: data[i].fileName,
+                  fileType: data[i].fileType,
+                  nsfw    : data[i].nsfw,
                 },
               };
             } else {
-              // console.log(resultHashTable[key]);
               resultHashTable[key]['count'] += 1;
             }
           }
-          // order the results
-          let sortableArray = [];
           for (let objKey in resultHashTable) {
             if (resultHashTable.hasOwnProperty(objKey)) {
               sortableArray.push([
@@ -183,13 +186,12 @@ module.exports = {
             }
           }
           sortableArray.sort((a, b) => {
-            return a[0] - b[0];
+            return b[0] - a[0];
           });
-          const sortedArray = sortableArray.map((a) => {
+          sortedArray = sortableArray.map((a) => {
             return a[1];
           });
           // return results
-          logger.debug(sortedArray);
           resolve(sortedArray);
         })
         .catch(error => {

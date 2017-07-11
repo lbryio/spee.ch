@@ -12,7 +12,6 @@
 		"PublishUploadPath": "/home/lbry/Downloads/"
 	},
 	"Logging": {
-		"LogLevel": "verbose",
-		"LogDirectory": "/home/lbry/Logs"
+		"LogLevel": "verbose"
 	}
 }
