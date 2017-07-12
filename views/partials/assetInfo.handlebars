@@ -43,7 +43,7 @@
 			<td>{{fileInfo.fileName}}</td>
 		</tr>
 		<tr>
-			<td class="left-column">fileType</td>
+			<td class="left-column">File Type</td>
 			<td>{{#if fileInfo.fileType}}
 					{{fileInfo.fileType}}
 				{{else}}
@@ -53,17 +53,3 @@
 		</tr>
 	</table>
 </div>
-
-<script type ="text/javascript">
- 	// update the link holder
-	function copyToClipboard(event){
-		var elementToCopy = event.target.dataset.elementtocopy;
-		var element = document.getElementById(elementToCopy);
-		element.select();
-		try {
-			var successful = document.execCommand('copy');
-		} catch (err) {
-			alert('Oops, unable to copy');
-		}
-	}
-</script>
