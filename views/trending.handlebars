@@ -1,17 +1,4 @@
 <div class="wrapper">
 	{{> topBar}}
-	<div class="full"> 
-		<h2>Trending Images </h2>
-		{{#each trendingAssets}}
-			{{#ifConditional this.fileType '===' 'video/mp4'}}
-				<video class="asset-small" controls>
-					<source src="/api/streamFile/{{this.fileName}}">
-					{{!--fallback--}}
-					Your browser does not support the <code>video</code> element.
-				</video>
-			{{else}}
-				<img  class="asset-small" src="/api/streamFile/{{this.fileName}}" />
-			{{/ifConditional}}
-		{{/each}}
-	</div>
+	{{> trending}}
 </div>
