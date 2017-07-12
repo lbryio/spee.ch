@@ -91,6 +91,13 @@ h4 {
 
 /* other */
 
+.asset-small {
+	height: 200px;
+	padding: 0px;
+	margin: 10px;
+	float: left;
+}
+
 input {
 	padding: 0.3em;
 }

@@ -9,10 +9,9 @@
 	},
 	"Database": {
 		"MySqlConnectionUri": "none",
-		"PublishUploadPath": "C:\\lbry\\speech\\hosted_content\\"
+		"DownloadDirectory": "/home/ubuntu/Downloads/"
 	},
 	"Logging": {
-		"LogLevel": "silly",
-		"LogDirectory": "C:\\lbry\\speech\\logs\\"
+		"LogLevel": "silly"
 	}
 }

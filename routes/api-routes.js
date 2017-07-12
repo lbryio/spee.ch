@@ -8,11 +8,11 @@ const errorHandlers = require('../helpers/libraries/errorHandlers.js');
 const { postToStats, sendGoogleAnalytics } = require('../controllers/statsController.js');
 
 const config = require('config');
-const hostedContentPath = config.get('Database.PublishUploadPath');
+const hostedContentPath = config.get('Database.DownloadDirectory');
 
 module.exports = app => {
-  // route to run a claim_list request on the daemon
-  app.get('/api/streamFile/:name', ({ params, headers }, res) => {
+  // route to return a file directly
+  app.get('/api/streamFile/:name', ({ params }, res) => {
     const filePath = `${hostedContentPath}${params.name}`;
     res.status(200).sendFile(filePath);
   });
@@ -24,7 +24,7 @@ module.exports = app => {
     lbryApi
       .getClaimsList(params.name)
       .then(claimsList => {
-        postToStats('serve', originalUrl, ip, 'success');
+        postToStats('serve', originalUrl, ip, null, null, null, null, 'success');
         res.status(200).json(claimsList);
       })
       .catch(error => {
@@ -56,7 +56,7 @@ module.exports = app => {
     lbryApi
       .resolveUri(params.uri)
       .then(resolvedUri => {
-        postToStats('serve', originalUrl, ip, 'success');
+        postToStats('serve', originalUrl, ip, null, null, null, null, 'success');
         res.status(200).json(resolvedUri);
       })
       .catch(error => {
@@ -76,7 +76,7 @@ module.exports = app => {
     try {
       validateFile(file, name, license, nsfw);
     } catch (error) {
-      postToStats('publish', originalUrl, ip, error.message);
+      postToStats('publish', originalUrl, ip, null, null, null, null, error.message);
       logger.debug('rejected >>', error.message);
       res.status(400).send(error.message);
       return;
@@ -91,7 +91,7 @@ module.exports = app => {
     publishController
       .publish(publishParams, fileName, fileType)
       .then(result => {
-        postToStats('publish', originalUrl, ip, 'success');
+        postToStats('publish', originalUrl, ip, null, null, null, null, 'success');
         res.status(200).json(result);
       })
       .catch(error => {

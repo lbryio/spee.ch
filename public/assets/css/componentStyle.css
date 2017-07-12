@@ -12,6 +12,29 @@
 	margin: 2px 5px 2px 5px;
 }
 
+/* publish */
+#drop-zone {
+	border: 1px dashed lightgrey;
+	padding: 1em;
+	height: 6em;
+}
+
+#asset-preview-holder {
+	width: 100%;
+	margin-bottom: 1em;
+}
+
+.snapshot-generator {
+  display: block;
+  height: 1px;
+  left: 0;
+  object-fit: contain;
+  position: fixed;
+  top: 0;
+  width: 1px;
+  z-index: -1;
+}
+
 /* show routes */
 .show-asset {
 	width: 100%;
@@ -53,7 +76,14 @@ button.copy-button {
 	vertical-align: top;
 }
 
-/*  learn more */
+/* trending claims */
+.asset-trending {
+	width: 21%;
+	margin: 2%;
+	float: left;
+}
+
+/* learn more */
 .learn-more {
 	text-align: center;
 	margin-top: 2px;
@@ -115,41 +145,11 @@ button.copy-button {
 	list-style-type: none;
 }
 
-/* publish */
-#drop-zone {
-	border: 1px dashed lightgrey;
-	padding: 1em;
-	height: 6em;
-}
-
-#asset-preview-holder {
-	width: 100%;
-	margin-bottom: 1em;
-}
-
-.snapshot-generator {
-  display: block;
-  height: 1px;
-  left: 0;
-  object-fit: contain;
-  position: fixed;
-  top: 0;
-  width: 1px;
-  z-index: -1;
-}
-
 /* meme */
 canvas {
   background-color: white; 
   width: 100%;
   height: auto;
-}
-
-.meme-fodder-img {
-	width: 21%;
-	padding: 0px;
-	margin: 2% 4% 2% 0px;
-	float: left;
 }
 
 /* statistics */
