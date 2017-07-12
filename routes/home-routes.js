@@ -1,19 +1,11 @@
 const logger = require('winston');
-const { postToStats, getTrendingClaims } = require('../controllers/statsController.js');
-const errorHandlers = require('../helpers/libraries/errorHandlers.js');
+const { postToStats } = require('../controllers/statsController.js');
 
 module.exports = app => {
   // route for the home page
   app.get('/', ({ headers, ip, originalUrl }, res) => {
-    const startDate = new Date();
-    startDate.setDate(startDate.getDate() - 1);
-    getTrendingClaims(startDate)
-      .then(result => {
-        res.status(200).render('index', { trendingAssets: result });
-      })
-      .catch(error => {
-        errorHandlers.handleRequestError(error, res);
-      });
+    // send response
+    res.status(200).render('index');
   });
   // a catch-all route if someone visits a page that does not exist
   app.use('*', ({ originalUrl, ip }, res) => {
