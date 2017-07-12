@@ -9,7 +9,7 @@
 	},
 	"Database": {
 		"MySqlConnectionUri": "none",
-		"PublishUploadPath": "none"
+		"DownloadDirectory": "none"
 	},
 	"Logging": {
 		"LogLevel": "none"

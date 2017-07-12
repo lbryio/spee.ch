@@ -7,7 +7,7 @@ const Handlebars = require('handlebars');
 const config = require('config');
 const winston = require('winston');
 
-const hostedContentPath = config.get('Database.PublishUploadPath');
+const hostedContentPath = config.get('Database.DownloadDirectory');
 
 // configure logging
 const logLevel = config.get('Logging.LogLevel');

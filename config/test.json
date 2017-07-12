@@ -9,7 +9,7 @@
 	},
 	"Database": {
 		"MySqlConnectionUri": "none",
-		"PublishUploadPath": "/home/ubuntu/Downloads/"
+		"DownloadDirectory": "/home/ubuntu/Downloads/"
 	},
 	"Logging": {
 		"LogLevel": "debug"

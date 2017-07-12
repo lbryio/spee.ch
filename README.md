@@ -11,7 +11,7 @@ spee.ch is a single-serving site that reads and publishes images to and from the
 	* save your connection uri somewhere handy (you will need it when you start the server)
 		* the uri should be in the form `mysql://user:pass@host:port/dbname`
 * clone this repo
-	* customize `config/develpment.json` by replacing the value of `Database.PublishUploadPath` with a string representing the local path where you want uploaded files to be stored.
+	* customize `config/develpment.json` by replacing the value of `Database.DownloadDirectory` with a string representing the local path where you want uploaded files to be stored.
 * run `npm install`
 * to start the server, from your command line run `node server.js` while passing three environmental variables: your lbry wallet address (`LBRY_WALLET_ADDRESS`), your mysql connection uri (`MYSQL_CONNECTION_STRING`), and the environment to run (`NODE_ENV`).
 	* i.e. `LBRY_WALLET_ADDRESS=<your wallet address here> MYSQL_CONNECTION_STRING=<your connection uri here> NODE_ENV=development node server.js`

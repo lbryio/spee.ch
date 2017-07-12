@@ -9,7 +9,7 @@
 	},
 	"Database": {
 		"MySqlConnectionUri": "none",
-		"PublishUploadPath": "/home/lbry/Downloads/"
+		"DownloadDirectory": "/home/lbry/Downloads/"
 	},
 	"Logging": {
 		"LogLevel": "verbose"

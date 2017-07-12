@@ -8,7 +8,7 @@ const errorHandlers = require('../helpers/libraries/errorHandlers.js');
 const { postToStats, sendGoogleAnalytics } = require('../controllers/statsController.js');
 
 const config = require('config');
-const hostedContentPath = config.get('Database.PublishUploadPath');
+const hostedContentPath = config.get('Database.DownloadDirectory');
 
 module.exports = app => {
   // route to return a file directly
