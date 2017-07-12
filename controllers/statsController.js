@@ -154,10 +154,16 @@ module.exports = {
             createdAt: {
               gt: startDate,
             },
+            FileId: {
+              not: null,
+            },
           },
           include: [db.File],
         })
         .then(data => {
+          if (data) {
+            logger.debug(data[0].File.name);
+          }
           // let resultHashTable = {};
           // let sortableArray = [];
           // let sortedArray;

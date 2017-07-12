@@ -46,7 +46,6 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER }) => {
   );
 
   File.associate = db => {
-    console.log('test');
     File.hasMany(db.Request);
   };
 

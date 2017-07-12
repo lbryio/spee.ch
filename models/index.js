@@ -32,7 +32,7 @@ fs
 
 Object.keys(db).forEach(modelName => {
   if (db[modelName].associate) {
-    logger.verbose('associating', modelName);
+    logger.info('Associating model:', modelName);
     db[modelName].associate(db);
   }
 });
