@@ -52,14 +52,14 @@ module.exports = (app) => {
         if (headers['accept']) { // note: added b/c some requests errored out due to no accept param in header
           const mimetypes = headers['accept'].split(',');
           if (mimetypes.includes('text/html')) {
-            postToStats('show', originalUrl, ip, fileInfo.name, fileInfo.claimId, fileInfo.fileName, fileInfo.fileType, fileInfo.nsfw, 'success');
+            postToStats('show', originalUrl, ip, fileInfo.name, fileInfo.claimId, 'success');
             res.status(200).render('showLite', { fileInfo });
           } else {
-            postToStats('serve', originalUrl, ip, fileInfo.name, fileInfo.claimId, fileInfo.fileName, fileInfo.fileType, fileInfo.nsfw, 'success');
+            postToStats('serve', originalUrl, ip, fileInfo.name, fileInfo.claimId, 'success');
             serveFile(fileInfo, res);
           }
         } else {
-          postToStats('serve', originalUrl, ip, fileInfo.name, fileInfo.claimId, fileInfo.fileName, fileInfo.fileType, fileInfo.nsfw, 'success');
+          postToStats('serve', originalUrl, ip, fileInfo.name, fileInfo.claimId, 'success');
           serveFile(fileInfo, res);
         }
       })
@@ -82,14 +82,14 @@ module.exports = (app) => {
         if (headers['accept']) { // note: added b/c some requests errored out due to no accept param in header
           const mimetypes = headers['accept'].split(',');
           if (mimetypes.includes('text/html')) {
-            postToStats('show', originalUrl, ip, fileInfo.name, fileInfo.claimId, fileInfo.fileName, fileInfo.fileType, fileInfo.nsfw, 'success');
+            postToStats('show', originalUrl, ip, fileInfo.name, fileInfo.claimId, 'success');
             res.status(200).render('showLite', { fileInfo });
           } else {
-            postToStats('serve', originalUrl, ip, fileInfo.name, fileInfo.claimId, fileInfo.fileName, fileInfo.fileType, fileInfo.nsfw, 'success');
+            postToStats('serve', originalUrl, ip, fileInfo.name, fileInfo.claimId, 'success');
             serveFile(fileInfo, res);
           }
         } else {
-          postToStats('serve', originalUrl, ip, fileInfo.name, fileInfo.claimId, fileInfo.fileName, fileInfo.fileType, fileInfo.nsfw, 'success');
+          postToStats('serve', originalUrl, ip, fileInfo.name, fileInfo.claimId, 'success');
           serveFile(fileInfo, res);
         }
       })

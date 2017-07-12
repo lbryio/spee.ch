@@ -9,7 +9,7 @@
 	},
 	"Database": {
 		"MySqlConnectionUri": "none",
-		"DownloadDirectory": "/home/ubuntu/Downloads/"
+		"DownloadDirectory": "C:\\Users\\Bones\\Downloads\\lbry\\"
 	},
 	"Logging": {
 		"LogLevel": "silly"

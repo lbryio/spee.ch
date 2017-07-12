@@ -11,7 +11,7 @@ module.exports = app => {
   app.use('*', ({ originalUrl, ip }, res) => {
     logger.error(`404 on ${originalUrl}`);
     // post to stats
-    postToStats('show', originalUrl, ip, null, null, null, null, null, 'Error: 404');
+    postToStats('show', originalUrl, ip, null, null, 'Error: 404');
     // send response
     res.status(404).render('fourOhFour');
   });

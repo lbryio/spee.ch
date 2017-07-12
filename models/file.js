@@ -44,5 +44,11 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER }) => {
       freezeTableName: true,
     }
   );
+
+  File.associate = db => {
+    console.log('test');
+    File.hasMany(db.Request);
+  };
+
   return File;
 };
