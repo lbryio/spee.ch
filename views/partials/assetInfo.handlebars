@@ -4,12 +4,24 @@
 </div>
 <div class="panel links">
 	<h2 class="subheader">Links</h2>
+	{{!--direct link to asset--}}
 	<a href="/{{fileInfo.name}}/{{fileInfo.claimId}}">Direct Link</a>
 	<br/>
 	<input type="text" id="direct-link" class="link" readonly="true" spellcheck="false" value="https://spee.ch/{{fileInfo.name}}/{{fileInfo.claimId}}"/>
 	<button class="copy-button" data-elementtocopy="direct-link" onclick="copyToClipboard(event)">copy</button>
 	<br/>
 	<br/>
+	{{!--markdown text using asset--}}
+	{{#ifConditional fileInfo.fileType '===' 'video/mp4'}}
+	{{else}}
+		Markdown
+		<br/>
+		<input type="text" id="markdown-text" class="link" readonly="true" spellcheck="false" value='![{{fileInfo.name}}](https://spee.ch/{{fileInfo.name}}/{{fileInfo.claimId}})'/>
+		<button class="copy-button" data-elementtocopy="markdown-text" onclick="copyToClipboard(event)">copy</button>
+		<br/>
+		<br/>
+	{{/ifConditional}}
+	{{!-- html text for embedding asset--}}
 	Embed HTML
 	<br/>
 	{{#ifConditional fileInfo.fileType '===' 'video/mp4'}}
@@ -20,7 +32,8 @@
 	<button class="copy-button" data-elementtocopy="embed-text" onclick="copyToClipboard(event)">copy</button>
 	<br/>
 	<br/>
-	<a href="/show/{{fileInfo.name}}/{{fileInfo.claimId}}">Details</a>
+	{{!-- link to show route for asset--}}
+	<a href="/show/{{fileInfo.name}}/{{fileInfo.claimId}}">Details Link</a>
 	</br>
 	<input type="text" id="show-link" class="link" readonly="true" spellcheck="false" value="https://spee.ch/show/{{fileInfo.name}}/{{fileInfo.claimId}}"/>
 	<button class="copy-button" data-elementtocopy="show-link" onclick="copyToClipboard(event)">copy</button>
