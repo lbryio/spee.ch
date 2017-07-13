@@ -149,7 +149,7 @@ module.exports = {
     const deferred = new Promise((resolve, reject) => {
       // get the raw requests data
       db.sequelize
-        .query('SELECT COUNT(*), file.* FROM request LEFT JOIN file ON request.FileId = file.id WHERE FileId != "null" AND nsfw != 1 GROUP BY FileId ORDER BY COUNT(*) DESC LIMIT 25;', { type: db.sequelize.QueryTypes.SELECT })
+        .query('SELECT COUNT(*), File.* FROM Request LEFT JOIN File ON Request.FileId = File.id WHERE FileId != "null" AND nsfw != 1 GROUP BY FileId ORDER BY COUNT(*) DESC LIMIT 25;', { type: db.sequelize.QueryTypes.SELECT })
         .then(results => {
           resolve(results);
         })
