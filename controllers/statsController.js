@@ -148,59 +148,10 @@ module.exports = {
     logger.debug('retrieving trending requests');
     const deferred = new Promise((resolve, reject) => {
       // get the raw requests data
-      db.Request
-        .findAll({
-          where: {
-            createdAt: {
-              gt: startDate,
-            },
-            FileId: {
-              not: null,
-            },
-          },
-          include: [db.File],
-        })
-        .then(data => {
-          if (data) {
-            logger.debug(data[0].File.name);
-          }
-          // let resultHashTable = {};
-          // let sortableArray = [];
-          // let sortedArray;
-          // // summarise the data
-          // for (let i = 0; i < data.length; i++) {
-          //   let key = data[i].fileId;
-          //   if (resultHashTable[key] === undefined) {
-          //     resultHashTable[key] = {
-          //       count  : 0,
-          //       details: {
-          //         name    : data[i].name,
-          //         claimId : data[i].claimId,
-          //         fileName: data[i].fileName,
-          //         fileType: data[i].fileType,
-          //         nsfw    : data[i].nsfw,
-          //       },
-          //     };
-          //   } else {
-          //     resultHashTable[key]['count'] += 1;
-          //   }
-          // }
-          // for (let objKey in resultHashTable) {
-          //   if (resultHashTable.hasOwnProperty(objKey)) {
-          //     sortableArray.push([
-          //       resultHashTable[objKey]['count'],
-          //       resultHashTable[objKey]['details'],
-          //     ]);
-          //   }
-          // }
-          // sortableArray.sort((a, b) => {
-          //   return b[0] - a[0];
-          // });
-          // sortedArray = sortableArray.map((a) => {
-          //   return a[1];
-          // });
-          // // return results
-          resolve();
+      db.sequelize
+        .query('SELECT COUNT(*), file.* FROM request LEFT JOIN file ON request.FileId = file.id WHERE FileId != "null" AND nsfw != 1 GROUP BY FileId ORDER BY COUNT(*) DESC LIMIT 25;', { type: db.sequelize.QueryTypes.SELECT })
+        .then(results => {
+          resolve(results);
         })
         .catch(error => {
           logger.error('sequelize error', error);
