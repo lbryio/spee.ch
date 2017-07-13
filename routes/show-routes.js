@@ -27,7 +27,7 @@ module.exports = (app) => {
     startDate.setDate(startDate.getDate() - 1);
     getStatsSummary(startDate)
       .then(result => {
-        postToStats('show', originalUrl, ip, null, null, null, null, null, 'success');
+        postToStats('show', originalUrl, ip, null, null, 'success');
         res.status(200).render('statistics', result);
       })
       .catch(error => {
@@ -39,7 +39,7 @@ module.exports = (app) => {
     // get and render the content
     getAllClaims('meme-fodder')
       .then(orderedFreePublicClaims => {
-        postToStats('show', originalUrl, ip, null, null, null, null, null, 'success');
+        postToStats('show', originalUrl, ip, null, null, 'success');
         res.status(200).render('memeFodder', { claims: orderedFreePublicClaims });
       })
       .catch(error => {
@@ -55,7 +55,7 @@ module.exports = (app) => {
           res.status(307).render('noClaims');
           return;
         }
-        postToStats('show', originalUrl, ip, null, null, null, null, null, 'success');
+        postToStats('show', originalUrl, ip, null, null, 'success');
         res.status(200).render('allClaims', { claims: orderedFreePublicClaims });
       })
       .catch(error => {
@@ -73,7 +73,7 @@ module.exports = (app) => {
           return;
         }
         // serve the file or the show route
-        postToStats('show', originalUrl, ip, fileInfo.name, fileInfo.claimId, fileInfo.fileName, fileInfo.fileType, fileInfo.nsfw, 'success');
+        postToStats('show', originalUrl, ip, fileInfo.name, fileInfo.claimId, 'success');
         res.status(200).render('show', { fileInfo });
       })
       .catch(error => {
@@ -91,7 +91,7 @@ module.exports = (app) => {
           return;
         }
         // serve the show route
-        postToStats('show', originalUrl, ip, fileInfo.name, fileInfo.claimId, fileInfo.fileName, fileInfo.fileType, fileInfo.nsfw, 'success');
+        postToStats('show', originalUrl, ip, fileInfo.name, fileInfo.claimId, 'success');
         res.status(200).render('show', { fileInfo });
       })
       .catch(error => {

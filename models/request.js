@@ -1,6 +1,6 @@
 module.exports = (sequelize, { STRING, BOOLEAN, TEXT }) => {
-  const Stats = sequelize.define(
-    'Stats',
+  const Request = sequelize.define(
+    'Request',
     {
       action: {
         type     : STRING,
@@ -14,26 +14,6 @@ module.exports = (sequelize, { STRING, BOOLEAN, TEXT }) => {
         type     : STRING,
         allowNull: true,
       },
-      name: {
-        type     : STRING,
-        allowNull: true,
-      },
-      claimId: {
-        type     : STRING,
-        allowNull: true,
-      },
-      fileName: {
-        type     : STRING,
-        allowNull: true,
-      },
-      fileType: {
-        type     : STRING,
-        allowNull: true,
-      },
-      nsfw: {
-        type     : BOOLEAN,
-        allowNull: true,
-      },
       result: {
         type     : TEXT('long'),
         allowNull: true,
@@ -44,5 +24,15 @@ module.exports = (sequelize, { STRING, BOOLEAN, TEXT }) => {
       freezeTableName: true,
     }
   );
-  return Stats;
+
+  Request.associate = db => {
+    Request.belongsTo(db.File, {
+      onDelete  : 'cascade',
+      foreignKey: {
+        allowNull: true,
+      },
+    });
+  };
+
+  return Request;
 };
