@@ -43,7 +43,7 @@ module.exports = {
       axios
         .post('http://localhost:5279/lbryapi', {
           method: 'get',
-          params: { uri, timeout: 30 },
+          params: { uri, timeout: 20 },
         })
         .then(({ data }) => {
           // check to make sure the daemon didn't just time out
@@ -54,7 +54,7 @@ module.exports = {
             reject(data.result.error);
           }
           /*
-            note: put in a check to make sure we do not resolve until the download is actually complete (response.data.completed === true)
+            note: put in a check to make sure we do not resolve until the download is actually complete (response.data.completed === true)?
           */
           resolve(data.result);
         })

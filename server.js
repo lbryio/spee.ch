@@ -7,12 +7,11 @@ const Handlebars = require('handlebars');
 const config = require('config');
 const winston = require('winston');
 
-const hostedContentPath = config.get('Database.PublishUploadPath');
+const hostedContentPath = config.get('Database.DownloadDirectory');
 
 // configure logging
 const logLevel = config.get('Logging.LogLevel');
-const logDir = config.get('Logging.LogDirectory');
-require('./config/loggerSetup.js')(winston, logLevel, logDir);
+require('./config/loggerSetup.js')(winston, logLevel);
 
 // set port
 const PORT = 3000;
@@ -29,6 +28,10 @@ app.enable('trust proxy');  // trust the proxy to get ip address for us
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 app.use(siofu.router);
+app.use((req, res, next) => {  // logging middleware
+  winston.verbose(`Request on ${req.originalUrl} from ${req.ip}`);
+  next();
+});
 
 // configure handlebars & register it with Express app
 const hbs = expressHandlebars.create({
@@ -49,6 +52,28 @@ const hbs = expressHandlebars.create({
         </script>`
       );
     },
+    ifConditional (varOne, operator, varTwo, options) {
+      switch (operator) {
+        case '===':
+          return (varOne === varTwo) ? options.fn(this) : options.inverse(this);
+        case '!==':
+          return (varOne !== varTwo) ? options.fn(this) : options.inverse(this);
+        case '<':
+          return (varOne < varTwo) ? options.fn(this) : options.inverse(this);
+        case '<=':
+          return (varOne <= varTwo) ? options.fn(this) : options.inverse(this);
+        case '>':
+          return (varOne > varTwo) ? options.fn(this) : options.inverse(this);
+        case '>=':
+          return (varOne >= varTwo) ? options.fn(this) : options.inverse(this);
+        case '&&':
+          return (varOne && varTwo) ? options.fn(this) : options.inverse(this);
+        case '||':
+          return (varOne || varTwo) ? options.fn(this) : options.inverse(this);
+        default:
+          return options.inverse(this);
+      }
+    },
   },
 });
 app.engine('handlebars', hbs.engine);
@@ -61,14 +86,18 @@ require('./routes/serve-routes.js')(app);
 require('./routes/home-routes.js')(app);
 
 // require socket.io routes
-const http = require('./routes/sockets-routes.js')(app, siofu, hostedContentPath);
+const server = require('./routes/sockets-routes.js')(app, siofu, hostedContentPath);
 
 // sync sequelize
 // wrap the server in socket.io to intercept incoming sockets requests
 // start server
-db.sequelize.sync().then(() => {
-  http.listen(PORT, () => {
-    winston.info('Trusting proxy?', app.get('trust proxy'));
-    winston.info(`Server is listening on PORT ${PORT}`);
+db.sequelize.sync()
+  .then(() => {
+    server.listen(PORT, () => {
+      winston.info('Trusting proxy?', app.get('trust proxy'));
+      winston.info(`Server is listening on PORT ${PORT}`);
+    });
+  })
+  .catch((error) => {
+    winston.log('Error syncing sequelize db:', error);
   });
-});

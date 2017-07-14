@@ -5,8 +5,7 @@ const db = require('../models');
 const googleApiKey = config.get('AnalyticsConfig.GoogleId');
 
 module.exports = {
-  postToStats (action, url, ipAddress, result) {
-    logger.silly(`creating ${action} record for statistics db`);
+  postToStats (action, url, ipAddress, name, claimId, result) {
     // make sure the result is a string
     if (result && (typeof result !== 'string')) {
       result = result.toString();
@@ -15,17 +14,30 @@ module.exports = {
     if (ipAddress && (typeof ipAddress !== 'string')) {
       ipAddress = ipAddress.toString();
     }
-    // create record in the db
-    db.Stats.create({
-      action,
-      url,
-      ipAddress,
-      result,
-    })
-    .then()
-    .catch(error => {
-      logger.error('sequelize error', error);
-    });
+    logger.silly(name, claimId);
+    db.File
+      .findOne({where: { name, claimId }})
+      .then(file => {
+        // create record in the db
+        let FileId;
+        if (file) {
+          FileId = file.dataValues.id;
+        } else {
+          FileId = null;
+        }
+        logger.silly('file id:', FileId);
+        return db.Request
+          .create({
+            action,
+            url,
+            ipAddress,
+            result,
+            FileId,
+          });
+      })
+      .catch(error => {
+        logger.error('sequelize error', error);
+      });
   },
   sendGoogleAnalytics (action, headers, ip, originalUrl) {
     const visitorId = ip.replace(/\./g, '-');
@@ -58,20 +70,27 @@ module.exports = {
       }
     });
   },
-  getStatsSummary () {
-    logger.debug('retrieving site statistics');
+  getStatsSummary (startDate) {
+    logger.debug('retrieving request records');
     const deferred = new Promise((resolve, reject) => {
-      // get the raw statistics data
-      db.Stats
-        .findAll()
+      // get the raw Requests data
+      db.Request
+        .findAll({
+          where: {
+            createdAt: {
+              gt: startDate,
+            },
+          },
+        })
         .then(data => {
-          const resultHashTable = {};
+          let resultHashTable = {};
           let totalServe = 0;
           let totalPublish = 0;
           let totalShow = 0;
           let totalCount = 0;
           let totalSuccess = 0;
           let totalFailure = 0;
+          let percentSuccess;
           // sumarise the data
           for (let i = 0; i < data.length; i++) {
             let key = data[i].action + data[i].url;
@@ -114,9 +133,25 @@ module.exports = {
               }
             }
           }
-          const percentSuccess = Math.round(totalSuccess / totalCount * 100);
+          percentSuccess = Math.round(totalSuccess / totalCount * 100);
           // return results
           resolve({ records: resultHashTable, totals: { totalServe, totalPublish, totalShow, totalCount, totalSuccess, totalFailure }, percentSuccess });
+        })
+        .catch(error => {
+          logger.error('sequelize error', error);
+          reject(error);
+        });
+    });
+    return deferred;
+  },
+  getTrendingClaims (startDate) {
+    logger.debug('retrieving trending requests');
+    const deferred = new Promise((resolve, reject) => {
+      // get the raw requests data
+      db.sequelize
+        .query('SELECT COUNT(*), File.* FROM Request LEFT JOIN File ON Request.FileId = File.id WHERE FileId != "null" AND nsfw != 1 GROUP BY FileId ORDER BY COUNT(*) DESC LIMIT 25;', { type: db.sequelize.QueryTypes.SELECT })
+        .then(results => {
+          resolve(results);
         })
         .catch(error => {
           logger.error('sequelize error', error);

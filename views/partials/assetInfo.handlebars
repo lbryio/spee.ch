@@ -1,0 +1,68 @@
+<div class="panel">
+	<h2>Name</h2>
+	<p>{{fileInfo.name}}</>
+</div>
+<div class="panel links">
+	<h2 class="subheader">Links</h2>
+	{{!--direct link to asset--}}
+	<a href="/{{fileInfo.name}}/{{fileInfo.claimId}}">Direct Link</a>
+	<br/>
+	<input type="text" id="direct-link" class="link" readonly="true" spellcheck="false" value="https://spee.ch/{{fileInfo.name}}/{{fileInfo.claimId}}"/>
+	<button class="copy-button" data-elementtocopy="direct-link" onclick="copyToClipboard(event)">copy</button>
+	<br/>
+	<br/>
+	{{!--markdown text using asset--}}
+	{{#ifConditional fileInfo.fileType '===' 'video/mp4'}}
+	{{else}}
+		Markdown
+		<br/>
+		<input type="text" id="markdown-text" class="link" readonly="true" spellcheck="false" value='![{{fileInfo.name}}](https://spee.ch/{{fileInfo.name}}/{{fileInfo.claimId}})'/>
+		<button class="copy-button" data-elementtocopy="markdown-text" onclick="copyToClipboard(event)">copy</button>
+		<br/>
+		<br/>
+	{{/ifConditional}}
+	{{!-- html text for embedding asset--}}
+	Embed HTML
+	<br/>
+	{{#ifConditional fileInfo.fileType '===' 'video/mp4'}}
+		<input type="text" id="embed-text" class="link" readonly="true" spellcheck="false" value='&lt;video autoplay controls>&lt;source src="https://spee.ch/{{fileInfo.name}}/{{fileInfo.claimId}}" />&lt;/video>'/>
+	{{else}}
+		<input type="text" id="embed-text" class="link" readonly="true" spellcheck="false" value='&lt;img src="https://spee.ch/{{fileInfo.name}}/{{fileInfo.claimId}}" />'/>
+	{{/ifConditional}}
+	<button class="copy-button" data-elementtocopy="embed-text" onclick="copyToClipboard(event)">copy</button>
+	<br/>
+	<br/>
+	{{!-- link to show route for asset--}}
+	<a href="/show/{{fileInfo.name}}/{{fileInfo.claimId}}">Details Link</a>
+	</br>
+	<input type="text" id="show-link" class="link" readonly="true" spellcheck="false" value="https://spee.ch/show/{{fileInfo.name}}/{{fileInfo.claimId}}"/>
+	<button class="copy-button" data-elementtocopy="show-link" onclick="copyToClipboard(event)">copy</button>
+	<br/>
+	<br/>
+</div>
+<div class="panel">
+	<h2 class="subheader">Metadata</h2>
+	<table class="metadata-table" style="table-layout: fixed">
+		<tr class="metadata-row">
+			<td class="left-column">Name</td>
+			<td>{{fileInfo.name}}</td>
+		</tr>
+		<tr class="metadata-row">
+			<td class="left-column">Claim Id</td>
+			<td>{{fileInfo.claimId}}</td>
+		</tr>
+		<tr class="metadata-row">
+			<td class="left-column">File Name</td>
+			<td>{{fileInfo.fileName}}</td>
+		</tr>
+		<tr>
+			<td class="left-column">File Type</td>
+			<td>{{#if fileInfo.fileType}}
+					{{fileInfo.fileType}}
+				{{else}}
+					unknown
+				{{/if}}
+			</td>
+		</tr>
+	</table>
+</div>

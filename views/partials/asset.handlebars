@@ -1,0 +1,13 @@
+<div class="panel">
+	<div id="asset-placeholder">
+		{{#ifConditional fileInfo.fileType '===' 'video/mp4'}}
+			<video class="show-asset" autoplay controls>
+				<source src="/api/streamFile/{{fileInfo.fileName}}">
+				{{!--fallback--}}
+				Your browser does not support the <code>video</code> element.
+			</video>
+		{{else}}
+			<img  class="show-asset" src="/api/streamFile/{{fileInfo.fileName}}" />
+		{{/ifConditional}}
+	</div>
+</div>

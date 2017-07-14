@@ -1,6 +1,6 @@
-module.exports = (sequelize, { STRING, TEXT }) => {
-  const Stats = sequelize.define(
-    'Stats',
+module.exports = (sequelize, { STRING, BOOLEAN, TEXT }) => {
+  const Request = sequelize.define(
+    'Request',
     {
       action: {
         type     : STRING,
@@ -13,7 +13,6 @@ module.exports = (sequelize, { STRING, TEXT }) => {
       ipAddress: {
         type     : STRING,
         allowNull: true,
-        default  : null,
       },
       result: {
         type     : TEXT('long'),
@@ -25,5 +24,15 @@ module.exports = (sequelize, { STRING, TEXT }) => {
       freezeTableName: true,
     }
   );
-  return Stats;
+
+  Request.associate = db => {
+    Request.belongsTo(db.File, {
+      onDelete  : 'cascade',
+      foreignKey: {
+        allowNull: true,
+      },
+    });
+  };
+
+  return Request;
 };

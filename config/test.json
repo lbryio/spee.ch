@@ -1,18 +1,15 @@
 {
 	"WalletConfig": {
-		"LbryPayAddress": "none",
-		"LbryClaimAddress": "none",
-		"LbryChangeAddress": "none"
+		"LbryClaimAddress": "none"
 	},
 	"AnalyticsConfig":{
 		"GoogleId": "UA-100747990-1"
 	},
 	"Database": {
 		"MySqlConnectionUri": "none",
-		"PublishUploadPath": "/home/ubuntu/Downloads/"
+		"DownloadDirectory": "/home/ubuntu/Downloads/"
 	},
 	"Logging": {
-		"LogLevel": "debug",
-		"LogDirectory": "/home/ubuntu/Logs"
+		"LogLevel": "debug"
 	}
 }

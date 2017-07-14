@@ -1,0 +1,23 @@
+<div class="wrapper">
+	{{> topBar}}
+	<div class="main">
+		{{> asset}}
+	</div>
+	<div class="sidebar">
+		{{> assetInfo}}
+	</div>
+	{{> footer}}
+</div>
+
+<script type ="text/javascript">
+	function copyToClipboard(event){
+		var elementToCopy = event.target.dataset.elementtocopy;
+		var element = document.getElementById(elementToCopy);
+		element.select();
+		try {
+			document.execCommand('copy');
+		} catch (err) {
+			alert('Oops, unable to copy');
+		}
+	}
+</script>

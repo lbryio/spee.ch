@@ -1,18 +1,15 @@
 {
 	"WalletConfig": {
-		"LbryPayAddress": "none",
-		"LbryClaimAddress": "none",
-		"LbryChangeAddress": "none"
+		"LbryClaimAddress": "none"
 	},
 	"AnalyticsConfig":{
 		"GoogleId": "UA-60403362-3"
 	},
 	"Database": {
 		"MySqlConnectionUri": "none",
-		"PublishUploadPath": "/home/lbry/Downloads/"
+		"DownloadDirectory": "/home/lbry/Downloads/"
 	},
 	"Logging": {
-		"LogLevel": "verbose",
-		"LogDirectory": "/home/lbry/Logs"
+		"LogLevel": "verbose"
 	}
 }

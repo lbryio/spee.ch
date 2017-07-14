@@ -5,8 +5,9 @@ const errorHandlers = require('../helpers/libraries/errorHandlers.js');
 const { postToStats } = require('../controllers/statsController.js');
 
 module.exports = (app, siofu, hostedContentPath) => {
-  const http = require('http').Server(app);
-  const io = require('socket.io')(http);
+  const http = require('http');
+  const server = http.Server(app);
+  const io = require('socket.io')(server);
 
   io.on('connection', socket => {
     logger.silly('a user connected via sockets');
@@ -26,32 +27,32 @@ module.exports = (app, siofu, hostedContentPath) => {
     // listener for when file upload encounters an error
     uploader.on('error', ({ error }) => {
       logger.error('an error occured while uploading', error);
-      postToStats('publish', '/', null, error);
+      postToStats('publish', '/', null, null, null, error);
       socket.emit('publish-status', error);
     });
     // listener for when file has been uploaded
     uploader.on('saved', ({ file }) => {
       if (file.success) {
         logger.debug(`Client successfully uploaded ${file.name}`);
-        socket.emit('publish-status', 'file upload successfully completed. Your image is being published (this might take a second)...');
+        socket.emit('publish-status', 'File upload successfully completed. Your image is being published to LBRY (this might take a second)...');
         // prepare the publish parameters
         const publishParams = publishHelpers.createPublishParams(file.meta.name, file.pathName, file.meta.license, file.meta.nsfw);
         // publish the file
         publishController
           .publish(publishParams, file.name, file.meta.type)
           .then(result => {
-            postToStats('publish', '/', null, 'success');
+            postToStats('publish', '/', null, null, null, 'success');
             socket.emit('publish-complete', { name: publishParams.name, result });
           })
           .catch(error => {
             error = errorHandlers.handlePublishError(error);
-            postToStats('publish', '/', null, error);
+            postToStats('publish', '/', null, null, null, error);
             socket.emit('publish-failure', error);
           });
       } else {
         logger.error(`An error occurred in uploading the client's file`);
-        socket.emit('publish-failure', 'file uploaded, but with errors');
-        postToStats('publish', '/', null, 'file uploaded, but with errors');
+        socket.emit('publish-failure', 'File uploaded, but with errors');
+        postToStats('publish', '/', null, null, null, 'File uploaded, but with errors');
         // to-do: remove the file if not done automatically
       }
     });
@@ -61,5 +62,5 @@ module.exports = (app, siofu, hostedContentPath) => {
     });
   });
 
-  return http;
+  return server;
 };
