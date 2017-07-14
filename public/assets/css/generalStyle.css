@@ -119,6 +119,11 @@ table {
 	word-wrap: break-word;
 }
 
+.input-error {
+	font-weight: bold;
+	color: red;
+}
+
 @media (max-width: 1250px) {
 
     .wrapper {
