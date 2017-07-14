@@ -17,7 +17,6 @@ function toggleSection(event){
 	}
 }
 
-// create a progress animation
 function createProgressBar(element, size){ 
 	var x = 1;
 	var adder = 1;
@@ -55,3 +54,26 @@ function dataURItoBlob(dataURI) {
 
     return new Blob([ia], {type:mimeString});
 }
+
+function showError(elementId, errorMsg) {
+	var errorDisplay = document.getElementById(elementId);
+	errorDisplay.hidden = false;
+	errorDisplay.innerText = errorMsg;
+}
+
+// Create new error objects, that prototypically inherit from the Error constructor
+function FileError(message) {
+  this.name = 'FileError';
+  this.message = message || 'Default Message';
+  this.stack = (new Error()).stack;
+}
+FileError.prototype = Object.create(Error.prototype);
+FileError.prototype.constructor = FileError;
+
+function NameError(message) {
+  this.name = 'NameError';
+  this.message = message || 'Default Message';
+  this.stack = (new Error()).stack;
+}
+NameError.prototype = Object.create(Error.prototype);
+NameError.prototype.constructor = NameError;

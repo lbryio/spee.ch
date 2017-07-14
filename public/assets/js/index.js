@@ -11,7 +11,13 @@ function publishSelectedImage(event) {
 	try {
 		validateSubmission(stagedFiles, name);
 	} catch (error) {
-		alert(error.message);
+		if (error.name === 'FileError'){
+			showError('input-error-file-selection', error.message);
+		} else if (error.name === 'NameError') {
+			showError('input-error-claim-name', error.message);
+		} else {
+			showError('input-error-publish-submit', error.message);
+		}
 		return;
 	}
 	// make sure the name is available then start the upload
@@ -20,7 +26,7 @@ function publishSelectedImage(event) {
 			uploader.submitFiles(stagedFiles); //note: must pass the file as part of an array.
 		})
 		.catch(function(error) {
-			alert(error);
+			showError('input-error-claim-name', error);
 		})
 };
 

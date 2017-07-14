@@ -29,16 +29,16 @@ function validateFile(file) {
 function validateSubmission(stagedFiles, name){
 	// make sure only 1 file was selected
 	if (!stagedFiles) {
-		throw new Error("Please select a file");
+		throw new FileError("Please select a file");
 	} else if (stagedFiles.length > 1) {
-		throw new Error("Only one file is allowed at a time");
+		throw new FileError("Only one file is allowed at a time");
 	}
 	// validate 'name' field
 	var invalidCharacters = /[^A-Za-z0-9,-]/.exec(name);
 	if (invalidCharacters) {
-		throw new Error(invalidCharacters + ' is not allowed. A-Z, a-z, 0-9, and "-" only.');
+		throw new NameError(invalidCharacters + ' is not allowed. A-Z, a-z, 0-9, and "-" only.');
 	} else if (name.length < 1) {
-		throw new Error("You must enter a name for your claim");
+		throw new NameError("You must enter a name for your claim");
 	}
 }
 
@@ -77,7 +77,7 @@ function previewAndStageFile(selectedFile){
 	try {
 		validateFile(selectedFile);
 	} catch (error) {
-		alert(error.message);
+		showError('input-error-file-selection', error.message);
 		return;
 	}
 	// set the preview
@@ -145,10 +145,10 @@ function stageAndPublish(file) {
 	var invalidCharacters = /[^A-Za-z0-9,-]/.exec(name);
 	// validate 'name'
 	if (invalidCharacters) {
-		alert(invalidCharacters + ' is not allowed. A-Z, a-z, 0-9, "_" and "-" only.');
+		showError('input-error-claim-name', invalidCharacters + ' is not allowed. A-Z, a-z, 0-9, "_" and "-" only.');
 		return;
 	} else if (name.length < 1) {
-		alert("You must enter a name for your claim");
+		showError('input-error-claim-name', 'You must enter a name for your claim');
 		return;
 	}
 	// stage files 
@@ -157,7 +157,7 @@ function stageAndPublish(file) {
 	if (stagedFiles) {
 		// make sure only 1 file was selected
 		if (stagedFiles.length < 1) {
-			alert("A file is needed");
+			showError('input-error-file-selection', 'A file is needed');
 			return;
 		}
 		// make sure the content type is acceptable
@@ -169,10 +169,10 @@ function stageAndPublish(file) {
 				uploader.submitFiles(stagedFiles);
 				break;
 			default:
-				alert("Only .png, .jpeg, .gif, and .mp4 files are currently supported");
+				showError('input-error-publish-submit', 'Only .png, .jpeg, .gif, and .mp4 files are currently supported');
 				break;
 		}
 	} else {
-		alert("Please select a file");
+		showError('input-error-file-selection', 'Please select a file');
 	}
 }
