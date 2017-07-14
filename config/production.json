@@ -1,8 +1,6 @@
 {
 	"WalletConfig": {
-		"LbryPayAddress": "none",
-		"LbryClaimAddress": "none",
-		"LbryChangeAddress": "none"
+		"LbryClaimAddress": "none"
 	},
 	"AnalyticsConfig":{
 		"GoogleId": "UA-60403362-3"

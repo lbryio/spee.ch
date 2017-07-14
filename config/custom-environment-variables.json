@@ -1,8 +1,6 @@
 {
 	"WalletConfig": {
-		"LbryPayAddress": "LBRY_PAY_ADDRESS",
-		"LbryClaimAddress": "LBRY_CLAIM_ADDRESS",
-		"LbryChangeAddress": "LBRY_CHANGE_ADDRESS"
+		"LbryClaimAddress": "LBRY_CLAIM_ADDRESS"
 	},
 	"Database": {
 		"MySqlConnectionUri": "MYSQL_CONNECTION_STRING"
