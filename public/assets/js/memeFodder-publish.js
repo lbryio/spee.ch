@@ -47,19 +47,4 @@ socket.on('publish-complete', function(msg){
 	publishResults += '<a href="/meme-fodder/play"><button>Reload</button></a></p>';
 	// update publish area
 	document.getElementById('publish-active-area').innerHTML = publishResults;
-	// update the link holder
-	document.getElementById('direct-link-holder').innerText = 'https://spee.ch' + directUrl;
-	// enable copy-to-clipboard
-	var copyBtn = document.querySelector('.copy-button');
-	copyBtn.addEventListener('click', function(event) {
-		// select the text
-		var text = document.getElementById('direct-link-holder');
-		text.select();
-		try {
-			var successful = document.execCommand('copy');
-			var msg = successful ? 'successful' : 'unsuccessful';
-		} catch (err) {
-			alert('Oops, unable to copy');
-		}
-	});
 });

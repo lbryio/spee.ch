@@ -3,6 +3,7 @@
 	<div class="col-left">
 		<div id="drop-zone" ondrop="drop_handler(event);" ondragover="dragover_handler(event);" ondragend="dragend_handler(event)">
 			<p>Drag and drop your file here, or choose your file below.</p>
+			<div class="input-error" id="input-error-file-selection" hidden="true"></div>
 			<input type="file"  id="siofu_input" name="file" accept="video/*,image/*" onchange="previewAndStageFile(event.target.files[0])" enctype="multipart/form-data"/>
 		</div>
 		<div id="asset-preview-holder">
@@ -12,7 +13,7 @@
 	<div class="col-right">
 		<textarea id="direct-link-holder" hidden="true">No URL yet</textarea>
 		<div id="publish-active-area">
-			
+			<div class="input-error" id="input-error-claim-name" hidden="true"></div>
 			<input type="text" id="publish-name" placeholder="Your claim name" class="form-control">
 			<p>
 			<label for="publish-license">License:</label>
@@ -25,6 +26,7 @@
 			<label for="publish-nsfw">NSFW</label>
 			</p>
 			<p>
+			<div class="input-error" id="input-error-publish-submit" hidden="true"></div>
 			<button id="publish-submit" onclick="publishSelectedImage(event)">Publish</button>
 			<a href="/"><button id="publish-reset">Reset</button></a>
 			</p>
