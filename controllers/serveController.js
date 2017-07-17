@@ -3,9 +3,10 @@ const db = require('../models');
 const logger = require('winston');
 const getAllFreePublicClaims = require('../helpers/functions/getAllFreePublicClaims.js');
 const isFreePublicClaim = require('../helpers/functions/isFreePublicClaim.js');
+const { validateClaimId } = require('../helpers/libraries/serveHelpers.js');
 
 function updateFileIfNeeded (uri, claimName, claimId, localOutpoint, localHeight) {
-  logger.debug(`A mysql record was found for ${claimName}:${claimId}. Initiating resolve to check outpoint.`);
+  logger.debug(`Initiating resolve to check outpoint for ${claimName}:${claimId}.`);
   // 1. resolve claim
   lbryApi
     .resolveUri(uri)
@@ -34,7 +35,7 @@ function updateFileIfNeeded (uri, claimName, claimId, localOutpoint, localHeight
       }
     })
     .catch(error => {
-      logger.error(`error resolving "${uri}" >> `, error);
+      logger.error(error);
     });
 }
 
@@ -110,6 +111,41 @@ function getClaimAndHandleResponse (uri, address, height, resolve, reject) {
     });
 }
 
+function getClaimAndReturnResponse (uri, address, height) {
+  const deferred = new Promise((resolve, reject) => {
+    lbryApi
+      .getClaim(uri)
+      .then(({ name, claim_id, outpoint, file_name, download_path, mime_type, metadata }) => {
+        // create entry in the db
+        logger.silly(`creating new File record`);
+        db.File
+          .create({
+            name,
+            claimId : claim_id,
+            address,  // note: passed as an arguent, not from this 'get' call
+            outpoint,
+            height, // note: passed as an arguent, not from this 'get' call
+            fileName: file_name,
+            filePath: download_path,
+            fileType: mime_type,
+            nsfw    : metadata.stream.metadata.nsfw,
+          })
+          .then(result => {
+            logger.debug('successfully created File record');
+            resolve(result); // note: result.dataValues ?
+          })
+          .catch(error => {
+            logger.error('sequelize create error', error);
+            reject(error);
+          });
+      })
+      .catch(error => {
+        reject(error);
+      });
+  });
+  return deferred;
+}
+
 module.exports = {
   getClaimByName (claimName) {
     const deferred = new Promise((resolve, reject) => {
@@ -155,20 +191,23 @@ module.exports = {
   },
   getClaimByClaimId (name, claimId) {
     const deferred = new Promise((resolve, reject) => {
-      const uri = `${name}#${claimId}`;
-      // 1. check locally for the claim
-      db.File
-        .findOne({ where: { name, claimId } })
-        .then(claim => {
-          // 2. if a match is found locally, serve it
-          if (claim) {
-            // serve the file
-            resolve(claim.dataValues);
-            // trigger an update if needed
-            updateFileIfNeeded(uri, name, claimId, claim.dataValues.outpoint, claim.dataValues.outpoint);
-          // 2. otherwise use daemon to retrieve it
-          } else {
-            // 3. resolve the Uri
+      let uri;
+      validateClaimId(name, claimId)  // 1. validate the claim id & retrieve the full claim id if needed
+        .then(validClaimId => {  // 2. check locally for the claim
+          logger.debug('valid claim id:', validClaimId);
+          uri = `${name}#${validClaimId}`;
+          return db.File.findOne({ where: { name, claimId: validClaimId } });
+        })
+        .then(({ dataValues }) => {
+          if (dataValues) { // 3. if a match is found locally, serve that claim
+            logger.debug('Result found in File table:', dataValues);
+            // return the data for the file to be served
+            resolve(dataValues);  // break out of the chain???
+            // update the file, as needed
+            updateFileIfNeeded(uri, name, claimId, dataValues.outpoint, dataValues.outpoint);
+          // 3. if a match was not found use the daemon to retrieve the claim & return the db data once it is created
+          } else { // 4. resolve the Uri
+            logger.debug('No result found in File table,');
             lbryApi
               .resolveUri(uri)
               .then(result => {
@@ -176,14 +215,13 @@ module.exports = {
                 if (!result.claim) {
                   logger.debug('resolve did not return a claim');
                   resolve(null);
-                  return;
                 }
-                // 4. check to see if the claim is free & public
+                // check to see if the claim is free & public
                 if (isFreePublicClaim(result.claim)) {
-                  // 5. get claim and serve
-                  getClaimAndHandleResponse(uri, result.claim.address, result.claim.height, resolve, reject);
+                  // get claim and serve
+                  resolve(getClaimAndReturnResponse(uri, result.claim.address, result.claim.height));
                 } else {
-                  reject(null);
+                  resolve(null);
                 }
               })
               .catch(error => {
