@@ -198,26 +198,25 @@ module.exports = {
           uri = `${name}#${validClaimId}`;
           return db.File.findOne({ where: { name, claimId: validClaimId } });
         })
-        .then(({ dataValues }) => {
-          if (dataValues) { // 3. if a match is found locally, serve that claim
-            logger.debug('Result found in File table:', dataValues);
+        .then(result => {
+          // 3. if a match is found locally, serve that claim
+          if (result) {
+            logger.debug('Result found in File table:', result.dataValues);
             // return the data for the file to be served
-            resolve(dataValues);  // break out of the chain???
+            resolve(result.dataValues);
             // update the file, as needed
-            updateFileIfNeeded(uri, name, claimId, dataValues.outpoint, dataValues.outpoint);
+            updateFileIfNeeded(uri, name, claimId, result.dataValues.outpoint, result.dataValues.outpoint);
           // 3. if a match was not found use the daemon to retrieve the claim & return the db data once it is created
-          } else { // 4. resolve the Uri
+          } else {
             logger.debug('No result found in File table,');
             lbryApi
               .resolveUri(uri)
               .then(result => {
-                // check to make sure the result is a claim
-                if (!result.claim) {
+                if (!result.claim) { // check to make sure the result is a claim
                   logger.debug('resolve did not return a claim');
                   resolve(null);
                 }
-                // check to see if the claim is free & public
-                if (isFreePublicClaim(result.claim)) {
+                if (isFreePublicClaim(result.claim)) { // check to see if the claim is free & public
                   // get claim and serve
                   resolve(getClaimAndReturnResponse(uri, result.claim.address, result.claim.height));
                 } else {
