@@ -59,6 +59,10 @@ button.copy-button {
 	float: right;
 }
 
+.share-option {
+	margin-bottom: 1em;
+}
+
 .metadata-table {
 	font-size: small;
 	border-collapse: collapse;

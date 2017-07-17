@@ -1,4 +1,5 @@
 <div id="asset-placeholder">
+	<a href="/show/{{fileInfo.name}}/{{fileInfo.claimId}}">
 	{{#ifConditional fileInfo.fileType '===' 'video/mp4'}}
 		<video class="show-asset-lite" autoplay controls>
 			<source src="/api/streamFile/{{fileInfo.fileName}}">
@@ -9,7 +10,5 @@
 	{{else}}
 		<img class="show-asset-lite" src="/api/streamFile/{{fileInfo.fileName}}" alt="{{fileInfo.fileName}}"/>
 	{{/ifConditional}}
-		<div>
-			<a href="/show/{{fileInfo.name}}/{{fileInfo.claimId}}">Details</a>
-		</div>
+	</a>
 </div>
