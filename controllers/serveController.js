@@ -208,7 +208,7 @@ module.exports = {
             updateFileIfNeeded(uri, name, claimId, result.dataValues.outpoint, result.dataValues.outpoint);
           // 3. if a match was not found use the daemon to retrieve the claim & return the db data once it is created
           } else {
-            logger.debug('No result found in File table,');
+            logger.debug('No result found in File table');
             lbryApi
               .resolveUri(uri)
               .then(result => {
