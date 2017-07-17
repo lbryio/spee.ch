@@ -5,7 +5,11 @@
 			{{!--fallback--}}
 			Your browser does not support the <code>video</code> element.
 		</video>
+		
 	{{else}}
 		<img class="show-asset-lite" src="/api/streamFile/{{fileInfo.fileName}}" alt="{{fileInfo.fileName}}"/>
 	{{/ifConditional}}
+		<div>
+			<a href="/show/{{fileInfo.name}}/{{fileInfo.claimId}}">Details</a>
+		</div>
 </div>
