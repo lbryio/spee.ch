@@ -42,6 +42,7 @@ module.exports = {
         getClaimsList(name)
           .then(({ claims }) => {
             const regex = new RegExp(`^${claimId}`);
+            logger.debug('regex:', regex);
             const filteredClaimsList = claims.filter(claim => {
               return regex.test(claim.claim_id);
             });
@@ -55,7 +56,7 @@ module.exports = {
                 break;
               default:
                 const sortedClaimsList = filteredClaimsList.sort((a, b) => {
-                  return a.height < b.height;
+                  return a.height > b.height;
                 });
                 resolve(sortedClaimsList[0].claim_id);
                 break;

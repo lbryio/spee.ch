@@ -203,7 +203,7 @@ module.exports = {
         .then(result => {
           // 3. if a match is found locally, serve that claim
           if (result) {
-            logger.debug('Result found in File table:', result.dataValues);
+            logger.debug('Result found in File table');
             // return the data for the file to be served
             resolve(result.dataValues);
             // update the file, as needed
