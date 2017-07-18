@@ -78,7 +78,6 @@ module.exports = (app, hostedContentPath) => {
       res.status(400).send(error.message);
       return;
     }
-
     // prepare the publish parameters
     const fileName = file.name;
     const filePath = file.path;
