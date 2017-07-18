@@ -2,10 +2,10 @@
   "name": "spee.ch",
   "version": "0.0.1",
   "description": "a single-serving site that reads and publishes images to and from the LBRY blockchain",
-  "main": "server.js",
+  "main": "speech.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js",
+    "start": "node speech.js",
     "lint": "eslint .",
     "fix": "eslint . --fix",
     "precommit": "eslint ."
