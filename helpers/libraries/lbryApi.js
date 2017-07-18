@@ -103,4 +103,24 @@ module.exports = {
     });
     return deferred;
   },
+  getDownloadDirectory () {
+    logger.debug('Retrieving the download directory path from lbry daemon...');
+    const deferred = new Promise((resolve, reject) => {
+      axios
+        .post('http://localhost:5279/lbryapi', {
+          method: 'settings_get',
+        })
+        .then(({ data }) => {
+          if (data.result) {
+            resolve(data.result.download_directory);
+          } else {
+            reject(new Error('Successfully connected to lbry daemon, but unable to retrieve the download directory.'));
+          }
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+    return deferred;
+  },
 };

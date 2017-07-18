@@ -6,8 +6,7 @@
 		"GoogleId": "none"
 	},
 	"Database": {
-		"MySqlConnectionUri": "none",
-		"DownloadDirectory": "none"
+		"MySqlConnectionUri": "none"
 	},
 	"Logging": {
 		"LogLevel": "none"

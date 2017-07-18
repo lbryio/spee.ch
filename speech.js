@@ -6,19 +6,15 @@ const expressHandlebars = require('express-handlebars');
 const Handlebars = require('handlebars');
 const config = require('config');
 const logger = require('winston');
+const { getDownloadDirectory } = require('./helpers/libraries/lbryApi');
 
-const hostedContentPath = config.get('Database.DownloadDirectory');
+const PORT = 3000; // set port
+const app = express(); // create an Express application
+const db = require('./models'); // require our models for syncing
 
 // configure logging
 const logLevel = config.get('Logging.LogLevel');
 require('./config/loggerSetup.js')(logger, logLevel);
-
-// set port
-const PORT = 3000;
-// create an Express application
-const app = express();
-// require our models for syncing
-const db = require('./models');
 
 // serve static files from public directory (css/js/img)
 app.use(express.static(`${__dirname}/public`));
@@ -33,7 +29,7 @@ app.use((req, res, next) => {  // logging middleware
   next();
 });
 
-// configure handlebars & register it with Express app
+// configure handlebars & register it with express app
 const hbs = expressHandlebars.create({
   defaultLayout: 'main', // sets the default layout
   handlebars   : Handlebars, // includes basic handlebars for access to that library
@@ -82,25 +78,26 @@ const hbs = expressHandlebars.create({
 app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
 
-// require express routes
-require('./routes/api-routes.js')(app);
-require('./routes/show-routes.js')(app);
-require('./routes/serve-routes.js')(app);
-require('./routes/home-routes.js')(app);
-
-// require socket.io routes
-const server = require('./routes/sockets-routes.js')(app, siofu, hostedContentPath);
-
-// sync sequelize
-// wrap the server in socket.io to intercept incoming sockets requests
-// start server
-db.sequelize.sync()
-  .then(() => {
+// start the server
+db.sequelize
+  .sync() // sync sequelize
+  .then(() => {  // get the download directory from the daemon
+    logger.info('Retrieving daemon download directory');
+    return getDownloadDirectory();
+  })
+  .then(hostedContentPath => { // require routes & wrap in socket.io
+    require('./routes/api-routes.js')(app, hostedContentPath);
+    require('./routes/show-routes.js')(app);
+    require('./routes/serve-routes.js')(app);
+    require('./routes/home-routes.js')(app);
+    return require('./routes/sockets-routes.js')(app, siofu, hostedContentPath);
+  })
+  .then(server => { // start the server
     server.listen(PORT, () => {
       logger.info('Trusting proxy?', app.get('trust proxy'));
       logger.info(`Server is listening on PORT ${PORT}`);
     });
   })
   .catch((error) => {
-    logger.log('Error syncing sequelize db:', error);
+    logger.error('Startup Error >>', error);
   });
