@@ -192,8 +192,10 @@ module.exports = {
   getClaimByClaimId (name, claimId) {
     const deferred = new Promise((resolve, reject) => {
       let uri;
-      validateClaimId(name, claimId)  // 1. validate the claim id & retrieve the full claim id if needed
-        .then(validClaimId => {  // 2. check locally for the claim
+      // 1. validate the claim id & retrieve the full claim id if needed
+      validateClaimId(name, claimId)
+        .then(validClaimId => {
+          // 2. check locally for the claim
           logger.debug('valid claim id:', validClaimId);
           uri = `${name}#${validClaimId}`;
           return db.File.findOne({ where: { name, claimId: validClaimId } });
@@ -206,7 +208,7 @@ module.exports = {
             resolve(result.dataValues);
             // update the file, as needed
             updateFileIfNeeded(uri, name, claimId, result.dataValues.outpoint, result.dataValues.outpoint);
-          // 3. if a match was not found use the daemon to retrieve the claim & return the db data once it is created
+          // 3. if a match was not found locally, use the daemon to retrieve the claim & return the db data once it is created
           } else {
             logger.debug('No result found in File table');
             lbryApi
