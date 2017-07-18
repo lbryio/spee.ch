@@ -55,7 +55,6 @@ module.exports = (claimName) => {
         resolve(orderedPublicClaims);
       })
       .catch(error => {
-        logger.error('error received from lbryApi.getClaimsList', error);
         reject(error);
       });
   });

@@ -36,7 +36,7 @@ module.exports = {
           });
       })
       .catch(error => {
-        logger.error('sequelize error', error);
+        logger.error('Sequelize error', error);
       });
   },
   sendGoogleAnalytics (action, headers, ip, originalUrl) {

@@ -5,13 +5,13 @@ const siofu = require('socketio-file-upload');
 const expressHandlebars = require('express-handlebars');
 const Handlebars = require('handlebars');
 const config = require('config');
-const winston = require('winston');
+const logger = require('winston');
 
 const hostedContentPath = config.get('Database.DownloadDirectory');
 
 // configure logging
 const logLevel = config.get('Logging.LogLevel');
-require('./config/loggerSetup.js')(winston, logLevel);
+require('./config/loggerSetup.js')(logger, logLevel);
 
 // set port
 const PORT = 3000;
@@ -29,7 +29,7 @@ app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 app.use(siofu.router);
 app.use((req, res, next) => {  // logging middleware
-  winston.verbose(`Request on ${req.originalUrl} from ${req.ip}`);
+  logger.verbose(`Request on ${req.originalUrl} from ${req.ip}`);
   next();
 });
 
@@ -74,6 +74,9 @@ const hbs = expressHandlebars.create({
           return options.inverse(this);
       }
     },
+    firstCharacter (word) {
+      return word.substring(0, 1);
+    },
   },
 });
 app.engine('handlebars', hbs.engine);
@@ -94,10 +97,10 @@ const server = require('./routes/sockets-routes.js')(app, siofu, hostedContentPa
 db.sequelize.sync()
   .then(() => {
     server.listen(PORT, () => {
-      winston.info('Trusting proxy?', app.get('trust proxy'));
-      winston.info(`Server is listening on PORT ${PORT}`);
+      logger.info('Trusting proxy?', app.get('trust proxy'));
+      logger.info(`Server is listening on PORT ${PORT}`);
     });
   })
   .catch((error) => {
-    winston.log('Error syncing sequelize db:', error);
+    logger.log('Error syncing sequelize db:', error);
   });
