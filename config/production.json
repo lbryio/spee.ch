@@ -6,8 +6,7 @@
 		"GoogleId": "UA-60403362-3"
 	},
 	"Database": {
-		"MySqlConnectionUri": "none",
-		"DownloadDirectory": "/home/lbry/Downloads/"
+		"MySqlConnectionUri": "none"
 	},
 	"Logging": {
 		"LogLevel": "verbose"

@@ -6,8 +6,7 @@
 		"GoogleId": "UA-100747990-1"
 	},
 	"Database": {
-		"MySqlConnectionUri": "none",
-		"DownloadDirectory": "/home/ubuntu/Downloads/"
+		"MySqlConnectionUri": "none"
 	},
 	"Logging": {
 		"LogLevel": "silly"
