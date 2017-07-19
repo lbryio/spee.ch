@@ -1,6 +1,21 @@
 const errorHandlers = require('../helpers/libraries/errorHandlers.js');
-const { getClaimByClaimId, getClaimByName, getAllClaims } = require('../controllers/serveController.js');
+const { getClaimByClaimId, getClaimByShortUrl, getClaimByName, getAllClaims } = require('../controllers/serveController.js');
 const { postToStats, getStatsSummary, getTrendingClaims } = require('../controllers/statsController.js');
+
+function validateClaimId (name, claimId) {
+  const deferred = new Promise((resolve, reject) => {
+    // if claim id is full 40 chars, retrieve the shortest possible url
+    if (claimId.length === 40) {
+      resolve(getClaimByClaimId(name, claimId));
+    // if the claim id is shorter than 40, retrieve the full claim id & shortest possible url
+    } else if (claimId.length < 40) {
+      resolve(getClaimByShortUrl(name, claimId));
+    } else {
+      reject(new Error('That Claim Id is longer than 40 characters.'));
+    }
+  });
+  return deferred;
+}
 
 module.exports = (app) => {
   // route to show 'about' page for spee.ch
@@ -65,7 +80,7 @@ module.exports = (app) => {
   // route to show a specific asset
   app.get('/show/:name/:claim_id', ({ ip, originalUrl, params }, res) => {
     // begin image-serve processes
-    getClaimByClaimId(params.name, params.claim_id)
+    validateClaimId(params.name, params.claim_id)
       .then((fileInfo) => {
         console.log('SHORT URL:', fileInfo.shortUrl);
         // check to make sure a file was found

@@ -3,7 +3,7 @@ const db = require('../models');
 const logger = require('winston');
 const getAllFreePublicClaims = require('../helpers/functions/getAllFreePublicClaims.js');
 const isFreePublicClaim = require('../helpers/functions/isFreePublicClaim.js');
-const { getClaimIdandShortUrl } = require('../helpers/libraries/serveHelpers.js');
+const { getShortUrlByClaimId, getClaimIdByShortUrl } = require('../helpers/libraries/serveHelpers.js');
 
 function updateFileIfNeeded (uri, localOutpoint, localHeight) {
   logger.debug(`Initiating resolve to check outpoint for ${uri}`);
@@ -189,17 +189,72 @@ module.exports = {
     });
     return deferred;
   },
-  getClaimByClaimId (name, providedClaimId) {
+  getClaimByClaimId (name, claimId) {
+    logger.debug(`Getting claim name: ${name} by claimid: ${claimId}`);
+    const deferred = new Promise((resolve, reject) => {
+      // 1. check locally for the claim
+      const uri = `${name}#${claimId}`;
+      db.File
+        .findOne({ where: { name, claimId } })
+        .then(result => {
+          // 3. if a match is found locally, serve that claim
+          if (result) {
+            logger.debug('local result found');
+            // return the data for the file to be served
+            getShortUrlByClaimId(name, claimId)
+              .then(shortUrl => {
+                result.dataValues['shortUrl'] = shortUrl;
+                resolve(result.dataValues);
+              })
+              .catch(error => reject(error));
+            // update the file, as needed
+            updateFileIfNeeded(uri, result.dataValues.outpoint, result.dataValues.outpoint);
+          // 3. if a match was not found locally, use the daemon to retrieve the claim & return the db data once it is created
+          } else {
+            logger.debug('no local result found');
+            lbryApi
+              .resolveUri(uri)
+              .then(result => {
+                logger.debug('resolve returned successfully');
+                if (result.claim && isFreePublicClaim(result.claim)) { // check to see if the claim is free & public
+                  // get claim and serve
+                  getClaimAndReturnResponse(uri, result.claim.address, result.claim.height)
+                    .then(result => {
+                      logger.debug('get request returned');
+                      getShortUrlByClaimId(name, claimId)
+                        .then(shortUrl => {
+                          result.dataValues['shortUrl'] = shortUrl;
+                          resolve(result.dataValues);
+                        })
+                        .catch(error => reject(error));
+                    })
+                    .catch(error => reject(error));
+                } else {
+                  logger.debug('Resolve did not return a free, public claim');
+                  resolve(null, null);
+                }
+              })
+              .catch(error => {
+                logger.debug('resolve returned an error');
+                reject(error);
+              });
+          }
+        })
+        .catch(error => reject(error));
+    });
+    return deferred;
+  },
+  getClaimByShortUrl (name, shortUrl) {
     const deferred = new Promise((resolve, reject) => {
       let uri;
-      let shortUrl;
+      let claimId;
       // 1. validate the claim id & retrieve the full claim id if needed
-      getClaimIdandShortUrl(name, providedClaimId)
+      getClaimIdByShortUrl(name, shortUrl)
         .then(result => {
           // 2. check locally for the claim
-          uri = `${name}#${result.claimId}`;
-          shortUrl = result.shortUrl;
-          return db.File.findOne({ where: { name, claimId: result.claimId } });
+          uri = `${name}#${result}`;
+          claimId = result;
+          return db.File.findOne({ where: { name, claimId } });
         })
         .then(result => {
           // 3. if a match is found locally, serve that claim

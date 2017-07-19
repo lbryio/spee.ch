@@ -91,12 +91,13 @@ module.exports = {
           params: { uri },
         })
         .then(({ data }) => {
+          logger.debug('resolved successfully', data);
           // check for errors
           if (data.result[uri].error) {
             reject(data.result[uri].error);
-            return;
+          } else {
+            resolve(data.result[uri]);
           }
-          resolve(data.result[uri]);
         })
         .catch(error => {
           reject(error);

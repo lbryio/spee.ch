@@ -1,7 +1,22 @@
-const { getClaimByClaimId, getClaimByName } = require('../controllers/serveController.js');
+const { getClaimByClaimId, getClaimByShortUrl, getClaimByName } = require('../controllers/serveController.js');
 const { postToStats, sendGoogleAnalytics } = require('../controllers/statsController.js');
 const errorHandlers = require('../helpers/libraries/errorHandlers.js');
 const { serveFile } = require('../helpers/libraries/serveHelpers.js');
+
+function  validateClaimId (name, claimId) {
+  const deferred = new Promise((resolve, reject) => {
+    // if claim id is full 40 chars, retrieve the shortest possible url
+    if (claimId.length === 40) {
+      resolve(getClaimByClaimId(name, claimId));
+    // if the claim id is shorter than 40, retrieve the full claim id & shortest possible url
+    } else if (claimId.length < 40) {
+      resolve(getClaimByShortUrl(name, claimId));
+    } else {
+      reject(new Error('That Claim Id is longer than 40 characters.'));
+    }
+  });
+  return deferred;
+}
 
 module.exports = (app) => {
   // route to serve a specific asset
@@ -9,7 +24,7 @@ module.exports = (app) => {
     // google analytics
     sendGoogleAnalytics('serve', headers, ip, originalUrl);
     // begin image-serve processes
-    getClaimByClaimId(params.name, params.claim_id)
+    validateClaimId(params.name, params.claim_id)
       .then((fileInfo) => {
         // check to make sure a file was found
         if (!fileInfo) {
