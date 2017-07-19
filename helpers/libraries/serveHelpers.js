@@ -2,6 +2,22 @@ const logger = require('winston');
 // const db = require('../../models');
 const { getClaimsList } = require('./lbryApi');
 
+function determineShortUrl (claimId, claimList) {
+  let shortUrl = claimId.substring(0, 1);
+  let i = 1;
+  claimList = claimList.filter(claim => {  // filter out this exact claim id
+    return claim.claim_id !== claimId;
+  });
+  while (claimList.length !== 0) {  // filter out matching claims until none or left
+    shortUrl = claimId.substring(0, i);
+    claimList = claimList.filter(claim => {
+      return (claim.claim_id.substring(0, i) === shortUrl);
+    });
+    i++;
+  }
+  return (shortUrl);
+}
+
 function getClaimIdByShortUrl (name, shortUrl) {
   const deferred = new Promise((resolve, reject) => {
     getClaimsList(name)
@@ -40,18 +56,7 @@ function getShortUrlByClaimId (name, claimId) {
     getClaimsList(name)
     // find the smallest possible unique url for this claim
     .then(({ claims }) => {
-      let shortUrl = claimId.substring(0, 1);
-      let i = 1;
-      claims = claims.filter(claim => {  // filter out this exact claim id
-        return claim.claim_id !== claimId;
-      });
-      while (claims.length !== 0) {  // filter out matching claims until none or left
-        shortUrl = claimId.substring(0, i);
-        claims = claims.filter(claim => {
-          return (claim.claim_id.substring(0, i) === shortUrl);
-        });
-        i++;
-      }
+      const shortUrl = determineShortUrl(claimId, claims);
       resolve(shortUrl);
     })
     .catch(error => {
@@ -110,11 +115,7 @@ module.exports = {
         getClaimIdByShortUrl(name, url)
           .then(result => {
             claimId = result;
-            return getShortUrlByClaimId(name, claimId);
-          })
-          .then(result => {
-            shortUrl = result;
-            resolve({claimId, shortUrl});
+            resolve({claimId, shortUrl: url});
           })
           .catch(error => {
             reject(error);
@@ -124,5 +125,8 @@ module.exports = {
       }
     });
     return deferred;
+  },
+  determineShortUrl (claimId, claimList) {
+    return determineShortUrl(claimId, claimList);
   },
 };
