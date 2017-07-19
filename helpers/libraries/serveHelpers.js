@@ -105,6 +105,7 @@ module.exports = {
           .then(result => {
             claimId = url;
             shortUrl = result;
+            logger.debug('short url', shortUrl);
             resolve({ claimId, shortUrl });
           })
           .catch(error => {

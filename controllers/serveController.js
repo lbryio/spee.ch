@@ -195,10 +195,11 @@ module.exports = {
       let shortUrl;
       // 1. validate the claim id & retrieve the full claim id if needed
       getClaimIdandShortUrl(name, providedClaimId)
-        .then(({ claimId, shortUrl }) => {
+        .then(result => {
           // 2. check locally for the claim
-          uri = `${name}#${claimId}`;
-          return db.File.findOne({ where: { name, claimId } });
+          uri = `${name}#${result.claimId}`;
+          shortUrl = result.shortUrl;
+          return db.File.findOne({ where: { name, claimId: result.claimId } });
         })
         .then(result => {
           // 3. if a match is found locally, serve that claim
