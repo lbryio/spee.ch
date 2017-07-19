@@ -10,11 +10,10 @@ module.exports = {
     if (result && (typeof result !== 'string')) {
       result = result.toString();
     }
-    // // make sure the ip address(es) are a string
+    // make sure the ip address(es) are a string
     if (ipAddress && (typeof ipAddress !== 'string')) {
       ipAddress = ipAddress.toString();
     }
-    logger.silly(name, claimId);
     db.File
       .findOne({where: { name, claimId }})
       .then(file => {
@@ -25,7 +24,6 @@ module.exports = {
         } else {
           FileId = null;
         }
-        logger.silly('file id:', FileId);
         return db.Request
           .create({
             action,
