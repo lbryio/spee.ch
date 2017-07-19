@@ -6,18 +6,18 @@
 	<h2 class="subheader">Links</h2>
 	{{!--short direct link to asset--}}
 	<div class="share-option">
-		<a href="/{{fileInfo.name}}/{{firstCharacter fileInfo.claimId}}">Direct Link</a>
+		<a href="/{{fileInfo.name}}/{{fileInfo.shortUrl}}">Direct Link</a>
 		<div class="input-error" id="input-error-copy-direct-link" hidden="true"></div>
 		<br/>
-		<input type="text" id="direct-link" class="link" readonly spellcheck="false" value="https://spee.ch/{{fileInfo.name}}/{{firstCharacter fileInfo.claimId}}" onclick="select()"/>
+		<input type="text" id="direct-link" class="link" readonly spellcheck="false" value="https://spee.ch/{{fileInfo.name}}/{{fileInfo.shortUrl}}" onclick="select()"/>
 		<button class="copy-button" data-elementtocopy="direct-link" onclick="copyToClipboard(event)">copy</button>
 	</div>
 	{{!-- link to show route for asset--}}
 	<div class="share-option">
-		<a href="/show/{{fileInfo.name}}/{{firstCharacter fileInfo.claimId}}">Details Link</a>
+		<a href="/show/{{fileInfo.name}}/{{fileInfo.shortUrl}}">Details Link</a>
 		<div class="input-error" id="input-error-copy-show-link" hidden="true"></div>
 		</br>
-		<input type="text" id="show-link" class="link" readonly onclick="select()" spellcheck="false" value="https://spee.ch/show/{{fileInfo.name}}/{{firstCharacter fileInfo.claimId}}"/>
+		<input type="text" id="show-link" class="link" readonly onclick="select()" spellcheck="false" value="https://spee.ch/show/{{fileInfo.name}}/{{fileInfo.shortUrl}}"/>
 		<button class="copy-button" data-elementtocopy="show-link" onclick="copyToClipboard(event)">copy</button>
 	</div>
 	{{!-- html text for embedding asset--}}

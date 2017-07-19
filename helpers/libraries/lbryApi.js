@@ -59,6 +59,7 @@ module.exports = {
           resolve(data.result);
         })
         .catch(error => {
+          logger.debug("axios.post 'get' error");
           reject(error);
         });
     });

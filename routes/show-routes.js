@@ -66,7 +66,8 @@ module.exports = (app) => {
   app.get('/show/:name/:claim_id', ({ ip, originalUrl, params }, res) => {
     // begin image-serve processes
     getClaimByClaimId(params.name, params.claim_id)
-      .then(fileInfo => {
+      .then((fileInfo) => {
+        console.log('SHORT URL:', fileInfo.shortUrl);
         // check to make sure a file was found
         if (!fileInfo) {
           res.status(307).render('noClaims');

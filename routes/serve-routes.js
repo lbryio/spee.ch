@@ -1,4 +1,3 @@
-const logger = require('winston');
 const { getClaimByClaimId, getClaimByName } = require('../controllers/serveController.js');
 const { postToStats, sendGoogleAnalytics } = require('../controllers/statsController.js');
 const errorHandlers = require('../helpers/libraries/errorHandlers.js');
@@ -11,8 +10,7 @@ module.exports = (app) => {
     sendGoogleAnalytics('serve', headers, ip, originalUrl);
     // begin image-serve processes
     getClaimByClaimId(params.name, params.claim_id)
-      .then(fileInfo => {
-        logger.debug('file info:', fileInfo);
+      .then((fileInfo) => {
         // check to make sure a file was found
         if (!fileInfo) {
           res.status(307).render('noClaims');
