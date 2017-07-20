@@ -36,6 +36,29 @@ function determineShortUrl (claimId, claimList) {
   }
 }
 
+function checkLocalDbForClaims (name, shortUrl) {
+  return db.File
+    .findAll({
+      where: {
+        name,
+        claimId: { $like: `${shortUrl}%` },
+      },
+    })
+    .then(records => {
+      logger.debug('number of local search results:', records.length);
+      if (records.length === 0) {
+        return records;
+      }
+      const localClaims = records.map(record => {  // format the data to match what lbry daemon would have returned
+        return { name: record.dataValues.name, claim_id: record.dataValues.claimId, height: record.dataValues.height };
+      });
+      return localClaims;
+    })
+    .catch(error => {
+      return error;
+    });
+}
+
 function getClaimAndUpdate (uri, address, height) {
   // 1. get the claim
   lbryApi
@@ -100,8 +123,19 @@ module.exports = {
   },
   getClaimIdByShortUrl (name, shortUrl) {
     const deferred = new Promise((resolve, reject) => {
-      lbryApi.getClaimsList(name)
-      .then(({ claims }) => {
+      lbryApi.getClaimsList(name)  // use the daemon to check for claims list
+      .then(({ claims }) => {  // if no claims were found, check locally for possible claims
+        logger.debug('Number of claims from getClaimsList:', claims.length);
+        if (claims.length === 0) {
+          logger.debug('no claims found with getClaimsList');
+          return checkLocalDbForClaims(name, shortUrl);
+        } else {
+          logger.debug('claims were found by getClaimsList');
+          return claims;
+        }
+      })
+      .then(claims => {  // handle the claims list
+        logger.debug('Claims ready for filtering:', claims);
         const regex = new RegExp(`^${shortUrl}`);
         logger.debug('regex:', regex);
         const filteredClaimsList = claims.filter(claim => {

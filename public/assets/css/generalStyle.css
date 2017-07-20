@@ -92,7 +92,7 @@ h4 {
 /* other */
 
 .asset-small {
-	height: 200px;
+	width: 30%;
 	padding: 0px;
 	margin: 10px;
 	float: left;

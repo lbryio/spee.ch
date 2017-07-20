@@ -1,19 +1,23 @@
 <div class="full"> 
 	<h2>Trending</h2>
-	{{#each trendingAssets}}
-		{{#if this.nsfw}}
-		{{else }}
-			<a href="/show/{{this.name}}/{{this.claimId}}">
-			{{#ifConditional this.fileType '===' 'video/mp4'}}
-				<video class="asset-small" controls>
-					<source src="/api/streamFile/{{this.fileName}}">
-					{{!--fallback--}}
-					Your browser does not support the <code>video</code> element.
-				</video>
-			{{else}}
-				<img  class="asset-small" src="/api/streamFile/{{this.fileName}}" />
-			{{/ifConditional}}
-			</a>
-		{{/if}}
-	{{/each}}
+	{{#grouped_each 3 trendingAssets}}
+		<div>
+		{{#each this}}
+			{{#if this.nsfw}}
+			{{else }}
+				<a href="/show/{{this.name}}/{{this.claimId}}">
+				{{#ifConditional this.fileType '===' 'video/mp4'}}
+					<video class="asset-small" controls>
+						<source src="/api/streamFile/{{this.fileName}}">
+						{{!--fallback--}}
+						Your browser does not support the <code>video</code> element.
+					</video>
+				{{else}}
+					<img  class="asset-small" src="/api/streamFile/{{this.fileName}}" />
+				{{/ifConditional}}
+				</a>
+			{{/if}}
+		{{/each}}
+		</div>
+	{{/grouped_each}}
 </div>
