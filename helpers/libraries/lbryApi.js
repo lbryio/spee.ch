@@ -59,6 +59,7 @@ module.exports = {
           resolve(data.result);
         })
         .catch(error => {
+          logger.debug("axios.post 'get' error");
           reject(error);
         });
     });
@@ -90,12 +91,11 @@ module.exports = {
           params: { uri },
         })
         .then(({ data }) => {
-          // check for errors
-          if (data.result[uri].error) {
+          if (data.result[uri].error) {  // check for errors
             reject(data.result[uri].error);
-            return;
+          } else {  // if no errors, resolve
+            resolve(data.result[uri]);
           }
-          resolve(data.result[uri]);
         })
         .catch(error => {
           reject(error);
