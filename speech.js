@@ -66,6 +66,8 @@ const hbs = expressHandlebars.create({
           return (varOne && varTwo) ? options.fn(this) : options.inverse(this);
         case '||':
           return (varOne || varTwo) ? options.fn(this) : options.inverse(this);
+        case 'mod3':
+          return ((parseInt(varOne) % 3) === 0) ? options.fn(this) : options.inverse(this);
         default:
           return options.inverse(this);
       }

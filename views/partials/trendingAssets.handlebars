@@ -1,23 +1,48 @@
+<script src="/vendors/masonry/masonry.pkgd.min.js"></script>
+
 <div class="full"> 
 	<h2>Trending</h2>
-	{{#grouped_each 3 trendingAssets}}
-		<div>
-		{{#each this}}
-			{{#if this.nsfw}}
-			{{else }}
+	<div class="grid" data-masonry='{ "itemSelector": ".grid-item" }'>
+		{{#each trendingAssets}}
+			{{#unless this.nsfw}}
+			
 				<a href="/show/{{this.name}}/{{this.claimId}}">
 				{{#ifConditional this.fileType '===' 'video/mp4'}}
-					<video class="asset-small" controls>
+					<video class="grid-item trending-video" controls>
 						<source src="/api/streamFile/{{this.fileName}}">
 						{{!--fallback--}}
 						Your browser does not support the <code>video</code> element.
 					</video>
 				{{else}}
-					<img  class="asset-small" src="/api/streamFile/{{this.fileName}}" />
+					<img  class="grid-item trending-image" src="/api/streamFile/{{this.fileName}}" />
 				{{/ifConditional}}
 				</a>
-			{{/if}}
+			
+			{{/unless}}
 		{{/each}}
-		</div>
-	{{/grouped_each}}
+	</div>
 </div>
+
+<script>
+	var elem = document.querySelector('.grid');
+	var trendingImages = document.querySelectorAll('.trending-image');
+	console.log(trendingImages)
+	var trendingVideos = document.querySelectorAll('.trending-video');
+	var msnry = new Masonry( elem, {
+		itemSelector: '.grid-item'
+	});
+	// after images are loaded, reset layout
+	for (var i = 0; i < trendingVideos.length; i++) {
+		trendingImages[i].addEventListener('load', function(){
+			console.log('image loaded');
+			msnry.layout();
+		})
+	}
+	// after videos are loaded, reset layout
+	for (var i = 0; i < trendingVideos.length; i++) {
+		trendingVideos[i].addEventListener('loadeddata', function(){
+			console.log('video loaded');
+			msnry.layout();
+		})
+	}
+</script>

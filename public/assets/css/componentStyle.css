@@ -81,10 +81,9 @@ button.copy-button {
 }
 
 /* trending claims */
-.asset-trending {
-	width: 21%;
-	margin: 2%;
-	float: left;
+.grid-item { 
+	width: 23%; 
+	margin: 0px 1% 20px 1%;
 }
 
 /* learn more */
