@@ -26,7 +26,6 @@
 <script>
 	var elem = document.querySelector('.grid');
 	var trendingImages = document.querySelectorAll('.trending-image');
-	console.log(trendingImages)
 	var trendingVideos = document.querySelectorAll('.trending-video');
 	var msnry = new Masonry( elem, {
 		itemSelector: '.grid-item'
@@ -34,14 +33,12 @@
 	// after images are loaded, reset layout
 	for (var i = 0; i < trendingVideos.length; i++) {
 		trendingImages[i].addEventListener('load', function(){
-			console.log('image loaded');
 			msnry.layout();
 		})
 	}
 	// after videos are loaded, reset layout
 	for (var i = 0; i < trendingVideos.length; i++) {
 		trendingVideos[i].addEventListener('loadeddata', function(){
-			console.log('video loaded');
 			msnry.layout();
 		})
 	}
