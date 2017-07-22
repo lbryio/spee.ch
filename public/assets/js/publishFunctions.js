@@ -120,8 +120,7 @@ function previewAndStageFile(selectedFile){
 	// set the name input value to the image name if none is set yet
 	if (nameInput.value === "") {
 		var filename = selectedFile.name.substring(0, selectedFile.name.indexOf('.'))
-		filename = filename.replace(/\s+/g, '-');
-		nameInput.value = filename;
+		nameInput.value = filename.replace(/\s+/g, '-');;
 	}
 	// store the selected file for upload
 	stagedFiles = [selectedFile];

@@ -58,4 +58,10 @@
 		document.getElementById('publish-active-area').innerHTML = publishResults;
 		window.location.href = showUrl;
 	});
+	
+	//event listener to filter claim name inputs
+	document.getElementById('publish-name').addEventListener('input', function() {
+		var name = this.value;
+		this.value = name.replace(/\s+/g, '-');
+	})
 </script>
