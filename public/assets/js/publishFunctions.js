@@ -2,7 +2,7 @@
 function updatePublishStatus(msg){
 	document.getElementById('publish-status').innerHTML = msg;
 }
-// validation function which checks the proposed file's type and size
+// validation function which checks the proposed file's type, size, and name
 function validateFile(file) {
 	if (!file) {
 		throw new Error('no file provided');
