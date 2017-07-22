@@ -29,6 +29,7 @@ module.exports = (app) => {
     startDate.setDate(startDate.getDate() - 1);
     getTrendingClaims(startDate)
       .then(result => {
+        // logger.debug(result);
         res.status(200).render('trending', { trendingAssets: result });
       })
       .catch(error => {
