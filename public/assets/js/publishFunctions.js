@@ -2,7 +2,7 @@
 function updatePublishStatus(msg){
 	document.getElementById('publish-status').innerHTML = msg;
 }
-
+// validation function which checks the proposed file's type, size, and name
 function validateFile(file) {
 	if (!file) {
 		throw new Error('no file provided');
@@ -22,28 +22,28 @@ function validateFile(file) {
 			}
 			break;
 		default:
-			throw new Error('The ' + file.Type + ' content type is not supported.  Only, .jpeg, .png, .gif, and .mp4 files are currently supported.')
+			throw new Error(file.type + ' is not supported a supported file type. Only, .jpeg, .png, .gif, and .mp4 files are currently supported.')
 	}
+	// validate the file name (note: different from the lbry claim name)
+	var invalidCharacter = /[^\w.-\s()]/g.exec(file.name);
+	if (invalidCharacter) {
+		throw new Error('Special characters, such as "' + invalidCharacter + '", are not allowed in the file name.');
+	};
 }
-
-function validateSubmission(stagedFiles, name){
-	// make sure only 1 file was selected
-	if (!stagedFiles) {
-		throw new FileError("Please select a file");
-	} else if (stagedFiles.length > 1) {
-		throw new FileError("Only one file is allowed at a time");
-	}
-	// validate 'name' field
-	var invalidCharacters = /[^A-Za-z0-9,-]/.exec(name);
-	if (invalidCharacters) {
-		throw new NameError(invalidCharacters + ' is not allowed. A-Z, a-z, 0-9, and "-" only.');
-	} else if (name.length < 1) {
-		throw new NameError("You must enter a name for your claim");
-	}
-}
-
+// validation function that checks to make sure the claim name is not already claimed
 function validateClaimName (name) {
 	var deferred = new Promise(function(resolve, reject) {
+		// validate the characters in the 'name' field
+		if (name.length < 1) {
+			reject(new NameError("You must enter a name for your claim"));
+			return;
+		}
+		var invalidCharacters = /[^A-Za-z0-9,-]/g.exec(name);
+		if (invalidCharacters) {
+			reject(new NameError('"' + invalidCharacters + '" is not allowed.  Use only the following characters: A-Z, a-z, 0-9, and "-"'));
+			return;
+		} 
+		// make sure the claim name is still available
 		var xhttp;
 		xhttp = new XMLHttpRequest();
 		xhttp.open('GET', '/api/isClaimAvailable/' + name, true);
@@ -54,7 +54,7 @@ function validateClaimName (name) {
 					if (this.response == true) {
 						resolve();
 					} else {
-						reject("That name has already been claimed by spee.ch.  Please choose a different name.");
+						reject( new NameError("That name has already been claimed by spee.ch.  Please choose a different name."));
 					}
 				} else {
 					reject("request to check claim name failed with status:" + this.status);
@@ -65,40 +65,86 @@ function validateClaimName (name) {
 	});
 	return deferred;
 }
+// validation function which checks all aspects of the publish submission
+function validateSubmission(stagedFiles, name){
+	var deferred = new Promise(function (resolve, reject) {
+		// make sure only 1 file was selected
+		if (!stagedFiles) {
+			reject(new FileError("Please select a file"));
+		} else if (stagedFiles.length > 1) {
+			reject(new FileError("Only one file is allowed at a time"));
+		}
+		// validate the file's name, type, and size
+		try {
+			validateFile(stagedFiles[0]);
+		} catch (error) {
+			reject(error);
+		}
+		// make sure the claim name has not already been used
+		validateClaimName(name)
+			.then(function() {
+				resolve();
+			})
+			.catch(function(error) {
+				reject(error);
+			})
+	});
+	return deferred;
+}
 
-/* regular publish helper functions */
+/* publish helper functions */
 
+// When a file is selected for publish, validate that file and 
+// stage it so it will be ready when the publish button is clicked.
 function previewAndStageFile(selectedFile){ 
 	var previewHolder = document.getElementById('asset-preview-holder');
 	var dropzone = document.getElementById('drop-zone');
 	var previewReader = new FileReader();
 	var nameInput = document.getElementById('publish-name'); 
-	// validate the file
+	// validate the file's name, type, and size
 	try {
 		validateFile(selectedFile);
 	} catch (error) {
 		showError('input-error-file-selection', error.message);
 		return;
 	}
-	// set the preview
-	if (selectedFile.type === 'video/mp4') {
-		
-	} else {
+	// set the image preview, if a preview was provided
+	if (selectedFile.type !== 'video/mp4') {
 		previewReader.readAsDataURL(selectedFile);
 		previewReader.onloadend = function () {
 			dropzone.style.display = 'none';
 			previewHolder.style.display = 'block';
-			previewHolder.innerHTML = '<img width="100%" src="' + previewReader.result + '" alt="image preview"/>';
-			
+			previewHolder.innerHTML = '<img width="100%" src="' + previewReader.result + '" alt="image preview"/>';			
 		};
 	}
 	// set the name input value to the image name if none is set yet
 	if (nameInput.value === "") {
-		nameInput.value = selectedFile.name.substring(0, selectedFile.name.indexOf('.'));
+		var filename = selectedFile.name.substring(0, selectedFile.name.indexOf('.'))
+		nameInput.value = filename.replace(/\s+/g, '-');;
 	}
 	// store the selected file for upload
 	stagedFiles = [selectedFile];
 }
+
+// Validate the publish submission and then trigger publishing.
+function publishSelectedImage(event) {
+	event.preventDefault();
+	var name = document.getElementById('publish-name').value;
+	validateSubmission(stagedFiles, name)
+		.then(function() {
+			uploader.submitFiles(stagedFiles); 
+		})
+		.catch(function(error) {
+			if (error.name === 'FileError'){
+				showError('input-error-file-selection', error.message);
+			} else if (error.name === 'NameError') {
+				showError('input-error-claim-name', error.message);
+			} else {
+				showError('input-error-publish-submit', error.message);
+			}
+			return;
+		})
+};
 
 /* drop zone functions */
 
@@ -126,53 +172,5 @@ function dragend_handler(ev) {
 		}
 	} else {
 		ev.dataTransfer.clearData();
-	}
-}
-
-/* meme publish functions */
-
-function startPublish() {
-	//download the image 
-    var dataUrl = canvas.toDataURL('image/jpeg');  // canvas defined in memeDraw.js
-	var blob = dataURItoBlob(dataUrl)
-	var fileName = nameInput.value + ".jpeg";  //note: need to dynamically grab type
-	var file = new File([blob], fileName, {type: 'image/jpeg', lastModified: Date.now()});
-	stageAndPublish(file); 
-};
-
-function stageAndPublish(file) {
-	var name = nameInput.value;
-	var invalidCharacters = /[^A-Za-z0-9,-]/.exec(name);
-	// validate 'name'
-	if (invalidCharacters) {
-		showError('input-error-claim-name', invalidCharacters + ' is not allowed. A-Z, a-z, 0-9, "_" and "-" only.');
-		return;
-	} else if (name.length < 1) {
-		showError('input-error-claim-name', 'You must enter a name for your claim');
-		return;
-	}
-	// stage files 
-	stagedFiles = [file]; // stores the selected file for 
-	// make sure a file was selected
-	if (stagedFiles) {
-		// make sure only 1 file was selected
-		if (stagedFiles.length < 1) {
-			showError('input-error-file-selection', 'A file is needed');
-			return;
-		}
-		// make sure the content type is acceptable
-		switch (stagedFiles[0].type) {
-			case "image/png":
-			case "image/jpeg":
-			case "image/gif":
-			case "video/mp4":
-				uploader.submitFiles(stagedFiles);
-				break;
-			default:
-				showError('input-error-publish-submit', 'Only .png, .jpeg, .gif, and .mp4 files are currently supported');
-				break;
-		}
-	} else {
-		showError('input-error-file-selection', 'Please select a file');
 	}
 }

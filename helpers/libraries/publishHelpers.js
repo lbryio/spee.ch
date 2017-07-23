@@ -24,11 +24,10 @@ module.exports = {
       default:
         throw new Error('The ' + file.Type + ' content type is not supported.  Only, .jpeg, .png, .gif, and .mp4 files are currently supported.');
     }
-
-    // validate name
+    // validate claim name
     const invalidCharacters = /[^A-Za-z0-9,-]/.exec(name);
     if (invalidCharacters) {
-      throw new Error('The name you provided is not allowed.  Please use A-Z, a-z, 0-9, and "-" only.');
+      throw new Error('The claim name you provided is not allowed.  Only the following characters are allowed: A-Z, a-z, 0-9, and "-"');
     }
     // validate license
     if ((license.indexOf('Public Domain') === -1) && (license.indexOf('Creative Commons') === -1)) {
