@@ -1,9 +1,9 @@
 const logger = require('winston');
-
+const licenses = ['Creative Commons', 'Public Domain', 'CC Attribution-NonCommercial 4.0 International'];
 module.exports = ({ value }) => {
   logger.debug('checking isFreePublicClaim ?');
   if (
-    (value.stream.metadata.license.indexOf('Public Domain') !== -1 || value.stream.metadata.license.indexOf('Creative Commons') !== -1) &&
+    (Array.asList(licenses).contains(value.stream.metadata.license)) &&
     (!value.stream.metadata.fee || value.stream.metadata.fee.amount === 0)
   ) {
     return true;
