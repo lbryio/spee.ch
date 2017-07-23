@@ -4,7 +4,7 @@
 		<div id="drop-zone" ondrop="drop_handler(event);" ondragover="dragover_handler(event);" ondragend="dragend_handler(event)">
 			<p>Drag and drop your file here, or choose your file below.</p>
 			<div class="input-error" id="input-error-file-selection" hidden="true"></div>
-			<input type="file"  id="siofu_input" name="file" accept="video/*,image/*" onchange="previewAndStageFile(event.target.files[0])" enctype="multipart/form-data"/>
+			<input type="file" id="siofu_input" name="file" accept="video/*,image/*" onchange="previewAndStageFile(event.target.files[0])" enctype="multipart/form-data"/>
 		</div>
 		<div id="asset-preview-holder">
 			
@@ -14,8 +14,10 @@
 		<textarea id="direct-link-holder" hidden="true">No URL yet</textarea>
 		<div id="publish-active-area">
 			<div class="input-error" id="input-error-claim-name" hidden="true"></div>
-			<input type="text" id="publish-name" placeholder="Your claim name" class="form-control">
-			<p>
+			<div class="claim-name-input-area">
+				Spee.ch/<input type="text" id="claim-name-input" placeholder="your-name-here" class="form-control">
+			</div>
+			<p class="stop-float">
 			<label for="publish-license">License:</label>
 			<select type="text" id="publish-license" name="license" value="license">
 				<option value="Public Domain">Public Domain</option>
