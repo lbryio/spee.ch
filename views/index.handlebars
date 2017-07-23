@@ -19,7 +19,7 @@
 	var stagedFiles = null;
 	/* socketio-file-upload listeners */
 	uploader.addEventListener('start', function(event){
-		var name = document.getElementById('publish-name').value;
+		var name = document.getElementById('claim-name-input').value;
 		var license = document.getElementById('publish-license').value;
 		var nsfw = document.getElementById('publish-nsfw').checked;
 		event.file.meta.name = name;
@@ -60,7 +60,7 @@
 	});
 	
 	//event listener to filter claim name inputs
-	document.getElementById('publish-name').addEventListener('input', function() {
+	document.getElementById('claim-name-input').addEventListener('input', function() {
 		var name = this.value;
 		this.value = name.replace(/\s+/g, '-');
 	})

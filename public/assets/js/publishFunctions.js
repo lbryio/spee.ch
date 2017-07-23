@@ -100,7 +100,7 @@ function previewAndStageFile(selectedFile){
 	var previewHolder = document.getElementById('asset-preview-holder');
 	var dropzone = document.getElementById('drop-zone');
 	var previewReader = new FileReader();
-	var nameInput = document.getElementById('publish-name'); 
+	var nameInput = document.getElementById('claim-name-input'); 
 	// validate the file's name, type, and size
 	try {
 		validateFile(selectedFile);
@@ -129,7 +129,7 @@ function previewAndStageFile(selectedFile){
 // Validate the publish submission and then trigger publishing.
 function publishSelectedImage(event) {
 	event.preventDefault();
-	var name = document.getElementById('publish-name').value;
+	var name = document.getElementById('claim-name-input').value;
 	validateSubmission(stagedFiles, name)
 		.then(function() {
 			uploader.submitFiles(stagedFiles); 
