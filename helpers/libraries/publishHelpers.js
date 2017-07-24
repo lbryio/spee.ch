@@ -8,7 +8,9 @@ module.exports = {
       throw new Error('No file was submitted or the key used was incorrect.  Files posted through this route must use a key of "speech" or null');
     }
     // check file type and size
-    switch (file.type) {
+    var magic = require('magic-number');
+    var mime  = magic.detectFile(file);
+    switch (mime) {
       case 'image/jpeg':
       case 'image/png':
       case 'image/gif':
