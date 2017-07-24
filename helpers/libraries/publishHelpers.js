@@ -9,8 +9,7 @@ module.exports = {
     }
     // check file type and size
     var magic = require('magic-number');
-    var mime  = magic.detectFile(file);
-    switch (mime) {
+    switch (magic.detectFile('file')) {
       case 'image/jpeg':
       case 'image/png':
       case 'image/gif':
@@ -24,7 +23,7 @@ module.exports = {
         }
         break;
       default:
-        throw new Error('The ' + file.Type + ' content type is not supported.  Only, .jpeg, .png, .gif, and .mp4 files are currently supported.');
+        throw new Error('The ' + magic.detectFile('file') + ' content type is not supported.  Only, .jpeg, .png, .gif, and .mp4 files are currently supported.');
     }
     // validate claim name
     const invalidCharacters = /[^A-Za-z0-9,-]/.exec(name);
