@@ -28,6 +28,7 @@ module.exports = {
               // 3. if a matching record is found locally, serve it
               if (result) {
                 // return the data for the file to be served
+                result.dataValues['fileExt'] = result.fileName.substring(result.fileName.lastIndexOf('.'));
                 serveHelpers.getShortUrlByClaimId(name, claimId)
                   .then(shortUrl => {
                     result.dataValues['shortUrl'] = shortUrl;
@@ -64,6 +65,7 @@ module.exports = {
           if (result) {
             logger.debug('local result found');
             // return the data for the file to be served
+            result.dataValues['fileExt'] = result.fileName.substring(result.fileName.lastIndexOf('.'));
             serveHelpers.getShortUrlByClaimId(name, claimId)
               .then(shortUrl => {
                 result.dataValues['shortUrl'] = shortUrl;
@@ -123,6 +125,7 @@ module.exports = {
           // 3. if a match is found locally, serve that claim
           if (result) {
             // return the data for the file to be served
+            result.dataValues['fileExt'] = result.fileName.substring(result.fileName.lastIndexOf('.'));
             result.dataValues['shortUrl'] = shortUrl;
             resolve(result.dataValues);
             // update the file, as needed

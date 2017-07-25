@@ -141,7 +141,7 @@ module.exports = (app) => {
     } else if (dotIndex === -1) {
       // google analytics
       sendGoogleAnalytics('show', headers, ip, originalUrl);
-      // get and render the content
+      // begin image-show process
       showClaimByName(params.name)
         .then(fileInfo => {
           // check to make sure a file was found
