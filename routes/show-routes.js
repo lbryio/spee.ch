@@ -79,7 +79,7 @@ module.exports = (app) => {
         }
         // serve the file or the show route
         postToStats('show', originalUrl, ip, fileInfo.name, fileInfo.claimId, 'success');
-        res.status(200).render('show', { fileInfo });
+        res.status(200).render('show', { layout: 'show', fileInfo });
       })
       .catch(error => {
         errorHandlers.handleRequestError('show', originalUrl, ip, error, res);
@@ -97,7 +97,7 @@ module.exports = (app) => {
         }
         // serve the show route
         postToStats('show', originalUrl, ip, fileInfo.name, fileInfo.claimId, 'success');
-        res.status(200).render('show', { fileInfo });
+        res.status(200).render('show', { layout: 'show', fileInfo });
       })
       .catch(error => {
         errorHandlers.handleRequestError('show', originalUrl, ip, error, res);

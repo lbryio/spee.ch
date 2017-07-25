@@ -36,7 +36,7 @@ module.exports = (app) => {
           const mimetypes = headers['accept'].split(',');
           if (mimetypes.includes('text/html')) {
             postToStats('show', originalUrl, ip, fileInfo.name, fileInfo.claimId, 'success');
-            res.status(200).render('showLite', { fileInfo });
+            res.status(200).render('showLite', { layout: 'show', fileInfo });
           } else {
             postToStats('serve', originalUrl, ip, fileInfo.name, fileInfo.claimId, 'success');
             serveFile(fileInfo, res);
@@ -67,7 +67,7 @@ module.exports = (app) => {
           const mimetypes = headers['accept'].split(',');
           if (mimetypes.includes('text/html')) {
             postToStats('show', originalUrl, ip, fileInfo.name, fileInfo.claimId, 'success');
-            res.status(200).render('showLite', { fileInfo });
+            res.status(200).render('showLite', { layout: 'show', fileInfo });
           } else {
             postToStats('serve', originalUrl, ip, fileInfo.name, fileInfo.claimId, 'success');
             serveFile(fileInfo, res);
