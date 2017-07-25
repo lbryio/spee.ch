@@ -12,6 +12,11 @@
 	margin: 2px 5px 2px 5px;
 }
 
+.top-bar-right {
+	float: right;
+	margin-left: 1em;
+}
+
 /* publish */
 #drop-zone {
 	border: 1px dashed lightgrey;
