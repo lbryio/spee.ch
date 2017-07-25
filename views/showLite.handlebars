@@ -1,7 +1,7 @@
 <div id="asset-placeholder">
 	<a href="/{{fileInfo.name}}/{{fileInfo.claimId}}">
 	{{#ifConditional fileInfo.fileType '===' 'video/mp4'}}
-		<video class="show-asset-lite" autoplay controls>
+		<video class="show-asset-lite" autoplay loop controls>
 			<source src="/api/streamFile/{{fileInfo.fileName}}">
 			{{!--fallback--}}
 			Your browser does not support the <code>video</code> element.
