@@ -38,17 +38,19 @@ function retrieveAssetShowInfo (name, claimId) {
 module.exports = (app) => {
   // route to serve a specific asset
   app.get('/:name/:claim_id', ({ headers, ip, originalUrl, params }, res) => {
-    // google analytics
-    sendGoogleAnalytics('serve', headers, ip, originalUrl);
     // decide to serve or show
     const dotIndex = params.claim_id.lastIndexOf('.');
     if (dotIndex === 0) {
-      logger.error('only an extension was submitted');
+      logger.error('a file extension with no name was submitted');
+      errorHandlers.handleRequestError('serve', originalUrl, ip, new Error('no claim id provided'), res);
     // if an image extension was given, serve the image directly
     } else if (dotIndex > 0) {
+      // google analytics
+      sendGoogleAnalytics('serve', headers, ip, originalUrl);
       const fileExtension = params.claim_id.substring(dotIndex);
-      const claimId = params.claim_id.substring(0, dotIndex - 1);
+      const claimId = params.claim_id.substring(0, dotIndex);
       logger.debug('file extension is:', fileExtension);
+      // begin image-serve processes
       retrieveAssetServeInfo(params.name, claimId)
         .then((fileInfo) => {
           // check to make sure a file was found
@@ -76,10 +78,11 @@ module.exports = (app) => {
         });
     // if no image extension was given, show the asset with details
     } else if (dotIndex === -1) {
-      // begin image-serve processes
+      // google analytics
+      sendGoogleAnalytics('show', headers, ip, originalUrl);
+      // begin image-show processes
       retrieveAssetShowInfo(params.name, params.claim_id)
         .then((fileInfo) => {
-          console.log('SHORT URL:', fileInfo.shortUrl);
           // check to make sure a file was found
           if (!fileInfo) {
             res.status(307).render('noClaims');
@@ -96,16 +99,17 @@ module.exports = (app) => {
   });
   // route to serve the winning asset at a claim
   app.get('/:name', ({ headers, ip, originalUrl, params }, res) => {
-    // google analytics
-    sendGoogleAnalytics('serve', headers, ip, originalUrl);
     // decide to serve or show
     const dotIndex = params.name.lastIndexOf('.');
     if (dotIndex === 0) {
-      logger.error('only an extension was submitted');
+      logger.error('a file extension with no name was submitted');
+      errorHandlers.handleRequestError('serve', originalUrl, ip, new Error('no name provided'), res);
     // if an image extension was given, serve the image directly
     } else if (dotIndex > 0) {
+      // google analytics
+      sendGoogleAnalytics('serve', headers, ip, originalUrl);
       const fileExtension = params.name.substring(dotIndex);
-      const claimName = params.name.substring(0, dotIndex - 1);
+      const claimName = params.name.substring(0, dotIndex);
       logger.debug('file extension is:', fileExtension);
       // begin image-serve processes
       serveClaimByName(claimName)
@@ -135,6 +139,8 @@ module.exports = (app) => {
         });
     // if no image extension was given, show the asset with details
     } else if (dotIndex === -1) {
+      // google analytics
+      sendGoogleAnalytics('show', headers, ip, originalUrl);
       // get and render the content
       showClaimByName(params.name)
         .then(fileInfo => {
