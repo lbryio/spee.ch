@@ -39,6 +39,11 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER }) => {
         allowNull   : false,
         defaultValue: false,
       },
+      trendingEligible: {
+        type        : BOOLEAN,
+        allowNull   : false,
+        defaultValue: true,
+      },
     },
     {
       freezeTableName: true,
