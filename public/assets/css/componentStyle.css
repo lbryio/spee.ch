@@ -1,7 +1,7 @@
 
 /* top bar */
 #logo, #title {
-	display: inline-block;
+	float: left;
 }
 
 #logo {
@@ -12,9 +12,18 @@
 	margin: 2px 5px 2px 5px;
 }
 
+.top-bar-left {
+	float: left;
+}
+
+.top-bar-tagline {
+	font-style: italic;
+	color: grey;
+}
+
 .top-bar-right {
-	float: right;
-	margin-left: 1em;
+	vertical-align: text-bottom;
+	margin-left: 0.5em;
 }
 
 /* publish */

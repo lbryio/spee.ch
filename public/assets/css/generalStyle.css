@@ -10,6 +10,14 @@
 	padding-bottom: 2px;
 	border-bottom: 1px lightgrey solid;
 	margin-top: 2em;
+	overflow: auto;
+	text-align: right;
+	display: inline-block;
+	vertical-align: text-bottom;
+}
+
+.full {
+	clear: both;
 }
 
 .main {
