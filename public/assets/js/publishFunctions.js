@@ -10,6 +10,7 @@ function validateFile(file) {
 	// validate size and type
 	switch (file.type) {
 		case 'image/jpeg':
+		case 'image/jpg':
 		case 'image/png':
 		case 'image/gif':
 			if (file.size > 10000000){
