@@ -16,15 +16,15 @@ const db = require('./models'); // require our models for syncing
 const logLevel = config.get('Logging.LogLevel');
 require('./config/loggerSetup.js')(logger, logLevel);
 
-// serve static files from public directory (css/js/img)
-app.use(express.static(`${__dirname}/public`));
-
-// configure express app
-app.enable('trust proxy');  // trust the proxy to get ip address for us
-app.use(bodyParser.json()); // for parsing application/json
-app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
-app.use(siofu.router);
-app.use((req, res, next) => {  // logging middleware
+// trust the proxy to get ip address for us
+app.enable('trust proxy');
+// add middleware
+app.use(express.static(`${__dirname}/public`)); // 'express.static' to serve static files from public directory
+app.use(express.static(`${__dirname}/public`)); // 'express.static' to serve static files from public directory
+app.use(bodyParser.json()); // 'body parser' for parsing application/json
+app.use(bodyParser.urlencoded({ extended: true })); // 'body parser' for parsing application/x-www-form-urlencoded
+app.use(siofu.router); // 'socketio-file-upload' router for uploading with socket.io
+app.use((req, res, next) => {  // custom logging middleware to log all incomming http requests
   logger.verbose(`Request on ${req.originalUrl} from ${req.ip}`);
   next();
 });
@@ -84,7 +84,10 @@ db.sequelize
     logger.info('Retrieving daemon download directory');
     return getDownloadDirectory();
   })
-  .then(hostedContentPath => { // require routes & wrap in socket.io
+  .then(hostedContentPath => {
+    // add the hosted content folder at a static path
+    app.use('/media', express.static(hostedContentPath));
+    // require routes & wrap in socket.io
     require('./routes/api-routes.js')(app, hostedContentPath);
     require('./routes/show-routes.js')(app);
     require('./routes/serve-routes.js')(app);

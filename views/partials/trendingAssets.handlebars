@@ -8,12 +8,12 @@
 				<a href="/{{this.name}}/{{this.claimId}}">
 				{{#ifConditional this.fileType '===' 'video/mp4'}}
 					<video class="grid-item trending-video" controls>
-						<source src="/api/streamFile/{{this.fileName}}">
+						<source src="/media/{{this.fileName}}">
 						{{!--fallback--}}
 						Your browser does not support the <code>video</code> element.
 					</video>
 				{{else}}
-					<img  class="grid-item trending-image" src="/api/streamFile/{{this.fileName}}" />
+					<img  class="grid-item trending-image" src="/media/{{this.fileName}}" />
 				{{/ifConditional}}
 				</a>
 			{{/unless}}
