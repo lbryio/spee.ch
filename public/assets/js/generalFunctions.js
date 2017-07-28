@@ -61,6 +61,12 @@ function showError(elementId, errorMsg) {
 	errorDisplay.innerText = errorMsg;
 }
 
+function clearError(elementId,) {
+	var errorDisplay = document.getElementById(elementId);
+	errorDisplay.hidden = true;
+	errorDisplay.innerText = '';
+}
+
 // Create new error objects, that prototypically inherit from the Error constructor
 function FileError(message) {
   this.name = 'FileError';

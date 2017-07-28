@@ -2,96 +2,6 @@
 function updatePublishStatus(msg){
 	document.getElementById('publish-status').innerHTML = msg;
 }
-// validation function which checks the proposed file's type, size, and name
-function validateFile(file) {
-	if (!file) {
-		throw new Error('no file provided');
-	}
-	// validate size and type
-	switch (file.type) {
-		case 'image/jpeg':
-		case 'image/jpg':
-		case 'image/png':
-		case 'image/gif':
-			if (file.size > 10000000){
-				throw new Error('Sorry, images are limited to 10 megabytes.');
-			}
-			break;
-		case 'video/mp4':
-			if (file.size > 50000000){
-				throw new Error('Sorry, videos are limited to 50 megabytes.');
-			}
-			break;
-		default:
-			throw new Error(file.type + ' is not supported a supported file type. Only, .jpeg, .png, .gif, and .mp4 files are currently supported.')
-	}
-	// validate the file name (note: different from the lbry claim name)
-	var invalidCharacter = /[^\w.-\s()]/g.exec(file.name);
-	if (invalidCharacter) {
-		throw new Error('Special characters, such as "' + invalidCharacter + '", are not allowed in the file name.');
-	};
-}
-// validation function that checks to make sure the claim name is not already claimed
-function validateClaimName (name) {
-	var deferred = new Promise(function(resolve, reject) {
-		// validate the characters in the 'name' field
-		if (name.length < 1) {
-			reject(new NameError("You must enter a name for your claim"));
-			return;
-		}
-		var invalidCharacters = /[^A-Za-z0-9,-]/g.exec(name);
-		if (invalidCharacters) {
-			reject(new NameError('"' + invalidCharacters + '" is not allowed.  Use only the following characters: A-Z, a-z, 0-9, and "-"'));
-			return;
-		} 
-		// make sure the claim name is still available
-		var xhttp;
-		xhttp = new XMLHttpRequest();
-		xhttp.open('GET', '/api/isClaimAvailable/' + name, true);
-		xhttp.responseType = 'json';
-		xhttp.onreadystatechange = function() {
-			if (this.readyState == 4 ) {
-				if ( this.status == 200) {
-					if (this.response == true) {
-						resolve();
-					} else {
-						reject( new NameError("That name has already been claimed by spee.ch.  Please choose a different name."));
-					}
-				} else {
-					reject("request to check claim name failed with status:" + this.status);
-				};
-			}
-		};
-		xhttp.send();
-	});
-	return deferred;
-}
-// validation function which checks all aspects of the publish submission
-function validateSubmission(stagedFiles, name){
-	var deferred = new Promise(function (resolve, reject) {
-		// make sure only 1 file was selected
-		if (!stagedFiles) {
-			reject(new FileError("Please select a file"));
-		} else if (stagedFiles.length > 1) {
-			reject(new FileError("Only one file is allowed at a time"));
-		}
-		// validate the file's name, type, and size
-		try {
-			validateFile(stagedFiles[0]);
-		} catch (error) {
-			reject(error);
-		}
-		// make sure the claim name has not already been used
-		validateClaimName(name)
-			.then(function() {
-				resolve();
-			})
-			.catch(function(error) {
-				reject(error);
-			})
-	});
-	return deferred;
-}
 
 /* publish helper functions */
 
@@ -115,13 +25,14 @@ function previewAndStageFile(selectedFile){
 		previewReader.onloadend = function () {
 			dropzone.style.display = 'none';
 			previewHolder.style.display = 'block';
-			previewHolder.innerHTML = '<img width="100%" src="' + previewReader.result + '" alt="image preview"/>';			
+			previewHolder.innerHTML = '<img width="100%" src="' + previewReader.result + '" alt="image preview"/>';
 		};
 	}
 	// set the name input value to the image name if none is set yet
 	if (nameInput.value === "") {
 		var filename = selectedFile.name.substring(0, selectedFile.name.indexOf('.'))
-		nameInput.value = filename.replace(/\s+/g, '-');;
+		nameInput.value = cleanseClaimName(filename);
+		checkClaimName(nameInput.value);
 	}
 	// store the selected file for upload
 	stagedFiles = [selectedFile];

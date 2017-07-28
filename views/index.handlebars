@@ -11,6 +11,7 @@
 <script src="/socket.io/socket.io.js"></script>
 <script src="/siofu/client.js"></script>
 <script src="/assets/js/generalFunctions.js"></script>
+<script src="/assets/js/validationFunctions.js"></script>
 <script src="/assets/js/publishFunctions.js"></script>
 <script typ="text/javascript">
 	// define variables
@@ -58,10 +59,5 @@
 		document.getElementById('publish-active-area').innerHTML = publishResults;
 		window.location.href = showUrl;
 	});
-	
-	//event listener to filter claim name inputs
-	document.getElementById('claim-name-input').addEventListener('input', function() {
-		var name = this.value;
-		this.value = name.replace(/\s+/g, '-');
-	})
+
 </script>
