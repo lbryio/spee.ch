@@ -123,6 +123,7 @@ table {
 .input-error {
 	font-weight: bold;
 	color: red;
+	font-size: small;
 }
 
 @media (max-width: 1250px) {

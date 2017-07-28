@@ -7,13 +7,13 @@
 			{{#unless this.nsfw}}
 				<a href="/{{this.name}}/{{this.claimId}}">
 				{{#ifConditional this.fileType '===' 'video/mp4'}}
-					<video class="grid-item trending-video" controls onloadeddata="resetLayout()">
+					<video class="grid-item trending-video" controls onloadeddata="resetTrendingLayout()">
 						<source src="/media/{{this.fileName}}" >
 						{{!--fallback--}}
 						Your browser does not support the <code>video</code> element.
 					</video>
 				{{else}}
-					<img  class="grid-item trending-image" src="/media/{{this.fileName}}" onload="resetLayout()"/>
+					<img  class="grid-item trending-image" src="/media/{{this.fileName}}" onload="resetTrendingLayout()"/>
 				{{/ifConditional}}
 				</a>
 			{{/unless}}
@@ -29,8 +29,7 @@
 		itemSelector: '.grid-item'
 	});
 	
-	function resetLayout() {
-		console.log('resetting layout');
+	function resetTrendingLayout() {
 		msnry.layout();
 	}
 </script>

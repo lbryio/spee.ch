@@ -1,21 +1,19 @@
 <div class="panel">
 	<h2>Publish</h2>
-	<div class="col-left">
+	<div class="col-left" id="file-selection-area">
 		<div id="drop-zone" ondrop="drop_handler(event);" ondragover="dragover_handler(event);" ondragend="dragend_handler(event)">
 			<p>Drag and drop your file here, or choose your file below.</p>
 			<div class="input-error" id="input-error-file-selection" hidden="true"></div>
 			<input type="file" id="siofu_input" name="file" accept="video/*,image/*" onchange="previewAndStageFile(event.target.files[0])" enctype="multipart/form-data"/>
 		</div>
-		<div id="asset-preview-holder">
-			
-		</div>
+		<div id="asset-preview-holder"></div>
 	</div>
 	<div class="col-right">
-		<textarea id="direct-link-holder" hidden="true">No URL yet</textarea>
 		<div id="publish-active-area">
 			<div class="input-error" id="input-error-claim-name" hidden="true"></div>
 			<div class="claim-name-input-area">
-				Spee.ch/<input type="text" id="claim-name-input" placeholder="your-name-here" class="form-control">
+				Spee.ch/<input type="text" id="claim-name-input" placeholder="your-title-here" oninput="checkClaimName(event.target.value)">
+				<span id="claim-name-available" hidden="true" style="color: green">&#x2714</span>
 			</div>
 			<p class="stop-float">
 			<label for="publish-license">License:</label>
@@ -30,9 +28,33 @@
 			<p>
 			<div class="input-error" id="input-error-publish-submit" hidden="true"></div>
 			<button id="publish-submit" onclick="publishSelectedImage(event)">Publish</button>
-			<a href="/"><button id="publish-reset">Reset</button></a>
+			<button onclick="resetPublishArea()">Reset</button>
 			</p>
 			<p><i>By clicking 'Publish' I attest that I have read and agree to the <a href="https://lbry.io/termsofservice" target="_blank">LBRY terms of service</a>.</i></p>
 		</div>
 	</div>
 </div>
+
+<script type="text/javascript" >
+	function resetPublishArea (){
+		// reset file selection area
+		document.getElementById('file-selection-area').innerHTML = `<div id="drop-zone" ondrop="drop_handler(event);" ondragover="dragover_handler(event);" ondragend="dragend_handler(event)">
+			<p>Drag and drop your file here, or choose your file below.</p>
+			<div class="input-error" id="input-error-file-selection" hidden="true"></div>
+			<input type="file" id="siofu_input" name="file" accept="video/*,image/*" onchange="previewAndStageFile(event.target.files[0])" enctype="multipart/form-data"/>
+		</div>
+		<div id="asset-preview-holder"></div>`;
+		// reset 
+		document.getElementById('claim-name-input').value = '';
+		// remove staged files 
+		stagedFiles = null;
+		// clear any errors
+		document.getElementById('input-error-file-selection').innerHTML = '';
+		document.getElementById('input-error-claim-name').innerHTML = '';
+		document.getElementById('input-error-publish-submit').innerHTML = '';
+		// remove nsfw check
+		document.getElementById('claim-name-available').hidden = true;
+		// remove nsfw check
+		document.getElementById('publish-nsfw').checked = false;
+	}
+</script>
