@@ -8,11 +8,6 @@ const errorHandlers = require('../helpers/libraries/errorHandlers.js');
 const { postToStats, sendGoogleAnalytics } = require('../controllers/statsController.js');
 
 module.exports = (app, hostedContentPath) => {
-  // route to return a file directly
-  app.get('/api/streamFile/:name', ({ params }, res) => {
-    const filePath = `${hostedContentPath}/${params.name}`;
-    res.status(200).sendFile(filePath);
-  });
   // route to run a claim_list request on the daemon
   app.get('/api/claim_list/:name', ({ headers, ip, originalUrl, params }, res) => {
     // google analytics

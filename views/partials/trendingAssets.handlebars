@@ -7,37 +7,31 @@
 			{{#unless this.nsfw}}
 				<a href="/{{this.name}}/{{this.claimId}}">
 				{{#ifConditional this.fileType '===' 'video/mp4'}}
-					<video class="grid-item trending-video" controls>
-						<source src="/api/streamFile/{{this.fileName}}">
+					<video class="grid-item trending-video" controls onloadeddata="resetLayout()">
+						<source src="/media/{{this.fileName}}" >
 						{{!--fallback--}}
 						Your browser does not support the <code>video</code> element.
 					</video>
 				{{else}}
-					<img  class="grid-item trending-image" src="/api/streamFile/{{this.fileName}}" />
+					<img  class="grid-item trending-image" src="/media/{{this.fileName}}" onload="resetLayout()"/>
 				{{/ifConditional}}
 				</a>
 			{{/unless}}
+			
 		{{/each}}
 	</div>
 </div>
 
+
 <script>
 	var elem = document.querySelector('.grid');
-	var trendingImages = document.querySelectorAll('.trending-image');
-	var trendingVideos = document.querySelectorAll('.trending-video');
 	var msnry = new Masonry( elem, {
 		itemSelector: '.grid-item'
 	});
-	// after images are loaded, reset layout
-	for (var i = 0; i < trendingVideos.length; i++) {
-		trendingImages[i].addEventListener('load', function(){
-			msnry.layout();
-		})
-	}
-	// after videos are loaded, reset layout
-	for (var i = 0; i < trendingVideos.length; i++) {
-		trendingVideos[i].addEventListener('loadeddata', function(){
-			msnry.layout();
-		})
+	
+	function resetLayout() {
+		console.log('resetting layout');
+		msnry.layout();
 	}
 </script>
+

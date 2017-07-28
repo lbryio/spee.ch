@@ -22,7 +22,6 @@
 }
 
 .top-bar-right {
-	vertical-align: text-bottom;
 	margin-left: 0.5em;
 }
 
@@ -166,13 +165,6 @@ button.copy-button {
 	list-style-type: none;
 }
 
-/* meme */
-canvas {
-  background-color: white; 
-  width: 100%;
-  height: auto;
-}
-
 /* statistics */
 .totals-row {
 	border-top: 1px solid grey;
@@ -194,12 +186,28 @@ canvas {
 		width: 100%;
 	}
 
+	.top-bar-tagline {
+		clear: both;
+		text-align: left;
+		width: 100%;
+	}
+
 }
 
 @media (max-width: 475px) {
 
+	div#publish-active-area {
+		margin-left: 2em;
+		margin-right: 2em;
+	}
+
     .all-claims-img {
 		width:50%;
 	}
+
+	.top-bar-right {
+		display: none;
+	}
+
 
 }

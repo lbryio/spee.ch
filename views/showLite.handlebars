@@ -2,13 +2,13 @@
 	<a href="/{{fileInfo.name}}/{{fileInfo.claimId}}">
 	{{#ifConditional fileInfo.fileType '===' 'video/mp4'}}
 		<video class="show-asset-lite" autoplay loop controls>
-			<source src="/api/streamFile/{{fileInfo.fileName}}">
+			<source src="/media/{{fileInfo.fileName}}">
 			{{!--fallback--}}
 			Your browser does not support the <code>video</code> element.
 		</video>
 		
 	{{else}}
-		<img class="show-asset-lite" src="/api/streamFile/{{fileInfo.fileName}}" alt="{{fileInfo.fileName}}"/>
+		<img class="show-asset-lite" src="/media/{{fileInfo.fileName}}" alt="{{fileInfo.fileName}}"/>
 	{{/ifConditional}}
 	</a>
 </div>
