@@ -1,5 +1,6 @@
 <div class="panel">
 	<div id="asset-placeholder">
+		<a href="/{{fileInfo.name}}/{{fileInfo.claimId}}{{fileInfo.fileExt}}">
 		{{#ifConditional fileInfo.fileType '===' 'video/mp4'}}
 			<video class="show-asset" autoplay loop controls>
 				<source src="/media/{{fileInfo.fileName}}">
@@ -9,5 +10,6 @@
 		{{else}}
 			<img  class="show-asset" src="/media/{{fileInfo.fileName}}" />
 		{{/ifConditional}}
+		</a>
 	</div>
 </div>
