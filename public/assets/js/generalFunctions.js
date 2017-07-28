@@ -61,7 +61,7 @@ function showError(elementId, errorMsg) {
 	errorDisplay.innerText = errorMsg;
 }
 
-function clearError(elementId,) {
+function clearError(elementId) {
 	var errorDisplay = document.getElementById(elementId);
 	errorDisplay.hidden = true;
 	errorDisplay.innerText = '';
