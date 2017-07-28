@@ -5,6 +5,9 @@ function validateFile(file) {
 	if (!file) {
 		throw new Error('no file provided');
 	}
+	if (/'/.test(file.name)) {
+		throw new Error('apostrophes are not allowed in the file name');
+	}
 	// validate size and type
 	switch (file.type) {
 		case 'image/jpeg':
