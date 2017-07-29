@@ -28,7 +28,7 @@
 		<div class="input-error" id="input-error-copy-embed-text" hidden="true"></div>
 		<br/>
 		{{#ifConditional fileInfo.fileType '===' 'video/mp4'}}
-			<input type="text" id="embed-text" class="link" readonly onclick="select()" spellcheck="false" value='&lt;video width="100%" controls>&lt;source src="https://spee.ch/{{fileInfo.name}}/{{fileInfo.claimId}}{{fileInfo.fileExt}}" />&lt;/video>'/>
+			<input type="text" id="embed-text" class="link" readonly onclick="select()" spellcheck="false" value='&lt;video width="100%" controls src="https://spee.ch/{{fileInfo.name}}/{{fileInfo.claimId}}{{fileInfo.fileExt}}"/>&lt;/video>'/>
 		{{else}}
 			<input type="text" id="embed-text" class="link" readonly onclick="select()" spellcheck="false" value='&lt;img src="https://spee.ch/{{fileInfo.name}}/{{fileInfo.claimId}}{{fileInfo.fileExt}}" />'/>
 		{{/ifConditional}}
