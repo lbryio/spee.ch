@@ -30,8 +30,8 @@ module.exports = {
       throw new Error('The claim name you provided is not allowed.  Only the following characters are allowed: A-Z, a-z, 0-9, and "-"');
     }
     // validate license
-    if ((license.indexOf('Public Domain') === -1) && (license.indexOf('Creative Commons') === -1)) {
-      throw new Error('Only posts with a license of "Public Domain" or "Creative Commons" are eligible for publishing through spee.ch');
+    if ((license.indexOf('Public Domain') === -1) && (license.indexOf('Creative Commons') === -1) && (license.indecOf('CC Attribution-NonCommercial 4.0 International') === -1)) {
+      throw new Error('Only posts with a "Public Domain" license,  or one of the Creative Commons licenses are eligible for publishing through spee.ch');
     }
     switch (nsfw) {
       case true:
