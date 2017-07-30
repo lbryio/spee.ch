@@ -144,10 +144,11 @@ module.exports = {
   },
   getTrendingClaims (startDate) {
     logger.debug('retrieving trending requests');
-    const deferred = new Promise((resolve, reject) => {
+    const dateTime = startDate.toISOString().slice(0, 19).replace('T', ' ');
+    return new Promise((resolve, reject) => {
       // get the raw requests data
       db.sequelize
-        .query('SELECT COUNT(*), File.* FROM Request LEFT JOIN File ON Request.FileId = File.id WHERE FileId IS NOT NULL AND nsfw != 1 AND trendingEligible = 1 GROUP BY FileId ORDER BY COUNT(*) DESC LIMIT 25;', { type: db.sequelize.QueryTypes.SELECT })
+        .query(`SELECT COUNT(*), File.* FROM Request LEFT JOIN File ON Request.FileId = File.id WHERE FileId IS NOT NULL AND nsfw != 1 AND trendingEligible = 1 AND Request.createdAt > "${dateTime}" GROUP BY FileId ORDER BY COUNT(*) DESC LIMIT 25;`, { type: db.sequelize.QueryTypes.SELECT })
         .then(results => {
           resolve(results);
         })
@@ -156,6 +157,5 @@ module.exports = {
           reject(error);
         });
     });
-    return deferred;
   },
 };

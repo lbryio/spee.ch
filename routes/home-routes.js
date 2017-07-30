@@ -6,7 +6,7 @@ module.exports = app => {
   app.get('/', ({ headers, ip, originalUrl }, res) => {
     // get yesterday's date
     const startDate = new Date();
-    startDate.setDate(startDate.getDate() - 1);
+    startDate.setDate(startDate.getDate() - 3);
     // send response
     getTrendingClaims(startDate)
       .then(result => {
