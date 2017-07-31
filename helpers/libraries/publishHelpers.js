@@ -12,8 +12,8 @@ module.exports = {
       case 'image/jpeg':
       case 'image/png':
       case 'image/gif':
-        if (file.size > 5000000) {
-          throw new Error('Your image exceeds the 5 megabyte limit.');
+        if (file.size > 50000000) {
+          throw new Error('Your image exceeds the 50 megabyte limit.');
         }
         break;
       case 'video/mp4':
