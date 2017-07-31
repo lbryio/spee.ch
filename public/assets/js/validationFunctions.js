@@ -14,8 +14,8 @@ function validateFile(file) {
 		case 'image/jpg':
 		case 'image/png':
 		case 'image/gif':
-			if (file.size > 10000000){
-				throw new Error('Sorry, images are limited to 10 megabytes.');
+			if (file.size > 50000000){
+				throw new Error('Sorry, images are limited to 50 megabytes.');
 			}
 			break;
 		case 'video/mp4':
