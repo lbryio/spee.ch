@@ -1,6 +1,7 @@
 const logger = require('winston');
 const db = require('../../models');
 const lbryApi = require('./lbryApi');
+const { postToStats } = require('../controllers/statsController.js');
 
 function determineShortUrl (claimId, claimList) {
   logger.debug('determining short url based on claim id and claim list');
@@ -106,11 +107,8 @@ module.exports = {
     // adjust default options as needed
     switch (fileType) {
       case 'image/jpeg':
-        break;
       case 'image/gif':
-        break;
       case 'image/png':
-        break;
       case 'video/mp4':
         break;
       default:
@@ -120,6 +118,14 @@ module.exports = {
     }
     // send the file
     res.status(200).sendFile(filePath, options);
+  },
+  showFile (originalUrl, ip, fileInfo, res) {
+    postToStats('show', originalUrl, ip, fileInfo.name, fileInfo.claimId, 'success');
+    res.status(200).render('show', { layout: 'show', fileInfo });
+  },
+  showFileLite (originalUrl, ip, fileInfo, res) {
+    postToStats('show', originalUrl, ip, fileInfo.name, fileInfo.claimId, 'success');
+    res.status(200).render('showLite', { layout: 'show', fileInfo });
   },
   getClaimIdByShortUrl (name, shortUrl) {
     const deferred = new Promise((resolve, reject) => {

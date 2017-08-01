@@ -1,184 +1,92 @@
-const { serveClaimByName, serveClaimByClaimId, serveClaimByShortUrl } = require('../controllers/serveController.js');
-const { postToStats, sendGoogleAnalytics } = require('../controllers/statsController.js');
-const errorHandlers = require('../helpers/libraries/errorHandlers.js');
-const { serveFile } = require('../helpers/libraries/serveHelpers.js');
-const { showClaimByName, showClaimByClaimId, showClaimByShortUrl } = require('../controllers/showController.js');
+const { serveFile, showFile, showFileLite } = require('../helpers/libraries/serveHelpers.js');
+const { getAssetByChannel, getAssetByShortUrl, getAssetByClaimId } = require('../controllers/serveController.js');
 const logger = require('winston');
 
-function retrieveAssetServeInfo (name, claimId) {
-  const deferred = new Promise((resolve, reject) => {
-    // if claim id is full 40 chars, retrieve the shortest possible url
-    if (claimId.length === 40) {
-      resolve(serveClaimByClaimId(name, claimId));
-    // if the claim id is shorter than 40, retrieve the full claim id & shortest possible url
-    } else if (claimId.length < 40) {
-      resolve(serveClaimByShortUrl(name, claimId));
-    } else {
-      reject(new Error('That Claim Id is longer than 40 characters.'));
-    }
-  });
-  return deferred;
-}
+const SERVE = 'SERVE';
+const SHOW = 'SHOW';
+const SHOWLITE = 'SHOWLITE';
+const CHANNEL = 'CHANNEL';
+const SHORTURL = 'SHORTURL';
+const CLAIMID = 'CLAIMID';
 
-function retrieveAssetShowInfo (name, claimId) {
-  const deferred = new Promise((resolve, reject) => {
-    // if claim id is full 40 chars, retrieve the shortest possible url
-    if (claimId.length === 40) {
-      resolve(showClaimByClaimId(name, claimId));
-    // if the claim id is shorter than 40, retrieve the full claim id & shortest possible url
-    } else if (claimId.length < 40) {
-      resolve(showClaimByShortUrl(name, claimId));
-    } else {
-      reject(new Error('That Claim Id is longer than 40 characters.'));
-    }
-  });
-  return deferred;
-}
-
-function serveClaimByNameWrapper (name, headers, originalUrl, ip, res) {
-  // begin image-serve processes
-  serveClaimByName(name)
-    .then(fileInfo => {
-      // check to make sure a file was found
-      if (!fileInfo) {
-        res.status(307).render('noClaims');
-        return;
-      }
-      // serve the file or the show route
-      if (headers['accept']) { // note: added b/c some requests errored out due to no accept param in header
-        const mimetypes = headers['accept'].split(',');
-        if (mimetypes.includes('text/html')) {
-          postToStats('show', originalUrl, ip, fileInfo.name, fileInfo.claimId, 'success');
-          res.status(200).render('showLite', { layout: 'show', fileInfo });
-        } else {
-          postToStats('serve', originalUrl, ip, fileInfo.name, fileInfo.claimId, 'success');
-          serveFile(fileInfo, res);
-        }
-      } else {
-        postToStats('serve', originalUrl, ip, fileInfo.name, fileInfo.claimId, 'success');
-        serveFile(fileInfo, res);
-      }
-    })
-    .catch(error => {
-      errorHandlers.handleRequestError('serve', originalUrl, ip, error, res);
-    });
-}
-
-function serveAssetByClaimIdWrapper (name, claimId, headers, originalUrl, ip, res) {
-  retrieveAssetServeInfo(name, claimId)
-    .then((fileInfo) => {
-      // check to make sure a file was found
-      if (!fileInfo) {
-        res.status(307).render('noClaims');
-        return;
-      }
-      // serve the file or the show route
-      if (headers['accept']) {
-        const mimetypes = headers['accept'].split(',');
-        if (mimetypes.includes('text/html')) {
-          postToStats('show', originalUrl, ip, fileInfo.name, fileInfo.claimId, 'success');
-          res.status(200).render('showLite', { layout: 'show', fileInfo });
-        } else {
-          postToStats('serve', originalUrl, ip, fileInfo.name, fileInfo.claimId, 'success');
-          serveFile(fileInfo, res);
-        }
-      } else {
-        postToStats('serve', originalUrl, ip, fileInfo.name, fileInfo.claimId, 'success');
-        serveFile(fileInfo, res);
-      }
-    })
-    .catch(error => {
-      errorHandlers.handleRequestError('serve', originalUrl, ip, error, res);
-    });
+function getAsset (claimType, channelName, shortUrl, fullClaimId, name) {
+  switch (claimType) {
+    case CHANNEL:
+      return getAssetByChannel(channelName, name);
+    case SHORTURL:
+      return getAssetByShortUrl(shortUrl, name);
+    case CLAIMID:
+      return getAssetByClaimId(fullClaimId, name);
+    default:
+      return new Error('that claim type was not found');
+  }
 }
 
 module.exports = (app) => {
   // route to serve a specific asset
-  app.get('/:name/:claim_id', ({ headers, ip, originalUrl, params }, res) => {
-    // decide to serve or show
-    const dotIndex = params.claim_id.lastIndexOf('.');
-    if (dotIndex === 0) {
-      logger.error('a file extension with no name was submitted');
-      errorHandlers.handleRequestError('serve', originalUrl, ip, new Error('no claim id provided'), res);
-    // if an image extension was given, serve the image directly
-    } else if (dotIndex > 0) {
-      // google analytics
-      sendGoogleAnalytics('serve', headers, ip, originalUrl);
-      // parse params
-      const fileExtension = params.claim_id.substring(dotIndex);
-      const claimId = params.claim_id.substring(0, dotIndex);
-      logger.debug('file extension is:', fileExtension);
-      // start image-serve processes
-      serveAssetByClaimIdWrapper(params.name, claimId, headers, originalUrl, ip, res);
-    // if no image extension was given, show the asset with details
-    } else if (dotIndex === -1) {
-      // google analytics
-      sendGoogleAnalytics('show', headers, ip, originalUrl);
-      // for backwards compatability: make sure the client can acept html, if not serve the file.
+  app.get('/:identifier/:name', ({ headers, ip, originalUrl, params }, res) => {
+    const identifier = params.identifier;
+    let name = params.name;
+    // parse identifier for whether it is a channel, short url, or claim_id
+    let claimType;
+    let channelName = null;
+    let shortUrl = null;
+    let fullClaimId = null;
+    if (identifier.charAt(0) === '@') {
+      channelName = identifier.substring(1);
+      logger.debug('channel name =', channelName);
+      claimType = CHANNEL;
+    } else if (identifier.length < 40) {
+      fullClaimId = identifier;
+      logger.debug('full claim id =', fullClaimId);
+      claimType = CLAIMID;
+    } else {
+      shortUrl = identifier;
+      logger.debug('short url =', shortUrl);
+      claimType = SHORTURL;
+    };
+    // parse the name
+    let method;
+    let desiredExtension;
+    if (name.lastIndexOf('.') === -1) {
+      method = SERVE;
       if (headers['accept'] && headers['accept'].split(',').includes('text/html')) {
-        // begin image-show processes
-        retrieveAssetShowInfo(params.name, params.claim_id)
-          .then((fileInfo) => {
-            // check to make sure a file was found
-            if (!fileInfo) {
-              res.status(307).render('noClaims');
-              return;
-            }
-            // serve the file or the show route
-            postToStats('show', originalUrl, ip, fileInfo.name, fileInfo.claimId, 'success');
-            res.status(200).render('show', { layout: 'show', fileInfo });
-          })
-          .catch(error => {
-            errorHandlers.handleRequestError('show', originalUrl, ip, error, res);
-          });
-      } else {
-        // start image-serve processes
-        serveAssetByClaimIdWrapper(params.name, params.claim_id, headers, originalUrl, ip, res);
+        method = SHOWLITE;
       }
+    } else {
+      method = SHOW;
+      if (headers['accept'] && !headers['accept'].split(',').includes('text/html')) {
+        method = SERVE;
+      }
+      desiredExtension = name.substring(name.lastIndexOf('.'));
+      name = name.substring(0, name.lastIndexOf('.'));
+      logger.debug('file extension =', desiredExtension);
     }
+    logger.debug('claim name = ', name);
+    logger.debug('method =', method);
+
+    getAsset(claimType, channelName, shortUrl, fullClaimId, name)
+      .then(result => {
+        switch (method) {
+          case SERVE:
+            serveFile(result, res);
+            break;
+          case SHOWLITE:
+            showFileLite(result, res);
+            break;
+          case SHOW:
+            showFile(result, res);
+            break;
+          default:
+            logger.error('I did not recognize that method');
+            break;
+        }
+      })
+      .catch(error => {
+        logger.error(error);
+      });
   });
   // route to serve the winning asset at a claim
   app.get('/:name', ({ headers, ip, originalUrl, params }, res) => {
-    // decide to serve or show
-    const dotIndex = params.name.lastIndexOf('.');
-    if (dotIndex === 0) {
-      logger.error('a file extension with no name was submitted');
-      errorHandlers.handleRequestError('serve', originalUrl, ip, new Error('no name provided'), res);
-    // if an image extension was given, serve the image directly
-    } else if (dotIndex > 0) {
-      // google analytics
-      sendGoogleAnalytics('serve', headers, ip, originalUrl);
-      // parse name param
-      const fileExtension = params.name.substring(dotIndex);
-      const claimName = params.name.substring(0, dotIndex);
-      logger.debug('file extension is:', fileExtension);
-      // start image-serve processes
-      serveClaimByNameWrapper(claimName, headers, originalUrl, ip, res);
-    // if no image extension was given, show the asset with details
-    } else if (dotIndex === -1) {
-      // google analytics
-      sendGoogleAnalytics('show', headers, ip, originalUrl);
-      // for backwards compatability: make sure the client can receive text/html, or else serve the asset directly
-      if (headers['accept'] && headers['accept'].split(',').includes('text/html')) {
-        // begin image-show process
-        showClaimByName(params.name)
-          .then(fileInfo => {
-            // check to make sure a file was found
-            if (!fileInfo) {
-              res.status(307).render('noClaims');
-              return;
-            }
-            // serve the show route
-            postToStats('show', originalUrl, ip, fileInfo.name, fileInfo.claimId, 'success');
-            res.status(200).render('show', { layout: 'show', fileInfo });
-          })
-          .catch(error => {
-            errorHandlers.handleRequestError('show', originalUrl, ip, error, res);
-          });
-      } else {
-        // start image serve process
-        serveClaimByNameWrapper(params.name, headers, originalUrl, ip, res);
-      }
-    }
   });
 };

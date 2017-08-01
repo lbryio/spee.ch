@@ -6,6 +6,15 @@ const isFreePublicClaim = require('../helpers/functions/isFreePublicClaim.js');
 const serveHelpers = require('../helpers/libraries/serveHelpers.js');
 
 module.exports = {
+  getAssetByChannel (channelName, name) {
+
+  },
+  getAssetByShortUrl (shortUrl, name) {
+
+  },
+  getAssetByClaimId (fullClaimId, name) {
+
+  },
   serveClaimByName (claimName) {
     const deferred = new Promise((resolve, reject) => {
       // 1. get the top free, public claims

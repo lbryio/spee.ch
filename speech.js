@@ -89,7 +89,7 @@ db.sequelize
     app.use('/media', express.static(hostedContentPath));
     // require routes & wrap in socket.io
     require('./routes/api-routes.js')(app, hostedContentPath);
-    require('./routes/show-routes.js')(app);
+    require('./routes/page-routes.js')(app);
     require('./routes/serve-routes.js')(app);
     require('./routes/home-routes.js')(app);
     return require('./routes/sockets-routes.js')(app, siofu, hostedContentPath);
