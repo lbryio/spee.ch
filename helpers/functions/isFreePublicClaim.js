@@ -1,5 +1,5 @@
 const logger = require('winston');
-const licenses = ['Creative Commons', 'Public Domain', 'CC Attribution-NonCommercial 4.0 International'];
+const licenses = ['Creative Commons', 'Public Domain', 'Creative Commons Attribution 4.0 International', 'Creative Commons Attribution-ShareAlike 4.0 International', 'Creative Commons Attribution-NoDerivatives 4.0 International', 'Creative Commons Attribution-NonCommercial 4.0 International', 'Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International', 'Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International'];
 
 module.exports = ({ value }) => {
   logger.debug('checking isFreePublicClaim ?');
