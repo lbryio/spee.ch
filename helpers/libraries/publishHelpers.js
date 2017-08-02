@@ -8,7 +8,8 @@ module.exports = {
       throw new Error('No file was submitted or the key used was incorrect.  Files posted through this route must use a key of "speech" or null');
     }
     // check file type and size
-    switch (file.type) {
+    var magic = require('magic-number');
+    switch (magic.detectFile('file')) {
       case 'image/jpeg':
       case 'image/png':
       case 'image/gif':
@@ -22,7 +23,7 @@ module.exports = {
         }
         break;
       default:
-        throw new Error('The ' + file.Type + ' content type is not supported.  Only, .jpeg, .png, .gif, and .mp4 files are currently supported.');
+        throw new Error('The ' + magic.detectFile('file') + ' content type is not supported.  Only, .jpeg, .png, .gif, and .mp4 files are currently supported.');
     }
     // validate claim name
     const invalidCharacters = /[^A-Za-z0-9,-]/.exec(name);
