@@ -1,7 +1,6 @@
 const logger = require('winston');
 const db = require('../../models');
 const lbryApi = require('./lbryApi');
-const { postToStats } = require('../controllers/statsController.js');
 
 function determineShortUrl (claimId, claimList) {
   logger.debug('determining short url based on claim id and claim list');
@@ -60,39 +59,39 @@ function checkLocalDbForClaims (name, shortUrl) {
     });
 }
 
-function getClaimAndUpdate (uri, address, height) {
-  // 1. get the claim
-  lbryApi
-    .getClaim(uri)
-    .then(({ name, claim_id, outpoint, file_name, download_path, mime_type, metadata }) => {
-      logger.debug(' Get returned outpoint: ', outpoint);
-      // 2. update the entry in db
-      db.File
-        .update({
-          outpoint,
-          height, // note: height is coming from the 'resolve', not 'get'.
-          address,  // note: address is coming from the 'resolve', not 'get'.
-          fileName: file_name,
-          filePath: download_path,
-          fileType: mime_type,
-          nsfw    : metadata.stream.metadata.nsfw,
-        }, {
-          where: {
-            name,
-            claimId: claim_id,
-          },
-        })
-        .then(result => {
-          logger.debug('successfully updated mysql record', result);
-        })
-        .catch(error => {
-          logger.error('sequelize error', error);
-        });
-    })
-    .catch(error => {
-      logger.error(`error while getting claim for ${uri} >> `, error);
-    });
-}
+// function getClaimAndUpdate (uri, address, height) {
+//   // 1. get the claim
+//   lbryApi
+//     .getClaim(uri)
+//     .then(({ name, claim_id, outpoint, file_name, download_path, mime_type, metadata }) => {
+//       logger.debug(' Get returned outpoint: ', outpoint);
+//       // 2. update the entry in db
+//       db.File
+//         .update({
+//           outpoint,
+//           height, // note: height is coming from the 'resolve', not 'get'.
+//           address,  // note: address is coming from the 'resolve', not 'get'.
+//           fileName: file_name,
+//           filePath: download_path,
+//           fileType: mime_type,
+//           nsfw    : metadata.stream.metadata.nsfw,
+//         }, {
+//           where: {
+//             name,
+//             claimId: claim_id,
+//           },
+//         })
+//         .then(result => {
+//           logger.debug('successfully updated mysql record', result);
+//         })
+//         .catch(error => {
+//           logger.error('sequelize error', error);
+//         });
+//     })
+//     .catch(error => {
+//       logger.error(`error while getting claim for ${uri} >> `, error);
+//     });
+// }
 
 module.exports = {
   serveFile ({ fileName, fileType, filePath }, res) {
@@ -119,12 +118,10 @@ module.exports = {
     // send the file
     res.status(200).sendFile(filePath, options);
   },
-  showFile (originalUrl, ip, fileInfo, res) {
-    postToStats('show', originalUrl, ip, fileInfo.name, fileInfo.claimId, 'success');
+  showFile (fileInfo, res) {
     res.status(200).render('show', { layout: 'show', fileInfo });
   },
-  showFileLite (originalUrl, ip, fileInfo, res) {
-    postToStats('show', originalUrl, ip, fileInfo.name, fileInfo.claimId, 'success');
+  showFileLite (fileInfo, res) {
     res.status(200).render('showLite', { layout: 'show', fileInfo });
   },
   getClaimIdByShortUrl (name, shortUrl) {
@@ -187,38 +184,39 @@ module.exports = {
   determineShortUrl (claimId, claimList) {
     return determineShortUrl(claimId, claimList);
   },
-  updateFileIfNeeded (uri, localOutpoint, localHeight) {
-    logger.debug(`Initiating resolve to check outpoint for ${uri}`);
-    // 1. resolve claim
-    lbryApi
-      .resolveUri(uri)
-      .then(result => {
-        // check to make sure the result is a claim
-        if (!result.claim) {
-          logger.debug('resolve did not return a claim');
-          return;
-        }
-        // logger.debug('resolved result:', result);
-        const resolvedOutpoint = `${result.claim.txid}:${result.claim.nout}`;
-        const resolvedHeight = result.claim.height;
-        const resolvedAddress = result.claim.address;
-        logger.debug('database outpoint:', localOutpoint);
-        logger.debug('resolved outpoint:', resolvedOutpoint);
-        // 2. if the outpoint's match, no further work needed
-        if (localOutpoint === resolvedOutpoint) {
-          logger.debug('local outpoint matched');
-        // 2. if the outpoints don't match, check the height
-        } else if (localHeight > resolvedHeight) {
-          logger.debug('local height was greater than resolved height');
-        // 2. get the resolved claim
-        } else {
-          logger.debug(`local outpoint did not match for ${uri}.  Initiating update.`);
-          getClaimAndUpdate(uri, resolvedAddress, resolvedHeight);
-        }
-      })
-      .catch(error => {
-        logger.error(error);
-      });
+  updateFileIfNeeded (name, claimId, localOutpoint, localHeight) {
+    // const uri = `${name}#${claimId}`;
+    // logger.debug(`Initiating resolve to check outpoint for ${uri}`);
+    // // 1. resolve claim
+    // lbryApi
+    //   .resolveUri(uri)
+    //   .then(result => {
+    //     // check to make sure the result is a claim
+    //     if (!result.claim) {
+    //       logger.debug('resolve did not return a claim');
+    //       return;
+    //     }
+    //     // logger.debug('resolved result:', result);
+    //     const resolvedOutpoint = `${result.claim.txid}:${result.claim.nout}`;
+    //     const resolvedHeight = result.claim.height;
+    //     const resolvedAddress = result.claim.address;
+    //     logger.debug('database outpoint:', localOutpoint);
+    //     logger.debug('resolved outpoint:', resolvedOutpoint);
+    //     // 2. if the outpoint's match, no further work needed
+    //     if (localOutpoint === resolvedOutpoint) {
+    //       logger.debug('local outpoint matched');
+    //     // 2. if the outpoints don't match, check the height
+    //     } else if (localHeight > resolvedHeight) {
+    //       logger.debug('local height was greater than resolved height');
+    //     // 2. get the resolved claim
+    //     } else {
+    //       logger.debug(`local outpoint did not match for ${uri}.  Initiating update.`);
+    //       getClaimAndUpdate(uri, resolvedAddress, resolvedHeight);
+    //     }
+    //   })
+    //   .catch(error => {
+    //     logger.error(error);
+    //   });
   },
   getClaimAndHandleResponse (uri, address, height, resolve, reject) {
     lbryApi

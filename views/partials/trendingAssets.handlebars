@@ -5,7 +5,7 @@
 	<div class="grid" data-masonry='{ "itemSelector": ".grid-item" }'>
 		{{#each trendingAssets}}
 			{{#unless this.nsfw}}
-				<a href="/{{this.name}}/{{this.claimId}}">
+				<a href="/{{this.claimId}}/{{this.name}}">
 				{{#ifConditional this.fileType '===' 'video/mp4'}}
 					<video class="grid-item trending-video" controls onloadeddata="resetTrendingLayout()">
 						<source src="/media/{{this.fileName}}" >

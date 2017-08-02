@@ -5,15 +5,139 @@ const getAllFreePublicClaims = require('../helpers/functions/getAllFreePublicCla
 const isFreePublicClaim = require('../helpers/functions/isFreePublicClaim.js');
 const serveHelpers = require('../helpers/libraries/serveHelpers.js');
 
+function checkForLocalAssetByShortUrl (channel, name) {
+  return new Promise((resolve, reject) => {
+    db.File
+      .findOne({where: { name, channel }})
+      .then(result => {
+        if (result) {
+          resolve(result.dataValues);
+        } else {
+          resolve(null);
+        }
+      })
+      .catch(error => {
+        reject(error);
+      });
+  });
+}
+
+function checkForLocalAssetByChannel (channelName, name) {
+  return new Promise((resolve, reject) => {
+
+  });
+}
+
+function checkForLocalAssetByClaimId (claimId, name) {
+  return new Promise((resolve, reject) => {
+    db.File
+      .findOne({where: { name, claimId }})
+      .then(result => {
+        if (result) {
+          resolve(result.dataValues);
+        } else {
+          resolve(null);
+        }
+      })
+      .catch(error => {
+        reject(error);
+      });
+  });
+}
+
+function formatGetResultsToFileInfo ({ name, claim_id, outpoint, file_name, download_path, mime_type, metadata }) {
+  return {
+    name,
+    claimId : claim_id,
+    outpoint,
+    fileName: file_name,
+    filePath: download_path,
+    fileType: mime_type,
+    nsfw    : metadata.stream.metadata.nsfw,
+  };
+}
+
 module.exports = {
   getAssetByChannel (channelName, name) {
-
+    return new Promise((resolve, reject) => {
+      // check locally for claim
+      checkForLocalAssetByChannel(channelName, name)
+        .then(result => {
+          // if not found locally, make a get request
+          if (!result) {
+            resolve();
+          // if a result was found, resolve the result
+          } else {
+            resolve(result);
+          }
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
   },
   getAssetByShortUrl (shortUrl, name) {
-
+    return new Promise((resolve, reject) => {
+      // check locally for claim
+      checkForLocalAssetByShortUrl(shortUrl, name)
+      .then(result => {
+        // if not found locally, make a get request
+        if (!result) {
+          resolve();
+        // if a result was found, resolve the result
+        } else {
+          resolve(result);
+        }
+      })
+      .catch(error => {
+        reject(error);
+      });
+    });
   },
   getAssetByClaimId (fullClaimId, name) {
-
+    return new Promise((resolve, reject) => {
+      // 1. check locally for claim
+      checkForLocalAssetByClaimId(fullClaimId, name)
+      .then(dataValues => {
+        // 2. if a result was found, resolve the result
+        if (dataValues) {
+          logger.debug('found a local file for this claimId');
+          // trigger an update check for the file
+          serveHelpers.updateFileIfNeeded(dataValues.name, dataValues.claimId, dataValues.outpoint, dataValues.height);
+          // resolve promise
+          resolve(dataValues);
+        // 2. if not found locally, make a get request
+        } else {
+          logger.debug('no local file for this claimId');
+          // 3. resolve the claim
+          lbryApi.resolveUri(`${name}#${fullClaimId}`)
+          .then(resolveResult => {
+            // if the claim is free and public, then get it
+            if (resolveResult.claim && isFreePublicClaim(resolveResult.claim)) {
+              lbryApi.getClaim(`${name}#${fullClaimId}`)
+              .then(getResult => {
+                let fileInfo = formatGetResultsToFileInfo(getResult);
+                fileInfo['address'] = resolveResult.claim.address;
+                fileInfo['height'] = resolveResult.claim.height;
+                resolve(fileInfo);
+              })
+              .catch(error => {
+                reject(error);
+              });
+            // if not, resolve with no claims
+            } else {
+              resolve(null);
+            }
+          })
+          .catch(error => {
+            reject(error);
+          });
+        }
+      })
+      .catch(error => {
+        reject(error);
+      });
+    });
   },
   serveClaimByName (claimName) {
     const deferred = new Promise((resolve, reject) => {
@@ -56,49 +180,7 @@ module.exports = {
     });
     return deferred;
   },
-  serveClaimByClaimId (name, claimId) {
-    logger.debug(`serving claim "${name}" with claimid "${claimId}"`);
-    const deferred = new Promise((resolve, reject) => {
-      // 1. check locally for the claim
-      const uri = `${name}#${claimId}`;
-      db.File
-        .findOne({ where: { name, claimId } })
-        .then(result => {
-          // 3. if a match is found locally, serve that claim
-          if (result) {
-            logger.debug('local result found');
-            // return the data for the file to be served
-            resolve(result.dataValues);
-            serveHelpers.updateFileIfNeeded(uri, result.dataValues.outpoint, result.dataValues.outpoint);
-          // 3. if a match was not found locally, use the daemon to retrieve the claim & return the db data once it is created
-          } else {
-            logger.debug('no local result found');
-            lbryApi
-              .resolveUri(uri)
-              .then(result => {
-                if (result.claim && isFreePublicClaim(result.claim)) { // check to see if the claim is free & public
-                  // get claim and serve
-                  serveHelpers
-                    .getClaimAndReturnResponse(uri, result.claim.address, result.claim.height)
-                    .then(result => {
-                      resolve(result.dataValues);
-                    })
-                    .catch(error => reject(error));
-                } else {
-                  logger.debug('Resolve did not return a free, public claim');
-                  resolve(null);
-                }
-              })
-              .catch(error => {
-                logger.debug('resolve returned an error');
-                reject(error);
-              });
-          }
-        })
-        .catch(error => reject(error));
-    });
-    return deferred;
-  },
+
   serveClaimByShortUrl (name, shortUrl) {
     const deferred = new Promise((resolve, reject) => {
       let uri;

@@ -1,6 +1,7 @@
+const logger = require('winston');
 const { serveFile, showFile, showFileLite } = require('../helpers/libraries/serveHelpers.js');
 const { getAssetByChannel, getAssetByShortUrl, getAssetByClaimId } = require('../controllers/serveController.js');
-const logger = require('winston');
+const { postToStats } = require('../controllers/statsController.js');
 
 const SERVE = 'SERVE';
 const SHOW = 'SHOW';
@@ -36,46 +37,61 @@ module.exports = (app) => {
       channelName = identifier.substring(1);
       logger.debug('channel name =', channelName);
       claimType = CHANNEL;
-    } else if (identifier.length < 40) {
+    } else if (identifier.length === 40) {
       fullClaimId = identifier;
       logger.debug('full claim id =', fullClaimId);
       claimType = CLAIMID;
-    } else {
+    } else if (identifier.length < 40) {
       shortUrl = identifier;
       logger.debug('short url =', shortUrl);
       claimType = SHORTURL;
+    } else {
+      logger.error('that url does not compute');
+      res.send('that url is invalid');
+      return;
     };
     // parse the name
     let method;
     let desiredExtension;
-    if (name.lastIndexOf('.') === -1) {
+    if (name.indexOf('.') !== -1) {
       method = SERVE;
       if (headers['accept'] && headers['accept'].split(',').includes('text/html')) {
         method = SHOWLITE;
       }
+      desiredExtension = name.substring(name.indexOf('.'));
+      name = name.substring(0, name.indexOf('.'));
+      logger.debug('file extension =', desiredExtension);
     } else {
       method = SHOW;
       if (headers['accept'] && !headers['accept'].split(',').includes('text/html')) {
         method = SERVE;
       }
-      desiredExtension = name.substring(name.lastIndexOf('.'));
-      name = name.substring(0, name.lastIndexOf('.'));
-      logger.debug('file extension =', desiredExtension);
     }
     logger.debug('claim name = ', name);
     logger.debug('method =', method);
 
     getAsset(claimType, channelName, shortUrl, fullClaimId, name)
-      .then(result => {
+      .then(fileInfo => {
+        // add file extension to the file info
+        fileInfo['fileExt'] = fileInfo.fileName.substring(fileInfo.fileName.lastIndexOf('.'));
+        // test logging
+        logger.debug(fileInfo);
+        // serve or show
+        if (!fileInfo) {
+          res.status(200).render('noClaims');
+          return;
+        }
         switch (method) {
           case SERVE:
-            serveFile(result, res);
+            serveFile(fileInfo, res);
             break;
           case SHOWLITE:
-            showFileLite(result, res);
+            postToStats('show', originalUrl, ip, fileInfo.name, fileInfo.claimId, 'success');
+            showFileLite(fileInfo, res);
             break;
           case SHOW:
-            showFile(result, res);
+            postToStats('show', originalUrl, ip, fileInfo.name, fileInfo.claimId, 'success');
+            showFile(fileInfo, res);
             break;
           default:
             logger.error('I did not recognize that method');
