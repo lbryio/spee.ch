@@ -6,11 +6,11 @@
 	<h2 class="subheader">Links</h2>
 	{{!--short direct link to asset--}}
 	<div class="share-option">
-		<a href="/{{fileInfo.name}}/{{fileInfo.shortUrl}}{{fileInfo.fileExt}}">Permanent Short Link</a>
+		<a href="/{{fileInfo.shortUrl}}/{{fileInfo.name}}{{fileInfo.fileExt}}">Permanent Short Link</a>
 		(most convenient)
 		<div class="input-error" id="input-error-copy-short-link" hidden="true"></div>
 		<br/>
-		<input type="text" id="short-link" class="link" readonly spellcheck="false" value="https://spee.ch/{{fileInfo.name}}/{{fileInfo.shortUrl}}{{fileInfo.fileExt}}" onclick="select()"/>
+		<input type="text" id="short-link" class="link" readonly spellcheck="false" value="https://spee.ch/{{fileInfo.shortUrl}}/{{fileInfo.name}}{{fileInfo.fileExt}}" onclick="select()"/>
 		<button class="copy-button" data-elementtocopy="short-link" onclick="copyToClipboard(event)">copy</button>
 	</div>
 	{{!-- link to show route for asset--}}
