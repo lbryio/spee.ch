@@ -1,6 +1,6 @@
 const logger = require('winston');
 const { serveFile, showFile, showFileLite, getShortUrlFromClaimId } = require('../helpers/serveHelpers.js');
-const { getAssetByChannel, getAssetByShortUrl, getAssetByClaimId } = require('../controllers/serveController.js');
+const { getAssetByChannel, getAssetByShortUrl, getAssetByClaimId, getAssetByName } = require('../controllers/serveController.js');
 const { postToStats } = require('../controllers/statsController.js');
 const { handleRequestError } = require('../helpers/errorHandlers.js');
 
@@ -10,6 +10,7 @@ const SHOWLITE = 'SHOWLITE';
 const CHANNEL = 'CHANNEL';
 const SHORTURL = 'SHORTURL';
 const CLAIMID = 'CLAIMID';
+const NAME = 'NAME';
 
 function getAsset (claimType, channelName, shortUrl, fullClaimId, name) {
   switch (claimType) {
@@ -19,8 +20,43 @@ function getAsset (claimType, channelName, shortUrl, fullClaimId, name) {
       return getAssetByShortUrl(shortUrl, name);
     case CLAIMID:
       return getAssetByClaimId(fullClaimId, name);
+    case NAME:
+      return getAssetByName(name);
     default:
       return new Error('that claim type was not found');
+  }
+}
+
+function serveOrShowAsset (fileInfo, method, originalUrl, ip, res) {
+  // add file extension to the file info
+  fileInfo['fileExt'] = fileInfo.fileName.substring(fileInfo.fileName.lastIndexOf('.'));
+  // test logging
+  logger.debug(fileInfo);
+  // serve or show
+  switch (method) {
+    case SERVE:
+      serveFile(fileInfo, res);
+      postToStats('serve', originalUrl, ip, fileInfo.name, fileInfo.claimId, 'success');
+      return fileInfo;
+    case SHOWLITE:
+      showFileLite(fileInfo, res);
+      postToStats('show', originalUrl, ip, fileInfo.name, fileInfo.claimId, 'success');
+      return fileInfo;
+    case SHOW:
+      return getShortUrlFromClaimId(fileInfo.claimId, fileInfo.name)
+      .then(shortUrl => {
+        fileInfo['shortUrl'] = shortUrl;
+        showFile(fileInfo, res);
+        postToStats('show', originalUrl, ip, fileInfo.name, fileInfo.claimId, 'success');
+        return fileInfo;
+      })
+      .catch(error => {
+        console.log('thowing error...');
+        throw error;
+      });
+    default:
+      logger.error('I did not recognize that method');
+      break;
   }
 }
 
@@ -74,44 +110,15 @@ module.exports = (app) => {
     getAsset(claimType, channelName, shortUrl, fullClaimId, name)
     // 2. serve or show
     .then(fileInfo => {
-      logger.debug('asset was retrieved');
-      // add file extension to the file info
-      fileInfo['fileExt'] = fileInfo.fileName.substring(fileInfo.fileName.lastIndexOf('.'));
-      // test logging
-      logger.debug(fileInfo);
-      // serve or show
       if (!fileInfo) {
         res.status(200).render('noClaims');
-        return;
-      }
-      switch (method) {
-        case SERVE:
-          serveFile(fileInfo, res);
-          break;
-        case SHOWLITE:
-          postToStats('show', originalUrl, ip, fileInfo.name, fileInfo.claimId, 'success');
-          showFileLite(fileInfo, res);
-          break;
-        case SHOW:
-          postToStats('show', originalUrl, ip, fileInfo.name, fileInfo.claimId, 'success');
-          getShortUrlFromClaimId(fileInfo.claimId, fileInfo.name)
-          .then(shortUrl => {
-            fileInfo['shortUrl'] = shortUrl;
-            showFile(fileInfo, res);
-          })
-          .catch(error => {
-            console.log('thowing error...');
-            throw error;
-          });
-          break;
-        default:
-          logger.error('I did not recognize that method');
-          break;
+      } else {
+        return serveOrShowAsset(fileInfo, method, originalUrl, ip, res);
       }
     })
     // 3. update the database
-    .then(() => {
-      logger.debug('update db / create new record');
+    .then(({channel, claimId, name}) => {
+      logger.debug('update db / create new record for:', channel, claimId, name);
       // if asset was found locally, update db (resolve the claim to see if a newer version exists and then get && update db if needed)
       // if asset was retrieved from lbrynet, create db record
     })
@@ -122,5 +129,45 @@ module.exports = (app) => {
   });
   // route to serve the winning asset at a claim
   app.get('/:name', ({ headers, ip, originalUrl, params }, res) => {
+    // parse name param
+    let name = params.name;
+    let method;
+    let desiredExtension;
+    if (name.indexOf('.') !== -1) {
+      method = SERVE;
+      if (headers['accept'] && headers['accept'].split(',').includes('text/html')) {
+        method = SHOWLITE;
+      }
+      desiredExtension = name.substring(name.indexOf('.'));
+      name = name.substring(0, name.indexOf('.'));
+      logger.debug('file extension =', desiredExtension);
+    } else {
+      method = SHOW;
+      if (headers['accept'] && !headers['accept'].split(',').includes('text/html')) {
+        method = SERVE;
+      }
+    }
+    logger.debug('claim name = ', name);
+    logger.debug('method =', method);
+    // 1. retrieve the asset and information
+    getAsset(NAME, null, null, null, name)
+    // 2. serve or show
+    .then(fileInfo => {
+      if (!fileInfo) {
+        res.status(200).render('noClaims');
+      } else {
+        return serveOrShowAsset(fileInfo, method, originalUrl, ip, res);
+      }
+    })
+    // 3. update the database
+    .then(({channel, claimId, name}) => {
+      logger.debug('update db / create new record');
+      // if asset was found locally, update db (resolve the claim to see if a newer version exists and then get && update db if needed)
+      // if asset was retrieved from lbrynet, create db record
+    })
+    .catch(error => {
+      console.log('...error was caught');
+      handleRequestError('serve', originalUrl, ip, error, res);
+    });
   });
 };

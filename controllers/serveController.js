@@ -113,6 +113,14 @@ module.exports = {
   getAssetByClaimId (fullClaimId, name) {
     return getAssetByClaimId(fullClaimId, name);
   },
+  getAssetByName (name) {
+    return new Promise((resolve, reject) => {
+      // temporarily throw error
+      reject(new Error('get by name is not currently supported'));
+      // get the claim id
+      // get teh asset by claim Id
+    });
+  },
   serveClaimByName (claimName) {
     return new Promise((resolve, reject) => {
       // 1. get the top free, public claims
