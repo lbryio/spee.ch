@@ -3,7 +3,7 @@ const { serveFile, showFile, showFileLite, getShortUrlFromClaimId } = require('.
 const { getAssetByChannel, getAssetByShortUrl, getAssetByClaimId, getAssetByName } = require('../controllers/serveController.js');
 const { postToStats } = require('../controllers/statsController.js');
 const { handleRequestError } = require('../helpers/errorHandlers.js');
-
+// const db = require('../models');
 const SERVE = 'SERVE';
 const SHOW = 'SHOW';
 const SHOWLITE = 'SHOWLITE';
@@ -25,6 +25,12 @@ function getAsset (claimType, channelName, shortUrl, fullClaimId, name) {
     default:
       return new Error('that claim type was not found');
   }
+}
+
+function updateFileDb (fileInfo) {
+  logger.debug('update db / create new record');
+  // 1. if asset was found locally (i.e. a record exists) then check to see if we should update the file in the db
+  // 2. upsert the file info into the file db
 }
 
 function serveOrShowAsset (fileInfo, method, originalUrl, ip, res) {
@@ -60,16 +66,66 @@ function serveOrShowAsset (fileInfo, method, originalUrl, ip, res) {
   }
 }
 
+function isValidClaimId (claimId) {
+  return ((claimId.length === 40) && !/[^A-Za-z0-9,-]/g.test(claimId));
+}
+
+function isValidShortUrl (claimId) {
+  return claimId.length === 1;  // really it should evaluate the short url itself
+}
+
+function isValidShortUrlOrClaimId (input) {
+  return (isValidClaimId(input) || isValidShortUrl(input));
+}
+
 module.exports = (app) => {
   // route to serve a specific asset
   app.get('/:identifier/:name', ({ headers, ip, originalUrl, params }, res) => {
-    const identifier = params.identifier;
+    let identifier = params.identifier;
     let name = params.name;
-    // parse identifier for whether it is a channel, short url, or claim_id
     let claimType;
     let channelName = null;
     let shortUrl = null;
     let fullClaimId = null;
+    let method;
+    let extension;
+    // parse the name
+    const positionOfExtension = name.indexOf('.');
+    if (positionOfExtension >= 0) {
+      name = name.substring(0, positionOfExtension);
+      extension = name.substring(positionOfExtension);
+      logger.debug('file extension =', extension);
+      if (headers['accept'] && headers['accept'].split(',').includes('text/html')) {
+        method = SHOWLITE;
+      } else {
+        method = SERVE;
+      }
+    } else {
+      if (headers['accept'] && !headers['accept'].split(',').includes('text/html')) {
+        method = SERVE;
+      } else {
+        method = SHOW;
+      }
+    }
+    /*
+      temporary patch for backwards compatability spee.ch/name/claim_id...
+      /doitlive/d
+      /doitlive/d.jpg
+      /doitlive/asldfj...sdjf
+      /doitlive/asldfj...sdjf.jpg
+      /not a valid short url or claim/is a valid short url or claim
+    */
+    if (isValidShortUrlOrClaimId(name) && !isValidShortUrlOrClaimId(identifier)) {
+      let tempName = name;
+      name = identifier;
+      identifier = tempName;
+    }
+    /*
+    */
+    logger.debug('claim name =', name);
+    logger.debug('identifiery =', identifier);
+    logger.debug('method =', method);
+    // parse identifier for whether it is a channel, short url, or claim_id
     if (identifier.charAt(0) === '@') {
       channelName = identifier.substring(1);
       logger.debug('channel name =', channelName);
@@ -87,25 +143,6 @@ module.exports = (app) => {
       res.send('that url is invalid');
       return;
     };
-    // parse the name
-    let method;
-    let desiredExtension;
-    if (name.indexOf('.') !== -1) {
-      method = SERVE;
-      if (headers['accept'] && headers['accept'].split(',').includes('text/html')) {
-        method = SHOWLITE;
-      }
-      desiredExtension = name.substring(name.indexOf('.'));
-      name = name.substring(0, name.indexOf('.'));
-      logger.debug('file extension =', desiredExtension);
-    } else {
-      method = SHOW;
-      if (headers['accept'] && !headers['accept'].split(',').includes('text/html')) {
-        method = SERVE;
-      }
-    }
-    logger.debug('claim name = ', name);
-    logger.debug('method =', method);
     // 1. retrieve the asset and information
     getAsset(claimType, channelName, shortUrl, fullClaimId, name)
     // 2. serve or show
@@ -117,10 +154,8 @@ module.exports = (app) => {
       }
     })
     // 3. update the database
-    .then(fileInfoToUpdate => {
-      logger.debug('update db / create new record for:', fileInfoToUpdate);
-      // if asset was found locally, update db (resolve the claim to see if a newer version exists and then get && update db if needed)
-      // if asset was retrieved from lbrynet, create db record
+    .then(fileInfoForUpdate => {
+      return updateFileDb(fileInfoForUpdate);
     })
     .catch(error => {
       handleRequestError('serve', originalUrl, ip, error, res);
@@ -159,10 +194,8 @@ module.exports = (app) => {
       }
     })
     // 3. update the database
-    .then(FileInfoToUpdate => {
-      logger.debug('update db / create new record');
-      // if asset was found locally, update db (resolve the claim to see if a newer version exists and then get && update db if needed)
-      // if asset was retrieved from lbrynet, create db record
+    .then(fileInfoForUpdate => {
+      return updateFileDb(fileInfoForUpdate);
     })
     .catch(error => {
       handleRequestError('serve', originalUrl, ip, error, res);
