@@ -5,12 +5,6 @@ const getAllFreePublicClaims = require('../helpers/functions/getAllFreePublicCla
 const isFreePublicClaim = require('../helpers/functions/isFreePublicClaim.js');
 const serveHelpers = require('../helpers/serveHelpers.js');
 
-// function checkForLocalAssetByShortUrl (shortUrl, name) {
-// }
-
-// function checkForLocalAssetByChannel (channelName, name) {
-// }
-
 function checkForLocalAssetByClaimId (claimId, name) {
   return new Promise((resolve, reject) => {
     db.File
@@ -115,50 +109,23 @@ module.exports = {
   },
   getAssetByName (name) {
     return new Promise((resolve, reject) => {
-      // temporarily throw error
-      reject(new Error('get by name is not currently supported'));
-      // get the claim id
-      // get teh asset by claim Id
-    });
-  },
-  serveClaimByName (claimName) {
-    return new Promise((resolve, reject) => {
-      // 1. get the top free, public claims
-      getAllFreePublicClaims(claimName)
-        .then(freePublicClaimList => {
-          // check to make sure some claims were found
-          if (!freePublicClaimList) {
-            resolve(null);
-            return;
-          }
-          const name = freePublicClaimList[0].name;
-          const claimId = freePublicClaimList[0].claim_id;
-          const uri = `${name}#${claimId}`;
-          const height = freePublicClaimList[0].height;
-          const address = freePublicClaimList[0].address;
-          // 2. check to see if the file is available locally
-          db.File
-            .findOne({ where: { name, claimId } })
-            .then(claim => {
-              // 3. if a matching record is found locally, serve it
-              if (claim) {
-                // serve the file
-                resolve(claim.dataValues);
-                // trigger update if needed
-                serveHelpers.updateFileIfNeeded(uri, claim.dataValues.outpoint, claim.dataValues.height);
-              // 3. otherwise use daemon to retrieve it
-              } else {
-                // get the claim and serve it
-                serveHelpers.getClaimAndHandleResponse(uri, address, height, resolve, reject);
-              }
-            })
-            .catch(error => {
-              reject(error);
-            });
-        })
-        .catch(error => {
-          reject(error);
-        });
+      // 1. get a list of the free public claims
+      getAllFreePublicClaims(name)
+      // 2. check locally for the top claim
+      .then(freePublicClaimList => {
+        // if no claims were found, return null
+        if (!freePublicClaimList) {
+          resolve(null);
+          return;
+        }
+        // parse the result
+        const claimId = freePublicClaimList[0].claim_id;
+        // get the asset
+        resolve(getAssetByClaimId(claimId, name));
+      })
+      .catch(error => {
+        reject(error);
+      });
     });
   },
 };

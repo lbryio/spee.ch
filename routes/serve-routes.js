@@ -123,7 +123,6 @@ module.exports = (app) => {
       // if asset was retrieved from lbrynet, create db record
     })
     .catch(error => {
-      console.log('...error was caught');
       handleRequestError('serve', originalUrl, ip, error, res);
     });
   });
@@ -166,7 +165,6 @@ module.exports = (app) => {
       // if asset was retrieved from lbrynet, create db record
     })
     .catch(error => {
-      console.log('...error was caught');
       handleRequestError('serve', originalUrl, ip, error, res);
     });
   });

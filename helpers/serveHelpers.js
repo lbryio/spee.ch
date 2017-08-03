@@ -3,8 +3,6 @@ const db = require('../models');
 const lbryApi = require('./lbryApi');
 
 function determineShortUrl (claimId, claimList) {
-  console.log('claimid =', claimId);
-  console.log('claimlist = ', claimList);
   logger.debug('determining short url based on claim id and claim list');
   const thisClaim = claimList.filter(claim => {  // find this claim in the list & store it
     return claim.claim_id === claimId;

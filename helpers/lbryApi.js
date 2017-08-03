@@ -3,7 +3,7 @@ const logger = require('winston');
 
 module.exports = {
   getWalletList () {
-    logger.debug('getting wallet list');
+    logger.debug('lbryApi >> getting wallet list');
     return new Promise((resolve, reject) => {
       axios
         .post('http://localhost:5279/lbryapi', {
@@ -19,7 +19,7 @@ module.exports = {
     });
   },
   publishClaim (publishParams) {
-    logger.debug(`Publishing claim to "${publishParams.name}"`);
+    logger.debug(`lbryApi >> Publishing claim to "${publishParams.name}"`);
     return new Promise((resolve, reject) => {
       axios
         .post('http://localhost:5279/lbryapi', {
@@ -36,7 +36,7 @@ module.exports = {
     });
   },
   getClaim (uri) {
-    logger.debug(`Getting Claim for "${uri}"`);
+    logger.debug(`lbryApi >> Getting Claim for "${uri}"`);
     return new Promise((resolve, reject) => {
       axios
         .post('http://localhost:5279/lbryapi', {
@@ -57,13 +57,12 @@ module.exports = {
           resolve(data.result);
         })
         .catch(error => {
-          logger.debug("axios.post 'get' error");
           reject(error);
         });
     });
   },
   getClaimsList (claimName) {
-    logger.debug(`Getting Claim List for "${claimName}"`);
+    logger.debug(`lbryApi >> Getting Claim List for "${claimName}"`);
     return new Promise((resolve, reject) => {
       axios
         .post('http://localhost:5279/lbryapi', {
@@ -79,7 +78,7 @@ module.exports = {
     });
   },
   resolveUri (uri) {
-    logger.debug(`Resolving URI for "${uri}"`);
+    logger.debug(`lbryApi >> Resolving URI for "${uri}"`);
     return new Promise((resolve, reject) => {
       axios
         .post('http://localhost:5279/lbryapi', {
@@ -99,7 +98,7 @@ module.exports = {
     });
   },
   getDownloadDirectory () {
-    logger.debug('Retrieving the download directory path from lbry daemon...');
+    logger.debug('lbryApi >> Retrieving the download directory path from lbry daemon...');
     return new Promise((resolve, reject) => {
       axios
         .post('http://localhost:5279/lbryapi', {
