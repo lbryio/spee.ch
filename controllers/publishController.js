@@ -20,7 +20,7 @@ function upsert (Model, values, condition) {
 }
 
 function checkNameAvailability (name) {
-  const deferred = new Promise((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     // find any records where the name is used
     db.File
       .findAll({ where: { name } })
@@ -50,12 +50,11 @@ function checkNameAvailability (name) {
         reject(error);
       });
   });
-  return deferred;
 };
 
 module.exports = {
   publish (publishParams, fileName, fileType) {
-    const deferred = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       // 1. make sure the name is available
       checkNameAvailability(publishParams.name)
       .then(result => {
@@ -108,7 +107,6 @@ module.exports = {
         reject(error);
       });
     });
-    return deferred;
   },
   checkNameAvailability (name) {
     return checkNameAvailability(name);

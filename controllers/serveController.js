@@ -114,7 +114,7 @@ module.exports = {
     return getAssetByClaimId(fullClaimId, name);
   },
   serveClaimByName (claimName) {
-    const deferred = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       // 1. get the top free, public claims
       getAllFreePublicClaims(claimName)
         .then(freePublicClaimList => {
@@ -152,6 +152,5 @@ module.exports = {
           reject(error);
         });
     });
-    return deferred;
   },
 };

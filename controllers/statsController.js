@@ -70,7 +70,7 @@ module.exports = {
   },
   getStatsSummary (startDate) {
     logger.debug('retrieving request records');
-    const deferred = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       // get the raw Requests data
       db.Request
         .findAll({
@@ -140,7 +140,6 @@ module.exports = {
           reject(error);
         });
     });
-    return deferred;
   },
   getTrendingClaims (startDate) {
     logger.debug('retrieving trending requests');

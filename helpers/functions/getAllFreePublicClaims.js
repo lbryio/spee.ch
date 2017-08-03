@@ -29,7 +29,7 @@ function orderClaims (claimsListArray) {
 }
 
 module.exports = (claimName) => {
-  const deferred = new Promise((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     // make a call to the daemon to get the claims list
     lbryApi
       .getClaimsList(claimName)
@@ -58,5 +58,4 @@ module.exports = (claimName) => {
         reject(error);
       });
   });
-  return deferred;
 };

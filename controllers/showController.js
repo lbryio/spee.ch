@@ -7,7 +7,7 @@ const serveHelpers = require('../helpers/serveHelpers.js');
 
 module.exports = {
   showClaimByName (claimName) {
-    const deferred = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       // 1. get the top free, public claims
       getAllFreePublicClaims(claimName)
         .then(freePublicClaimList => {
@@ -51,11 +51,10 @@ module.exports = {
           reject(error);
         });
     });
-    return deferred;
   },
   showClaimByClaimId (name, claimId) {
     logger.debug(`Getting claim name: ${name} by claimid: ${claimId}`);
-    const deferred = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       // 1. check locally for the claim
       const uri = `${name}#${claimId}`;
       db.File
@@ -107,10 +106,9 @@ module.exports = {
         })
         .catch(error => reject(error));
     });
-    return deferred;
   },
   showClaimByShortUrl (name, shortUrl) {
-    const deferred = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       let uri;
       let claimId;
       // 1. validate the claim id & retrieve the full claim id if needed
@@ -154,7 +152,6 @@ module.exports = {
         })
         .catch(error => reject(error));
     });
-    return deferred;
   },
   showAllClaims (claimName) {
     return getAllFreePublicClaims(claimName);
