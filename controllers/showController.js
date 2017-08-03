@@ -1,9 +1,9 @@
-const lbryApi = require('../helpers/libraries/lbryApi.js');
+const lbryApi = require('../helpers/lbryApi.js');
 const db = require('../models');
 const logger = require('winston');
 const getAllFreePublicClaims = require('../helpers/functions/getAllFreePublicClaims.js');
 const isFreePublicClaim = require('../helpers/functions/isFreePublicClaim.js');
-const serveHelpers = require('../helpers/libraries/serveHelpers.js');
+const serveHelpers = require('../helpers/serveHelpers.js');
 
 module.exports = {
   showClaimByName (claimName) {

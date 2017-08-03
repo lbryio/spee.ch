@@ -1,5 +1,5 @@
 const { postToStats, getTrendingClaims } = require('../controllers/statsController.js');
-const errorHandlers = require('../helpers/libraries/errorHandlers.js');
+const errorHandlers = require('../helpers/errorHandlers.js');
 
 module.exports = app => {
   // route for the home page

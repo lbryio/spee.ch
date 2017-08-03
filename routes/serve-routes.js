@@ -1,8 +1,8 @@
 const logger = require('winston');
-const { serveFile, showFile, showFileLite, getShortUrlFromClaimId } = require('../helpers/libraries/serveHelpers.js');
+const { serveFile, showFile, showFileLite, getShortUrlFromClaimId } = require('../helpers/serveHelpers.js');
 const { getAssetByChannel, getAssetByShortUrl, getAssetByClaimId } = require('../controllers/serveController.js');
 const { postToStats } = require('../controllers/statsController.js');
-const { handleRequestError } = require('../helpers/libraries/errorHandlers.js');
+const { handleRequestError } = require('../helpers/errorHandlers.js');
 
 const SERVE = 'SERVE';
 const SHOW = 'SHOW';
@@ -116,6 +116,7 @@ module.exports = (app) => {
       // if asset was retrieved from lbrynet, create db record
     })
     .catch(error => {
+      console.log('...error was caught');
       handleRequestError('serve', originalUrl, ip, error, res);
     });
   });

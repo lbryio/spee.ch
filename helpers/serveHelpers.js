@@ -1,8 +1,10 @@
 const logger = require('winston');
-const db = require('../../models');
+const db = require('../models');
 const lbryApi = require('./lbryApi');
 
 function determineShortUrl (claimId, claimList) {
+  console.log('claimid =', claimId);
+  console.log('claimlist = ', claimList);
   logger.debug('determining short url based on claim id and claim list');
   const thisClaim = claimList.filter(claim => {  // find this claim in the list & store it
     return claim.claim_id === claimId;
@@ -10,6 +12,7 @@ function determineShortUrl (claimId, claimList) {
   claimList = claimList.filter(claim => {  // remove this claim from the claim list
     return claim.claim_id !== claimId;
   });
+  console.log(claimList.length);
   if (claimList.length === 0) {  // if there are no other claims, return the first letter of the claim id
     return claimId.substring(0, 1);
   } else {
@@ -133,8 +136,9 @@ module.exports = {
       });
     });
   },
-  getShortUrlFromClaimId (name, claimId) {
+  getShortUrlFromClaimId (claimId, name) {
     return new Promise((resolve, reject) => {
+      console.log('getting short url');
       // get a list of all the claims
       lbryApi.getClaimsList(name)
       // find the smallest possible unique url for this claim

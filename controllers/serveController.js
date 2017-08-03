@@ -1,9 +1,9 @@
-const lbryApi = require('../helpers/libraries/lbryApi.js');
+const lbryApi = require('../helpers/lbryApi.js');
 const db = require('../models');
 const logger = require('winston');
 const getAllFreePublicClaims = require('../helpers/functions/getAllFreePublicClaims.js');
 const isFreePublicClaim = require('../helpers/functions/isFreePublicClaim.js');
-const serveHelpers = require('../helpers/libraries/serveHelpers.js');
+const serveHelpers = require('../helpers/serveHelpers.js');
 
 // function checkForLocalAssetByShortUrl (shortUrl, name) {
 // }
@@ -91,10 +91,10 @@ function getAssetByClaimId (fullClaimId, name) {
 module.exports = {
   getAssetByChannel (channelName, name) {
     return new Promise((resolve, reject) => {
+      // temporarily throw error
+      reject(new Error('channel names are not currently supported'));
       // get the claim id
-
       // get teh asset by claim Id
-
     });
   },
   getAssetByShortUrl: function (shortUrl, name) {

@@ -2,9 +2,9 @@ const logger = require('winston');
 const multipart = require('connect-multiparty');
 const multipartMiddleware = multipart();
 const publishController = require('../controllers/publishController.js');
-const lbryApi = require('../helpers/libraries/lbryApi.js');
-const { createPublishParams, validateFile } = require('../helpers/libraries/publishHelpers.js');
-const errorHandlers = require('../helpers/libraries/errorHandlers.js');
+const lbryApi = require('../helpers/lbryApi.js');
+const { createPublishParams, validateFile } = require('../helpers/publishHelpers.js');
+const errorHandlers = require('../helpers/errorHandlers.js');
 const { postToStats, sendGoogleAnalytics } = require('../controllers/statsController.js');
 
 module.exports = (app, hostedContentPath) => {

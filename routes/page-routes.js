@@ -1,4 +1,4 @@
-const errorHandlers = require('../helpers/libraries/errorHandlers.js');
+const errorHandlers = require('../helpers/errorHandlers.js');
 const { showAllClaims } = require('../controllers/showController.js');
 const { postToStats, getStatsSummary, getTrendingClaims } = require('../controllers/statsController.js');
 

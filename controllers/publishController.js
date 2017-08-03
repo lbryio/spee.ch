@@ -1,7 +1,7 @@
 const logger = require('winston');
 const db = require('../models');
-const lbryApi = require('../helpers/libraries/lbryApi.js');
-const publishHelpers = require('../helpers/libraries/publishHelpers.js');
+const lbryApi = require('../helpers/lbryApi.js');
+const publishHelpers = require('../helpers/publishHelpers.js');
 
 function upsert (Model, values, condition) {
   return Model

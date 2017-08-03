@@ -6,7 +6,7 @@ const expressHandlebars = require('express-handlebars');
 const Handlebars = require('handlebars');
 const config = require('config');
 const logger = require('winston');
-const { getDownloadDirectory } = require('./helpers/libraries/lbryApi');
+const { getDownloadDirectory } = require('./helpers/lbryApi');
 
 const PORT = 3000; // set port
 const app = express(); // create an Express application
