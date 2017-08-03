@@ -117,8 +117,8 @@ module.exports = (app) => {
       }
     })
     // 3. update the database
-    .then(({channel, claimId, name}) => {
-      logger.debug('update db / create new record for:', channel, claimId, name);
+    .then(fileInfoToUpdate => {
+      logger.debug('update db / create new record for:', fileInfoToUpdate);
       // if asset was found locally, update db (resolve the claim to see if a newer version exists and then get && update db if needed)
       // if asset was retrieved from lbrynet, create db record
     })
@@ -159,7 +159,7 @@ module.exports = (app) => {
       }
     })
     // 3. update the database
-    .then(({channel, claimId, name}) => {
+    .then(FileInfoToUpdate => {
       logger.debug('update db / create new record');
       // if asset was found locally, update db (resolve the claim to see if a newer version exists and then get && update db if needed)
       // if asset was retrieved from lbrynet, create db record
