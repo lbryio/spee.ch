@@ -42,11 +42,6 @@ function getAssetByClaimId (fullClaimId, name) {
       // 2. if a result was found, resolve the result
       if (dataValues) {
         logger.debug('found a local file for this claimId');
-        // trigger an update check for the file
-        /*
-        serveHelpers.updateFileIfNeeded(dataValues.name, dataValues.claimId, dataValues.outpoint, dataValues.height);
-        */
-        // resolve promise
         resolve(dataValues);
       // 2. if not found locally, make a get request
       } else {
@@ -61,6 +56,9 @@ function getAssetByClaimId (fullClaimId, name) {
               let fileInfo = formatGetResultsToFileInfo(getResult);
               fileInfo['address'] = resolveResult.claim.address;
               fileInfo['height'] = resolveResult.claim.height;
+              // insert a record in the File table
+              db.File.create(fileInfo);
+              // resolve the promise
               resolve(fileInfo);
             })
             .catch(error => {

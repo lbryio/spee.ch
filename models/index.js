@@ -37,6 +37,22 @@ Object.keys(db).forEach(modelName => {
   }
 });
 
+db['upsert'] = (Model, values, condition) => {
+  return Model
+    .findOne({ where: condition })
+    .then(function (obj) {
+      if (obj) {  // update
+        logger.silly(`updating ${values.name}:${values.claimId} in File db`);
+        return obj.update(values);
+      } else {  // insert
+        logger.silly(`creating ${values.name}:${values.claimId} in File db`);
+        return Model.create(values);
+      }
+    }).catch(function (error) {
+      logger.error('Sequelize findOne error', error);
+    });
+};
+
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 

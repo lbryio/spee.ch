@@ -3,7 +3,6 @@ const { serveFile, showFile, showFileLite, getShortUrlFromClaimId } = require('.
 const { getAssetByChannel, getAssetByShortUrl, getAssetByClaimId, getAssetByName } = require('../controllers/serveController.js');
 const { handleRequestError } = require('../helpers/errorHandlers.js');
 const { postToStats, sendGoogleAnalytics } = require('../controllers/statsController.js');
-// const db = require('../models');
 const SERVE = 'SERVE';
 const SHOW = 'SHOW';
 const SHOWLITE = 'SHOWLITE';
@@ -27,17 +26,9 @@ function getAsset (claimType, channelName, shortUrl, fullClaimId, name) {
   }
 }
 
-function updateFileDb (fileInfo) {
-  logger.debug('update db / create new record');
-  // 1. if asset was found locally (i.e. a record exists) then check to see if we should update the file in the db
-  // 2. upsert the file info into the file db
-}
-
 function serveOrShowAsset (fileInfo, method, headers, originalUrl, ip, res) {
   // add file extension to the file info
   fileInfo['fileExt'] = fileInfo.fileName.substring(fileInfo.fileName.lastIndexOf('.'));
-  // test logging
-  logger.debug(fileInfo);
   // serve or show
   switch (method) {
     case SERVE:
@@ -145,9 +136,9 @@ module.exports = (app) => {
         return serveOrShowAsset(fileInfo, method, headers, originalUrl, ip, res);
       }
     })
-    // 3. update the database
+    // 3. update the file
     .then(fileInfoForUpdate => {
-      return updateFileDb(fileInfoForUpdate);
+      // if needed, this is where we would update the file
     })
     .catch(error => {
       handleRequestError('serve', originalUrl, ip, error, res);
@@ -187,7 +178,7 @@ module.exports = (app) => {
     })
     // 3. update the database
     .then(fileInfoForUpdate => {
-      return updateFileDb(fileInfoForUpdate);
+      // if needed, this is where we would update the file
     })
     .catch(error => {
       handleRequestError('serve', originalUrl, ip, error, res);

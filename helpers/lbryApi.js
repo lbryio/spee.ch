@@ -62,7 +62,7 @@ module.exports = {
     });
   },
   getClaimsList (claimName) {
-    logger.debug(`lbryApi >> Getting Claim List for "${claimName}"`);
+    logger.debug(`lbryApi >> Getting claim_list for "${claimName}"`);
     return new Promise((resolve, reject) => {
       axios
         .post('http://localhost:5279/lbryapi', {

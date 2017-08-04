@@ -10,7 +10,7 @@ function determineShortUrl (claimId, claimList) {
   claimList = claimList.filter(claim => {  // remove this claim from the claim list
     return claim.claim_id !== claimId;
   });
-  console.log(claimList.length);
+  logger.debug('claim list length:', claimList.length);
   if (claimList.length === 0) {  // if there are no other claims, return the first letter of the claim id
     return claimId.substring(0, 1);
   } else {
@@ -94,7 +94,7 @@ module.exports = {
   },
   getClaimIdFromShortUrl (shortUrl, name) {
     return new Promise((resolve, reject) => {
-      logger.debug('getting claims list from lbrynet');
+      logger.debug('getting claim_id from short url');
       // use the daemon to check for claims list
       lbryApi.getClaimsList(name)
       .then(({ claims }) => {
@@ -135,7 +135,7 @@ module.exports = {
   },
   getShortUrlFromClaimId (claimId, name) {
     return new Promise((resolve, reject) => {
-      console.log('getting short url');
+      logger.debug('finding short url from claim_id');
       // get a list of all the claims
       lbryApi.getClaimsList(name)
       // find the smallest possible unique url for this claim

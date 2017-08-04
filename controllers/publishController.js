@@ -3,22 +3,6 @@ const db = require('../models');
 const lbryApi = require('../helpers/lbryApi.js');
 const publishHelpers = require('../helpers/publishHelpers.js');
 
-function upsert (Model, values, condition) {
-  return Model
-    .findOne({ where: condition })
-    .then(function (obj) {
-      if (obj) {  // update
-        logger.silly(`updating ${values.name}:${values.claimId} in File db`);
-        return obj.update(values);
-      } else {  // insert
-        logger.silly(`creating ${values.name}:${values.claimId} in File db`);
-        return Model.create(values);
-      }
-    }).catch(function (error) {
-      logger.error('Sequelize findOne error', error);
-    });
-}
-
 function checkNameAvailability (name) {
   return new Promise((resolve, reject) => {
     // find any records where the name is used
@@ -65,7 +49,7 @@ module.exports = {
             .then(result => {
               logger.info(`Successfully published ${fileName}`, result);
               // 3. update old record or create new one (update is in case the claim has been published before by this daemon)
-              upsert(
+              db.upsert(
                 db.File,
                 {
                   name    : publishParams.name,
