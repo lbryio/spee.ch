@@ -1,5 +1,5 @@
-const errorHandlers = require('../helpers/libraries/errorHandlers.js');
-const { showAllClaims } = require('../controllers/showController.js');
+const errorHandlers = require('../helpers/errorHandlers.js');
+const getAllFreePublicClaims = require('../helpers/functions/getAllFreePublicClaims.js');
 const { postToStats, getStatsSummary, getTrendingClaims } = require('../controllers/statsController.js');
 
 module.exports = (app) => {
@@ -38,7 +38,7 @@ module.exports = (app) => {
   // route to display all free public claims at a given name
   app.get('/:name/all', ({ ip, originalUrl, params }, res) => {
     // get and render the content
-    showAllClaims(params.name)
+    getAllFreePublicClaims(params.name)
       .then(orderedFreePublicClaims => {
         if (!orderedFreePublicClaims) {
           res.status(307).render('noClaims');

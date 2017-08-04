@@ -3,8 +3,8 @@ const logger = require('winston');
 
 module.exports = {
   getWalletList () {
-    logger.debug('getting wallet list');
-    const deferred = new Promise((resolve, reject) => {
+    logger.debug('lbryApi >> getting wallet list');
+    return new Promise((resolve, reject) => {
       axios
         .post('http://localhost:5279/lbryapi', {
           method: 'wallet_list',
@@ -17,11 +17,10 @@ module.exports = {
           reject(error);
         });
     });
-    return deferred;
   },
   publishClaim (publishParams) {
-    logger.debug(`Publishing claim to "${publishParams.name}"`);
-    const deferred = new Promise((resolve, reject) => {
+    logger.debug(`lbryApi >> Publishing claim to "${publishParams.name}"`);
+    return new Promise((resolve, reject) => {
       axios
         .post('http://localhost:5279/lbryapi', {
           method: 'publish',
@@ -35,11 +34,10 @@ module.exports = {
           reject(error);
         });
     });
-    return deferred;
   },
   getClaim (uri) {
-    logger.debug(`Getting Claim for "${uri}"`);
-    const deferred = new Promise((resolve, reject) => {
+    logger.debug(`lbryApi >> Getting Claim for "${uri}"`);
+    return new Promise((resolve, reject) => {
       axios
         .post('http://localhost:5279/lbryapi', {
           method: 'get',
@@ -59,15 +57,13 @@ module.exports = {
           resolve(data.result);
         })
         .catch(error => {
-          logger.debug("axios.post 'get' error");
           reject(error);
         });
     });
-    return deferred;
   },
   getClaimsList (claimName) {
-    logger.debug(`Getting Claim List for "${claimName}"`);
-    const deferred = new Promise((resolve, reject) => {
+    logger.debug(`lbryApi >> Getting claim_list for "${claimName}"`);
+    return new Promise((resolve, reject) => {
       axios
         .post('http://localhost:5279/lbryapi', {
           method: 'claim_list',
@@ -80,11 +76,10 @@ module.exports = {
           reject(error);
         });
     });
-    return deferred;
   },
   resolveUri (uri) {
-    logger.debug(`Resolving URI for "${uri}"`);
-    const deferred = new Promise((resolve, reject) => {
+    logger.debug(`lbryApi >> Resolving URI for "${uri}"`);
+    return new Promise((resolve, reject) => {
       axios
         .post('http://localhost:5279/lbryapi', {
           method: 'resolve',
@@ -101,11 +96,10 @@ module.exports = {
           reject(error);
         });
     });
-    return deferred;
   },
   getDownloadDirectory () {
-    logger.debug('Retrieving the download directory path from lbry daemon...');
-    const deferred = new Promise((resolve, reject) => {
+    logger.debug('lbryApi >> Retrieving the download directory path from lbry daemon...');
+    return new Promise((resolve, reject) => {
       axios
         .post('http://localhost:5279/lbryapi', {
           method: 'settings_get',
@@ -118,9 +112,9 @@ module.exports = {
           }
         })
         .catch((error) => {
-          reject(error);
+          logger.error('Unable to retrieve daemon download directory.  Restart spee.ch once the daemon is ready.  Using default "/home/lbry/Downloads".', error);
+          resolve('/home/lbry/Downloads/');
         });
     });
-    return deferred;
   },
 };

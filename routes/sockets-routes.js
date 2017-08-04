@@ -1,7 +1,7 @@
 const logger = require('winston');
 const publishController = require('../controllers/publishController.js');
-const publishHelpers = require('../helpers/libraries/publishHelpers.js');
-const errorHandlers = require('../helpers/libraries/errorHandlers.js');
+const publishHelpers = require('../helpers/publishHelpers.js');
+const errorHandlers = require('../helpers/errorHandlers.js');
 const { postToStats } = require('../controllers/statsController.js');
 
 module.exports = (app, siofu, hostedContentPath) => {

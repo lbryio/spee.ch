@@ -1,5 +1,5 @@
 const { postToStats, getTrendingClaims } = require('../controllers/statsController.js');
-const errorHandlers = require('../helpers/libraries/errorHandlers.js');
+const errorHandlers = require('../helpers/errorHandlers.js');
 
 module.exports = app => {
   // route for the home page
@@ -17,7 +17,7 @@ module.exports = app => {
       });
   });
   // a catch-all route if someone visits a page that does not exist
-  app.use('*', ({ originalUrl, ip }, res) => {
+  app.use('*', ({ headers, originalUrl, ip }, res) => {
     // post to stats
     postToStats('show', originalUrl, ip, null, null, 'Error: 404');
     // send response

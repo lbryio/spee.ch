@@ -29,7 +29,7 @@ function validateFile(file) {
 }
 // validation function that checks to make sure the claim name is not already claimed
 function isNameAvailable (name) {
-	var deferred = new Promise(function(resolve, reject) {
+	return new Promise(function(resolve, reject) {
 		// make sure the claim name is still available
 		var xhttp;
 		xhttp = new XMLHttpRequest();
@@ -50,7 +50,6 @@ function isNameAvailable (name) {
 		};
 		xhttp.send();
 	});
-	return deferred;
 }
 // validation function that checks to make sure the claim name is valid
 function validateClaimName (name) {
@@ -92,7 +91,7 @@ function checkClaimName(name){
 }
 // validation function which checks all aspects of the publish submission
 function validateSubmission(stagedFiles, name){
-	var deferred = new Promise(function (resolve, reject) {
+	return new Promise(function (resolve, reject) {
 		// make sure only 1 file was selected
 		if (!stagedFiles) {
 			reject(new FileError("Please select a file"));
@@ -119,5 +118,4 @@ function validateSubmission(stagedFiles, name){
 				reject(error);
 			});
 	});
-	return deferred;
 }

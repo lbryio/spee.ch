@@ -42,7 +42,7 @@ module.exports = {
     const visitor = ua(googleApiKey, visitorId, { strictCidFormat: false, https: true });
     let params;
     switch (action) {
-      case 'serve':
+      case 'SERVE':
         params = {
           ec : 'serve',
           ea : originalUrl,
@@ -51,7 +51,7 @@ module.exports = {
           ul : headers['accept-language'],
         };
         break;
-      case 'publish':
+      case 'PUBLISH':
         params = {
           ec : 'publish',
           ea : originalUrl,
@@ -70,7 +70,7 @@ module.exports = {
   },
   getStatsSummary (startDate) {
     logger.debug('retrieving request records');
-    const deferred = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       // get the raw Requests data
       db.Request
         .findAll({
@@ -140,7 +140,6 @@ module.exports = {
           reject(error);
         });
     });
-    return deferred;
   },
   getTrendingClaims (startDate) {
     logger.debug('retrieving trending requests');

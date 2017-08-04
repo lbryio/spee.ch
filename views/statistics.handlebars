@@ -4,10 +4,14 @@
 	</div>
 	<div>
 		<h3>Site Statistics</h3>
+		<p>Serve: {{ totals.totalServe }}</p>
+		<p>Publish: {{ totals.totalPublish }}</p>
+		<p>Show: {{ totals.totalShow }}</p>
+		<p>Percent Success: {{ percentSuccess}}%</p>
 		<table>
 			<tr>
 				<th>action</th>
-				<th>url</th> 
+				<th >url</th> 
 				<th class="center-text">count</th>
 				<th class="center-text">success</th>
 				<th class="center-text">failure</th>
@@ -15,7 +19,7 @@
 			{{#each records}}
 			<tr>
 				<td>{{ this.action }}</td>
-				<td>{{ this.url }}</td> 
+				<td class="stats-table-url">{{ this.url }}</td> 
 				<td class="center-text">{{ this.count }}</td>
 				<td class="center-text">{{ this.success }}</td>
 				<td class="center-text">{{ this.failure }}</td>
@@ -29,9 +33,6 @@
 				<td class="totals-row center-text">{{ totals.totalFailure }}</td>
 			</tr>
 		</table>
-		<p>Serve: {{ totals.totalServe }}</p>
-		<p>Publish: {{ totals.totalPublish }}</p>
-		<p>Show: {{ totals.totalShow }}</p>
-		<p>Percent Success: {{ percentSuccess}}%</p>
+
 	</div>
 </div>

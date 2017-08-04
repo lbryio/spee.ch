@@ -1,5 +1,5 @@
 const isFreePublicClaim = require('./isFreePublicClaim.js');
-const lbryApi = require('../libraries/lbryApi.js');
+const lbryApi = require('../lbryApi.js');
 const logger = require('winston');
 
 function filterForFreePublicClaims (claimsListArray) {
@@ -29,7 +29,7 @@ function orderClaims (claimsListArray) {
 }
 
 module.exports = (claimName) => {
-  const deferred = new Promise((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     // make a call to the daemon to get the claims list
     lbryApi
       .getClaimsList(claimName)
@@ -58,5 +58,4 @@ module.exports = (claimName) => {
         reject(error);
       });
   });
-  return deferred;
 };

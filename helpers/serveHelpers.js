@@ -1,5 +1,5 @@
 const logger = require('winston');
-const db = require('../../models');
+const db = require('../models');
 const lbryApi = require('./lbryApi');
 
 function determineShortUrl (claimId, claimList) {
@@ -10,6 +10,7 @@ function determineShortUrl (claimId, claimList) {
   claimList = claimList.filter(claim => {  // remove this claim from the claim list
     return claim.claim_id !== claimId;
   });
+  logger.debug('claim list length:', claimList.length);
   if (claimList.length === 0) {  // if there are no other claims, return the first letter of the claim id
     return claimId.substring(0, 1);
   } else {
@@ -91,9 +92,9 @@ module.exports = {
     logger.debug('showing file lite');
     res.status(200).render('showLite', { layout: 'show', fileInfo });
   },
-  getClaimIdByShortUrl (shortUrl, name) {
+  getClaimIdFromShortUrl (shortUrl, name) {
     return new Promise((resolve, reject) => {
-      logger.debug('getting claims list from lbrynet');
+      logger.debug('getting claim_id from short url');
       // use the daemon to check for claims list
       lbryApi.getClaimsList(name)
       .then(({ claims }) => {
@@ -112,7 +113,6 @@ module.exports = {
         const filteredClaimsList = claims.filter(claim => {
           return regex.test(claim.claim_id);
         });
-        logger.debug('filtered claims list', filteredClaimsList);
         switch (filteredClaimsList.length) {
           case 0:
             reject(new Error('That is an invalid short url'));
@@ -133,8 +133,9 @@ module.exports = {
       });
     });
   },
-  getShortUrlFromClaimId (name, claimId) {
+  getShortUrlFromClaimId (claimId, name) {
     return new Promise((resolve, reject) => {
+      logger.debug('finding short url from claim_id');
       // get a list of all the claims
       lbryApi.getClaimsList(name)
       // find the smallest possible unique url for this claim
