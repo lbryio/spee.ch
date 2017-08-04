@@ -113,7 +113,6 @@ module.exports = {
         const filteredClaimsList = claims.filter(claim => {
           return regex.test(claim.claim_id);
         });
-        logger.debug('filtered claims list', filteredClaimsList);
         switch (filteredClaimsList.length) {
           case 0:
             reject(new Error('That is an invalid short url'));

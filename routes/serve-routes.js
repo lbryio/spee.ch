@@ -93,8 +93,8 @@ module.exports = (app) => {
     // parse the name
     const positionOfExtension = name.indexOf('.');
     if (positionOfExtension >= 0) {
-      name = name.substring(0, positionOfExtension);
       extension = name.substring(positionOfExtension);
+      name = name.substring(0, positionOfExtension);
       logger.debug('file extension =', extension);
       if (headers['accept'] && headers['accept'].split(',').includes('text/html')) {
         method = SHOWLITE;
@@ -116,7 +116,6 @@ module.exports = (app) => {
     }
     /* end */
     logger.debug('claim name =', name);
-    logger.debug('identifiery =', identifier);
     logger.debug('method =', method);
     // parse identifier for whether it is a channel, short url, or claim_id
     if (identifier.charAt(0) === '@') {
@@ -159,15 +158,15 @@ module.exports = (app) => {
     // parse name param
     let name = params.name;
     let method;
-    let desiredExtension;
+    let fileExtension;
     if (name.indexOf('.') !== -1) {
       method = SERVE;
       if (headers['accept'] && headers['accept'].split(',').includes('text/html')) {
         method = SHOWLITE;
       }
-      desiredExtension = name.substring(name.indexOf('.'));
+      fileExtension = name.substring(name.indexOf('.'));
       name = name.substring(0, name.indexOf('.'));
-      logger.debug('file extension =', desiredExtension);
+      logger.debug('file extension =', fileExtension);
     } else {
       method = SHOW;
       if (headers['accept'] && !headers['accept'].split(',').includes('text/html')) {
