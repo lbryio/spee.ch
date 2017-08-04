@@ -171,6 +171,9 @@ button.copy-button {
 	border-bottom: 1px solid grey;
 	font-weight: bold; 
 }
+.stats-table-url {
+	word-wrap: break-word;
+}
 
 @media (max-width: 750px) {
 	
