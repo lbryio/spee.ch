@@ -2,17 +2,17 @@ const logger = require('winston');
 const db = require('../models');
 const lbryApi = require('./lbryApi');
 
-function determineShortUrl (claimId, claimList) {
+function determineShortUrl (claimId, height, claimList) {
   logger.debug('determining short url based on claim id and claim list');
-  const thisClaim = claimList.filter(claim => {  // find this claim in the list & store it
-    return claim.claim_id === claimId;
-  })[0];
-  claimList = claimList.filter(claim => {  // remove this claim from the claim list
+  // remove this claim from the claim list, if it exists
+  claimList = claimList.filter(claim => {
     return claim.claim_id !== claimId;
   });
   logger.debug('claim list length:', claimList.length);
-  if (claimList.length === 0) {  // if there are no other claims, return the first letter of the claim id
+  // if there are no other claims, return the first letter of the claim id
+  if (claimList.length === 0) {
     return claimId.substring(0, 1);
+  // otherwise determine the proper url
   } else {
     let i = 0;
     const claimListCopy = claimList;
@@ -29,7 +29,7 @@ function determineShortUrl (claimId, claimList) {
       return (claim.claim_id.substring(0, i) === lastMatch);
     });
     for (let j = 0; j < matchingClaims.length; j++) {
-      if (matchingClaims[j].height < thisClaim.height) {
+      if (matchingClaims[j].height < height) {
         return claimId.substring(0, i + 1);
       }
     }
@@ -133,14 +133,14 @@ module.exports = {
       });
     });
   },
-  getShortUrlFromClaimId (claimId, name) {
+  getShortUrlFromClaimId (claimId, height, name) {
     return new Promise((resolve, reject) => {
       logger.debug('finding short url from claim_id');
       // get a list of all the claims
       lbryApi.getClaimsList(name)
       // find the smallest possible unique url for this claim
       .then(({ claims }) => {
-        const shortUrl = determineShortUrl(claimId, claims);
+        const shortUrl = determineShortUrl(claimId, height, claims);
         resolve(shortUrl);
       })
       .catch(error => {

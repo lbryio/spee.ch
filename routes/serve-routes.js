@@ -41,7 +41,7 @@ function serveOrShowAsset (fileInfo, method, headers, originalUrl, ip, res) {
       postToStats('show', originalUrl, ip, fileInfo.name, fileInfo.claimId, 'success');
       return fileInfo;
     case SHOW:
-      return getShortUrlFromClaimId(fileInfo.claimId, fileInfo.name)
+      return getShortUrlFromClaimId(fileInfo.claimId, fileInfo.height, fileInfo.name)
       .then(shortUrl => {
         fileInfo['shortUrl'] = shortUrl;
         showFile(fileInfo, res);
