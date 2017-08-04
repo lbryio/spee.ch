@@ -11,7 +11,7 @@ module.exports = (app, hostedContentPath) => {
   // route to run a claim_list request on the daemon
   app.get('/api/claim_list/:name', ({ headers, ip, originalUrl, params }, res) => {
     // google analytics
-    sendGoogleAnalytics('serve', headers, ip, originalUrl);
+    sendGoogleAnalytics('SERVE', headers, ip, originalUrl);
     // serve the content
     lbryApi
       .getClaimsList(params.name)
@@ -43,7 +43,7 @@ module.exports = (app, hostedContentPath) => {
   // route to run a resolve request on the daemon
   app.get('/api/resolve/:uri', ({ headers, ip, originalUrl, params }, res) => {
     // google analytics
-    sendGoogleAnalytics('serve', headers, ip, originalUrl);
+    sendGoogleAnalytics('SERVE', headers, ip, originalUrl);
     // serve content
     lbryApi
       .resolveUri(params.uri)
@@ -59,7 +59,7 @@ module.exports = (app, hostedContentPath) => {
   // route to run a publish request on the daemon
   app.post('/api/publish', multipartMiddleware, ({ body, files, headers, ip, originalUrl }, res) => {
     // google analytics
-    sendGoogleAnalytics('publish', headers, ip, originalUrl);
+    sendGoogleAnalytics('PUBLISH', headers, ip, originalUrl);
     // validate that a file was provided
     const file = files.speech || files.null;
     const name = body.name || file.name.substring(0, file.name.indexOf('.'));

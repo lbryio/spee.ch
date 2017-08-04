@@ -94,7 +94,7 @@ module.exports = {
   getAssetByShortUrl: function (shortUrl, name) {
     return new Promise((resolve, reject) => {
       // get the full claimId
-      serveHelpers.getClaimIdByShortUrl(shortUrl, name)
+      serveHelpers.getClaimIdFromShortUrl(shortUrl, name)
       // get the asset by the claimId
       .then(claimId => {
         resolve(getAssetByClaimId(claimId, name));

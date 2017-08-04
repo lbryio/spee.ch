@@ -1,8 +1,8 @@
 const logger = require('winston');
 const { serveFile, showFile, showFileLite, getShortUrlFromClaimId } = require('../helpers/serveHelpers.js');
 const { getAssetByChannel, getAssetByShortUrl, getAssetByClaimId, getAssetByName } = require('../controllers/serveController.js');
-const { postToStats } = require('../controllers/statsController.js');
 const { handleRequestError } = require('../helpers/errorHandlers.js');
+const { postToStats, sendGoogleAnalytics } = require('../controllers/statsController.js');
 // const db = require('../models');
 const SERVE = 'SERVE';
 const SHOW = 'SHOW';
@@ -33,7 +33,7 @@ function updateFileDb (fileInfo) {
   // 2. upsert the file info into the file db
 }
 
-function serveOrShowAsset (fileInfo, method, originalUrl, ip, res) {
+function serveOrShowAsset (fileInfo, method, headers, originalUrl, ip, res) {
   // add file extension to the file info
   fileInfo['fileExt'] = fileInfo.fileName.substring(fileInfo.fileName.lastIndexOf('.'));
   // test logging
@@ -42,6 +42,7 @@ function serveOrShowAsset (fileInfo, method, originalUrl, ip, res) {
   switch (method) {
     case SERVE:
       serveFile(fileInfo, res);
+      sendGoogleAnalytics(method, headers, ip, originalUrl);
       postToStats('serve', originalUrl, ip, fileInfo.name, fileInfo.claimId, 'success');
       return fileInfo;
     case SHOWLITE:
@@ -67,7 +68,7 @@ function serveOrShowAsset (fileInfo, method, originalUrl, ip, res) {
 }
 
 function isValidClaimId (claimId) {
-  return ((claimId.length === 40) && !/[^A-Za-z0-9,-]/g.test(claimId));
+  return ((claimId.length === 40) && !/[^A-Za-z0-9]/g.test(claimId));
 }
 
 function isValidShortUrl (claimId) {
@@ -107,21 +108,13 @@ module.exports = (app) => {
         method = SHOW;
       }
     }
-    /*
-      temporary patch for backwards compatability spee.ch/name/claim_id...
-      /doitlive/d
-      /doitlive/d.jpg
-      /doitlive/asldfj...sdjf
-      /doitlive/asldfj...sdjf.jpg
-      /not a valid short url or claim/is a valid short url or claim
-    */
+    /* start: temporary patch for backwards compatability spee.ch/name/claim_id */
     if (isValidShortUrlOrClaimId(name) && !isValidShortUrlOrClaimId(identifier)) {
       let tempName = name;
       name = identifier;
       identifier = tempName;
     }
-    /*
-    */
+    /* end */
     logger.debug('claim name =', name);
     logger.debug('identifiery =', identifier);
     logger.debug('method =', method);
@@ -139,7 +132,7 @@ module.exports = (app) => {
       logger.debug('short url =', shortUrl);
       claimType = SHORTURL;
     } else {
-      logger.error('that url does not compute');
+      logger.error('The URL provided could not be parsed');
       res.send('that url is invalid');
       return;
     };
@@ -150,7 +143,7 @@ module.exports = (app) => {
       if (!fileInfo) {
         res.status(200).render('noClaims');
       } else {
-        return serveOrShowAsset(fileInfo, method, originalUrl, ip, res);
+        return serveOrShowAsset(fileInfo, method, headers, originalUrl, ip, res);
       }
     })
     // 3. update the database
@@ -190,7 +183,7 @@ module.exports = (app) => {
       if (!fileInfo) {
         res.status(200).render('noClaims');
       } else {
-        return serveOrShowAsset(fileInfo, method, originalUrl, ip, res);
+        return serveOrShowAsset(fileInfo, method, headers, originalUrl, ip, res);
       }
     })
     // 3. update the database

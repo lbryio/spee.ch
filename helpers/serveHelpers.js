@@ -92,7 +92,7 @@ module.exports = {
     logger.debug('showing file lite');
     res.status(200).render('showLite', { layout: 'show', fileInfo });
   },
-  getClaimIdByShortUrl (shortUrl, name) {
+  getClaimIdFromShortUrl (shortUrl, name) {
     return new Promise((resolve, reject) => {
       logger.debug('getting claims list from lbrynet');
       // use the daemon to check for claims list

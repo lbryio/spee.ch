@@ -17,7 +17,7 @@ module.exports = app => {
       });
   });
   // a catch-all route if someone visits a page that does not exist
-  app.use('*', ({ originalUrl, ip }, res) => {
+  app.use('*', ({ headers, originalUrl, ip }, res) => {
     // post to stats
     postToStats('show', originalUrl, ip, null, null, 'Error: 404');
     // send response

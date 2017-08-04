@@ -42,7 +42,7 @@ module.exports = {
     const visitor = ua(googleApiKey, visitorId, { strictCidFormat: false, https: true });
     let params;
     switch (action) {
-      case 'serve':
+      case 'SERVE':
         params = {
           ec : 'serve',
           ea : originalUrl,
@@ -51,7 +51,7 @@ module.exports = {
           ul : headers['accept-language'],
         };
         break;
-      case 'publish':
+      case 'PUBLISH':
         params = {
           ec : 'publish',
           ea : originalUrl,
