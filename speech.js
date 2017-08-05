@@ -48,6 +48,16 @@ const hbs = expressHandlebars.create({
         </script>`
       );
     },
+    addOpenGraph (title, url, type, source, mimeType) {
+      return new Handlebars.SafeString(
+        `<meta property="og:title" content="${title}"/>
+        <meta property="og:url" content="${url}" />
+        <meta property="og:site_name" content="spee.ch" />
+        <meta property="og:type" content="${type}" /> 
+        <meta property="og:${type}" content="${source}" /> 
+        <meta property="og:${type}:type" content="${mimeType}" />`
+      );
+    },
     ifConditional (varOne, operator, varTwo, options) {
       switch (operator) {
         case '===':

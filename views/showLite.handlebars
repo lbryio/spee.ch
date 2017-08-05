@@ -6,9 +6,10 @@
 			{{!--fallback--}}
 			Your browser does not support the <code>video</code> element.
 		</video>
-		
+		{{addOpenGraph fileInfo.name links.showUrl 'video' links.source fileInfo.fileType }}
 	{{else}}
 		<img class="show-asset-lite" src="/media/{{fileInfo.fileName}}" alt="{{fileInfo.fileName}}"/>
+		{{addOpenGraph fileInfo.name links.showUrl 'image' links.source fileInfo.fileType }}
 	{{/ifConditional}}
 	</a>
 </div>
