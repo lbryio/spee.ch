@@ -54,9 +54,32 @@ const hbs = expressHandlebars.create({
         <meta property="og:url" content="${url}" />
         <meta property="og:site_name" content="spee.ch" />
         <meta property="og:type" content="${type}" /> 
+        <meta property="og:description" content="${title} published via spee.ch" /> 
         <meta property="og:${type}" content="${source}" /> 
         <meta property="og:${type}:type" content="${mimeType}" />`
       );
+    },
+    addTwitterCard (assetType, source) {
+      if (assetType === 'image') {
+        return new Handlebars.SafeString(
+          `<meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:site" content="@lbryio" />
+          <meta name="twitter:creator" content="@lbryio" />
+          `
+        );
+      } else if (assetType === 'video') {
+        return new Handlebars.SafeString(
+          `<meta name="twitter:card" content="player" />
+          <meta name="twitter:site" content="@lbryio" />
+          <meta name="twitter:image" content="https://spee.ch/assets/img/content-freedom-64px.png" />
+          <meta name="twitter:player" content="https://yoursite.com/container.html"/ >
+          <meta name="twitter:player:width" content="480" />
+          <meta name="twitter:player:height" content="480" />
+          <meta name="twitter:player:stream" content="${source}" />
+          <meta name="twitter:player:stream:content_type" content="video/mp4; codecs=&quot;avc1.42E01E1, mp4a.40.2&quot;" />
+          `
+        );
+      }
     },
     ifConditional (varOne, operator, varTwo, options) {
       switch (operator) {
