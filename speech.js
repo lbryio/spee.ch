@@ -49,15 +49,35 @@ const hbs = expressHandlebars.create({
       );
     },
     addOpenGraph (title, url, type, source, mimeType) {
-      return new Handlebars.SafeString(
-        `<meta property="og:title" content="${title}"/>
-        <meta property="og:url" content="${url}" />
-        <meta property="og:site_name" content="spee.ch" />
-        <meta property="og:type" content="${type}" /> 
-        <meta property="og:description" content="${title} published via spee.ch" /> 
-        <meta property="og:${type}" content="${source}" /> 
-        <meta property="og:${type}:type" content="${mimeType}" />`
-      );
+      if (type === 'image') {
+        return new Handlebars.SafeString(
+          `<meta property="og:title" content="${title}"/> 
+          <meta property="og:url" content="${url}" /> 
+          <meta property="og:site_name" content="Spee.ch" /> 
+          <meta property="og:description" content="Spee.ch: open-source, decentralized content hosting." />
+          <meta property="og:image" content="${source}" /> 
+          <meta property="og:image:type" content="${mimeType}" />
+          <meta property="og:image:width" content="600" />
+          <meta property="og:image:height" content="315" />
+          <meta property="og:type" content="article" />
+          <meta property="author" content="Spee.ch" />
+          <meta property="article:author" content="Spee.ch" />`
+        );
+      } else if (type === 'video') {
+        return new Handlebars.SafeString(
+          `<meta property="og:title" content="${title}"/> 
+          <meta property="og:url" content="${url}" /> 
+          <meta property="og:site_name" content="Spee.ch" /> 
+          <meta property="og:description" content="Spee.ch: open-source, decentralized content hosting." />
+          <meta property="og:image" content="https://spee.ch/assets/img/content-freedom-large.png" /> 
+          <meta property="og:image:type" content="image/png" />
+          <meta property="og:image:width" content="600" />
+          <meta property="og:image:height" content="315" />
+          <meta property="og:type" content="video" /> 
+          <meta property="og:video" content="${source}" /> 
+          <meta property="og:video:type" content="${mimeType}" />`
+        );
+      }
     },
     addTwitterCard (assetType, source) {
       if (assetType === 'image') {
@@ -71,7 +91,7 @@ const hbs = expressHandlebars.create({
         return new Handlebars.SafeString(
           `<meta name="twitter:card" content="player" />
           <meta name="twitter:site" content="@lbryio" />
-          <meta name="twitter:image" content="https://spee.ch/assets/img/content-freedom-64px.png" />
+          <meta name="twitter:image" content="https://spee.ch/assets/img/content-freedom-large.png" />
           <meta name="twitter:player" content="https://yoursite.com/container.html"/ >
           <meta name="twitter:player:width" content="480" />
           <meta name="twitter:player:height" content="480" />
