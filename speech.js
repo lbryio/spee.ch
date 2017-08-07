@@ -59,9 +59,7 @@ const hbs = expressHandlebars.create({
           <meta property="og:image:type" content="${mimeType}" />
           <meta property="og:image:width" content="600" />
           <meta property="og:image:height" content="315" />
-          <meta property="og:type" content="article" />
-          <meta property="author" content="Spee.ch" />
-          <meta property="article:author" content="Spee.ch" />`
+          <meta property="og:type" content="article" />`
         );
       } else if (type === 'video') {
         return new Handlebars.SafeString(
