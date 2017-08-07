@@ -48,20 +48,8 @@ const hbs = expressHandlebars.create({
         </script>`
       );
     },
-    addOpenGraph (title, url, type, source, mimeType) {
-      if (type === 'image') {
-        return new Handlebars.SafeString(
-          `<meta property="og:title" content="${title}"/> 
-          <meta property="og:url" content="${url}" /> 
-          <meta property="og:site_name" content="Spee.ch" /> 
-          <meta property="og:description" content="Spee.ch: open-source, decentralized content hosting." />
-          <meta property="og:image" content="${source}" /> 
-          <meta property="og:image:type" content="${mimeType}" />
-          <meta property="og:image:width" content="600" />
-          <meta property="og:image:height" content="315" />
-          <meta property="og:type" content="article" />`
-        );
-      } else if (type === 'video') {
+    addOpenGraph (title, url, source, mimeType) {
+      if (mimeType === 'video/mp4') {
         return new Handlebars.SafeString(
           `<meta property="og:title" content="${title}"/> 
           <meta property="og:url" content="${url}" /> 
@@ -73,7 +61,32 @@ const hbs = expressHandlebars.create({
           <meta property="og:image:height" content="315" />
           <meta property="og:type" content="video" /> 
           <meta property="og:video" content="${source}" /> 
+          <meta property="og:video:secure_url" content="${source}" /> 
           <meta property="og:video:type" content="${mimeType}" />`
+        );
+      } else if (mimeType === 'image/gif') {
+        return new Handlebars.SafeString(
+          `<meta property="og:title" content="${title}"/> 
+          <meta property="og:url" content="${url}" /> 
+          <meta property="og:site_name" content="Spee.ch" /> 
+          <meta property="og:description" content="Spee.ch: open-source, decentralized content hosting." />
+          <meta property="og:image" content="${source}" /> 
+          <meta property="og:image:type" content="${mimeType}" />
+          <meta property="og:image:width" content="600" />
+          <meta property="og:image:height" content="315" />
+          <meta property="og:type" content="video.other" />`
+        );
+      } else {
+        return new Handlebars.SafeString(
+          `<meta property="og:title" content="${title}"/> 
+          <meta property="og:url" content="${url}" /> 
+          <meta property="og:site_name" content="Spee.ch" /> 
+          <meta property="og:description" content="Spee.ch: open-source, decentralized content hosting." />
+          <meta property="og:image" content="${source}" /> 
+          <meta property="og:image:type" content="${mimeType}" />
+          <meta property="og:image:width" content="600" />
+          <meta property="og:image:height" content="315" />
+          <meta property="og:type" content="article" />`
         );
       }
     },
