@@ -52,7 +52,7 @@ const hbs = expressHandlebars.create({
       if (type === 'image') {
         return new Handlebars.SafeString(
           `<meta property="og:title" content="${title}"/> 
-          <meta property="og:url" content="${url}" /> 
+          <meta property="og:url" content="${source}" /> 
           <meta property="og:site_name" content="Spee.ch" /> 
           <meta property="og:description" content="Spee.ch: open-source, decentralized content hosting." />
           <meta property="og:image" content="${source}" /> 
@@ -64,7 +64,7 @@ const hbs = expressHandlebars.create({
       } else if (type === 'video') {
         return new Handlebars.SafeString(
           `<meta property="og:title" content="${title}"/> 
-          <meta property="og:url" content="${url}" /> 
+          <meta property="og:url" content="${source}" /> 
           <meta property="og:site_name" content="Spee.ch" /> 
           <meta property="og:description" content="Spee.ch: open-source, decentralized content hosting." />
           <meta property="og:image" content="https://spee.ch/assets/img/content-freedom-large.png" /> 
