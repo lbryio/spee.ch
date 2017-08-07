@@ -90,15 +90,8 @@ const hbs = expressHandlebars.create({
         );
       }
     },
-    addTwitterCard (assetType, source) {
-      if (assetType === 'image') {
-        return new Handlebars.SafeString(
-          `<meta name="twitter:card" content="summary_large_image" />
-          <meta name="twitter:site" content="@lbryio" />
-          <meta name="twitter:creator" content="@lbryio" />
-          `
-        );
-      } else if (assetType === 'video') {
+    addTwitterCard (source, mimeType) {
+      if (mimeType === 'video/mp4') {
         return new Handlebars.SafeString(
           `<meta name="twitter:card" content="player" />
           <meta name="twitter:site" content="@lbryio" />
@@ -109,6 +102,12 @@ const hbs = expressHandlebars.create({
           <meta name="twitter:player:stream" content="${source}" />
           <meta name="twitter:player:stream:content_type" content="video/mp4; codecs=&quot;avc1.42E01E1, mp4a.40.2&quot;" />
           `
+        );
+      } else {
+        return new Handlebars.SafeString(
+          `<meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:site" content="@lbryio" />
+          <meta name="twitter:creator" content="@lbryio" />`
         );
       }
     },

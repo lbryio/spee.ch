@@ -6,8 +6,10 @@
 			{{!--fallback--}}
 			Your browser does not support the <code>video</code> element.
 		</video>
+
 	{{else}}
-		<img class="show-asset-lite" src="/media/{{fileInfo.fileName}}" alt="{
+		<img class="show-asset-lite" src="/media/{{fileInfo.fileName}}" alt="{{fileInfo.fileName}}"/>
+		
 	{{/ifConditional}}
 	</a>
 </div>
