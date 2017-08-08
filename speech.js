@@ -50,7 +50,7 @@ const hbs = expressHandlebars.create({
     },
     addOpenGraph (title, mimeType, showUrl, source) {
       let basicTags = `<meta property="og:title" content="${title}"> 
-          <meta property="og:url" content="${source}" > 
+          <meta property="og:url" content="${showUrl}" > 
           <meta property="og:site_name" content="Spee.ch" > 
           <meta property="og:description" content="View or download ${title} from spee.ch: the open-source, decentralized content host." >`;
       if (mimeType === 'video/mp4') {
