@@ -39,7 +39,7 @@ module.exports = (app) => {
   app.get('/embed/:claimId/:name', ({ params }, res) => {
     const claimId = params.claimId;
     const name = params.name;
-    const dummyParam = ' ';
+    const dummyParam = 'b';
     console.log('claimId ==', claimId);
     console.log('name ==', name);
     // get and render the content
