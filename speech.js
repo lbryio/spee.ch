@@ -48,9 +48,9 @@ const hbs = expressHandlebars.create({
         </script>`
       );
     },
-    addOpenGraph (title, url, source, mimeType) {
+    addOpenGraph (title, mimeType, showUrl, source) {
       let basicTags = `<meta property="og:title" content="${title}"/> 
-          <meta property="og:url" content="${url}" /> 
+          <meta property="og:url" content="${showUrl}" /> 
           <meta property="og:site_name" content="Spee.ch" /> 
           <meta property="og:description" content="View or download ${title} from spee.ch: the open-source, decentralized content host." />`;
       if (mimeType === 'video/mp4') {
@@ -82,15 +82,15 @@ const hbs = expressHandlebars.create({
         );
       }
     },
-    addTwitterCard (source, mimeType, fileName, showUrl) {
-      let basicTwitterTags = `<meta name="twitter:card" content="player" />
-        <meta name="twitter:site" content="@lbryio" />`;
+    addTwitterCard (mimeType, source, twitterPlayerUrl, directFileUrl) {
+      let basicTwitterTags = `<meta name="twitter:site" content="@lbryio" />`;
       if (mimeType === 'video/mp4') {
         return new Handlebars.SafeString(
-          `${basicTwitterTags} <meta name="twitter:player" content="${showUrl}"/ >
+          `${basicTwitterTags} <meta name="twitter:card" content="player" />
+          <meta name="twitter:player" content="${twitterPlayerUrl}>
           <meta name="twitter:player:width" content="480" />
           <meta name="twitter:player:height" content="480" />
-          <meta name="twitter:player:stream" content="https://spee.ch/media/${fileName}" />
+          <meta name="twitter:player:stream" content="${directFileUrl}" />
           <meta name="twitter:player:stream:content_type" content="video/mp4" />
           `
         );

@@ -60,11 +60,12 @@ function checkLocalDbForClaims (name, shortUrl) {
     });
 }
 
-function createOpenGraphInfo ({ fileType, claimId, name, fileExt }) {
+function createOpenGraphInfo ({ fileType, claimId, name, fileName, fileExt }) {
   return {
-    type   : fileType.substring(0, fileType.indexOf('/')),
-    showUrl: `https://spee.ch/${claimId}/${name}`,
-    source : `https://spee.ch/${claimId}/${name}${fileExt}`,
+    twitterPlayerUrl: `https://spee.ch/twitterPlayer/${claimId}/${name}`,
+    showUrl         : `https://spee.ch/${claimId}/${name}`,
+    source          : `https://spee.ch/${claimId}/${name}${fileExt}`,
+    directFileUrl   : `https://spee.ch/media/${fileName}`,
   };
 }
 
