@@ -86,6 +86,11 @@ module.exports = (app) => {
     if (positionOfExtension >= 0) {
       extension = name.substring(positionOfExtension);
       name = name.substring(0, positionOfExtension);
+      /* patch because twitter player preview adds '>' before file extension */
+      if (name.indexOf('>') >= 0) {
+        name = name.substring(0, name.indexOf('>'));
+      }
+      /* end patch */
       logger.debug('file extension =', extension);
       if (headers['accept'] && headers['accept'].split(',').includes('text/html')) {
         method = SHOWLITE;
@@ -95,7 +100,7 @@ module.exports = (app) => {
     } else {
       method = SHOW;
     }
-    /* start: temporary patch for backwards compatability spee.ch/name/claim_id */
+    /* patch for backwards compatability with spee.ch/name/claim_id */
     if (isValidShortUrlOrClaimId(name) && !isValidShortUrlOrClaimId(identifier)) {
       let tempName = name;
       name = identifier;
