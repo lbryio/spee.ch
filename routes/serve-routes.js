@@ -93,11 +93,7 @@ module.exports = (app) => {
         method = SERVE;
       }
     } else {
-      if (headers['accept'] && !headers['accept'].split(',').includes('text/html')) {
-        method = SERVE;
-      } else {
-        method = SHOW;
-      }
+      method = SHOW;
     }
     /* start: temporary patch for backwards compatability spee.ch/name/claim_id */
     if (isValidShortUrlOrClaimId(name) && !isValidShortUrlOrClaimId(identifier)) {

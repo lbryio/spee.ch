@@ -36,6 +36,14 @@ module.exports = (app) => {
       });
   });
   // route to display all free public claims at a given name
+  app.get('/twitterPlayer/:claimId/:fileName', ({ params }, res) => {
+    const claimId = params.claimId;
+    const fileName = params.fileName;
+    const fileExtension = '.mp4';
+    // get and render the content
+    res.status(200).render('twitterPlayer', { layout: 'twitterPlayer', claimId, fileName, fileExtension });
+  });
+  // route to display all free public claims at a given name
   app.get('/:name/all', ({ ip, originalUrl, params }, res) => {
     // get and render the content
     getAllFreePublicClaims(params.name)

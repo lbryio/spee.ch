@@ -60,6 +60,15 @@ function checkLocalDbForClaims (name, shortUrl) {
     });
 }
 
+function createOpenGraphInfo ({ fileType, claimId, name, fileName, fileExt }) {
+  return {
+    twitterPlayerUrl: `https://spee.ch/twitterPlayer/${claimId}/${name}`,
+    showUrl         : `https://spee.ch/${claimId}/${name}`,
+    source          : `https://spee.ch/${claimId}/${name}${fileExt}`,
+    directFileUrl   : `https://spee.ch/media/${fileName}`,
+  };
+}
+
 module.exports = {
   serveFile ({ fileName, fileType, filePath }, res) {
     logger.info(`serving file ${fileName}`);
@@ -86,11 +95,12 @@ module.exports = {
     res.status(200).sendFile(filePath, options);
   },
   showFile (fileInfo, res) {
-    res.status(200).render('show', { layout: 'show', fileInfo });
+    const openGraphInfo = createOpenGraphInfo(fileInfo);
+    res.status(200).render('show', { layout: 'show', fileInfo, openGraphInfo });
   },
   showFileLite (fileInfo, res) {
-    logger.debug('showing file lite');
-    res.status(200).render('showLite', { layout: 'show', fileInfo });
+    const openGraphInfo = createOpenGraphInfo(fileInfo);
+    res.status(200).render('showLite', { layout: 'show', fileInfo, openGraphInfo });
   },
   getClaimIdFromShortUrl (shortUrl, name) {
     return new Promise((resolve, reject) => {

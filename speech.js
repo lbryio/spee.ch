@@ -48,6 +48,58 @@ const hbs = expressHandlebars.create({
         </script>`
       );
     },
+    addOpenGraph (title, mimeType, showUrl, source) {
+      let basicTags = `<meta property="og:title" content="${title}"/> 
+          <meta property="og:url" content="${showUrl}" /> 
+          <meta property="og:site_name" content="Spee.ch" /> 
+          <meta property="og:description" content="View or download ${title} from spee.ch: the open-source, decentralized content host." />`;
+      if (mimeType === 'video/mp4') {
+        return new Handlebars.SafeString(
+          `${basicTags} <meta property="og:image" content="https://spee.ch/assets/img/content-freedom-large.png" /> 
+          <meta property="og:image:type" content="image/png" />
+          <meta property="og:image:width" content="600" />
+          <meta property="og:image:height" content="315" />
+          <meta property="og:type" content="video" /> 
+          <meta property="og:video" content="${source}" /> 
+          <meta property="og:video:secure_url" content="${source}" /> 
+          <meta property="og:video:type" content="${mimeType}" />`
+        );
+      } else if (mimeType === 'image/gif') {
+        return new Handlebars.SafeString(
+          `${basicTags} <meta property="og:image" content="${source}" /> 
+          <meta property="og:image:type" content="${mimeType}" />
+          <meta property="og:image:width" content="600" />
+          <meta property="og:image:height" content="315" />
+          <meta property="og:type" content="video.other" />`
+        );
+      } else {
+        return new Handlebars.SafeString(
+          `${basicTags} <meta property="og:image" content="${source}" /> 
+          <meta property="og:image:type" content="${mimeType}" />
+          <meta property="og:image:width" content="600" />
+          <meta property="og:image:height" content="315" />
+          <meta property="og:type" content="article" />`
+        );
+      }
+    },
+    addTwitterCard (mimeType, source, twitterPlayerUrl, directFileUrl) {
+      let basicTwitterTags = `<meta name="twitter:site" content="@lbryio" />`;
+      if (mimeType === 'video/mp4') {
+        return new Handlebars.SafeString(
+          `${basicTwitterTags} <meta name="twitter:card" content="player" />
+          <meta name="twitter:player" content="${twitterPlayerUrl}>
+          <meta name="twitter:player:width" content="480" />
+          <meta name="twitter:player:height" content="480" />
+          <meta name="twitter:player:stream" content="${directFileUrl}" />
+          <meta name="twitter:player:stream:content_type" content="video/mp4" />
+          `
+        );
+      } else {
+        return new Handlebars.SafeString(
+          `${basicTwitterTags} <meta name="twitter:card" content="summary_large_image" />`
+        );
+      }
+    },
     ifConditional (varOne, operator, varTwo, options) {
       switch (operator) {
         case '===':
