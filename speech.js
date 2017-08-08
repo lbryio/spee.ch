@@ -91,8 +91,7 @@ const hbs = expressHandlebars.create({
           <meta name="twitter:player:width" content="600" >
           <meta name="twitter:text:player_width" content="600" >
           <meta name="twitter:player:height" content="315" >
-          <meta name="twitter:player:stream" content="${directFileUrl}" >
-          
+   
           `
         );
       } else {
