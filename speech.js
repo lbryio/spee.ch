@@ -90,7 +90,7 @@ const hbs = expressHandlebars.create({
           <meta name="twitter:player" content="${embedUrl}>
           <meta name="twitter:player:width" content="600" >
           <meta name="twitter:text:player_width" content="600" >
-          <meta name="twitter:player:height" content="325" >
+          <meta name="twitter:player:height" content="337" >
           <meta name="twitter:player:stream" content="${directFileUrl}" >
           <meta name="twitter:player:stream:content_type" content="video/mp4" >
           `
