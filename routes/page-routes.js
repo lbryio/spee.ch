@@ -38,8 +38,8 @@ module.exports = (app) => {
   // route to display all free public claims at a given name
   app.get('/embed/:claimId/:name', ({ params }, res) => {
     const claimId = params.claimId;
-    const name = params.name + '.mp4';
-    const dummyParam = 'b';
+    const name = params.name;
+    const dummyParam = '.b';
     console.log('claimId ==', claimId);
     console.log('name ==', name);
     // get and render the content
