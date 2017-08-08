@@ -82,12 +82,12 @@ const hbs = expressHandlebars.create({
         );
       }
     },
-    addTwitterCard (mimeType, source, twitterPlayerUrl, directFileUrl) {
+    addTwitterCard (mimeType, source, embedUrl, directFileUrl) {
       let basicTwitterTags = `<meta name="twitter:site" content="@lbryio" />`;
       if (mimeType === 'video/mp4') {
         return new Handlebars.SafeString(
           `${basicTwitterTags} <meta name="twitter:card" content="player" />
-          <meta name="twitter:player" content="${twitterPlayerUrl}>
+          <meta name="twitter:player" content="${embedUrl}>
           <meta name="twitter:player:width" content="480" />
           <meta name="twitter:player:height" content="480" />
           <meta name="twitter:player:stream" content="${directFileUrl}" />
