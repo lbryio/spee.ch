@@ -36,12 +36,11 @@ module.exports = (app) => {
       });
   });
   // route to display all free public claims at a given name
-  app.get('/embed/:claimId/:fileName', ({ params }, res) => {
+  app.get('/embed/:claimId/:name', ({ params }, res) => {
     const claimId = params.claimId;
-    const fileName = params.fileName;
-    const fileExtension = '.mp4';
+    const name = params.name;
     // get and render the content
-    res.status(200).render('embed', { layout: 'embed', claimId, fileName, fileExtension });
+    res.status(200).render('embed', { layout: 'embed', claimId, name });
   });
   // route to display all free public claims at a given name
   app.get('/:name/all', ({ ip, originalUrl, params }, res) => {
