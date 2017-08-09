@@ -2,7 +2,7 @@ const lbryApi = require('../helpers/lbryApi.js');
 const db = require('../models');
 const logger = require('winston');
 const getAllFreePublicClaims = require('../helpers/functions/getAllFreePublicClaims.js');
-const isFreePublicClaim = require('../helpers/functions/isFreePublicClaim.js');
+const isFreeClaim = require('../helpers/functions/isFreeClaim.js');
 const serveHelpers = require('../helpers/serveHelpers.js');
 
 function checkForLocalAssetByClaimId (claimId, name) {
@@ -50,7 +50,7 @@ function getAssetByClaimId (fullClaimId, name) {
         lbryApi.resolveUri(`${name}#${fullClaimId}`)
         .then(resolveResult => {
           // if the claim is free and public, then get it
-          if (resolveResult.claim && isFreePublicClaim(resolveResult.claim)) {
+          if (resolveResult.claim && isFreeClaim(resolveResult.claim)) {
             lbryApi.getClaim(`${name}#${fullClaimId}`)
             .then(getResult => {
               let fileInfo = formatGetResultsToFileInfo(getResult);

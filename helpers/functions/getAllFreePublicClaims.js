@@ -1,4 +1,4 @@
-const isFreePublicClaim = require('./isFreePublicClaim.js');
+const isFreeClaim = require('./isFreeClaim.js');
 const lbryApi = require('../lbryApi.js');
 const logger = require('winston');
 
@@ -11,7 +11,7 @@ function filterForFreePublicClaims (claimsListArray) {
     if (!claim.value) {
       return false;
     }
-    return isFreePublicClaim(claim);
+    return isFreeClaim(claim);
   });
   return freePublicClaims;
 }
