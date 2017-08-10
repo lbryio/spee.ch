@@ -132,7 +132,7 @@ app.set('view engine', 'handlebars');
 
 // start the server
 db.sequelize
-  .sync({force: true}) // sync sequelize
+  .sync() // sync sequelize
   .then(() => {  // get the download directory from the daemon
     logger.info('Retrieving daemon download directory');
     return getDownloadDirectory();
