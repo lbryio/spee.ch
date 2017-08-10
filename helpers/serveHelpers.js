@@ -4,36 +4,48 @@ const lbryApi = require('./lbryApi');
 
 function determineShortClaimId (claimId, height, claimList) {
   logger.debug('determining short url based on claim id and claim list');
+  logger.debug('claimlist starting length:', claimList.length);
   // remove this claim from the claim list, if it exists
   claimList = claimList.filter(claim => {
     return claim.claim_id !== claimId;
   });
-  logger.debug('claim list length:', claimList.length);
-  // if there are no other claims, return the first letter of the claim id
+  logger.debug('claim list length without this claim:', claimList.length);
+  // If there are no other claims, return the first letter of the claim id...
   if (claimList.length === 0) {
     return claimId.substring(0, 1);
-  // otherwise determine the proper url
+  // ...otherwise determine the proper short id.
   } else {
-    let i = 0;
     const claimListCopy = claimList;
-    while (claimList.length !== 0) {  // filter out matching claims
+    let i = 0;
+    // find the longest shared prefix (there is a better way to do this that filters, checks next filter, then filters (i.e. combine this step and next))
+    while (claimList.length !== 0) {
       i++;
       claimList = claimList.filter(claim => {
-        return (claim.claim_id.substring(0, i) === claimId.substring(0, i));
+        const otherClaimIdSegmentToCompare = claim.claim_id.substring(0, i);
+        const thisClaimIdSegmentToCompare = claimId.substring(0, i);
+        logger.debug('compare:', otherClaimIdSegmentToCompare, '===', thisClaimIdSegmentToCompare, '?');
+        return (otherClaimIdSegmentToCompare === thisClaimIdSegmentToCompare);
       });
     }
-    i -= 1;
-    const lastMatch = claimId.substring(0, i);
-
-    const matchingClaims = claimListCopy.filter(claim => {
-      return (claim.claim_id.substring(0, i) === lastMatch);
-    });
-    for (let j = 0; j < matchingClaims.length; j++) {
-      if (matchingClaims[j].height < height) {
-        return claimId.substring(0, i + 1);
-      }
+    // use that longest shared prefix to get only those competing claims
+    const lastMatchIndex = i - 1;
+    const lastMatch = claimId.substring(0, lastMatchIndex);
+    logger.debug('last match index:', lastMatchIndex, 'last match:', lastMatch);
+    if (lastMatchIndex === 0) { // if no other claims share a prefix, return with first letter.
+      return claimId.substring(0, 1);
     }
-    return claimId.substring(0, i);
+    const allMatchingClaimsAtLastMatch = claimListCopy.filter(claim => {
+      return (claim.claim_id.substring(0, lastMatchIndex) === lastMatch);
+    });
+    // for those that share the longest shared prefix: see which came first in time. whichever is earliest, the others take the extra character
+    const sortedMatchingClaims = allMatchingClaimsAtLastMatch.sort((a, b) => {
+      return (a.height < b.height);
+    });
+    // compare to the earliest one, if it is earlier, this claim takes the extra character
+    if (sortedMatchingClaims[0].height < height) {
+      return claimId.substring(0, lastMatchIndex + 1);
+    }
+    return claimId.substring(0, lastMatchIndex);
   }
 }
 
