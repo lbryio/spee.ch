@@ -4,6 +4,7 @@ const logger = require('winston');
 const getAllFreePublicClaims = require('../helpers/functions/getAllFreePublicClaims.js');
 const isFreeClaim = require('../helpers/functions/isFreeClaim.js');
 const serveHelpers = require('../helpers/serveHelpers.js');
+const { createClaimEntryFromLbryResolve } = require('../helpers/claimModelWrapper.js');
 
 function checkForLocalAssetByClaimId (claimId, name) {
   return new Promise((resolve, reject) => {
@@ -39,7 +40,7 @@ function getAssetByClaimId (fullClaimId, name) {
     // 1. check locally for claim
     checkForLocalAssetByClaimId(fullClaimId, name)
     .then(dataValues => {
-      // 2. if a result was found, resolve the result
+      // 2. if a result was found, return the result
       if (dataValues) {
         logger.debug('found a local file for this claimId');
         resolve(dataValues);
@@ -49,15 +50,19 @@ function getAssetByClaimId (fullClaimId, name) {
         // 3. resolve the claim
         lbryApi.resolveUri(`${name}#${fullClaimId}`)
         .then(resolveResult => {
-          // if the claim is free and public, then get it
+          // if the claim is free...
           if (resolveResult.claim && isFreeClaim(resolveResult.claim)) {
+            // get the claim
             lbryApi.getClaim(`${name}#${fullClaimId}`)
             .then(getResult => {
+              // logger.debug('getResult >>', getResult);
               let fileInfo = formatGetResultsToFileInfo(getResult);
               fileInfo['address'] = resolveResult.claim.address;
               fileInfo['height'] = resolveResult.claim.height;
               // insert a record in the File table
               db.File.create(fileInfo);
+              // insert a record in the Claim table
+              createClaimEntryFromLbryResolve(resolveResult.claim);
               // resolve the promise
               resolve(fileInfo);
             })
