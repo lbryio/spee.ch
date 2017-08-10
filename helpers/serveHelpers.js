@@ -2,7 +2,7 @@ const logger = require('winston');
 const db = require('../models');
 const lbryApi = require('./lbryApi');
 
-function determineShortUrl (claimId, height, claimList) {
+function determineShortClaimId (claimId, height, claimList) {
   logger.debug('determining short url based on claim id and claim list');
   // remove this claim from the claim list, if it exists
   claimList = claimList.filter(claim => {
@@ -37,12 +37,12 @@ function determineShortUrl (claimId, height, claimList) {
   }
 }
 
-function checkLocalDbForClaims (name, shortUrl) {
+function checkLocalDbForClaims (name, shortId) {
   return db.File
     .findAll({
       where: {
         name,
-        claimId: { $like: `${shortUrl}%` },
+        claimId: { $like: `${shortId}%` },
       },
     })
     .then(records => {
@@ -102,7 +102,7 @@ module.exports = {
     const openGraphInfo = createOpenGraphInfo(fileInfo);
     res.status(200).render('showLite', { layout: 'show', fileInfo, openGraphInfo });
   },
-  getClaimIdFromShortUrl (shortUrl, name) {
+  getFullClaimIdFromShortId (shortId, name) {
     return new Promise((resolve, reject) => {
       logger.debug('getting claim_id from short url');
       // use the daemon to check for claims list
@@ -111,7 +111,7 @@ module.exports = {
         logger.debug('Number of claims from getClaimsList:', claims.length);
         // if no claims were found, check locally for possible claims
         if (claims.length === 0) {
-          return checkLocalDbForClaims(name, shortUrl);
+          return checkLocalDbForClaims(name, shortId);
         } else {
           return claims;
         }
@@ -119,7 +119,7 @@ module.exports = {
       // handle the claims list
       .then(claims => {
         logger.debug('Claims ready for filtering');
-        const regex = new RegExp(`^${shortUrl}`);
+        const regex = new RegExp(`^${shortId}`);
         const filteredClaimsList = claims.filter(claim => {
           return regex.test(claim.claim_id);
         });
@@ -143,15 +143,16 @@ module.exports = {
       });
     });
   },
-  getShortUrlFromClaimId (claimId, height, name) {
+  getShortIdFromClaimId (claimId, height, name) {
     return new Promise((resolve, reject) => {
-      logger.debug('finding short url from claim_id');
+      logger.debug('finding short claim id from full claim id');
       // get a list of all the claims
       lbryApi.getClaimsList(name)
       // find the smallest possible unique url for this claim
       .then(({ claims }) => {
-        const shortUrl = determineShortUrl(claimId, height, claims);
-        resolve(shortUrl);
+        const shortId = determineShortClaimId(claimId, height, claims);
+        logger.debug('short claim id ===', shortId);
+        resolve(shortId);
       })
       .catch(error => {
         reject(error);

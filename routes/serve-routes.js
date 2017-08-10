@@ -1,6 +1,6 @@
 const logger = require('winston');
-const { serveFile, showFile, showFileLite, getShortUrlFromClaimId } = require('../helpers/serveHelpers.js');
-const { getAssetByChannel, getAssetByShortUrl, getAssetByClaimId, getAssetByName } = require('../controllers/serveController.js');
+const { serveFile, showFile, showFileLite, getShortIdFromClaimId } = require('../helpers/serveHelpers.js');
+const { getAssetByChannel, getAssetByShortId, getAssetByClaimId, getAssetByName } = require('../controllers/serveController.js');
 const { handleRequestError } = require('../helpers/errorHandlers.js');
 const { postToStats, sendGoogleAnalytics } = require('../controllers/statsController.js');
 const SERVE = 'SERVE';
@@ -11,12 +11,12 @@ const SHORTURL = 'SHORTURL';
 const CLAIMID = 'CLAIMID';
 const NAME = 'NAME';
 
-function getAsset (claimType, channelName, shortUrl, fullClaimId, name) {
+function getAsset (claimType, channelName, shortId, fullClaimId, name) {
   switch (claimType) {
     case CHANNEL:
       return getAssetByChannel(channelName, name);
     case SHORTURL:
-      return getAssetByShortUrl(shortUrl, name);
+      return getAssetByShortId(shortId, name);
     case CLAIMID:
       return getAssetByClaimId(fullClaimId, name);
     case NAME:
@@ -41,9 +41,9 @@ function serveOrShowAsset (fileInfo, method, headers, originalUrl, ip, res) {
       postToStats('show', originalUrl, ip, fileInfo.name, fileInfo.claimId, 'success');
       return fileInfo;
     case SHOW:
-      return getShortUrlFromClaimId(fileInfo.claimId, fileInfo.height, fileInfo.name)
-      .then(shortUrl => {
-        fileInfo['shortUrl'] = shortUrl;
+      return getShortIdFromClaimId(fileInfo.claimId, fileInfo.height, fileInfo.name)
+      .then(shortId => {
+        fileInfo['shortId'] = shortId;
         showFile(fileInfo, res);
         postToStats('show', originalUrl, ip, fileInfo.name, fileInfo.claimId, 'success');
         return fileInfo;
@@ -62,12 +62,12 @@ function isValidClaimId (claimId) {
   return ((claimId.length === 40) && !/[^A-Za-z0-9]/g.test(claimId));
 }
 
-function isValidShortUrl (claimId) {
+function isValidShortId (claimId) {
   return claimId.length === 1;  // really it should evaluate the short url itself
 }
 
-function isValidShortUrlOrClaimId (input) {
-  return (isValidClaimId(input) || isValidShortUrl(input));
+function isValidShortIdOrClaimId (input) {
+  return (isValidClaimId(input) || isValidShortId(input));
 }
 
 module.exports = (app) => {
@@ -77,7 +77,7 @@ module.exports = (app) => {
     let name = params.name;
     let claimType;
     let channelName = null;
-    let shortUrl = null;
+    let shortId = null;
     let fullClaimId = null;
     let method;
     let extension;
@@ -101,7 +101,7 @@ module.exports = (app) => {
       method = SHOW;
     }
     /* patch for backwards compatability with spee.ch/name/claim_id */
-    if (isValidShortUrlOrClaimId(name) && !isValidShortUrlOrClaimId(identifier)) {
+    if (isValidShortIdOrClaimId(name) && !isValidShortIdOrClaimId(identifier)) {
       let tempName = name;
       name = identifier;
       identifier = tempName;
@@ -119,8 +119,8 @@ module.exports = (app) => {
       logger.debug('full claim id =', fullClaimId);
       claimType = CLAIMID;
     } else if (identifier.length < 40) {
-      shortUrl = identifier;
-      logger.debug('short url =', shortUrl);
+      shortId = identifier;
+      logger.debug('short claim id =', shortId);
       claimType = SHORTURL;
     } else {
       logger.error('The URL provided could not be parsed');
@@ -128,7 +128,7 @@ module.exports = (app) => {
       return;
     };
     // 1. retrieve the asset and information
-    getAsset(claimType, channelName, shortUrl, fullClaimId, name)
+    getAsset(claimType, channelName, shortId, fullClaimId, name)
     // 2. serve or show
     .then(fileInfo => {
       if (!fileInfo) {
