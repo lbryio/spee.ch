@@ -3,68 +3,68 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, ARRAY, DECIMAL, D
     'Claim',
     {
       address: {
-        type     : STRING,
-        allowNull: false,
+        type   : STRING,
+        default: null,
       },
       amount: {
-        type     : STRING,
-        allowNull: false,
+        type   : STRING,
+        default: null,
       },
       claimId: {
-        type     : STRING,
-        allowNull: false,
+        type   : STRING,
+        default: null,
       },
       claimSequence: {
-        type     : INTEGER,
-        allowNull: false,
+        type   : INTEGER,
+        default: null,
       },
       decodedClaim: {
-        type     : BOOLEAN,
-        allowNull: false,
+        type   : BOOLEAN,
+        default: null,
       },
       depth: {
-        type     : INTEGER,
-        allowNull: false,
+        type   : INTEGER,
+        default: null,
       },
       effectiveAmount: {
-        type     : STRING,
-        allowNull: false,
+        type   : STRING,
+        default: null,
       },
       hasSignature: {
         type   : BOOLEAN,
-        default: false,
+        default: null,
       },
       height: {
         type   : STRING,
-        default: '0',
+        default: null,
       },
       hex: {
-        type     : TEXT('long'),
-        allowNull: false,
+        type   : TEXT('long'),
+        default: null,
       },
       name: {
-        type     : STRING,
-        allowNull: false,
+        type   : STRING,
+        default: null,
       },
       nout: {
-        type     : INTEGER,
-        allowNull: false,
+        type   : INTEGER,
+        default: null,
       },
       txid: {
-        type     : STRING,
-        allowNull: false,
+        type   : STRING,
+        default: null,
       },
       validAtHeight: {
         type   : STRING,
         default: null,
       },
       outpoint: {
-        type     : STRING,
-        allowNull: false,
+        type   : STRING,
+        default: null,
       },
       claimType: {
-        type     : STRING,
-        allowNull: false,
+        type   : STRING,
+        default: null,
       },
       author: {
         type   : STRING,

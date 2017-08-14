@@ -4,7 +4,6 @@ const logger = require('winston');
 const getAllFreePublicClaims = require('../helpers/functions/getAllFreePublicClaims.js');
 const isFreeClaim = require('../helpers/functions/isFreeClaim.js');
 const serveHelpers = require('../helpers/serveHelpers.js');
-const { createClaimEntryFromLbryResolve } = require('../helpers/claimModelWrapper.js');
 
 function checkForLocalAssetByClaimId (claimId, name) {
   return new Promise((resolve, reject) => {
@@ -61,8 +60,6 @@ function getAssetByClaimId (fullClaimId, name) {
               fileInfo['height'] = resolveResult.claim.height;
               // insert a record in the File table
               db.File.create(fileInfo);
-              // insert a record in the Claim table
-              createClaimEntryFromLbryResolve(resolveResult.claim);
               // resolve the promise
               resolve(fileInfo);
             })
