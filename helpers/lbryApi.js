@@ -61,7 +61,7 @@ module.exports = {
         });
     });
   },
-  getClaimsList (claimName) {
+  getClaimList (claimName) {
     logger.debug(`lbryApi >> Getting claim_list for "${claimName}"`);
     return new Promise((resolve, reject) => {
       axios

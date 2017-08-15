@@ -118,9 +118,9 @@ module.exports = {
     return new Promise((resolve, reject) => {
       logger.debug('getting claim_id from short url');
       // use the daemon to check for claims list
-      lbryApi.getClaimsList(name)
+      lbryApi.getClaimList(name)
       .then(({ claims }) => {
-        logger.debug('Number of claims from getClaimsList:', claims.length);
+        logger.debug('Number of claims from getClaimList:', claims.length);
         // if no claims were found, check locally for possible claims
         if (claims.length === 0) {
           return checkLocalDbForClaims(name, shortId);
@@ -159,7 +159,7 @@ module.exports = {
     return new Promise((resolve, reject) => {
       logger.debug('finding short claim id from full claim id');
       // get a list of all the claims
-      lbryApi.getClaimsList(name)
+      lbryApi.getClaimList(name)
       // find the smallest possible unique url for this claim
       .then(({ claims }) => {
         const shortId = determineShortClaimId(claimId, height, claims);

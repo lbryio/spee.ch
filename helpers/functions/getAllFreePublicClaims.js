@@ -32,7 +32,7 @@ module.exports = (claimName) => {
   return new Promise((resolve, reject) => {
     // make a call to the daemon to get the claims list
     lbryApi
-      .getClaimsList(claimName)
+      .getClaimList(claimName)
       .then(({ claims }) => {
         logger.debug(`Number of claims: ${claims.length}`);
         // return early if no claims were found

@@ -2,13 +2,12 @@ const logger = require('winston');
 const db = require('../models');
 
 module.exports = {
-  getLocalClaimsList (name) {
+  getLocalClaimList (name) {
     logger.debug(`db.Claim >> Getting claim_list for "${name}"`);
     return db.Claim.findAll({ name })
     .then(result => {
       logger.debug('db.claim result length', result.length);
       if (result.length >= 1) {
-        console.log('there was a result');
         result = result.map(claim => {
           return claim.dataValues;
         });
@@ -40,8 +39,8 @@ module.exports = {
       return error;
     });
   },
-  createClaimEntryFromLbryResolve (claim) {
-    logger.debug('db.Claim >> creating claim entry from lbry resolve');
+  updateLocalClaimRecordFromResolve (claim) {
+    logger.debug('db.Claim >> creating claim entry from lbry resolve results');
     // parse the resolved data
     let claimData = {};
     claimData['address'] = claim.address;
@@ -84,14 +83,14 @@ module.exports = {
       claimData['valueVersion'] = claim.value.version;
     }
     // create search criteria
-    const searchCriteria = { name: claimData.name, claimId: claimData.claimId };
+    const updateCriteria = { name: claimData.name, claimId: claimData.claimId };
     // create entry in db
-    db.upsert(db.Claim, claimData, searchCriteria)
-    .then(() => {
-      logger.debug('successfully added data to db.Claim');
+    db.Claim.update(claimData, updateCriteria)
+    .then((rows, result) => {
+      logger.debug('successfully updated record in db.Claim');
     })
     .catch(error => {
-      logger.error('Sequelize findOne error', error);
+      logger.error('db.Claim.update error', error);
     });
   },
 };

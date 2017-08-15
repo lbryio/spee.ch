@@ -14,7 +14,7 @@ module.exports = (app, hostedContentPath) => {
     sendGoogleAnalytics('SERVE', headers, ip, originalUrl);
     // serve the content
     lbryApi
-      .getClaimsList(params.name)
+      .getClaimList(params.name)
       .then(claimsList => {
         postToStats('serve', originalUrl, ip, null, null, 'success');
         res.status(200).json(claimsList);

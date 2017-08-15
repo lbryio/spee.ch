@@ -66,15 +66,23 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, ARRAY, DECIMAL, D
         type   : STRING,
         default: null,
       },
+      certificateId: {
+        type   : STRING,
+        default: null,
+      },
       author: {
         type   : STRING,
         default: null,
       },
       description: {
-        type   : STRING,
+        type   : TEXT('long'),
         default: null,
       },
       language: {
+        type   : STRING,
+        default: null,
+      },
+      license: {
         type   : STRING,
         default: null,
       },
