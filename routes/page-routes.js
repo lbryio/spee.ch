@@ -1,5 +1,5 @@
 const errorHandlers = require('../helpers/errorHandlers.js');
-const getAllFreePublicClaims = require('../helpers/functions/getAllFreePublicClaims.js');
+const { getAllFreeClaims } = require('../helpers/serveHelpers.js');
 const { postToStats, getStatsSummary, getTrendingClaims } = require('../controllers/statsController.js');
 
 module.exports = (app) => {
@@ -48,14 +48,14 @@ module.exports = (app) => {
   // route to display all free public claims at a given name
   app.get('/:name/all', ({ ip, originalUrl, params }, res) => {
     // get and render the content
-    getAllFreePublicClaims(params.name)
-      .then(orderedFreePublicClaims => {
-        if (!orderedFreePublicClaims) {
+    getAllFreeClaims(params.name)
+      .then(orderedFreeClaims => {
+        if (!orderedFreeClaims) {
           res.status(307).render('noClaims');
           return;
         }
         postToStats('show', originalUrl, ip, null, null, 'success');
-        res.status(200).render('allClaims', { claims: orderedFreePublicClaims });
+        res.status(200).render('allClaims', { claims: orderedFreeClaims });
       })
       .catch(error => {
         errorHandlers.handleRequestError('show', originalUrl, ip, error, res);

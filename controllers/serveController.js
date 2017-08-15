@@ -1,9 +1,8 @@
 const lbryApi = require('../helpers/lbryApi.js');
 const db = require('../models');
 const logger = require('winston');
-const getAllFreePublicClaims = require('../helpers/functions/getAllFreePublicClaims.js');
 const isFreeClaim = require('../helpers/functions/isFreeClaim.js');
-const serveHelpers = require('../helpers/serveHelpers.js');
+const { getTopFreeClaim, getFullClaimIdFromShortId } = require('../helpers/serveHelpers.js');
 
 function checkForLocalAssetByClaimId (claimId, name) {
   return new Promise((resolve, reject) => {
@@ -94,7 +93,7 @@ module.exports = {
   getAssetByShortId: function (shortId, name) {
     return new Promise((resolve, reject) => {
       // get the full claimId
-      serveHelpers.getFullClaimIdFromShortId(shortId, name)
+      getFullClaimIdFromShortId(shortId, name)
       // get the asset by the claimId
       .then(claimId => {
         resolve(getAssetByClaimId(claimId, name));
@@ -110,16 +109,15 @@ module.exports = {
   getAssetByName (name) {
     return new Promise((resolve, reject) => {
       // 1. get a list of the free public claims
-      getAllFreePublicClaims(name)
+      getTopFreeClaim(name)
       // 2. check locally for the top claim
       .then(freePublicClaimList => {
         // if no claims were found, return null
         if (!freePublicClaimList) {
-          resolve(null);
-          return;
+          return resolve(null);
         }
         // parse the result
-        const claimId = freePublicClaimList[0].claim_id;
+        const claimId = freePublicClaimList[0].claimId;
         // get the asset
         resolve(getAssetByClaimId(claimId, name));
       })

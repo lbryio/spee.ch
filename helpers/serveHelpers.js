@@ -1,13 +1,12 @@
 const logger = require('winston');
 const db = require('../models');
-const lbryApi = require('./lbryApi');
 
 function determineShortClaimId (claimId, height, claimList) {
   logger.debug('determining short url based on claim id and claim list');
   logger.debug('claimlist starting length:', claimList.length);
   // remove this claim from the claim list, if it exists
   claimList = claimList.filter(claim => {
-    return claim.claim_id !== claimId;
+    return claim.claimId !== claimId;
   });
   logger.debug('claim list length without this claim:', claimList.length);
   // If there are no other claims, return the first letter of the claim id...
@@ -21,7 +20,7 @@ function determineShortClaimId (claimId, height, claimList) {
     while (claimList.length !== 0) {
       i++;
       claimList = claimList.filter(claim => {
-        const otherClaimIdSegmentToCompare = claim.claim_id.substring(0, i);
+        const otherClaimIdSegmentToCompare = claim.claimId.substring(0, i);
         const thisClaimIdSegmentToCompare = claimId.substring(0, i);
         logger.debug('compare:', otherClaimIdSegmentToCompare, '===', thisClaimIdSegmentToCompare, '?');
         return (otherClaimIdSegmentToCompare === thisClaimIdSegmentToCompare);
@@ -35,7 +34,7 @@ function determineShortClaimId (claimId, height, claimList) {
       return claimId.substring(0, 1);
     }
     const allMatchingClaimsAtLastMatch = claimListCopy.filter(claim => {
-      return (claim.claim_id.substring(0, lastMatchIndex) === lastMatch);
+      return (claim.claimId.substring(0, lastMatchIndex) === lastMatch);
     });
     // for those that share the longest shared prefix: see which came first in time. whichever is earliest, the others take the extra character
     const sortedMatchingClaims = allMatchingClaimsAtLastMatch.sort((a, b) => {
@@ -47,29 +46,6 @@ function determineShortClaimId (claimId, height, claimList) {
     }
     return claimId.substring(0, lastMatchIndex);
   }
-}
-
-function checkLocalDbForClaims (name, shortId) {
-  return db.File
-    .findAll({
-      where: {
-        name,
-        claimId: { $like: `${shortId}%` },
-      },
-    })
-    .then(records => {
-      logger.debug('number of local search results:', records.length);
-      if (records.length === 0) {
-        return records;
-      }
-      const localClaims = records.map(record => {  // format the data to match what lbry daemon would have returned
-        return { name: record.dataValues.name, claim_id: record.dataValues.claimId, height: record.dataValues.height };
-      });
-      return localClaims;
-    })
-    .catch(error => {
-      return error;
-    });
 }
 
 function createOpenGraphInfo ({ fileType, claimId, name, fileName, fileExt }) {
@@ -118,36 +94,13 @@ module.exports = {
     return new Promise((resolve, reject) => {
       logger.debug('getting claim_id from short url');
       // use the daemon to check for claims list
-      lbryApi.getClaimList(name)
-      .then(({ claims }) => {
-        logger.debug('Number of claims from getClaimList:', claims.length);
-        // if no claims were found, check locally for possible claims
-        if (claims.length === 0) {
-          return checkLocalDbForClaims(name, shortId);
-        } else {
-          return claims;
-        }
-      })
-      // handle the claims list
-      .then(claims => {
-        logger.debug('Claims ready for filtering');
-        const regex = new RegExp(`^${shortId}`);
-        const filteredClaimsList = claims.filter(claim => {
-          return regex.test(claim.claim_id);
-        });
-        switch (filteredClaimsList.length) {
+      db.sequelize.query(`SELECT claimId FROM Claim WHERE name = '${name}' AND claimId LIKE '${shortId}%' ORDER BY height ASC LIMIT 1;`)
+      .then(result => {
+        switch (result.length) {
           case 0:
-            reject(new Error('That is an invalid short url'));
-            break;
-          case 1:
-            resolve(filteredClaimsList[0].claim_id);
-            break;
-          default:
-            const sortedClaimsList = filteredClaimsList.sort((a, b) => {
-              return a.height > b.height;
-            });
-            resolve(sortedClaimsList[0].claim_id);
-            break;
+            return reject(new Error('That is an invalid Short Id'));
+          default: // note results must be sorted
+            return resolve(result[0].datavalues.claimId);
         }
       })
       .catch(error => {
@@ -158,13 +111,51 @@ module.exports = {
   getShortIdFromClaimId (claimId, height, name) {
     return new Promise((resolve, reject) => {
       logger.debug('finding short claim id from full claim id');
-      // get a list of all the claims
-      lbryApi.getClaimList(name)
-      // find the smallest possible unique url for this claim
-      .then(({ claims }) => {
-        const shortId = determineShortClaimId(claimId, height, claims);
-        logger.debug('short claim id ===', shortId);
-        resolve(shortId);
+      db.sequelize.query(`SELECT claimId, height FROM Claim WHERE name = '${name}' ORDER BY claimId;`)
+      .then(result => {
+        switch (result.length) {
+          case 0:
+            return reject(new Error('That is an invalid Claim Id'));
+          default: // note results must be sorted
+            const resultsArray = result.map(claim => {
+              return claim.dataValues;
+            });
+            const shortId = determineShortClaimId(claimId, height, resultsArray);
+            logger.debug('short claim id ===', shortId);
+            return resolve(shortId);
+        }
+      })
+      .catch(error => {
+        reject(error);
+      });
+    });
+  },
+  getAllFreeClaims (claimName) {
+    return new Promise((resolve, reject) => {
+      db.sequelize.query(`SELECT * FROM Claim WHERE name = '${claimName}' ORDER BY amount DESC, height ASC`)
+      .then(result => {
+        if (result.length === 0) {
+          logger.debug('exiting due to lack of claims');
+          return resolve(null);
+        }
+        const claims = result.map(claim => {
+          return claim.dataValues;
+        });
+        return resolve(claims);
+      })
+      .catch(error => {
+        reject(error);
+      });
+    });
+  },
+  getTopFreeClaim (claimName) {
+    return new Promise((resolve, reject) => {
+      db.sequelize.query(`SELECT * FROM Claim WHERE name = '${claimName}' ORDER BY amount DESC, height ASC LIMIT 1`)
+      .then(result => {
+        if (result.length === 0) {
+          return resolve(null);
+        }
+        return resolve(result[0].dataValues);
       })
       .catch(error => {
         reject(error);
