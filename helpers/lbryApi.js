@@ -79,6 +79,7 @@ module.exports = {
   },
   resolveUri (uri) {
     logger.debug(`lbryApi >> Resolving URI for "${uri}"`);
+    // console.log('resolving uri', uri);
     return new Promise((resolve, reject) => {
       axios
         .post('http://localhost:5279/lbryapi', {
@@ -93,6 +94,7 @@ module.exports = {
           }
         })
         .catch(error => {
+          console.log('error with resolve', error);
           reject(error);
         });
     });
