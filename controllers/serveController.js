@@ -53,7 +53,7 @@ function getAssetByClaimId (fullClaimId, name) {
             // get the claim
             lbryApi.getClaim(`${name}#${fullClaimId}`)
             .then(getResult => {
-              // logger.debug('getResult >>', getResult);
+              logger.debug('getResult >>', getResult);
               let fileInfo = formatGetResultsToFileInfo(getResult);
               fileInfo['address'] = resolveResult.claim.address;
               fileInfo['height'] = resolveResult.claim.height;

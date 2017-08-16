@@ -94,13 +94,13 @@ module.exports = {
     return new Promise((resolve, reject) => {
       logger.debug('getting claim_id from short url');
       // use the daemon to check for claims list
-      db.sequelize.query(`SELECT claimId FROM Claim WHERE name = '${name}' AND claimId LIKE '${shortId}%' ORDER BY height ASC LIMIT 1;`)
+      db.sequelize.query(`SELECT claimId FROM Claim WHERE name = '${name}' AND claimId LIKE '${shortId}%' ORDER BY height ASC LIMIT 1;`, { type: db.sequelize.QueryTypes.SELECT })
       .then(result => {
         switch (result.length) {
           case 0:
             return reject(new Error('That is an invalid Short Id'));
           default: // note results must be sorted
-            return resolve(result[0].datavalues.claimId);
+            return resolve(result[0].claimId);
         }
       })
       .catch(error => {
@@ -111,16 +111,13 @@ module.exports = {
   getShortIdFromClaimId (claimId, height, name) {
     return new Promise((resolve, reject) => {
       logger.debug('finding short claim id from full claim id');
-      db.sequelize.query(`SELECT claimId, height FROM Claim WHERE name = '${name}' ORDER BY claimId;`)
+      db.sequelize.query(`SELECT claimId, height FROM Claim WHERE name = '${name}' ORDER BY claimId;`, { type: db.sequelize.QueryTypes.SELECT })
       .then(result => {
         switch (result.length) {
           case 0:
             return reject(new Error('That is an invalid Claim Id'));
           default: // note results must be sorted
-            const resultsArray = result.map(claim => {
-              return claim.dataValues;
-            });
-            const shortId = determineShortClaimId(claimId, height, resultsArray);
+            const shortId = determineShortClaimId(claimId, height, result);
             logger.debug('short claim id ===', shortId);
             return resolve(shortId);
         }
@@ -132,16 +129,14 @@ module.exports = {
   },
   getAllFreeClaims (claimName) {
     return new Promise((resolve, reject) => {
-      db.sequelize.query(`SELECT * FROM Claim WHERE name = '${claimName}' ORDER BY amount DESC, height ASC`)
+      db.sequelize.query(`SELECT * FROM Claim WHERE name = '${claimName}' ORDER BY amount DESC, height ASC`, { type: db.sequelize.QueryTypes.SELECT })
       .then(result => {
-        if (result.length === 0) {
-          logger.debug('exiting due to lack of claims');
-          return resolve(null);
+        switch (result.length) {
+          case 0:
+            return resolve(null);
+          default:
+            return resolve(result);
         }
-        const claims = result.map(claim => {
-          return claim.dataValues;
-        });
-        return resolve(claims);
       })
       .catch(error => {
         reject(error);
@@ -150,12 +145,14 @@ module.exports = {
   },
   getTopFreeClaim (claimName) {
     return new Promise((resolve, reject) => {
-      db.sequelize.query(`SELECT * FROM Claim WHERE name = '${claimName}' ORDER BY amount DESC, height ASC LIMIT 1`)
+      db.sequelize.query(`SELECT * FROM Claim WHERE name = '${claimName}' ORDER BY amount DESC, height ASC LIMIT 1`, { type: db.sequelize.QueryTypes.SELECT })
       .then(result => {
-        if (result.length === 0) {
-          return resolve(null);
+        switch (result.length) {
+          case 0:
+            return resolve(null);
+          default:
+            return resolve(result);
         }
-        return resolve(result[0].dataValues);
       })
       .catch(error => {
         reject(error);

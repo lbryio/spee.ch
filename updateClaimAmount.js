@@ -29,7 +29,7 @@ db.sequelize
       setTimeout(() => {
         lbryApi.resolveUri(uri)
         .then(result => {
-          // console.log(resolveResult);
+          console.log('resolve worked! :)');
           if (result['claim']) {
             const amount = result['claim'].amount;
             return record.update({ amount });
