@@ -1,8 +1,7 @@
 const lbryApi = require('../helpers/lbryApi.js');
 const db = require('../models');
 const logger = require('winston');
-const isFreeClaim = require('../helpers/functions/isFreeClaim.js');
-const { getTopFreeClaim, getFullClaimIdFromShortId } = require('../helpers/serveHelpers.js');
+const { getTopFreeClaim, getFullClaimIdFromShortId, resolveAgainstClaimTable } = require('../helpers/serveHelpers.js');
 
 function checkForLocalAssetByClaimId (claimId, name) {
   return new Promise((resolve, reject) => {
@@ -39,43 +38,42 @@ function getAssetByClaimId (fullClaimId, name) {
     // 1. check locally for claim
     checkForLocalAssetByClaimId(fullClaimId, name)
     .then(dataValues => {
-      // 2. if a result was found, return the result
+      // if a result was found, return early with the result
       if (dataValues) {
         logger.debug('found a local file for this name and claimId');
-        resolve(dataValues);
-      // 2. if not found locally, make a get request
-      } else {
-        logger.debug('no local file for this name and claimId');
-        // 3. resolve the claim
-        lbryApi.resolveUri(`${name}#${fullClaimId}`)  // USE A LOCAL RESOLVE HERE
-        .then(resolveResult => {
-          logger.debug('resolve result >> ', resolveResult);
-          // if the claim is free...
-          if (resolveResult.claim && isFreeClaim(resolveResult.claim)) {
-            // get the claim
-            lbryApi.getClaim(`${name}#${fullClaimId}`)
-            .then(getResult => {
-              logger.debug('getResult >>', getResult);
-              let fileInfo = formatGetResultsToFileInfo(getResult);
-              fileInfo['address'] = resolveResult.claim.address;
-              fileInfo['height'] = resolveResult.claim.height;
-              // insert a record in the File table
-              db.File.create(fileInfo);
-              // resolve the promise
-              resolve(fileInfo);
-            })
-            .catch(error => {
-              reject(error);
-            });
-          // if not, resolve with no claims
-          } else {
-            resolve(null);
-          }
+        return resolve(dataValues);
+      }
+      logger.debug('no local file found for this name and claimId');
+      // 2. if no local claim, resolve and get the claim
+      resolveAgainstClaimTable(name, fullClaimId)
+      .then(resolveResult => {
+        logger.debug('resolve result >> ', resolveResult);
+        // if no result, return early (claim doesn't exist or isn't free)
+        if (!resolveResult) {
+          return resolve(null);
+        }
+        let fileRecord = {};
+        // get the claim
+        lbryApi.getClaim(`${name}#${fullClaimId}`)
+        .then(getResult => {
+          logger.debug('getResult >>', getResult);
+          fileRecord = formatGetResultsToFileInfo(getResult);
+          fileRecord['address'] = (resolveResult.address || 0);
+          fileRecord['height'] = resolveResult.height;
+          // insert a record in the File table & Update Claim table
+          return db.File.create(fileRecord);
+        })
+        .then(fileRecordResults => {
+          logger.debug('File record successfully updated');
+          resolve(fileRecord);
         })
         .catch(error => {
           reject(error);
         });
-      }
+      })
+      .catch(error => {
+        reject(error);
+      });
     })
     .catch(error => {
       reject(error);

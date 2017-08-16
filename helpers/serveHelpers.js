@@ -127,9 +127,9 @@ module.exports = {
       });
     });
   },
-  getAllFreeClaims (claimName) {
+  getAllFreeClaims (name) {
     return new Promise((resolve, reject) => {
-      db.sequelize.query(`SELECT * FROM Claim WHERE name = '${claimName}' ORDER BY amount DESC, height ASC`, { type: db.sequelize.QueryTypes.SELECT })
+      db.sequelize.query(`SELECT * FROM Claim WHERE name = '${name}' ORDER BY amount DESC, height ASC`, { type: db.sequelize.QueryTypes.SELECT })
       .then(result => {
         switch (result.length) {
           case 0:
@@ -143,15 +143,33 @@ module.exports = {
       });
     });
   },
-  getTopFreeClaim (claimName) {
+  getTopFreeClaim (name) {
     return new Promise((resolve, reject) => {
-      db.sequelize.query(`SELECT * FROM Claim WHERE name = '${claimName}' ORDER BY amount DESC, height ASC LIMIT 1`, { type: db.sequelize.QueryTypes.SELECT })
+      db.sequelize.query(`SELECT * FROM Claim WHERE name = '${name}' ORDER BY amount DESC, height ASC LIMIT 1`, { type: db.sequelize.QueryTypes.SELECT })
       .then(result => {
         switch (result.length) {
           case 0:
             return resolve(null);
           default:
             return resolve(result[0]);
+        }
+      })
+      .catch(error => {
+        reject(error);
+      });
+    });
+  },
+  resolveAgainstClaimTable (name, claimId) {
+    return new Promise((resolve, reject) => {
+      db.sequelize.query(`SELECT * FROM Claim WHERE name = '${name}' AND claimId = '${claimId}'`, { type: db.sequelize.QueryTypes.SELECT })
+      .then(result => {
+        switch (result.length) {
+          case 0:
+            return resolve(null);
+          case 1:
+            return resolve(result[0]);
+          default:
+            return new Error('more than one entry matches that name and claimID');
         }
       })
       .catch(error => {
