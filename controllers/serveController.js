@@ -34,20 +34,22 @@ function formatGetResultsToFileInfo ({ name, claim_id, outpoint, file_name, down
 }
 
 function getAssetByClaimId (fullClaimId, name) {
+  logger.debug('...getting asset by claim Id...');
   return new Promise((resolve, reject) => {
     // 1. check locally for claim
     checkForLocalAssetByClaimId(fullClaimId, name)
     .then(dataValues => {
       // 2. if a result was found, return the result
       if (dataValues) {
-        logger.debug('found a local file for this claimId');
+        logger.debug('found a local file for this name and claimId');
         resolve(dataValues);
       // 2. if not found locally, make a get request
       } else {
-        logger.debug('no local file for this claimId');
+        logger.debug('no local file for this name and claimId');
         // 3. resolve the claim
-        lbryApi.resolveUri(`${name}#${fullClaimId}`)
+        lbryApi.resolveUri(`${name}#${fullClaimId}`)  // USE A LOCAL RESOLVE HERE
         .then(resolveResult => {
+          logger.debug('resolve result >> ', resolveResult);
           // if the claim is free...
           if (resolveResult.claim && isFreeClaim(resolveResult.claim)) {
             // get the claim
@@ -83,19 +85,22 @@ function getAssetByClaimId (fullClaimId, name) {
 
 module.exports = {
   getAssetByChannel (channelName, name) {
+    logger.debug('...getting asset by channel...');
     return new Promise((resolve, reject) => {
       // temporarily throw error
       reject(new Error('channel names are not currently supported'));
       // get the claim id
-      // get teh asset by claim Id
+      // get the asset by claim Id
     });
   },
   getAssetByShortId: function (shortId, name) {
+    logger.debug('...getting asset by short id...');
     return new Promise((resolve, reject) => {
       // get the full claimId
       getFullClaimIdFromShortId(shortId, name)
       // get the asset by the claimId
       .then(claimId => {
+        logger.debug('claim id =', claimId);
         resolve(getAssetByClaimId(claimId, name));
       })
       .catch(error => {
@@ -107,17 +112,19 @@ module.exports = {
     return getAssetByClaimId(fullClaimId, name);
   },
   getAssetByName (name) {
+    logger.debug('...getting asset by claim name...');
     return new Promise((resolve, reject) => {
       // 1. get a list of the free public claims
       getTopFreeClaim(name)
       // 2. check locally for the top claim
-      .then(freePublicClaimList => {
+      .then(topFreeClaim => {
         // if no claims were found, return null
-        if (!freePublicClaimList) {
+        if (!topFreeClaim) {
           return resolve(null);
         }
         // parse the result
-        const claimId = freePublicClaimList[0].claimId;
+        const claimId = topFreeClaim.claimId;
+        logger.debug('top free claim id =', claimId);
         // get the asset
         resolve(getAssetByClaimId(claimId, name));
       })

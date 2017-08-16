@@ -151,7 +151,7 @@ module.exports = {
           case 0:
             return resolve(null);
           default:
-            return resolve(result);
+            return resolve(result[0]);
         }
       })
       .catch(error => {
