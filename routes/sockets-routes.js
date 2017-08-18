@@ -38,17 +38,16 @@ module.exports = (app, siofu, hostedContentPath) => {
         // prepare the publish parameters
         const publishParams = publishHelpers.createPublishParams(file.meta.name, file.pathName, file.meta.license, file.meta.nsfw);
         // publish the file
-        publishController
-          .publish(publishParams, file.name, file.meta.type)
-          .then(result => {
-            postToStats('publish', '/', null, null, null, 'success');
-            socket.emit('publish-complete', { name: publishParams.name, result });
-          })
-          .catch(error => {
-            error = errorHandlers.handlePublishError(error);
-            postToStats('publish', '/', null, null, null, error);
-            socket.emit('publish-failure', error);
-          });
+        publishController.publish(publishParams, file.name, file.meta.type)
+        .then(result => {
+          postToStats('publish', '/', null, null, null, 'success');
+          socket.emit('publish-complete', { name: publishParams.name, result });
+        })
+        .catch(error => {
+          error = errorHandlers.handlePublishError(error);
+          postToStats('publish', '/', null, null, null, error);
+          socket.emit('publish-failure', error);
+        });
       } else {
         logger.error(`An error occurred in uploading the client's file`);
         socket.emit('publish-failure', 'File uploaded, but with errors');

@@ -1,9 +1,7 @@
 const lbryApi = require('../helpers/lbryApi.js');
 const db = require('../models');
 const logger = require('winston');
-const getAllFreePublicClaims = require('../helpers/functions/getAllFreePublicClaims.js');
-const isFreeClaim = require('../helpers/functions/isFreeClaim.js');
-const serveHelpers = require('../helpers/serveHelpers.js');
+const { getTopFreeClaim, getFullClaimIdFromShortId, resolveAgainstClaimTable } = require('../helpers/serveHelpers.js');
 
 function checkForLocalAssetByClaimId (claimId, name) {
   return new Promise((resolve, reject) => {
@@ -35,44 +33,47 @@ function formatGetResultsToFileInfo ({ name, claim_id, outpoint, file_name, down
 }
 
 function getAssetByClaimId (fullClaimId, name) {
+  logger.debug('...getting asset by claim Id...');
   return new Promise((resolve, reject) => {
     // 1. check locally for claim
     checkForLocalAssetByClaimId(fullClaimId, name)
     .then(dataValues => {
-      // 2. if a result was found, resolve the result
+      // if a result was found, return early with the result
       if (dataValues) {
-        logger.debug('found a local file for this claimId');
-        resolve(dataValues);
-      // 2. if not found locally, make a get request
-      } else {
-        logger.debug('no local file for this claimId');
-        // 3. resolve the claim
-        lbryApi.resolveUri(`${name}#${fullClaimId}`)
-        .then(resolveResult => {
-          // if the claim is free and public, then get it
-          if (resolveResult.claim && isFreeClaim(resolveResult.claim)) {
-            lbryApi.getClaim(`${name}#${fullClaimId}`)
-            .then(getResult => {
-              let fileInfo = formatGetResultsToFileInfo(getResult);
-              fileInfo['address'] = resolveResult.claim.address;
-              fileInfo['height'] = resolveResult.claim.height;
-              // insert a record in the File table
-              db.File.create(fileInfo);
-              // resolve the promise
-              resolve(fileInfo);
-            })
-            .catch(error => {
-              reject(error);
-            });
-          // if not, resolve with no claims
-          } else {
-            resolve(null);
-          }
+        logger.debug('found a local file for this name and claimId');
+        return resolve(dataValues);
+      }
+      logger.debug('no local file found for this name and claimId');
+      // 2. if no local claim, resolve and get the claim
+      resolveAgainstClaimTable(name, fullClaimId)
+      .then(resolveResult => {
+        logger.debug('resolve result >> ', resolveResult);
+        // if no result, return early (claim doesn't exist or isn't free)
+        if (!resolveResult) {
+          return resolve(null);
+        }
+        let fileRecord = {};
+        // get the claim
+        lbryApi.getClaim(`${name}#${fullClaimId}`)
+        .then(getResult => {
+          logger.debug('getResult >>', getResult);
+          fileRecord = formatGetResultsToFileInfo(getResult);
+          fileRecord['address'] = (resolveResult.address || 0);
+          fileRecord['height'] = resolveResult.height;
+          // insert a record in the File table & Update Claim table
+          return db.File.create(fileRecord);
+        })
+        .then(fileRecordResults => {
+          logger.debug('File record successfully updated');
+          resolve(fileRecord);
         })
         .catch(error => {
           reject(error);
         });
-      }
+      })
+      .catch(error => {
+        reject(error);
+      });
     })
     .catch(error => {
       reject(error);
@@ -82,19 +83,22 @@ function getAssetByClaimId (fullClaimId, name) {
 
 module.exports = {
   getAssetByChannel (channelName, name) {
+    logger.debug('...getting asset by channel...');
     return new Promise((resolve, reject) => {
       // temporarily throw error
       reject(new Error('channel names are not currently supported'));
       // get the claim id
-      // get teh asset by claim Id
+      // get the asset by claim Id
     });
   },
   getAssetByShortId: function (shortId, name) {
+    logger.debug('...getting asset by short id...');
     return new Promise((resolve, reject) => {
       // get the full claimId
-      serveHelpers.getFullClaimIdFromShortId(shortId, name)
+      getFullClaimIdFromShortId(shortId, name)
       // get the asset by the claimId
       .then(claimId => {
+        logger.debug('claim id =', claimId);
         resolve(getAssetByClaimId(claimId, name));
       })
       .catch(error => {
@@ -106,18 +110,19 @@ module.exports = {
     return getAssetByClaimId(fullClaimId, name);
   },
   getAssetByName (name) {
+    logger.debug('...getting asset by claim name...');
     return new Promise((resolve, reject) => {
       // 1. get a list of the free public claims
-      getAllFreePublicClaims(name)
+      getTopFreeClaim(name)
       // 2. check locally for the top claim
-      .then(freePublicClaimList => {
+      .then(topFreeClaim => {
         // if no claims were found, return null
-        if (!freePublicClaimList) {
-          resolve(null);
-          return;
+        if (!topFreeClaim) {
+          return resolve(null);
         }
         // parse the result
-        const claimId = freePublicClaimList[0].claim_id;
+        const claimId = topFreeClaim.claimId;
+        logger.debug('top free claim id =', claimId);
         // get the asset
         resolve(getAssetByClaimId(claimId, name));
       })

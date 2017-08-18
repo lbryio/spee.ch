@@ -1,9 +1,9 @@
 const logger = require('winston');
 const multipart = require('connect-multiparty');
 const multipartMiddleware = multipart();
-const publishController = require('../controllers/publishController.js');
-const lbryApi = require('../helpers/lbryApi.js');
-const { createPublishParams, validateFile } = require('../helpers/publishHelpers.js');
+const { publish } = require('../controllers/publishController.js');
+const { getClaimList, resolveUri } = require('../helpers/lbryApi.js');
+const { createPublishParams, validateFile, checkNameAvailability } = require('../helpers/publishHelpers.js');
 const errorHandlers = require('../helpers/errorHandlers.js');
 const { postToStats, sendGoogleAnalytics } = require('../controllers/statsController.js');
 
@@ -13,47 +13,44 @@ module.exports = (app, hostedContentPath) => {
     // google analytics
     sendGoogleAnalytics('SERVE', headers, ip, originalUrl);
     // serve the content
-    lbryApi
-      .getClaimsList(params.name)
-      .then(claimsList => {
-        postToStats('serve', originalUrl, ip, null, null, 'success');
-        res.status(200).json(claimsList);
-      })
-      .catch(error => {
-        errorHandlers.handleRequestError('publish', originalUrl, ip, error, res);
-      });
+    getClaimList(params.name)
+    .then(claimsList => {
+      postToStats('serve', originalUrl, ip, null, null, 'success');
+      res.status(200).json(claimsList);
+    })
+    .catch(error => {
+      errorHandlers.handleRequestError('publish', originalUrl, ip, error, res);
+    });
   });
   // route to check whether spee.ch has published to a claim
   app.get('/api/isClaimAvailable/:name', ({ ip, originalUrl, params }, res) => {
     // send response
-    publishController
-      .checkNameAvailability(params.name)
-      .then(result => {
-        if (result === true) {
-          res.status(200).json(true);
-        } else {
-          logger.debug(`Rejecting publish request because ${params.name} has already been published via spee.ch`);
-          res.status(200).json(false);
-        }
-      })
-      .catch(error => {
-        res.status(500).json(error);
-      });
+    checkNameAvailability(params.name)
+    .then(result => {
+      if (result === true) {
+        res.status(200).json(true);
+      } else {
+        logger.debug(`Rejecting publish request because ${params.name} has already been published via spee.ch`);
+        res.status(200).json(false);
+      }
+    })
+    .catch(error => {
+      res.status(500).json(error);
+    });
   });
   // route to run a resolve request on the daemon
   app.get('/api/resolve/:uri', ({ headers, ip, originalUrl, params }, res) => {
     // google analytics
     sendGoogleAnalytics('SERVE', headers, ip, originalUrl);
     // serve content
-    lbryApi
-      .resolveUri(params.uri)
-      .then(resolvedUri => {
-        postToStats('serve', originalUrl, ip, null, null, 'success');
-        res.status(200).json(resolvedUri);
-      })
-      .catch(error => {
-        errorHandlers.handleRequestError('publish', originalUrl, ip, error, res);
-      });
+    resolveUri(params.uri)
+    .then(resolvedUri => {
+      postToStats('serve', originalUrl, ip, null, null, 'success');
+      res.status(200).json(resolvedUri);
+    })
+    .catch(error => {
+      errorHandlers.handleRequestError('publish', originalUrl, ip, error, res);
+    });
   });
 
   // route to run a publish request on the daemon
@@ -79,14 +76,13 @@ module.exports = (app, hostedContentPath) => {
     const fileType = file.type;
     const publishParams = createPublishParams(name, filePath, license, nsfw);
     // publish the file
-    publishController
-      .publish(publishParams, fileName, fileType)
-      .then(result => {
-        postToStats('publish', originalUrl, ip, null, null, 'success');
-        res.status(200).json(result);
-      })
-      .catch(error => {
-        errorHandlers.handleRequestError('publish', originalUrl, ip, error, res);
-      });
+    publish(publishParams, fileName, fileType)
+    .then(result => {
+      postToStats('publish', originalUrl, ip, null, null, 'success');
+      res.status(200).json(result);
+    })
+    .catch(error => {
+      errorHandlers.handleRequestError('publish', originalUrl, ip, error, res);
+    });
   });
 };
