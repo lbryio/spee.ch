@@ -8,10 +8,10 @@ spee.ch is a single-serving site that reads and publishes images and videos to a
 	* save your connection uri somewhere handy (you will need it when you start the server)
 		* the uri should be in the form `mysql://user:pass@host:port/dbname`
 * start lbrynet daemon
-	* install the [`lbry`](https://github.com/lbryio/lbry) daemon (0.14.2rc2 or higher)
+	* install the [`lbry`](https://github.com/lbryio/lbry) daemon
 	* start the `lbry` daemon
 * start spee.ch-sync
-	* install and run the [`speech-sync`](https://github.com/billbitt/spee.ch-sync) tool from this repo: https://github.com/billbitt/spee.ch-sync
+	* install and run this [`speech-sync`](https://github.com/billbitt/spee.ch-sync) tool
 * start spee.ch
 	* clone this repo
 	* run `npm install`
@@ -23,19 +23,6 @@ spee.ch is a single-serving site that reads and publishes images and videos to a
 		* e.g. `LBRY_CLAIM_ADDRESS=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX MYSQL_CONNECTION_STRING=mysql://root:XXXXXX@localhost:3306/lbry NODE_ENV=development node speech.js`
 		* To run hot, use `nodemon` instead of `node`
 * visit [localhost:3000](http://localhost:3000)
-
-## site navigation
-* spee.ch
-	* To publish a file, navigate to the homepage.
-* spee.ch/< the name of the claim >
-	* To view the file with the largest bid at a claim.
-	* E.g. spee.ch/doitlive.
-* spee.ch/< the name of the claim >/< the claim_id >
-	* To view a specific file at a claim
-	* E.g. spee.ch/doitlive/c496c8c55ed79816fec39e36a78645aa4458edb5
-* spee.ch/< the name of the claim >/all
-	* To view a batch of files at a claim
-	* E.g. spee.ch/doitlive/all
 
 ## API
 
