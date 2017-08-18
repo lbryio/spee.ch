@@ -26,9 +26,13 @@ function getAsset (claimType, channelName, shortId, fullClaimId, name) {
   }
 }
 
-function serveOrShowAsset (fileInfo, method, headers, originalUrl, ip, res) {
+function serveOrShowAsset (fileInfo, extension, method, headers, originalUrl, ip, res) {
   // add file extension to the file info
-  fileInfo['fileExt'] = fileInfo.fileName.substring(fileInfo.fileName.lastIndexOf('.'));
+  if (extension === '.gifv') {
+    fileInfo['fileExt'] = '.gifv';
+  } else {
+    fileInfo['fileExt'] = fileInfo.fileName.substring(fileInfo.fileName.lastIndexOf('.'));
+  }
   // serve or show
   switch (method) {
     case SERVE:
@@ -106,7 +110,7 @@ module.exports = (app) => {
       name = identifier;
       identifier = tempName;
     }
-    /* end */
+    /* end patch */
     logger.debug('claim name =', name);
     logger.debug('method =', method);
     // parse identifier for whether it is a channel, short url, or claim_id
@@ -134,7 +138,7 @@ module.exports = (app) => {
       if (!fileInfo) {
         res.status(200).render('noClaims');
       } else {
-        return serveOrShowAsset(fileInfo, method, headers, originalUrl, ip, res);
+        return serveOrShowAsset(fileInfo, extension, method, headers, originalUrl, ip, res);
       }
     })
     // 3. update the file
@@ -174,7 +178,7 @@ module.exports = (app) => {
       if (!fileInfo) {
         res.status(200).render('noClaims');
       } else {
-        return serveOrShowAsset(fileInfo, method, headers, originalUrl, ip, res);
+        return serveOrShowAsset(fileInfo, null, method, headers, originalUrl, ip, res);
       }
     })
     // 3. update the database
