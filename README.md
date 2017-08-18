@@ -1,22 +1,27 @@
 # spee.ch
-spee.ch is a single-serving site that reads and publishes images to and from the [LBRY](https://lbry.io/) blockchain.
+spee.ch is a single-serving site that reads and publishes images and videos to and from the [LBRY](https://lbry.io/) blockchain.
 
 ## how to run this repository locally
-* start lbry
-	* install the [`lbry`](https://github.com/lbryio/lbry) daemon (0.14.2rc2 or higher)
-	* start the `lbry` daemon
 * start mysql
 	* install mysql
 	* create a database called `lbry`
 	* save your connection uri somewhere handy (you will need it when you start the server)
 		* the uri should be in the form `mysql://user:pass@host:port/dbname`
-* clone this repo
-	* customize `config/develpment.json` by replacing the value of `Database.DownloadDirectory` with a string representing the local path where you want uploaded files to be stored.
-* run `npm install`
-* to start the server, from your command line run `node speech.js` while passing three environmental variables: your lbry wallet address (`LBRY_CLAIM_ADDRESS`), your mysql connection uri (`MYSQL_CONNECTION_STRING`), and the environment to run (`NODE_ENV`).
-	* i.e. `LBRY_CLAIM_ADDRESS=<your wallet address here> MYSQL_CONNECTION_STRING=<your connection uri here> NODE_ENV=development node speech.js`
-	* e.g. `LBRY_CLAIM_ADDRESS=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX MYSQL_CONNECTION_STRING=mysql://root:XXXXXX@localhost:3306/lbry NODE_ENV=development node speech.js`
-	* To run hot, use `nodemon` instead of `node`
+* start lbrynet daemon
+	* install the [`lbry`](https://github.com/lbryio/lbry) daemon (0.14.2rc2 or higher)
+	* start the `lbry` daemon
+* start spee.ch-sync
+	* install and run the [`speech-sync`](https://github.com/billbitt/spee.ch-sync) tool from this repo: https://github.com/billbitt/spee.ch-sync
+* start spee.ch
+	* clone this repo
+	* run `npm install`
+	* to start the server, from your command line run `node speech.js` while passing three environmental variables: 
+		* (1) your lbry wallet address (`LBRY_CLAIM_ADDRESS`), 
+		* (2) your mysql connection uri (`MYSQL_CONNECTION_STRING`), 
+		* (3) the environment to run (`NODE_ENV`).
+		* i.e. `LBRY_CLAIM_ADDRESS=<your wallet address here> MYSQL_CONNECTION_STRING=<your connection uri here> NODE_ENV=development node speech.js`
+		* e.g. `LBRY_CLAIM_ADDRESS=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX MYSQL_CONNECTION_STRING=mysql://root:XXXXXX@localhost:3306/lbry NODE_ENV=development node speech.js`
+		* To run hot, use `nodemon` instead of `node`
 * visit [localhost:3000](http://localhost:3000)
 
 ## site navigation
