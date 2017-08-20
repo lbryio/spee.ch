@@ -36,7 +36,7 @@ module.exports = (app, siofu, hostedContentPath) => {
         logger.debug(`Client successfully uploaded ${file.name}`);
         socket.emit('publish-status', 'File upload successfully completed. Your image is being published to LBRY (this might take a second)...');
         // prepare the publish parameters
-        const publishParams = publishHelpers.createPublishParams(file.meta.name, file.pathName, file.meta.license, file.meta.nsfw);
+        const publishParams = publishHelpers.createPublishParams(file.meta.name, file.pathName, file.meta.title, file.meta.description, file.meta.license, file.meta.nsfw);
         // publish the file
         publishController.publish(publishParams, file.name, file.meta.type)
         .then(result => {

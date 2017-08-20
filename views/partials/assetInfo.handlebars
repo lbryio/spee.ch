@@ -29,6 +29,7 @@
 		<input type="text" id="gifv-text" class="link" readonly onclick="select()" spellcheck="false" value='https://spee.ch/{{fileInfo.shortId}}/{{fileInfo.name}}.gifv'/>
 		<button class="copy-button" data-elementtocopy="gifv-text" onclick="copyToClipboard(event)">copy</button>
 	</div>
+	{{/ifConditional}}
 	{{!-- html text for embedding asset--}}
 	<div class="share-option">
 		Embed HTML
@@ -41,7 +42,6 @@
 		{{/ifConditional}}
 		<button class="copy-button" data-elementtocopy="embed-text" onclick="copyToClipboard(event)">copy</button>
 	</div>
-	{{/ifConditional}}
 	{{!--markdown text using asset--}}
 	{{#ifConditional fileInfo.fileType '===' 'video/mp4'}}
 	{{else}}

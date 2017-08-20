@@ -135,6 +135,7 @@ module.exports = (app) => {
     getAsset(claimType, channelName, shortId, fullClaimId, name)
     // 2. serve or show
     .then(fileInfo => {
+      logger.debug('fileInfo', fileInfo);
       if (!fileInfo) {
         res.status(200).render('noClaims');
       } else {

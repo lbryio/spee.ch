@@ -61,17 +61,19 @@
 			<input type="file" id="siofu_input" name="file" accept="video/*,image/*" onchange="previewAndStageFile(event.target.files[0])" enctype="multipart/form-data"/>
 		</div>
 		<div id="asset-preview-holder"></div>`;
-		// reset 
+		// reset inputs
 		document.getElementById('claim-name-input').value = '';
-		// remove staged files 
+		document.getElementById('publish-title').value = '';
+		document.getElementById('publish-description').value = '';
+		document.getElementById('publish-nsfw').checked = false;
+		// remove staged files
 		stagedFiles = null;
 		// clear any errors
 		document.getElementById('input-error-file-selection').innerHTML = '';
 		document.getElementById('input-error-claim-name').innerHTML = '';
 		document.getElementById('input-error-publish-submit').innerHTML = '';
-		// remove nsfw check
 		document.getElementById('claim-name-available').hidden = true;
 		// remove nsfw check
-		document.getElementById('publish-nsfw').checked = false;
+		
 	}
 </script>
