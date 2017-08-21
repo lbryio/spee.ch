@@ -10,7 +10,7 @@
 	<meta property="fb:app_id" content="1371961932852223">
 	{{#unless fileInfo.nsfw}}
 	{{{addTwitterCard fileInfo.fileType openGraphInfo.source openGraphInfo.embedUrl openGraphInfo.directFileUrl}}}
-	{{{addOpenGraph fileInfo.name fileInfo.fileType openGraphInfo.showUrl openGraphInfo.source}}}
+	{{{addOpenGraph fileInfo.title fileInfo.fileType openGraphInfo.showUrl openGraphInfo.source fileInfo.description}}}
 	{{/unless}}
 </head>
 <body>
