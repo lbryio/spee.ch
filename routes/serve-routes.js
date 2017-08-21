@@ -1,5 +1,5 @@
 const logger = require('winston');
-const { serveFile, showFile, showFileLite, getShortIdFromClaimId } = require('../helpers/serveHelpers.js');
+const { serveFile, showFile, showFileLite, getShortIdFromClaimId, resolveAgainstClaimTable } = require('../helpers/serveHelpers.js');
 const { getAssetByChannel, getAssetByShortId, getAssetByClaimId, getAssetByName } = require('../controllers/serveController.js');
 const { handleRequestError } = require('../helpers/errorHandlers.js');
 const { postToStats, sendGoogleAnalytics } = require('../controllers/statsController.js');
@@ -48,6 +48,12 @@ function serveOrShowAsset (fileInfo, extension, method, headers, originalUrl, ip
       return getShortIdFromClaimId(fileInfo.claimId, fileInfo.height, fileInfo.name)
       .then(shortId => {
         fileInfo['shortId'] = shortId;
+        return resolveAgainstClaimTable(fileInfo.name, fileInfo.claimId);
+      })
+      .then(resolveResult => {
+        logger.debug('resolve result', resolveResult);
+        fileInfo['title'] = resolveResult.title;
+        fileInfo['description'] = resolveResult.description;
         showFile(fileInfo, res);
         postToStats('show', originalUrl, ip, fileInfo.name, fileInfo.claimId, 'success');
         return fileInfo;
