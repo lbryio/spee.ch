@@ -24,15 +24,17 @@ module.exports = {
         publishResults = result;
         logger.info(`Successfully published ${fileName}`, publishResults);
         fileRecord = {
-          name    : publishParams.name,
-          claimId : publishResults.claim_id,
-          address : publishParams.claim_address,
-          outpoint: `${publishResults.txid}:${publishResults.nout}`,
-          height  : 0,
+          name       : publishParams.name,
+          claimId    : publishResults.claim_id,
+          title      : publishParams.metadata.title,
+          description: publishParams.metadata.description,
+          address    : publishParams.claim_address,
+          outpoint   : `${publishResults.txid}:${publishResults.nout}`,
+          height     : 0,
           fileName,
-          filePath: publishParams.file_path,
+          filePath   : publishParams.file_path,
           fileType,
-          nsfw    : publishParams.metadata.nsfw,
+          nsfw       : publishParams.metadata.nsfw,
         };
         upsertCriteria = {
           name   : publishParams.name,

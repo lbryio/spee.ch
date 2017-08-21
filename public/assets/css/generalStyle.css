@@ -1,3 +1,6 @@
+body, button, input, textarea, label, select, option {
+	font-family: serif;
+}
 /* Containters */
 .wrapper {
 	margin-left: 20%;

@@ -1,6 +1,6 @@
 <div class="panel">
-	<h2>Name</h2>
-	<p>{{fileInfo.name}}</>
+	<h2>Title</h2>
+	<p>{{fileInfo.title}}</>
 </div>
 <div class="panel links">
 	<h2 class="subheader">Links</h2>
@@ -29,6 +29,7 @@
 		<input type="text" id="gifv-text" class="link" readonly onclick="select()" spellcheck="false" value='https://spee.ch/{{fileInfo.shortId}}/{{fileInfo.name}}.gifv'/>
 		<button class="copy-button" data-elementtocopy="gifv-text" onclick="copyToClipboard(event)">copy</button>
 	</div>
+	{{/ifConditional}}
 	{{!-- html text for embedding asset--}}
 	<div class="share-option">
 		Embed HTML
@@ -41,7 +42,6 @@
 		{{/ifConditional}}
 		<button class="copy-button" data-elementtocopy="embed-text" onclick="copyToClipboard(event)">copy</button>
 	</div>
-	{{/ifConditional}}
 	{{!--markdown text using asset--}}
 	{{#ifConditional fileInfo.fileType '===' 'video/mp4'}}
 	{{else}}
@@ -53,6 +53,10 @@
 		<button class="copy-button" data-elementtocopy="markdown-text" onclick="copyToClipboard(event)">copy</button>
 	</div>
 	{{/ifConditional}}
+</div>
+<div class="panel">
+	<h2>Description</h2>
+	<p>{{fileInfo.description}}</>
 </div>
 <div class="panel">
 	<h2 class="subheader">Metadata</h2>

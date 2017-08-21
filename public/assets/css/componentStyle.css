@@ -29,7 +29,8 @@
 #drop-zone {
 	border: 1px dashed lightgrey;
 	padding: 1em;
-	height: 6em;
+	height: 13em;
+	background: #F5F0EF;
 }
 
 #asset-preview-holder {
@@ -37,11 +38,20 @@
 	margin-bottom: 1em;
 }
 
-.claim-name-input-area {
+#claim-name-input-area {
 	border-bottom: 1px blue solid;
 	float: left;
 	margin-bottom: 1em;
 	font-weight: bold;
+}
+
+.publish-input, #publish-license {
+	border: 1px solid lightgrey; 
+}
+
+.publish-input {
+	padding: 1%; 
+	width: 90%
 }
 
 #claim-name-input {

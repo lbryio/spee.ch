@@ -3,7 +3,6 @@
 	<div class="full"> 
 		{{> publish}}
 		{{> learnMore}}
-		{{> trendingAssets}}
 	</div>
 	{{> footer}}
 </div>
@@ -21,9 +20,13 @@
 	/* socketio-file-upload listeners */
 	uploader.addEventListener('start', function(event){
 		var name = document.getElementById('claim-name-input').value;
+		var title = document.getElementById('publish-title').value;
+		var description = document.getElementById('publish-description').value;
 		var license = document.getElementById('publish-license').value;
 		var nsfw = document.getElementById('publish-nsfw').checked;
 		event.file.meta.name = name;
+		event.file.meta.title = title;
+		event.file.meta.description = description;
 		event.file.meta.license = license;
 		event.file.meta.nsfw = nsfw;
 		event.file.meta.type = stagedFiles[0].type;

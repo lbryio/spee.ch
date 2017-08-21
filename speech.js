@@ -48,11 +48,11 @@ const hbs = expressHandlebars.create({
         </script>`
       );
     },
-    addOpenGraph (title, mimeType, showUrl, source) {
+    addOpenGraph (title, mimeType, showUrl, source, description) {
       let basicTags = `<meta property="og:title" content="${title}"> 
           <meta property="og:url" content="${showUrl}" > 
           <meta property="og:site_name" content="Spee.ch" > 
-          <meta property="og:description" content="View or download ${title} from spee.ch: the open-source, decentralized content host." >`;
+          <meta property="og:description" content="${description}">`;
       if (mimeType === 'video/mp4') {
         return new Handlebars.SafeString(
           `${basicTags} <meta property="og:image" content="https://spee.ch/assets/img/content-freedom-large.png" > 
