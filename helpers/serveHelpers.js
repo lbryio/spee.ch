@@ -45,9 +45,50 @@ function getLongChannelId (channelName, channelId) {
   } else if (channelId && channelId.length < 40) {  // short channel id
     return getLongChannelIdFromShortChannelId(channelName, channelId);
   } else {
-    return getChannelIdFromChannelName(channelName);
+    return getLongChannelIdFromChannelName(channelName);
   }
 };
+
+function getLongChannelIdFromShortChannelId (channelName, channelId) {
+  return new Promise((resolve, reject) => {
+    logger.debug(`finding long channel id for ${channelName}:${channelId}`);
+    // get the long channel Id
+    db.sequelize.query(`SELECT claimId, height FROM Certificate WHERE name = '${channelName}' AND claimId LIKE '${channelId}%' ORDER BY height ASC LIMIT 1;`, { type: db.sequelize.QueryTypes.SELECT })
+    .then(result => {
+      logger.debug('result >>', result);
+      switch (result.length) {
+        case 0:
+          throw new Error('That is an invalid Short Channel Id');
+        default: // note results must be sorted
+          return resolve(result[0].claimId);
+      }
+    })
+    .catch(error => {
+      reject(error);
+    });
+  });
+}
+
+function getLongChannelIdFromChannelName (channelName) {
+  // select the top top channel id
+  return new Promise((resolve, reject) => {
+    logger.debug(`finding long channel id for ${channelName}`);
+    // get the long channel Id
+    db.sequelize.query(`SELECT claimId, amount, height FROM Certificate WHERE name = '${channelName}' ORDER BY amount DESC, height ASC LIMIT 1;`, { type: db.sequelize.QueryTypes.SELECT })
+    .then(result => {
+      logger.debug('result >>', result);
+      switch (result.length) {
+        case 0:
+          throw new Error('That is an invalid Channel Name');
+        default:
+          return resolve(result[0].claimId);
+      }
+    })
+    .catch(error => {
+      reject(error);
+    });
+  });
+}
 
 function getClaimIdByLongChannelId (channelId, claimName) {
   return new Promise((resolve, reject) => {
@@ -65,35 +106,6 @@ function getClaimIdByLongChannelId (channelId, claimName) {
       reject(error);
     });
   });
-}
-
-function getLongChannelIdFromShortChannelId (channelName, channelId) {
-  return new Promise((resolve, reject) => {
-    logger.debug(`finding long channel id for ${channelName}:${channelId}`);
-    // get the long channel Id
-    db.sequelize.query(`SELECT claimId, height FROM Certificate WHERE name = '${channelName}' AND claimId LIKE '${channelId}%' ORDER BY height ASC LIMIT 1;`, { type: db.sequelize.QueryTypes.SELECT })
-    .then(result => {
-      logger.debug('result >>', result);
-      switch (result.length) {
-        case 0:
-          throw new Error('That is an invalid Short Channel Id');
-        default: // note results must be sorted
-          return (result[0].claimId);
-      }
-    })
-    // return the long channel id
-    .then(longChannelId => {
-      logger.debug('channelId =', longChannelId);
-      return resolve(longChannelId);
-    })
-    .catch(error => {
-      reject(error);
-    });
-  });
-}
-
-function getChannelIdFromChannelName (channelName, claimName) {
-  // select the top top channel id
 }
 
 function determineShortClaimId (claimId, height, claimList) {
