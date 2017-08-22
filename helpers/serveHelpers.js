@@ -127,6 +127,24 @@ module.exports = {
       });
     });
   },
+  getClaimIdByChannelId (channelId, name) {
+    return new Promise((resolve, reject) => {
+      logger.debug('finding claim id from channel id');
+      db.sequelize.query(`SELECT claimId FROM Claim WHERE name = '${name}' AND certificateId = '${channelId}' LIMIT 1;`, { type: db.sequelize.QueryTypes.SELECT })
+      .then(result => {
+        switch (result.length) {
+          case 0:
+            return reject(new Error('That is an invalid Channel Id'));
+          default: // note results must be sorted
+            logger.debug('found result', result);
+            return resolve(result[0].claimId);
+        }
+      })
+      .catch(error => {
+        reject(error);
+      });
+    });
+  },
   getAllFreeClaims (name) {
     return new Promise((resolve, reject) => {
       db.sequelize.query(`SELECT * FROM Claim WHERE name = '${name}' ORDER BY amount DESC, height ASC`, { type: db.sequelize.QueryTypes.SELECT })

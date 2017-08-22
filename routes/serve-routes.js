@@ -7,19 +7,20 @@ const SERVE = 'SERVE';
 const SHOW = 'SHOW';
 const SHOWLITE = 'SHOWLITE';
 const CHANNEL = 'CHANNEL';
-const SHORTURL = 'SHORTURL';
-const CLAIMID = 'CLAIMID';
-const NAME = 'NAME';
+const CLAIM_ID_SHORT = 'CLAIM_ID_SHORT';
+const CLAIM_ID_LONG = 'CLAIM_ID_LONG';
+const CLAIM_NAME = 'CLAIM_NAME';
+const CHANNELID_INDICATOR = ':';
 
-function getAsset (claimType, channelName, shortId, fullClaimId, name) {
+function getAsset (claimType, channelName, channelId, shortId, fullClaimId, name) {
   switch (claimType) {
     case CHANNEL:
-      return getAssetByChannel(channelName, name);
-    case SHORTURL:
+      return getAssetByChannel(channelName, channelId, name);
+    case CLAIM_ID_SHORT:
       return getAssetByShortId(shortId, name);
-    case CLAIMID:
+    case CLAIM_ID_LONG:
       return getAssetByClaimId(fullClaimId, name);
-    case NAME:
+    case CLAIM_NAME:
       return getAssetByName(name);
     default:
       return new Error('that claim type was not found');
@@ -89,6 +90,7 @@ module.exports = (app) => {
     let channelName = null;
     let shortId = null;
     let fullClaimId = null;
+    let channelId = null;
     let method;
     let extension;
     // parse the name
@@ -121,24 +123,29 @@ module.exports = (app) => {
     logger.debug('method =', method);
     // parse identifier for whether it is a channel, short url, or claim_id
     if (identifier.charAt(0) === '@') {
-      channelName = identifier.substring(1);
+      channelName = identifier;
       logger.debug('channel name =', channelName);
       claimType = CHANNEL;
+      const channelIdIndex = channelName.indexOf(CHANNELID_INDICATOR);
+      if (channelIdIndex !== -1) {
+        channelId = channelName.substring(channelIdIndex + 1);
+        channelName = channelName.substring(0, channelIdIndex);
+      }
     } else if (identifier.length === 40) {
       fullClaimId = identifier;
       logger.debug('full claim id =', fullClaimId);
-      claimType = CLAIMID;
+      claimType = CLAIM_ID_LONG;
     } else if (identifier.length < 40) {
       shortId = identifier;
       logger.debug('short claim id =', shortId);
-      claimType = SHORTURL;
+      claimType = CLAIM_ID_SHORT;
     } else {
       logger.error('The URL provided could not be parsed');
       res.send('that url is invalid');
       return;
     };
     // 1. retrieve the asset and information
-    getAsset(claimType, channelName, shortId, fullClaimId, name)
+    getAsset(claimType, channelName, channelId, shortId, fullClaimId, name)
     // 2. serve or show
     .then(fileInfo => {
       logger.debug('fileInfo', fileInfo);
@@ -179,7 +186,7 @@ module.exports = (app) => {
     logger.debug('claim name = ', name);
     logger.debug('method =', method);
     // 1. retrieve the asset and information
-    getAsset(NAME, null, null, null, name)
+    getAsset(CLAIM_NAME, null, null, null, name)
     // 2. serve or show
     .then(fileInfo => {
       if (!fileInfo) {

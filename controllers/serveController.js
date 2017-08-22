@@ -1,7 +1,7 @@
 const lbryApi = require('../helpers/lbryApi.js');
 const db = require('../models');
 const logger = require('winston');
-const { getTopFreeClaim, getFullClaimIdFromShortId, resolveAgainstClaimTable } = require('../helpers/serveHelpers.js');
+const { getTopFreeClaim, getFullClaimIdFromShortId, resolveAgainstClaimTable, getClaimIdByChannelId } = require('../helpers/serveHelpers.js');
 
 function checkForLocalAssetByClaimId (claimId, name) {
   return new Promise((resolve, reject) => {
@@ -82,14 +82,21 @@ function getAssetByClaimId (fullClaimId, name) {
 }
 
 module.exports = {
-  getAssetByChannel (channelName, name) {
-    logger.debug('...getting asset by channel...');
-    return new Promise((resolve, reject) => {
-      // temporarily throw error
-      reject(new Error('channel names are not currently supported'));
-      // get the claim id
-      // get the asset by claim Id
-    });
+  getAssetByChannel (channelName, channelId, name) {
+    if (channelId) {
+      return new Promise((resolve, reject) => {
+        getClaimIdByChannelId(channelId, name)
+        .then(claimId => {
+          logger.debug('claim id = ', claimId);
+          resolve(getAssetByClaimId(claimId, name));
+        })
+        .catch(error => {
+          reject(error);
+        });
+      });
+    } else {
+      return new Error('this is not supported yet');
+    }
   },
   getAssetByShortId: function (shortId, name) {
     logger.debug('...getting asset by short id...');
