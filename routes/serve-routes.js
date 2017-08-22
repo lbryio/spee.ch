@@ -186,7 +186,7 @@ module.exports = (app) => {
     logger.debug('claim name = ', name);
     logger.debug('method =', method);
     // 1. retrieve the asset and information
-    getAsset(CLAIM_NAME, null, null, null, name)
+    getAsset(CLAIM_NAME, null, null, null, null, name)
     // 2. serve or show
     .then(fileInfo => {
       if (!fileInfo) {
