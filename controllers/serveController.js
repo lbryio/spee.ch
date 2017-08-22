@@ -1,7 +1,7 @@
 const lbryApi = require('../helpers/lbryApi.js');
 const db = require('../models');
 const logger = require('winston');
-const { getTopFreeClaim, getFullClaimIdFromShortId, resolveAgainstClaimTable, getClaimIdByChannelId } = require('../helpers/serveHelpers.js');
+const { getTopFreeClaim, getFullClaimIdFromShortId, resolveAgainstClaimTable, getClaimIdByChannel } = require('../helpers/serveHelpers.js');
 
 function checkForLocalAssetByClaimId (claimId, name) {
   return new Promise((resolve, reject) => {
@@ -82,21 +82,18 @@ function getAssetByClaimId (fullClaimId, name) {
 }
 
 module.exports = {
-  getAssetByChannel (channelName, channelId, name) {
-    if (channelId) {
-      return new Promise((resolve, reject) => {
-        getClaimIdByChannelId(channelId, name)
-        .then(claimId => {
-          logger.debug('claim id = ', claimId);
-          resolve(getAssetByClaimId(claimId, name));
-        })
-        .catch(error => {
-          reject(error);
-        });
+  getAssetByChannel (channelName, channelId, claimName) {
+    logger.debug('channelId =', channelId);
+    return new Promise((resolve, reject) => {
+      getClaimIdByChannel(channelName, channelId)
+      .then(claimId => {
+        logger.debug('claim id = ', claimId);
+        resolve(getAssetByClaimId(claimId, claimName));
+      })
+      .catch(error => {
+        reject(error);
       });
-    } else {
-      return new Error('this is not supported yet');
-    }
+    });
   },
   getAssetByShortId: function (shortId, name) {
     logger.debug('...getting asset by short id...');
@@ -136,6 +133,12 @@ module.exports = {
       .catch(error => {
         reject(error);
       });
+    });
+  },
+  getChannelByName (name) {
+    logger.debug('...getting channel by channel name...');
+    return new Promise((resolve, reject) => {
+      reject(new Error('This feature is not yet supported'));
     });
   },
 };

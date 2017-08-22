@@ -124,13 +124,13 @@ module.exports = (app) => {
     // parse identifier for whether it is a channel, short url, or claim_id
     if (identifier.charAt(0) === '@') {
       channelName = identifier;
-      logger.debug('channel name =', channelName);
       claimType = CHANNEL;
       const channelIdIndex = channelName.indexOf(CHANNELID_INDICATOR);
       if (channelIdIndex !== -1) {
         channelId = channelName.substring(channelIdIndex + 1);
         channelName = channelName.substring(0, channelIdIndex);
       }
+      logger.debug('channel name =', channelName);
     } else if (identifier.length === 40) {
       fullClaimId = identifier;
       logger.debug('full claim id =', fullClaimId);
