@@ -85,7 +85,7 @@ module.exports = {
   getAssetByChannel (channelName, channelId, claimName) {
     logger.debug('channelId =', channelId);
     return new Promise((resolve, reject) => {
-      getClaimIdByChannel(channelName, channelId)
+      getClaimIdByChannel(channelName, channelId, claimName)
       .then(claimId => {
         logger.debug('claim id = ', claimId);
         resolve(getAssetByClaimId(claimId, claimName));

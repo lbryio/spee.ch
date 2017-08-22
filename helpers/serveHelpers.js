@@ -49,10 +49,10 @@ function getLongChannelId (channelName, channelId) {
   }
 };
 
-function getClaimIdByLongChannelId (channelId, name) {
+function getClaimIdByLongChannelId (channelId, claimName) {
   return new Promise((resolve, reject) => {
-    logger.debug('finding claim id from channel id and claim name');
-    db.sequelize.query(`SELECT claimId FROM Claim WHERE name = '${name}' AND certificateId = '${channelId}' LIMIT 1;`, { type: db.sequelize.QueryTypes.SELECT })
+    logger.debug(`finding claim id for claim "${claimName}" from channel "${channelId}"`);
+    db.sequelize.query(`SELECT claimId FROM Claim WHERE name = '${claimName}' AND certificateId = '${channelId}' LIMIT 1;`, { type: db.sequelize.QueryTypes.SELECT })
     .then(result => {
       switch (result.length) {
         case 0:
