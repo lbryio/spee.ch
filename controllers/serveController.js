@@ -20,15 +20,24 @@ function checkForLocalAssetByClaimId (claimId, name) {
   });
 }
 
-function formatGetResultsToFileInfo ({ name, claim_id, outpoint, file_name, download_path, mime_type, metadata }) {
+function addGetResultsToFileRecord (fileInfo, getResult) {
+  fileInfo.fileName = getResult.file_name;
+  fileInfo.filePath = getResult.download_path;
+  fileInfo.fileType = getResult.mime_type;
+  return fileInfo;
+}
+
+function createFileRecord ({ name, claimId, outpoint, height, address, nsfw }) {
   return {
     name,
-    claimId : claim_id,
+    claimId,
     outpoint,
-    fileName: file_name,
-    filePath: download_path,
-    fileType: mime_type,
-    nsfw    : metadata.stream.metadata.nsfw,
+    height,
+    address,
+    fileName: '',
+    filePath: '',
+    fileType: '',
+    nsfw,
   };
 }
 
@@ -57,9 +66,8 @@ function getAssetByClaimId (fullClaimId, name) {
         lbryApi.getClaim(`${name}#${fullClaimId}`)
         .then(getResult => {
           logger.debug('getResult >>', getResult);
-          fileRecord = formatGetResultsToFileInfo(getResult);
-          fileRecord['address'] = (resolveResult.address || 0);
-          fileRecord['height'] = resolveResult.height;
+          fileRecord = createFileRecord(resolveResult);
+          fileRecord = addGetResultsToFileRecord(fileRecord, getResult);
           // insert a record in the File table & Update Claim table
           return db.File.create(fileRecord);
         })
