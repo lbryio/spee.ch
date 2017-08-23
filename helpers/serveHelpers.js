@@ -1,43 +1,14 @@
 const logger = require('winston');
 const db = require('../models');
 
-// function determineShortChannelId (name, longChannelId) {
-//   return new Promise((resolve, reject) => {
-//     logger.debug('finding short channel id');
-//     db.sequelize.query(`SELECT claimId, height FROM Certificate WHERE name = '${name}' ORDER BY height;`, { type: db.sequelize.QueryTypes.SELECT })
-//     .then(result => {
-//       switch (result.length) {
-//         case 0:
-//           return reject(new Error('That is an invalid channel name'));
-//         default:
-//           let certificateIndex;
-//           let shortId = longChannelId.substring(0, 1); // default sort id is the first letter
-//           let shortIdLength = 0;
-//           // find the index of this certificate
-//           certificateIndex = result.findIndex(element => {
-//             return element.claimId === longChannelId;
-//           });
-//           if (certificateIndex < 0) { throw new Error('claimid not found in possible sorted list') }
-//           // get an array of all certificates with lower height
-//           let possibleMatches = result.slice(0, certificateIndex);
-//           // remove certificates with the same prefixes until none are left.
-//           while (possibleMatches.length > 0) {
-//             shortIdLength += 1;
-//             shortId = longChannelId.substring(0, shortIdLength);
-//             possibleMatches = possibleMatches.filter(element => {
-//               return (element.claimId.substring(0, shortIdLength) === shortId);
-//             });
-//           }
-//           // return the short Id
-//           logger.debug('short claim id ===', shortId);
-//           return resolve(shortId);
-//       }
-//     })
-//     .catch(error => {
-//       reject(error);
-//     });
-//   });
-// }
+function createOpenGraphInfo ({ fileType, claimId, name, fileName, fileExt }) {
+  return {
+    embedUrl     : `https://spee.ch/embed/${claimId}/${name}`,
+    showUrl      : `https://spee.ch/${claimId}/${name}`,
+    source       : `https://spee.ch/${claimId}/${name}${fileExt}`,
+    directFileUrl: `https://spee.ch/media/${fileName}`,
+  };
+}
 
 function getLongChannelId (channelName, channelId) {
   if (channelId && (channelId.length === 40)) {  // full channel id
@@ -108,6 +79,24 @@ function getClaimIdByLongChannelId (channelId, claimName) {
   });
 }
 
+function getAllChannelClaims (channelId) {
+  return new Promise((resolve, reject) => {
+    logger.debug(`finding all claims in channel "${channelId}"`);
+    db.sequelize.query(`SELECT * FROM Claim WHERE certificateId = '${channelId}' ORDeR BY height DESC;`, { type: db.sequelize.QueryTypes.SELECT })
+    .then(result => {
+      switch (result.length) {
+        case 0:
+          return resolve(null);
+        default:
+          return resolve(result);
+      }
+    })
+    .catch(error => {
+      reject(error);
+    });
+  });
+}
+
 function determineShortClaimId (claimId, height, claimList) {
   logger.debug('determining short url based on claim id and claim list');
   logger.debug('claimlist starting length:', claimList.length);
@@ -155,13 +144,42 @@ function determineShortClaimId (claimId, height, claimList) {
   }
 }
 
-function createOpenGraphInfo ({ fileType, claimId, name, fileName, fileExt }) {
-  return {
-    embedUrl     : `https://spee.ch/embed/${claimId}/${name}`,
-    showUrl      : `https://spee.ch/${claimId}/${name}`,
-    source       : `https://spee.ch/${claimId}/${name}${fileExt}`,
-    directFileUrl: `https://spee.ch/media/${fileName}`,
-  };
+function getShortChannelId (channelName, longChannelId) {
+  return new Promise((resolve, reject) => {
+    logger.debug('finding short channel id');
+    db.sequelize.query(`SELECT claimId, height FROM Certificate WHERE name = '${channelName}' ORDER BY height;`, { type: db.sequelize.QueryTypes.SELECT })
+    .then(result => {
+      switch (result.length) {
+        case 0:
+          return reject(new Error('That is an invalid channel name'));
+        default:
+          let certificateIndex;
+          let shortId = longChannelId.substring(0, 1); // default sort id is the first letter
+          let shortIdLength = 0;
+          // find the index of this certificate
+          certificateIndex = result.findIndex(element => {
+            return element.claimId === longChannelId;
+          });
+          if (certificateIndex < 0) { throw new Error('claimid not found in possible sorted list') }
+          // get an array of all certificates with lower height
+          let possibleMatches = result.slice(0, certificateIndex);
+          // remove certificates with the same prefixes until none are left.
+          while (possibleMatches.length > 0) {
+            shortIdLength += 1;
+            shortId = longChannelId.substring(0, shortIdLength);
+            possibleMatches = possibleMatches.filter(element => {
+              return (element.claimId.substring(0, shortIdLength) === shortId);
+            });
+          }
+          // return the short Id
+          logger.debug('short claim id ===', shortId);
+          return resolve(shortId);
+      }
+    })
+    .catch(error => {
+      reject(error);
+    });
+  });
 }
 
 module.exports = {
@@ -294,6 +312,35 @@ module.exports = {
       })
       .then(claimId => {
         return resolve(claimId);
+      })
+      .catch(error => {
+        reject(error);
+      });
+    });
+  },
+  getChannelContents (channelName, channelId) {
+    return new Promise((resolve, reject) => {
+      let longChannelId;
+      let shortChannelId;
+      // 1. get the long channel Id
+      getLongChannelId(channelName, channelId)
+      // 2. get all claims for that channel
+      .then(result => {
+        longChannelId = result;
+        return getShortChannelId(channelName, longChannelId);
+      })
+      .then(result => {
+        shortChannelId = result;
+        return getAllChannelClaims(longChannelId);
+      })
+      .then(allChannelClaims => {
+        allChannelClaims.forEach(element => {
+          element['channelName'] = channelName;
+          element['longChannelId'] = longChannelId;
+          element['shortChannelId'] = shortChannelId;
+          element['fileExtension'] = element.contentType.substring(element.contentType.lastIndexOf('/') + 1);
+        });
+        return resolve(allChannelClaims);
       })
       .catch(error => {
         reject(error);

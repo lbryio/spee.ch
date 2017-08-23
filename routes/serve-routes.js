@@ -1,5 +1,5 @@
 const logger = require('winston');
-const { serveFile, showFile, showFileLite, getShortIdFromClaimId, resolveAgainstClaimTable } = require('../helpers/serveHelpers.js');
+const { serveFile, showFile, showFileLite, getShortIdFromClaimId, resolveAgainstClaimTable, getChannelContents } = require('../helpers/serveHelpers.js');
 const { getAssetByChannel, getAssetByShortId, getAssetByClaimId, getAssetByName } = require('../controllers/serveController.js');
 const { handleRequestError } = require('../helpers/errorHandlers.js');
 const { postToStats, sendGoogleAnalytics } = require('../controllers/statsController.js');
@@ -169,38 +169,68 @@ module.exports = (app) => {
     let name = params.name;
     let method;
     let fileExtension;
-    if (name.indexOf('.') !== -1) {
-      method = SERVE;
-      if (headers['accept'] && headers['accept'].split(',').includes('text/html')) {
-        method = SHOWLITE;
+    let channelName = null;
+    let channelId = null;
+    if (name.charAt(0) === '@') {
+      channelName = name;
+      const channelIdIndex = channelName.indexOf(CHANNELID_INDICATOR);
+      if (channelIdIndex !== -1) {
+        channelId = channelName.substring(channelIdIndex + 1);
+        channelName = channelName.substring(0, channelIdIndex);
       }
-      fileExtension = name.substring(name.indexOf('.'));
-      name = name.substring(0, name.indexOf('.'));
-      logger.debug('file extension =', fileExtension);
+      logger.debug('channel name =', channelName);
+      logger.debug('channel Id =', channelId);
+      // 1. retrieve the channel contents
+      getChannelContents(channelName, channelId)
+      // 2. respond to the request
+      .then(channelContents => {
+        if (!channelContents) {
+          res.status(200).render('noChannel');
+        } else {
+          const handlebarsData = {
+            channelName,
+            channelContents,
+          };
+          res.status(200).render('channel', handlebarsData);
+        }
+      })
+      .catch(error => {
+        handleRequestError('serve', originalUrl, ip, error, res);
+      });
     } else {
-      method = SHOW;
-      if (headers['accept'] && !headers['accept'].split(',').includes('text/html')) {
+      if (name.indexOf('.') !== -1) {
         method = SERVE;
-      }
-    }
-    logger.debug('claim name = ', name);
-    logger.debug('method =', method);
-    // 1. retrieve the asset and information
-    getAsset(CLAIM_NAME, null, null, null, null, name)
-    // 2. serve or show
-    .then(fileInfo => {
-      if (!fileInfo) {
-        res.status(200).render('noClaims');
+        if (headers['accept'] && headers['accept'].split(',').includes('text/html')) {
+          method = SHOWLITE;
+        }
+        fileExtension = name.substring(name.indexOf('.'));
+        name = name.substring(0, name.indexOf('.'));
+        logger.debug('file extension =', fileExtension);
       } else {
-        return serveOrShowAsset(fileInfo, null, method, headers, originalUrl, ip, res);
+        method = SHOW;
+        if (headers['accept'] && !headers['accept'].split(',').includes('text/html')) {
+          method = SERVE;
+        }
       }
-    })
-    // 3. update the database
-    .then(fileInfoForUpdate => {
-      // if needed, this is where we would update the file
-    })
-    .catch(error => {
-      handleRequestError('serve', originalUrl, ip, error, res);
-    });
+      logger.debug('claim name = ', name);
+      logger.debug('method =', method);
+      // 1. retrieve the asset and information
+      getAsset(CLAIM_NAME, null, null, null, null, name)
+      // 2. respond to the request
+      .then(fileInfo => {
+        if (!fileInfo) {
+          res.status(200).render('noClaims');
+        } else {
+          return serveOrShowAsset(fileInfo, null, method, headers, originalUrl, ip, res);
+        }
+      })
+      // 3. update the database
+      .then(fileInfoForUpdate => {
+        // if needed, this is where we would update the file
+      })
+      .catch(error => {
+        handleRequestError('serve', originalUrl, ip, error, res);
+      });
+    }
   });
 };

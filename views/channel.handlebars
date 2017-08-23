@@ -1,0 +1,32 @@
+<div class="wrapper">
+	{{> topBar}}
+	<div>
+		<h3>{{this.channelName}}</h3>
+		<p>Below are all the free claims in this channel.</p>
+		{{#each channelContents}}
+			<div class="all-claims-item">
+				{{#ifConditional this.fileType '===' 'video/mp4'}}
+					<video class="all-claims-img" autoplay controls>
+						<source src="/{{this.claimId}}/{{this.name}}.{{this.fileExtension}}">
+						{{!--fallback--}}
+						Your browser does not support the <code>video</code> element.
+					</video>
+				{{else}}
+					<img  class="all-claims-img" src="/{{this.claimId}}/{{this.name}}.{{this.fileExtension}}" />
+				{{/ifConditional}}
+				
+				<div class="all-claims-details">
+					<ul style="list-style-type:none">
+						<li>Title: {{this.title}}</li>
+						<li>Description: {{this.description}}</li>
+						<li>License: {{this.license}}</li>
+						<li>Link: <a href="/{{this.channelName}}:{{this.shortChannelId}}/{{this.name}}.{{this.fileExtension}}">spee.ch/{{this.channelName}}:{{this.shortChannelId}}/{{this.name}}.{{this.fileExtension}}</a></li>
+						<li>Claim: {{this.name}}</li>
+						<li>Claim Id: {{this.claimId}}</li>
+					</ul>
+				</div>
+			</div>
+		{{/each}}
+	</div>
+	{{> footer}}
+</div>
