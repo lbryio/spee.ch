@@ -6,13 +6,13 @@
 		{{#each channelContents}}
 			<div class="all-claims-item">
 				{{#ifConditional this.contentType '===' 'video/mp4'}}
-					<video class="all-claims-img" autoplay controls>
+					<video class="all-claims-asset" controls>
 						<source src="/{{this.claimId}}/{{this.name}}.{{this.fileExtension}}">
 						{{!--fallback--}}
 						Your browser does not support the <code>video</code> element.
 					</video>
 				{{else}}
-					<img  class="all-claims-img" src="/{{this.claimId}}/{{this.name}}.{{this.fileExtension}}" />
+					<img  class="all-claims-asset" src="/{{this.claimId}}/{{this.name}}.{{this.fileExtension}}" />
 				{{/ifConditional}}
 				
 				<div class="all-claims-details">
