@@ -172,7 +172,7 @@ function getShortChannelId (channelName, longChannelId) {
             });
           }
           // return the short Id
-          logger.debug('short claim id ===', shortId);
+          logger.debug('short channel id ===', shortId);
           return resolve(shortId);
       }
     })
@@ -334,12 +334,14 @@ module.exports = {
         return getAllChannelClaims(longChannelId);
       })
       .then(allChannelClaims => {
-        allChannelClaims.forEach(element => {
-          element['channelName'] = channelName;
-          element['longChannelId'] = longChannelId;
-          element['shortChannelId'] = shortChannelId;
-          element['fileExtension'] = element.contentType.substring(element.contentType.lastIndexOf('/') + 1);
-        });
+        if (allChannelClaims) {
+          allChannelClaims.forEach(element => {
+            element['channelName'] = channelName;
+            element['longChannelId'] = longChannelId;
+            element['shortChannelId'] = shortChannelId;
+            element['fileExtension'] = element.contentType.substring(element.contentType.lastIndexOf('/') + 1);
+          });
+        }
         return resolve(allChannelClaims);
       })
       .catch(error => {
