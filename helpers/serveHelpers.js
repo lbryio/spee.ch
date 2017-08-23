@@ -41,7 +41,7 @@ const db = require('../models');
 
 function getLongChannelId (channelName, channelId) {
   if (channelId && (channelId.length === 40)) {  // full channel id
-    return channelId;
+    return new Promise((resolve, reject) => resolve(channelId));
   } else if (channelId && channelId.length < 40) {  // short channel id
     return getLongChannelIdFromShortChannelId(channelName, channelId);
   } else {
