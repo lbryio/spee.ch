@@ -1,8 +1,6 @@
 const logger = require('winston');
-const { serveFile, showFile, showFileLite, getShortIdFromClaimId, resolveAgainstClaimTable, getChannelContents } = require('../helpers/serveHelpers.js');
-const { getAssetByChannel, getAssetByShortId, getAssetByClaimId, getAssetByName } = require('../controllers/serveController.js');
+const { getAssetByShortId, getAssetByClaimId, getAssetByName, getChannelContents, getAssetByChannel, serveOrShowAsset } = require('../controllers/serveController.js');
 const { handleRequestError } = require('../helpers/errorHandlers.js');
-const { postToStats, sendGoogleAnalytics } = require('../controllers/statsController.js');
 const SERVE = 'SERVE';
 const SHOW = 'SHOW';
 const SHOWLITE = 'SHOWLITE';
@@ -24,48 +22,6 @@ function getAsset (claimType, channelName, channelId, shortId, fullClaimId, name
       return getAssetByName(name);
     default:
       return new Error('that claim type was not found');
-  }
-}
-
-function serveOrShowAsset (fileInfo, extension, method, headers, originalUrl, ip, res) {
-  // add file extension to the file info
-  if (extension === '.gifv') {
-    fileInfo['fileExt'] = '.gifv';
-  } else {
-    fileInfo['fileExt'] = fileInfo.fileName.substring(fileInfo.fileName.lastIndexOf('.'));
-  }
-  // serve or show
-  switch (method) {
-    case SERVE:
-      serveFile(fileInfo, res);
-      sendGoogleAnalytics(method, headers, ip, originalUrl);
-      postToStats('serve', originalUrl, ip, fileInfo.name, fileInfo.claimId, 'success');
-      return fileInfo;
-    case SHOWLITE:
-      showFileLite(fileInfo, res);
-      postToStats('show', originalUrl, ip, fileInfo.name, fileInfo.claimId, 'success');
-      return fileInfo;
-    case SHOW:
-      return getShortIdFromClaimId(fileInfo.claimId, fileInfo.height, fileInfo.name)
-      .then(shortId => {
-        fileInfo['shortId'] = shortId;
-        return resolveAgainstClaimTable(fileInfo.name, fileInfo.claimId);
-      })
-      .then(resolveResult => {
-        logger.debug('resolve result', resolveResult);
-        fileInfo['title'] = resolveResult.title;
-        fileInfo['description'] = resolveResult.description;
-        showFile(fileInfo, res);
-        postToStats('show', originalUrl, ip, fileInfo.name, fileInfo.claimId, 'success');
-        return fileInfo;
-      })
-      .catch(error => {
-        console.log('thowing error...');
-        throw error;
-      });
-    default:
-      logger.error('I did not recognize that method');
-      break;
   }
 }
 

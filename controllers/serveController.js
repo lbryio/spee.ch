@@ -1,7 +1,11 @@
 const lbryApi = require('../helpers/lbryApi.js');
 const db = require('../models');
 const logger = require('winston');
-const { getTopFreeClaim, getFullClaimIdFromShortId, resolveAgainstClaimTable, getClaimIdByChannel } = require('../helpers/serveHelpers.js');
+const { getTopFreeClaim, getFullClaimIdFromShortId, resolveAgainstClaimTable, serveFile, showFile, showFileLite, getShortClaimIdFromLongClaimId, getClaimIdByLongChannelId, getAllChannelClaims, getLongChannelId, getShortChannelIdFromLongChannelId } = require('../helpers/serveHelpers.js');
+const { postToStats, sendGoogleAnalytics } = require('../controllers/statsController.js');
+const SERVE = 'SERVE';
+const SHOW = 'SHOW';
+const SHOWLITE = 'SHOWLITE';
 
 function checkForLocalAssetByClaimId (claimId, name) {
   return new Promise((resolve, reject) => {
@@ -90,19 +94,6 @@ function getAssetByClaimId (fullClaimId, name) {
 }
 
 module.exports = {
-  getAssetByChannel (channelName, channelId, claimName) {
-    logger.debug('channelId =', channelId);
-    return new Promise((resolve, reject) => {
-      getClaimIdByChannel(channelName, channelId, claimName)
-      .then(claimId => {
-        logger.debug('claim id = ', claimId);
-        resolve(getAssetByClaimId(claimId, claimName));
-      })
-      .catch(error => {
-        reject(error);
-      });
-    });
-  },
   getAssetByShortId: function (shortId, name) {
     logger.debug('...getting asset by short id...');
     return new Promise((resolve, reject) => {
@@ -143,10 +134,97 @@ module.exports = {
       });
     });
   },
-  getChannelByName (name) {
-    logger.debug('...getting channel by channel name...');
+  getAssetByChannel (channelName, channelId, claimName) {
+    logger.debug('channelId =', channelId);
     return new Promise((resolve, reject) => {
-      reject(new Error('This feature is not yet supported'));
+      // 1. get the long channel id
+      getLongChannelId(channelName, channelId)
+      // 2. get the claim Id
+      .then(longChannelId => {
+        return getClaimIdByLongChannelId(longChannelId, claimName);
+      })
+      // 3. get the asset by this claim id and name
+      .then(claimId => {
+        logger.debug('asset claim id = ', claimId);
+        resolve(getAssetByClaimId(claimId, claimName));
+      })
+      .catch(error => {
+        reject(error);
+      });
     });
+  },
+  getChannelContents (channelName, channelId) {
+    return new Promise((resolve, reject) => {
+      let longChannelId;
+      let shortChannelId;
+      // 1. get the long channel Id
+      getLongChannelId(channelName, channelId)
+      // 2. get all claims for that channel
+      .then(result => {
+        longChannelId = result;
+        return getShortChannelIdFromLongChannelId(channelName, longChannelId);
+      })
+      // 3. get all Claim records for this channel
+      .then(result => {
+        shortChannelId = result;
+        return getAllChannelClaims(longChannelId);
+      })
+      // 4. add extra data not available from Claim table
+      .then(allChannelClaims => {
+        if (allChannelClaims) {
+          allChannelClaims.forEach(element => {
+            element['channelName'] = channelName;
+            element['longChannelId'] = longChannelId;
+            element['shortChannelId'] = shortChannelId;
+            element['fileExtension'] = element.contentType.substring(element.contentType.lastIndexOf('/') + 1);
+          });
+        }
+        return resolve(allChannelClaims);
+      })
+      .catch(error => {
+        reject(error);
+      });
+    });
+  },
+  serveOrShowAsset (fileInfo, extension, method, headers, originalUrl, ip, res) {
+    // add file extension to the file info
+    if (extension === '.gifv') {
+      fileInfo['fileExt'] = '.gifv';
+    } else {
+      fileInfo['fileExt'] = fileInfo.fileName.substring(fileInfo.fileName.lastIndexOf('.'));
+    }
+    // serve or show
+    switch (method) {
+      case SERVE:
+        serveFile(fileInfo, res);
+        sendGoogleAnalytics(method, headers, ip, originalUrl);
+        postToStats('serve', originalUrl, ip, fileInfo.name, fileInfo.claimId, 'success');
+        return fileInfo;
+      case SHOWLITE:
+        showFileLite(fileInfo, res);
+        postToStats('show', originalUrl, ip, fileInfo.name, fileInfo.claimId, 'success');
+        return fileInfo;
+      case SHOW:
+        return getShortClaimIdFromLongClaimId(fileInfo.claimId, fileInfo.name)
+        .then(shortId => {
+          fileInfo['shortId'] = shortId;
+          return resolveAgainstClaimTable(fileInfo.name, fileInfo.claimId);
+        })
+        .then(resolveResult => {
+          logger.debug('resolve result', resolveResult);
+          fileInfo['title'] = resolveResult.title;
+          fileInfo['description'] = resolveResult.description;
+          showFile(fileInfo, res);
+          postToStats('show', originalUrl, ip, fileInfo.name, fileInfo.claimId, 'success');
+          return fileInfo;
+        })
+        .catch(error => {
+          console.log('thowing error...');
+          throw error;
+        });
+      default:
+        logger.error('I did not recognize that method');
+        break;
+    }
   },
 };

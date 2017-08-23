@@ -10,16 +10,6 @@ function createOpenGraphInfo ({ fileType, claimId, name, fileName, fileExt }) {
   };
 }
 
-function getLongChannelId (channelName, channelId) {
-  if (channelId && (channelId.length === 40)) {  // full channel id
-    return new Promise((resolve, reject) => resolve(channelId));
-  } else if (channelId && channelId.length < 40) {  // short channel id
-    return getLongChannelIdFromShortChannelId(channelName, channelId);
-  } else {
-    return getLongChannelIdFromChannelName(channelName);
-  }
-};
-
 function getLongChannelIdFromShortChannelId (channelName, channelId) {
   return new Promise((resolve, reject) => {
     logger.debug(`finding long channel id for ${channelName}:${channelId}`);
@@ -61,125 +51,28 @@ function getLongChannelIdFromChannelName (channelName) {
   });
 }
 
-function getClaimIdByLongChannelId (channelId, claimName) {
-  return new Promise((resolve, reject) => {
-    logger.debug(`finding claim id for claim "${claimName}" from channel "${channelId}"`);
-    db.sequelize.query(`SELECT claimId FROM Claim WHERE name = '${claimName}' AND certificateId = '${channelId}' LIMIT 1;`, { type: db.sequelize.QueryTypes.SELECT })
-    .then(result => {
-      switch (result.length) {
-        case 0:
-          return reject(new Error('There is no such claim for that channel'));
-        default:
-          return resolve(result[0].claimId);
-      }
-    })
-    .catch(error => {
-      reject(error);
-    });
+function sortResult (result, longId) {
+  let claimIndex;
+  let shortId = longId.substring(0, 1); // default sort id is the first letter
+  let shortIdLength = 0;
+  // find the index of this certificate
+  claimIndex = result.findIndex(element => {
+    return element.claimId === longId;
   });
-}
-
-function getAllChannelClaims (channelId) {
-  return new Promise((resolve, reject) => {
-    logger.debug(`finding all claims in channel "${channelId}"`);
-    db.sequelize.query(`SELECT * FROM Claim WHERE certificateId = '${channelId}' ORDeR BY height DESC;`, { type: db.sequelize.QueryTypes.SELECT })
-    .then(result => {
-      switch (result.length) {
-        case 0:
-          return resolve(null);
-        default:
-          return resolve(result);
-      }
-    })
-    .catch(error => {
-      reject(error);
+  if (claimIndex < 0) { throw new Error('claimid not found in possible sorted list') }
+  // get an array of all certificates with lower height
+  let possibleMatches = result.slice(0, claimIndex);
+  // remove certificates with the same prefixes until none are left.
+  while (possibleMatches.length > 0) {
+    shortIdLength += 1;
+    shortId = longId.substring(0, shortIdLength);
+    possibleMatches = possibleMatches.filter(element => {
+      return (element.claimId.substring(0, shortIdLength) === shortId);
     });
-  });
-}
-
-function determineShortClaimId (claimId, height, claimList) {
-  logger.debug('determining short url based on claim id and claim list');
-  logger.debug('claimlist starting length:', claimList.length);
-  // remove this claim from the claim list, if it exists
-  claimList = claimList.filter(claim => {
-    return claim.claimId !== claimId;
-  });
-  logger.debug('claim list length without this claim:', claimList.length);
-  // If there are no other claims, return the first letter of the claim id...
-  if (claimList.length === 0) {
-    return claimId.substring(0, 1);
-  // ...otherwise determine the proper short id.
-  } else {
-    const claimListCopy = claimList;
-    let i = 0;
-    // find the longest shared prefix (there is a better way to do this that filters, checks next filter, then filters (i.e. combine this step and next))
-    while (claimList.length !== 0) {
-      i++;
-      claimList = claimList.filter(claim => {
-        const otherClaimIdSegmentToCompare = claim.claimId.substring(0, i);
-        const thisClaimIdSegmentToCompare = claimId.substring(0, i);
-        logger.debug('compare:', otherClaimIdSegmentToCompare, '===', thisClaimIdSegmentToCompare, '?');
-        return (otherClaimIdSegmentToCompare === thisClaimIdSegmentToCompare);
-      });
-    }
-    // use that longest shared prefix to get only those competing claims
-    const lastMatchIndex = i - 1;
-    const lastMatch = claimId.substring(0, lastMatchIndex);
-    logger.debug('last match index:', lastMatchIndex, 'last match:', lastMatch);
-    if (lastMatchIndex === 0) { // if no other claims share a prefix, return with first letter.
-      return claimId.substring(0, 1);
-    }
-    const allMatchingClaimsAtLastMatch = claimListCopy.filter(claim => {
-      return (claim.claimId.substring(0, lastMatchIndex) === lastMatch);
-    });
-    // for those that share the longest shared prefix: see which came first in time. whichever is earliest, the others take the extra character
-    const sortedMatchingClaims = allMatchingClaimsAtLastMatch.sort((a, b) => {
-      return (a.height < b.height);
-    });
-    // compare to the earliest one, if it is earlier, this claim takes the extra character
-    if (sortedMatchingClaims[0].height < height) {
-      return claimId.substring(0, lastMatchIndex + 1);
-    }
-    return claimId.substring(0, lastMatchIndex);
   }
-}
-
-function getShortChannelId (channelName, longChannelId) {
-  return new Promise((resolve, reject) => {
-    logger.debug('finding short channel id');
-    db.sequelize.query(`SELECT claimId, height FROM Certificate WHERE name = '${channelName}' ORDER BY height;`, { type: db.sequelize.QueryTypes.SELECT })
-    .then(result => {
-      switch (result.length) {
-        case 0:
-          return reject(new Error('That is an invalid channel name'));
-        default:
-          let certificateIndex;
-          let shortId = longChannelId.substring(0, 1); // default sort id is the first letter
-          let shortIdLength = 0;
-          // find the index of this certificate
-          certificateIndex = result.findIndex(element => {
-            return element.claimId === longChannelId;
-          });
-          if (certificateIndex < 0) { throw new Error('claimid not found in possible sorted list') }
-          // get an array of all certificates with lower height
-          let possibleMatches = result.slice(0, certificateIndex);
-          // remove certificates with the same prefixes until none are left.
-          while (possibleMatches.length > 0) {
-            shortIdLength += 1;
-            shortId = longChannelId.substring(0, shortIdLength);
-            possibleMatches = possibleMatches.filter(element => {
-              return (element.claimId.substring(0, shortIdLength) === shortId);
-            });
-          }
-          // return the short Id
-          logger.debug('short channel id ===', shortId);
-          return resolve(shortId);
-      }
-    })
-    .catch(error => {
-      reject(error);
-    });
-  });
+  // return the short Id
+  logger.debug('short channel id ===', shortId);
+  return shortId;
 }
 
 module.exports = {
@@ -233,18 +126,16 @@ module.exports = {
       });
     });
   },
-  getShortIdFromClaimId (claimId, height, name) {
+  getShortClaimIdFromLongClaimId (claimId, claimName) {
     return new Promise((resolve, reject) => {
-      logger.debug('finding short claim id from full claim id');
-      db.sequelize.query(`SELECT claimId, height FROM Claim WHERE name = '${name}' ORDER BY claimId;`, { type: db.sequelize.QueryTypes.SELECT })
+      logger.debug('finding short channel id');
+      db.sequelize.query(`SELECT claimId, height FROM Claim WHERE name = '${claimName}' ORDER BY height;`, { type: db.sequelize.QueryTypes.SELECT })
       .then(result => {
         switch (result.length) {
           case 0:
             return reject(new Error('That is an invalid claim name'));
-          default: // note results must be sorted
-            const shortId = determineShortClaimId(claimId, height, result);
-            logger.debug('short claim id ===', shortId);
-            return resolve(shortId);
+          default:
+            return resolve(sortResult(result, claimId));
         }
       })
       .catch(error => {
@@ -302,47 +193,60 @@ module.exports = {
       });
     });
   },
-  getClaimIdByChannel (channelName, channelId, claimName) {
+  getClaimIdByLongChannelId (channelId, claimName) {
     return new Promise((resolve, reject) => {
-      // 1. get the long channel id
-      getLongChannelId(channelName, channelId)
-      // 2. get the claim Id
-      .then(longChannelId => {
-        return getClaimIdByLongChannelId(longChannelId, claimName);
-      })
-      .then(claimId => {
-        return resolve(claimId);
+      logger.debug(`finding claim id for claim "${claimName}" from channel "${channelId}"`);
+      db.sequelize.query(`SELECT claimId FROM Claim WHERE name = '${claimName}' AND certificateId = '${channelId}' LIMIT 1;`, { type: db.sequelize.QueryTypes.SELECT })
+      .then(result => {
+        switch (result.length) {
+          case 0:
+            return reject(new Error('There is no such claim for that channel'));
+          default:
+            return resolve(result[0].claimId);
+        }
       })
       .catch(error => {
         reject(error);
       });
     });
   },
-  getChannelContents (channelName, channelId) {
+  getAllChannelClaims (channelId) {
     return new Promise((resolve, reject) => {
-      let longChannelId;
-      let shortChannelId;
-      // 1. get the long channel Id
-      getLongChannelId(channelName, channelId)
-      // 2. get all claims for that channel
+      logger.debug(`finding all claims in channel "${channelId}"`);
+      db.sequelize.query(`SELECT * FROM Claim WHERE certificateId = '${channelId}' ORDeR BY height DESC;`, { type: db.sequelize.QueryTypes.SELECT })
       .then(result => {
-        longChannelId = result;
-        return getShortChannelId(channelName, longChannelId);
-      })
-      .then(result => {
-        shortChannelId = result;
-        return getAllChannelClaims(longChannelId);
-      })
-      .then(allChannelClaims => {
-        if (allChannelClaims) {
-          allChannelClaims.forEach(element => {
-            element['channelName'] = channelName;
-            element['longChannelId'] = longChannelId;
-            element['shortChannelId'] = shortChannelId;
-            element['fileExtension'] = element.contentType.substring(element.contentType.lastIndexOf('/') + 1);
-          });
+        switch (result.length) {
+          case 0:
+            return resolve(null);
+          default:
+            return resolve(result);
         }
-        return resolve(allChannelClaims);
+      })
+      .catch(error => {
+        reject(error);
+      });
+    });
+  },
+  getLongChannelId (channelName, channelId) {
+    if (channelId && (channelId.length === 40)) {  // full channel id
+      return new Promise((resolve, reject) => resolve(channelId));
+    } else if (channelId && channelId.length < 40) {  // short channel id
+      return getLongChannelIdFromShortChannelId(channelName, channelId);
+    } else {
+      return getLongChannelIdFromChannelName(channelName);
+    }
+  },
+  getShortChannelIdFromLongChannelId (channelName, longChannelId) {
+    return new Promise((resolve, reject) => {
+      logger.debug('finding short channel id');
+      db.sequelize.query(`SELECT claimId, height FROM Certificate WHERE name = '${channelName}' ORDER BY height;`, { type: db.sequelize.QueryTypes.SELECT })
+      .then(result => {
+        switch (result.length) {
+          case 0:
+            return reject(new Error('That is an invalid channel name'));
+          default:
+            return resolve(sortResult(result, longChannelId));
+        }
       })
       .catch(error => {
         reject(error);
