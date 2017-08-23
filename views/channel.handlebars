@@ -5,7 +5,7 @@
 		<p>Below are all the free claims in this channel.</p>
 		{{#each channelContents}}
 			<div class="all-claims-item">
-				{{#ifConditional this.fileType '===' 'video/mp4'}}
+				{{#ifConditional this.contentType '===' 'video/mp4'}}
 					<video class="all-claims-img" autoplay controls>
 						<source src="/{{this.claimId}}/{{this.name}}.{{this.fileExtension}}">
 						{{!--fallback--}}
