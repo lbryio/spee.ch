@@ -51,6 +51,42 @@ function getLongChannelIdFromChannelName (channelName) {
   });
 }
 
+function getLongClaimIdFromShortClaimId (name, shortId) {
+  return new Promise((resolve, reject) => {
+    logger.debug('getting claim_id from short url');
+    // use the daemon to check for claims list
+    db.sequelize.query(`SELECT claimId FROM Claim WHERE name = '${name}' AND claimId LIKE '${shortId}%' ORDER BY height ASC LIMIT 1;`, { type: db.sequelize.QueryTypes.SELECT })
+    .then(result => {
+      switch (result.length) {
+        case 0:
+          return reject(new Error('That is an invalid Short Claim Id'));
+        default: // note results must be sorted
+          return resolve(result[0].claimId);
+      }
+    })
+    .catch(error => {
+      reject(error);
+    });
+  });
+}
+
+function getTopFreeClaimIdByClaimName (name) {
+  return new Promise((resolve, reject) => {
+    db.sequelize.query(`SELECT claimId FROM Claim WHERE name = '${name}' ORDER BY amount DESC, height ASC LIMIT 1`, { type: db.sequelize.QueryTypes.SELECT })
+    .then(result => {
+      switch (result.length) {
+        case 0:
+          return resolve(null);
+        default:
+          return resolve(result[0].claimId);
+      }
+    })
+    .catch(error => {
+      reject(error);
+    });
+  });
+};
+
 function sortResult (result, longId) {
   let claimIndex;
   let shortId = longId.substring(0, 1); // default sort id is the first letter
@@ -108,23 +144,14 @@ module.exports = {
     const openGraphInfo = createOpenGraphInfo(fileInfo);
     res.status(200).render('showLite', { layout: 'show', fileInfo, openGraphInfo });
   },
-  getFullClaimIdFromShortId (shortId, name) {
-    return new Promise((resolve, reject) => {
-      logger.debug('getting claim_id from short url');
-      // use the daemon to check for claims list
-      db.sequelize.query(`SELECT claimId FROM Claim WHERE name = '${name}' AND claimId LIKE '${shortId}%' ORDER BY height ASC LIMIT 1;`, { type: db.sequelize.QueryTypes.SELECT })
-      .then(result => {
-        switch (result.length) {
-          case 0:
-            return reject(new Error('That is an invalid Short Claim Id'));
-          default: // note results must be sorted
-            return resolve(result[0].claimId);
-        }
-      })
-      .catch(error => {
-        reject(error);
-      });
-    });
+  getLongClaimId (claimName, claimId) {  // read the various inputs and decide how to return the long claim id
+    if (claimId && (claimId.length === 40)) {
+      return new Promise((resolve, reject) => resolve(claimId));
+    } else if (claimId && claimId.length < 40) {
+      return getLongClaimIdFromShortClaimId(claimName, claimId);  // need to create this function
+    } else {  // if no claim id provided
+      return getTopFreeClaimIdByClaimName(claimName);
+    }
   },
   getShortClaimIdFromLongClaimId (claimId, claimName) {
     return new Promise((resolve, reject) => {
@@ -152,22 +179,6 @@ module.exports = {
             return resolve(null);
           default:
             return resolve(result);
-        }
-      })
-      .catch(error => {
-        reject(error);
-      });
-    });
-  },
-  getTopFreeClaim (name) {
-    return new Promise((resolve, reject) => {
-      db.sequelize.query(`SELECT * FROM Claim WHERE name = '${name}' ORDER BY amount DESC, height ASC LIMIT 1`, { type: db.sequelize.QueryTypes.SELECT })
-      .then(result => {
-        switch (result.length) {
-          case 0:
-            return resolve(null);
-          default:
-            return resolve(result[0]);
         }
       })
       .catch(error => {

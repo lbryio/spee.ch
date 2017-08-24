@@ -1,29 +1,7 @@
 const logger = require('winston');
-const { getAssetByShortId, getAssetByClaimId, getAssetByName, getChannelContents, getAssetByChannel, serveOrShowAsset } = require('../controllers/serveController.js');
+const { getAssetByClaim, getChannelContents, getAssetByChannel, serveOrShowAsset } = require('../controllers/serveController.js');
 const { handleRequestError } = require('../helpers/errorHandlers.js');
-const SERVE = 'SERVE';
-const SHOW = 'SHOW';
-const SHOWLITE = 'SHOWLITE';
-const CHANNEL = 'CHANNEL';
-const CLAIM_ID_SHORT = 'CLAIM_ID_SHORT';
-const CLAIM_ID_LONG = 'CLAIM_ID_LONG';
-const CLAIM_NAME = 'CLAIM_NAME';
-const CHANNELID_INDICATOR = ':';
-
-function getAsset (claimType, channelName, channelId, shortId, fullClaimId, name) {
-  switch (claimType) {
-    case CHANNEL:
-      return getAssetByChannel(channelName, channelId, name);
-    case CLAIM_ID_SHORT:
-      return getAssetByShortId(shortId, name);
-    case CLAIM_ID_LONG:
-      return getAssetByClaimId(fullClaimId, name);
-    case CLAIM_NAME:
-      return getAssetByName(name);
-    default:
-      return new Error('that claim type was not found');
-  }
-}
+const { SERVE, SHOW, SHOWLITE, CHANNEL, CLAIM, CHANNELID_INDICATOR } = require('../helpers/constants.js');
 
 function isValidClaimId (claimId) {
   return ((claimId.length === 40) && !/[^A-Za-z0-9]/g.test(claimId));
@@ -37,6 +15,17 @@ function isValidShortIdOrClaimId (input) {
   return (isValidClaimId(input) || isValidShortId(input));
 }
 
+function getAsset (claimType, channelName, channelId, name, claimId) {
+  switch (claimType) {
+    case CHANNEL:
+      return getAssetByChannel(channelName, channelId, name);
+    case CLAIM:
+      return getAssetByClaim(name, claimId);
+    default:
+      return new Error('that claim type was not found');
+  }
+}
+
 module.exports = (app) => {
   // route to serve a specific asset
   app.get('/:identifier/:name', ({ headers, ip, originalUrl, params }, res) => {
@@ -44,8 +33,7 @@ module.exports = (app) => {
     let name = params.name;
     let claimType;
     let channelName = null;
-    let shortId = null;
-    let fullClaimId = null;
+    let claimId = null;
     let channelId = null;
     let method;
     let extension;
@@ -87,21 +75,13 @@ module.exports = (app) => {
         channelName = channelName.substring(0, channelIdIndex);
       }
       logger.debug('channel name =', channelName);
-    } else if (identifier.length === 40) {
-      fullClaimId = identifier;
-      logger.debug('full claim id =', fullClaimId);
-      claimType = CLAIM_ID_LONG;
-    } else if (identifier.length < 40) {
-      shortId = identifier;
-      logger.debug('short claim id =', shortId);
-      claimType = CLAIM_ID_SHORT;
     } else {
-      logger.error('The URL provided could not be parsed');
-      res.send('that url is invalid');
-      return;
-    };
+      claimId = identifier;
+      logger.debug('claim id =', claimId);
+      claimType = CLAIM;
+    }
     // 1. retrieve the asset and information
-    getAsset(claimType, channelName, channelId, shortId, fullClaimId, name)
+    getAsset(claimType, channelName, channelId, name, claimId)
     // 2. serve or show
     .then(fileInfo => {
       logger.debug('fileInfo', fileInfo);
@@ -171,7 +151,7 @@ module.exports = (app) => {
       logger.debug('claim name = ', name);
       logger.debug('method =', method);
       // 1. retrieve the asset and information
-      getAsset(CLAIM_NAME, null, null, null, null, name)
+      getAsset(CLAIM, null, null, null, name, null)
       // 2. respond to the request
       .then(fileInfo => {
         if (!fileInfo) {

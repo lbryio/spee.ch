@@ -1,11 +1,9 @@
 const lbryApi = require('../helpers/lbryApi.js');
 const db = require('../models');
 const logger = require('winston');
-const { getTopFreeClaim, getFullClaimIdFromShortId, resolveAgainstClaimTable, serveFile, showFile, showFileLite, getShortClaimIdFromLongClaimId, getClaimIdByLongChannelId, getAllChannelClaims, getLongChannelId, getShortChannelIdFromLongChannelId } = require('../helpers/serveHelpers.js');
+const { resolveAgainstClaimTable, serveFile, showFile, showFileLite, getShortClaimIdFromLongClaimId, getClaimIdByLongChannelId, getAllChannelClaims, getLongChannelId, getShortChannelIdFromLongChannelId, getLongClaimId } = require('../helpers/serveHelpers.js');
 const { postToStats, sendGoogleAnalytics } = require('../controllers/statsController.js');
-const SERVE = 'SERVE';
-const SHOW = 'SHOW';
-const SHOWLITE = 'SHOWLITE';
+const { SERVE, SHOW, SHOWLITE } = require('../helpers/constants.js');
 
 function checkForLocalAssetByClaimId (claimId, name) {
   return new Promise((resolve, reject) => {
@@ -45,7 +43,7 @@ function createFileRecord ({ name, claimId, outpoint, height, address, nsfw }) {
   };
 }
 
-function getAssetByClaimId (fullClaimId, name) {
+function getAssetByLongClaimId (fullClaimId, name) {
   logger.debug('...getting asset by claim Id...');
   return new Promise((resolve, reject) => {
     // 1. check locally for claim
@@ -94,40 +92,15 @@ function getAssetByClaimId (fullClaimId, name) {
 }
 
 module.exports = {
-  getAssetByShortId: function (shortId, name) {
-    logger.debug('...getting asset by short id...');
+  getAssetByClaim (claimName, claimId) {
+    logger.debug('getting asset by claim');
     return new Promise((resolve, reject) => {
-      // get the full claimId
-      getFullClaimIdFromShortId(shortId, name)
-      // get the asset by the claimId
-      .then(claimId => {
-        logger.debug('claim id =', claimId);
-        resolve(getAssetByClaimId(claimId, name));
-      })
-      .catch(error => {
-        reject(error);
-      });
-    });
-  },
-  getAssetByClaimId (fullClaimId, name) {
-    return getAssetByClaimId(fullClaimId, name);
-  },
-  getAssetByName (name) {
-    logger.debug('...getting asset by claim name...');
-    return new Promise((resolve, reject) => {
-      // 1. get a list of the free public claims
-      getTopFreeClaim(name)
-      // 2. check locally for the top claim
-      .then(topFreeClaim => {
-        // if no claims were found, return null
-        if (!topFreeClaim) {
-          return resolve(null);
-        }
-        // parse the result
-        const claimId = topFreeClaim.claimId;
-        logger.debug('top free claim id =', claimId);
-        // get the asset
-        resolve(getAssetByClaimId(claimId, name));
+      // 1. get the long claim id
+      getLongClaimId(claimName, claimId)  // here
+      // 2. get the claim Id
+      .then(longClaimId => {
+        logger.debug('long claim id = ', longClaimId);
+        resolve(getAssetByLongClaimId(longClaimId, claimName));
       })
       .catch(error => {
         reject(error);
@@ -135,7 +108,7 @@ module.exports = {
     });
   },
   getAssetByChannel (channelName, channelId, claimName) {
-    logger.debug('channelId =', channelId);
+    logger.debug('getting asset by channel');
     return new Promise((resolve, reject) => {
       // 1. get the long channel id
       getLongChannelId(channelName, channelId)
@@ -146,7 +119,7 @@ module.exports = {
       // 3. get the asset by this claim id and name
       .then(claimId => {
         logger.debug('asset claim id = ', claimId);
-        resolve(getAssetByClaimId(claimId, claimName));
+        resolve(getAssetByLongClaimId(claimId, claimName));
       })
       .catch(error => {
         reject(error);
