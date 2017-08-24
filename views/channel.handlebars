@@ -5,22 +5,19 @@
 		<p>Below are all the free claims in this channel.</p>
 		{{#each channelContents}}
 			<div class="all-claims-item">
-				{{#ifConditional this.contentType '===' 'video/mp4'}}
-					<video class="all-claims-asset" controls>
-						<source src="/{{this.claimId}}/{{this.name}}.{{this.fileExtension}}">
-						{{!--fallback--}}
-						Your browser does not support the <code>video</code> element.
-					</video>
-				{{else}}
-					<img  class="all-claims-asset" src="/{{this.claimId}}/{{this.name}}.{{this.fileExtension}}" />
-				{{/ifConditional}}
-				
+				<a href="/{{this.channelName}}:{{this.shortChannelId}}/{{this.name}}.{{this.fileExtension}}">
+					{{#ifConditional this.contentType '===' 'video/mp4'}}
+						<img class="all-claims-asset" src="/assets/img/content-freedom-large.png"/>
+					{{else}}
+						<img  class="all-claims-asset" src="/{{this.claimId}}/{{this.name}}.{{this.fileExtension}}" />
+					{{/ifConditional}}
+				</a>
 				<div class="all-claims-details">
 					<ul style="list-style-type:none">
-						<li>Title: {{this.title}}</li>
-						<li>Description: {{this.description}}</li>
+						<li><strong>{{this.title}}</strong></li>
+						<li><i> {{this.description}}</i></li>
+						<li><a href="/{{this.channelName}}:{{this.shortChannelId}}/{{this.name}}.{{this.fileExtension}}">spee.ch/{{this.channelName}}:{{this.shortChannelId}}/{{this.name}}.{{this.fileExtension}}</a></li>
 						<li>License: {{this.license}}</li>
-						<li>Link: <a href="/{{this.channelName}}:{{this.shortChannelId}}/{{this.name}}.{{this.fileExtension}}">spee.ch/{{this.channelName}}:{{this.shortChannelId}}/{{this.name}}.{{this.fileExtension}}</a></li>
 						<li>Claim: {{this.name}}</li>
 						<li>Claim Id: {{this.claimId}}</li>
 					</ul>
