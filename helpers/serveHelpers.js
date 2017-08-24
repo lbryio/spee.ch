@@ -172,7 +172,7 @@ module.exports = {
   },
   getAllFreeClaims (name) {
     return new Promise((resolve, reject) => {
-      db.sequelize.query(`SELECT * FROM Claim WHERE name = '${name}' ORDER BY amount DESC, height ASC`, { type: db.sequelize.QueryTypes.SELECT })
+      db.sequelize.query(`SELECT name, claimId, outpoint, height, address FROM Claim WHERE name = '${name}' ORDER BY amount DESC, height ASC`, { type: db.sequelize.QueryTypes.SELECT })
       .then(result => {
         switch (result.length) {
           case 0:
@@ -188,7 +188,7 @@ module.exports = {
   },
   resolveAgainstClaimTable (name, claimId) {
     return new Promise((resolve, reject) => {
-      db.sequelize.query(`SELECT * FROM Claim WHERE name = '${name}' AND claimId = '${claimId}'`, { type: db.sequelize.QueryTypes.SELECT })
+      db.sequelize.query(`SELECT name, claimId, outpoint, height, address, title, description FROM Claim WHERE name = '${name}' AND claimId = '${claimId}'`, { type: db.sequelize.QueryTypes.SELECT })
       .then(result => {
         switch (result.length) {
           case 0:
@@ -224,7 +224,7 @@ module.exports = {
   getAllChannelClaims (channelId) {
     return new Promise((resolve, reject) => {
       logger.debug(`finding all claims in channel "${channelId}"`);
-      db.sequelize.query(`SELECT * FROM Claim WHERE certificateId = '${channelId}' ORDeR BY height DESC;`, { type: db.sequelize.QueryTypes.SELECT })
+      db.sequelize.query(`SELECT name, claimId, outpoint, height, address FROM Claim WHERE certificateId = '${channelId}' ORDeR BY height DESC;`, { type: db.sequelize.QueryTypes.SELECT })
       .then(result => {
         switch (result.length) {
           case 0:
