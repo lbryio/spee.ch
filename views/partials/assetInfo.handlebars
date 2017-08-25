@@ -20,16 +20,6 @@
 		<input type="text" id="long-link" class="link" readonly onclick="select()" spellcheck="false" value="https://spee.ch/{{fileInfo.claimId}}/{{fileInfo.name}}{{fileInfo.fileExt}}"/>
 		<button class="copy-button" data-elementtocopy="long-link" onclick="copyToClipboard(event)">copy</button>
 	</div>
-	{{!-- gif v link --}}
-	{{#ifConditional fileInfo.fileType '===' 'video/mp4'}}
-	<div class="share-option">
-		<a href="/{{fileInfo.shortId}}/{{fileInfo.name}}.gifv">gifv</a>
-		<div class="input-error" id="input-error-copy-gifv-text" hidden="true"></div>
-		<br/>
-		<input type="text" id="gifv-text" class="link" readonly onclick="select()" spellcheck="false" value='https://spee.ch/{{fileInfo.shortId}}/{{fileInfo.name}}.gifv'/>
-		<button class="copy-button" data-elementtocopy="gifv-text" onclick="copyToClipboard(event)">copy</button>
-	</div>
-	{{/ifConditional}}
 	{{!-- html text for embedding asset--}}
 	<div class="share-option">
 		Embed HTML
