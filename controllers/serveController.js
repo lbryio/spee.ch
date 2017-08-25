@@ -1,7 +1,9 @@
 const lbryApi = require('../helpers/lbryApi.js');
 const db = require('../models');
 const logger = require('winston');
-const { getTopFreeClaim, getFullClaimIdFromShortId, resolveAgainstClaimTable } = require('../helpers/serveHelpers.js');
+const { resolveAgainstClaimTable, serveFile, showFile, showFileLite, getShortClaimIdFromLongClaimId, getClaimIdByLongChannelId, getAllChannelClaims, getLongChannelId, getShortChannelIdFromLongChannelId, getLongClaimId } = require('../helpers/serveHelpers.js');
+const { postToStats, sendGoogleAnalytics } = require('../controllers/statsController.js');
+const { SERVE, SHOW, SHOWLITE } = require('../helpers/constants.js');
 
 function checkForLocalAssetByClaimId (claimId, name) {
   return new Promise((resolve, reject) => {
@@ -20,19 +22,28 @@ function checkForLocalAssetByClaimId (claimId, name) {
   });
 }
 
-function formatGetResultsToFileInfo ({ name, claim_id, outpoint, file_name, download_path, mime_type, metadata }) {
+function addGetResultsToFileRecord (fileInfo, getResult) {
+  fileInfo.fileName = getResult.file_name;
+  fileInfo.filePath = getResult.download_path;
+  fileInfo.fileType = getResult.mime_type;
+  return fileInfo;
+}
+
+function createFileRecord ({ name, claimId, outpoint, height, address, nsfw }) {
   return {
     name,
-    claimId : claim_id,
+    claimId,
     outpoint,
-    fileName: file_name,
-    filePath: download_path,
-    fileType: mime_type,
-    nsfw    : metadata.stream.metadata.nsfw,
+    height,
+    address,
+    fileName: '',
+    filePath: '',
+    fileType: '',
+    nsfw,
   };
 }
 
-function getAssetByClaimId (fullClaimId, name) {
+function getAssetByLongClaimId (fullClaimId, name) {
   logger.debug('...getting asset by claim Id...');
   return new Promise((resolve, reject) => {
     // 1. check locally for claim
@@ -57,9 +68,8 @@ function getAssetByClaimId (fullClaimId, name) {
         lbryApi.getClaim(`${name}#${fullClaimId}`)
         .then(getResult => {
           logger.debug('getResult >>', getResult);
-          fileRecord = formatGetResultsToFileInfo(getResult);
-          fileRecord['address'] = (resolveResult.address || 0);
-          fileRecord['height'] = resolveResult.height;
+          fileRecord = createFileRecord(resolveResult);
+          fileRecord = addGetResultsToFileRecord(fileRecord, getResult);
           // insert a record in the File table & Update Claim table
           return db.File.create(fileRecord);
         })
@@ -82,53 +92,112 @@ function getAssetByClaimId (fullClaimId, name) {
 }
 
 module.exports = {
-  getAssetByChannel (channelName, name) {
-    logger.debug('...getting asset by channel...');
+  getAssetByClaim (claimName, claimId) {
+    logger.debug('getting asset by claim');
     return new Promise((resolve, reject) => {
-      // temporarily throw error
-      reject(new Error('channel names are not currently supported'));
-      // get the claim id
-      // get the asset by claim Id
+      // 1. get the long claim id
+      getLongClaimId(claimName, claimId)  // here
+      // 2. get the claim Id
+      .then(longClaimId => {
+        logger.debug('long claim id = ', longClaimId);
+        resolve(getAssetByLongClaimId(longClaimId, claimName));
+      })
+      .catch(error => {
+        reject(error);
+      });
     });
   },
-  getAssetByShortId: function (shortId, name) {
-    logger.debug('...getting asset by short id...');
+  getAssetByChannel (channelName, channelId, claimName) {
+    logger.debug('getting asset by channel');
     return new Promise((resolve, reject) => {
-      // get the full claimId
-      getFullClaimIdFromShortId(shortId, name)
-      // get the asset by the claimId
+      // 1. get the long channel id
+      getLongChannelId(channelName, channelId)
+      // 2. get the claim Id
+      .then(longChannelId => {
+        return getClaimIdByLongChannelId(longChannelId, claimName);
+      })
+      // 3. get the asset by this claim id and name
       .then(claimId => {
-        logger.debug('claim id =', claimId);
-        resolve(getAssetByClaimId(claimId, name));
+        logger.debug('asset claim id = ', claimId);
+        resolve(getAssetByLongClaimId(claimId, claimName));
       })
       .catch(error => {
         reject(error);
       });
     });
   },
-  getAssetByClaimId (fullClaimId, name) {
-    return getAssetByClaimId(fullClaimId, name);
-  },
-  getAssetByName (name) {
-    logger.debug('...getting asset by claim name...');
+  getChannelContents (channelName, channelId) {
     return new Promise((resolve, reject) => {
-      // 1. get a list of the free public claims
-      getTopFreeClaim(name)
-      // 2. check locally for the top claim
-      .then(topFreeClaim => {
-        // if no claims were found, return null
-        if (!topFreeClaim) {
-          return resolve(null);
+      let longChannelId;
+      let shortChannelId;
+      // 1. get the long channel Id
+      getLongChannelId(channelName, channelId)
+      // 2. get all claims for that channel
+      .then(result => {
+        longChannelId = result;
+        return getShortChannelIdFromLongChannelId(channelName, longChannelId);
+      })
+      // 3. get all Claim records for this channel
+      .then(result => {
+        shortChannelId = result;
+        return getAllChannelClaims(longChannelId);
+      })
+      // 4. add extra data not available from Claim table
+      .then(allChannelClaims => {
+        if (allChannelClaims) {
+          allChannelClaims.forEach(element => {
+            element['channelName'] = channelName;
+            element['longChannelId'] = longChannelId;
+            element['shortChannelId'] = shortChannelId;
+            element['fileExtension'] = element.contentType.substring(element.contentType.lastIndexOf('/') + 1);
+          });
         }
-        // parse the result
-        const claimId = topFreeClaim.claimId;
-        logger.debug('top free claim id =', claimId);
-        // get the asset
-        resolve(getAssetByClaimId(claimId, name));
+        return resolve(allChannelClaims);
       })
       .catch(error => {
         reject(error);
       });
     });
+  },
+  serveOrShowAsset (fileInfo, extension, method, headers, originalUrl, ip, res) {
+    // add file extension to the file info
+    if (extension === '.gifv') {
+      fileInfo['fileExt'] = '.gifv';
+    } else {
+      fileInfo['fileExt'] = fileInfo.fileName.substring(fileInfo.fileName.lastIndexOf('.'));
+    }
+    // serve or show
+    switch (method) {
+      case SERVE:
+        serveFile(fileInfo, res);
+        sendGoogleAnalytics(method, headers, ip, originalUrl);
+        postToStats('serve', originalUrl, ip, fileInfo.name, fileInfo.claimId, 'success');
+        return fileInfo;
+      case SHOWLITE:
+        showFileLite(fileInfo, res);
+        postToStats('show', originalUrl, ip, fileInfo.name, fileInfo.claimId, 'success');
+        return fileInfo;
+      case SHOW:
+        return getShortClaimIdFromLongClaimId(fileInfo.claimId, fileInfo.name)
+        .then(shortId => {
+          fileInfo['shortId'] = shortId;
+          return resolveAgainstClaimTable(fileInfo.name, fileInfo.claimId);
+        })
+        .then(resolveResult => {
+          logger.debug('resolve result', resolveResult);
+          fileInfo['title'] = resolveResult.title;
+          fileInfo['description'] = resolveResult.description;
+          showFile(fileInfo, res);
+          postToStats('show', originalUrl, ip, fileInfo.name, fileInfo.claimId, 'success');
+          return fileInfo;
+        })
+        .catch(error => {
+          console.log('thowing error...');
+          throw error;
+        });
+      default:
+        logger.error('I did not recognize that method');
+        break;
+    }
   },
 };

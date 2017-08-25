@@ -156,4 +156,18 @@ module.exports = {
       });
     });
   },
+  getRecentClaims (startDate) {
+    logger.debug('retrieving most recent claims');
+    return new Promise((resolve, reject) => {
+      // get the raw requests data
+      db.sequelize.query(`SELECT * FROM File WHERE nsfw != 1 AND trendingEligible = 1 ORDER BY createdAt DESC LIMIT 25;`, { type: db.sequelize.QueryTypes.SELECT })
+      .then(results => {
+        resolve(results);
+      })
+      .catch(error => {
+        logger.error('sequelize error', error);
+        reject(error);
+      });
+    });
+  },
 };

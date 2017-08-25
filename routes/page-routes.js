@@ -1,6 +1,6 @@
 const errorHandlers = require('../helpers/errorHandlers.js');
 const { getAllFreeClaims } = require('../helpers/serveHelpers.js');
-const { postToStats, getStatsSummary, getTrendingClaims } = require('../controllers/statsController.js');
+const { postToStats, getStatsSummary, getTrendingClaims, getRecentClaims } = require('../controllers/statsController.js');
 
 module.exports = (app) => {
   // route to show 'about' page for spee.ch
@@ -9,13 +9,26 @@ module.exports = (app) => {
     res.status(200).render('about');
   });
   // route to display a list of the trending images
-  app.get('/trending', ({ params, headers }, res) => {
+  app.get('/popular', ({ params, headers }, res) => {
     const startDate = new Date();
     startDate.setDate(startDate.getDate() - 1);
     getTrendingClaims(startDate)
       .then(result => {
         // logger.debug(result);
         res.status(200).render('trending', { trendingAssets: result });
+      })
+      .catch(error => {
+        errorHandlers.handleRequestError(error, res);
+      });
+  });
+  // route to display a list of the trending images
+  app.get('/new', ({ params, headers }, res) => {
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() - 1);
+    getRecentClaims(startDate)
+      .then(result => {
+        // logger.debug(result);
+        res.status(200).render('new', { newClaims: result });
       })
       .catch(error => {
         errorHandlers.handleRequestError(error, res);

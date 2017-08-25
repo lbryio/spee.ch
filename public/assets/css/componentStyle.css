@@ -163,7 +163,7 @@ button.copy-button {
 	overflow: auto;
 }
 
-.all-claims-img {
+.all-claims-asset {
 	width: 20%;
 	float: left;
 	margin: 5px 30px 5px 0px;
@@ -187,7 +187,7 @@ button.copy-button {
 
 @media (max-width: 750px) {
 	
-	.all-claims-img {
+	.all-claims-asset {
 		width:30%;
 	}
 
@@ -214,7 +214,7 @@ button.copy-button {
 		margin-right: 2em;
 	}
 
-    .all-claims-img {
+    .all-claims-asset {
 		width:50%;
 	}
 
