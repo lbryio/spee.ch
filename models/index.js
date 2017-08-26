@@ -9,6 +9,12 @@ const logger = require('winston');
 const connectionUri = config.get('Database.MySqlConnectionUri');
 const sequelize = new Sequelize(connectionUri, {
   logging: false,
+  pool   : {
+    max    : 5,
+    min    : 0,
+    idle   : 20000,
+    acquire: 20000,
+  },
 });
 
 sequelize
