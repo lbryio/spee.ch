@@ -37,15 +37,15 @@ Object.keys(db).forEach(modelName => {
   }
 });
 
-db['upsert'] = (Model, values, condition) => {
+db['upsert'] = (Model, values, condition, tableName) => {
   return Model
     .findOne({ where: condition })
     .then(function (obj) {
       if (obj) {  // update
-        logger.silly(`updating ${values.name}:${values.claimId} in File db`);
+        logger.debug(`updating "${values.name}" "${values.claimId}" in db.${tableName}`);
         return obj.update(values);
       } else {  // insert
-        logger.silly(`creating ${values.name}:${values.claimId} in File db`);
+        logger.debug(`creating "${values.name}" "${values.claimId}" in db.${tableName}`);
         return Model.create(values);
       }
     }).catch(function (error) {

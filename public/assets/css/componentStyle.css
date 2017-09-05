@@ -29,7 +29,8 @@
 #drop-zone {
 	border: 1px dashed lightgrey;
 	padding: 1em;
-	height: 6em;
+	height: 13em;
+	background: #F5F0EF;
 }
 
 #asset-preview-holder {
@@ -37,11 +38,20 @@
 	margin-bottom: 1em;
 }
 
-.claim-name-input-area {
+#claim-name-input-area {
 	border-bottom: 1px blue solid;
 	float: left;
 	margin-bottom: 1em;
 	font-weight: bold;
+}
+
+.publish-input, #publish-license {
+	border: 1px solid lightgrey; 
+}
+
+.publish-input {
+	padding: 1%; 
+	width: 90%
 }
 
 #claim-name-input {
@@ -153,7 +163,7 @@ button.copy-button {
 	overflow: auto;
 }
 
-.all-claims-img {
+.all-claims-asset {
 	width: 20%;
 	float: left;
 	margin: 5px 30px 5px 0px;
@@ -177,7 +187,7 @@ button.copy-button {
 
 @media (max-width: 750px) {
 	
-	.all-claims-img {
+	.all-claims-asset {
 		width:30%;
 	}
 
@@ -204,7 +214,7 @@ button.copy-button {
 		margin-right: 2em;
 	}
 
-    .all-claims-img {
+    .all-claims-asset {
 		width:50%;
 	}
 

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#">
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
@@ -7,17 +7,19 @@
 	<title>Spee.ch</title>
 	<link rel="stylesheet" href="/assets/css/generalStyle.css" type="text/css">
 	<link rel="stylesheet" href="/assets/css/componentStyle.css" type="text/css">
-	<!-- twitter card -->
-	<meta name="twitter:card" content="summary_large_image">
-	<meta name="twitter:site" content="@spee.ch">
-	<meta name="twitter:creator" content="@spee.ch">
-	<meta name="twitter:title" content="{{fileInfo.name}}">
-	<meta name="twitter:description" content="An image hosted via Spee.ch">
-	<meta name="twitter:image" content="https://spee.ch/media/{{fileInfo.fileName}}">
+	<meta property="fb:app_id" content="1371961932852223">
+	{{#unless fileInfo.nsfw}}
+	{{{addTwitterCard fileInfo.fileType openGraphInfo.source openGraphInfo.embedUrl openGraphInfo.directFileUrl}}}
+	{{{addOpenGraph fileInfo.title fileInfo.fileType openGraphInfo.showUrl openGraphInfo.source fileInfo.description}}}
+	{{/unless}}
+	<!-- google analytics -->
+	{{ googleAnalytics }}
 </head>
 <body>
 	{{{ body }}}
-	<!-- google analytics -->
-	{{ googleAnalytics }}
 </body>
 </html>
+
+<script>
+
+</script>

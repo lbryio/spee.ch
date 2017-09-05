@@ -1,6 +1,8 @@
 const logger = require('winston');
 const config = require('config');
 const fs = require('fs');
+const db = require('../models');
+const { getWalletList } = require('./lbryApi.js');
 
 module.exports = {
   validateFile (file, name, license, nsfw) {
@@ -49,7 +51,7 @@ module.exports = {
         throw new Error('NSFW value was not accepted.  NSFW must be set to either true, false, "on", or "off"');
     }
   },
-  createPublishParams (name, filePath, license, nsfw) {
+  createPublishParams (name, filePath, title, description, license, nsfw) {
     logger.debug(`Creating Publish Parameters for "${name}"`);
     const claimAddress = config.get('WalletConfig.LbryClaimAddress');
     // filter nsfw and ensure it is a boolean
@@ -66,15 +68,23 @@ module.exports = {
     } else {
       nsfw = true;
     }
+    // provide defaults for title & description
+    if (title === '' || title === null) {
+      title = name;
+    }
+    if (description === '' || title === null) {
+      description = `${name} published via spee.ch`;
+    }
+    // create the publish params
     const publishParams = {
       name,
       file_path: filePath,
       bid      : 0.01,
       metadata : {
-        description: `${name} published via spee.ch`,
-        title      : name,
-        author     : 'spee.ch',
-        language   : 'en',
+        description,
+        title,
+        author  : 'spee.ch',
+        language: 'en',
         license,
         nsfw,
       },
@@ -88,6 +98,36 @@ module.exports = {
     fs.unlink(filePath, err => {
       if (err) throw err;
       logger.debug(`successfully deleted ${filePath}`);
+    });
+  },
+  checkNameAvailability (name) {
+    return new Promise((resolve, reject) => {
+      // find any records where the name is used
+      db.File.findAll({ where: { name } })
+      .then(result => {
+        if (result.length >= 1) {
+          // filter out any results that were not published from a spee.ch wallet address
+          getWalletList()
+          .then((walletList) => {
+            const filteredResult = result.filter((claim) => {
+              return walletList.includes(claim.address);
+            });
+            if (filteredResult.length >= 1) {
+              resolve(false);
+            } else {
+              resolve(true);
+            }
+          })
+          .catch((error) => {
+            reject(error);
+          });
+        } else {
+          resolve(true);
+        }
+      })
+      .catch(error => {
+        reject(error);
+      });
     });
   },
 };

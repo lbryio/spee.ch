@@ -1,73 +1,29 @@
 const logger = require('winston');
-const { serveFile, showFile, showFileLite, getShortUrlFromClaimId } = require('../helpers/serveHelpers.js');
-const { getAssetByChannel, getAssetByShortUrl, getAssetByClaimId, getAssetByName } = require('../controllers/serveController.js');
+const { getAssetByClaim, getChannelContents, getAssetByChannel, serveOrShowAsset } = require('../controllers/serveController.js');
 const { handleRequestError } = require('../helpers/errorHandlers.js');
-const { postToStats, sendGoogleAnalytics } = require('../controllers/statsController.js');
-const SERVE = 'SERVE';
-const SHOW = 'SHOW';
-const SHOWLITE = 'SHOWLITE';
-const CHANNEL = 'CHANNEL';
-const SHORTURL = 'SHORTURL';
-const CLAIMID = 'CLAIMID';
-const NAME = 'NAME';
-
-function getAsset (claimType, channelName, shortUrl, fullClaimId, name) {
-  switch (claimType) {
-    case CHANNEL:
-      return getAssetByChannel(channelName, name);
-    case SHORTURL:
-      return getAssetByShortUrl(shortUrl, name);
-    case CLAIMID:
-      return getAssetByClaimId(fullClaimId, name);
-    case NAME:
-      return getAssetByName(name);
-    default:
-      return new Error('that claim type was not found');
-  }
-}
-
-function serveOrShowAsset (fileInfo, method, headers, originalUrl, ip, res) {
-  // add file extension to the file info
-  fileInfo['fileExt'] = fileInfo.fileName.substring(fileInfo.fileName.lastIndexOf('.'));
-  // serve or show
-  switch (method) {
-    case SERVE:
-      serveFile(fileInfo, res);
-      sendGoogleAnalytics(method, headers, ip, originalUrl);
-      postToStats('serve', originalUrl, ip, fileInfo.name, fileInfo.claimId, 'success');
-      return fileInfo;
-    case SHOWLITE:
-      showFileLite(fileInfo, res);
-      postToStats('show', originalUrl, ip, fileInfo.name, fileInfo.claimId, 'success');
-      return fileInfo;
-    case SHOW:
-      return getShortUrlFromClaimId(fileInfo.claimId, fileInfo.height, fileInfo.name)
-      .then(shortUrl => {
-        fileInfo['shortUrl'] = shortUrl;
-        showFile(fileInfo, res);
-        postToStats('show', originalUrl, ip, fileInfo.name, fileInfo.claimId, 'success');
-        return fileInfo;
-      })
-      .catch(error => {
-        console.log('thowing error...');
-        throw error;
-      });
-    default:
-      logger.error('I did not recognize that method');
-      break;
-  }
-}
+const { SERVE, SHOW, SHOWLITE, CHANNEL, CLAIM, CHANNELID_INDICATOR } = require('../helpers/constants.js');
 
 function isValidClaimId (claimId) {
   return ((claimId.length === 40) && !/[^A-Za-z0-9]/g.test(claimId));
 }
 
-function isValidShortUrl (claimId) {
+function isValidShortId (claimId) {
   return claimId.length === 1;  // really it should evaluate the short url itself
 }
 
-function isValidShortUrlOrClaimId (input) {
-  return (isValidClaimId(input) || isValidShortUrl(input));
+function isValidShortIdOrClaimId (input) {
+  return (isValidClaimId(input) || isValidShortId(input));
+}
+
+function getAsset (claimType, channelName, channelId, name, claimId) {
+  switch (claimType) {
+    case CHANNEL:
+      return getAssetByChannel(channelName, channelId, name);
+    case CLAIM:
+      return getAssetByClaim(name, claimId);
+    default:
+      return new Error('that claim type was not found');
+  }
 }
 
 module.exports = (app) => {
@@ -77,8 +33,8 @@ module.exports = (app) => {
     let name = params.name;
     let claimType;
     let channelName = null;
-    let shortUrl = null;
-    let fullClaimId = null;
+    let claimId = null;
+    let channelId = null;
     let method;
     let extension;
     // parse the name
@@ -86,6 +42,11 @@ module.exports = (app) => {
     if (positionOfExtension >= 0) {
       extension = name.substring(positionOfExtension);
       name = name.substring(0, positionOfExtension);
+      /* patch because twitter player preview adds '>' before file extension */
+      if (name.indexOf('>') >= 0) {
+        name = name.substring(0, name.indexOf('>'));
+      }
+      /* end patch */
       logger.debug('file extension =', extension);
       if (headers['accept'] && headers['accept'].split(',').includes('text/html')) {
         method = SHOWLITE;
@@ -93,47 +54,41 @@ module.exports = (app) => {
         method = SERVE;
       }
     } else {
-      if (headers['accept'] && !headers['accept'].split(',').includes('text/html')) {
-        method = SERVE;
-      } else {
-        method = SHOW;
-      }
+      method = SHOW;
     }
-    /* start: temporary patch for backwards compatability spee.ch/name/claim_id */
-    if (isValidShortUrlOrClaimId(name) && !isValidShortUrlOrClaimId(identifier)) {
+    /* patch for backwards compatability with spee.ch/name/claim_id */
+    if (isValidShortIdOrClaimId(name) && !isValidShortIdOrClaimId(identifier)) {
       let tempName = name;
       name = identifier;
       identifier = tempName;
     }
-    /* end */
+    /* end patch */
     logger.debug('claim name =', name);
     logger.debug('method =', method);
     // parse identifier for whether it is a channel, short url, or claim_id
     if (identifier.charAt(0) === '@') {
-      channelName = identifier.substring(1);
-      logger.debug('channel name =', channelName);
+      channelName = identifier;
       claimType = CHANNEL;
-    } else if (identifier.length === 40) {
-      fullClaimId = identifier;
-      logger.debug('full claim id =', fullClaimId);
-      claimType = CLAIMID;
-    } else if (identifier.length < 40) {
-      shortUrl = identifier;
-      logger.debug('short url =', shortUrl);
-      claimType = SHORTURL;
+      const channelIdIndex = channelName.indexOf(CHANNELID_INDICATOR);
+      if (channelIdIndex !== -1) {
+        channelId = channelName.substring(channelIdIndex + 1);
+        channelName = channelName.substring(0, channelIdIndex);
+      }
+      logger.debug('channel name =', channelName);
     } else {
-      logger.error('The URL provided could not be parsed');
-      res.send('that url is invalid');
-      return;
-    };
+      claimId = identifier;
+      logger.debug('claim id =', claimId);
+      claimType = CLAIM;
+    }
     // 1. retrieve the asset and information
-    getAsset(claimType, channelName, shortUrl, fullClaimId, name)
+    getAsset(claimType, channelName, channelId, name, claimId)
     // 2. serve or show
     .then(fileInfo => {
+      logger.debug('fileInfo', fileInfo);
       if (!fileInfo) {
         res.status(200).render('noClaims');
       } else {
-        return serveOrShowAsset(fileInfo, method, headers, originalUrl, ip, res);
+        return serveOrShowAsset(fileInfo, extension, method, headers, originalUrl, ip, res);
       }
     })
     // 3. update the file
@@ -150,38 +105,68 @@ module.exports = (app) => {
     let name = params.name;
     let method;
     let fileExtension;
-    if (name.indexOf('.') !== -1) {
-      method = SERVE;
-      if (headers['accept'] && headers['accept'].split(',').includes('text/html')) {
-        method = SHOWLITE;
+    let channelName = null;
+    let channelId = null;
+    if (name.charAt(0) === '@') {
+      channelName = name;
+      const channelIdIndex = channelName.indexOf(CHANNELID_INDICATOR);
+      if (channelIdIndex !== -1) {
+        channelId = channelName.substring(channelIdIndex + 1);
+        channelName = channelName.substring(0, channelIdIndex);
       }
-      fileExtension = name.substring(name.indexOf('.'));
-      name = name.substring(0, name.indexOf('.'));
-      logger.debug('file extension =', fileExtension);
+      logger.debug('channel name =', channelName);
+      logger.debug('channel Id =', channelId);
+      // 1. retrieve the channel contents
+      getChannelContents(channelName, channelId)
+      // 2. respond to the request
+      .then(channelContents => {
+        if (!channelContents) {
+          res.status(200).render('noChannel');
+        } else {
+          const handlebarsData = {
+            channelName,
+            channelContents,
+          };
+          res.status(200).render('channel', handlebarsData);
+        }
+      })
+      .catch(error => {
+        handleRequestError('serve', originalUrl, ip, error, res);
+      });
     } else {
-      method = SHOW;
-      if (headers['accept'] && !headers['accept'].split(',').includes('text/html')) {
+      if (name.indexOf('.') !== -1) {
         method = SERVE;
-      }
-    }
-    logger.debug('claim name = ', name);
-    logger.debug('method =', method);
-    // 1. retrieve the asset and information
-    getAsset(NAME, null, null, null, name)
-    // 2. serve or show
-    .then(fileInfo => {
-      if (!fileInfo) {
-        res.status(200).render('noClaims');
+        if (headers['accept'] && headers['accept'].split(',').includes('text/html')) {
+          method = SHOWLITE;
+        }
+        fileExtension = name.substring(name.indexOf('.'));
+        name = name.substring(0, name.indexOf('.'));
+        logger.debug('file extension =', fileExtension);
       } else {
-        return serveOrShowAsset(fileInfo, method, headers, originalUrl, ip, res);
+        method = SHOW;
+        if (headers['accept'] && !headers['accept'].split(',').includes('text/html')) {
+          method = SERVE;
+        }
       }
-    })
-    // 3. update the database
-    .then(fileInfoForUpdate => {
-      // if needed, this is where we would update the file
-    })
-    .catch(error => {
-      handleRequestError('serve', originalUrl, ip, error, res);
-    });
+      logger.debug('claim name = ', name);
+      logger.debug('method =', method);
+      // 1. retrieve the asset and information
+      getAsset(CLAIM, null, null, name, null)
+      // 2. respond to the request
+      .then(fileInfo => {
+        if (!fileInfo) {
+          res.status(200).render('noClaims');
+        } else {
+          return serveOrShowAsset(fileInfo, null, method, headers, originalUrl, ip, res);
+        }
+      })
+      // 3. update the database
+      .then(fileInfoForUpdate => {
+        // if needed, this is where we would update the file
+      })
+      .catch(error => {
+        handleRequestError('serve', originalUrl, ip, error, res);
+      });
+    }
   });
 };

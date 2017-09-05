@@ -1,10 +1,9 @@
-<script src="/vendors/masonry/masonry.pkgd.min.js"></script>
-
-<div class="full"> 
-	<h2>Trending</h2>
-	<p><i>The 25 most popular assets on spee.ch</i></p>
-	<div class="grid" data-masonry='{ "itemSelector": ".grid-item" }'>
-		{{#each trendingAssets}}
+<div class="wrapper">
+	{{> topBar}}
+	<div>
+		<h2>New on Spee.ch</h2>
+		<p><i>The 25 most recent publishes on spee.ch</i></p>
+		{{#each newClaims}}
 			<div class="all-claims-item">
 				<a href="/{{this.claimId}}/{{this.name}}">
 					{{#ifConditional this.fileType '===' 'video/mp4'}}
@@ -17,23 +16,11 @@
 					<ul style="list-style-type:none">
 						<li><bold>{{this.name}}</bold></li>
 						<li><i>Claim Id: {{this.claimId}}</i></li>
-						<li><strong>{{this.title}}</strong></li>
+						<li><a href="/{{this.claimId}}/{{this.name}}">Link</a></li>
 					</ul>
 				</div>
 			</div>
 		{{/each}}
 	</div>
+	{{> footer}}
 </div>
-
-
-<script>
-	var elem = document.querySelector('.grid');
-	var msnry = new Masonry( elem, {
-		itemSelector: '.grid-item'
-	});
-	
-	function resetTrendingLayout() {
-		msnry.layout();
-	}
-</script>
-

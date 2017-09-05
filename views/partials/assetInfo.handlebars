@@ -1,26 +1,24 @@
 <div class="panel">
-	<h2>Name</h2>
-	<p>{{fileInfo.name}}</>
+	<h2>Title</h2>
+	<p>{{fileInfo.title}}</>
 </div>
 <div class="panel links">
 	<h2 class="subheader">Links</h2>
+	{{!--short direct link to asset--}}
+	<div class="share-option">
+		<a href="/{{fileInfo.shortId}}/{{fileInfo.name}}{{fileInfo.fileExt}}">Permanent Short Link</a> (most convenient)
+		<div class="input-error" id="input-error-copy-short-link" hidden="true"></div>
+		<br/>
+		<input type="text" id="short-link" class="link" readonly spellcheck="false" value="https://spee.ch/{{fileInfo.shortId}}/{{fileInfo.name}}{{fileInfo.fileExt}}" onclick="select()"/>
+		<button class="copy-button" data-elementtocopy="short-link" onclick="copyToClipboard(event)">copy</button>
+	</div>
 	{{!-- link to show route for asset--}}
 	<div class="share-option">
-		<a href="/{{fileInfo.claimId}}/{{fileInfo.name}}{{fileInfo.fileExt}}">Permanent Long Link</a>
-		(fastest service)
+		<a href="/{{fileInfo.claimId}}/{{fileInfo.name}}{{fileInfo.fileExt}}">Permanent Long Link</a> (fastest service)
 		<div class="input-error" id="input-error-copy-long-link" hidden="true"></div>
 		</br>
 		<input type="text" id="long-link" class="link" readonly onclick="select()" spellcheck="false" value="https://spee.ch/{{fileInfo.claimId}}/{{fileInfo.name}}{{fileInfo.fileExt}}"/>
 		<button class="copy-button" data-elementtocopy="long-link" onclick="copyToClipboard(event)">copy</button>
-	</div>
-	{{!--short direct link to asset--}}
-	<div class="share-option">
-		<a href="/{{fileInfo.shortUrl}}/{{fileInfo.name}}{{fileInfo.fileExt}}">Permanent Short Link</a>
-		(most convenient)
-		<div class="input-error" id="input-error-copy-short-link" hidden="true"></div>
-		<br/>
-		<input type="text" id="short-link" class="link" readonly spellcheck="false" value="https://spee.ch/{{fileInfo.shortUrl}}/{{fileInfo.name}}{{fileInfo.fileExt}}" onclick="select()"/>
-		<button class="copy-button" data-elementtocopy="short-link" onclick="copyToClipboard(event)">copy</button>
 	</div>
 	{{!-- html text for embedding asset--}}
 	<div class="share-option">
@@ -45,6 +43,10 @@
 		<button class="copy-button" data-elementtocopy="markdown-text" onclick="copyToClipboard(event)">copy</button>
 	</div>
 	{{/ifConditional}}
+</div>
+<div class="panel">
+	<h2>Description</h2>
+	<p>{{fileInfo.description}}</>
 </div>
 <div class="panel">
 	<h2 class="subheader">Metadata</h2>
