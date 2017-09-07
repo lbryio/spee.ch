@@ -9,6 +9,9 @@ module.exports = (app) => {
     res.status(200).render('about');
   });
   // route to display a list of the trending images
+  app.get('/trending', (req, res) => {
+    res.status(301).redirect('/popular');
+  });
   app.get('/popular', (req, res) => {
     const startDate = new Date();
     startDate.setDate(startDate.getDate() - 1);
