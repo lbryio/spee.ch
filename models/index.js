@@ -43,6 +43,9 @@ Object.keys(db).forEach(modelName => {
   }
 });
 
+db.sequelize = sequelize;
+db.Sequelize = Sequelize;
+
 db['upsert'] = (Model, values, condition, tableName) => {
   return Model
     .findOne({ where: condition })
@@ -59,7 +62,12 @@ db['upsert'] = (Model, values, condition, tableName) => {
     });
 };
 
-db.sequelize = sequelize;
-db.Sequelize = Sequelize;
+db['getTrendingClaims'] = (startDate) => {
+  return db.sequelize.query(`SELECT COUNT(*), File.* FROM Request LEFT JOIN File ON Request.FileId = File.id WHERE FileId IS NOT NULL AND nsfw != 1 AND trendingEligible = 1 AND Request.createdAt > "${startDate}" GROUP BY FileId ORDER BY COUNT(*) DESC LIMIT 25;`, { type: db.sequelize.QueryTypes.SELECT });
+};
+
+db['getRecentClaims'] = () => {
+  return db.sequelize.query(`SELECT * FROM File WHERE nsfw != 1 AND trendingEligible = 1 ORDER BY createdAt DESC LIMIT 25;`, { type: db.sequelize.QueryTypes.SELECT });
+};
 
 module.exports = db;

@@ -147,7 +147,7 @@ module.exports = {
     const dateTime = startDate.toISOString().slice(0, 19).replace('T', ' ');
     return new Promise((resolve, reject) => {
       // get the raw requests data
-      db.sequelize.query(`SELECT COUNT(*), File.* FROM Request LEFT JOIN File ON Request.FileId = File.id WHERE FileId IS NOT NULL AND nsfw != 1 AND trendingEligible = 1 AND Request.createdAt > "${dateTime}" GROUP BY FileId ORDER BY COUNT(*) DESC LIMIT 25;`, { type: db.sequelize.QueryTypes.SELECT })
+      db.getTrendingClaims(dateTime)
       .then(results => {
         resolve(results);
       })
@@ -157,11 +157,11 @@ module.exports = {
       });
     });
   },
-  getRecentClaims (startDate) {
+  getRecentClaims () {
     logger.debug('retrieving most recent claims');
     return new Promise((resolve, reject) => {
       // get the raw requests data
-      db.sequelize.query(`SELECT * FROM File WHERE nsfw != 1 AND trendingEligible = 1 ORDER BY createdAt DESC LIMIT 25;`, { type: db.sequelize.QueryTypes.SELECT })
+      db.getRecentClaims()
       .then(results => {
         resolve(results);
       })
