@@ -90,18 +90,18 @@ module.exports = {
           let totalSuccess = 0;
           let totalFailure = 0;
           let percentSuccess;
-          // sumarise the data
+          // summarise the data
           for (let i = 0; i < data.length; i++) {
             let key = data[i].action + data[i].url;
             totalCount += 1;
             switch (data[i].action) {
-              case 'serve':
+              case 'SERVE':
                 totalServe += 1;
                 break;
-              case 'publish':
+              case 'PUBLISH':
                 totalPublish += 1;
                 break;
-              case 'show':
+              case 'SHOW':
                 totalShow += 1;
                 break;
               default: break;
