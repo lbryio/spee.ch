@@ -4,15 +4,16 @@ const { postToStats, getStatsSummary, getTrendingClaims, getRecentClaims } = req
 
 module.exports = (app) => {
   // route to show 'about' page for spee.ch
-  app.get('/about', ({ ip, originalUrl }, res) => {
+  app.get('/about', (req, res) => {
     // get and render the content
     res.status(200).render('about');
   });
   // route to display a list of the trending images
-  app.get('/popular', ({ params, headers }, res) => {
+  app.get('/popular', (req, res) => {
     const startDate = new Date();
     startDate.setDate(startDate.getDate() - 1);
-    getTrendingClaims(startDate)
+    const dateTime = startDate.toISOString().slice(0, 19).replace('T', ' ');
+    getTrendingClaims(dateTime)
       .then(result => {
         // logger.debug(result);
         res.status(200).render('trending', { trendingAssets: result });
@@ -22,10 +23,8 @@ module.exports = (app) => {
       });
   });
   // route to display a list of the trending images
-  app.get('/new', ({ params, headers }, res) => {
-    const startDate = new Date();
-    startDate.setDate(startDate.getDate() - 1);
-    getRecentClaims(startDate)
+  app.get('/new', (req, res) => {
+    getRecentClaims()
       .then(result => {
         // logger.debug(result);
         res.status(200).render('new', { newClaims: result });

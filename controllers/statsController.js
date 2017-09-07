@@ -144,10 +144,9 @@ module.exports = {
   },
   getTrendingClaims (startDate) {
     logger.debug('retrieving trending requests');
-    const dateTime = startDate.toISOString().slice(0, 19).replace('T', ' ');
     return new Promise((resolve, reject) => {
       // get the raw requests data
-      db.getTrendingClaims(dateTime)
+      db.getTrendingClaims(startDate)
       .then(results => {
         resolve(results);
       })
