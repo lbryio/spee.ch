@@ -161,10 +161,10 @@ module.exports = {
   },
   serveOrShowAsset (fileInfo, extension, method, headers, originalUrl, ip, res) {
     // add file extension to the file info
-    if (extension === '.gifv') {
-      fileInfo['fileExt'] = '.gifv';
+    if (extension === 'gifv') {
+      fileInfo['fileExt'] = 'gifv';
     } else {
-      fileInfo['fileExt'] = fileInfo.fileName.substring(fileInfo.fileName.lastIndexOf('.'));
+      fileInfo['fileExt'] = fileInfo.fileName.substring(fileInfo.fileName.lastIndexOf('.') + 1);
     }
     // serve or show
     switch (method) {
