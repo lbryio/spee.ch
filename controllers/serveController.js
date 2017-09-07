@@ -3,7 +3,10 @@ const db = require('../models');
 const logger = require('winston');
 const { resolveAgainstClaimTable, serveFile, showFile, showFileLite, getShortClaimIdFromLongClaimId, getClaimIdByLongChannelId, getAllChannelClaims, getLongChannelId, getShortChannelIdFromLongChannelId, getLongClaimId } = require('../helpers/serveHelpers.js');
 const { postToStats, sendGoogleAnalytics } = require('../controllers/statsController.js');
-const { SERVE, SHOW, SHOWLITE } = require('../helpers/constants.js');
+
+const SERVE = 'SERVE';
+const SHOW = 'SHOW';
+const SHOWLITE = 'SHOWLITE';
 
 function checkForLocalAssetByClaimId (claimId, name) {
   return new Promise((resolve, reject) => {

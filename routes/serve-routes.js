@@ -1,7 +1,13 @@
 const logger = require('winston');
 const { getAssetByClaim, getChannelContents, getAssetByChannel, serveOrShowAsset } = require('../controllers/serveController.js');
 const { handleRequestError } = require('../helpers/errorHandlers.js');
-const { SERVE, SHOW, SHOWLITE, CHANNEL, CLAIM, CHANNELID_INDICATOR } = require('../helpers/constants.js');
+
+const SERVE = 'SERVE';
+const SHOW = 'SHOW';
+const SHOWLITE = 'SHOWLITE';
+const CHANNEL = 'CHANNEL';
+const CLAIM = 'CLAIM';
+const CHANNELID_INDICATOR = ':';
 
 function isValidClaimId (claimId) {
   return ((claimId.length === 40) && !/[^A-Za-z0-9]/g.test(claimId));
@@ -84,7 +90,6 @@ module.exports = (app) => {
     getAsset(claimType, channelName, channelId, name, claimId)
     // 2. serve or show
     .then(fileInfo => {
-      logger.debug('fileInfo', fileInfo);
       if (!fileInfo) {
         res.status(200).render('noClaims');
       } else {
