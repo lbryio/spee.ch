@@ -166,16 +166,16 @@ module.exports = {
     } else {
       fileInfo['fileExt'] = fileInfo.fileName.substring(fileInfo.fileName.lastIndexOf('.') + 1);
     }
+    // add stats table
+    postToStats(method, originalUrl, ip, fileInfo.name, fileInfo.claimId, 'success');
     // serve or show
     switch (method) {
       case SERVE:
         serveFile(fileInfo, res);
         sendGoogleAnalytics(method, headers, ip, originalUrl);
-        postToStats('serve', originalUrl, ip, fileInfo.name, fileInfo.claimId, 'success');
         return fileInfo;
       case SHOWLITE:
         showFileLite(fileInfo, res);
-        postToStats('show', originalUrl, ip, fileInfo.name, fileInfo.claimId, 'success');
         return fileInfo;
       case SHOW:
         return getShortClaimIdFromLongClaimId(fileInfo.claimId, fileInfo.name)
@@ -184,15 +184,13 @@ module.exports = {
           return resolveAgainstClaimTable(fileInfo.name, fileInfo.claimId);
         })
         .then(resolveResult => {
-          logger.debug('resolve result', resolveResult);
           fileInfo['title'] = resolveResult.title;
           fileInfo['description'] = resolveResult.description;
           showFile(fileInfo, res);
-          postToStats('show', originalUrl, ip, fileInfo.name, fileInfo.claimId, 'success');
           return fileInfo;
         })
         .catch(error => {
-          console.log('thowing error...');
+          logger.error('throwing serve/show error...');
           throw error;
         });
       default:

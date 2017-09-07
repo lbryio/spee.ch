@@ -6,6 +6,7 @@ const googleApiKey = config.get('AnalyticsConfig.GoogleId');
 
 module.exports = {
   postToStats (action, url, ipAddress, name, claimId, result) {
+    logger.debug('action:', action);
     // make sure the result is a string
     if (result && (typeof result !== 'string')) {
       result = result.toString();
