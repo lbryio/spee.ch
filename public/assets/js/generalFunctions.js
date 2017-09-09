@@ -3,7 +3,7 @@ function toggleSection(event){
 
 	var dataSet = event.target.dataset;
 	var status = dataSet.open;
-	var masterElement = document.getElementById(event.srcElement.id);
+	var masterElement = document.getElementById(event.target.id||event.srcElement.id);
 	var slaveElement = document.getElementById(dataSet.slaveelementid);
 	
 	if (status === "false") {
