@@ -37,7 +37,7 @@
 	</div>
 	{{!-- link to show route for asset--}}
 	<div class="share-option">
-		<a href="/{{fileInfo.claimId}}/{{fileInfo.name}}{{fileInfo.fileExt}}">Permanent Long Link</a> (fastest service)
+		<a href="/{{fileInfo.claimId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}">Permanent Long Link</a> (fastest service)
 		<div class="input-error" id="input-error-copy-long-link" hidden="true"></div>
 		<br>
 		<input type="text" id="long-link" class="link" readonly onclick="select()" spellcheck="false" value="https://spee.ch/{{fileInfo.claimId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}"/>
