@@ -6,6 +6,7 @@ const googleApiKey = config.get('AnalyticsConfig.GoogleId');
 
 module.exports = {
   postToStats (action, url, ipAddress, name, claimId, result) {
+    logger.debug('action:', action);
     // make sure the result is a string
     if (result && (typeof result !== 'string')) {
       result = result.toString();
@@ -89,18 +90,18 @@ module.exports = {
           let totalSuccess = 0;
           let totalFailure = 0;
           let percentSuccess;
-          // sumarise the data
+          // summarise the data
           for (let i = 0; i < data.length; i++) {
             let key = data[i].action + data[i].url;
             totalCount += 1;
             switch (data[i].action) {
-              case 'serve':
+              case 'SERVE':
                 totalServe += 1;
                 break;
-              case 'publish':
+              case 'PUBLISH':
                 totalPublish += 1;
                 break;
-              case 'show':
+              case 'SHOW':
                 totalShow += 1;
                 break;
               default: break;
@@ -143,10 +144,9 @@ module.exports = {
   },
   getTrendingClaims (startDate) {
     logger.debug('retrieving trending requests');
-    const dateTime = startDate.toISOString().slice(0, 19).replace('T', ' ');
     return new Promise((resolve, reject) => {
       // get the raw requests data
-      db.sequelize.query(`SELECT COUNT(*), File.* FROM Request LEFT JOIN File ON Request.FileId = File.id WHERE FileId IS NOT NULL AND nsfw != 1 AND trendingEligible = 1 AND Request.createdAt > "${dateTime}" GROUP BY FileId ORDER BY COUNT(*) DESC LIMIT 25;`, { type: db.sequelize.QueryTypes.SELECT })
+      db.getTrendingClaims(startDate)
       .then(results => {
         resolve(results);
       })
@@ -156,11 +156,11 @@ module.exports = {
       });
     });
   },
-  getRecentClaims (startDate) {
+  getRecentClaims () {
     logger.debug('retrieving most recent claims');
     return new Promise((resolve, reject) => {
       // get the raw requests data
-      db.sequelize.query(`SELECT * FROM File WHERE nsfw != 1 AND trendingEligible = 1 ORDER BY createdAt DESC LIMIT 25;`, { type: db.sequelize.QueryTypes.SELECT })
+      db.getRecentClaims()
       .then(results => {
         resolve(results);
       })

@@ -42,7 +42,7 @@ module.exports = {
         };
         return Promise.all([db.upsert(db.File, fileRecord, upsertCriteria, 'File'), db.upsert(db.Claim, fileRecord, upsertCriteria, 'Claim')]);
       })
-      .then((fileRecordResults, claimRecordResults) => {
+      .then(() => {
         logger.debug('File and Claim records successfully created');
         resolve(publishResults); // resolve the promise with the result from lbryApi.publishClaim;
       })

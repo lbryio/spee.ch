@@ -1,7 +1,13 @@
 const logger = require('winston');
 const { getAssetByClaim, getChannelContents, getAssetByChannel, serveOrShowAsset } = require('../controllers/serveController.js');
 const { handleRequestError } = require('../helpers/errorHandlers.js');
-const { SERVE, SHOW, SHOWLITE, CHANNEL, CLAIM, CHANNELID_INDICATOR } = require('../helpers/constants.js');
+
+const SERVE = 'SERVE';
+const SHOW = 'SHOW';
+const SHOWLITE = 'SHOWLITE';
+const CHANNEL = 'CHANNEL';
+const CLAIM = 'CLAIM';
+const CHANNELID_INDICATOR = ':';
 
 function isValidClaimId (claimId) {
   return ((claimId.length === 40) && !/[^A-Za-z0-9]/g.test(claimId));
@@ -36,18 +42,18 @@ module.exports = (app) => {
     let claimId = null;
     let channelId = null;
     let method;
-    let extension;
+    let fileExtension;
     // parse the name
     const positionOfExtension = name.indexOf('.');
     if (positionOfExtension >= 0) {
-      extension = name.substring(positionOfExtension);
+      fileExtension = name.substring(positionOfExtension + 1);
       name = name.substring(0, positionOfExtension);
       /* patch because twitter player preview adds '>' before file extension */
       if (name.indexOf('>') >= 0) {
         name = name.substring(0, name.indexOf('>'));
       }
       /* end patch */
-      logger.debug('file extension =', extension);
+      logger.debug('file extension =', fileExtension);
       if (headers['accept'] && headers['accept'].split(',').includes('text/html')) {
         method = SHOWLITE;
       } else {
@@ -84,11 +90,10 @@ module.exports = (app) => {
     getAsset(claimType, channelName, channelId, name, claimId)
     // 2. serve or show
     .then(fileInfo => {
-      logger.debug('fileInfo', fileInfo);
       if (!fileInfo) {
         res.status(200).render('noClaims');
       } else {
-        return serveOrShowAsset(fileInfo, extension, method, headers, originalUrl, ip, res);
+        return serveOrShowAsset(fileInfo, fileExtension, method, headers, originalUrl, ip, res);
       }
     })
     // 3. update the file
@@ -139,7 +144,7 @@ module.exports = (app) => {
         if (headers['accept'] && headers['accept'].split(',').includes('text/html')) {
           method = SHOWLITE;
         }
-        fileExtension = name.substring(name.indexOf('.'));
+        fileExtension = name.substring(name.indexOf('.') + 1);
         name = name.substring(0, name.indexOf('.'));
         logger.debug('file extension =', fileExtension);
       } else {
@@ -157,7 +162,7 @@ module.exports = (app) => {
         if (!fileInfo) {
           res.status(200).render('noClaims');
         } else {
-          return serveOrShowAsset(fileInfo, null, method, headers, originalUrl, ip, res);
+          return serveOrShowAsset(fileInfo, fileExtension, method, headers, originalUrl, ip, res);
         }
       })
       // 3. update the database

@@ -27,7 +27,7 @@ module.exports = (app, siofu, hostedContentPath) => {
     // listener for when file upload encounters an error
     uploader.on('error', ({ error }) => {
       logger.error('an error occured while uploading', error);
-      postToStats('publish', '/', null, null, null, error);
+      postToStats('PUBLISH', '/', null, null, null, error);
       socket.emit('publish-status', error);
     });
     // listener for when file has been uploaded
@@ -40,18 +40,18 @@ module.exports = (app, siofu, hostedContentPath) => {
         // publish the file
         publishController.publish(publishParams, file.name, file.meta.type)
         .then(result => {
-          postToStats('publish', '/', null, null, null, 'success');
+          postToStats('PUBLISH', '/', null, null, null, 'success');
           socket.emit('publish-complete', { name: publishParams.name, result });
         })
         .catch(error => {
           error = errorHandlers.handlePublishError(error);
-          postToStats('publish', '/', null, null, null, error);
+          postToStats('PUBLISH', '/', null, null, null, error);
           socket.emit('publish-failure', error);
         });
       } else {
         logger.error(`An error occurred in uploading the client's file`);
         socket.emit('publish-failure', 'File uploaded, but with errors');
-        postToStats('publish', '/', null, null, null, 'File uploaded, but with errors');
+        postToStats('PUBLISH', '/', null, null, null, 'File uploaded, but with errors');
         // to-do: remove the file if not done automatically
       }
     });

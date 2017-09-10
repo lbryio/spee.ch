@@ -1,18 +1,22 @@
 const errorHandlers = require('../helpers/errorHandlers.js');
-const { getAllFreeClaims } = require('../helpers/serveHelpers.js');
+const db = require('../models');
 const { postToStats, getStatsSummary, getTrendingClaims, getRecentClaims } = require('../controllers/statsController.js');
 
 module.exports = (app) => {
   // route to show 'about' page for spee.ch
-  app.get('/about', ({ ip, originalUrl }, res) => {
+  app.get('/about', (req, res) => {
     // get and render the content
     res.status(200).render('about');
   });
   // route to display a list of the trending images
-  app.get('/popular', ({ params, headers }, res) => {
+  app.get('/trending', (req, res) => {
+    res.status(301).redirect('/popular');
+  });
+  app.get('/popular', (req, res) => {
     const startDate = new Date();
     startDate.setDate(startDate.getDate() - 1);
-    getTrendingClaims(startDate)
+    const dateTime = startDate.toISOString().slice(0, 19).replace('T', ' ');
+    getTrendingClaims(dateTime)
       .then(result => {
         // logger.debug(result);
         res.status(200).render('trending', { trendingAssets: result });
@@ -22,10 +26,8 @@ module.exports = (app) => {
       });
   });
   // route to display a list of the trending images
-  app.get('/new', ({ params, headers }, res) => {
-    const startDate = new Date();
-    startDate.setDate(startDate.getDate() - 1);
-    getRecentClaims(startDate)
+  app.get('/new', (req, res) => {
+    getRecentClaims()
       .then(result => {
         // logger.debug(result);
         res.status(200).render('new', { newClaims: result });
@@ -61,7 +63,8 @@ module.exports = (app) => {
   // route to display all free public claims at a given name
   app.get('/:name/all', ({ ip, originalUrl, params }, res) => {
     // get and render the content
-    getAllFreeClaims(params.name)
+    db
+      .getAllFreeClaims(params.name)
       .then(orderedFreeClaims => {
         if (!orderedFreeClaims) {
           res.status(307).render('noClaims');
