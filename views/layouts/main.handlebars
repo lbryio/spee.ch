@@ -7,14 +7,32 @@
 	<title>Spee.ch</title>
 	<link rel="stylesheet" href="/assets/css/generalStyle.css" type="text/css">
 	<link rel="stylesheet" href="/assets/css/componentStyle.css" type="text/css">
-	<meta name="twitter:card" content="summary" />
-	<meta name="twitter:site" content="@lbryio" />
 	<meta property="og:title" content="spee.ch">
 	<meta property="og:site_name" content="spee.ch">
 	<meta property="og:type" content="website">
 	<meta property="og:image" content="https://spee.ch/assets/img/content-freedom-64px.png">
 	<meta property="og:url" content="http://spee.ch/">
 	<meta property="og:description" content="Open-source, decentralized image and video hosting.">
+	<!-- Twitter Card data -->
+	<meta name="twitter:site" content="@LBRYio">
+	<meta name="twitter:domain" content="spee.ch">
+	<meta name="twitter:title" content="{{fileInfo.name}}">
+	<meta name="twitter:description" content="Spee.ch - Decentralized Image Hosting using Lbry Protocol">
+	<!-- Twitter Summary card images must be at least 120x120px -->
+	{{#ifConditional fileInfo.fileType '===' 'video/mp4'}}
+	<meta name="twitter:card" content="player">
+	<meta name="twitter:player" content="https://spee.ch/{{fileInfo.name}}">
+	<meta name="twitter:player:width" content="735">
+  <meta name="twitter:player:height" content="449">
+	<meta name="twitter:image" content="https://spee.ch/test.png">
+	<meta name="twitter:image:width" content="735">
+	<meta name="twitter:image:height" content="449">
+	{{else}}
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:image" content="https://spee.ch/{{fileInfo.claimId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}">
+	<meta name="twitter:image:width" content="735">
+	<meta name="twitter:image:height" content="449">
+	{{/ifConditional}}
 	<!-- google analytics -->
 	{{ googleAnalytics }}
 </head>
