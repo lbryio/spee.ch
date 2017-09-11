@@ -1,11 +1,7 @@
 <div class='content-list-card'>
     <a href="{{this.showUrlLong}}"><span class='content-list-card-link'></span></a>
     {{#ifConditional this.contentType '===' 'video/mp4'}}
-        {{#ifConditional this.thumbnail '===' ''}}
-            <img class="content-list-asset" src="/assets/img/content-freedom-large.png"/>
-        {{else}}
-            <img class="content-list-asset" src="{{this.thumbnail}}"/>
-        {{/ifConditional}}
+         <img class="content-list-asset" src="{{this.thumbnail}}"/>
     {{else}}
         <img  class="content-list-asset" src="{{this.directUrlLong}}" />
     {{/ifConditional}}

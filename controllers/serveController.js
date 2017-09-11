@@ -157,6 +157,9 @@ module.exports = {
               element['showUrlLong'] = `/${channelName}:${longChannelId}/${element.name}`;
               element['directUrlLong'] = `/${channelName}:${longChannelId}/${element.name}.${fileExtenstion}`;
               element['directUrlShort'] = `/${channelName}:${shortChannelId}/${element.name}.${fileExtenstion}`;
+              if (!element.thumbnail || element.thumbnail === '') {
+                element['thumbnail'] = 'https://spee.ch/assets/img/content-freedom-large.png';
+              }
             });
           }
           return resolve(allChannelClaims);
