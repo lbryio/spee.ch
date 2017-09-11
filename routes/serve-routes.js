@@ -132,7 +132,6 @@ module.exports = (app) => {
             channelName,
             channelContents,
           };
-          logger.debug(handlebarsData);
           res.status(200).render('channel', handlebarsData);
         }
       })
