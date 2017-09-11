@@ -226,7 +226,7 @@ db['getAllFreeClaims'] = (name) => {
 db['resolveClaim'] = (name, claimId) => {
   return new Promise((resolve, reject) => {
     db
-      .sequelize.query(`SELECT name, claimId, outpoint, height, address, title, description FROM Claim WHERE name = '${name}' AND claimId = '${claimId}'`, { type: db.sequelize.QueryTypes.SELECT })
+      .sequelize.query(`SELECT name, claimId, outpoint, height, address, title, description, thumbnail FROM Claim WHERE name = '${name}' AND claimId = '${claimId}'`, { type: db.sequelize.QueryTypes.SELECT })
       .then(result => {
         switch (result.length) {
           case 0:

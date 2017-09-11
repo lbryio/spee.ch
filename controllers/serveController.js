@@ -192,6 +192,12 @@ module.exports = {
             return db.resolveClaim(fileInfo.name, fileInfo.claimId);
           })
           .then(resolveResult => {
+            logger.debug(resolveResult);
+            if (!resolveResult.thumbnail || resolveResult.thumbnail === '') {
+              fileInfo['thumbnail'] = 'https://spee.ch/assets/img/content-freedom-large.png';
+            } else {
+              fileInfo['thumbnail'] = resolveResult.thumbnail;
+            }
             fileInfo['title'] = resolveResult.title;
             fileInfo['description'] = resolveResult.description;
             showFile(fileInfo, res);
