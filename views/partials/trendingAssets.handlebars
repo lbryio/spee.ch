@@ -1,6 +1,4 @@
-<script src="/vendors/masonry/masonry.pkgd.min.js"></script>
-
-<div class="full"> 
+<div class="full">
 	<h2>Trending</h2>
 	<p><i>The 25 most popular assets on spee.ch</i></p>
 	<div class="grid" data-masonry='{ "itemSelector": ".grid-item" }'>
@@ -24,16 +22,4 @@
 		{{/each}}
 	</div>
 </div>
-
-
-<script>
-	var elem = document.querySelector('.grid');
-	var msnry = new Masonry( elem, {
-		itemSelector: '.grid-item'
-	});
-	
-	function resetTrendingLayout() {
-		msnry.layout();
-	}
-</script>
 
