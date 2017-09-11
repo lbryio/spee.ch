@@ -153,10 +153,11 @@ module.exports = {
         .then(allChannelClaims => {
           if (allChannelClaims) {
             allChannelClaims.forEach(element => {
-              element['channelName'] = channelName;
-              element['longChannelId'] = longChannelId;
-              element['shortChannelId'] = shortChannelId;
-              element['fileExtension'] = element.contentType.substring(element.contentType.lastIndexOf('/') + 1);
+              const fileExtenstion = element.contentType.substring(element.contentType.lastIndexOf('/') + 1);
+              element['showUrlLong'] = `/${channelName}:${longChannelId}/${element.name}`;
+              element['showUrlShort'] = `/${channelName}:${shortChannelId}/${element.name}`;
+              element['directUrlLong'] = `/${channelName}:${longChannelId}/${element.name}.${fileExtenstion}`;
+              element['directUrlShort'] = `/${channelName}:${shortChannelId}/${element.name}.${fileExtenstion}`;
             });
           }
           return resolve(allChannelClaims);
