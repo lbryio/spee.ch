@@ -266,7 +266,7 @@ db['getAllChannelClaims'] = (channelId) => {
   return new Promise((resolve, reject) => {
     logger.debug(`finding all claims in channel "${channelId}"`);
     db
-      .sequelize.query(`SELECT name, claimId, outpoint, height, address, contentType, title, description, license FROM Claim WHERE certificateId = '${channelId}' ORDeR BY height DESC;`, { type: db.sequelize.QueryTypes.SELECT })
+      .sequelize.query(`SELECT name, claimId, outpoint, height, address, contentType, title, description, license, thumbnail FROM Claim WHERE certificateId = '${channelId}' ORDeR BY height DESC;`, { type: db.sequelize.QueryTypes.SELECT })
       .then(result => {
         switch (result.length) {
           case 0:

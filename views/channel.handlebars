@@ -4,10 +4,11 @@
 		<h3>{{this.channelName}}</h3>
 		<p>Below are all the free claims in this channel.</p>
 		{{#each channelContents}}
+            <script>console.log(this)</script>
 			<div class="all-claims-item">
 				<a href="/{{this.channelName}}:{{this.shortChannelId}}/{{this.name}}.{{this.fileExtension}}">
 					{{#ifConditional this.contentType '===' 'video/mp4'}}
-						<img class="all-claims-asset" src="/assets/img/content-freedom-large.png"/>
+						<img class="all-claims-asset" src="{{this.thumbnail}}"/>
 					{{else}}
 						<img  class="all-claims-asset" src="/{{this.claimId}}/{{this.name}}.{{this.fileExtension}}" />
 					{{/ifConditional}}
