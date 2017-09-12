@@ -1,25 +1,47 @@
 <div class="panel">
-	<h2>My Recent Publishes</h2>
+	<h2>My Publishes</h2>
 	<div class="row" id="recent-publishes"></div>
 </div>
 
 <script type="text/javascript" >
     const publishDisplayArea = document.getElementById('recent-publishes');
-    function addToPublishList(publishData, publishList){
-        let publish = document.createElement('li');
-        publish.innerHTML = `<a href="/${publishData.claimId}/${publishData.name}">${publishData.name}</a>`;
-        
-        publishList.insertBefore(publish, publishList.firstChild);
+    let myPublishes = null;
+    function addToPublishList(publishData, key, publishList){
+        let listElement = document.createElement('li');
+        listElement.setAttribute('id', key);
+        let link = document.createElement('a');
+        link.setAttribute('href', `/${publishData.claimId}/${publishData.name}`);
+        link.setAttribute('class', 'link--bold');
+        link.innerText = `spee.ch/${publishData.name}`;
+        listElement.appendChild(link);
+        let removeLink = document.createElement('a');
+        removeLink.innerText = ' [remove] ';
+        removeLink.setAttribute('class', 'link--padded');
+        removeLink.setAttribute('href', '');
+        removeLink.setAttribute('data-key', key);
+        removeLink.setAttribute('onClick', 'deletePublish(event)');
+        listElement.appendChild(removeLink);
+        publishList.insertBefore(listElement, publishList.firstChild);
+    }
+    function deletePublish(event){
+        event.preventDefault();
+        const key = event.target.dataset.key;
+        // update local storage
+        delete myPublishes[key];
+        window.localStorage.setItem('myPublishes', JSON.stringify(myPublishes));
+        // remove this element
+        const thisPublishEntry = document.getElementById(key);
+        thisPublishEntry.parentNode.removeChild(thisPublishEntry);
     }
 	// check for publishes in local storage & display them
-    let myPublishes = window.localStorage.getItem('myPublishes');
+    myPublishes = window.localStorage.getItem('myPublishes');
     if (myPublishes) {
         myPublishes = JSON.parse(myPublishes);
         const publishList = document.createElement('ul');
         publishDisplayArea.appendChild(publishList);
         for (let key in myPublishes){
             if (myPublishes.hasOwnProperty(key)) {
-                addToPublishList(myPublishes[key], publishList);
+                addToPublishList(myPublishes[key], key, publishList);
             }
         }
     // if not, show no publishes.

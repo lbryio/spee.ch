@@ -1,7 +1,7 @@
 body, button, input, textarea, label, select, option {
 	font-family: serif;
 }
-/* Containters */
+/* Containers */
 .wrapper {
 	margin-left: 20%;
 	width:60%;
@@ -76,6 +76,18 @@ a, a:visited {
 	color: blue;
 	text-decoration: none;
 }
+
+.link--padded {
+	padding: 0px 0.5em 0px 0.5em;
+}
+.link--bold {
+	font-weight: bold;
+}
+
+.link--grey {
+	color: gray;
+}
+
 h1 {
 	font-size: x-large;
 }
