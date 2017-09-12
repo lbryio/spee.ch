@@ -8,7 +8,8 @@
     function addToPublishList(publishData, publishList){
         let publish = document.createElement('li');
         publish.innerHTML = `<a href="/${publishData.claimId}/${publishData.name}">${publishData.name}</a>`;
-        publishList.appendChild(publish);
+        
+        publishList.insertBefore(publish, publishList.firstChild);
     }
 	// check for publishes in local storage & display them
     let myPublishes = window.localStorage.getItem('myPublishes');
