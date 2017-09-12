@@ -7,6 +7,7 @@ const { postToStats, sendGoogleAnalytics } = require('../controllers/statsContro
 const SERVE = 'SERVE';
 const SHOW = 'SHOW';
 const SHOWLITE = 'SHOWLITE';
+const DEFAULT_THUMBNAIL = 'https://spee.ch/assets/img/content-freedom-large.png';
 
 function checkForLocalAssetByClaimId (claimId, name) {
   return new Promise((resolve, reject) => {
@@ -95,6 +96,13 @@ function getAssetByLongClaimId (fullClaimId, name) {
   });
 }
 
+function chooseThumbnail (claimInfo, defaultThumbnail) {
+  if (!claimInfo.thumbnail || claimInfo.thumbnail === '') {
+    return defaultThumbnail;
+  }
+  return claimInfo.thumbnail;
+}
+
 module.exports = {
   getAssetByClaim (claimName, claimId) {
     logger.debug('getting asset by claim');
@@ -157,9 +165,7 @@ module.exports = {
               element['showUrlLong'] = `/${channelName}:${longChannelId}/${element.name}`;
               element['directUrlLong'] = `/${channelName}:${longChannelId}/${element.name}.${fileExtenstion}`;
               element['directUrlShort'] = `/${channelName}:${shortChannelId}/${element.name}.${fileExtenstion}`;
-              if (!element.thumbnail || element.thumbnail === '') {
-                element['thumbnail'] = 'https://spee.ch/assets/img/content-freedom-large.png';
-              }
+              element['thumbnail'] = chooseThumbnail(element, DEFAULT_THUMBNAIL);
             });
           }
           return resolve(allChannelClaims);
@@ -195,11 +201,7 @@ module.exports = {
             return db.resolveClaim(fileInfo.name, fileInfo.claimId);
           })
           .then(resolveResult => {
-            if (!resolveResult.thumbnail || resolveResult.thumbnail === '') {
-              fileInfo['thumbnail'] = 'https://spee.ch/assets/img/content-freedom-large.png';
-            } else {
-              fileInfo['thumbnail'] = resolveResult.thumbnail;
-            }
+            fileInfo['thumbnail'] = chooseThumbnail(resolveResult, DEFAULT_THUMBNAIL);
             fileInfo['title'] = resolveResult.title;
             fileInfo['description'] = resolveResult.description;
             showFile(fileInfo, res);
