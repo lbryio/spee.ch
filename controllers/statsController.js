@@ -148,6 +148,16 @@ module.exports = {
       // get the raw requests data
       db.getTrendingClaims(startDate)
       .then(results => {
+        if (results) {
+          results.forEach(element => {
+            const fileExtenstion = element.fileType.substring(element.fileType.lastIndexOf('/') + 1);
+            element['showUrlLong'] = `/${element.claimId}/${element.name}`;
+            element['directUrlLong'] = `/${element.claimId}/${element.name}.${fileExtenstion}`;
+            element['directUrlShort'] = `/${element.claimId}/${element.name}.${fileExtenstion}`;
+            element['contentType'] = element.fileType;
+            element['thumbnail'] = 'https://spee.ch/assets/img/content-freedom-large.png';
+          });
+        }
         resolve(results);
       })
       .catch(error => {

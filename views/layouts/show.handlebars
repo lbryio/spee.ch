@@ -9,8 +9,8 @@
 	<link rel="stylesheet" href="/assets/css/componentStyle.css" type="text/css">
 	<meta property="fb:app_id" content="1371961932852223">
 	{{#unless fileInfo.nsfw}}
-	{{{addTwitterCard fileInfo.fileType openGraphInfo.source openGraphInfo.embedUrl openGraphInfo.directFileUrl}}}
-	{{{addOpenGraph fileInfo.title fileInfo.fileType openGraphInfo.showUrl openGraphInfo.source fileInfo.description}}}
+	    {{{addTwitterCard fileInfo.fileType openGraphInfo.source openGraphInfo.embedUrl openGraphInfo.directFileUrl}}}
+	    {{{addOpenGraph fileInfo.title fileInfo.fileType openGraphInfo.showUrl openGraphInfo.source fileInfo.description fileInfo.thumbnail}}}
 	{{/unless}}
 	<!-- google analytics -->
 	{{ googleAnalytics }}
