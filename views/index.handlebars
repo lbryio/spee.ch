@@ -3,6 +3,7 @@
 	<div class="full"> 
 		{{> publish}}
 		{{> learnMore}}
+        {{> recentPublishes}}
 	</div>
 	{{> footer}}
 </div>
@@ -54,13 +55,29 @@
 	});
 	socket.on('publish-complete', function(msg){
 		var publishResults;
-		var showUrl = msg.name + '/' + msg.result.claim_id;
+		var showUrl = msg.result.claim_id + '/' + msg.name;
 		// build new publish area
 		publishResults = '<p>Your publish is complete! You are being redirected to it now.</p>';
 		publishResults += '<p><a target="_blank" href="' + showUrl + '">If you do not get redirected, click here.</a></p>';
 		// update publish area
 		document.getElementById('publish-active-area').innerHTML = publishResults;
+		// store the publish in local storage
+        const myStorage = window.localStorage;
+        let myPublishes = myStorage.getItem('myPublishes');
+        if (!myPublishes){
+            myPublishes = {};
+        } else {
+            myPublishes = JSON.parse(myPublishes);
+        }
+        const key = `${new Date().toISOString()}_${msg.name}`;
+        myPublishes[key] = {
+            name: msg.name,
+            claimId: msg.result.claim_id,
+            showUrl: showUrl,
+            date: new Date().toString(),
+        };
+        myStorage.setItem('myPublishes', JSON.stringify(myPublishes));
+		// forward the user to the show page
 		window.location.href = showUrl;
 	});
-
 </script>

@@ -1,0 +1,34 @@
+<div class="panel">
+	<h2>My Recent Publishes</h2>
+	<div class="row" id="recent-publishes"></div>
+</div>
+
+<script type="text/javascript" >
+    const publishDisplayArea = document.getElementById('recent-publishes');
+    function addToPublishList(publishData, publishList){
+        let publish = document.createElement('li');
+        publish.innerHTML = `<a href="/${publishData.claimId}/${publishData.name}">${publishData.name}</a>`;
+        publishList.appendChild(publish);
+    }
+	// check for publishes in local storage & display them
+    let myPublishes = window.localStorage.getItem('myPublishes');
+    if (myPublishes) {
+        myPublishes = JSON.parse(myPublishes);
+        const publishList = document.createElement('ul');
+        publishDisplayArea.appendChild(publishList);
+        for (let key in myPublishes){
+            if (myPublishes.hasOwnProperty(key)) {
+                addToPublishList(myPublishes[key], publishList);
+            }
+        }
+    // if not, show no publishes.
+    } else {
+        console.log('no publishes found');
+        let noPublishesNotice = document.createElement('p');
+        noPublishesNotice.innerText = 'You do not have any recent publishes.';
+        publishDisplayArea.appendChild(noPublishesNotice);
+        let localStorageNotice = document.createElement('p')
+        localStorageNotice.innerHTML =`<i>Note: your recent publishes are stored in your browser's local storage.  They may be erased by certain actions, like clearing browsing data.</i>`;
+        publishDisplayArea.appendChild(localStorageNotice);
+    }
+</script>
