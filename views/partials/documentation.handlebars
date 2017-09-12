@@ -1,36 +1,27 @@
 <div class="panel">
 	<h2>Documentation
-		<a class="toggle-link" id="documentation-toggle" href="#" onclick="toggleSection(event)" data-open="false" data-slaveelementid="documentation-detail">[open]</a>
+		<a class="link--primary link--right" id="documentation-toggle" href="#" onclick="toggleSection(event)" data-open="false" data-slaveelementid="documentation-detail">[open]</a>
 	</h2>
 	<div id="documentation-detail" hidden="true">
-		<code>https://spee.ch/</code>
+		<code>spee.ch/[name].[ext]</code>
 		<ul>
-			<li>Learn about Spee.ch and publish your own media</li>
+			<li>Serves the winning free claim at this name directly</li>
+			<li>E.g. <a class="link--primary" href="/doitlive.png">spee.ch/doitlive.png</a></li>
 		</ul>
-		<code>https://spee.ch/:name.ext</code>
+		<code>spee.ch/[name]</code>
 		<ul>
-			<li >Serves the winning free, public claim at this name directly</li>
-			<li >E.g. <a href="/doitlive.png">spee.ch/doitlive.png</a></li>
+			<li>Serves an HTML page which shows the winning claim at this name with additional details</li>
+			<li>E.g. <a class="link--primary" href="/doitlive">spee.ch/doitlive</a></li>
 		</ul>
-		<code>https://spee.ch/:name</code>
+		<code>spee.ch/[claim_id]/[name].[ext]</code>
 		<ul>
-			<li >Serves an HTML page which shows the winning claim at this name with additional details</li>
-			<li >E.g. <a href="/doitlive">spee.ch/doitlive</a></li>
+			<li>Serves a specific piece of content directly</li>
+			<li>E.g. <a class="link--primary" href="/ca3023187e901df9e9aabd95d6ae09b6cc69b3f0/doitlive.jpg">spee.ch/ca3023187e901df9e9aabd95d6ae09b6cc69b3f0/doitlive.jpg</a></li>
 		</ul>
-		<code>https://spee.ch/:name/:claim_id.ext</code>
+		<code>spee.ch/[claim_id]/[name]</code>
 		<ul>
-			<li >Serves a specific image or video file directly</li>
-			<li >E.g. <a href="/ca3023187e901df9e9aabd95d6ae09b6cc69b3f0/doitlive.jpg">spee.ch/doitlive/ca3023187e901df9e9aabd95d6ae09b6cc69b3f0.jpg</a></li>
-		</ul>
-		<code>https://spee.ch/:name/:claim_id</code>
-		<ul>
-			<li >Serves an HTML page with this specific claim and additional details</li>
-			<li >E.g. <a href="/ca3023187e901df9e9aabd95d6ae09b6cc69b3f0/doitlive">spee.ch/doitlive/ca3023187e901df9e9aabd95d6ae09b6cc69b3f0</a></li>
-		</ul>
-		<code>https://spee.ch/:name/all</code>
-		<ul>
-			<li >Displays a list of all files at a claim</li>
-			<li >E.g. <a href="/doitlive/all">spee.ch/doitlive/all</a></li>
+			<li>Serves an HTML page with this specific piece of content and additional details</li>
+			<li>E.g. <a class="link--primary" href="/ca3023187e901df9e9aabd95d6ae09b6cc69b3f0/doitlive">spee.ch/ca3023187e901df9e9aabd95d6ae09b6cc69b3f0/doitlive</a></li>
 		</ul>
 	</div>
 </div>

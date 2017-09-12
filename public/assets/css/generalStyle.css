@@ -73,8 +73,15 @@ footer {
 /* text */
 
 a, a:visited {
-	color: blue;
 	text-decoration: none;
+}
+
+.link--primary, .link--primary:visited {
+	color: blue;
+}
+
+.link--secondary {
+	color: gray;
 }
 
 .link--padded {
@@ -84,8 +91,8 @@ a, a:visited {
 	font-weight: bold;
 }
 
-.link--grey {
-	color: gray;
+.link--right {
+	float: right;
 }
 
 h1 {
@@ -125,10 +132,6 @@ table {
 
 .stop-float {
 	clear: both;
-}
-
-.toggle-link {
-	float: right;
 }
 
 .wrap-words {

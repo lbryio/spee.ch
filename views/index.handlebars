@@ -51,14 +51,14 @@
 		updatePublishStatus(msg);
 	});
 	socket.on('publish-failure', function(msg){
-		document.getElementById('publish-active-area').innerHTML = '<p> --(✖╭╮✖)→ </p><p>' + JSON.stringify(msg) + '</p><strong>For help, post the above error text in the #speech channel on the <a href="https://lbry.slack.com/" target="_blank">lbry slack</a></strong>';
+		document.getElementById('publish-active-area').innerHTML = '<p> --(✖╭╮✖)→ </p><p>' + JSON.stringify(msg) + '</p><strong>For help, post the above error text in the #speech channel on the <a class="link--primary" href="https://lbry.slack.com/" target="_blank">lbry slack</a></strong>';
 	});
 	socket.on('publish-complete', function(msg){
 		var publishResults;
 		var showUrl = msg.result.claim_id + '/' + msg.name;
 		// build new publish area
 		publishResults = '<p>Your publish is complete! You are being redirected to it now.</p>';
-		publishResults += '<p><a target="_blank" href="' + showUrl + '">If you do not get redirected, click here.</a></p>';
+		publishResults += '<p><a class="link--primary" target="_blank" href="' + showUrl + '">If you do not get redirected, click here.</a></p>';
 		// update publish area
 		document.getElementById('publish-active-area').innerHTML = publishResults;
 		// store the publish in local storage
