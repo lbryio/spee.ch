@@ -12,6 +12,10 @@ module.exports = (winston, logLevel) => {
     ],
   });
 
+  // winston.on('error', (err) => {
+  //   console.log('unhandled exception in winston >> ', err);
+  // });
+
   winston.error('Level 0');
   winston.warn('Level 1');
   winston.info('Level 2');

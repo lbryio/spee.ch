@@ -14,7 +14,8 @@ const db = require('./models'); // require our models for syncing
 
 // configure logging
 const logLevel = config.get('Logging.LogLevel');
-require('./config/loggerSetup.js')(logger, logLevel);
+require('./config/loggerConfig.js')(logger, logLevel);
+require('./config/slackLoggerConfig.js')(logger);
 
 // trust the proxy to get ip address for us
 app.enable('trust proxy');
@@ -154,5 +155,5 @@ db.sequelize
     });
   })
   .catch((error) => {
-    logger.error('Startup Error >>', error);
+    logger.error('Startup Error', error);
   });

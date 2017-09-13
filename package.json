@@ -39,7 +39,8 @@
     "socket.io": "^2.0.1",
     "socketio-file-upload": "^0.6.0",
     "universal-analytics": "^0.4.13",
-    "winston": "^2.3.1"
+    "winston": "^2.3.1",
+    "winston-slack-webhook": "^0.1.5"
   },
   "devDependencies": {
     "eslint": "3.19.0",

@@ -5,5 +5,8 @@
 	"Database": {
 		"Username": "MYSQL_USERNAME",
 		"Password": "MYSQL_PASSWORD"
+	},
+	"Logging": {
+		"SlackWebHook": "SLACK_WEB_HOOK"
 	}
 }
