@@ -114,7 +114,7 @@ module.exports = {
           }
         })
         .catch((error) => {
-          logger.error('Unable to retrieve daemon download directory.  Restart spee.ch once the daemon is ready.  Using default "/home/lbry/Downloads".', error);
+          logger.error('Unable to retrieve daemon download directory', error);
           resolve('/home/lbry/Downloads/');
         });
     });

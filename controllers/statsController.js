@@ -35,7 +35,7 @@ module.exports = {
           });
       })
       .catch(error => {
-        logger.error('Sequelize error', error);
+        logger.error('Sequelize error >>', error);
       });
   },
   sendGoogleAnalytics (action, headers, ip, originalUrl) {
@@ -137,7 +137,7 @@ module.exports = {
           resolve({ records: resultHashTable, totals: { totalServe, totalPublish, totalShow, totalCount, totalSuccess, totalFailure }, percentSuccess });
         })
         .catch(error => {
-          logger.error('sequelize error', error);
+          logger.error('sequelize error >>', error);
           reject(error);
         });
     });
@@ -161,7 +161,7 @@ module.exports = {
         resolve(results);
       })
       .catch(error => {
-        logger.error('sequelize error', error);
+        logger.error('sequelize error >>', error);
         reject(error);
       });
     });

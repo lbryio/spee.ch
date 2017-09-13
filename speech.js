@@ -135,7 +135,7 @@ app.set('view engine', 'handlebars');
 db.sequelize
   .sync() // sync sequelize
   .then(() => {  // get the download directory from the daemon
-    logger.info('Retrieving daemon download directory');
+    logger.info('Retrieving daemon download directory...');
     return getDownloadDirectory();
   })
   .then(hostedContentPath => {
@@ -155,5 +155,5 @@ db.sequelize
     });
   })
   .catch((error) => {
-    logger.error('Startup Error', error);
+    logger.error(`Startup Error >> ${error.message}`, error);
   });
