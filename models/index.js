@@ -6,14 +6,18 @@ const config = require('config');
 const db = {};
 const logger = require('winston');
 
-const connectionUri = config.get('Database.MySqlConnectionUri');
-const sequelize = new Sequelize(connectionUri, {
+const database = config.get('Database.database');
+const username = config.get('Database.username');
+const password = config.get('Database.password');
+const sequelize = new Sequelize(database, username, password, {
+  host   : 'localhost',
+  dialect: 'mysql',
   logging: false,
   pool   : {
     max    : 5,
     min    : 0,
-    idle   : 20000,
-    acquire: 20000,
+    idle   : 10000,
+    acquire: 10000,
   },
 });
 

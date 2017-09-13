@@ -5,8 +5,7 @@ spee.ch is a single-serving site that reads and publishes images and videos to a
 * start mysql
 	* install mysql
 	* create a database called `lbry`
-	* save your connection uri somewhere handy (you will need it when you start the server)
-		* the uri should be in the form `mysql://user:pass@host:port/dbname`
+	* save your connection `username` and `password` someplace handy
 * start lbrynet daemon
 	* install the [`lbry`](https://github.com/lbryio/lbry) daemon
 	* start the `lbry` daemon
@@ -17,10 +16,11 @@ spee.ch is a single-serving site that reads and publishes images and videos to a
 	* run `npm install`
 	* to start the server, from your command line run `node speech.js` while passing three environmental variables: 
 		* (1) your lbry wallet address (`LBRY_CLAIM_ADDRESS`), 
-		* (2) your mysql connection uri (`MYSQL_CONNECTION_STRING`), 
+		* (2) your mysql username (`MYSQL_USERNAME`),
+		* (2) your mysql password (`MYSQL_PASSWORD`), 
 		* (3) the environment to run (`NODE_ENV`).
-		* i.e. `LBRY_CLAIM_ADDRESS=<your wallet address here> MYSQL_CONNECTION_STRING=<your connection uri here> NODE_ENV=development node speech.js`
-		* e.g. `LBRY_CLAIM_ADDRESS=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX MYSQL_CONNECTION_STRING=mysql://root:XXXXXX@localhost:3306/lbry NODE_ENV=development node speech.js`
+		* i.e. `LBRY_CLAIM_ADDRESS=<your wallet address here> MYSQL_USERNAME=<username here> MYSQL_PASSWORD=<password here> NODE_ENV=development node speech.js`
+		* e.g. `LBRY_CLAIM_ADDRESS=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX MYSQL_USERNAME="lbry" MYSQL_PASSWORD="xxxxxx" NODE_ENV=development node speech.js`
 		* To run hot, use `nodemon` instead of `node`
 * visit [localhost:3000](http://localhost:3000)
 
