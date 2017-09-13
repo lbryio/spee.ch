@@ -6,9 +6,9 @@ const config = require('config');
 const db = {};
 const logger = require('winston');
 
-const database = config.get('Database.database');
-const username = config.get('Database.username');
-const password = config.get('Database.password');
+const database = config.get('Database.Database');
+const username = config.get('Database.Username');
+const password = config.get('Database.Password');
 const sequelize = new Sequelize(database, username, password, {
   host   : 'localhost',
   dialect: 'mysql',
