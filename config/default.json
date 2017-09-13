@@ -6,7 +6,9 @@
 		"GoogleId": "none"
 	},
 	"Database": {
-		"MySqlConnectionUri": "none"
+		"database": "lbry",
+		"username": "none",
+		"password": "none"
 	},
 	"Logging": {
 		"LogLevel": "none"

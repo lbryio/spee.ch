@@ -3,6 +3,7 @@
 		"LbryClaimAddress": "LBRY_CLAIM_ADDRESS"
 	},
 	"Database": {
-		"MySqlConnectionUri": "MYSQL_CONNECTION_STRING"
+		"username": "MYSQL_USERNAME",
+		"password": "MYSQL_PASSWORD"
 	}
 }
