@@ -11,7 +11,7 @@ module.exports = (winston) => {
     level     : 'error',
     webhookUrl: SLACK_WEB_HOOK,
     channel   : SLACK_ERROR_CHANNEL,
-    username  : 'errorBot',
+    username  : 'spee.ch',
     iconEmoji : ':face_with_head_bandage:',
   });
   winston.add(winstonSlackWebHook, {
@@ -19,7 +19,7 @@ module.exports = (winston) => {
     level     : 'info',
     webhookUrl: SLACK_WEB_HOOK,
     channel   : SLACK_INFO_CHANNEL,
-    username  : 'infoBot',
+    username  : 'spee.ch',
     iconEmoji : ':nerd_face:',
   });
   // send test message
