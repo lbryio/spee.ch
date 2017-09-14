@@ -110,11 +110,12 @@ module.exports = {
           if (data.result) {
             resolve(data.result.download_directory);
           } else {
-            reject(new Error('Successfully connected to lbry daemon, but unable to retrieve the download directory.'));
+            // reject(new Error('Successfully connected to lbry daemon, but unable to retrieve the download directory.'));
+            return new Error('Successfully connected to lbry daemon, but unable to retrieve the download directory.');
           }
         })
-        .catch((error) => {
-          logger.error('Unable to retrieve daemon download directory', error);
+        .catch(error => {
+          logger.error('Lbrynet Error:', error);
           resolve('/home/lbry/Downloads/');
         });
     });

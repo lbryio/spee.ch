@@ -3,7 +3,7 @@ const { postToStats } = require('../controllers/statsController.js');
 
 module.exports = {
   handleRequestError (action, originalUrl, ip, error, res) {
-    logger.error(`Request Error >> ${error.message}`, error);
+    logger.error('Request Error:', error);
     if (error.response) {
       postToStats(action, originalUrl, ip, null, null, error.response.data.error.messsage);
       res.status(error.response.status).send(error.response.data.error.message);
@@ -19,7 +19,7 @@ module.exports = {
     }
   },
   handlePublishError (error) {
-    logger.error(`Publish Error >> ${error.message}`, error);
+    logger.error('Publish Error:', error);
     if (error.code === 'ECONNREFUSED') {
       return 'Connection refused.  The daemon may not be running.';
     } else if (error.response.data.error) {
