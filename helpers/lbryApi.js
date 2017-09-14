@@ -115,7 +115,7 @@ module.exports = {
           }
         })
         .catch(error => {
-          logger.error('Lbrynet Error:', error);
+          logger.error('Lbrynet Error:', error.message);
           resolve('/home/lbry/Downloads/');
         });
     });
