@@ -1,6 +1,7 @@
 const config = require('config');
 const SLACK_WEB_HOOK = config.get('Logging.SlackWebHook');
-
+const SLACK_ERROR_CHANNEL = config.get('Logging.SlackErrorChannel');
+const SLACK_INFO_CHANNEL = config.get('Logging.SlackLogsChannel');
 const winstonSlackWebHook = require('winston-slack-webhook').SlackWebHook;
 
 module.exports = (winston) => {
@@ -9,7 +10,7 @@ module.exports = (winston) => {
     name      : 'slack-errors-transport',
     level     : 'error',
     webhookUrl: SLACK_WEB_HOOK,
-    channel   : '#speech-errors',
+    channel   : SLACK_ERROR_CHANNEL,
     username  : 'errorBot',
     iconEmoji : ':face_with_head_bandage:',
   });
@@ -17,7 +18,7 @@ module.exports = (winston) => {
     name      : 'slack-info-transport',
     level     : 'info',
     webhookUrl: SLACK_WEB_HOOK,
-    channel   : '#speech-logs',
+    channel   : SLACK_INFO_CHANNEL,
     username  : 'infoBot',
     iconEmoji : ':nerd_face:',
   });
