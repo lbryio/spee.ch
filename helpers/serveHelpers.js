@@ -11,7 +11,7 @@ function createOpenGraphInfo ({ fileType, claimId, name, fileName, fileExt }) {
 
 module.exports = {
   serveFile ({ fileName, fileType, filePath }, res) {
-    logger.info(`serving file ${fileName}`);
+    logger.debug(`serving file ${fileName}`);
     // set default options
     let options = {
       headers: {
