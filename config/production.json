@@ -10,7 +10,7 @@
 	},
 	"Logging": {
 		"LogLevel": "verbose",
-		"SlackErrorChannel": "speech-errors",
-		"SlackInfoChannel": "speech-logs"
+		"SlackErrorChannel": "#speech-errors",
+		"SlackInfoChannel": "#speech-logs"
 	}
 }

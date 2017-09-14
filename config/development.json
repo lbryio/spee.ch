@@ -10,7 +10,7 @@
 	},
 	"Logging": {
 		"LogLevel": "silly",
-		"SlackErrorChannel": "staging_speech-errors",
+		"SlackErrorChannel": "#staging_speech-errors",
 		"SlackInfoChannel": "none"
 	}
 }

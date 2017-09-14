@@ -1,7 +1,7 @@
 const config = require('config');
 const SLACK_WEB_HOOK = config.get('Logging.SlackWebHook');
 const SLACK_ERROR_CHANNEL = config.get('Logging.SlackErrorChannel');
-const SLACK_INFO_CHANNEL = config.get('Logging.SlackLogsChannel');
+const SLACK_INFO_CHANNEL = config.get('Logging.SlackInfoChannel');
 const winstonSlackWebHook = require('winston-slack-webhook').SlackWebHook;
 
 module.exports = (winston) => {
