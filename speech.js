@@ -7,7 +7,7 @@ const Handlebars = require('handlebars');
 const config = require('config');
 const logger = require('winston');
 const { getDownloadDirectory } = require('./helpers/lbryApi');
-
+const helmet = require('helmet');
 const PORT = 3000; // set port
 const app = express(); // create an Express application
 const db = require('./models'); // require our models for syncing
@@ -20,7 +20,7 @@ require('./config/slackLoggerConfig.js')(logger);
 // trust the proxy to get ip address for us
 app.enable('trust proxy');
 // add middleware
-app.use(express.static(`${__dirname}/public`)); // 'express.static' to serve static files from public directory
+app.use(helmet()); // set HTTP headers to protect against well-known web vulnerabilties
 app.use(express.static(`${__dirname}/public`)); // 'express.static' to serve static files from public directory
 app.use(bodyParser.json()); // 'body parser' for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // 'body parser' for parsing application/x-www-form-urlencoded
