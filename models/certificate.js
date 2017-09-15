@@ -87,5 +87,15 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, ARRAY, DECIMAL, D
       freezeTableName: true,
     }
   );
+
+  Certificate.associate = db => {
+    Certificate.belongsTo(db.User, {
+      onDelete  : 'cascade',
+      foreignKey: {
+        allowNull: true,
+      },
+    });
+  };
+
   return Certificate;
 };

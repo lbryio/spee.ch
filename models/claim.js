@@ -140,5 +140,14 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, ARRAY, DECIMAL, D
     }
   );
 
+  Claim.associate = db => {
+    Claim.belongsTo(db.File, {
+      onDelete  : 'cascade',
+      foreignKey: {
+        allowNull: true,
+      },
+    });
+  };
+
   return Claim;
 };

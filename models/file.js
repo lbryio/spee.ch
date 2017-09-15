@@ -52,6 +52,13 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER }) => {
 
   File.associate = db => {
     File.hasMany(db.Request);
+    File.belongsTo(db.User, {
+      onDelete  : 'cascade',
+      foreignKey: {
+        allowNull: true,
+      },
+    });
+    File.hasOne(db.Claim);
   };
 
   return File;
