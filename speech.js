@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const siofu = require('socketio-file-upload');
 const expressHandlebars = require('express-handlebars');
 const Handlebars = require('handlebars');
+const handlebarsHelpers = require('./helpers/handlebarsHelpers.js');
 const config = require('config');
 const logger = require('winston');
 const { getDownloadDirectory } = require('./helpers/lbryApi');
@@ -11,6 +12,7 @@ const helmet = require('helmet');
 const PORT = 3000; // set port
 const app = express(); // create an Express application
 const db = require('./models'); // require our models for syncing
+const passport = require('passport');
 
 // configure logging
 const logLevel = config.get('Logging.LogLevel');
@@ -30,103 +32,19 @@ app.use((req, res, next) => {  // custom logging middleware to log all incomming
   next();
 });
 
+// initialize passport
+app.use(passport.initialize());
+// Load passport strategies
+const localSignupStrategy = require('./passport/local-signup.js');
+const localLoginStrategy = require('./passport/local-login.js');
+passport.use('local-signup', localSignupStrategy);
+passport.use('local-login', localLoginStrategy);
+
 // configure handlebars & register it with express app
 const hbs = expressHandlebars.create({
   defaultLayout: 'main', // sets the default layout
   handlebars   : Handlebars, // includes basic handlebars for access to that library
-  helpers      : {
-    // define any extra helpers you may need
-    googleAnalytics () {
-      const googleApiKey = config.get('AnalyticsConfig.GoogleId');
-      return new Handlebars.SafeString(
-        `<script>
-        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-        ga('create', '${googleApiKey}', 'auto');
-        ga('send', 'pageview');
-        </script>`
-      );
-    },
-    addOpenGraph (title, mimeType, showUrl, source, description, thumbnail) {
-      let basicTags = `<meta property="og:title" content="${title}"> 
-          <meta property="og:url" content="${showUrl}" > 
-          <meta property="og:site_name" content="Spee.ch" > 
-          <meta property="og:description" content="${description}">`;
-      if (mimeType === 'video/mp4') {
-        return new Handlebars.SafeString(
-          `${basicTags} <meta property="og:image" content="${thumbnail}" > 
-          <meta property="og:image:type" content="image/png" >
-          <meta property="og:image:width" content="600" >
-          <meta property="og:image:height" content="315" >
-          <meta property="og:type" content="video" > 
-          <meta property="og:video" content="${source}" > 
-          <meta property="og:video:secure_url" content="${source}" > 
-          <meta property="og:video:type" content="${mimeType}" >`
-        );
-      } else if (mimeType === 'image/gif') {
-        return new Handlebars.SafeString(
-          `${basicTags} <meta property="og:image" content="${source}" > 
-          <meta property="og:image:type" content="${mimeType}" >
-          <meta property="og:image:width" content="600" >
-          <meta property="og:image:height" content="315" >
-          <meta property="og:type" content="video.other" >`
-        );
-      } else {
-        return new Handlebars.SafeString(
-          `${basicTags} <meta property="og:image" content="${source}" > 
-          <meta property="og:image:type" content="${mimeType}" >
-          <meta property="og:image:width" content="600" >
-          <meta property="og:image:height" content="315" >
-          <meta property="og:type" content="article" >`
-        );
-      }
-    },
-    addTwitterCard (mimeType, source, embedUrl, directFileUrl) {
-      let basicTwitterTags = `<meta name="twitter:site" content="@speechch" >`;
-      if (mimeType === 'video/mp4') {
-        return new Handlebars.SafeString(
-          `${basicTwitterTags} <meta name="twitter:card" content="player" >
-          <meta name="twitter:player" content="${embedUrl}>
-          <meta name="twitter:player:width" content="600" >
-          <meta name="twitter:text:player_width" content="600" >
-          <meta name="twitter:player:height" content="337" >
-          <meta name="twitter:player:stream" content="${directFileUrl}" >
-          <meta name="twitter:player:stream:content_type" content="video/mp4" >
-          `
-        );
-      } else {
-        return new Handlebars.SafeString(
-          `${basicTwitterTags} <meta name="twitter:card" content="summary_large_image" >`
-        );
-      }
-    },
-    ifConditional (varOne, operator, varTwo, options) {
-      switch (operator) {
-        case '===':
-          return (varOne === varTwo) ? options.fn(this) : options.inverse(this);
-        case '!==':
-          return (varOne !== varTwo) ? options.fn(this) : options.inverse(this);
-        case '<':
-          return (varOne < varTwo) ? options.fn(this) : options.inverse(this);
-        case '<=':
-          return (varOne <= varTwo) ? options.fn(this) : options.inverse(this);
-        case '>':
-          return (varOne > varTwo) ? options.fn(this) : options.inverse(this);
-        case '>=':
-          return (varOne >= varTwo) ? options.fn(this) : options.inverse(this);
-        case '&&':
-          return (varOne && varTwo) ? options.fn(this) : options.inverse(this);
-        case '||':
-          return (varOne || varTwo) ? options.fn(this) : options.inverse(this);
-        case 'mod3':
-          return ((parseInt(varOne) % 3) === 0) ? options.fn(this) : options.inverse(this);
-        default:
-          return options.inverse(this);
-      }
-    },
-  },
+  helpers      : handlebarsHelpers,  // custom defined helpers
 });
 app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');

@@ -1,0 +1,11 @@
+<div class="wrapper">
+	{{> topBar}}
+	<div class="full">
+        {{#if isAuthenticated}}
+		    {{> profile }}
+        {{else}}
+            {{> loginForm}}
+        {{/if}}
+	</div>
+	{{> footer}}
+</div>

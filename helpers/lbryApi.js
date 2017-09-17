@@ -120,4 +120,15 @@ module.exports = {
         });
     });
   },
+  createChannel (channelName) {
+    return new Promise((resolve, reject) => {
+      resolve({
+        tx      : 'test',
+        txid    : 'test',
+        nout    : 'test',
+        fee     : 'test',
+        claim_id: 'xxxxxxxxxxxxxxxxxx',
+      });
+    });
+  },
 };

@@ -1,6 +1,6 @@
-module.exports = (sequelize, { STRING, BOOLEAN, INTEGER }) => {
+module.exports = (sequelize, { STRING }) => {
   const User = sequelize.define(
-        'User',
+    'User',
     {
       channelName: {
         type     : STRING,
@@ -21,6 +21,11 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER }) => {
     },
     {
       freezeTableName: true,
+      instanceMethods: {
+        validPassword: function (password) {
+          return (password === this.password);
+        },
+      },
     }
     );
 
