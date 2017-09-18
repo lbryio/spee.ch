@@ -1,5 +1,6 @@
 const PassportLocalStrategy = require('passport-local').Strategy;
-const db = require('./models');
+const db = require('../models');
+const logger = require('winston');
 
 module.exports = new PassportLocalStrategy(
   {
@@ -8,20 +9,21 @@ module.exports = new PassportLocalStrategy(
     session          : false,
     passReqToCallback: true,
   },
-  (username, password, done) => {
+  (req, username, password, done) => {
     return db.User
         .findOne({where: {channelName: username}})
         .then(user => {
+          logger.debug('user', user.dataValues);
           if (!user) {
             return done(null, false, {message: 'Incorrect username or password.'});
           }
-          if (!user.validPassword(password)) {
+          if (!user.validPassword(password, user.password)) {
             return done(null, false, {message: 'Incorrect username or password.'});
           }
-          return done(null, user);
+          return done(null, user.dataValues);
         })
         .catch(error => {
           return done(error);
         });
-  },
+  }
 );

@@ -13,6 +13,7 @@ const PORT = 3000; // set port
 const app = express(); // create an Express application
 const db = require('./models'); // require our models for syncing
 const passport = require('passport');
+const session = require('express-session');
 
 // configure logging
 const logLevel = config.get('Logging.LogLevel');
@@ -31,9 +32,24 @@ app.use((req, res, next) => {  // custom logging middleware to log all incomming
   logger.verbose(`Request on ${req.originalUrl} from ${req.ip}`);
   next();
 });
-
 // initialize passport
+app.use(session({ secret: 'cats' }));
 app.use(passport.initialize());
+app.use(passport.session());
+passport.serializeUser(function (user, done) {
+  done(null, user.id);
+});
+
+passport.deserializeUser(function (id, done) {
+  db.User.findOne({ where: { id } })
+  .then(user => {
+    done(null, user.dataValues);
+  })
+  .catch(error => {
+    logger.error('sequelize error', error);
+  });
+});
+
 // Load passport strategies
 const localSignupStrategy = require('./passport/local-signup.js');
 const localLoginStrategy = require('./passport/local-login.js');

@@ -1,11 +1,20 @@
 <div class="wrapper">
-	{{> topBar}}
-	<div class="full">
-        {{#if isAuthenticated}}
-		    {{> profile }}
-        {{else}}
-            {{> loginForm}}
-        {{/if}}
-	</div>
-	{{> footer}}
+    {{> topBar}}
+    <div class="full">
+        <h2>Log In</h2>
+        <form id="login-form" action="/login" method="post">
+            <div>
+                <label>Username:</label>
+                <input type="text" name="username"/>
+            </div>
+            <div>
+                <label>Password:</label>
+                <input type="password" name="password"/>
+            </div>
+            <div>
+                <input type="submit" value="Log In"/>
+            </div>
+        </form>
+    </div>
+    {{> footer}}
 </div>

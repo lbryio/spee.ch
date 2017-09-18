@@ -21,17 +21,17 @@ module.exports = (sequelize, { STRING }) => {
     },
     {
       freezeTableName: true,
-      instanceMethods: {
-        validPassword: function (password) {
-          return (password === this.password);
-        },
-      },
     }
-    );
+  );
 
   User.associate = db => {
     User.hasMany(db.File);
     User.hasOne(db.Certificate);
+  };
+
+  User.prototype.validPassword = (givenpassword, thispassword) => {
+    console.log(`${givenpassword} === ${thispassword}`);
+    return (givenpassword === thispassword);
   };
 
   return User;
