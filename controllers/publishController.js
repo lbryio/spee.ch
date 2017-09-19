@@ -8,7 +8,7 @@ module.exports = {
     return new Promise((resolve, reject) => {
       let publishResults = {};
       // 1. make sure the name is available
-      publishHelpers.checkNameAvailability(publishParams.name)
+      publishHelpers.checkClaimNameAvailability(publishParams.name)
       // 2. publish the file
       .then(result => {
         if (result === true) {

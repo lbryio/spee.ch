@@ -123,11 +123,35 @@ table {
 	word-wrap: break-word;
 }
 
-.input-error {
+/*  BEM  */
+
+.info-message {
 	font-weight: bold;
-	color: red;
-	font-size: small;
 }
+
+.info-message--success {
+	color: green;
+}
+
+.info-message--failure {
+	color: red;
+}
+
+.input-text {
+	outline: none;
+	border: 0px;
+	background-color: #ffffff;
+}
+
+.input-text--primary {
+	border-bottom: 1px solid grey;
+}
+
+.input-text--primary:focus {
+	border-bottom: 1px solid blue;
+}
+
+/* MEDIA QUERIES */
 
 @media (max-width: 1250px) {
 

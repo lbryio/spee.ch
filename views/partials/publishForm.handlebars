@@ -11,12 +11,12 @@
 		</div>
 		<div class="col-right">
 			<div id="publish-active-area">
-				<div class="input-error" id="input-error-claim-name" hidden="true"></div>
 				<div class="stop-float">
+                    <span id="claim-name-error" class="info-message info-message--failure"  hidden="true"></span>
 					<p>
                         Spee.ch/
-                        <input type="text" id="claim-name-input" class="input-text--primary" placeholder="your-url-here" oninput="checkClaimName(event.target.value)">
-                        <span id="claim-name-available" hidden="true" style="color: green">&#x2714</span>
+                        <input type="text" id="claim-name-input" class="input-text input-text--primary" placeholder="your-url-here" oninput="checkClaimName(event.target.value)">
+                        <span id="claim-name-success" class="info-message info-message--success"></span>
                     </p>
 				</div>
                 <div class="stop-float">
@@ -55,6 +55,6 @@
 		document.getElementById('input-error-file-selection').innerHTML = '';
 		document.getElementById('input-error-claim-name').innerHTML = '';
 		document.getElementById('input-error-publish-submit').innerHTML = '';
-		document.getElementById('claim-name-available').hidden = true;
+		document.getElementById('claim-name-success').hidden = true;
 	}
 </script>

@@ -100,7 +100,7 @@ module.exports = {
       logger.debug(`successfully deleted ${filePath}`);
     });
   },
-  checkNameAvailability (name) {
+  checkClaimNameAvailability (name) {
     return new Promise((resolve, reject) => {
       // find any records where the name is used
       db.File.findAll({ where: { name } })
@@ -133,27 +133,13 @@ module.exports = {
   checkChannelAvailability (name) {
     return new Promise((resolve, reject) => {
       // find any records where the name is used
-      db.Certificate.findAll({ where: { name } })
+      db.User.findAll({ where: { channelName: name } })
         .then(result => {
+          logger.debug('sequelize result:', result);
           if (result.length >= 1) {
-                // filter out any results that were not published from a spee.ch wallet address
-            getWalletList()
-                    .then((walletList) => {
-                      const filteredResult = result.filter((claim) => {
-                        return walletList.includes(claim.address);
-                      });
-                      if (filteredResult.length >= 1) {
-                        resolve(false);
-                      } else {
-                        resolve(true);
-                      }
-                    })
-                    .catch((error) => {
-                      reject(error);
-                    });
-          } else {
-            resolve(true);
+            return resolve(false);
           }
+          resolve(true);
         })
         .catch(error => {
           reject(error);

@@ -18,6 +18,10 @@ module.exports = (sequelize, { STRING }) => {
         type     : STRING,
         allowNull: false,
       },
+      address: {
+        type     : STRING,
+        allowNull: false,
+      },
     },
     {
       freezeTableName: true,

@@ -27,56 +27,6 @@ function validateFile(file) {
 			throw new Error(file.type + ' is not a supported file type. Only, .jpeg, .png, .gif, and .mp4 files are currently supported.')
 	}
 }
-// validation function that checks to make sure the claim name is not already claimed
-function isChannelAvailable (name) {
-    return new Promise(function(resolve, reject) {
-        // make sure the claim name is still available
-        var xhttp;
-        xhttp = new XMLHttpRequest();
-        xhttp.open('GET', '/api/isChannelAvailable/' + name, true);
-        xhttp.responseType = 'json';
-        xhttp.onreadystatechange = function() {
-            if (this.readyState == 4 ) {
-                if ( this.status == 200) {
-                    if (this.response == true) {
-                        resolve();
-                    } else {
-                        reject( new NameError("That name has already been claimed by another user.  Please choose a different name."));
-                    }
-                } else {
-                    reject("request to check claim name failed with status:" + this.status);
-                };
-            }
-        };
-        xhttp.send();
-    });
-}
-
-// validation function that checks to make sure the claim name is not already claimed
-function isNameAvailable (name) {
-    return new Promise(function(resolve, reject) {
-        // make sure the claim name is still available
-        var xhttp;
-        xhttp = new XMLHttpRequest();
-        xhttp.open('GET', '/api/isClaimAvailable/' + name, true);
-        xhttp.responseType = 'json';
-        xhttp.onreadystatechange = function() {
-            if (this.readyState == 4 ) {
-                if ( this.status == 200) {
-                    if (this.response == true) {
-                        resolve();
-                    } else {
-                        reject( new NameError("That name has already been claimed by another user.  Please choose a different name."));
-                    }
-                } else {
-                    reject("request to check claim name failed with status:" + this.status);
-                };
-            }
-        };
-        xhttp.send();
-    });
-}
-
 // validation function that checks to make sure the claim name is valid
 function validateClaimName (name) {
 	// ensure a name was entered
@@ -95,49 +45,83 @@ function cleanseClaimName(name) {
 	name = name.replace(/[^A-Za-z0-9-]/g, '');  // remove all characters that are not A-Z, a-z, 0-9, or '-'
 	return name;
 }
-// validaiton function to check claim name as the input changes
-function checkClaimName(name){
-	try {
-		// check to make sure the characters are valid
-		validateClaimName(name);
-		clearError('input-error-claim-name');
-		// check to make sure it is availabe
-		isNameAvailable(name)
-			.then(function() {
-				document.getElementById('claim-name-available').hidden = false;
-			})
-			.catch(function(error) {
-				document.getElementById('claim-name-available').hidden = true;
-				showError('input-error-claim-name', error.message);
-			});
-	} catch (error) {
-		showError('input-error-claim-name', error.message);
-		document.getElementById('claim-name-available').hidden = true;
-	}
+
+// validation functions to check claim & channel name eligibility as the inputs change
+
+function isNameAvailable (name, apiUrl) {
+    return new Promise(function(resolve, reject) {
+        // make sure the claim name is still available
+        var xhttp;
+        xhttp = new XMLHttpRequest();
+        xhttp.open('GET', apiUrl + name, true);
+        xhttp.responseType = 'json';
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 ) {
+                if ( this.status == 200) {
+                    if (this.response == true) {
+                        resolve();
+                    } else {
+                        reject( new NameError("That name has already been claimed by another user.  Please choose a different name."));
+                    }
+                } else {
+                    reject("request to check claim name failed with status:" + this.status);
+                };
+            }
+        };
+        xhttp.send();
+    });
 }
 
+function showError(errorDisplay, errorMsg) {
+    errorDisplay.hidden = false;
+    errorDisplay.innerText = errorMsg;
+}
 
-// validaiton function to check claim name as the input changes
-function checkChannelName(event){
-    console.log(event);
-    const name = event.target.value;
-    const target = document.getElementById(event.target.id);
-    const errorDisplay = target.parentNode.firstChild;
-    console.log('error display:', errorDisplay)
+function hideError(errorDisplay) {
+    errorDisplay.hidden = true;
+    errorDisplay.innerText = '';
+}
+
+function showSuccess (successElement) {
+    successElement.hidden = false;
+    successElement.innerHTML = "&#x2714";
+}
+
+function hideSuccess (successElement) {
+    successElement.hidden = true;
+    successElement.innerHTML = "";
+}
+
+function checkAvailability(name, successDisplayElement, errorDisplayElement, isNameAvailable, apiUrl) {
     try {
+        // check to make sure the characters are valid
+        validateClaimName(name);
         // check to make sure it is available
-        isChannelAvailable(name)
+        isNameAvailable(name, apiUrl)
             .then(function() {
-                errorDisplay.hidden = false;
+                hideError(errorDisplayElement);
+                showSuccess(successDisplayElement)
             })
             .catch(function(error) {
-                errorDisplay.hidden = false;
-                showError(errorDisplay.getAttribute('id'), error.message);
+                hideSuccess(successDisplayElement);
+                showError(errorDisplayElement, error.message);
             });
     } catch (error) {
-        console.log(error.message);
-        document.getElementById(errorDisplay.getAttribute('id')).hidden = true;
+        hideSuccess(successDisplayElement);
+        showError(errorDisplayElement, error.message);
     }
+}
+
+function checkClaimName(name){
+	const successDisplayElement = document.getElementById('claim-name-success');
+	const errorDisplayElement = document.getElementById('claim-name-error');
+	checkAvailability(name, successDisplayElement, errorDisplayElement, isNameAvailable, '/api/isClaimAvailable/');
+}
+
+function checkChannelName(name){
+    const successDisplayElement = document.getElementById('channel-name-success');
+    const errorDisplayElement = document.getElementById('channel-name-error');
+    checkAvailability(name, successDisplayElement, errorDisplayElement, isNameAvailable, '/api/isChannelAvailable/');
 }
 
 // validation function which checks all aspects of the publish submission

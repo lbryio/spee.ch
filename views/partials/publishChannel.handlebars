@@ -1,21 +1,34 @@
 <div id="claim-channel-input-area">
-    <label for="publish-channel">Channel:</label></td>
-    <select type="text" id="publish-channel" name="channel" value="channel" onclick="check(event)">
-        {{#if user}}
-            <option value="@{{user.channelName}}" >@{{user.channelName}}</option>
-        {{/if}}
-        <option value="@speech" >Anonymous</option>
-        <option value="new" >New</option>
-    </select>
-    <div id="channel-create-details" hidden="true"><p id="test" style="color: red;"></p>
-        <label for="channelName">Channel Name: </label>
-        @<input type="text" id="channel-name-input" class="input-text--primary" oninput="checkChannelName(event)">
-        <br/>
-        <label for="password" >Password: </label>
-        <input type="text" id="password" class="input-text--primary">
-        <br/>
-        <button >create</button>
+
+    <p>
+        <label for="publish-channel">Channel:</label></td>
+        <select type="text" id="publish-channel" name="channel" value="channel" onclick="check(event)">
+            {{#if user}}
+                <option value="@{{user.channelName}}" >@{{user.channelName}}</option>
+            {{/if}}
+            <option value="@speech" >Anonymous</option>
+            <option value="new" >New</option>
+        </select>
+    </p>
+
+    <div id="channel-create-details" hidden="true">
+
+        <span id="channel-name-error" class="info-message info-message--failure"></span>
+        <p>
+            <label for="channelName">Channel Name: </label>
+            @<input type="text" id="channel-name-input" class="input-text input-text--primary" placeholder="exampleChannel" oninput="checkChannelName(event.target.value)">
+            <span id="channel-name-success" class="info-message info-message--success"></span>
+            <br/>
+
+            <label for="password" >Password: </label>
+            <input type="password" id="password" placeholder="" class="input-text input-text--primary">
+            <br/>
+        </p>
+
+            <button >create</button>
+
     </div>
+
 </div>
 
 <script type="text/javascript">

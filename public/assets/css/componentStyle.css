@@ -54,16 +54,7 @@
 	width: 90%
 }
 
-.input-text--primary {
-	border: 0px;
-	background-color: #ffffff;
-	border-bottom: 1px solid grey;
-}
 
-.input-text--primary:focus {
-	outline: none;
-	border-bottom: 1px solid blue;
-}
 
 /* show routes */
 .show-asset {
