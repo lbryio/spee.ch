@@ -1,0 +1,28 @@
+<p>Details
+    <a class="toggle-link" id="details-toggle" href="#" onclick="toggleSection(event)" data-open="false" data-slaveelementid="details-detail">[open]</a>
+</p>
+<div id="details-detail" hidden="true">
+    <table>
+        <tr>
+            <td><label for="publish-title">Title: </label></td>
+            <td><input type="text" id="publish-title" class="input-text--primary"></td>
+        </tr>
+        <tr>
+            <td><label for="publish-description">Description: </label></td>
+            <td><textarea rows="2" id="publish-description"> </textarea></td>
+        </tr>
+        <tr>
+            <td><label for="publish-license">License:* </label></td>
+            <td>
+                <select type="text" id="publish-license" name="license" value="license">
+                    <option value="Public Domain">Public Domain</option>
+                    <option value="Creative Commons">Creative Commons</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td><label for="publish-nsfw">NSFW*</label></td>
+            <td><input type="checkbox" id="publish-nsfw"></td>
+        </tr>
+    </table>
+</div>

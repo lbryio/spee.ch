@@ -20,7 +20,7 @@ module.exports = new PassportLocalStrategy(
           if (!user.validPassword(password, user.password)) {
             return done(null, false, {message: 'Incorrect username or password.'});
           }
-          return done(null, user.dataValues);
+          return done(null, user);  // user.dataValues?
         })
         .catch(error => {
           return done(error);

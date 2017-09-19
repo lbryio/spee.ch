@@ -54,12 +54,15 @@
 	width: 90%
 }
 
-#claim-name-input {
+.input-text--primary {
 	border: 0px;
+	background-color: #ffffff;
+	border-bottom: 1px solid grey;
 }
 
-#claim-name-input:focus {
-	outline: none
+.input-text--primary:focus {
+	outline: none;
+	border-bottom: 1px solid blue;
 }
 
 /* show routes */

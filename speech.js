@@ -22,35 +22,35 @@ require('./config/slackLoggerConfig.js')(logger);
 
 // trust the proxy to get ip address for us
 app.enable('trust proxy');
+
 // add middleware
 app.use(helmet()); // set HTTP headers to protect against well-known web vulnerabilties
 app.use(express.static(`${__dirname}/public`)); // 'express.static' to serve static files from public directory
 app.use(bodyParser.json()); // 'body parser' for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // 'body parser' for parsing application/x-www-form-urlencoded
 app.use(siofu.router); // 'socketio-file-upload' router for uploading with socket.io
-app.use((req, res, next) => {  // custom logging middleware to log all incomming http requests
+app.use((req, res, next) => {  // custom logging middleware to log all incoming http requests
   logger.verbose(`Request on ${req.originalUrl} from ${req.ip}`);
   next();
 });
+
 // initialize passport
 app.use(session({ secret: 'cats' }));
 app.use(passport.initialize());
 app.use(passport.session());
-passport.serializeUser(function (user, done) {
+passport.serializeUser((user, done) => {
   done(null, user.id);
 });
-
-passport.deserializeUser(function (id, done) {
+passport.deserializeUser((id, done) => {
   db.User.findOne({ where: { id } })
   .then(user => {
-    done(null, user.dataValues);
+    done(null, user);  // user.dataValues?
   })
   .catch(error => {
     logger.error('sequelize error', error);
+    done(error, null);
   });
 });
-
-// Load passport strategies
 const localSignupStrategy = require('./passport/local-signup.js');
 const localLoginStrategy = require('./passport/local-login.js');
 passport.use('local-signup', localSignupStrategy);
@@ -65,6 +65,16 @@ const hbs = expressHandlebars.create({
 app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
 
+// middleware to pass user info back to client, if user is logged in
+app.use((req, res, next) => {
+  if (req.user) {
+    res.locals.user = {
+      id         : req.user.id,
+      channelName: req.user.channelName,
+    };
+  }
+  next();
+});
 // start the server
 db.sequelize
   .sync() // sync sequelize

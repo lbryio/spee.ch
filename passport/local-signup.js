@@ -26,7 +26,7 @@ module.exports = new PassportLocalStrategy(
       })
       .then(user => {
         logger.debug('User record was created successfully');
-        return done(null);
+        return done(null, user);  // user.datavalues?
       })
       .catch(error => {
         logger.debug(error);

@@ -1,0 +1,38 @@
+<div id="claim-channel-input-area">
+    <label for="publish-channel">Channel:</label></td>
+    <select type="text" id="publish-channel" name="channel" value="channel" onclick="check(event)">
+        {{#if user}}
+            <option value="@{{user.channelName}}" >@{{user.channelName}}</option>
+        {{/if}}
+        <option value="@speech" >Anonymous</option>
+        <option value="new" >New</option>
+    </select>
+    <div id="channel-create-details" hidden="true"><p id="test" style="color: red;"></p>
+        <label for="channelName">Channel Name: </label>
+        @<input type="text" id="channel-name-input" class="input-text--primary" oninput="checkChannelName(event)">
+        <br/>
+        <label for="password" >Password: </label>
+        <input type="text" id="password" class="input-text--primary">
+        <br/>
+        <button >create</button>
+    </div>
+</div>
+
+<script type="text/javascript">
+ // toggle channel creation tool
+ const createChannelTool = document.getElementById('channel-create-details');
+ function check(event) {
+     const selectedOption = event.target.selectedOptions[0].value;
+     console.log(selectedOption);
+     if (selectedOption === 'new') {
+         createChannelTool.hidden = false;
+     } else {
+         createChannelTool.hidden = true;
+     }
+ }
+
+ function createChannel() {
+
+ }
+
+</script>

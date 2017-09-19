@@ -3,7 +3,7 @@ const multipart = require('connect-multiparty');
 const multipartMiddleware = multipart();
 const { publish } = require('../controllers/publishController.js');
 const { getClaimList, resolveUri } = require('../helpers/lbryApi.js');
-const { createPublishParams, validateFile, checkNameAvailability } = require('../helpers/publishHelpers.js');
+const { createPublishParams, validateFile, checkNameAvailability, checkChannelAvailability } = require('../helpers/publishHelpers.js');
 const errorHandlers = require('../helpers/errorHandlers.js');
 const { postToStats, sendGoogleAnalytics } = require('../controllers/statsController.js');
 
@@ -37,6 +37,22 @@ module.exports = (app, hostedContentPath) => {
     .catch(error => {
       res.status(500).json(error);
     });
+  });
+  // route to check whether spee.ch has published to a channel
+  app.get('/api/isChannelAvailable/:name', ({ ip, originalUrl, params }, res) => {
+    // send response
+    checkChannelAvailability(params.name)
+      .then(result => {
+        if (result === true) {
+          res.status(200).json(true);
+        } else {
+          logger.debug(`Rejecting publish request because ${params.name} has already been published via spee.ch`);
+          res.status(200).json(false);
+        }
+      })
+      .catch(error => {
+        res.status(500).json(error);
+      });
   });
   // route to run a resolve request on the daemon
   app.get('/api/resolve/:uri', ({ headers, ip, originalUrl, params }, res) => {

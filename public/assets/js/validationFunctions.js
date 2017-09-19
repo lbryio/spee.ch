@@ -28,29 +28,55 @@ function validateFile(file) {
 	}
 }
 // validation function that checks to make sure the claim name is not already claimed
-function isNameAvailable (name) {
-	return new Promise(function(resolve, reject) {
-		// make sure the claim name is still available
-		var xhttp;
-		xhttp = new XMLHttpRequest();
-		xhttp.open('GET', '/api/isClaimAvailable/' + name, true);
-		xhttp.responseType = 'json';
-		xhttp.onreadystatechange = function() {
-			if (this.readyState == 4 ) {
-				if ( this.status == 200) {
-					if (this.response == true) {
-						resolve();
-					} else {
-						reject( new NameError("That name has already been claimed by another user.  Please choose a different name."));
-					}
-				} else {
-					reject("request to check claim name failed with status:" + this.status);
-				};
-			}
-		};
-		xhttp.send();
-	});
+function isChannelAvailable (name) {
+    return new Promise(function(resolve, reject) {
+        // make sure the claim name is still available
+        var xhttp;
+        xhttp = new XMLHttpRequest();
+        xhttp.open('GET', '/api/isChannelAvailable/' + name, true);
+        xhttp.responseType = 'json';
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 ) {
+                if ( this.status == 200) {
+                    if (this.response == true) {
+                        resolve();
+                    } else {
+                        reject( new NameError("That name has already been claimed by another user.  Please choose a different name."));
+                    }
+                } else {
+                    reject("request to check claim name failed with status:" + this.status);
+                };
+            }
+        };
+        xhttp.send();
+    });
 }
+
+// validation function that checks to make sure the claim name is not already claimed
+function isNameAvailable (name) {
+    return new Promise(function(resolve, reject) {
+        // make sure the claim name is still available
+        var xhttp;
+        xhttp = new XMLHttpRequest();
+        xhttp.open('GET', '/api/isClaimAvailable/' + name, true);
+        xhttp.responseType = 'json';
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 ) {
+                if ( this.status == 200) {
+                    if (this.response == true) {
+                        resolve();
+                    } else {
+                        reject( new NameError("That name has already been claimed by another user.  Please choose a different name."));
+                    }
+                } else {
+                    reject("request to check claim name failed with status:" + this.status);
+                };
+            }
+        };
+        xhttp.send();
+    });
+}
+
 // validation function that checks to make sure the claim name is valid
 function validateClaimName (name) {
 	// ensure a name was entered
@@ -89,6 +115,31 @@ function checkClaimName(name){
 		document.getElementById('claim-name-available').hidden = true;
 	}
 }
+
+
+// validaiton function to check claim name as the input changes
+function checkChannelName(event){
+    console.log(event);
+    const name = event.target.value;
+    const target = document.getElementById(event.target.id);
+    const errorDisplay = target.parentNode.firstChild;
+    console.log('error display:', errorDisplay)
+    try {
+        // check to make sure it is available
+        isChannelAvailable(name)
+            .then(function() {
+                errorDisplay.hidden = false;
+            })
+            .catch(function(error) {
+                errorDisplay.hidden = false;
+                showError(errorDisplay.getAttribute('id'), error.message);
+            });
+    } catch (error) {
+        console.log(error.message);
+        document.getElementById(errorDisplay.getAttribute('id')).hidden = true;
+    }
+}
+
 // validation function which checks all aspects of the publish submission
 function validateSubmission(stagedFiles, name){
 	return new Promise(function (resolve, reject) {

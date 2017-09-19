@@ -4,5 +4,12 @@
 	<a href="/popular" class="top-bar-right">popular</a>
 	<a href="https://github.com/lbryio/spee.ch" target="_blank" class="top-bar-right">source</a>
 	<a href="/about" class="top-bar-right">help</a>
+
+    {{#if user}}
+        <a href="/@{{user.channelName}}" class="top-bar-right">@{{user.channelName}}</a>
+        <a href="/logout" class="top-bar-right">logout</a>
+    {{else}}
+        <a href="/login" class="top-bar-right">login</a>
+    {{/if}}
 	<div class="top-bar-tagline">Open-source, decentralized image and video hosting.</div>
 </div>

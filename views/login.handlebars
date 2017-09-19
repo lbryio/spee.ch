@@ -1,20 +1,39 @@
 <div class="wrapper">
     {{> topBar}}
     <div class="full">
+
         <h2>Log In</h2>
+        <p>Log in to an existing channel</p>
         <form id="login-form" action="/login" method="post">
             <div>
                 <label>Username:</label>
-                <input type="text" name="username"/>
+                @ <input type="text" name="username" class="input-text--primary"/>
             </div>
             <div>
                 <label>Password:</label>
-                <input type="password" name="password"/>
+                <input type="password" name="password" class="input-text--primary"/>
             </div>
             <div>
                 <input type="submit" value="Log In"/>
             </div>
         </form>
+
+        <h2>Create New</h2>
+        <p>Create a brand new channel</p>
+        <form action="/signup" method="post">
+            <div>
+                <label>Channel name:</label>
+                @ <input type="text" name="username" class="input-text--primary"/>
+            </div>
+            <div>
+                <label>Password:</label>
+                <input type="password" name="password" class="input-text--primary"/>
+            </div>
+            <div>
+                <input type="submit" value="Create"/>
+            </div>
+        </form>
+
     </div>
     {{> footer}}
 </div>
