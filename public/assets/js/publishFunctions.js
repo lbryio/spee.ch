@@ -19,7 +19,7 @@ function previewAndStageFile(selectedFile){
 		showError('input-error-file-selection', error.message);
 		return;
 	}
-	// set the image preview, if a preview was provided
+	// set the image preview, if an image was provided
 	if (selectedFile.type !== 'video/mp4') {
 		previewReader.readAsDataURL(selectedFile);
 		previewReader.onloadend = function () {
@@ -41,18 +41,22 @@ function previewAndStageFile(selectedFile){
 // Validate the publish submission and then trigger publishing.
 function publishSelectedImage(event) {
 	event.preventDefault();
-	var name = document.getElementById('claim-name-input').value;
-	validateSubmission(stagedFiles, name)
+	var claimName = document.getElementById('claim-name-input').value;
+    var channelName = document.getElementById('channel-name-select').value;
+	validateSubmission(stagedFiles, claimName, channelName)
 		.then(function() {
 			uploader.submitFiles(stagedFiles); 
 		})
 		.catch(function(error) {
-			if (error.name === 'FileError'){
-				showError('input-error-file-selection', error.message);
+			if (error.name === 'FileError') {
+                showError(document.getElementById('input-error-file-selection'), error.message);
 			} else if (error.name === 'NameError') {
-				showError('input-error-claim-name', error.message);
+				showError(document.getElementById('input-error-claim-name'), error.message);
+            } else if (error.name === 'ChannelError'){
+				console.log(error);
+                showError(document.getElementById('input-error-channel-select'), error.message);
 			} else {
-				showError('input-error-publish-submit', error.message);
+				showError(document.getElementById('input-error-publish-submit'), error.message);
 			}
 			return;
 		})

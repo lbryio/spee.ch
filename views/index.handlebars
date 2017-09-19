@@ -24,12 +24,14 @@
 		var description = document.getElementById('publish-description').value;
 		var license = document.getElementById('publish-license').value;
 		var nsfw = document.getElementById('publish-nsfw').checked;
+		var channel = document.getElementById('channel-name-select').value;
 		event.file.meta.name = name;
 		event.file.meta.title = title;
 		event.file.meta.description = description;
 		event.file.meta.license = license;
 		event.file.meta.nsfw = nsfw;
 		event.file.meta.type = stagedFiles[0].type;
+        event.file.meta.channel = channel;
 		// re-set the html in the publish area
 		document.getElementById('publish-active-area').innerHTML = '<div id="publish-status"></div><div id="progress-bar"></div>';
 		// start a progress animation
@@ -54,7 +56,7 @@
 	});
 	socket.on('publish-complete', function(msg){
 		var publishResults;
-		var showUrl = msg.name + '/' + msg.result.claim_id;
+		var showUrl = msg.result.claim_id + "/" + msg.name;
 		// build new publish area
 		publishResults = '<p>Your publish is complete! You are being redirected to it now.</p>';
 		publishResults += '<p><a target="_blank" href="' + showUrl + '">If you do not get redirected, click here.</a></p>';

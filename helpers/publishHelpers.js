@@ -135,7 +135,6 @@ module.exports = {
       // find any records where the name is used
       db.User.findAll({ where: { channelName: name } })
         .then(result => {
-          logger.debug('sequelize result:', result);
           if (result.length >= 1) {
             return resolve(false);
           }

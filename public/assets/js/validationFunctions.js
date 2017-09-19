@@ -113,39 +113,44 @@ function checkAvailability(name, successDisplayElement, errorDisplayElement, isN
 }
 
 function checkClaimName(name){
-	const successDisplayElement = document.getElementById('claim-name-success');
-	const errorDisplayElement = document.getElementById('claim-name-error');
+	const successDisplayElement = document.getElementById('input-success-claim-name');
+	const errorDisplayElement = document.getElementById('input-error-claim-name');
 	checkAvailability(name, successDisplayElement, errorDisplayElement, isNameAvailable, '/api/isClaimAvailable/');
 }
 
 function checkChannelName(name){
-    const successDisplayElement = document.getElementById('channel-name-success');
-    const errorDisplayElement = document.getElementById('channel-name-error');
+    const successDisplayElement = document.getElementById('input-success-channel-name');
+    const errorDisplayElement = document.getElementById('input-error-channel-name');
     checkAvailability(name, successDisplayElement, errorDisplayElement, isNameAvailable, '/api/isChannelAvailable/');
 }
 
 // validation function which checks all aspects of the publish submission
-function validateSubmission(stagedFiles, name){
+function validateSubmission(stagedFiles, claimName, channelName){
 	return new Promise(function (resolve, reject) {
-		// make sure only 1 file was selected
+		// 1. make sure only 1 file was selected
 		if (!stagedFiles) {
 			reject(new FileError("Please select a file"));
 		} else if (stagedFiles.length > 1) {
 			reject(new FileError("Only one file is allowed at a time"));
 		}
-		// validate the file's name, type, and size
+		// 2. validate the file's name, type, and size
 		try {
 			validateFile(stagedFiles[0]);
 		} catch (error) {
 			reject(error);
 		}
-		// make sure the claim name has not already been used
+		// 3. validate that a channel was chosen
+		if (channelName === 'new') {
+			reject(new ChannelError("Please select a valid channel"));
+        };
+		// 4. validate the claim name
 		try {
-			validateClaimName(name);
+			validateClaimName(claimName); // validate the formatting
 		} catch (error) {
 			reject(error);
 		}
-		isNameAvailable(name)
+		console.log(claimName);
+		isNameAvailable(claimName, '/api/isClaimAvailable/')  // validate the availability
 			.then(function() {
 				resolve();
 			})

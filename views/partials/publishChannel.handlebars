@@ -1,8 +1,8 @@
 <div id="claim-channel-input-area">
-
+    <span id="input-error-channel-select" class="info-message info-message--failure"></span>
     <p>
-        <label for="publish-channel">Channel:</label></td>
-        <select type="text" id="publish-channel" name="channel" value="channel" onclick="check(event)">
+        <label for="channel-name-select">Channel:</label>
+        <select type="text" id="channel-name-select" name="channel" value="channel" onclick="check(event)">
             {{#if user}}
                 <option value="@{{user.channelName}}" >@{{user.channelName}}</option>
             {{/if}}
@@ -12,23 +12,19 @@
     </p>
 
     <div id="channel-create-details" hidden="true">
-
-        <span id="channel-name-error" class="info-message info-message--failure"></span>
+        <span id="input-error-channel-name" class="info-message info-message--failure"></span>
         <p>
             <label for="channelName">Channel Name: </label>
-            @<input type="text" id="channel-name-input" class="input-text input-text--primary" placeholder="exampleChannel" oninput="checkChannelName(event.target.value)">
-            <span id="channel-name-success" class="info-message info-message--success"></span>
+            @<input type="text" id="channel-name-input" class="input-text input-text--primary" placeholder="exampleChannel" value=""; oninput="checkChannelName(event.target.value)">
+            <span id="input-success-channel-name" class="info-message info-message--success"></span>
             <br/>
 
             <label for="password" >Password: </label>
-            <input type="password" id="password" placeholder="" class="input-text input-text--primary">
+            <input type="password" id="password" placeholder="" value="" class="input-text input-text--primary">
             <br/>
         </p>
-
             <button >create</button>
-
     </div>
-
 </div>
 
 <script type="text/javascript">
@@ -36,14 +32,13 @@
  const createChannelTool = document.getElementById('channel-create-details');
  function check(event) {
      const selectedOption = event.target.selectedOptions[0].value;
-     console.log(selectedOption);
-     if (selectedOption === 'new') {
-         createChannelTool.hidden = false;
-     } else {
+     if (selectedOption != 'new') {
          createChannelTool.hidden = true;
+         hideError(document.getElementById('input-error-channel-select'));
+     } else {
+         createChannelTool.hidden = false;
      }
  }
-
  function createChannel() {
 
  }
