@@ -4,19 +4,17 @@
 
         <h2>Log In</h2>
         <p>Log in to an existing channel:</p>
-        <form id="login-form" action="/login" method="post">
+        <form id="login-form">
             <div>
                 <label>Username:</label>
-                @ <input type="text" name="username" class="input-text input-text--primary"/>
+                @ <input type="text" id="login-channel-name" class="input-text input-text--primary"/>
             </div>
             <div>
                 <label>Password:</label>
-                <input type="password" name="password" class="input-text input-text--primary"/>
-            </div>
-            <div>
-                <input type="submit" value="Log In"/>
+                <input type="password" id="login-channel-password" class="input-text input-text--primary"/>
             </div>
         </form>
+        <button onclick="loginToChannel(event)">Log In</button>
 
         <h2>Create New</h2>
         <p>Create a brand new channel:</p>
@@ -24,23 +22,23 @@
             <div>
                 <div id="input-error-channel-name" class="info-message info-message--failure"></div>
                 <label>Channel name:</label>
-                @ <input type="text" name="username" value="" id="new-channel-name" class="input-text input-text--primary" oninput="checkChannelName(event.target.value)"/>
+                @ <input type="text" id="new-channel-name" class="input-text input-text--primary" oninput="checkChannelName(event.target.value)"/>
                 <span id="input-success-channel-name" class="info-message info-message--success"></span>
             </div>
             <div>
                 <div id="input-error-password" class="info-message info-message--failure"></div>
                 <label>Password:</label>
-                <input type="password" name="password" value="" id="new-channel-password" class="input-text input-text--primary"/>
+                <input type="password" id="new-channel-password" class="input-text input-text--primary"/>
             </div>
         </form>
-        <button value="Create" onclick="publishNewChannel(event)">Create Channel</button>
+        <button onclick="publishNewChannel(event)">Create Channel</button>
     </div>
     {{> footer}}
 </div>
 
 <script src="/assets/js/generalFunctions.js"></script>
 <script src="/assets/js/validationFunctions.js"></script>
-<script src="/assets/js/publishChannelFunctions.js"></script>
+<script src="/assets/js/authFunctions.js"></script>
 <script type="text/javascript">
     function publishNewChannel (event) {
         const channelName = `@${document.getElementById('new-channel-name').value}`;
@@ -52,10 +50,10 @@
         // validate submission
         validateNewChannelSubmission(channelName, password)
             .then(() => {
-                return sendSignupRequest(channelName, password) // post the request
+                return sendAuthRequest(channelName, password, '/signup'); // post the request
             })
             .then(() => {
-                console.log('success');
+                console.log('signup success');
                 document.getElementById('publish-channel-form').innerHTML = '<p>Your channel has been successfully created! Redirecting you now...</p>';
                 window.location.href = `/${channelName}`;
             })
@@ -65,8 +63,23 @@
                 } else if (error.name === 'ChannelPasswordError'){
                     showError(passwordErrorDisplayElement, error.message);
                 } else {
-                    console.log('failure:', error);
+                    console.log('signup failure:', error);
                 }
+            })
+    }
+    function loginToChannel (event) {
+        const channelName = `@${document.getElementById('login-channel-name').value}`;
+        const password = document.getElementById('login-channel-password').value;
+        // prevent default action
+        event.preventDefault()
+        // send request
+        sendAuthRequest(channelName, password, '/login')
+            .then(() => {
+                console.log('login success');
+                //window.location.href = `/${channelName}`;
+            })
+            .catch(error => {
+                console.log('login failure:', error);
             })
     }
 </script>

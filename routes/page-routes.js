@@ -1,28 +1,12 @@
 const errorHandlers = require('../helpers/errorHandlers.js');
 const { postToStats, getStatsSummary, getTrendingClaims, getRecentClaims } = require('../controllers/statsController.js');
-const passport = require('passport');
-const logger = require('winston');
 
 module.exports = (app) => {
-  // route for auth
-  app.post('/signup', passport.authenticate('local-signup'), (req, res) => {
-    logger.debug('redirecting to user channel');
-    // If this function gets called, signup was successful.
-    // `req.user` contains the authenticated user.
-    res.redirect(`/${req.user.channelName}`);
-  });
-  app.post('/login', passport.authenticate('local-login'), (req, res) => {
-    logger.debug('redirecting to user channel');
-    // If this function gets called, login was successful.
-    // `req.user` contains the authenticated user.
-    res.redirect(`/${req.user.channelName}`);
-  });
   // route to log out
   app.get('/logout', (req, res) => {
     req.logout();
     res.redirect('/login');
   });
-
   // route to display login page
   app.get('/login', (req, res) => {
     if (req.user) {
@@ -31,14 +15,6 @@ module.exports = (app) => {
       res.status(200).render('login');
     }
   });
-  // route to display login page
-  // app.get('/users/:name', isAuthenticated, (req, res) => {
-  //   res.status(200).render('profile');
-  // });
-  // app.get('/logout', deAuthenticate, (req, res) => {
-  //   res.status(200).render('/');
-  // });
-
   // route to show 'about' page for spee.ch
   app.get('/about', (req, res) => {
     // get and render the content

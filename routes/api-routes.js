@@ -6,18 +6,8 @@ const { getClaimList, resolveUri } = require('../helpers/lbryApi.js');
 const { createPublishParams, validateFile, checkClaimNameAvailability, checkChannelAvailability } = require('../helpers/publishHelpers.js');
 const errorHandlers = require('../helpers/errorHandlers.js');
 const { postToStats, sendGoogleAnalytics } = require('../controllers/statsController.js');
-const passport = require('passport');
 
-module.exports = (app, hostedContentPath) => {
-  // route for auth
-  app.post('/api/signup', passport.authenticate('local-signup'), (req, res) => {
-    logger.debug('successful signup');
-    res.status(200).json(true);
-  });
-  app.post('/api/login', passport.authenticate('local-login'), (req, res) => {
-    logger.debug('successful login');
-    res.status(200).json(true);
-  });
+module.exports = (app) => {
   // route to run a claim_list request on the daemon
   app.get('/api/claim_list/:name', ({ headers, ip, originalUrl, params }, res) => {
     // google analytics

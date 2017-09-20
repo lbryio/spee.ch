@@ -7,41 +7,65 @@
                 <option value="{{user.channelName}}" >{{user.channelName}}</option>
             {{/if}}
             <option value="@speech" >Anonymous</option>
+            <option value="login">Login</option>
             <option value="new" >New</option>
         </select>
     </p>
+
+    <div id="channel-login-details" hidden="true">
+        <p>
+        <form id="channel-login-form">
+            <div>
+                <label for="login-channel-name">Channel Name: </label>
+                @<input type="text" name="login-channel-name" id="login-channel-name" class="input-text input-text--primary" placeholder="" value="">
+            </div>
+            <div>
+                <label for="login-channel-password" >Password: </label>
+                <input type="password" name="login-channel-password" id="login-channel-password" class="input-text input-text--primary" placeholder="" value="">
+            </div>
+
+        </form>
+        </p>
+        <button onclick="loginToChannel(event)">Login</button>
+    </div>
 
     <div id="channel-create-details" hidden="true">
         <p>
             <form id="publish-channel-form">
                 <div>
                     <div id="input-error-channel-name" class="info-message info-message--failure"></div>
-                    <label for="channelName">Channel Name: </label>
-                    @<input type="text" name="channelName" id="new-channel-name" class="input-text input-text--primary" placeholder="exampleChannel" value="" oninput="checkChannelName(event.target.value)">
+                    <label for="new-channel-name">Channel Name: </label>
+                    @<input type="text" name="new-channel-name" id="new-channel-name" class="input-text input-text--primary" placeholder="exampleChannel" value="" oninput="checkChannelName(event.target.value)">
                     <span id="input-success-channel-name" class="info-message info-message--success"></span>
                 </div>
                 <div>
                     <div id="input-error-channel-password" class="info-message info-message--failure"></div>
-                    <label for="channelPassword" >Password: </label>
-                    <input type="password" name="channelPassword" id="new-channel-password" placeholder="" value="" class="input-text input-text--primary">
+                    <label for="new-channel-password">Password: </label>
+                    <input type="password" name="new-channel-password" id="new-channel-password" placeholder="" value="" class="input-text input-text--primary">
                 </div>
-
             </form>
         </p>
-            <button onclick="publishNewChannel(event)">Create Channel</button>
+        <button onclick="publishNewChannel(event)">Create Channel</button>
     </div>
 </div>
 
+<script src="/assets/js/authFunctions.js"></script>
 <script type="text/javascript">
 
  function toggleChannel (event) {
      const createChannelTool = document.getElementById('channel-create-details');
+     const loginToChannelTool = document.getElementById('channel-login-details');
      const selectedOption = event.target.selectedOptions[0].value;
-     if (selectedOption != 'new') {
+     if (selectedOption === 'new') {
+         createChannelTool.hidden = false;
+         loginToChannelTool.hidden = true;
+     } else if (selectedOption === 'login') {
+         loginToChannelTool.hidden = false;
+         createChannelTool.hidden = true;
+     } else {
+         loginToChannelTool.hidden = true;
          createChannelTool.hidden = true;
          hideError(document.getElementById('input-error-channel-select'));
-     } else {
-         createChannelTool.hidden = false;
      }
  }
 
@@ -55,12 +79,14 @@
      // validate submission
      validateNewChannelSubmission(channelName, password)
          .then(() => {
-             return sendSignupRequest(channelName, password) // post the request
+             document.getElementById('channel-create-details').innerHTML = '<p>Your channel is being created...</p>';
+             return sendAuthRequest(channelName, password, '/signup') // post the request
          })
          .then(() => {
              console.log('success');
-             document.getElementById('signup-form').innerHTML = '<p>Your channel has been successfully created! Redirecting you now...</p>';
-             window.location.href = `/${channelName}`;
+             document.getElementById('channel-create-details').innerHTML = '<p>Your channel has been successfully created!</p>';
+             // referesh window logged in as the channel
+             window.location.href = `/`;
          })
          .catch(error => {
              if (error.name === 'ChannelNameError'){
@@ -70,6 +96,22 @@
              } else {
                  console.log('failure:', error);
              }
+         })
+ }
+
+ function loginToChannel (event) {
+     const channelName = `@${document.getElementById('login-channel-name').value}`;
+     const password = document.getElementById('login-channel-password').value;
+     // prevent default
+     event.preventDefault()
+     // send request
+     sendAuthRequest(channelName, password, '/login')
+         .then(() => {
+             console.log('login success');
+             //window.location.href = `/${channelName}`;
+         })
+         .catch(error => {
+             console.log('login failure:', error);
          })
  }
 

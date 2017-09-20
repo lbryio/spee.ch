@@ -10,6 +10,7 @@ module.exports = new PassportLocalStrategy(
     passReqToCallback: true,
   },
   (req, username, password, done) => {
+    logger.debug('verifying loggin attempt');
     username = `@${username}`;
     return db.User
         .findOne({where: {channelName: username}})

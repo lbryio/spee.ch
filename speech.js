@@ -88,7 +88,8 @@ db.sequelize
     // add the hosted content folder at a static path
     app.use('/media', express.static(hostedContentPath));
     // require routes & wrap in socket.io
-    require('./routes/api-routes.js')(app, hostedContentPath);
+    require('./routes/auth-routes.js')(app);
+    require('./routes/api-routes.js')(app);
     require('./routes/page-routes.js')(app);
     require('./routes/serve-routes.js')(app);
     require('./routes/home-routes.js')(app);

@@ -4,7 +4,7 @@
 		<div class="col-left" id="file-selection-area">
 			<div id="drop-zone" ondrop="drop_handler(event);" ondragover="dragover_handler(event);" ondragend="dragend_handler(event)">
 				<p>Drag and drop your file here, or choose your file below.</p>
-                <span class="info-message info-message--failure" id="input-error-file-selection" hidden="true"></span><br/>
+                <div class="info-message info-message--failure" id="input-error-file-selection" hidden="true"></div>
 				<input type="file" id="siofu_input" name="file" accept="video/*,image/*" onchange="previewAndStageFile(event.target.files[0])" enctype="multipart/form-data"/>
 			</div>
 			<div id="asset-preview-holder"></div>
@@ -40,7 +40,7 @@
 		// reset file selection area
 		document.getElementById('file-selection-area').innerHTML = `<div id="drop-zone" ondrop="drop_handler(event);" ondragover="dragover_handler(event);" ondragend="dragend_handler(event)">
 			<p>Drag and drop your file here, or choose your file below.</p>
-			<div class="input-error" id="input-error-file-selection" hidden="true"></div>
+			<div class="info-message info-message--failure" id="input-error-file-selection" hidden="true"></div>
 			<input type="file" id="siofu_input" name="file" accept="video/*,image/*" onchange="previewAndStageFile(event.target.files[0])" enctype="multipart/form-data"/>
 		</div>
 		<div id="asset-preview-holder"></div>`;

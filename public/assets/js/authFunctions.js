@@ -1,11 +1,11 @@
-function sendSignupRequest (channelName, password) {
+function sendAuthRequest (channelName, password, url) {  // url === /signup or /login
     return new Promise(function(resolve, reject) {
         // make sure the claim name is still available
         let xhttp;
         const params = `username=${channelName}&password=${password}`;
-        console.log(params);
+        console.log(params, url);
         xhttp = new XMLHttpRequest();
-        xhttp.open('POST', '/api/signup', true);
+        xhttp.open('POST', url, true);
         xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         xhttp.responseType = 'json';
         xhttp.onreadystatechange = function() {
