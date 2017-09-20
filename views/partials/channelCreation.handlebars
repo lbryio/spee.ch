@@ -1,0 +1,51 @@
+<div id="channel-publish-wrapper">
+    <p>
+        <form id="publish-channel-form">
+            <div>
+                <div id="input-error-channel-name" class="info-message info-message--failure"></div>
+                <label for="new-channel-name">Channel Name: </label>
+                @<input type="text" name="new-channel-name" id="new-channel-name" class="input-text input-text--primary" placeholder="exampleChannel" value="" oninput="checkChannelName(event.target.value)">
+                <span id="input-success-channel-name" class="info-message info-message--success"></span>
+            </div>
+            <div>
+                <div id="input-error-channel-password" class="info-message info-message--failure"></div>
+                <label for="new-channel-password">Password: </label>
+                <input type="password" name="new-channel-password" id="new-channel-password" placeholder="" value="" class="input-text input-text--primary">
+            </div>
+        </form>
+    </p>
+    <button onclick="publishNewChannel(event)">Create Channel</button>
+</div>
+
+<script type="text/javascript">
+ function publishNewChannel (event) {
+     const channelName = `@${document.getElementById('new-channel-name').value}`;
+     const password = document.getElementById('new-channel-password').value;
+     const channelNameErrorDisplayElement = document.getElementById('input-error-channel-name');
+     const passwordErrorDisplayElement = document.getElementById('input-error-channel-password');
+     const wrapper = document.getElementById('channel-publish-wrapper');
+     // prevent default so this script can handle submission
+     event.preventDefault();
+     // validate submission
+     validateNewChannelSubmission(channelName, password)
+         .then(() => {
+             wrapper.innerHTML = '<p>Creating your new channel...</p>';
+             return sendAuthRequest(channelName, password, '/signup') // post the request
+         })
+         .then(() => {
+             console.log('success');
+             wrapper.innerHTML = '<p>Your channel has been successfully created!</p>';
+             // referesh window logged in as the channel
+             window.location.href = '/';
+         })
+         .catch(error => {
+             if (error.name === 'ChannelNameError'){
+                 showError(channelNameErrorDisplayElement, error.message);
+             } else if (error.name === 'ChannelPasswordError'){
+                 showError(passwordErrorDisplayElement, error.message);
+             } else {
+                 console.log('failure:', error);
+             }
+         })
+ }
+</script>

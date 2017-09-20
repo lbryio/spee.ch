@@ -5,7 +5,7 @@ module.exports = (app) => {
   // route to log out
   app.get('/logout', (req, res) => {
     req.logout();
-    res.redirect('/login');
+    res.redirect('/');
   });
   // route to display login page
   app.get('/login', (req, res) => {

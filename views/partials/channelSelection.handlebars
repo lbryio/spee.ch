@@ -1,0 +1,43 @@
+<div>
+    <p>
+        <div id="input-error-channel-select" class="info-message info-message--failure"></div>
+        <label for="channel-name-select">Channel:</label>
+        <select type="text" id="channel-name-select" name="channel" value="channel" onclick="toggleChannel(event)">
+            {{#if user}}
+                <option value="{{user.channelName}}" >{{user.channelName}}</option>
+            {{/if}}
+            <option value="@speech" >Anonymous</option>
+            <option value="login">Login</option>
+            <option value="new" >New</option>
+        </select>
+    </p>
+
+    <div id="channel-login-details" hidden="true">
+        {{> channelLogin}}
+    </div>
+
+    <div id="channel-create-details" hidden="true">
+        {{> channelCreation}}
+    </div>
+</div>
+
+<script src="/assets/js/authFunctions.js"></script>
+<script type="text/javascript">
+
+ function toggleChannel (event) {
+     const createChannelTool = document.getElementById('channel-create-details');
+     const loginToChannelTool = document.getElementById('channel-login-details');
+     const selectedOption = event.target.selectedOptions[0].value;
+     if (selectedOption === 'new') {
+         createChannelTool.hidden = false;
+         loginToChannelTool.hidden = true;
+     } else if (selectedOption === 'login') {
+         loginToChannelTool.hidden = false;
+         createChannelTool.hidden = true;
+     } else {
+         loginToChannelTool.hidden = true;
+         createChannelTool.hidden = true;
+         hideError(document.getElementById('input-error-channel-select'));
+     }
+ }
+</script>

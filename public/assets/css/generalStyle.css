@@ -121,7 +121,7 @@ button {
 	background-color: white;
 }
 
-button:hover, button:focus  {
+button:hover {
 	border: 1px solid blue;
 	color: white;
 	background-color: blue;
