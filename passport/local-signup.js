@@ -2,6 +2,7 @@ const db = require('../models');
 const PassportLocalStrategy = require('passport-local').Strategy;
 const lbryApi = require('../helpers/lbryApi.js');
 const logger = require('winston');
+const config = require('config');
 
 module.exports = new PassportLocalStrategy(
   {
@@ -11,20 +12,34 @@ module.exports = new PassportLocalStrategy(
     passReqToCallback: true,  // we want to be able to read the post body message parameters in the callback
   },
   (req, username, password, done) => {
-    console.log('inside local-signup');
+    logger.debug('new channel signup request');
+    const address = config.get('WalletConfig.LbryClaimAddress');
+    // validate raw inputs (username, password)
+    username = '@' + username;
     // create the channel and retrieve the metadata
-    lbryApi.createChannel(username)
-      .then(channelInfo => {
-        // define an object that contains all the user data
+    return lbryApi.createChannel(username)
+      .then(channelTx => {
+        // create certificate record
+        const certificateData = {
+          address,
+          claimId: channelTx.claim_id,
+          name   : username,
+        };
+        logger.debug('certificateData >', certificateData);
+        return db.Certificate.create(certificateData);
+      })
+      .then(certificate => {
+        logger.debug('certificate result >', certificate.dataValues);
+        logger.debug('Certificate record was created successfully');
+          // define an object that contains all the user data
         const userData = {
           channelName   : username,
-          channelClaimId: channelInfo.claim_id,
+          channelClaimId: certificate.claimId,
           password      : password,
-          email         : 'test email', // req.body.email.trim(),
+          address,
         };
         return db.User.create(userData);
-      })
-      .then(user => {
+      }).then(user => {
         logger.debug('User record was created successfully');
         return done(null, user);  // user.datavalues?
       })

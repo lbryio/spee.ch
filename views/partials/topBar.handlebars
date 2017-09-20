@@ -6,7 +6,7 @@
 	<a href="/about" class="top-bar-right">help</a>
 
     {{#if user}}
-        <a href="/@{{user.channelName}}" class="top-bar-right">@{{user.channelName}}</a>
+        <a href="/{{user.channelName}}" class="top-bar-right">{{user.channelName}}</a>
         <a href="/logout" class="top-bar-right">logout</a>
     {{else}}
         <a href="/login" class="top-bar-right">login</a>

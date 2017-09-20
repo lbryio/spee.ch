@@ -4,7 +4,7 @@
         <label for="channel-name-select">Channel:</label>
         <select type="text" id="channel-name-select" name="channel" value="channel" onclick="check(event)">
             {{#if user}}
-                <option value="@{{user.channelName}}" >@{{user.channelName}}</option>
+                <option value="{{user.channelName}}" >{{user.channelName}}</option>
             {{/if}}
             <option value="@speech" >Anonymous</option>
             <option value="new" >New</option>
@@ -15,7 +15,7 @@
         <span id="input-error-channel-name" class="info-message info-message--failure"></span>
         <p>
             <label for="channelName">Channel Name: </label>
-            @<input type="text" id="channel-name-input" class="input-text input-text--primary" placeholder="exampleChannel" value=""; oninput="checkChannelName(event.target.value)">
+            @<input type="text" id="channel-name-input" class="input-text input-text--primary" placeholder="exampleChannel" value="" oninput="checkChannelName(event.target.value)">
             <span id="input-success-channel-name" class="info-message info-message--success"></span>
             <br/>
 

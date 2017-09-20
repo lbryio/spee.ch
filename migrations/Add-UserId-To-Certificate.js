@@ -6,7 +6,7 @@ module.exports = {
       'UserId',
       {
         type     : Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
       }
     );
   },

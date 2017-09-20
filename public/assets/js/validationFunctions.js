@@ -40,6 +40,26 @@ function validateClaimName (name) {
 	}
 }
 
+function validateChannelName (name) {
+	name = name.substring(name.indexOf('@') + 1);
+	console.log(name);
+    // ensure a name was entered
+    if (name.length < 1) {
+        throw new ChannelError("You must enter a name for your channel");
+    }
+    // validate the characters in the 'name' field
+    const invalidCharacters = /[^A-Za-z0-9,-,@]/g.exec(name);
+    if (invalidCharacters) {
+        throw new ChannelError('"' + invalidCharacters + '" characters are not allowed in the channel name.');
+    }
+}
+
+function validatePassword (password) {
+    if (password.length < 1) {
+        throw new ChannelError("You must enter a password for you channel");
+    }
+}
+
 function cleanseClaimName(name) {
 	name = name.replace(/\s+/g, '-'); // replace spaces with dashes
 	name = name.replace(/[^A-Za-z0-9-]/g, '');  // remove all characters that are not A-Z, a-z, 0-9, or '-'
@@ -92,10 +112,10 @@ function hideSuccess (successElement) {
     successElement.innerHTML = "";
 }
 
-function checkAvailability(name, successDisplayElement, errorDisplayElement, isNameAvailable, apiUrl) {
+function checkAvailability(name, successDisplayElement, errorDisplayElement, validateName, isNameAvailable, apiUrl) {
     try {
         // check to make sure the characters are valid
-        validateClaimName(name);
+        validateName(name);
         // check to make sure it is available
         isNameAvailable(name, apiUrl)
             .then(function() {
@@ -115,13 +135,14 @@ function checkAvailability(name, successDisplayElement, errorDisplayElement, isN
 function checkClaimName(name){
 	const successDisplayElement = document.getElementById('input-success-claim-name');
 	const errorDisplayElement = document.getElementById('input-error-claim-name');
-	checkAvailability(name, successDisplayElement, errorDisplayElement, isNameAvailable, '/api/isClaimAvailable/');
+	checkAvailability(name, successDisplayElement, errorDisplayElement, validateClaimName, isNameAvailable, '/api/isClaimAvailable/');
 }
 
 function checkChannelName(name){
     const successDisplayElement = document.getElementById('input-success-channel-name');
     const errorDisplayElement = document.getElementById('input-error-channel-name');
-    checkAvailability(name, successDisplayElement, errorDisplayElement, isNameAvailable, '/api/isChannelAvailable/');
+    name = `@${name}`;
+    checkAvailability(name, successDisplayElement, errorDisplayElement, validateChannelName, isNameAvailable, '/api/isChannelAvailable/');
 }
 
 // validation function which checks all aspects of the publish submission

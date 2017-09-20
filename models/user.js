@@ -14,10 +14,6 @@ module.exports = (sequelize, { STRING }) => {
         type     : STRING,
         allowNull: false,
       },
-      email: {
-        type     : STRING,
-        allowNull: false,
-      },
       address: {
         type     : STRING,
         allowNull: false,

@@ -9,13 +9,13 @@ module.exports = (app) => {
     logger.debug('redirecting to user channel');
     // If this function gets called, signup was successful.
     // `req.user` contains the authenticated user.
-    res.redirect('/@' + req.user.channelName);
+    res.redirect(`/${req.user.channelName}`);
   });
   app.post('/login', passport.authenticate('local-login'), (req, res) => {
     logger.debug('redirecting to user channel');
     // If this function gets called, login was successful.
     // `req.user` contains the authenticated user.
-    res.redirect('/@' + req.user.channelName);
+    res.redirect(`/${req.user.channelName}`);
   });
   // route to log out
   app.get('/logout', (req, res) => {
@@ -26,7 +26,7 @@ module.exports = (app) => {
   // route to display login page
   app.get('/login', (req, res) => {
     if (req.user) {
-      res.status(200).redirect(`/@${req.user.channelName}`);
+      res.status(200).redirect(`/${req.user.channelName}`);
     } else {
       res.status(200).render('login');
     }
