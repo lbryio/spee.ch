@@ -45,18 +45,18 @@ function validateChannelName (name) {
 	console.log(name);
     // ensure a name was entered
     if (name.length < 1) {
-        throw new ChannelError("You must enter a name for your channel");
+        throw new ChannelNameError("You must enter a name for your channel");
     }
     // validate the characters in the 'name' field
     const invalidCharacters = /[^A-Za-z0-9,-,@]/g.exec(name);
     if (invalidCharacters) {
-        throw new ChannelError('"' + invalidCharacters + '" characters are not allowed in the channel name.');
+        throw new ChannelNameError('"' + invalidCharacters + '" characters are not allowed in the channel name.');
     }
 }
 
 function validatePassword (password) {
     if (password.length < 1) {
-        throw new ChannelError("You must enter a password for you channel");
+        throw new ChannelNameError("You must enter a password for you channel");
     }
 }
 
@@ -146,32 +146,32 @@ function checkChannelName(name){
 }
 
 // validation function which checks all aspects of the publish submission
-function validateSubmission(stagedFiles, claimName, channelName){
+function validateFilePublishSubmission(stagedFiles, claimName, channelName){
 	return new Promise(function (resolve, reject) {
 		// 1. make sure only 1 file was selected
 		if (!stagedFiles) {
-			reject(new FileError("Please select a file"));
+			return reject(new FileError("Please select a file"));
 		} else if (stagedFiles.length > 1) {
-			reject(new FileError("Only one file is allowed at a time"));
+			return reject(new FileError("Only one file is allowed at a time"));
 		}
 		// 2. validate the file's name, type, and size
 		try {
 			validateFile(stagedFiles[0]);
 		} catch (error) {
-			reject(error);
+			return reject(error);
 		}
 		// 3. validate that a channel was chosen
 		if (channelName === 'new') {
-			reject(new ChannelError("Please select a valid channel"));
+			return reject(new ChannelNameError("Please select a valid channel"));
         };
 		// 4. validate the claim name
 		try {
-			validateClaimName(claimName); // validate the formatting
+			validateClaimName(claimName);
 		} catch (error) {
-			reject(error);
+			return reject(error);
 		}
-		console.log(claimName);
-		isNameAvailable(claimName, '/api/isClaimAvailable/')  // validate the availability
+		// if all validation passes, check availability of the name
+		isNameAvailable(claimName, '/api/isClaimAvailable/')
 			.then(function() {
 				resolve();
 			})
@@ -179,4 +179,30 @@ function validateSubmission(stagedFiles, claimName, channelName){
 				reject(error);
 			});
 	});
+}
+
+// validation function which checks all aspects of the publish submission
+function validateNewChannelSubmission(channelName, password){
+    return new Promise(function (resolve, reject) {
+    	// 1. validate name
+        try {
+            validateChannelName(channelName);
+        } catch (error) {
+            return reject(error);
+        }
+        // 2. validate password
+        try {
+            validatePassword(password);
+        } catch (error) {
+            return reject(error);
+        }
+        // 3. if all validation passes, check availability of the name
+        isNameAvailable(channelName, '/api/isChannelAvailable/')  // validate the availability
+            .then(function() {
+                resolve();
+            })
+            .catch(function(error) {
+                reject(error);
+            });
+    });
 }

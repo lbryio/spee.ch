@@ -1,9 +1,38 @@
-// update the publish status
-function updatePublishStatus(msg){
-	document.getElementById('publish-status').innerHTML = msg;
+/* drop zone functions */
+
+function drop_handler(ev) {
+    ev.preventDefault();
+    // if dropped items aren't files, reject them
+    var dt = ev.dataTransfer;
+    if (dt.items) {
+        if (dt.items[0].kind == 'file') {
+            var droppedFile = dt.items[0].getAsFile();
+            previewAndStageFile(droppedFile);
+        }
+    }
 }
 
-/* publish helper functions */
+function dragover_handler(ev) {
+    ev.preventDefault();
+}
+
+function dragend_handler(ev) {
+    var dt = ev.dataTransfer;
+    if (dt.items) {
+        for (var i = 0; i < dt.items.length; i++) {
+            dt.items.remove(i);
+        }
+    } else {
+        ev.dataTransfer.clearData();
+    }
+}
+
+/* publish functions */
+
+// update the publish status
+function updatePublishStatus(msg){
+    document.getElementById('publish-status').innerHTML = msg;
+}
 
 // When a file is selected for publish, validate that file and 
 // stage it so it will be ready when the publish button is clicked.
@@ -40,19 +69,21 @@ function previewAndStageFile(selectedFile){
 
 // Validate the publish submission and then trigger publishing.
 function publishSelectedImage(event) {
-	event.preventDefault();
 	var claimName = document.getElementById('claim-name-input').value;
     var channelName = document.getElementById('channel-name-select').value;
-	validateSubmission(stagedFiles, claimName, channelName)
-		.then(function() {
+    // prevent default so this script can handle submission
+    event.preventDefault();
+	// validate, submit, and handle response
+	validateFilePublishSubmission(stagedFiles, claimName, channelName)
+		.then(() => {
 			uploader.submitFiles(stagedFiles); 
 		})
-		.catch(function(error) {
+		.catch(error => {
 			if (error.name === 'FileError') {
                 showError(document.getElementById('input-error-file-selection'), error.message);
 			} else if (error.name === 'NameError') {
 				showError(document.getElementById('input-error-claim-name'), error.message);
-            } else if (error.name === 'ChannelError'){
+            } else if (error.name === 'ChannelNameError'){
 				console.log(error);
                 showError(document.getElementById('input-error-channel-select'), error.message);
 			} else {
@@ -61,32 +92,3 @@ function publishSelectedImage(event) {
 			return;
 		})
 };
-
-/* drop zone functions */
-
-function drop_handler(ev) {
-	ev.preventDefault();
-	// if dropped items aren't files, reject them
-	var dt = ev.dataTransfer;
-	if (dt.items) {
-		if (dt.items[0].kind == 'file') {
-			var droppedFile = dt.items[0].getAsFile();
-			previewAndStageFile(droppedFile);
-		}
-	}
-}
-
-function dragover_handler(ev) {
-	ev.preventDefault();
-}
-
-function dragend_handler(ev) {
-	var dt = ev.dataTransfer;
-	if (dt.items) {
-		for (var i = 0; i < dt.items.length; i++) {
-			dt.items.remove(i);
-		}
-	} else {
-		ev.dataTransfer.clearData();
-	}
-}

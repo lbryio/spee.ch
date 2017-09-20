@@ -20,9 +20,9 @@
 
         <h2>Create New</h2>
         <p>Create a brand new channel:</p>
-        <span id="input-error-channel-name" class="info-message info-message--failure"></span><br/>
         <form id="signup-form" action="/signup" method="post">
             <div>
+                <span id="input-error-channel-name" class="info-message info-message--failure"></span><br/>
                 <label>Channel name:</label>
                 @ <input type="text" name="username" value="" id="new-channel-name" class="input-text input-text--primary" oninput="checkChannelName(event.target.value)"/>
                 <span id="input-success-channel-name" class="info-message info-message--success"></span>
@@ -33,7 +33,7 @@
                 <input type="password" name="password" value="" id="new-channel-password" class="input-text input-text--primary"/>
             </div>
             <div>
-                <input type="submit" value="Create" onclick="submitNewChannelRequest(event)"/>
+                <input type="submit" value="Create" onclick="publishNewChannel(event)"/>
             </div>
         </form>
 
@@ -43,32 +43,4 @@
 
 <script src="/assets/js/generalFunctions.js"></script>
 <script src="/assets/js/validationFunctions.js"></script>
-<script src="/assets/js/channelFunctions.js"></script>
-<script type="text/javascript">
-    function submitNewChannelRequest (event) {
-        const channelName = document.getElementById('new-channel-name').value;
-        const password = document.getElementById('new-channel-password').value;
-        // prevent default so this script can handle submission
-        event.preventDefault();
-        // validate channel name
-
-
-        // validate password
-        try {
-            validatePassword(password);
-        } catch (error) {
-            showError(document.getElementById('input-error-password'), error.message)
-            return;
-        }
-        // post request
-        sendSignupRequest(channelName, password)
-        .then(() => {
-            console.log('success');
-            document.getElementById('signup-form').innerHTML = '<p>Your channel has been successfully created! Redirecting you now...</p>';
-            window.location.href = '/channelName';
-        })
-        .catch(error => {
-            console.log(error);
-        })
-    }
-</script>
+<script src="/assets/js/publishChannelFunctions.js"></script>

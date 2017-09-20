@@ -52,10 +52,18 @@ function NameError(message) {
 NameError.prototype = Object.create(Error.prototype);
 NameError.prototype.constructor = NameError;
 
-function ChannelError(message) {
-    this.name = 'ChannelError';
+function ChannelNameError(message) {
+    this.name = 'ChannelNameError';
     this.message = message || 'Default Message';
     this.stack = (new Error()).stack;
 }
-ChannelError.prototype = Object.create(Error.prototype);
-ChannelError.prototype.constructor = ChannelError;
+ChannelNameError.prototype = Object.create(Error.prototype);
+ChannelNameError.prototype.constructor = ChannelNameError;
+
+function ChannelPasswordError(message) {
+    this.name = 'ChannelPasswordError';
+    this.message = message || 'Default Message';
+    this.stack = (new Error()).stack;
+}
+ChannelPasswordError.prototype = Object.create(Error.prototype);
+ChannelPasswordError.prototype.constructor = ChannelPasswordError;
