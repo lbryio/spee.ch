@@ -14,10 +14,12 @@ function sendAuthRequest (channelName, password, url) {  // url === /signup or /
                     if (this.response == true) {
                         resolve();
                     } else {
-                        reject( new NameError("Your request could not be completed"));
+                        reject(new NameError('Your request succedded but could not be completed'));
                     }
+                } else if (this.status == 401) {
+                    reject('Incorrect username or password')
                 } else {
-                    reject("createChannel request failed with status:" + this.status);
+                    reject('Auth request failed with status:' + this.status);
                 };
             }
         };

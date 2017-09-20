@@ -5,6 +5,7 @@
         <h2>Log In</h2>
         <p>Log in to an existing channel:</p>
         <form id="login-form">
+            <div id="login-error-display-element" class="info-message info-message--failure"></div>
             <div>
                 <label>Username:</label>
                 @ <input type="text" id="login-channel-name" class="input-text input-text--primary"/>
@@ -50,12 +51,13 @@
         // validate submission
         validateNewChannelSubmission(channelName, password)
             .then(() => {
+                document.getElementById('publish-channel-form').innerHTML = '<p>Creating your new channel...</p>';
                 return sendAuthRequest(channelName, password, '/signup'); // post the request
             })
             .then(() => {
                 console.log('signup success');
-                document.getElementById('publish-channel-form').innerHTML = '<p>Your channel has been successfully created! Redirecting you now...</p>';
-                window.location.href = `/${channelName}`;
+                document.getElementById('publish-channel-form').innerHTML = '<p>Your channel has been successfully created! Signing you in now...</p>';
+                window.location.href = '/';
             })
             .catch(error => {
                 if (error.name === 'ChannelNameError'){
@@ -70,15 +72,17 @@
     function loginToChannel (event) {
         const channelName = `@${document.getElementById('login-channel-name').value}`;
         const password = document.getElementById('login-channel-password').value;
+        const loginErrorDisplayElement = document.getElementById('login-error-display-element');
         // prevent default action
         event.preventDefault()
         // send request
         sendAuthRequest(channelName, password, '/login')
-            .then(() => {
+            .then( () => {
                 console.log('login success');
-                //window.location.href = `/${channelName}`;
+                window.location.href = `/${channelName}`;
             })
             .catch(error => {
+                showError(loginErrorDisplayElement, error);
                 console.log('login failure:', error);
             })
     }

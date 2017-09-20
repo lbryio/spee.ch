@@ -10,18 +10,19 @@ module.exports = new PassportLocalStrategy(
     passReqToCallback: true,
   },
   (req, username, password, done) => {
-    logger.debug('verifying loggin attempt');
-    username = `@${username}`;
+    logger.debug(`verifying loggin attempt ${username} ${password}`);
     return db.User
         .findOne({where: {channelName: username}})
         .then(user => {
           if (!user) {
+            logger.debug('no user found');
             return done(null, false, {message: 'Incorrect username or password.'});
           }
           if (!user.validPassword(password, user.password)) {
+            logger.debug('incorrect password');
             return done(null, false, {message: 'Incorrect username or password.'});
           }
-          logger.debug('user', user.dataValues);
+          logger.debug('user found:', user.dataValues);
           return done(null, user);
         })
         .catch(error => {
