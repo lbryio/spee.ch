@@ -31,12 +31,12 @@ function validateFile(file) {
 function validateClaimName (name) {
 	// ensure a name was entered
 	if (name.length < 1) {
-		throw new NameError("You must enter a name for your claim");
+		throw new NameError("You must enter a name for your url");
 	}
 	// validate the characters in the 'name' field
 	const invalidCharacters = /[^A-Za-z0-9,-]/g.exec(name);
 	if (invalidCharacters) {
-		throw new NameError('"' + invalidCharacters + '" characters are not allowed in the title.');
+		throw new NameError('"' + invalidCharacters + '" characters are not allowed in the url.');
 	}
 }
 
@@ -81,7 +81,7 @@ function isNameAvailable (name, apiUrl) {
                     if (this.response == true) {
                         resolve();
                     } else {
-                        reject( new NameError("That name has already been claimed by another user.  Please choose a different name."));
+                        reject( new NameError("That name has already been claimed by someone else."));
                     }
                 } else {
                     reject("request to check claim name failed with status:" + this.status);

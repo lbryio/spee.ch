@@ -24,33 +24,3 @@ function sendSignupRequest (channelName, password) {
         xhttp.send(params);
     });
 }
-
-function publishNewChannel (event) {
-    const channelName = `@${document.getElementById('new-channel-name').value}`;
-    const password = document.getElementById('new-channel-password').value;
-    const channelNameErrorDisplayElement = document.getElementById('input-error-channel-name');
-    const passwordErrorDisplayElement = document.getElementById('input-error-password');
-    // prevent default so this script can handle submission
-    event.preventDefault();
-    // validate submission
-    validateNewChannelSubmission(channelName, password)
-        .then(() => {
-            return sendSignupRequest(channelName, password) // post the request
-        })
-        .then(() => {
-            console.log('success');
-            document.getElementById('signup-form').innerHTML = '<p>Your channel has been successfully created! Redirecting you now...</p>';
-            window.location.href = `/${channelName}`;
-        })
-        .catch(error => {
-            if (error.name === 'ChannelNameError'){
-                showError(channelNameErrorDisplayElement, error.message);
-            } else if (error.name === 'ChannelPasswordError'){
-                showError(passwordErrorDisplayElement, error.message);
-            } else {
-                console.log('failure:', error);
-            }
-        })
-
-
-}

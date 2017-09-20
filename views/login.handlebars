@@ -20,23 +20,20 @@
 
         <h2>Create New</h2>
         <p>Create a brand new channel:</p>
-        <form id="signup-form" action="/signup" method="post">
+        <form id="publish-channel-form">
             <div>
-                <span id="input-error-channel-name" class="info-message info-message--failure"></span><br/>
+                <div id="input-error-channel-name" class="info-message info-message--failure"></div>
                 <label>Channel name:</label>
                 @ <input type="text" name="username" value="" id="new-channel-name" class="input-text input-text--primary" oninput="checkChannelName(event.target.value)"/>
                 <span id="input-success-channel-name" class="info-message info-message--success"></span>
             </div>
             <div>
-                <span id="input-error-password" class="info-message info-message--failure"></span><br/>
+                <div id="input-error-password" class="info-message info-message--failure"></div>
                 <label>Password:</label>
                 <input type="password" name="password" value="" id="new-channel-password" class="input-text input-text--primary"/>
             </div>
-            <div>
-                <input type="submit" value="Create" onclick="publishNewChannel(event)"/>
-            </div>
         </form>
-
+        <button value="Create" onclick="publishNewChannel(event)">Create Channel</button>
     </div>
     {{> footer}}
 </div>
@@ -44,3 +41,32 @@
 <script src="/assets/js/generalFunctions.js"></script>
 <script src="/assets/js/validationFunctions.js"></script>
 <script src="/assets/js/publishChannelFunctions.js"></script>
+<script type="text/javascript">
+    function publishNewChannel (event) {
+        const channelName = `@${document.getElementById('new-channel-name').value}`;
+        const password = document.getElementById('new-channel-password').value;
+        const channelNameErrorDisplayElement = document.getElementById('input-error-channel-name');
+        const passwordErrorDisplayElement = document.getElementById('input-error-password');
+        // prevent default so this script can handle submission
+        event.preventDefault();
+        // validate submission
+        validateNewChannelSubmission(channelName, password)
+            .then(() => {
+                return sendSignupRequest(channelName, password) // post the request
+            })
+            .then(() => {
+                console.log('success');
+                document.getElementById('publish-channel-form').innerHTML = '<p>Your channel has been successfully created! Redirecting you now...</p>';
+                window.location.href = `/${channelName}`;
+            })
+            .catch(error => {
+                if (error.name === 'ChannelNameError'){
+                    showError(channelNameErrorDisplayElement, error.message);
+                } else if (error.name === 'ChannelPasswordError'){
+                    showError(passwordErrorDisplayElement, error.message);
+                } else {
+                    console.log('failure:', error);
+                }
+            })
+    }
+</script>

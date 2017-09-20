@@ -1,8 +1,8 @@
 <div id="claim-channel-input-area">
-    <span id="input-error-channel-select" class="info-message info-message--failure"></span>
     <p>
+        <div id="input-error-channel-select" class="info-message info-message--failure"></div>
         <label for="channel-name-select">Channel:</label>
-        <select type="text" id="channel-name-select" name="channel" value="channel" onclick="check(event)">
+        <select type="text" id="channel-name-select" name="channel" value="channel" onclick="toggleChannel(event)">
             {{#if user}}
                 <option value="{{user.channelName}}" >{{user.channelName}}</option>
             {{/if}}
@@ -12,25 +12,30 @@
     </p>
 
     <div id="channel-create-details" hidden="true">
-        <span id="input-error-channel-name" class="info-message info-message--failure"></span>
         <p>
-            <label for="channelName">Channel Name: </label>
-            @<input type="text" id="channel-name-input" class="input-text input-text--primary" placeholder="exampleChannel" value="" oninput="checkChannelName(event.target.value)">
-            <span id="input-success-channel-name" class="info-message info-message--success"></span>
-            <br/>
+            <form id="publish-channel-form">
+                <div>
+                    <div id="input-error-channel-name" class="info-message info-message--failure"></div>
+                    <label for="channelName">Channel Name: </label>
+                    @<input type="text" name="channelName" id="new-channel-name" class="input-text input-text--primary" placeholder="exampleChannel" value="" oninput="checkChannelName(event.target.value)">
+                    <span id="input-success-channel-name" class="info-message info-message--success"></span>
+                </div>
+                <div>
+                    <div id="input-error-channel-password" class="info-message info-message--failure"></div>
+                    <label for="channelPassword" >Password: </label>
+                    <input type="password" name="channelPassword" id="new-channel-password" placeholder="" value="" class="input-text input-text--primary">
+                </div>
 
-            <label for="password" >Password: </label>
-            <input type="password" id="password" placeholder="" value="" class="input-text input-text--primary">
-            <br/>
+            </form>
         </p>
-            <button >create</button>
+            <button onclick="publishNewChannel(event)">Create Channel</button>
     </div>
 </div>
 
 <script type="text/javascript">
- // toggle channel creation tool
- const createChannelTool = document.getElementById('channel-create-details');
- function check(event) {
+
+ function toggleChannel (event) {
+     const createChannelTool = document.getElementById('channel-create-details');
      const selectedOption = event.target.selectedOptions[0].value;
      if (selectedOption != 'new') {
          createChannelTool.hidden = true;
@@ -39,8 +44,33 @@
          createChannelTool.hidden = false;
      }
  }
- function createChannel() {
 
+ function publishNewChannel (event) {
+     const channelName = `@${document.getElementById('new-channel-name').value}`;
+     const password = document.getElementById('new-channel-password').value;
+     const channelNameErrorDisplayElement = document.getElementById('input-error-channel-name');
+     const passwordErrorDisplayElement = document.getElementById('input-error-channel-password');
+     // prevent default so this script can handle submission
+     event.preventDefault();
+     // validate submission
+     validateNewChannelSubmission(channelName, password)
+         .then(() => {
+             return sendSignupRequest(channelName, password) // post the request
+         })
+         .then(() => {
+             console.log('success');
+             document.getElementById('signup-form').innerHTML = '<p>Your channel has been successfully created! Redirecting you now...</p>';
+             window.location.href = `/${channelName}`;
+         })
+         .catch(error => {
+             if (error.name === 'ChannelNameError'){
+                 showError(channelNameErrorDisplayElement, error.message);
+             } else if (error.name === 'ChannelPasswordError'){
+                 showError(passwordErrorDisplayElement, error.message);
+             } else {
+                 console.log('failure:', error);
+             }
+         })
  }
 
 </script>

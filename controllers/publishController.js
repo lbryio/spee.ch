@@ -14,7 +14,7 @@ module.exports = {
         if (result === true) {
           return lbryApi.publishClaim(publishParams);
         } else {
-          return new Error('That name has already been claimed by spee.ch.  Please choose a new claim name.');
+          return new Error('That name has already been claimed by spee.ch.');
         }
       })
       // 3. upsert File record (update is in case the claim has been published before by this daemon)
