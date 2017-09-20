@@ -26,7 +26,7 @@ function sendSignupRequest (channelName, password) {
 }
 
 function publishNewChannel (event) {
-    const channelName = document.getElementById('new-channel-name').value;
+    const channelName = `@${document.getElementById('new-channel-name').value}`;
     const password = document.getElementById('new-channel-password').value;
     const channelNameErrorDisplayElement = document.getElementById('input-error-channel-name');
     const passwordErrorDisplayElement = document.getElementById('input-error-password');
@@ -40,7 +40,7 @@ function publishNewChannel (event) {
         .then(() => {
             console.log('success');
             document.getElementById('signup-form').innerHTML = '<p>Your channel has been successfully created! Redirecting you now...</p>';
-            window.location.href = '/channelName';
+            window.location.href = `/${channelName}`;
         })
         .catch(error => {
             if (error.name === 'ChannelNameError'){

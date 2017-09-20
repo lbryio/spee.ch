@@ -14,14 +14,14 @@ module.exports = new PassportLocalStrategy(
     return db.User
         .findOne({where: {channelName: username}})
         .then(user => {
-          logger.debug('user', user.dataValues);
           if (!user) {
             return done(null, false, {message: 'Incorrect username or password.'});
           }
           if (!user.validPassword(password, user.password)) {
             return done(null, false, {message: 'Incorrect username or password.'});
           }
-          return done(null, user);  // user.dataValues?
+          logger.debug('user', user.dataValues);
+          return done(null, user);
         })
         .catch(error => {
           return done(error);

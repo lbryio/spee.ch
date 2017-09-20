@@ -14,8 +14,8 @@ module.exports = new PassportLocalStrategy(
   (req, username, password, done) => {
     logger.debug('new channel signup request');
     const address = config.get('WalletConfig.LbryClaimAddress');
-    // validate raw inputs (username, password)
-    username = '@' + username;
+    // server-side validaton of raw inputs (username, password)
+
     // create the channel and retrieve the metadata
     return lbryApi.createChannel(username)
       .then(channelTx => {

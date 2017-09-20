@@ -56,7 +56,7 @@ function validateChannelName (name) {
 
 function validatePassword (password) {
     if (password.length < 1) {
-        throw new ChannelNameError("You must enter a password for you channel");
+        throw new ChannelPasswordError("You must enter a password for you channel");
     }
 }
 
@@ -172,10 +172,10 @@ function validateFilePublishSubmission(stagedFiles, claimName, channelName){
 		}
 		// if all validation passes, check availability of the name
 		isNameAvailable(claimName, '/api/isClaimAvailable/')
-			.then(function() {
+			.then(() => {
 				resolve();
 			})
-			.catch(function(error) {
+			.catch(error => {
 				reject(error);
 			});
 	});
@@ -198,10 +198,12 @@ function validateNewChannelSubmission(channelName, password){
         }
         // 3. if all validation passes, check availability of the name
         isNameAvailable(channelName, '/api/isChannelAvailable/')  // validate the availability
-            .then(function() {
+            .then(() => {
+                console.log('channel is avaliable');
                 resolve();
             })
-            .catch(function(error) {
+            .catch( error => {
+                console.log('error: channel is not avaliable');
                 reject(error);
             });
     });
