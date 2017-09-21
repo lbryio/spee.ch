@@ -1,6 +1,7 @@
 body, button, input, textarea, label, select, option {
 	font-family: serif;
 }
+
 /* Containters */
 
 .wrapper {
@@ -170,11 +171,11 @@ input:-webkit-autofill {
 }
 
 .input-text--primary {
-	border-bottom: 1px solid grey;
+	border-bottom: 1px solid blue;
 }
 
 .input-text--primary:focus {
-	border-bottom: 1px solid blue;
+	border-bottom: 1px solid grey;
 }
 
 /* MEDIA QUERIES */

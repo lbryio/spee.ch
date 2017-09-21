@@ -30,7 +30,7 @@ module.exports = (app) => {
       if (result === true) {
         res.status(200).json(true);
       } else {
-        logger.debug(`Rejecting publish request because ${params.name} has already been published via spee.ch`);
+        logger.debug(`Rejecting '${params.name}' because that name has already been claimed on spee.ch`);
         res.status(200).json(false);
       }
     })
@@ -45,7 +45,7 @@ module.exports = (app) => {
         if (result === true) {
           res.status(200).json(true);
         } else {
-          logger.debug(`Rejecting publish request because ${params.name} has already been published via spee.ch`);
+          logger.debug(`Rejecting '${params.name}' because that channel has already been claimed on spee.ch`);
           res.status(200).json(false);
         }
       })
