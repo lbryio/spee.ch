@@ -18,12 +18,12 @@ module.exports = {
   down: (queryInterface, Sequelize) => {
     // logic for reverting the changes
     const p1 = queryInterface.removeColumn(
-      'Certificate',
-      'UserId'
+      'User',
+      'CertificateId'
     );
     const p2 = queryInterface.addColumn(
-      'User',
-      'CertificateId',
+      'Certificate',
+      'UserId',
       {
         type     : Sequelize.STRING,
         allowNull: true,

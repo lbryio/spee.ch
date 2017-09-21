@@ -14,11 +14,21 @@ module.exports = new PassportLocalStrategy(
   (req, username, password, done) => {
     logger.debug('new channel signup request');
     const address = config.get('WalletConfig.LbryClaimAddress');
-    // server-side validaton of raw inputs (username, password)
+    let user;
+    let certificate;
+    // server-side validaton of inputs (username, password)
 
     // create the channel and retrieve the metadata
     return lbryApi.createChannel(username)
       .then(channelTx => {
+        // create user record
+        const userData = {
+          channelName   : username,
+          channelClaimId: channelTx.claim_id,
+          password      : password,
+          address,
+        };
+        logger.debug('userData >', userData);
         // create certificate record
         const certificateData = {
           address,
@@ -26,24 +36,19 @@ module.exports = new PassportLocalStrategy(
           name   : username,
         };
         logger.debug('certificateData >', certificateData);
-        return db.Certificate.create(certificateData);
+        // save user and certificate to db
+        return Promise.all([db.User.create(userData), db.Certificate.create(certificateData)]);
       })
-      .then(certificate => {
-        logger.debug('certificate result >', certificate.dataValues);
-        logger.debug('Certificate record was created successfully');
-          // define an object that contains all the user data
-        const userData = {
-          channelName   : username,
-          channelClaimId: certificate.claimId,
-          password      : password,
-          address,
-          CertificateId : certificate.id,
-        };
-        logger.debug('userData >', userData);
-        return db.User.create(userData);
-      }).then(user => {
+      .then(result => {
+        user = result[0];
+        certificate = result[1];
+        logger.debug('user and certificate successfully created');
         logger.debug('user result >', user.dataValues);
-        logger.debug('User record was created successfully');
+        logger.debug('certificate result >', certificate.dataValues);
+        // associate the instances
+        return Promise.all([certificate.setUser(user), user.setCertificate(certificate)]);
+      }).then(result => {
+        logger.debug('user and certificate successfully associated');
         return done(null, user);
       })
       .catch(error => {

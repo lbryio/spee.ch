@@ -45,8 +45,10 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser((id, done) => {
   db.User.findOne({ where: { id } })
   .then(user => {
-    done(null, user);  // user.dataValues?
+    done(null, user);
+    return null;
   })
+  .then()
   .catch(error => {
     logger.error('sequelize error', error);
     done(error, null);

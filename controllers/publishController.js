@@ -7,14 +7,14 @@ module.exports = {
   publish (publishParams, fileName, fileType) {
     return new Promise((resolve, reject) => {
       let publishResults = {};
-      // 1. make sure the name is (still) available
+      // 1. make sure the name is available
       publishHelpers.checkClaimNameAvailability(publishParams.name)
       // 2. publish the file
       .then(result => {
         if (result === true) {
           return lbryApi.publishClaim(publishParams);
         } else {
-          return new Error('That name has already been claimed on spee.ch.');
+          return new Error('That name has already been claimed by spee.ch.');
         }
       })
       // 3. upsert File record (update is in case the claim has been published before by this daemon)
@@ -40,10 +40,15 @@ module.exports = {
           name   : publishParams.name,
           claimId: publishResults.claim_id,
         };
+        // create the records
         return Promise.all([db.upsert(db.File, fileRecord, upsertCriteria, 'File'), db.upsert(db.Claim, fileRecord, upsertCriteria, 'Claim')]);
       })
-      .then(() => {
+      .then((file, claim) => {
         logger.debug('File and Claim records successfully created');
+        return Promise.all([file.setClaims(claim), claim.setFiles(file)]);
+      })
+      .then(() => {
+        logger.debug('File and Claim records successfully associated');
         resolve(publishResults); // resolve the promise with the result from lbryApi.publishClaim;
       })
       .catch(error => {
