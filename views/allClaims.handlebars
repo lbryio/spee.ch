@@ -2,7 +2,7 @@
 	{{> topBar}}
 	<div>
 		<h3>All Claims</h3>
-		<p>These are all the free, public assets at that claim.  You can publish more at <a href="/">spee.ch</a>.</p>
+		<p>These are all the free, public assets at that claim.  You can publish more at <a class="link--primary" href="/">spee.ch</a>.</p>
 		{{#each claims}}
 			<div class="all-claims-item">
 				<img class="all-claims-asset" src="/{{this.claimId}}/{{this.name}}.test" />
@@ -10,7 +10,7 @@
 					<ul style="list-style-type:none">
 						<li>claim: {{this.name}}</li>
 						<li>claim_id: {{this.claim_id}}</li>
-						<li>link: <a href="/{{this.claimId}}/{{this.name}}">spee.ch/{{this.name}}/{{this.claimId}}</a></li>
+						<li>link: <a class="link--primary" href="/{{this.claimId}}/{{this.name}}">spee.ch/{{this.name}}/{{this.claimId}}</a></li>
 						<li>author: {{this.value.stream.metadata.author}}</li>
 						<li>description: {{this.value.stream.metadata.description}}</li>
 						<li>license: {{this.value.stream.metadata.license}}</li>

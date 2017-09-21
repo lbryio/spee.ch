@@ -1,0 +1,59 @@
+<div class="panel">
+	<h2>My Publishes</h2>
+	<div class="row" id="recent-publishes"></div>
+</div>
+
+<script type="text/javascript" >
+    const publishDisplayArea = document.getElementById('recent-publishes');
+    let myPublishes = null;
+    function addToPublishList(publishData, key, publishList){
+        let listElement = document.createElement('li');
+        listElement.setAttribute('id', key);
+        let link = document.createElement('a');
+        link.setAttribute('href', `/${publishData.claimId}/${publishData.name}`);
+        link.setAttribute('class', 'link--primary');
+        link.innerText = `spee.ch/${publishData.name}`;
+        listElement.appendChild(link);
+        let removeLink = document.createElement('a');
+        removeLink.innerText = '[remove]';
+        removeLink.setAttribute('class', 'link--secondary link--padded');
+        removeLink.setAttribute('href', '');
+        removeLink.setAttribute('data-key', key);
+        removeLink.setAttribute('onClick', 'deletePublish(event)');
+        listElement.appendChild(removeLink);
+        publishList.insertBefore(listElement, publishList.firstChild);
+    }
+    function deletePublish(event){
+        event.preventDefault();
+        const key = event.target.dataset.key;
+        // update local storage
+        delete myPublishes[key];
+        window.localStorage.setItem('myPublishes', JSON.stringify(myPublishes));
+        // update list
+        updatePublishList();
+    }
+    function updatePublishList(){
+        publishDisplayArea.innerHTML = '';
+        myPublishes = window.localStorage.getItem('myPublishes');
+        if (!myPublishes || myPublishes === "{}") {
+            let noPublishesNotice = document.createElement('p');
+            noPublishesNotice.innerText = 'You do not have any recent publishes.';
+            publishDisplayArea.appendChild(noPublishesNotice);
+            let localStorageNotice = document.createElement('p')
+            localStorageNotice.innerHTML = `<i>Note: your recent publishes are stored in your browser's local storage.  They may be erased by certain actions, like clearing browsing data.</i>`;
+            publishDisplayArea.appendChild(localStorageNotice);
+        } else {
+            myPublishes = JSON.parse(myPublishes);
+            const publishList = document.createElement('ul');
+            publishDisplayArea.appendChild(publishList);
+            for (let key in myPublishes) {
+                if (myPublishes.hasOwnProperty(key)) {
+                    addToPublishList(myPublishes[key], key, publishList);
+                }
+            }
+        }
+    }
+	// check for publishes in local storage & display them
+    updatePublishList();
+
+</script>

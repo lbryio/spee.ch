@@ -6,7 +6,7 @@
 	<h2 class="subheader">Links</h2>
 	{{!--short direct link to asset--}}
 	<div class="share-option">
-		<a href="/{{fileInfo.shortId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}">Permanent Short Link</a> (most convenient)
+		<a class="link--primary" href="/{{fileInfo.shortId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}">Permanent Short Link</a> (most convenient)
 		<div class="input-error" id="input-error-copy-short-link" hidden="true"></div>
 		<br/>
 		<input type="text" id="short-link" class="link" readonly spellcheck="false" value="https://spee.ch/{{fileInfo.shortId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}" onclick="select()"/>
@@ -14,7 +14,7 @@
 	</div>
 	{{!-- link to show route for asset--}}
 	<div class="share-option">
-		<a href="/{{fileInfo.claimId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}">Permanent Long Link</a> (fastest service)
+		<a class="link--primary" href="/{{fileInfo.claimId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}">Permanent Long Link</a> (fastest service)
 		<div class="input-error" id="input-error-copy-long-link" hidden="true"></div>
 		</br>
 		<input type="text" id="long-link" class="link" readonly onclick="select()" spellcheck="false" value="https://spee.ch/{{fileInfo.claimId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}"/>

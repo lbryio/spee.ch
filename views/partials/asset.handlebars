@@ -1,6 +1,6 @@
 <div class="panel">
 	<div id="asset-placeholder">
-		<a href="/{{fileInfo.claimId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}">
+		<a class="link--primary" href="/{{fileInfo.claimId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}">
 		{{#ifConditional fileInfo.fileType '===' 'video/mp4'}}
 			{{#ifConditional fileInfo.fileExt '===' 'gifv'}}
 				<video class="show-asset" autoplay loop muted>
