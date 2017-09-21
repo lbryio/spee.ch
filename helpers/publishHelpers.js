@@ -83,12 +83,12 @@ module.exports = {
       metadata : {
         description,
         title,
-        author      : 'spee.ch',
-        language    : 'en',
+        author  : 'spee.ch',
+        language: 'en',
         license,
         nsfw,
-        channel_name: channel,
       },
+      channel_name : channel,
       claim_address: claimAddress,
       // change_address: changeAddress,
     };

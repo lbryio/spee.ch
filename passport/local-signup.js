@@ -20,11 +20,11 @@ module.exports = new PassportLocalStrategy(
 
     // create the channel and retrieve the metadata
     return lbryApi.createChannel(username)
-      .then(channelTx => {
+      .then(tx => {
         // create user record
         const userData = {
           channelName   : username,
-          channelClaimId: channelTx.claim_id,
+          channelClaimId: tx.claim_id,
           password      : password,
           address,
         };
@@ -32,7 +32,7 @@ module.exports = new PassportLocalStrategy(
         // create certificate record
         const certificateData = {
           address,
-          claimId: channelTx.claim_id,
+          claimId: tx.claim_id,
           name   : username,
         };
         logger.debug('certificateData >', certificateData);
@@ -47,7 +47,7 @@ module.exports = new PassportLocalStrategy(
         logger.debug('certificate result >', certificate.dataValues);
         // associate the instances
         return Promise.all([certificate.setUser(user), user.setCertificate(certificate)]);
-      }).then(result => {
+      }).then(() => {
         logger.debug('user and certificate successfully associated');
         return done(null, user);
       })

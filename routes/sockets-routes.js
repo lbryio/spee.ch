@@ -35,6 +35,12 @@ module.exports = (app, siofu, hostedContentPath) => {
       if (file.success) {
         logger.debug(`Client successfully uploaded ${file.name}`);
         socket.emit('publish-status', 'File upload successfully completed. Your image is being published to LBRY (this might take a second)...');
+
+        /*
+        NOTE: need to validate that client has the credentials to the channel they chose
+        otherwise they could circumvent security client side.
+         */
+
         // prepare the publish parameters
         const publishParams = publishHelpers.createPublishParams(file.meta.name, file.pathName, file.meta.title, file.meta.description, file.meta.license, file.meta.nsfw, file.meta.channel);
         // publish the file
