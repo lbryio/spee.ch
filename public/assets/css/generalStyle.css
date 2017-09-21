@@ -164,17 +164,17 @@ input:-webkit-autofill {
  -webkit-box-shadow: 0 0 0px 1000px white inset;
 }
 
-.input-text {
+.input-text, .select, .textarea {
 	outline: none;
 	border: 0px;
 	background-color: white;
 }
 
-.input-text--primary {
+.input-text--primary, .select--primary, .textarea--primary {
 	border-bottom: 1px solid blue;
 }
 
-.input-text--primary:focus {
+.input-text--primary:focus, .select--primary:focus, .textarea--primary:focus {
 	border-bottom: 1px solid grey;
 }
 

@@ -39,10 +39,12 @@ module.exports = new PassportLocalStrategy(
           address,
           CertificateId : certificate.id,
         };
+        logger.debug('userData >', userData);
         return db.User.create(userData);
       }).then(user => {
+        logger.debug('user result >', user.dataValues);
         logger.debug('User record was created successfully');
-        return done(null, user);  // user.datavalues?
+        return done(null, user);
       })
       .catch(error => {
         logger.debug(error);

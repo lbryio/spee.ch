@@ -2,7 +2,7 @@
     <p>
         <div id="input-error-channel-select" class="info-message info-message--failure"></div>
         <label for="channel-name-select">Channel:</label>
-        <select type="text" id="channel-name-select" name="channel" value="channel" onclick="toggleChannel(event)">
+        <select type="text" id="channel-name-select" class="select select--primary" value="channel" onclick="toggleChannel(event)">
             {{#if user}}
                 <option value="{{user.channelName}}" >{{user.channelName}}</option>
             {{/if}}
