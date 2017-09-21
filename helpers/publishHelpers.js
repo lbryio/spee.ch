@@ -92,7 +92,7 @@ module.exports = {
       claim_address: claimAddress,
     };
     // add channel if applicable
-    if (channel !== 'none'){
+    if (channel !== 'none') {
       publishParams['channel_name'] = channel;
     } else {
       publishParams['channel_name'] = defaultChannel;
