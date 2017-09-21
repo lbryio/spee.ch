@@ -32,7 +32,7 @@ module.exports = {
       throw new Error('The claim name you provided is not allowed.  Only the following characters are allowed: A-Z, a-z, 0-9, and "-"');
     }
     // validate license
-    if ((license.indexOf('Public Domain') === -1) && (license.indexOf('Creative Commons') === -1) && (license.indecOf('CC Attribution-NonCommercial 4.0 International') === -1)) {
+    if ((license.indexOf('Public Domain') === -1) && (license.indexOf('Creative Commons') === -1)) {
       throw new Error('Only posts with a "Public Domain" license,  or one of the Creative Commons licenses are eligible for publishing through spee.ch');
     }
     switch (nsfw) {
@@ -54,6 +54,7 @@ module.exports = {
   createPublishParams (name, filePath, title, description, license, nsfw, channel) {
     logger.debug(`Creating Publish Parameters for "${name}"`);
     const claimAddress = config.get('WalletConfig.LbryClaimAddress');
+    const defaultChannel = config.get('WalletConfig.DefaultChannel');
     // filter nsfw and ensure it is a boolean
     if (nsfw === false) {
       nsfw = false;
@@ -72,7 +73,7 @@ module.exports = {
     if (title === '' || title === null) {
       title = name;
     }
-    if (description === '' || description === null) {
+    if (description === ' ' || description === null) {
       description = `${name} published via spee.ch`;
     }
     // create the publish params
@@ -88,10 +89,15 @@ module.exports = {
         license,
         nsfw,
       },
-      channel_name : channel,
       claim_address: claimAddress,
-      // change_address: changeAddress,
     };
+    // add channel if applicable
+    if (channel !== 'none'){
+      publishParams['channel_name'] = channel;
+    } else {
+      publishParams['channel_name'] = defaultChannel;
+    }
+
     logger.debug('publishParams:', publishParams);
     return publishParams;
   },

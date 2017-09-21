@@ -1,6 +1,7 @@
 {
 	"WalletConfig": {
-		"LbryClaimAddress": "none"
+		"LbryClaimAddress": "none",
+		"DefaultChannel": "none"
 	},
 	"AnalyticsConfig":{
 		"GoogleId": "none"
@@ -11,6 +12,8 @@
 		"Password": "none"
 	},
 	"Logging": {
-		"LogLevel": "none"
+		"LogLevel": "none",
+		"SlackErrorChannel": "none",
+		"SlackInfoChannel": "none"
 	}
 }

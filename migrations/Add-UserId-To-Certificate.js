@@ -1,7 +1,7 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
       // logic for transforming into the new state
-    queryInterface.addColumn(
+    return queryInterface.addColumn(
       'Certificate',
       'UserId',
       {
@@ -12,7 +12,7 @@ module.exports = {
   },
   down: (queryInterface, Sequelize) => {
     // logic for reverting the changes
-    queryInterface.removeColumn(
+    return queryInterface.removeColumn(
       'Certificate',
       'UserId'
     );

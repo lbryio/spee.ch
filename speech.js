@@ -72,8 +72,9 @@ app.set('view engine', 'handlebars');
 app.use((req, res, next) => {
   if (req.user) {
     res.locals.user = {
-      id         : req.user.id,
-      channelName: req.user.channelName,
+      id            : req.user.id,
+      channelName   : req.user.channelName,
+      channelClaimId: req.user.channelClaimId,
     };
   }
   next();

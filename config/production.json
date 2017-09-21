@@ -1,12 +1,9 @@
 {
 	"WalletConfig": {
-		"LbryClaimAddress": "none"
+		"DefaultChannel": "@speech"
 	},
 	"AnalyticsConfig":{
 		"GoogleId": "UA-60403362-3"
-	},
-	"Database": {
-		"MySqlConnectionUri": "none"
 	},
 	"Logging": {
 		"LogLevel": "verbose",

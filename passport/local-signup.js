@@ -19,21 +19,21 @@ module.exports = new PassportLocalStrategy(
     // server-side validaton of inputs (username, password)
 
     // create the channel and retrieve the metadata
-    return lbryApi.createChannel(username)
+    return lbryApi.createChannel(username, address)
       .then(tx => {
         // create user record
         const userData = {
           channelName   : username,
           channelClaimId: tx.claim_id,
           password      : password,
-          address,
+          // address,
         };
         logger.debug('userData >', userData);
         // create certificate record
         const certificateData = {
-          address,
           claimId: tx.claim_id,
           name   : username,
+          // address,
         };
         logger.debug('certificateData >', certificateData);
         // save user and certificate to db
