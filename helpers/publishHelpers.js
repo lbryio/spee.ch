@@ -51,7 +51,7 @@ module.exports = {
         throw new Error('NSFW value was not accepted.  NSFW must be set to either true, false, "on", or "off"');
     }
   },
-  createPublishParams (name, filePath, title, description, license, nsfw) {
+  createPublishParams (name, filePath, title, description, license, nsfw, channel) {
     logger.debug(`Creating Publish Parameters for "${name}"`);
     const claimAddress = config.get('WalletConfig.LbryClaimAddress');
     // filter nsfw and ensure it is a boolean
@@ -72,7 +72,7 @@ module.exports = {
     if (title === '' || title === null) {
       title = name;
     }
-    if (description === '' || title === null) {
+    if (description === '' || description === null) {
       description = `${name} published via spee.ch`;
     }
     // create the publish params
@@ -83,10 +83,11 @@ module.exports = {
       metadata : {
         description,
         title,
-        author  : 'spee.ch',
-        language: 'en',
+        author      : 'spee.ch',
+        language    : 'en',
         license,
         nsfw,
+        channel_name: channel,
       },
       claim_address: claimAddress,
       // change_address: changeAddress,

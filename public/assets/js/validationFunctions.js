@@ -161,7 +161,7 @@ function validateFilePublishSubmission(stagedFiles, claimName, channelName){
 			return reject(error);
 		}
 		// 3. validate that a channel was chosen
-		if (channelName === 'new') {
+		if (channelName === 'new' || channelName === 'login') {
 			return reject(new ChannelNameError("Please select a valid channel"));
         };
 		// 4. validate the claim name
