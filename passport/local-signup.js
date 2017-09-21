@@ -37,6 +37,7 @@ module.exports = new PassportLocalStrategy(
           channelClaimId: certificate.claimId,
           password      : password,
           address,
+          CertificateId : certificate.id,
         };
         return db.User.create(userData);
       }).then(user => {
