@@ -6,9 +6,9 @@
 		"GoogleId": "none"
 	},
 	"Database": {
-		"database": "lbry",
-		"username": "none",
-		"password": "none"
+		"Database": "lbry",
+		"Username": "none",
+		"Password": "none"
 	},
 	"Logging": {
 		"LogLevel": "none"

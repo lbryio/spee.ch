@@ -6,9 +6,9 @@ const config = require('config');
 const db = {};
 const logger = require('winston');
 
-const database = config.get('Database.database');
-const username = config.get('Database.username');
-const password = config.get('Database.password');
+const database = config.get('Database.Database');
+const username = config.get('Database.Username');
+const password = config.get('Database.Password');
 const sequelize = new Sequelize(database, username, password, {
   host   : 'localhost',
   dialect: 'mysql',
@@ -52,7 +52,7 @@ function getLongClaimIdFromShortClaimId (name, shortId) {
       .then(result => {
         switch (result.length) {
           case 0:
-            return reject(new Error('That is an invalid Short Claim Id'));
+            throw new Error('That is an invalid Short Claim Id');
           default: // note results must be sorted
             return resolve(result[0].claimId);
         }
@@ -179,7 +179,7 @@ db['getShortClaimIdFromLongClaimId'] = (claimId, claimName) => {
       .then(result => {
         switch (result.length) {
           case 0:
-            return reject(new Error('That is an invalid claim name'));
+            throw new Error('That is an invalid claim name');
           default:
             return resolve(sortResult(result, claimId));
         }
@@ -198,7 +198,7 @@ db['getShortChannelIdFromLongChannelId'] = (channelName, longChannelId) => {
       .then(result => {
         switch (result.length) {
           case 0:
-            return reject(new Error('That is an invalid channel name'));
+            throw new Error('That is an invalid channel name');
           default:
             return resolve(sortResult(result, longChannelId));
         }
@@ -238,7 +238,7 @@ db['resolveClaim'] = (name, claimId) => {
           case 1:
             return resolve(result[0]);
           default:
-            return new Error('more than one entry matches that name and claimID');
+            throw new Error('more than one entry matches that name and claimID');
         }
       })
       .catch(error => {
@@ -255,7 +255,7 @@ db['getClaimIdByLongChannelId'] = (channelId, claimName) => {
       .then(result => {
         switch (result.length) {
           case 0:
-            return reject(new Error('There is no such claim for that channel'));
+            throw new Error('There is no such claim for that channel');
           default:
             return resolve(result[0].claimId);
         }

@@ -9,6 +9,8 @@
 		"MySqlConnectionUri": "none"
 	},
 	"Logging": {
-		"LogLevel": "verbose"
+		"LogLevel": "verbose",
+		"SlackErrorChannel": "#speech-errors",
+		"SlackInfoChannel": "#speech-logs"
 	}
 }

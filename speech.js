@@ -14,7 +14,8 @@ const db = require('./models'); // require our models for syncing
 
 // configure logging
 const logLevel = config.get('Logging.LogLevel');
-require('./config/loggerSetup.js')(logger, logLevel);
+require('./config/loggerConfig.js')(logger, logLevel);
+require('./config/slackLoggerConfig.js')(logger);
 
 // trust the proxy to get ip address for us
 app.enable('trust proxy');
@@ -134,7 +135,7 @@ app.set('view engine', 'handlebars');
 db.sequelize
   .sync() // sync sequelize
   .then(() => {  // get the download directory from the daemon
-    logger.info('Retrieving daemon download directory');
+    logger.info('Retrieving daemon download directory...');
     return getDownloadDirectory();
   })
   .then(hostedContentPath => {
@@ -154,5 +155,5 @@ db.sequelize
     });
   })
   .catch((error) => {
-    logger.error('Startup Error >>', error);
+    logger.error(`Startup Error >> ${error.message}`, error);
   });
