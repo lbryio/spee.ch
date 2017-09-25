@@ -15,7 +15,6 @@ module.exports = new PassportLocalStrategy(
     logger.debug('new channel signup request');
     const address = config.get('WalletConfig.LbryClaimAddress');
     let user;
-    let certificate;
     // server-side validaton of inputs (username, password)
 
     // create the channel and retrieve the metadata
@@ -26,7 +25,6 @@ module.exports = new PassportLocalStrategy(
           channelName   : username,
           channelClaimId: tx.claim_id,
           password      : password,
-          // address,
         };
         logger.debug('userData >', userData);
         // create certificate record
@@ -39,16 +37,16 @@ module.exports = new PassportLocalStrategy(
         // save user and certificate to db
         return Promise.all([db.User.create(userData), db.Certificate.create(certificateData)]);
       })
-      .then(result => {
-        user = result[0];
-        certificate = result[1];
+      .then(([newUser, newCertificate]) => {
+        user = newUser;  // save outside scope of this function
         logger.debug('user and certificate successfully created');
-        logger.debug('user result >', user.dataValues);
-        logger.debug('certificate result >', certificate.dataValues);
+        logger.debug('user result >', newUser.dataValues);
+        logger.debug('certificate result >', newCertificate.dataValues);
         // associate the instances
-        return Promise.all([certificate.setUser(user), user.setCertificate(certificate)]);
+        return Promise.all([newCertificate.setUser(newUser), newUser.setCertificate(newCertificate)]);
       }).then(() => {
         logger.debug('user and certificate successfully associated');
+        logger.debug('user ===', user.dataValues);
         return done(null, user);
       })
       .catch(error => {
