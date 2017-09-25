@@ -20,6 +20,9 @@ const logLevel = config.get('Logging.LogLevel');
 require('./config/loggerConfig.js')(logger, logLevel);
 require('./config/slackLoggerConfig.js')(logger);
 
+// check for global config variables
+require('./helpers/configVarCheck.js')();
+
 // trust the proxy to get ip address for us
 app.enable('trust proxy');
 
@@ -68,7 +71,7 @@ const hbs = expressHandlebars.create({
 app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
 
-// middleware to pass user info back to client, if user is logged in
+// middleware to pass user info back to client (for handlebars access), if user is logged in
 app.use((req, res, next) => {
   if (req.user) {
     res.locals.user = {
