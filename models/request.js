@@ -22,6 +22,7 @@ module.exports = (sequelize, { STRING, BOOLEAN, TEXT }) => {
     },
     {
       freezeTableName: true,
+      underscored    : true,
     }
   );
 

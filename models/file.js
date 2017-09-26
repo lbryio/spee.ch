@@ -47,6 +47,7 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER }) => {
     },
     {
       freezeTableName: true,
+      underscored    : true,
     }
   );
 

@@ -2,11 +2,7 @@ module.exports = (sequelize, { STRING }) => {
   const User = sequelize.define(
     'User',
     {
-      channelName: {
-        type     : STRING,
-        allowNull: false,
-      },
-      channelClaimId: {
+      userName: {
         type     : STRING,
         allowNull: false,
       },
@@ -17,11 +13,11 @@ module.exports = (sequelize, { STRING }) => {
     },
     {
       freezeTableName: true,
+      underscored    : true,
     }
   );
 
   User.associate = db => {
-    User.hasMany(db.File);
     User.hasOne(db.Certificate);
   };
 
