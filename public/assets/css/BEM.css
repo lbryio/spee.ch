@@ -1,0 +1,256 @@
+
+/* TEXT */
+
+body, button, input, textarea, label, select, option {
+	font-family: serif;
+}
+
+p {
+	padding-left: 0.3em;
+}
+
+/* CONTAINERS */
+
+.wrapper {
+	margin-left: 20%;
+	width:60%;
+}
+
+.full {
+	clear: both;
+}
+
+.main {
+	float: left;
+	width: 65%;
+
+}
+
+.panel {
+	overflow: auto;
+	word-wrap: break-word;
+}
+
+.sidebar {
+	float: right;
+	width: 33%;
+}
+
+footer {
+	display: inline-block;
+	width: 100%;
+	margin-bottom: 2px;
+	padding-bottom: 2px;
+	border-bottom: 1px lightgrey solid;
+	margin-top: 2px;
+	padding-top: 2px;
+	border-top: 1px lightgrey solid;
+	text-align: center;
+	color: grey;
+}
+
+/* COLUMNS AND ROWS */
+
+.col-left, .col-right {
+	overflow: auto;
+	margin: 0px;
+	width: 48%;
+}
+
+.col-left {
+	padding: 5px 10px 5px 0px;
+	float: left;
+}
+
+.col-right {
+	padding: 5px 0px 5px 10px;
+	float: right;
+}
+
+.row {
+	padding: 1em 2% 1em 2%;
+	margin: 0px;
+
+}
+
+.row--wide {
+	padding: 1em 0px 1em 0px;
+	margin: 0px;
+
+}
+
+.top-bar {
+    margin: 2em 0px 2px 0px;
+	padding: 0px 0px 2px 0px;
+	border-bottom: 1px lightgrey solid;
+	overflow: auto;
+	text-align: right;
+	vertical-align: text-bottom;
+}
+
+
+.column {
+	display: inline-block;
+	padding: 0px;
+	margin: 0px;
+}
+
+.column--1 {
+	width: 8%;
+}
+
+.column--2 {
+	width: 16%;
+}
+
+.column--3 {
+	width: 24%;
+}
+
+.column--4 {
+	width: 32%;
+}
+
+.column--5 {
+	width: 40%;
+}
+
+.column--6 {
+	width: 48%;
+}
+
+.column--7 {
+	width: 56%;
+}
+
+.column--8 {
+	width: 64%;
+}
+
+.column--9 {
+	width: 72%;
+}
+
+.column--10 {
+	width: 80%;
+}
+
+.column--11 {
+	width: 88%;
+}
+
+.column--12 {
+	width: 96%;
+}
+
+/* HEADERS */
+
+h1 {
+	font-size: x-large;
+}
+
+h2 {
+	font-size: medium;
+	margin-top: 1em;
+	border-top: 1px #999 solid;
+	background-color: lightgray;
+	padding: 6px;
+}
+
+.subheader {
+	margin-top: 0px;
+}
+
+h4 {
+	padding: 3px;
+}
+
+.center-text {
+	text-align: center;
+}
+
+/* LINKS */
+
+a, a:visited {
+	color: blue;
+	text-decoration: none;
+}
+
+/* ERROR MESSAGES */
+
+.info-message {
+	font-weight: bold;
+}
+
+.info-message--success {
+	color: green;
+}
+
+.info-message--failure {
+	color: red;
+}
+
+/* INPUT FIELDS */
+
+input:-webkit-autofill {
+ -webkit-box-shadow: 0 0 0px 1000px white inset;
+}
+
+.label, .input-text, .select, .textarea {
+	font-size: medium;
+	padding: 0.3em;
+	outline: none;
+	border: 0px;
+	background-color: white;
+}
+
+.input-text--primary, .select--primary, .textarea--primary {
+	border-bottom: 1px solid blue;
+}
+
+.input-text--primary:focus, .select--primary:focus, .textarea--primary:focus {
+	border-bottom: 1px solid grey;
+}
+
+/* BUTTONS */
+
+button {
+	border: 1px solid black;
+	padding: 0.5em;
+	margin: 0.5em 0.3em 0.5em 0.3em;
+	color: black;
+	background-color: white;
+}
+
+button:hover {
+	border: 1px solid blue;
+	color: white;
+	background-color: blue;
+}
+
+button:active{
+	border: 1px solid blue;
+	color: white;
+	background-color: white;
+}
+
+/* TABLES */
+
+table {
+	width: 100%;
+	text-align: left;
+}
+
+/* other */
+
+.stop-float {
+	clear: both;
+}
+
+.toggle-link {
+	float: right;
+}
+
+.wrap-words {
+	word-wrap: break-word;
+}

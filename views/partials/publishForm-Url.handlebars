@@ -1,0 +1,14 @@
+<div class="row">
+    <div class="column column--3">
+        <label class="label">URL:</label>
+    </div>
+    <div class="column column--9">
+        <div id="input-error-claim-name" class="info-message info-message--failure"  hidden="true"></div>
+        <div class="input-text--primary">
+            <span>Spee.ch/{{user.channelName}}/</span>
+            <input type="text" id="claim-name-input" class="input-text" placeholder="your-url-here" oninput="checkClaimName(event.target.value)">
+            <span id="input-success-claim-name" class="info-message info-message--success"></span>
+        </div>
+
+    </div>
+</div>

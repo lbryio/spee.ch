@@ -1,7 +1,14 @@
-<p>Details
-    <a class="toggle-link" id="details-toggle" href="#" onclick="toggleSection(event)" data-open="false" data-slaveelementid="details-detail">[open]</a>
-</p>
-<div id="details-detail" hidden="true">
+<div class="row">
+    <div class="column column--3">
+        <label class="label">Details:</label>
+    </div>
+    <div class="column column--9">
+        <a class="toggle-link" id="details-toggle" href="#" onclick="toggleSection(event)" data-open="false" data-slaveelementid="details-detail">[open]</a>
+    </div>
+</div>
+
+<div class="row" id="details-detail" hidden="true">
+
     <table>
         <tr>
             <td><label for="publish-title">Title: </label></td>
@@ -25,5 +32,9 @@
             <td><input type="checkbox" id="publish-nsfw"></td>
         </tr>
     </table>
+
 </div>
+
+
+
 

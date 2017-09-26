@@ -1,29 +1,35 @@
-<div>
-    <p>
+<div class="row">
+    <div class="column column--3">
+        <label class="label" for="channel-name-select">Channel:</label>
+    </div>
+    <div class="column column--7">
         <div id="input-error-channel-select" class="info-message info-message--failure"></div>
-        <label for="channel-name-select">Channel:</label>
         <select type="text" id="channel-name-select" class="select select--primary" value="channel" onclick="toggleChannel(event)">
+        <optgroup>
             {{#if user}}
                 <option value="@{{user.userName}}" >@{{user.userName}}</option>
             {{/if}}
             <option value="none" >None</option>
+        </optgroup>
+        <optgroup>
             <option value="login">Login</option>
             <option value="new" >New</option>
+        </optgroup>
         </select>
-    </p>
-
-    <div id="channel-login-details" hidden="true">
-        {{> channelLogin}}
-    </div>
-
-    <div id="channel-create-details" hidden="true">
-        {{> channelCreation}}
     </div>
 </div>
 
+<div id="channel-login-details" class="row" hidden="true">
+    {{> channelLoginForm}}
+</div>
+
+<div  id="channel-create-details" class="row" hidden="true">
+    {{> channelCreationForm}}
+</div>
+
+
 <script src="/assets/js/authFunctions.js"></script>
 <script type="text/javascript">
-
  function toggleChannel (event) {
      const createChannelTool = document.getElementById('channel-create-details');
      const loginToChannelTool = document.getElementById('channel-login-details');

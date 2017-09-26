@@ -73,7 +73,7 @@ module.exports = {
     if (title === '' || title === null) {
       title = name;
     }
-    if (description === ' ' || description === null) {
+    if (description.trim() === '' || description === null) {
       description = `${name} published via spee.ch`;
     }
     // create the publish params

@@ -1,0 +1,59 @@
+@media (max-width: 1250px) {
+    .wrapper {
+		margin-left: 10%;
+		width:80%;
+	}
+}
+
+@media (max-width: 1000px) {
+    .wrapper {
+		margin-left: 10%;
+		width:80%;
+	}
+
+	.main {
+		float: none;
+		width: 100%;
+		margin-right: 0px;
+		padding-right: 0px;
+		border-right: 0px;
+		margin-bottom: 5px;
+	}
+
+	.sidebar {
+		border-top: 1px solid lightgray;
+		float: none;
+		width: 100%;
+	}
+}
+
+@media (max-width: 750px ) {
+	.col-left, .col-right {
+		float: none;
+		margin: 0px;
+		padding: 0px;
+		width: 100%;
+	}
+
+	.col-right {
+		padding-top: 20px;
+	}
+
+	.all-claims-asset {
+		width:30%;
+	}
+
+	.all-claims-details {
+		font-size: small;
+	}
+
+	.show-asset-lite {
+		width: 100%;
+	}
+
+	.top-bar-tagline {
+		clear: both;
+		text-align: left;
+		width: 100%;
+	}
+}
