@@ -9,6 +9,11 @@ p {
 	padding-left: 0.3em;
 }
 
+.url-text {
+	margin:0px;
+	padding:0px;
+}
+
 /* CONTAINERS */
 
 .wrapper {
