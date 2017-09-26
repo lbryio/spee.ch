@@ -4,7 +4,7 @@
         <label for="channel-name-select">Channel:</label>
         <select type="text" id="channel-name-select" class="select select--primary" value="channel" onclick="toggleChannel(event)">
             {{#if user}}
-                <option value="{{user.channelName}}" >{{user.channelName}}</option>
+                <option value="@{{user.userName}}" >@{{user.userName}}</option>
             {{/if}}
             <option value="none" >None</option>
             <option value="login">Login</option>

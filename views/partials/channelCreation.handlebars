@@ -19,7 +19,7 @@
 
 <script type="text/javascript">
  function publishNewChannel (event) {
-     const channelName = `@${document.getElementById('new-channel-name').value}`;
+     const channelName = document.getElementById('new-channel-name').value;
      const password = document.getElementById('new-channel-password').value;
      const channelNameErrorDisplayElement = document.getElementById('input-error-channel-name');
      const passwordErrorDisplayElement = document.getElementById('input-error-channel-password');

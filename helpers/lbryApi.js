@@ -122,7 +122,7 @@ module.exports = {
         });
     });
   },
-  createChannel (name, claimAddress) {
+  createChannel (name) {
     return new Promise((resolve, reject) => {
       axios
         .post('http://localhost:5279/lbryapi', {
@@ -135,9 +135,9 @@ module.exports = {
         .then(response => {
           handleResponse(response, resolve, reject);
         })
-          .catch(error => {
-            reject(error);
-          });
+        .catch(error => {
+          reject(error);
+        });
     });
   },
 };

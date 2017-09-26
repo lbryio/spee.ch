@@ -16,7 +16,7 @@
 
 <script type="text/javascript">
  function loginToChannel (event) {
-     const channelName = `@${document.getElementById('login-channel-name').value}`;
+     const channelName = document.getElementById('login-channel-name').value;
      const password = document.getElementById('login-channel-password').value;
      const loginErrorDisplayElement = document.getElementById('login-error-display-element');
      // prevent default

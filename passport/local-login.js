@@ -24,8 +24,6 @@ module.exports = new PassportLocalStrategy(
           }
           logger.debug('user found:', user.dataValues);
           return user.getChannel().then(channel => {
-            user['channelName'] = channel.channelClaimId;
-            user['channelClaimId'] = channel.channelClaimId;
             return done(null, user);
           });
         })

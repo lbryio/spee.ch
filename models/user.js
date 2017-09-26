@@ -17,7 +17,7 @@ module.exports = (sequelize, { STRING }) => {
   );
 
   User.associate = db => {
-    User.hasOne(db.Certificate);
+    User.hasOne(db.Channel);
   };
 
   User.prototype.validPassword = (givenpassword, thispassword) => {

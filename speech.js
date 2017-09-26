@@ -45,10 +45,18 @@ app.use(passport.session());
 passport.serializeUser((user, done) => {
   done(null, user.id);
 });
-passport.deserializeUser((id, done) => {
+passport.deserializeUser((id, done) => {  // this populates req.user
   db.User.findOne({ where: { id } })
   .then(user => {
-    done(null, user);
+    user.getChannel().then(channel => {
+      let userInfo = {};
+      userInfo['id'] = user.id;
+      userInfo['userName'] = user.userName;
+      userInfo['channelName'] = channel.channelName;
+      userInfo['channelClaimId'] = channel.channelClaimId;
+      done(null, userInfo);
+    });
+    // done(null, user);
     return null;
   })
   .then()
@@ -74,6 +82,7 @@ app.set('view engine', 'handlebars');
 // middleware to pass user info back to client (for handlebars access), if user is logged in
 app.use((req, res, next) => {
   if (req.user) {
+    logger.verbose(req.user);
     res.locals.user = {
       id            : req.user.id,
       userName      : req.user.userName,
