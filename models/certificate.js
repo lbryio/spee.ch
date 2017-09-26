@@ -85,12 +85,11 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, ARRAY, DECIMAL, D
     },
     {
       freezeTableName: true,
-      underscored    : true,
     }
   );
 
   Certificate.associate = db => {
-    Certificate.belongsTo(db.User, {
+    Certificate.belongsTo(db.Channel, {
       onDelete  : 'cascade',
       foreignKey: {
         allowNull: true,

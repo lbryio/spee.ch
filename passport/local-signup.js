@@ -22,11 +22,16 @@ module.exports = new PassportLocalStrategy(
       .then(tx => {
         // create user record
         const userData = {
-          channelName   : username,
-          channelClaimId: tx.claim_id,
-          password      : password,
+          userName: username,
+          password: password,
         };
         logger.debug('userData >', userData);
+        // create user record
+        const channelData = {
+          channelName   : `@${username}`,
+          channelClaimId: tx.claim_id,
+        };
+        logger.debug('channelData >', channelData);
         // create certificate record
         const certificateData = {
           claimId: tx.claim_id,
@@ -35,15 +40,18 @@ module.exports = new PassportLocalStrategy(
         };
         logger.debug('certificateData >', certificateData);
         // save user and certificate to db
-        return Promise.all([db.User.create(userData), db.Certificate.create(certificateData)]);
+        return Promise.all([db.User.create(userData), db.Channel.create(channelData), db.Certificate.create(certificateData)]);
       })
-      .then(([newUser, newCertificate]) => {
+      .then(([newUser, newChannel, newCertificate]) => {
         user = newUser;  // save outside scope of this function
+        user['channelName'] = newChannel.channelClaimId;
+        user['channelClaimId'] = newChannel.channelClaimId;
         logger.debug('user and certificate successfully created');
         logger.debug('user result >', newUser.dataValues);
+        logger.debug('user result >', newChannel.dataValues);
         logger.debug('certificate result >', newCertificate.dataValues);
         // associate the instances
-        return Promise.all([newCertificate.setUser(newUser), newUser.setCertificate(newCertificate)]);
+        return Promise.all([newCertificate.setChannel(newChannel), newChannel.setUser(newUser)]);
       }).then(() => {
         logger.debug('user and certificate successfully associated');
         logger.debug('user ===', user.dataValues);

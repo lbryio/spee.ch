@@ -76,6 +76,7 @@ app.use((req, res, next) => {
   if (req.user) {
     res.locals.user = {
       id            : req.user.id,
+      userName      : req.user.userName,
       channelName   : req.user.channelName,
       channelClaimId: req.user.channelClaimId,
     };

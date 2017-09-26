@@ -21,7 +21,7 @@ module.exports = {
       .then(tx => {
         logger.info(`Successfully published ${fileName}`, tx);
         publishResults = tx;
-        return db.User.findOne({where: {channelName: publishParams.channel_name}});
+        return db.Channel.findOne({where: {channelName: publishParams.channel_name}});
       })
       .then(user => {
         logger.debug('found user', user.datavalues);

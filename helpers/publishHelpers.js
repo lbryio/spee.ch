@@ -140,7 +140,7 @@ module.exports = {
   checkChannelAvailability (name) {
     return new Promise((resolve, reject) => {
       // find any records where the name is used
-      db.User.findAll({ where: { channelName: name } })
+      db.Channel.findAll({ where: { channelName: name } })
         .then(result => {
           if (result.length >= 1) {
             return resolve(false);

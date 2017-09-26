@@ -137,7 +137,6 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, ARRAY, DECIMAL, D
     },
     {
       freezeTableName: true,
-      underscored    : true,
     }
   );
 

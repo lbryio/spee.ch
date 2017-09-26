@@ -47,18 +47,11 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER }) => {
     },
     {
       freezeTableName: true,
-      underscored    : true,
     }
   );
 
   File.associate = db => {
     File.hasMany(db.Request);
-    File.belongsTo(db.User, {
-      onDelete  : 'cascade',
-      foreignKey: {
-        allowNull: true,
-      },
-    });
     File.hasOne(db.Claim);
   };
 

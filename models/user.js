@@ -13,7 +13,6 @@ module.exports = (sequelize, { STRING }) => {
     },
     {
       freezeTableName: true,
-      underscored    : true,
     }
   );
 
