@@ -24,7 +24,7 @@ module.exports = {
         return db.Channel.findOne({where: {channelName: publishParams.channel_name}});
       })
       .then(user => {
-        logger.debug('found user', user.datavalues);
+        logger.debug('found user', user.dataValues);
         const fileRecord = {
           name       : publishParams.name,
           claimId    : publishResults.claim_id,
