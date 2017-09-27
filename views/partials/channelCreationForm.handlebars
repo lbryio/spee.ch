@@ -21,13 +21,20 @@
         <input type="password" name="new-channel-password" id="new-channel-password" placeholder="" value="" class="input-text input-text--primary">
     </div>
 
+    <div class="row row--wide">
+        <button onclick="publishNewChannel(event)">Create Channel</button>
+    </div>
 </form>
-<div class="row row--wide">
-    <button onclick="publishNewChannel(event)">Create Channel</button>
+
+
+<div id="channel-publish-in-progress" hidden="true">
+    <p>Creating your new channel.  This may take a few seconds...</p>
+    <div id="create-channel-progress-bar"></div>
 </div>
 
-
-<div id="channel-publish-wrapper"></div>
+<div id="channel-publish-done" hidden="true">
+    <p>Your channel has been successfully created!</p>
+</div>
 
 
 <script type="text/javascript">
@@ -36,19 +43,26 @@
      const password = document.getElementById('new-channel-password').value;
      const channelNameErrorDisplayElement = document.getElementById('input-error-channel-name');
      const passwordErrorDisplayElement = document.getElementById('input-error-channel-password');
-     const wrapper = document.getElementById('channel-publish-wrapper');
+     const chanelCreateForm = document.getElementById('publish-channel-form');
+     const inProgress = document.getElementById('channel-publish-in-progress');
+     const done = document.getElementById('channel-publish-done');
+
      // prevent default so this script can handle submission
      event.preventDefault();
      // validate submission
      validateNewChannelSubmission(channelName, password)
          .then(() => {
-             wrapper.innerHTML = '<p>Creating your new channel...</p>';
+             console.log('in progress');
+             chanelCreateForm.hidden = true;
+             inProgress.hidden = false;
+             createProgressBar(document.getElementById('create-channel-progress-bar'), 12);
              return sendAuthRequest(channelName, password, '/signup') // post the request
          })
          .then(() => {
              console.log('success');
-             wrapper.innerHTML = '<p>Your channel has been successfully created!</p>';
-             // referesh window logged in as the channel
+             inProgress.hidden=true;
+             done.hidden = false;
+             // refresh window logged in as the channel
              window.location.href = '/';
          })
          .catch(error => {
