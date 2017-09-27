@@ -66,7 +66,7 @@ function getLongClaimIdFromShortClaimId (name, shortId) {
 function getTopFreeClaimIdByClaimName (name) {
   return new Promise((resolve, reject) => {
     db
-      .sequelize.query(`SELECT claimId FROM Claim WHERE name = '${name}' ORDER BY amount DESC, height ASC LIMIT 1`, { type: db.sequelize.QueryTypes.SELECT })
+      .sequelize.query(`SELECT claimId FROM Claim WHERE name = '${name}' ORDER BY effectiveAmount DESC, height ASC LIMIT 1`, { type: db.sequelize.QueryTypes.SELECT })
       .then(result => {
         switch (result.length) {
           case 0:
