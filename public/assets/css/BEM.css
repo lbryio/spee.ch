@@ -79,9 +79,13 @@ footer {
 }
 
 .row--wide {
-	padding: 1em 0px 1em 0px;
-	margin: 0px;
+	padding-right: 0px;
+	padding-left: 0px;
+}
 
+.row--thin {
+	padding-top: 0.5em;
+	padding-bottom: 0.5em;
 }
 
 .top-bar {
@@ -217,6 +221,13 @@ input:-webkit-autofill {
 	border-bottom: 1px solid grey;
 }
 
+.input-checkbox, .input-textarea {
+	border: 1px solid grey;
+}
+
+.label--secondary {
+	color: grey;
+}
 /* BUTTONS */
 
 button {

@@ -18,21 +18,6 @@ function handleResponse ({ data }, resolve, reject) {
 }
 
 module.exports = {
-  getWalletList () {
-    logger.debug('lbryApi >> getting wallet list');
-    return new Promise((resolve, reject) => {
-      axios
-        .post('http://localhost:5279/lbryapi', {
-          method: 'wallet_list',
-        })
-        .then(response => {
-          handleResponse(response, resolve, reject);
-        })
-        .catch(error => {
-          reject(error);
-        });
-    });
-  },
   publishClaim (publishParams) {
     logger.debug(`lbryApi >> Publishing claim to "${publishParams.name}"`);
     return new Promise((resolve, reject) => {

@@ -7,31 +7,47 @@
     </div>
 </div>
 
-<div class="row" id="details-detail" hidden="true">
+<div id="details-detail" hidden="true">
 
-    <table>
-        <tr>
-            <td><label for="publish-title">Title: </label></td>
-            <td><input type="text" id="publish-title" class="input-text input-text--primary"></td>
-        </tr>
-        <tr>
-            <td><label for="publish-description">Description: </label></td>
-            <td><textarea rows="2" id="publish-description" class="textarea textarea--primary"> </textarea></td>
-        </tr>
-        <tr>
-            <td><label for="publish-license">License:* </label></td>
-            <td>
-                <select type="text" id="publish-license" name="license" value="license">
-                    <option value="Public Domain">Public Domain</option>
-                    <option value="Creative Commons">Creative Commons</option>
-                </select>
-            </td>
-        </tr>
-        <tr>
-            <td><label for="publish-nsfw">NSFW*</label></td>
-            <td><input type="checkbox" id="publish-nsfw"></td>
-        </tr>
-    </table>
+    <div class="row row--thin">
+        <div class="column column--3">
+            <label for="publish-title" class="label label--secondary">Title: </label>
+        </div>
+        <div class="column column--9">
+            <input type="text" id="publish-title" class="input-text input-text--primary">
+        </div>
+    </div>
+
+    <div class="row row--thin">
+        <div class="column column--3">
+            <label for="publish-description" class="label label--secondary">Description: </label>
+        </div>
+        <div class="column column--9">
+            <textarea rows="2" id="publish-description" class="input-textarea"></textarea>
+        </div>
+    </div>
+
+    <div class="row row--thin">
+        <div class="column column--3">
+            <label for="publish-license" class="label label--secondary">License:* </label>
+        </div>
+        <div class="column column--9">
+            <select type="text" id="publish-license" class="select select--primary">
+                <option value="Public Domain">Public Domain</option>
+                <option value="Creative Commons">Creative Commons</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="row row--thin">
+        <div class="column column--3">
+            <label for="publish-nsfw" class="label label--secondary">NSFW*</label>
+        </div>
+        <div class="column column--9">
+            <input class="input-checkbox" type="checkbox" id="publish-nsfw">
+        </div>
+    </div>
+
 
 </div>
 
