@@ -192,7 +192,7 @@ db['getShortClaimIdFromLongClaimId'] = (claimId, claimName) => {
 
 db['getShortChannelIdFromLongChannelId'] = (longChannelId, channelName) => {
   return new Promise((resolve, reject) => {
-    logger.debug('finding short channel id');
+    logger.debug(`finding short channel id for ${longChannelId} ${channelName}`);
     db
       .sequelize.query(`SELECT claimId, height FROM Certificate WHERE name = '${channelName}' ORDER BY height;`, { type: db.sequelize.QueryTypes.SELECT })
       .then(result => {

@@ -1,3 +1,46 @@
+function getRequest (url) {
+    console.log('making GET request to', url)
+    return new Promise((resolve, reject) => {
+        let xhttp = new XMLHttpRequest();
+        xhttp.open('GET', url, true);
+        xhttp.responseType = 'json';
+        xhttp.onreadystatechange = () => {
+            if (xhttp.readyState == 4 ) {
+                console.log(xhttp);
+                if ( xhttp.status == 200) {
+                    console.log('response:', xhttp.response);
+                    resolve(xhttp.response);
+                } else {
+                    reject('request failed with status:' + xhttp.status);
+                };
+            }
+        };
+        xhttp.send();
+    })
+}
+
+function postRequest (url, params) {
+    console.log('making POST request to', url)
+    return new Promise((resolve, reject) => {
+        let xhttp = new XMLHttpRequest();
+        xhttp.open('POST', url, true);
+        xhttp.responseType = 'json';
+        xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        xhttp.onreadystatechange = () => {
+            if (xhttp.readyState == 4 ) {
+                console.log(xhttp);
+                if ( xhttp.status == 200) {
+                    console.log('response:', xhttp.response);
+                    resolve(xhttp.response);
+                } else {
+                    reject('request failed with status:' + xhttp.status);
+                };
+            }
+        };
+        xhttp.send(params);
+    })
+}
+
 function toggleSection(event){
 	event.preventDefault();
 

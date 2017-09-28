@@ -42,7 +42,6 @@ function validateClaimName (name) {
 
 function validateChannelName (name) {
 	name = name.substring(name.indexOf('@') + 1);
-	console.log(name);
     // ensure a name was entered
     if (name.length < 1) {
         throw new ChannelNameError("You must enter a name for your channel");
@@ -69,27 +68,8 @@ function cleanseClaimName(name) {
 // validation functions to check claim & channel name eligibility as the inputs change
 
 function isNameAvailable (name, apiUrl) {
-    return new Promise(function(resolve, reject) {
-        // make sure the claim name is still available
-        var xhttp;
-        xhttp = new XMLHttpRequest();
-        xhttp.open('GET', apiUrl + name, true);
-        xhttp.responseType = 'json';
-        xhttp.onreadystatechange = function() {
-            if (this.readyState == 4 ) {
-                if ( this.status == 200) {
-                    if (this.response == true) {
-                        resolve();
-                    } else {
-                        reject( new NameError("That name has already been claimed by someone else."));
-                    }
-                } else {
-                    reject("request to check claim name failed with status:" + this.status);
-                };
-            }
-        };
-        xhttp.send();
-    });
+    const url = apiUrl + name;
+    return getRequest(url)
 }
 
 function showError(errorDisplay, errorMsg) {
@@ -112,17 +92,23 @@ function hideSuccess (successElement) {
     successElement.innerHTML = "";
 }
 
-function checkAvailability(name, successDisplayElement, errorDisplayElement, validateName, isNameAvailable, apiUrl) {
+function checkAvailability(name, successDisplayElement, errorDisplayElement, validateName, isNameAvailable, errorMessage, apiUrl) {
     try {
         // check to make sure the characters are valid
         validateName(name);
         // check to make sure it is available
         isNameAvailable(name, apiUrl)
-            .then(function() {
-                hideError(errorDisplayElement);
-                showSuccess(successDisplayElement)
+            .then(result => {
+            	console.log('result:', result)
+            	if (result === true) {
+                    hideError(errorDisplayElement);
+                    showSuccess(successDisplayElement)
+				} else {
+                    hideSuccess(successDisplayElement);
+                    showError(errorDisplayElement, errorMessage);
+				}
             })
-            .catch(function(error) {
+            .catch(error => {
                 hideSuccess(successDisplayElement);
                 showError(errorDisplayElement, error.message);
             });
@@ -135,14 +121,14 @@ function checkAvailability(name, successDisplayElement, errorDisplayElement, val
 function checkClaimName(name){
 	const successDisplayElement = document.getElementById('input-success-claim-name');
 	const errorDisplayElement = document.getElementById('input-error-claim-name');
-	checkAvailability(name, successDisplayElement, errorDisplayElement, validateClaimName, isNameAvailable, '/api/isClaimAvailable/');
+	checkAvailability(name, successDisplayElement, errorDisplayElement, validateClaimName, isNameAvailable, 'Sorry, that url ending has been taken by another user', '/api/isClaimAvailable/');
 }
 
 function checkChannelName(name){
     const successDisplayElement = document.getElementById('input-success-channel-name');
     const errorDisplayElement = document.getElementById('input-error-channel-name');
     name = `@${name}`;
-    checkAvailability(name, successDisplayElement, errorDisplayElement, validateChannelName, isNameAvailable, '/api/isChannelAvailable/');
+    checkAvailability(name, successDisplayElement, errorDisplayElement, validateChannelName, isNameAvailable, 'Sorry, that Channel has been taken by another user', '/api/isChannelAvailable/');
 }
 
 // validation function which checks all aspects of the publish submission

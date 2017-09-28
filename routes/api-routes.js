@@ -134,6 +134,7 @@ module.exports = (app) => {
     // serve content
     db.getShortChannelIdFromLongChannelId(params.longId, params.name)
       .then(shortId => {
+        console.log('sending back short channel id', shortId);
         res.status(200).json(shortId);
       })
       .catch(error => {
