@@ -59,15 +59,7 @@
              } else {
                  console.log('selected option:', selectedOption);
                  // retrieve short url from db
-                 getRequest(`/api/shortChannelId/{{{user.channelClaimId}}}/{{{user.channelName}}}`)
-                 .then(result => {
-                     console.log('result', result)
-                     // update url text
-                     urlChannel.innerText = `{{user.channelName}}:${result}/`;
-                 })
-                 .catch(error => {
-                     console.log('error retrieving short channel id', error);
-                 })
+                 urlChannel.innerText = `{{user.channelName}}:{{user.shortChannelId}}/`;
              }
          }
     }

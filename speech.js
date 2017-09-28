@@ -46,20 +46,23 @@ passport.serializeUser((user, done) => {
   done(null, user.id);
 });
 passport.deserializeUser((id, done) => {  // this populates req.user
+  let userInfo = {};
   db.User.findOne({ where: { id } })
   .then(user => {
-    user.getChannel().then(channel => {
-      let userInfo = {};
-      userInfo['id'] = user.id;
-      userInfo['userName'] = user.userName;
-      userInfo['channelName'] = channel.channelName;
-      userInfo['channelClaimId'] = channel.channelClaimId;
-      done(null, userInfo);
-    });
-    // done(null, user);
+    userInfo['id'] = user.id;
+    userInfo['userName'] = user.userName;
+    return user.getChannel();
+  })
+  .then(channel => {
+    userInfo['channelName'] = channel.channelName;
+    userInfo['channelClaimId'] = channel.channelClaimId;
+    return db.getShortChannelIdFromLongChannelId(channel.channelClaimId, channel.channelName);
+  })
+  .then(shortChannelId => {
+    userInfo['shortChannelId'] = shortChannelId;
+    done(null, userInfo);
     return null;
   })
-  .then()
   .catch(error => {
     logger.error('sequelize error', error);
     done(error, null);
@@ -88,6 +91,7 @@ app.use((req, res, next) => {
       userName      : req.user.userName,
       channelName   : req.user.channelName,
       channelClaimId: req.user.channelClaimId,
+      shortChannelId: req.user.shortChannelId,
     };
   }
   next();
