@@ -1,6 +1,7 @@
 const logger = require('winston');
 const multipart = require('connect-multiparty');
 const multipartMiddleware = multipart();
+const db = require('../models');
 const { publish } = require('../controllers/publishController.js');
 const { getClaimList, resolveUri } = require('../helpers/lbryApi.js');
 const { createPublishParams, validateFile, checkClaimNameAvailability, checkChannelAvailability } = require('../helpers/publishHelpers.js');
@@ -69,7 +70,6 @@ module.exports = (app) => {
       errorHandlers.handleRequestError('publish', originalUrl, ip, error, res);
     });
   });
-
   // route to run a publish request on the daemon
   app.post('/api/publish', multipartMiddleware, ({ body, files, headers, ip, originalUrl }, res) => {
     // google analytics
@@ -104,9 +104,11 @@ module.exports = (app) => {
       }
       return createPublishParams(name, filePath, title, description, license, nsfw, channelName);
     })
+    // create publish parameters object
     .then(publishParams => {
       return publish(publishParams, fileName, fileType);
     })
+    // publish the asset
     .then(result => {
       postToStats('publish', originalUrl, ip, null, null, 'success');
       res.status(200).json(result);
@@ -114,5 +116,29 @@ module.exports = (app) => {
     .catch(error => {
       logger.error('publish api error', error);
     });
+  });
+  // route to get a short claim id from long claim Id
+  app.get('/api/shortClaimId/:longId/:name', ({ originalUrl, ip, params }, res) => {
+    // serve content
+    db.getShortClaimIdFromLongClaimId(params.longId, params.name)
+      .then(shortId => {
+        res.status(200).json(shortId);
+      })
+      .catch(error => {
+        logger.error('api error getting short channel id', error);
+        res.status(400).json(error.message);
+      });
+  });
+  // route to get a short channel id from long channel Id
+  app.get('/api/shortChannelId/:longId/:name', ({ params }, res) => {
+    // serve content
+    db.getShortChannelIdFromLongChannelId(params.longId, params.name)
+      .then(shortId => {
+        res.status(200).json(shortId);
+      })
+      .catch(error => {
+        logger.error('api error getting short channel id', error);
+        res.status(400).json(error.message);
+      });
   });
 };

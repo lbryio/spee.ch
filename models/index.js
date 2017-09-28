@@ -190,7 +190,7 @@ db['getShortClaimIdFromLongClaimId'] = (claimId, claimName) => {
   });
 };
 
-db['getShortChannelIdFromLongChannelId'] = (channelName, longChannelId) => {
+db['getShortChannelIdFromLongChannelId'] = (longChannelId, channelName) => {
   return new Promise((resolve, reject) => {
     logger.debug('finding short channel id');
     db

@@ -150,7 +150,7 @@ module.exports = {
         // 2. get all claims for that channel
         .then(result => {
           longChannelId = result;
-          return db.getShortChannelIdFromLongChannelId(channelName, longChannelId);
+          return db.getShortChannelIdFromLongChannelId(longChannelId, channelName);
         })
         // 3. get all Claim records for this channel
         .then(result => {
