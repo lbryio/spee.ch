@@ -43,6 +43,7 @@ module.exports = (app, siofu, hostedContentPath) => {
 
         // prepare the publish parameters
         const publishParams = publishHelpers.createPublishParams(file.meta.name, file.pathName, file.meta.title, file.meta.description, file.meta.license, file.meta.nsfw, file.meta.channel);
+        logger.debug(publishParams);
         // publish the file
         publishController.publish(publishParams, file.name, file.meta.type)
         .then(result => {

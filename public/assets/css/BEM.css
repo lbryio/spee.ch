@@ -9,9 +9,31 @@ p {
 	padding-left: 0.3em;
 }
 
+.center-text {
+	text-align: center;
+}
+
 .url-text {
 	margin:0px;
 	padding:0px;
+}
+
+/* HEADERS */
+
+h1 {
+	font-size: x-large;
+}
+
+h2 {
+	font-size: medium;
+	margin-top: 1em;
+	border-top: 1px #999 solid;
+	background-color: lightgray;
+	padding: 6px;
+}
+
+h4 {
+	padding: 3px;
 }
 
 /* CONTAINERS */
@@ -152,32 +174,6 @@ footer {
 	width: 96%;
 }
 
-/* HEADERS */
-
-h1 {
-	font-size: x-large;
-}
-
-h2 {
-	font-size: medium;
-	margin-top: 1em;
-	border-top: 1px #999 solid;
-	background-color: lightgray;
-	padding: 6px;
-}
-
-.subheader {
-	margin-top: 0px;
-}
-
-h4 {
-	padding: 3px;
-}
-
-.center-text {
-	text-align: center;
-}
-
 /* LINKS */
 
 a, a:visited {
@@ -225,9 +221,6 @@ input:-webkit-autofill {
 	border: 1px solid grey;
 }
 
-.label--secondary {
-	color: grey;
-}
 /* BUTTONS */
 
 button {

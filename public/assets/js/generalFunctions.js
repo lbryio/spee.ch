@@ -5,14 +5,16 @@ function toggleSection(event){
 	var status = dataSet.open;
 	var masterElement = document.getElementById(event.target.id||event.srcElement.id);
 	var slaveElement = document.getElementById(dataSet.slaveelementid);
+	var closedLabel = dataSet.closedlabel;
+	var openLabel = dataSet.openlabel;
 	
 	if (status === "false") {
 		slaveElement.hidden = false;
-		masterElement.innerText = "[close]";
+		masterElement.innerText = openLabel;
 		masterElement.dataset.open = "true";
 	} else {
 		slaveElement.hidden = true;
-		masterElement.innerText = "[open]";
+		masterElement.innerText = closedLabel;
 		masterElement.dataset.open = "false";
 	}
 }

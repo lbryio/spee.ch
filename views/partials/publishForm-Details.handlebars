@@ -1,17 +1,8 @@
-<div class="row">
-    <div class="column column--3">
-        <label class="label">Details:</label>
-    </div>
-    <div class="column column--9">
-        <a class="toggle-link" id="details-toggle" href="#" onclick="toggleSection(event)" data-open="false" data-slaveelementid="details-detail">[open]</a>
-    </div>
-</div>
-
 <div id="details-detail" hidden="true">
 
     <div class="row row--thin">
         <div class="column column--3">
-            <label for="publish-title" class="label label--secondary">Title: </label>
+            <label for="publish-title" class="label">Title: </label>
         </div>
         <div class="column column--9">
             <input type="text" id="publish-title" class="input-text input-text--primary">
@@ -20,7 +11,7 @@
 
     <div class="row row--thin">
         <div class="column column--3">
-            <label for="publish-description" class="label label--secondary">Description: </label>
+            <label for="publish-description" class="label">Description: </label>
         </div>
         <div class="column column--9">
             <textarea rows="2" id="publish-description" class="input-textarea"></textarea>
@@ -29,7 +20,7 @@
 
     <div class="row row--thin">
         <div class="column column--3">
-            <label for="publish-license" class="label label--secondary">License:* </label>
+            <label for="publish-license" class="label">License:* </label>
         </div>
         <div class="column column--9">
             <select type="text" id="publish-license" class="select select--primary">
@@ -41,14 +32,18 @@
 
     <div class="row row--thin">
         <div class="column column--3">
-            <label for="publish-nsfw" class="label label--secondary">NSFW*</label>
+            <label for="publish-nsfw" class="label">NSFW*</label>
         </div>
         <div class="column column--9">
             <input class="input-checkbox" type="checkbox" id="publish-nsfw">
         </div>
     </div>
+</div>
 
-
+<div class="row">
+    <div class="column column--12">
+        <a class="label" id="details-toggle" href="#" onclick="toggleSection(event)" data-open="false" data-openlabel="[less]" data-closedlabel="[more]" data-slaveelementid="details-detail">[more]</a>
+    </div>
 </div>
 
 
