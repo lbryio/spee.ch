@@ -97,7 +97,7 @@ function getAssetByLongClaimId (fullClaimId, name) {
 }
 
 function chooseThumbnail (claimInfo, defaultThumbnail) {
-  if (!claimInfo.thumbnail || claimInfo.thumbnail === '') {
+  if (!claimInfo.thumbnail || claimInfo.thumbnail.trim() === '') {
     return defaultThumbnail;
   }
   return claimInfo.thumbnail;
@@ -168,7 +168,12 @@ module.exports = {
               element['thumbnail'] = chooseThumbnail(element, DEFAULT_THUMBNAIL);
             });
           }
-          return resolve(allChannelClaims);
+          return resolve({
+            channelName,
+            longChannelId,
+            shortChannelId,
+            claims: allChannelClaims,
+          });
         })
         .catch(error => {
           reject(error);

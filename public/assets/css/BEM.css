@@ -1,4 +1,7 @@
 
+/*  GENERAL */
+
+
 /* TEXT */
 
 body, button, input, textarea, label, select, option {
@@ -30,6 +33,14 @@ h2 {
 	border-top: 1px #999 solid;
 	background-color: lightgray;
 	padding: 6px;
+}
+
+h3 {
+	color: black;;
+}
+
+.h3--secondary {
+	color: #999999;
 }
 
 h4 {

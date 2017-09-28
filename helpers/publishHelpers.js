@@ -57,22 +57,20 @@ module.exports = {
     // filter nsfw and ensure it is a boolean
     if (nsfw === false) {
       nsfw = false;
-    } else if (nsfw.toLowerCase === 'false') {
-      nsfw = false;
-    } else if (nsfw.toLowerCase === 'off') {
-      nsfw = false;
+    } else if (typeof nsfw === 'string') {
+      if (nsfw.toLowerCase === 'false' || nsfw.toLowerCase === 'off' || nsfw === '0') {
+        nsfw = false;
+      }
     } else if (nsfw === 0) {
-      nsfw = false;
-    } else if (nsfw === '0') {
       nsfw = false;
     } else {
       nsfw = true;
     }
     // provide defaults for title & description
-    if (title === '' || title === null) {
+    if (title === null || title === '') {
       title = name;
     }
-    if (description.trim() === '' || description === null) {
+    if (description === null || description.trim() === '') {
       description = `${name} published via spee.ch`;
     }
     // create the publish params

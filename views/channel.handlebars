@@ -1,9 +1,9 @@
 <div class="wrapper">
 	{{> topBar}}
 	<div>
-		<h3>{{this.channelName}}</h3>
+        <h3>{{this.channelName}}<span class="h3--secondary">:{{this.shortChannelId}}</span></h3>
 		<p>Below is all the free content in this channel.</p>
-		{{#each channelContents}}
+		{{#each this.claims}}
           {{> contentListItem}}
 		{{/each}}
 	</div>

@@ -6,6 +6,7 @@ const { getClaimList, resolveUri } = require('../helpers/lbryApi.js');
 const { createPublishParams, validateFile, checkClaimNameAvailability, checkChannelAvailability } = require('../helpers/publishHelpers.js');
 const errorHandlers = require('../helpers/errorHandlers.js');
 const { postToStats, sendGoogleAnalytics } = require('../controllers/statsController.js');
+const { authenticateApiPublish } = require('../auth/authentication.js');
 
 module.exports = (app) => {
   // route to run a claim_list request on the daemon
@@ -76,8 +77,13 @@ module.exports = (app) => {
     // validate that a file was provided
     const file = files.speech || files.null;
     const name = body.name || file.name.substring(0, file.name.indexOf('.'));
+    const title = body.title || null;
+    const description = body.description || null;
     const license = body.license || 'No License Provided';
-    const nsfw = body.nsfw || true;
+    const nsfw = body.nsfw || null;
+    const channelName = body.channelName || 'none';
+    const channelPassword = body.channelPassword || null;
+    logger.debug(`name: ${name}, license: ${license}, nsfw: ${nsfw}`);
     try {
       validateFile(file, name, license, nsfw);
     } catch (error) {
@@ -86,19 +92,27 @@ module.exports = (app) => {
       res.status(400).send(error.message);
       return;
     }
-    // prepare the publish parameters
     const fileName = file.name;
     const filePath = file.path;
     const fileType = file.type;
-    const publishParams = createPublishParams(name, filePath, license, nsfw);
-    // publish the file
-    publish(publishParams, fileName, fileType)
+    // channel authorization
+    authenticateApiPublish(channelName, channelPassword)
+    .then(result => {
+      if (!result) {
+        res.status(401).send('Authentication failed, you do not have access to that channel');
+        throw new Error('authentication failed');
+      }
+      return createPublishParams(name, filePath, title, description, license, nsfw, channelName);
+    })
+    .then(publishParams => {
+      return publish(publishParams, fileName, fileType);
+    })
     .then(result => {
       postToStats('publish', originalUrl, ip, null, null, 'success');
       res.status(200).json(result);
     })
     .catch(error => {
-      errorHandlers.handleRequestError('publish', originalUrl, ip, error, res);
+      logger.error('publish api error', error);
     });
   });
 };
