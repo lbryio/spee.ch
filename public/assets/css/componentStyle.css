@@ -5,24 +5,11 @@
 }
 
 #logo {
-	height: 1.5em;
+
 }
 
 #title {
-	margin: 2px 5px 2px 5px;
-}
 
-.top-bar-left {
-	float: left;
-}
-
-.top-bar-tagline {
-	font-style: italic;
-	color: grey;
-}
-
-.top-bar-right {
-	margin-left: 0.5em;
 }
 
 /* publish */

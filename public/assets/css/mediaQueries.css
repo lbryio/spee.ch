@@ -1,15 +1,5 @@
-@media (max-width: 1250px) {
-    .wrapper {
-		margin-left: 10%;
-		width:80%;
-	}
-}
 
 @media (max-width: 1000px) {
-    .wrapper {
-		margin-left: 10%;
-		width:80%;
-	}
 
 	.main {
 		float: none;

@@ -5,7 +5,8 @@
 /* TEXT */
 
 body, button, input, textarea, label, select, option {
-	font-family: serif;
+	font-family: monospace;
+	font-size: large;
 }
 
 p {
@@ -19,6 +20,10 @@ p {
 .url-text {
 	margin:0px;
 	padding:0px;
+}
+
+.block-quote {
+	font-size: 4rem;
 }
 
 /* HEADERS */
@@ -37,6 +42,8 @@ h2 {
 
 h3 {
 	color: black;;
+	font-weight: normal;
+	font-size: 1rem;
 }
 
 .h3--secondary {
@@ -48,31 +55,6 @@ h4 {
 }
 
 /* CONTAINERS */
-
-.wrapper {
-	margin-left: 20%;
-	width:60%;
-}
-
-.full {
-	clear: both;
-}
-
-.main {
-	float: left;
-	width: 65%;
-
-}
-
-.panel {
-	overflow: auto;
-	word-wrap: break-word;
-}
-
-.sidebar {
-	float: right;
-	width: 33%;
-}
 
 footer {
 	display: inline-block;
@@ -89,23 +71,8 @@ footer {
 
 /* COLUMNS AND ROWS */
 
-.col-left, .col-right {
-	overflow: auto;
-	margin: 0px;
-	width: 48%;
-}
-
-.col-left {
-	padding: 5px 10px 5px 0px;
-	float: left;
-}
-
-.col-right {
-	padding: 5px 0px 5px 10px;
-	float: right;
-}
-
 .row {
+	clear: both;
 	padding: 1em 2% 1em 2%;
 	margin: 0px;
 
@@ -121,16 +88,6 @@ footer {
 	padding-bottom: 0.5em;
 }
 
-.top-bar {
-    margin: 2em 0px 2px 0px;
-	padding: 0px 0px 2px 0px;
-	border-bottom: 1px lightgrey solid;
-	overflow: auto;
-	text-align: right;
-	vertical-align: text-bottom;
-}
-
-
 .column {
 	display: inline-block;
 	padding: 0px;
@@ -138,51 +95,88 @@ footer {
 }
 
 .column--1 {
-	width: 8%;
+	width: 10%;
 }
 
 .column--2 {
-	width: 16%;
+	width: 20%;
 }
 
 .column--3 {
-	width: 24%;
+	width: 30%;
 }
 
 .column--4 {
-	width: 32%;
-}
-
-.column--5 {
 	width: 40%;
 }
 
+.column--5 {
+	width: 50%;
+}
+
 .column--6 {
-	width: 48%;
+	width: 60%;
 }
 
 .column--7 {
-	width: 56%;
+	width: 70%;
 }
 
 .column--8 {
-	width: 64%;
-}
-
-.column--9 {
-	width: 72%;
-}
-
-.column--10 {
 	width: 80%;
 }
 
-.column--11 {
-	width: 88%;
+.column--9 {
+	width: 90%;
 }
 
-.column--12 {
-	width: 96%;
+.column--10 {
+	width: 100%;
+}
+
+/* ALIGNMENT */
+.align-content-left {
+	text-align: left;
+}
+
+.align-content-center {
+	text-align: center;
+}
+
+.align-content-right {
+	text-align: right;
+}
+
+.align-content-top {
+	vertical-align: top;
+}
+
+.align-content-right {
+	vertical-align: bottom;
+}
+
+/* TOP BAR */
+
+.nav-bar {
+	border-bottom: 2px solid #eaeaea;
+}
+
+.nav-bar-logo, .nav-bar-title, .nav-bar-link {
+	display: inline-block;
+}
+
+.nav-bar-title {
+	font-size: 1.5em;
+	color: black;
+}
+
+.nav-bar-title--superscript {
+ 	font-size: small;
+	vertical-align: top;
+}
+
+.nav-bar-link {
+	padding: 1em 0.5em 1em 0.5em;
 }
 
 /* LINKS */
@@ -262,10 +256,6 @@ table {
 }
 
 /* other */
-
-.stop-float {
-	clear: both;
-}
 
 .toggle-link {
 	float: right;
