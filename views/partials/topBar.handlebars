@@ -1,17 +1,18 @@
 <div class="row-wide nav-bar">
     <div class="nav-bar-title-section">
-        <a href="/"><span class="nav-bar-title">Spee.ch</span></a><span class="nav-bar-title nav-bar-title--superscript">(beta)</span>
+        <a href="/"><span class="nav-bar-title">spee&lt;h</span></a><span class="nav-bar-title nav-bar-title--superscript">(beta)</span>
         <div class="nav-bar-link-section">
-            <a class="nav-bar-link" href="https://github.com/lbryio/spee.ch" target="_blank">source</a>
-            <a class="nav-bar-link" href="/about">about</a>
+            <a class="nav-bar-link" href="/popular">Popular</a>
+            <a class="nav-bar-link" href="/about">About</a>
+            <a class="nav-bar-link" href="https://github.com/lbryio/spee.ch" target="_blank">Source</a>
             {{#if user}}
                 <select type="text" class="select nav-bar-link" onchange="toggleLogin(event)">
                     <option value="none">@{{user.userName}}</option>
-                    <option value="view">view</option>
-                    <option value="logout">logout</option>
+                    <option value="view">View</option>
+                    <option value="logout">Logout</option>
                 </select>
             {{else}}
-                <a class="nav-bar-link" href="/login">login</a>
+                <a class="nav-bar-link" href="/login">Login</a>
             {{/if}}
         </div>
     </div>

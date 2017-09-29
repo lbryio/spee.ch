@@ -1,40 +1,24 @@
-<div class="panel">
-	<h2>Publish</h2>
-	<div class="row">
-		<div class="col-left">
-            <div id="file-selection-area">
-
-                <div id="drop-zone" ondrop="drop_handler(event);" ondragover="dragover_handler(event);" ondragend="dragend_handler(event)">
-                    <div class="row">
-                        <p>Drag and drop your file here, or choose your file below.</p>
-                        <div class="info-message info-message--failure" id="input-error-file-selection" hidden="true"></div>
-                    </div>
-                    <div class="row">
-                        <input type="file" id="siofu_input" name="file" accept="video/*,image/*" onchange="previewAndStageFile(event.target.files[0])" enctype="multipart/form-data"/>
-                    </div>
-                </div>
-
-                <div id="asset-preview-holder"></div>
-
-            </div>
-		</div>
-		<div class="col-right">
-			<div id="publish-active-area">
-
-                {{> publishForm-Channel}}
-
-                {{> publishForm-Url}}
-
-                {{> publishForm-Details}}
-
-				<div class="row">
-                    <div class="input-error" id="input-error-publish-submit" hidden="true"></div>
-                    <button id="publish-submit" onclick="publishSelectedImage(event)">Publish</button>
-                    <button onclick="resetPublishArea()">Reset</button>
-                </div>
-			</div>
-		</div>
-	</div>
+<div class="row" id="file-selection-area">
+    <div id="drop-zone" ondrop="drop_handler(event);" ondragover="dragover_handler(event);" ondragend="dragend_handler(event)">
+        <div class="row">
+            <p>Drag and drop your file here, or choose your file below.</p>
+            <div class="info-message info-message--failure" id="input-error-file-selection" hidden="true"></div>
+        </div>
+        <div class="row">
+            <input type="file" id="siofu_input" name="file" accept="video/*,image/*" onchange="previewAndStageFile(event.target.files[0])" enctype="multipart/form-data"/>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="column column--5" id="asset-preview-holder"></div>
+    <div class="column column--5" id="publish-active-area">
+        {{> publishForm-Channel}}
+        {{> publishForm-Url}}
+        {{> publishForm-Details}}
+        <div class="input-error" id="input-error-publish-submit" hidden="true"></div>
+        <button id="publish-submit" onclick="publishSelectedImage(event)">Publish</button>
+        <button onclick="resetPublishArea()">Reset</button>
+    </div>
 </div>
 
 <script type="text/javascript" >

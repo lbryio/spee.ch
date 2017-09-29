@@ -1,10 +1,9 @@
 
 <form id="publish-channel-form">
-
-    <div class="column column--3">
-        <label class="label" for="new-channel-name">Name:</label>
-    </div>
-    <div class="column column--7">
+    <div class="row row--wide">
+        <div class="column column--3">
+            <label class="label" for="new-channel-name">Name:</label>
+        </div><div class="column column--4">
         <div id="input-error-channel-name" class="info-message info-message--failure"></div>
         <div class="input-text--primary">
             <span>@</span>
@@ -12,13 +11,14 @@
             <span id="input-success-channel-name" class="info-message info-message--success"></span>
         </div>
     </div>
-
-    <div class="column column--3">
-        <label class="label" for="new-channel-password">Password:</label>
     </div>
-    <div class="column column--7">
-        <div id="input-error-channel-password" class="info-message info-message--failure"></div>
-        <input type="password" name="new-channel-password" id="new-channel-password" placeholder="" value="" class="input-text input-text--primary">
+    <div class="row row--wide">
+        <div class="column column--3">
+            <label class="label" for="new-channel-password">Password:</label>
+        </div><div class="column column--4">
+            <div id="input-error-channel-password" class="info-message info-message--failure"></div>
+            <input type="password" name="new-channel-password" id="new-channel-password" placeholder="" value="" class="input-text input-text--primary">
+        </div>
     </div>
 
     <div class="row row--wide">
