@@ -13,12 +13,12 @@
 	<meta property="og:image" content="https://spee.ch/assets/img/content-freedom-64px.png">
 	<meta property="og:url" content="http://spee.ch/">
 	<meta property="og:description" content="Open-source, decentralized image and video hosting.">
-<!-- Twitter Card data -->
+	<!-- Twitter Card data -->
 	<meta name="twitter:site" content="@LBRYio">
 	<meta name="twitter:domain" content="spee.ch">
 	<meta name="twitter:title" content="{{fileInfo.name}}">
 	<meta name="twitter:description" content="Spee.ch - Decentralized Image Hosting using Lbry Protocol">
-<!-- Twitter Summary card images must be at least 120x120px -->
+	<!-- Twitter Summary card images must be at least 120x120px -->
 	{{#ifConditional fileInfo.fileType '===' 'video/mp4'}}
 	<meta name="twitter:card" content="player">
 	<meta name="twitter:player" content="https://spee.ch/{{fileInfo.name}}">
@@ -33,7 +33,7 @@
 	<meta name="twitter:image:width" content="735">
 	<meta name="twitter:image:height" content="449">
 	{{/ifConditional}}
-<!-- google analytics -->
+	<!-- google analytics -->
 	{{ googleAnalytics }}
 </head>
 <body>
