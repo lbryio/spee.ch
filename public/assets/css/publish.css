@@ -1,14 +1,25 @@
 /* Publish Form */
 
-/* blocks */
-.publish {
-
-}
-
-/* elements */
 .publish-dropzone {
 	border: 1px dashed lightgrey;
 	padding: 1em;
 	height: 13em;
 	background: #F5F0EF;
+}
+
+.asset-preview {
+	display: block;
+	width: 100%;
+}
+
+
+/* Show page */
+
+.asset-display {
+	display: block;
+	width: 100%;
+}
+
+.copy-input {
+
 }

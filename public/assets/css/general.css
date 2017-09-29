@@ -36,10 +36,6 @@ h1 {
 
 h2 {
 	font-size: x-large;
-	margin-top: 1em;
-	border-top: 1px #999 solid;
-	background-color: lightgray;
-	padding: 6px;
 }
 
 h3 {
@@ -171,6 +167,14 @@ input:-webkit-autofill {
 
 .input-checkbox, .input-textarea {
 	border: 1px solid grey;
+}
+
+.input-disabled {
+	border: 1px solid black;
+	padding: 0.5em;
+	margin: 0.5em 0.3em 0.5em 0.3em;
+	color: black;
+	background-color: white;
 }
 
 /* BUTTONS */

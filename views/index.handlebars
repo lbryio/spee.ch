@@ -1,24 +1,25 @@
 <script src="/assets/js/generalFunctions.js"></script>
 
 {{> topBar}}
-<div class="row" id="file-selection-area">
-    <div id="drop-zone" ondrop="drop_handler(event);" ondragover="dragover_handler(event);" ondragend="dragend_handler(event)">
-        <div class="row">
-            <p>Drag and drop your file here, or choose your file below.</p>
-            <div class="info-message info-message--failure" id="input-error-file-selection" hidden="true"></div>
-        </div>
-        <div class="row">
-            <input type="file" id="siofu_input" name="file" accept="video/*,image/*" onchange="previewAndStageFile(event.target.files[0])" enctype="multipart/form-data"/>
-        </div>
+<div class="row" id="drop-zone-wrapper">
+    <div class="publish-dropzone align-content-center" ondrop="drop_handler(event);" ondragover="dragover_handler(event);" ondragend="dragend_handler(event)">
+        <p>Drag and drop your file here, or choose your file below.</p>
+        <div class="info-message info-message--failure" id="input-error-file-selection" hidden="true"></div>
+        <input type="file" id="siofu_input" name="file" accept="video/*,image/*" onchange="previewAndStageFile(event.target.files[0])" enctype="multipart/form-data"/>
     </div>
 </div>
-<div class="row">
-    <div class="column column--5" id="asset-preview-holder"></div>
-    <div class="column column--5" id="publish-active-area">
-        {{> publishForm-Channel}}
-        {{> publishForm-Url}}
-        {{> publishForm-Details}}
-        {{> publishForm-Submit}}
+<div class="row" id="publish-form-wrapper" hidden="true">
+    <div class="column column--4 align-content-top" >
+        <div id="asset-preview-holder" class="asset-show"></div>
+    </div><div class="column column--1" ></div><div class="column column--5 align-content-top">
+        <div id="publish-status" hidden="true"></div>
+        <div id="publish-progress-bar" hidden="true"></div>
+        <div id="publish-active-area">
+            {{> publishForm-Channel}}
+            {{> publishForm-Url}}
+            {{> publishForm-Details}}
+            {{> publishForm-Submit}}
+        </div>
     </div>
 </div>
 
@@ -26,35 +27,39 @@
 <script src="/siofu/client.js"></script>
 <script src="/assets/js/validationFunctions.js"></script>
 <script src="/assets/js/publishFileFunctions.js"></script>
-<script type="text/javascript" >
-    function resetPublishArea (){
-        // reset file selection area
-        document.getElementById('file-selection-area').innerHTML = `<div id="drop-zone" ondrop="drop_handler(event);" ondragover="dragover_handler(event);" ondragend="dragend_handler(event)">
-			<p>Drag and drop your file here, or choose your file below.</p>
-			<div class="info-message info-message--failure" id="input-error-file-selection" hidden="true"></div>
-			<input type="file" id="siofu_input" name="file" accept="video/*,image/*" onchange="previewAndStageFile(event.target.files[0])" enctype="multipart/form-data"/>
-		</div>
-		<div id="asset-preview-holder"></div>`;
-        // reset inputs
-        document.getElementById('claim-name-input').value = '';
-        document.getElementById('publish-title').value = '';
-        document.getElementById('publish-description').value = '';
-        document.getElementById('publish-nsfw').checked = false;
-        // remove staged files
-        stagedFiles = null;
-        // clear any errors
-        document.getElementById('input-error-file-selection').innerHTML = '';
-        document.getElementById('input-error-claim-name').innerHTML = '';
-        document.getElementById('input-error-publish-submit').innerHTML = '';
-        document.getElementById('input-success-claim-name').hidden = true;
-    }
-</script>
 <script typ="text/javascript">
-	// define variables
-	var socket = io();
-	var uploader = new SocketIOFileUpload(socket);
-	var stagedFiles = null;
+    var socket = io();
+    var uploader = new SocketIOFileUpload(socket);
+    var stagedFiles = null;
+    /* drop zone functions */
+    function drop_handler(ev) {
+        ev.preventDefault();
+        // if dropped items aren't files, reject them
+        var dt = ev.dataTransfer;
+        if (dt.items) {
+            if (dt.items[0].kind == 'file') {
+                var droppedFile = dt.items[0].getAsFile();
+                previewAndStageFile(droppedFile);
+            }
+        }
+    }
+    function dragover_handler(ev) {
+        ev.preventDefault();
+    }
+    function dragend_handler(ev) {
+        var dt = ev.dataTransfer;
+        if (dt.items) {
+            for (var i = 0; i < dt.items.length; i++) {
+                dt.items.remove(i);
+            }
+        } else {
+            ev.dataTransfer.clearData();
+        }
+    }
 	/* socketio-file-upload listeners */
+    function updatePublishStatus(msg){
+        document.getElementById('publish-status').innerHTML = msg;
+    }
 	uploader.addEventListener('start', function(event){
 		var name = document.getElementById('claim-name-input').value;
 		var title = document.getElementById('publish-title').value;
@@ -69,10 +74,12 @@
 		event.file.meta.nsfw = nsfw;
 		event.file.meta.type = stagedFiles[0].type;
         event.file.meta.channel = channel;
-		// re-set the html in the publish area
-		document.getElementById('publish-active-area').innerHTML = '<div id="publish-status"></div><div id="progress-bar"></div>';
-		// start a progress animation
-		createProgressBar(document.getElementById('progress-bar'), 12);
+        // hide the submit area
+        document.getElementById('publish-active-area').hidden = true;
+		// show the progress status and animation
+		document.getElementById('publish-status').hidden = false;
+        document.getElementById('publish-progress-bar').hidden = false;
+		createProgressBar(document.getElementById('publish-progress-bar'), 12);
 		// google analytics
 		ga('send', {
 			hitType: 'event',
@@ -89,16 +96,15 @@
 		updatePublishStatus(msg);
 	});
 	socket.on('publish-failure', function(msg){
-		document.getElementById('publish-active-area').innerHTML = '<p> --(✖╭╮✖)→ </p><p>' + JSON.stringify(msg) + '</p><strong>For help, post the above error text in the #speech channel on the <a href="https://lbry.slack.com/" target="_blank">lbry slack</a></strong>';
+		updatePublishStatus('<p> --(✖╭╮✖)→ </p><p>' + JSON.stringify(msg) + '</p><strong>For help, post the above error text in the #speech channel on the <a href="https://lbry.slack.com/" target="_blank">lbry slack</a></strong>');
+		document.getElementById('publish-progress-bar').hidden = true;
 	});
 	socket.on('publish-complete', function(msg){
-		var publishResults;
 		var showUrl = msg.result.claim_id + "/" + msg.name;
-		// build new publish area
-		publishResults = '<p>Your publish is complete! You are being redirected to it now.</p>';
-		publishResults += '<p><a target="_blank" href="' + showUrl + '">If you do not get redirected, click here.</a></p>';
-		// update publish area
-		document.getElementById('publish-active-area').innerHTML = publishResults;
+		// update status
+		updatePublishStatus('<p>Your publish is complete! You are being redirected to it now.</p><p><a target="_blank" href="' + showUrl + '">If you do not get redirected, click here.</a></p>');
+        document.getElementById('publish-progress-bar').hidden = true;
+        // redirect the user
 		window.location.href = showUrl;
 	});
 </script>
