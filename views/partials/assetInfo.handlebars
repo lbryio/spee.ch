@@ -45,10 +45,10 @@
 	</div>
 	{{!--Lbry Direct Link--}}
 	<div class="share-option">
-		<a href="lbry://{{fileInfo.name}}">Lbry Link</a> (Lbry-app)
+		<a href="lbry://{{fileInfo.name}}#{{fileInfo.claimId}}">Lbry Link</a> (Lbry-app)
 		<div class="input-error" id="input-error-copy-lbry-link" hidden="true"></div>
 		<br>
-		<input type="text" id="lbry-link" class="link" readonly  onclick="select()" spellcheck="false" value="lbry://{{fileInfo.name}}"/>
+		<input type="text" id="lbry-link" class="link" readonly  onclick="select()" spellcheck="false" value="lbry://{{fileInfo.name}}#{{fileInfo.claimId}}"/>
 		<button class="copy-button" data-elementtocopy="lbry-link" onclick="copyToClipboard(event)">copy</button>
 	</div>
 	{{!-- html text for embedding asset--}}
