@@ -27,41 +27,36 @@ function validateFile(file) {
 			throw new Error(file.type + ' is not a supported file type. Only, .jpeg, .png, .gif, and .mp4 files are currently supported.')
 	}
 }
-// validation function that checks to make sure the claim name is not already claimed
-function isNameAvailable (name) {
-	return new Promise(function(resolve, reject) {
-		// make sure the claim name is still available
-		var xhttp;
-		xhttp = new XMLHttpRequest();
-		xhttp.open('GET', '/api/isClaimAvailable/' + name, true);
-		xhttp.responseType = 'json';
-		xhttp.onreadystatechange = function() {
-			if (this.readyState == 4 ) {
-				if ( this.status == 200) {
-					if (this.response == true) {
-						resolve();
-					} else {
-						reject( new NameError("That name has already been claimed by another user.  Please choose a different name."));
-					}
-				} else {
-					reject("request to check claim name failed with status:" + this.status);
-				};
-			}
-		};
-		xhttp.send();
-	});
-}
 // validation function that checks to make sure the claim name is valid
 function validateClaimName (name) {
 	// ensure a name was entered
 	if (name.length < 1) {
-		throw new NameError("You must enter a name for your claim");
+		throw new NameError("You must enter a name for your url");
 	}
 	// validate the characters in the 'name' field
 	const invalidCharacters = /[^A-Za-z0-9,-]/g.exec(name);
 	if (invalidCharacters) {
-		throw new NameError('"' + invalidCharacters + '" characters are not allowed in the title.');
+		throw new NameError('"' + invalidCharacters + '" characters are not allowed in the url.');
 	}
+}
+
+function validateChannelName (name) {
+	name = name.substring(name.indexOf('@') + 1);
+    // ensure a name was entered
+    if (name.length < 1) {
+        throw new ChannelNameError("You must enter a name for your channel");
+    }
+    // validate the characters in the 'name' field
+    const invalidCharacters = /[^A-Za-z0-9,-,@]/g.exec(name);
+    if (invalidCharacters) {
+        throw new ChannelNameError('"' + invalidCharacters + '" characters are not allowed in the channel name.');
+    }
+}
+
+function validatePassword (password) {
+    if (password.length < 1) {
+        throw new ChannelPasswordError("You must enter a password for you channel");
+    }
 }
 
 function cleanseClaimName(name) {
@@ -69,53 +64,133 @@ function cleanseClaimName(name) {
 	name = name.replace(/[^A-Za-z0-9-]/g, '');  // remove all characters that are not A-Z, a-z, 0-9, or '-'
 	return name;
 }
-// validaiton function to check claim name as the input changes
-function checkClaimName(name){
-	try {
-		// check to make sure the characters are valid
-		validateClaimName(name);
-		clearError('input-error-claim-name');
-		// check to make sure it is availabe
-		isNameAvailable(name)
-			.then(function() {
-				document.getElementById('claim-name-available').hidden = false;
-			})
-			.catch(function(error) {
-				document.getElementById('claim-name-available').hidden = true;
-				showError('input-error-claim-name', error.message);
-			});
-	} catch (error) {
-		showError('input-error-claim-name', error.message);
-		document.getElementById('claim-name-available').hidden = true;
-	}
+
+// validation functions to check claim & channel name eligibility as the inputs change
+
+function isNameAvailable (name, apiUrl) {
+    const url = apiUrl + name;
+    return getRequest(url)
 }
+
+function showError(errorDisplay, errorMsg) {
+    errorDisplay.hidden = false;
+    errorDisplay.innerText = errorMsg;
+}
+
+function hideError(errorDisplay) {
+    errorDisplay.hidden = true;
+    errorDisplay.innerText = '';
+}
+
+function showSuccess (successElement) {
+    successElement.hidden = false;
+    successElement.innerHTML = "&#x2714";
+}
+
+function hideSuccess (successElement) {
+    successElement.hidden = true;
+    successElement.innerHTML = "";
+}
+
+function checkAvailability(name, successDisplayElement, errorDisplayElement, validateName, isNameAvailable, errorMessage, apiUrl) {
+    try {
+        // check to make sure the characters are valid
+        validateName(name);
+        // check to make sure it is available
+        isNameAvailable(name, apiUrl)
+            .then(result => {
+            	console.log('result:', result)
+            	if (result === true) {
+                    hideError(errorDisplayElement);
+                    showSuccess(successDisplayElement)
+				} else {
+                    hideSuccess(successDisplayElement);
+                    showError(errorDisplayElement, errorMessage);
+				}
+            })
+            .catch(error => {
+                hideSuccess(successDisplayElement);
+                showError(errorDisplayElement, error.message);
+            });
+    } catch (error) {
+        hideSuccess(successDisplayElement);
+        showError(errorDisplayElement, error.message);
+    }
+}
+
+function checkClaimName(name){
+	const successDisplayElement = document.getElementById('input-success-claim-name');
+	const errorDisplayElement = document.getElementById('input-error-claim-name');
+	checkAvailability(name, successDisplayElement, errorDisplayElement, validateClaimName, isNameAvailable, 'Sorry, that url ending has been taken by another user', '/api/isClaimAvailable/');
+}
+
+function checkChannelName(name){
+    const successDisplayElement = document.getElementById('input-success-channel-name');
+    const errorDisplayElement = document.getElementById('input-error-channel-name');
+    name = `@${name}`;
+    checkAvailability(name, successDisplayElement, errorDisplayElement, validateChannelName, isNameAvailable, 'Sorry, that Channel has been taken by another user', '/api/isChannelAvailable/');
+}
+
 // validation function which checks all aspects of the publish submission
-function validateSubmission(stagedFiles, name){
+function validateFilePublishSubmission(stagedFiles, claimName, channelName){
 	return new Promise(function (resolve, reject) {
-		// make sure only 1 file was selected
+		// 1. make sure only 1 file was selected
 		if (!stagedFiles) {
-			reject(new FileError("Please select a file"));
+			return reject(new FileError("Please select a file"));
 		} else if (stagedFiles.length > 1) {
-			reject(new FileError("Only one file is allowed at a time"));
+			return reject(new FileError("Only one file is allowed at a time"));
 		}
-		// validate the file's name, type, and size
+		// 2. validate the file's name, type, and size
 		try {
 			validateFile(stagedFiles[0]);
 		} catch (error) {
-			reject(error);
+			return reject(error);
 		}
-		// make sure the claim name has not already been used
+		// 3. validate that a channel was chosen
+		if (channelName === 'new' || channelName === 'login') {
+			return reject(new ChannelNameError("Please select a valid channel"));
+        };
+		// 4. validate the claim name
 		try {
-			validateClaimName(name);
+			validateClaimName(claimName);
 		} catch (error) {
-			reject(error);
+			return reject(error);
 		}
-		isNameAvailable(name)
-			.then(function() {
+		// if all validation passes, check availability of the name
+		isNameAvailable(claimName, '/api/isClaimAvailable/')
+			.then(() => {
 				resolve();
 			})
-			.catch(function(error) {
+			.catch(error => {
 				reject(error);
 			});
 	});
+}
+
+// validation function which checks all aspects of the publish submission
+function validateNewChannelSubmission(channelName, password){
+    return new Promise(function (resolve, reject) {
+    	// 1. validate name
+        try {
+            validateChannelName(channelName);
+        } catch (error) {
+            return reject(error);
+        }
+        // 2. validate password
+        try {
+            validatePassword(password);
+        } catch (error) {
+            return reject(error);
+        }
+        // 3. if all validation passes, check availability of the name
+        isNameAvailable(channelName, '/api/isChannelAvailable/')  // validate the availability
+            .then(() => {
+                console.log('channel is avaliable');
+                resolve();
+            })
+            .catch( error => {
+                console.log('error: channel is not avaliable');
+                reject(error);
+            });
+    });
 }

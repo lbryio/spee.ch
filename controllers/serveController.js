@@ -97,7 +97,7 @@ function getAssetByLongClaimId (fullClaimId, name) {
 }
 
 function chooseThumbnail (claimInfo, defaultThumbnail) {
-  if (!claimInfo.thumbnail || claimInfo.thumbnail === '') {
+  if (!claimInfo.thumbnail || claimInfo.thumbnail.trim() === '') {
     return defaultThumbnail;
   }
   return claimInfo.thumbnail;
@@ -150,7 +150,7 @@ module.exports = {
         // 2. get all claims for that channel
         .then(result => {
           longChannelId = result;
-          return db.getShortChannelIdFromLongChannelId(channelName, longChannelId);
+          return db.getShortChannelIdFromLongChannelId(longChannelId, channelName);
         })
         // 3. get all Claim records for this channel
         .then(result => {
@@ -168,7 +168,12 @@ module.exports = {
               element['thumbnail'] = chooseThumbnail(element, DEFAULT_THUMBNAIL);
             });
           }
-          return resolve(allChannelClaims);
+          return resolve({
+            channelName,
+            longChannelId,
+            shortChannelId,
+            claims: allChannelClaims,
+          });
         })
         .catch(error => {
           reject(error);

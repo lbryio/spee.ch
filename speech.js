@@ -4,132 +4,98 @@ const bodyParser = require('body-parser');
 const siofu = require('socketio-file-upload');
 const expressHandlebars = require('express-handlebars');
 const Handlebars = require('handlebars');
+const handlebarsHelpers = require('./helpers/handlebarsHelpers.js');
 const config = require('config');
 const logger = require('winston');
 const { getDownloadDirectory } = require('./helpers/lbryApi');
-
+const helmet = require('helmet');
 const PORT = 3000; // set port
 const app = express(); // create an Express application
 const db = require('./models'); // require our models for syncing
+const passport = require('passport');
+const session = require('express-session');
 
 // configure logging
 const logLevel = config.get('Logging.LogLevel');
 require('./config/loggerConfig.js')(logger, logLevel);
 require('./config/slackLoggerConfig.js')(logger);
 
+// check for global config variables
+require('./helpers/configVarCheck.js')();
+
 // trust the proxy to get ip address for us
 app.enable('trust proxy');
+
 // add middleware
-app.use(express.static(`${__dirname}/public`)); // 'express.static' to serve static files from public directory
+app.use(helmet()); // set HTTP headers to protect against well-known web vulnerabilties
 app.use(express.static(`${__dirname}/public`)); // 'express.static' to serve static files from public directory
 app.use(bodyParser.json()); // 'body parser' for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // 'body parser' for parsing application/x-www-form-urlencoded
 app.use(siofu.router); // 'socketio-file-upload' router for uploading with socket.io
-app.use((req, res, next) => {  // custom logging middleware to log all incomming http requests
+app.use((req, res, next) => {  // custom logging middleware to log all incoming http requests
   logger.verbose(`Request on ${req.originalUrl} from ${req.ip}`);
+  logger.debug(req.body);
   next();
 });
+
+// initialize passport
+app.use(session({ secret: 'cats' }));
+app.use(passport.initialize());
+app.use(passport.session());
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
+passport.deserializeUser((id, done) => {  // this populates req.user
+  let userInfo = {};
+  db.User.findOne({ where: { id } })
+  .then(user => {
+    userInfo['id'] = user.id;
+    userInfo['userName'] = user.userName;
+    return user.getChannel();
+  })
+  .then(channel => {
+    userInfo['channelName'] = channel.channelName;
+    userInfo['channelClaimId'] = channel.channelClaimId;
+    return db.getShortChannelIdFromLongChannelId(channel.channelClaimId, channel.channelName);
+  })
+  .then(shortChannelId => {
+    userInfo['shortChannelId'] = shortChannelId;
+    done(null, userInfo);
+    return null;
+  })
+  .catch(error => {
+    logger.error('sequelize error', error);
+    done(error, null);
+  });
+});
+const localSignupStrategy = require('./passport/local-signup.js');
+const localLoginStrategy = require('./passport/local-login.js');
+passport.use('local-signup', localSignupStrategy);
+passport.use('local-login', localLoginStrategy);
 
 // configure handlebars & register it with express app
 const hbs = expressHandlebars.create({
   defaultLayout: 'main', // sets the default layout
   handlebars   : Handlebars, // includes basic handlebars for access to that library
-  helpers      : {
-    // define any extra helpers you may need
-    googleAnalytics () {
-      const googleApiKey = config.get('AnalyticsConfig.GoogleId');
-      return new Handlebars.SafeString(
-        `<script>
-        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-        ga('create', '${googleApiKey}', 'auto');
-        ga('send', 'pageview');
-        </script>`
-      );
-    },
-    addOpenGraph (title, mimeType, showUrl, source, description, thumbnail) {
-      let basicTags = `<meta property="og:title" content="${title}"> 
-          <meta property="og:url" content="${showUrl}" > 
-          <meta property="og:site_name" content="Spee.ch" > 
-          <meta property="og:description" content="${description}">`;
-      if (mimeType === 'video/mp4') {
-        return new Handlebars.SafeString(
-          `${basicTags} <meta property="og:image" content="${thumbnail}" > 
-          <meta property="og:image:type" content="image/png" >
-          <meta property="og:image:width" content="600" >
-          <meta property="og:image:height" content="315" >
-          <meta property="og:type" content="video" > 
-          <meta property="og:video" content="${source}" > 
-          <meta property="og:video:secure_url" content="${source}" > 
-          <meta property="og:video:type" content="${mimeType}" >`
-        );
-      } else if (mimeType === 'image/gif') {
-        return new Handlebars.SafeString(
-          `${basicTags} <meta property="og:image" content="${source}" > 
-          <meta property="og:image:type" content="${mimeType}" >
-          <meta property="og:image:width" content="600" >
-          <meta property="og:image:height" content="315" >
-          <meta property="og:type" content="video.other" >`
-        );
-      } else {
-        return new Handlebars.SafeString(
-          `${basicTags} <meta property="og:image" content="${source}" > 
-          <meta property="og:image:type" content="${mimeType}" >
-          <meta property="og:image:width" content="600" >
-          <meta property="og:image:height" content="315" >
-          <meta property="og:type" content="article" >`
-        );
-      }
-    },
-    addTwitterCard (mimeType, source, embedUrl, directFileUrl) {
-      let basicTwitterTags = `<meta name="twitter:site" content="@speechch" >`;
-      if (mimeType === 'video/mp4') {
-        return new Handlebars.SafeString(
-          `${basicTwitterTags} <meta name="twitter:card" content="player" >
-          <meta name="twitter:player" content="${embedUrl}>
-          <meta name="twitter:player:width" content="600" >
-          <meta name="twitter:text:player_width" content="600" >
-          <meta name="twitter:player:height" content="337" >
-          <meta name="twitter:player:stream" content="${directFileUrl}" >
-          <meta name="twitter:player:stream:content_type" content="video/mp4" >
-          `
-        );
-      } else {
-        return new Handlebars.SafeString(
-          `${basicTwitterTags} <meta name="twitter:card" content="summary_large_image" >`
-        );
-      }
-    },
-    ifConditional (varOne, operator, varTwo, options) {
-      switch (operator) {
-        case '===':
-          return (varOne === varTwo) ? options.fn(this) : options.inverse(this);
-        case '!==':
-          return (varOne !== varTwo) ? options.fn(this) : options.inverse(this);
-        case '<':
-          return (varOne < varTwo) ? options.fn(this) : options.inverse(this);
-        case '<=':
-          return (varOne <= varTwo) ? options.fn(this) : options.inverse(this);
-        case '>':
-          return (varOne > varTwo) ? options.fn(this) : options.inverse(this);
-        case '>=':
-          return (varOne >= varTwo) ? options.fn(this) : options.inverse(this);
-        case '&&':
-          return (varOne && varTwo) ? options.fn(this) : options.inverse(this);
-        case '||':
-          return (varOne || varTwo) ? options.fn(this) : options.inverse(this);
-        case 'mod3':
-          return ((parseInt(varOne) % 3) === 0) ? options.fn(this) : options.inverse(this);
-        default:
-          return options.inverse(this);
-      }
-    },
-  },
+  helpers      : handlebarsHelpers,  // custom defined helpers
 });
 app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
+
+// middleware to pass user info back to client (for handlebars access), if user is logged in
+app.use((req, res, next) => {
+  if (req.user) {
+    logger.verbose(req.user);
+    res.locals.user = {
+      id            : req.user.id,
+      userName      : req.user.userName,
+      channelName   : req.user.channelName,
+      channelClaimId: req.user.channelClaimId,
+      shortChannelId: req.user.shortChannelId,
+    };
+  }
+  next();
+});
 
 // start the server
 db.sequelize
@@ -142,7 +108,8 @@ db.sequelize
     // add the hosted content folder at a static path
     app.use('/media', express.static(hostedContentPath));
     // require routes & wrap in socket.io
-    require('./routes/api-routes.js')(app, hostedContentPath);
+    require('./routes/auth-routes.js')(app);
+    require('./routes/api-routes.js')(app);
     require('./routes/page-routes.js')(app);
     require('./routes/serve-routes.js')(app);
     require('./routes/home-routes.js')(app);

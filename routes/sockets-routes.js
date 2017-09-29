@@ -35,8 +35,15 @@ module.exports = (app, siofu, hostedContentPath) => {
       if (file.success) {
         logger.debug(`Client successfully uploaded ${file.name}`);
         socket.emit('publish-status', 'File upload successfully completed. Your image is being published to LBRY (this might take a second)...');
+
+        /*
+        NOTE: need to validate that client has the credentials to the channel they chose
+        otherwise they could circumvent security client side.
+         */
+
         // prepare the publish parameters
-        const publishParams = publishHelpers.createPublishParams(file.meta.name, file.pathName, file.meta.title, file.meta.description, file.meta.license, file.meta.nsfw);
+        const publishParams = publishHelpers.createPublishParams(file.meta.name, file.pathName, file.meta.title, file.meta.description, file.meta.license, file.meta.nsfw, file.meta.channel);
+        logger.debug(publishParams);
         // publish the file
         publishController.publish(publishParams, file.name, file.meta.type)
         .then(result => {
@@ -52,7 +59,7 @@ module.exports = (app, siofu, hostedContentPath) => {
         logger.error(`An error occurred in uploading the client's file`);
         socket.emit('publish-failure', 'File uploaded, but with errors');
         postToStats('PUBLISH', '/', null, null, null, 'File uploaded, but with errors');
-        // to-do: remove the file if not done automatically
+        // to-do: remove the file, if not done automatically
       }
     });
     // handle disconnect

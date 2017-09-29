@@ -1,3 +1,46 @@
+function getRequest (url) {
+    console.log('making GET request to', url)
+    return new Promise((resolve, reject) => {
+        let xhttp = new XMLHttpRequest();
+        xhttp.open('GET', url, true);
+        xhttp.responseType = 'json';
+        xhttp.onreadystatechange = () => {
+            if (xhttp.readyState == 4 ) {
+                console.log(xhttp);
+                if ( xhttp.status == 200) {
+                    console.log('response:', xhttp.response);
+                    resolve(xhttp.response);
+                } else {
+                    reject('request failed with status:' + xhttp.status);
+                };
+            }
+        };
+        xhttp.send();
+    })
+}
+
+function postRequest (url, params) {
+    console.log('making POST request to', url)
+    return new Promise((resolve, reject) => {
+        let xhttp = new XMLHttpRequest();
+        xhttp.open('POST', url, true);
+        xhttp.responseType = 'json';
+        xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        xhttp.onreadystatechange = () => {
+            if (xhttp.readyState == 4 ) {
+                console.log(xhttp);
+                if ( xhttp.status == 200) {
+                    console.log('response:', xhttp.response);
+                    resolve(xhttp.response);
+                } else {
+                    reject('request failed with status:' + xhttp.status);
+                };
+            }
+        };
+        xhttp.send(params);
+    })
+}
+
 function toggleSection(event){
 	event.preventDefault();
 
@@ -5,14 +48,16 @@ function toggleSection(event){
 	var status = dataSet.open;
 	var masterElement = document.getElementById(event.target.id||event.srcElement.id);
 	var slaveElement = document.getElementById(dataSet.slaveelementid);
+	var closedLabel = dataSet.closedlabel;
+	var openLabel = dataSet.openlabel;
 	
 	if (status === "false") {
 		slaveElement.hidden = false;
-		masterElement.innerText = "[close]";
+		masterElement.innerText = openLabel;
 		masterElement.dataset.open = "true";
 	} else {
 		slaveElement.hidden = true;
-		masterElement.innerText = "[open]";
+		masterElement.innerText = closedLabel;
 		masterElement.dataset.open = "false";
 	}
 }
@@ -35,38 +80,6 @@ function createProgressBar(element, size){
 	setInterval(addOne, 300);
 }
 
-function dataURItoBlob(dataURI) {
-    // convert base64/URLEncoded data component to raw binary data held in a string
-    var byteString;
-    if (dataURI.split(',')[0].indexOf('base64') >= 0)
-        byteString = atob(dataURI.split(',')[1]);
-    else
-        byteString = unescape(dataURI.split(',')[1]);
-
-    // separate out the mime component
-    var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
-
-    // write the bytes of the string to a typed array
-    var ia = new Uint8Array(byteString.length);
-    for (var i = 0; i < byteString.length; i++) {
-        ia[i] = byteString.charCodeAt(i);
-    }
-
-    return new Blob([ia], {type:mimeString});
-}
-
-function showError(elementId, errorMsg) {
-	var errorDisplay = document.getElementById(elementId);
-	errorDisplay.hidden = false;
-	errorDisplay.innerText = errorMsg;
-}
-
-function clearError(elementId) {
-	var errorDisplay = document.getElementById(elementId);
-	errorDisplay.hidden = true;
-	errorDisplay.innerText = '';
-}
-
 // Create new error objects, that prototypically inherit from the Error constructor
 function FileError(message) {
   this.name = 'FileError';
@@ -83,3 +96,19 @@ function NameError(message) {
 }
 NameError.prototype = Object.create(Error.prototype);
 NameError.prototype.constructor = NameError;
+
+function ChannelNameError(message) {
+    this.name = 'ChannelNameError';
+    this.message = message || 'Default Message';
+    this.stack = (new Error()).stack;
+}
+ChannelNameError.prototype = Object.create(Error.prototype);
+ChannelNameError.prototype.constructor = ChannelNameError;
+
+function ChannelPasswordError(message) {
+    this.name = 'ChannelPasswordError';
+    this.message = message || 'Default Message';
+    this.stack = (new Error()).stack;
+}
+ChannelPasswordError.prototype = Object.create(Error.prototype);
+ChannelPasswordError.prototype.constructor = ChannelPasswordError;

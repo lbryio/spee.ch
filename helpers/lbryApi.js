@@ -1,23 +1,23 @@
 const axios = require('axios');
 const logger = require('winston');
 
+function handleResponse ({ data }, resolve, reject) {
+  logger.debug('handling lbry api response');
+  if (data.result) {
+    // check for an error
+    if (data.result.error) {
+      reject(data.result.error);
+      return;
+    };
+    logger.debug('data.result', data.result);
+    resolve(data.result);
+    return;
+  }
+  // fallback in case the just timed out
+  reject(JSON.stringify(data));
+}
+
 module.exports = {
-  getWalletList () {
-    logger.debug('lbryApi >> getting wallet list');
-    return new Promise((resolve, reject) => {
-      axios
-        .post('http://localhost:5279/lbryapi', {
-          method: 'wallet_list',
-        })
-        .then(response => {
-          const result = response.data.result;
-          resolve(result);
-        })
-        .catch(error => {
-          reject(error);
-        });
-    });
-  },
   publishClaim (publishParams) {
     logger.debug(`lbryApi >> Publishing claim to "${publishParams.name}"`);
     return new Promise((resolve, reject) => {
@@ -27,8 +27,7 @@ module.exports = {
           params: publishParams,
         })
         .then(response => {
-          const result = response.data.result;
-          resolve(result);
+          handleResponse(response, resolve, reject);
         })
         .catch(error => {
           reject(error);
@@ -43,18 +42,8 @@ module.exports = {
           method: 'get',
           params: { uri, timeout: 20 },
         })
-        .then(({ data }) => {
-          // check to make sure the daemon didn't just time out
-          if (!data.result) {
-            reject(JSON.stringify(data));
-          }
-          if (data.result.error) {
-            reject(data.result.error);
-          }
-          /*
-            note: put in a check to make sure we do not resolve until the download is actually complete (response.data.completed === true)?
-          */
-          resolve(data.result);
+        .then(response => {
+          handleResponse(response, resolve, reject);
         })
         .catch(error => {
           reject(error);
@@ -69,8 +58,8 @@ module.exports = {
           method: 'claim_list',
           params: { name: claimName },
         })
-        .then(({ data }) => {
-          resolve(data.result);
+        .then(response => {
+          handleResponse(response, resolve, reject);
         })
         .catch(error => {
           reject(error);
@@ -94,7 +83,6 @@ module.exports = {
           }
         })
         .catch(error => {
-          console.log('error with resolve', error);
           reject(error);
         });
     });
@@ -110,13 +98,30 @@ module.exports = {
           if (data.result) {
             resolve(data.result.download_directory);
           } else {
-            // reject(new Error('Successfully connected to lbry daemon, but unable to retrieve the download directory.'));
             return new Error('Successfully connected to lbry daemon, but unable to retrieve the download directory.');
           }
         })
         .catch(error => {
           logger.error('Lbrynet Error:', error);
           resolve('/home/lbry/Downloads/');
+        });
+    });
+  },
+  createChannel (name) {
+    return new Promise((resolve, reject) => {
+      axios
+        .post('http://localhost:5279/lbryapi', {
+          method: 'channel_new',
+          params: {
+            channel_name: name,
+            amount      : 0.1,
+          },
+        })
+        .then(response => {
+          handleResponse(response, resolve, reject);
+        })
+        .catch(error => {
+          reject(error);
         });
     });
   },

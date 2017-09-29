@@ -1,0 +1,78 @@
+
+<form id="publish-channel-form">
+
+    <div class="column column--3">
+        <label class="label" for="new-channel-name">Name:</label>
+    </div>
+    <div class="column column--9">
+        <div id="input-error-channel-name" class="info-message info-message--failure"></div>
+        <div class="input-text--primary">
+            <span>@</span>
+            <input type="text" name="new-channel-name" id="new-channel-name" class="input-text" placeholder="exampleChannel" value="" oninput="checkChannelName(event.target.value)">
+            <span id="input-success-channel-name" class="info-message info-message--success"></span>
+        </div>
+    </div>
+
+    <div class="column column--3">
+        <label class="label" for="new-channel-password">Password:</label>
+    </div>
+    <div class="column column--9">
+        <div id="input-error-channel-password" class="info-message info-message--failure"></div>
+        <input type="password" name="new-channel-password" id="new-channel-password" placeholder="" value="" class="input-text input-text--primary">
+    </div>
+
+    <div class="row row--wide">
+        <button onclick="publishNewChannel(event)">Create Channel</button>
+    </div>
+</form>
+
+
+<div id="channel-publish-in-progress" hidden="true">
+    <p>Creating your new channel.  This may take a few seconds...</p>
+    <div id="create-channel-progress-bar"></div>
+</div>
+
+<div id="channel-publish-done" hidden="true">
+    <p>Your channel has been successfully created!</p>
+</div>
+
+
+<script type="text/javascript">
+ function publishNewChannel (event) {
+     const channelName = document.getElementById('new-channel-name').value;
+     const password = document.getElementById('new-channel-password').value;
+     const channelNameErrorDisplayElement = document.getElementById('input-error-channel-name');
+     const passwordErrorDisplayElement = document.getElementById('input-error-channel-password');
+     const chanelCreateForm = document.getElementById('publish-channel-form');
+     const inProgress = document.getElementById('channel-publish-in-progress');
+     const done = document.getElementById('channel-publish-done');
+
+     // prevent default so this script can handle submission
+     event.preventDefault();
+     // validate submission
+     validateNewChannelSubmission(channelName, password)
+         .then(() => {
+             console.log('in progress');
+             chanelCreateForm.hidden = true;
+             inProgress.hidden = false;
+             createProgressBar(document.getElementById('create-channel-progress-bar'), 12);
+             return sendAuthRequest(channelName, password, '/signup') // post the request
+         })
+         .then(() => {
+             console.log('success');
+             inProgress.hidden=true;
+             done.hidden = false;
+             // refresh window logged in as the channel
+             window.location.href = '/';
+         })
+         .catch(error => {
+             if (error.name === 'ChannelNameError'){
+                 showError(channelNameErrorDisplayElement, error.message);
+             } else if (error.name === 'ChannelPasswordError'){
+                 showError(passwordErrorDisplayElement, error.message);
+             } else {
+                 console.log('failure:', error);
+             }
+         })
+ }
+</script>

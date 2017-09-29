@@ -66,7 +66,7 @@ function getLongClaimIdFromShortClaimId (name, shortId) {
 function getTopFreeClaimIdByClaimName (name) {
   return new Promise((resolve, reject) => {
     db
-      .sequelize.query(`SELECT claimId FROM Claim WHERE name = '${name}' ORDER BY amount DESC, height ASC LIMIT 1`, { type: db.sequelize.QueryTypes.SELECT })
+      .sequelize.query(`SELECT claimId FROM Claim WHERE name = '${name}' ORDER BY effectiveAmount DESC, height ASC LIMIT 1`, { type: db.sequelize.QueryTypes.SELECT })
       .then(result => {
         switch (result.length) {
           case 0:
@@ -190,9 +190,9 @@ db['getShortClaimIdFromLongClaimId'] = (claimId, claimName) => {
   });
 };
 
-db['getShortChannelIdFromLongChannelId'] = (channelName, longChannelId) => {
+db['getShortChannelIdFromLongChannelId'] = (longChannelId, channelName) => {
   return new Promise((resolve, reject) => {
-    logger.debug('finding short channel id');
+    logger.debug(`finding short channel id for ${longChannelId} ${channelName}`);
     db
       .sequelize.query(`SELECT claimId, height FROM Certificate WHERE name = '${channelName}' ORDER BY height;`, { type: db.sequelize.QueryTypes.SELECT })
       .then(result => {

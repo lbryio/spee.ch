@@ -1,0 +1,23 @@
+<div class="wrapper">
+    {{> topBar}}
+    <h2>Log In</h2>
+    <div class="row row--wide">
+
+        <div class="column column--6">
+            <p>Log in to an existing channel:</p>
+            {{>channelLoginForm}}
+        </div>
+    </div>
+    <h2>Create New</h2>
+    <div class="row row--wide">
+        <div class="column column--6">
+            <p>Create a brand new channel:</p>
+            {{>channelCreationForm}}
+        </div>
+    </div>
+    {{> footer}}
+</div>
+
+<script src="/assets/js/generalFunctions.js"></script>
+<script src="/assets/js/validationFunctions.js"></script>
+<script src="/assets/js/authFunctions.js"></script>

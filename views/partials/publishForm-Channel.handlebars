@@ -1,0 +1,66 @@
+<div class="row">
+    <div class="column column--3">
+        <label class="label" for="channel-name-select">Channel:</label>
+    </div>
+    <div class="column column--9">
+        <div id="input-error-channel-select" class="info-message info-message--failure"></div>
+        <select type="text" id="channel-name-select" class="select select--primary" value="channel" onchange="toggleChannel(event)">
+        <optgroup>
+            {{#if user}}
+                <option value="{{user.channelName}}" >@{{user.userName}}</option>
+            {{/if}}
+            <option value="none" >None</option>
+        </optgroup>
+        <optgroup>
+            <option value="login">Login</option>
+            <option value="new" >New</option>
+        </optgroup>
+        </select>
+    </div>
+</div>
+
+<div id="channel-login-details" class="row" hidden="true">
+    {{> channelLoginForm}}
+</div>
+
+<div  id="channel-create-details" class="row" hidden="true">
+    {{> channelCreationForm}}
+</div>
+
+<script src="/assets/js/authFunctions.js"></script>
+<script type="text/javascript">
+    function toggleChannel (event) {
+         const createChannelTool = document.getElementById('channel-create-details');
+         const loginToChannelTool = document.getElementById('channel-login-details');
+         const selectedOption = event.target.selectedOptions[0].value;
+         const urlChannel = document.getElementById('url-channel');
+         console.log('toggle event triggered');
+         if (selectedOption === 'new') {
+             // show/hide the login and new channel forms
+             createChannelTool.hidden = false;
+             loginToChannelTool.hidden = true;
+             // update URL
+             urlChannel.innerText = '';
+         } else if (selectedOption === 'login') {
+             // show/hide the login and new channel forms
+             loginToChannelTool.hidden = false;
+             createChannelTool.hidden = true;
+             // update URL
+             urlChannel.innerText = '';
+         } else {
+             // hide the login and new channel forms
+             loginToChannelTool.hidden = true;
+             createChannelTool.hidden = true;
+             hideError(document.getElementById('input-error-channel-select'));
+             // update URL
+             if (selectedOption === 'none'){
+                 console.log('selected option: none');
+                 urlChannel.innerText = '';
+             } else {
+                 console.log('selected option:', selectedOption);
+                 // retrieve short url from db
+                 urlChannel.innerText = `{{user.channelName}}:{{user.shortChannelId}}/`;
+             }
+         }
+    }
+</script>

@@ -1,8 +1,20 @@
 const errorHandlers = require('../helpers/errorHandlers.js');
-const db = require('../models');
 const { postToStats, getStatsSummary, getTrendingClaims, getRecentClaims } = require('../controllers/statsController.js');
 
 module.exports = (app) => {
+  // route to log out
+  app.get('/logout', (req, res) => {
+    req.logout();
+    res.redirect('/');
+  });
+  // route to display login page
+  app.get('/login', (req, res) => {
+    if (req.user) {
+      res.status(200).redirect(`/${req.user.channelName}`);
+    } else {
+      res.status(200).render('login');
+    }
+  });
   // route to show 'about' page for spee.ch
   app.get('/about', (req, res) => {
     // get and render the content
@@ -19,7 +31,9 @@ module.exports = (app) => {
     getTrendingClaims(dateTime)
       .then(result => {
         // logger.debug(result);
-        res.status(200).render('trending', { trendingAssets: result });
+        res.status(200).render('trending', {
+          trendingAssets: result,
+        });
       })
       .catch(error => {
         errorHandlers.handleRequestError(error, res);
@@ -30,21 +44,26 @@ module.exports = (app) => {
     getRecentClaims()
       .then(result => {
         // logger.debug(result);
-        res.status(200).render('new', { newClaims: result });
+        res.status(200).render('new', {
+          newClaims: result,
+        });
       })
       .catch(error => {
         errorHandlers.handleRequestError(error, res);
       });
   });
   // route to show statistics for spee.ch
-  app.get('/stats', ({ ip, originalUrl }, res) => {
+  app.get('/stats', ({ ip, originalUrl, user }, res) => {
     // get and render the content
     const startDate = new Date();
     startDate.setDate(startDate.getDate() - 1);
     getStatsSummary(startDate)
       .then(result => {
         postToStats('show', originalUrl, ip, null, null, 'success');
-        res.status(200).render('statistics', result);
+        res.status(200).render('statistics', {
+          user,
+          result,
+        });
       })
       .catch(error => {
         errorHandlers.handleRequestError(error, res);
@@ -60,20 +79,8 @@ module.exports = (app) => {
     res.status(200).render('embed', { layout: 'embed', claimId, name });
   });
   // route to display all free public claims at a given name
-  app.get('/:name/all', ({ ip, originalUrl, params }, res) => {
+  app.get('/:name/all', (req, res) => {
     // get and render the content
-    db
-      .getAllFreeClaims(params.name)
-      .then(orderedFreeClaims => {
-        if (!orderedFreeClaims) {
-          res.status(307).render('noClaims');
-          return;
-        }
-        postToStats('show', originalUrl, ip, null, null, 'success');
-        res.status(200).render('allClaims', { claims: orderedFreeClaims });
-      })
-      .catch(error => {
-        errorHandlers.handleRequestError('show', originalUrl, ip, error, res);
-      });
+    res.status(410).send('/:name/all is no longer supported');
   });
 };

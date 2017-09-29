@@ -1,16 +1,20 @@
 {
 	"WalletConfig": {
-		"LbryClaimAddress": "none"
+		"LbryClaimAddress": null,
+		"DefaultChannel": null
 	},
 	"AnalyticsConfig":{
-		"GoogleId": "none"
+		"GoogleId": null
 	},
 	"Database": {
 		"Database": "lbry",
-		"Username": "none",
-		"Password": "none"
+		"Username": null,
+		"Password": null
 	},
 	"Logging": {
-		"LogLevel": "none"
+		"LogLevel": null,
+		"SlackWebHook": null,
+		"SlackErrorChannel": null,
+		"SlackInfoChannel": null
 	}
 }

@@ -124,15 +124,12 @@ module.exports = (app) => {
       // 1. retrieve the channel contents
       getChannelContents(channelName, channelId)
       // 2. respond to the request
-      .then(channelContents => {
-        if (!channelContents) {
+      .then(result => {
+        logger.debug('result');
+        if (!result.claims) {
           res.status(200).render('noChannel');
         } else {
-          const handlebarsData = {
-            channelName,
-            channelContents,
-          };
-          res.status(200).render('channel', handlebarsData);
+          res.status(200).render('channel', result);
         }
       })
       .catch(error => {
