@@ -1,10 +1,10 @@
 	<h2>Title</h2>
-    <div class="row row--thin">
+    <div class="row row--short">
         {{fileInfo.title}}
     </div>
 	<h2>Links</h2>
 	{{!-- short direct link to asset --}}
-	<div class="row row--thin">
+	<div class="row row--short">
 		<div class="column column--5">
             <a href="/{{fileInfo.shortId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}">Short Link</a>
             <div class="input-error" id="input-error-copy-short-link" hidden="true"></div>
@@ -15,7 +15,7 @@
         </div>
 	</div>
     {{!-- html text for embedding asset--}}
-    <div class="row row--thin">
+    <div class="row row--short">
         <div class="column column--5">
             Embed HTML
             <div class="input-error" id="input-error-copy-embed-text" hidden="true"></div>
@@ -53,12 +53,12 @@
     <!--</div>-->
 
     <h2>Description</h2>
-    <div class="row row--thin">
+    <div class="row row--short">
         {{fileInfo.description}}
     </div>
 
 	<h2>Metadata</h2>
-    <div class="row row--thin">
+    <div class="row row--short">
         <table class="metadata-table" style="table-layout: fixed">
             <tr class="metadata-row">
                 <td class="left-column">Name</td>
