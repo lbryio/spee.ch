@@ -157,8 +157,31 @@ footer {
 
 /* TOP BAR */
 
+/* blocks */
 .nav-bar {
+
+}
+
+.nav-bar-title-section, .nav-bar-link-section {
+	padding: 0px 1em 0px 1em;
+}
+
+.nav-bar-title-section {
+	overflow: hidden;
 	border-bottom: 2px solid #eaeaea;
+	position: relative;
+	z-index: 2;
+}
+
+.nav-bar-link-section {
+	position: absolute;
+	bottom: 0px;
+	right: 0px;
+}
+
+/* elements */
+.nav-bar-title, .nav-bar-link {
+	padding: 1.5rem 0.5rem 1.5rem 0.5rem;
 }
 
 .nav-bar-logo, .nav-bar-title, .nav-bar-link {
@@ -176,8 +199,14 @@ footer {
 }
 
 .nav-bar-link {
-	padding: 1em 0.5em 1em 0.5em;
+	border-bottom: 1px solid #eaeaea;
 }
+.nav-bar-link:hover {
+	background-color: yellow;
+	border-bottom: 1px solid blue;
+}
+
+
 
 /* LINKS */
 
