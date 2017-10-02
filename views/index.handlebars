@@ -7,8 +7,11 @@
             <div id="publish-dropzone-instructions">
                 <p>Drag & drop image or video here</p>
                 <p>OR</p>
-                <div class="info-message info-message--failure" id="input-error-file-selection" hidden="true"></div>
-                <input type="file" id="siofu_input" name="file" accept="video/*,image/*" onchange="previewAndStageFile(event.target.files[0])" enctype="multipart/form-data"/>
+                <form>
+                    <div class="info-message info-message--failure" id="input-error-file-selection" hidden="true"></div>
+                    <label class="input-file-label" for="siofu_input">CHOOSE FILE</label>
+                    <input class=" input-file" type="file" id="siofu_input" name="siofu_input" accept="video/*,image/*" onchange="previewAndStageFile(event.target.files[0])" enctype="multipart/form-data"/>
+                </form>
             </div>
         </div>
     </div>

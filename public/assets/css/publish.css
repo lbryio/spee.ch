@@ -5,13 +5,16 @@
 }
 
 #publish-dropzone {
-	border: 2px dashed darkgrey;
-	background: #F5F0EF;
+	border: 2px dashed dodgerblue;
     height: calc(100% - 2px);
+	position: relative;
 }
 
 #publish-dropzone-instructions {
-    margin-top: 20%;
+	position: absolute;
+	top: 40%;
+	left: 50%;
+	transform: translateX(-50%) translateY(-40%);
 }
 
 .asset-preview {

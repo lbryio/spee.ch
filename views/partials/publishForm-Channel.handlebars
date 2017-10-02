@@ -1,10 +1,9 @@
 <div class="row">
-    <div class="column column--3">
+    <div class="column column--4">
         <label class="label" for="channel-name-select">Channel:</label>
-    </div>
-    <div class="column column--7">
+    </div><div class="column column--6">
         <div id="input-error-channel-select" class="info-message info-message--failure"></div>
-        <select type="text" id="channel-name-select" class="select select--primary" value="channel" onchange="toggleChannel(event)">
+        <select type="text" id="channel-name-select" class="select select--primary select--arrow" value="channel" onchange="toggleChannel(event)">
         <optgroup>
             {{#if user}}
                 <option value="{{user.channelName}}" >@{{user.userName}}</option>

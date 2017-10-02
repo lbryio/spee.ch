@@ -1,10 +1,8 @@
 <div class="row">
 
-    <div class="column column--3">
+    <div class="column column--4">
         <label class="label">URL:</label>
-    </div>
-
-    <div class="column column--7">
+    </div><div class="column column--6">
         <div id="input-error-claim-name" class="info-message info-message--failure"  hidden="true"></div>
         <div class="input-text--primary">
             <span class="url-text">Spee.ch/</span><span id="url-channel" class="url-text">{{#if user}}{{user.channelName}}:{{user.shortChannelId}}/{{/if}}</span><input type="text" id="claim-name-input" class="input-text" placeholder="your-url-here" oninput="checkClaimName(event.target.value)">
