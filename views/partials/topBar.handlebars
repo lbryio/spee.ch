@@ -5,7 +5,6 @@
             <a class="nav-bar-link" href="/">Upload</a>
             <a class="nav-bar-link" href="/popular">Popular</a>
             <a class="nav-bar-link" href="/about">About</a>
-            <a class="nav-bar-link" href="https://github.com/lbryio/spee.ch" target="_blank">Source</a>
             {{#if user}}
                 <select type="text" class="select select--no-arrow nav-bar-link" onchange="toggleLogin(event)">
                     <option value="{{user.channelName}}:{{user.channelClaimId}}">@{{user.userName}}</option>

@@ -43,6 +43,11 @@ h2 {
 	font-size: x-large;
 }
 
+.h2--secondary {
+	font-weight: normal;
+	color: lightgrey;
+}
+
 h3 {
 	font-size: large;
 	font-weight: normal;

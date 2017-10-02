@@ -5,9 +5,13 @@
 }
 
 #publish-dropzone {
-	border: 2px dashed dodgerblue;
+	border: 2px dashed lightgrey;
     height: calc(100% - 2px);
 	position: relative;
+}
+
+#publish-dropzone:hover {
+	border: 2px dashed dodgerblue;
 }
 
 #publish-dropzone-instructions {
@@ -30,5 +34,19 @@
 }
 
 .copy-input {
+
+}
+
+/* item lists */
+
+.content-list-item {
+
+}
+
+.content-list-item-asset {
+	width: 90%;
+}
+
+.content-list-item-link {
 
 }
