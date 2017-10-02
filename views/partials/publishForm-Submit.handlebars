@@ -3,10 +3,6 @@
 <button onclick="resetPublishArea()">Reset</button>
 
 <script type="text/javascript" >
-
-    }
-</script>
-<script type="text/javascript" >
     function resetPublishArea () {
         // reset the drop zone
         // remove staged files
@@ -28,7 +24,7 @@
     function previewAndStageFile(selectedFile){
         const publishForm = document.getElementById('publish-form-wrapper');
         var previewHolder = document.getElementById('asset-preview-holder');
-        var dropzone = document.getElementById('drop-zone-wrapper');
+        var dropzone = document.getElementById('publish-drop-zone-wrapper');
         var previewReader = new FileReader();
         var nameInput = document.getElementById('claim-name-input');
         // validate the file's name, type, and size

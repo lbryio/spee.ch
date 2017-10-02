@@ -1,18 +1,23 @@
 /* Publish Form */
 
-.publish-dropzone {
-	border: 1px dashed lightgrey;
-	padding: 1em;
-	height: 13em;
-	background: #F5F0EF;
+#publish-dropzone-wrapper, #publish-form-wrapper {
 	height: 100%;
+}
+
+#publish-dropzone {
+	border: 2px dashed darkgrey;
+	background: #F5F0EF;
+    height: calc(100% - 2px);
+}
+
+#publish-dropzone-instructions {
+    margin-top: 20%;
 }
 
 .asset-preview {
 	display: block;
 	width: 100%;
 }
-
 
 /* Show page */
 

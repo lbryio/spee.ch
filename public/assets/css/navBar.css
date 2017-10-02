@@ -2,7 +2,7 @@
 
 /* blocks */
 .nav-bar {
-
+ height: 4.5rem;
 }
 
 .nav-bar-title-section, .nav-bar-link-section {
@@ -38,5 +38,5 @@
 	border-bottom: 2px solid white;
 }
 .nav-bar-link:hover {
-	border-bottom: 2px solid blue;
+	border-bottom: 2px solid dodgerblue;
 }

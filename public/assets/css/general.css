@@ -1,3 +1,8 @@
+html, body {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+}
 /* TEXT */
 
 body, button, input, textarea, label, select, option {
@@ -57,14 +62,14 @@ h3 {
 	padding-left: 0px;
 }
 
-.row--thin {
+.row--short {
 	padding-top: 0.5em;
 	padding-bottom: 0.5em;
 }
 
 .row--full-height {
-	padding: 0px 0px 0px 0px;
-	height: 100%
+	padding: 2em;
+	height: calc(100% - 4rem - 4.5rem - 4px);
 }
 
 .column {
@@ -163,7 +168,7 @@ input:-webkit-autofill {
 }
 
 .input-text--primary, .select--primary, .textarea--primary {
-	border-bottom: 1px solid blue;
+	border-bottom: 1px solid dodgerblue;
 }
 
 .input-text--primary:focus, .select--primary:focus, .textarea--primary:focus {
@@ -193,13 +198,13 @@ button {
 }
 
 button:hover {
-	border: 1px solid blue;
+	border: 1px solid dodgerblue;
 	color: white;
-	background-color: blue;
+	background-color: dodgerblue;
 }
 
 button:active{
-	border: 1px solid blue;
+	border: 1px solid dodgerblue;
 	color: white;
 	background-color: white;
 }
