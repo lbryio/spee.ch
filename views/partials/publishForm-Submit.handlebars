@@ -1,6 +1,10 @@
-<div class="input-error" id="input-error-publish-submit" hidden="true"></div>
-<button id="publish-submit" onclick="publishSelectedImage(event)">Publish</button>
-<button onclick="resetPublishArea()">Reset</button>
+<div class="row">
+    <div class="input-error" id="input-error-publish-submit" hidden="true"></div>
+    <button id="publish-submit" class="button--primary button--large" onclick="publishSelectedImage(event)">Upload</button>
+</div>
+<div class="row row--short align-content-center">
+    <button class="button--cancel" onclick="resetPublishArea()">Cancel</button>
+</div>
 
 <script type="text/javascript" >
     function resetPublishArea () {

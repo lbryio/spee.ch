@@ -16,11 +16,21 @@
         </div>
     </div>
     <div id="publish-form-wrapper" hidden="true">
-        <div class="column column--4 align-content-top" >
-            <div id="asset-preview-holder" class="asset-show"></div>
-        </div><div class="column column--1" ></div><div class="column column--5 align-content-top">
-        <div id="publish-status" hidden="true"></div>
-        <div id="publish-progress-bar" hidden="true"></div>
+        <div class="column column--10">
+            <!-- title input -->
+            <input type="text" id="publish-title" class="input-text input-text--large" placeholder="Title (optional)">
+        </div>
+        <div class="column column--5 align-content-top" >
+            <!-- preview -->
+            <div class="row">
+                <div id="asset-preview-holder" class="asset-show"></div>
+            </div>
+            <!-- description input -->
+            <textarea rows="3" id="publish-description" class="textarea textarea--large" placeholder="Description (optional)"></textarea>
+
+        </div><div class="column column--5 align-content-top">
+        <div id="publish-status" class="row" hidden="true"></div>
+        <div id="publish-progress-bar" class="row" hidden="true"></div>
         <div id="publish-active-area">
             {{> publishForm-Channel}}
             {{> publishForm-Url}}
