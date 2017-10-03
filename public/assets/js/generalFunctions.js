@@ -6,7 +6,6 @@ function getRequest (url) {
         xhttp.responseType = 'json';
         xhttp.onreadystatechange = () => {
             if (xhttp.readyState == 4 ) {
-                console.log(xhttp);
                 if ( xhttp.status == 200) {
                     console.log('response:', xhttp.response);
                     resolve(xhttp.response);
@@ -28,7 +27,6 @@ function postRequest (url, params) {
         xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         xhttp.onreadystatechange = () => {
             if (xhttp.readyState == 4 ) {
-                console.log(xhttp);
                 if ( xhttp.status == 200) {
                     console.log('response:', xhttp.response);
                     resolve(xhttp.response);

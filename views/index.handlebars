@@ -5,13 +5,15 @@
     <div id="publish-dropzone-wrapper">
         <div id="publish-dropzone" class="align-content-center" ondrop="drop_handler(event);" ondragover="dragover_handler(event);" ondragend="dragend_handler(event)">
             <div id="publish-dropzone-instructions">
-                <p>Drag & drop image or video here</p>
-                <p>OR</p>
-                <form>
-                    <div class="info-message info-message--failure" id="input-error-file-selection" hidden="true"></div>
-                    <label class="input-file-label" for="siofu_input">CHOOSE FILE</label>
-                    <input class=" input-file" type="file" id="siofu_input" name="siofu_input" accept="video/*,image/*" onchange="previewAndStageFile(event.target.files[0])" enctype="multipart/form-data"/>
-                </form>
+                <div class="row">
+                    <p>Drag & drop image or video here</p>
+                    <p>OR</p>
+                    <form>
+                        <label class="input-file-label" for="siofu_input">CHOOSE FILE</label>
+                        <input class=" input-file" type="file" id="siofu_input" name="siofu_input" accept="video/*,image/*" onchange="previewAndStageFile(event.target.files[0])" enctype="multipart/form-data"/>
+                    </form>
+                </div>
+                <div class="info-message info-message--failure" id="input-error-file-selection" hidden="true"></div>
             </div>
         </div>
     </div>
@@ -48,6 +50,7 @@
     var socket = io();
     var uploader = new SocketIOFileUpload(socket);
     var stagedFiles = null;
+
     /* drop zone functions */
     function drop_handler(ev) {
         ev.preventDefault();
@@ -73,6 +76,7 @@
             ev.dataTransfer.clearData();
         }
     }
+
 	/* socketio-file-upload listeners */
     function updatePublishStatus(msg){
         document.getElementById('publish-status').innerHTML = msg;

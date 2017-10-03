@@ -1,7 +1,7 @@
 const logger = require('winston');
 const publishController = require('../controllers/publishController.js');
 const publishHelpers = require('../helpers/publishHelpers.js');
-const errorHandlers = require('../helpers/errorHandlers.js');
+const { useObjectPropertiesIfNoKeys } = require('../helpers/errorHandlers.js');
 const { postToStats } = require('../controllers/statsController.js');
 
 module.exports = (app, siofu, hostedContentPath) => {
@@ -47,17 +47,17 @@ module.exports = (app, siofu, hostedContentPath) => {
         // publish the file
         publishController.publish(publishParams, file.name, file.meta.type)
         .then(result => {
-          postToStats('PUBLISH', '/', null, null, null, 'success');
           socket.emit('publish-complete', { name: publishParams.name, result });
+          postToStats('PUBLISH', '/', null, null, null, 'success');
         })
         .catch(error => {
-          error = errorHandlers.handlePublishError(error);
-          postToStats('PUBLISH', '/', null, null, null, error);
           socket.emit('publish-failure', error);
+          logger.error('Publish Error:', useObjectPropertiesIfNoKeys(error));
+          postToStats('PUBLISH', '/', null, null, null, error);
         });
       } else {
-        logger.error(`An error occurred in uploading the client's file`);
         socket.emit('publish-failure', 'File uploaded, but with errors');
+        logger.error(`An error occurred in uploading the client's file`);
         postToStats('PUBLISH', '/', null, null, null, 'File uploaded, but with errors');
         // to-do: remove the file, if not done automatically
       }
