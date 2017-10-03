@@ -8,19 +8,7 @@
 
 <script type="text/javascript" >
     function resetPublishArea () {
-        // reset the drop zone
-        // remove staged files
-        stagedFiles = null;
-        // reset publish form inputs
-        document.getElementById('claim-name-input').value = '';
-        document.getElementById('publish-title').value = '';
-        document.getElementById('publish-description').value = '';
-        document.getElementById('publish-nsfw').checked = false;
-        // clear any errors
-        document.getElementById('input-error-file-selection').innerHTML = '';
-        document.getElementById('input-error-claim-name').innerHTML = '';
-        document.getElementById('input-error-publish-submit').innerHTML = '';
-        document.getElementById('input-success-claim-name').hidden = true;
+        window.location.href = '/';
     }
     /* publish functions */
     // When a file is selected for publish, validate that file and
