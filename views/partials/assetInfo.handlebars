@@ -6,26 +6,26 @@
 {{!-- short direct link to asset --}}
 <div class="row row--short">
     <div class="column column--7">
-        <a href="/{{fileInfo.shortId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}">Short Link</a>
+        <p><a href="/{{fileInfo.shortId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}">Short Link</a></p>
         <div class="input-error" id="input-error-copy-short-link" hidden="true"></div>
         <br/>
-        <input type="text" id="short-link" class="input-disabled" readonly spellcheck="false" value="https://spee.ch/{{fileInfo.shortId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}" onclick="select()"/>
-    </div><div class="column column--3">
+        <input type="text" id="short-link" class="input-disabled input-text--full-width" readonly spellcheck="false" value="https://spee.ch/{{fileInfo.shortId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}" onclick="select()"/>
+    </div><div class="column column--1"></div><div class="column column--2">
         <button class="button--primary" data-elementtocopy="short-link" onclick="copyToClipboard(event)">copy</button>
     </div>
 </div>
 {{!-- html text for embedding asset--}}
 <div class="row row--short">
     <div class="column column--7">
-        Embed HTML
+        <p>Embed HTML</p>
         <div class="input-error" id="input-error-copy-embed-text" hidden="true"></div>
         <br/>
         {{#ifConditional fileInfo.fileType '===' 'video/mp4'}}
-            <input type="text" id="embed-text" class="input-disabled" readonly onclick="select()" spellcheck="false" value='&lt;video width="100%" controls src="https://spee.ch/{{fileInfo.claimId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}"/>&lt;/video>'/>
+            <input type="text" id="embed-text" class="input-disabled input-text--full-width" readonly onclick="select()" spellcheck="false" value='&lt;video width="100%" controls src="https://spee.ch/{{fileInfo.claimId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}"/>&lt;/video>'/>
         {{else}}
-            <input type="text" id="embed-text" class="input-disabled" readonly onclick="select()" spellcheck="false" value='&lt;img src="https://spee.ch/{{fileInfo.claimId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}" />'/>
+            <input type="text" id="embed-text" class="input-disabled input-text--full-width" readonly onclick="select()" spellcheck="false" value='&lt;img src="https://spee.ch/{{fileInfo.claimId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}"/>'/>
         {{/ifConditional}}
-    </div><div class="column column--3">
+    </div><div class="column column--1"></div><div class="column column--2">
         <button class="button--primary" data-elementtocopy="embed-text" onclick="copyToClipboard(event)">copy</button>
     </div>
 </div>

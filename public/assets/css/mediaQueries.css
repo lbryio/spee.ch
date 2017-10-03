@@ -18,32 +18,38 @@
 }
 
 @media (max-width: 750px ) {
-	.col-left, .col-right {
-		float: none;
-		margin: 0px;
-		padding: 0px;
+
+	.column--med-10 {
 		width: 100%;
 	}
 
-	.col-right {
-		padding-top: 20px;
+	.h2--top {
+		margin-top: 1em;
+	}
+}
+
+
+@media (max-width: 475px) {
+
+	.nav-bar {
+		height: 8rem;
 	}
 
-	.all-claims-asset {
-		width:30%;
+	.nav-bar-title {
+		padding-bottom: 0px;
 	}
 
-	.all-claims-details {
-		font-size: small;
+	.nav-bar-link-section {
+		position: relative;
+		padding-left: 0px;
 	}
 
-	.show-asset-lite {
-		width: 100%;
+	.row--full-height {
+
+		height: calc(100% - 11rem);
 	}
 
-	.top-bar-tagline {
-		clear: both;
-		text-align: left;
+	.column--sml-10 {
 		width: 100%;
 	}
 }

@@ -22,7 +22,7 @@
             <!-- title input -->
             <input type="text" id="publish-title" class="input-text input-text--large input-text--full-width" placeholder="Title (optional)">
         </div>
-        <div class="column column--5 align-content-top" >
+        <div class="column column--5 column--med-10 align-content-top" >
             <!-- preview -->
             <div class="row">
                 <div id="asset-preview-holder" class="dropzone" ondrop="drop_handler(event);" ondragover="dragover_handler(event);" ondragend="dragend_handler(event)" onmouseenter="showInstructions()" onmouseleave="hideInstructions()">
@@ -36,14 +36,13 @@
                                 <input class=" input-file" type="file" id="siofu_input" name="siofu_input" accept="video/*,image/*" onchange="previewAndStageFile(event.target.files[0])" enctype="multipart/form-data"/>
                             </form>
                         </div>
-                        <div class="info-message info-message--failure" id="" hidden="true"></div>
                     </div>
 
                 </div>
             </div>
             <!-- description input -->
             <textarea rows="2" id="publish-description" class="textarea textarea--large textarea--full-width" placeholder="Description (optional)"></textarea>
-        </div><div class="column column--5 align-content-top">
+        </div><div class="column column--5 column--med-10 align-content-top">
         <div id="publish-status" class="row" hidden="true"></div>
         <div id="publish-progress-bar" class="row" hidden="true"></div>
         <div id="publish-active-area">

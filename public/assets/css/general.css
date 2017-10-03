@@ -8,6 +8,7 @@ html, body {
 body, button, input, textarea, label, select, option {
 	font-family: monospace;
 	font-size: large;
+	word-wrap: break-word;
 }
 
 p {
@@ -162,6 +163,7 @@ h3 {
 
 /* INPUT FIELDS */
 
+/* blocks */
 input:-webkit-autofill {
  -webkit-box-shadow: 0 0 0px 1000px white inset;
 }
@@ -174,8 +176,36 @@ input:-webkit-autofill {
 	background-color: white;
 }
 
+.input-disabled {
+	border: 1px solid black;
+	padding: 0.5em;
+	margin: 0px;
+	color: black;
+	background-color: white;
+}
+
 option {
 	font-family: monospace;
+}
+
+
+.input-checkbox, .input-textarea {
+	border: 1px solid grey;
+}
+
+.input-file {
+	width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+
+.input-file-label {
+	color: dodgerblue;
+	text-decoration: underline;
+	cursor: pointer;
 }
 
 .select--no-arrow {
@@ -191,6 +221,7 @@ option {
 	padding-right: 1em;
 }
 
+/* modifiers */
 .input-text--primary, .select--primary, .textarea--primary {
 	border-bottom: 1px solid dodgerblue;
 }
@@ -212,31 +243,8 @@ option {
 	width: calc(100% - 0.6em);
 }
 
-.input-checkbox, .input-textarea {
-	border: 1px solid grey;
-}
-
-.input-file-label {
-	color: dodgerblue;
-	text-decoration: underline;
-	cursor: pointer;
-}
-
-.input-file {
-	width: 0.1px;
-	height: 0.1px;
-	opacity: 0;
-	overflow: hidden;
-	position: absolute;
-	z-index: -1;
-}
-
-.input-disabled {
-	border: 1px solid black;
-	padding: 0.5em;
-	margin: 0.5em 0.3em 0.5em 0.3em;
-	color: black;
-	background-color: white;
+.input-disabled--full-width {
+	width: calc(100% - 1em - 2px);
 }
 
 /* BUTTONS */
