@@ -138,7 +138,7 @@ function checkChannelName(name){
     const successDisplayElement = document.getElementById('input-success-channel-name');
     const errorDisplayElement = document.getElementById('input-error-channel-name');
     name = `@${name}`;
-    checkAvailability(name, successDisplayElement, errorDisplayElement, validateChannelName, isNameAvailable, 'Sorry, that Channel has been taken by another user', '/api/isChannelAvailable/');
+    checkAvailability(name, successDisplayElement, errorDisplayElement, validateChannelName, isNameAvailable, 'Sorry, that Channel name has been taken by another user', '/api/isChannelAvailable/');
 }
 
 // validation function which checks all aspects of the publish submission
@@ -205,7 +205,7 @@ function validateNewChannelSubmission(channelName, password){
         // 3. if all validation passes, check availability of the name
         isNameAvailable(channelName, '/api/isChannelAvailable/')  // validate the availability
             .then(() => {
-                console.log('channel is avaliable');
+                console.log('channel is available');
                 resolve();
             })
             .catch( error => {

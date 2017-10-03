@@ -167,6 +167,7 @@ input:-webkit-autofill {
 }
 
 .label, .input-text, .select, .textarea {
+	margin: 0px;
 	padding: 0.3em;
 	outline: none;
 	border: 0px;
@@ -198,11 +199,14 @@ input:-webkit-autofill {
 .input-text--large, .select--large, .textarea--large {
 	font-size: 2rem;
 	border-left: 1px solid dodgerblue;
-	margin: 0.5rem;
 }
 
 .input-text--large:focus, .select--large:focus, .textarea--large:focus {
 	border-left: 1px solid grey;
+}
+
+.input-text--full-width, .textarea--full-width {
+	width: calc(100% - 0.6em);
 }
 
 .input-checkbox, .input-textarea {
