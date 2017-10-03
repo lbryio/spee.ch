@@ -48,6 +48,10 @@ h2 {
 	color: lightgrey;
 }
 
+.h2--top {
+	margin-top: 0px;
+}
+
 h3 {
 	font-size: large;
 	font-weight: normal;
