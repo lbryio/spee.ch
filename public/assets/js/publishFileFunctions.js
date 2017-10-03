@@ -8,7 +8,7 @@ function cancelPublish () {
 // stage it so it will be ready when the publish button is clicked.
 function previewAndStageFile(selectedFile){
 	const publishForm = document.getElementById('publish-form-wrapper');
-    const previewHolder = document.getElementById('asset-preview-holder');
+    const assetPreview = document.getElementById('asset-preview-target');
     const dropzoneWrapper = document.getElementById('publish-dropzone-wrapper');
     const previewReader = new FileReader();
     const nameInput = document.getElementById('claim-name-input');
@@ -26,14 +26,14 @@ function previewAndStageFile(selectedFile){
     console.log('file type:', selectedFile.type)
     if (selectedFile.type !== 'video/mp4') {
 		if (selectedFile.type === 'image/gif') {
-            previewHolder.innerHTML = `<h2>loading preview...</h2>`
+            assetPreview.innerHTML = `<h2>loading preview...</h2>`
 		}
 		previewReader.readAsDataURL(selectedFile);
 		previewReader.onloadend = function () {
-			previewHolder.innerHTML = '<img width="100%" src="' + previewReader.result + '" alt="image preview"/>';
+            assetPreview.innerHTML = '<img id="asset-preview" src="' + previewReader.result + '" alt="image preview"/>';
 		};
 	} else {
-		previewHolder.innerHTML = `<img width="100%" src="/assets/img/black_video_play.jpg"/>`
+        assetPreview.innerHTML = `<img id="asset-preview" src="/assets/img/black_video_play.jpg"/>`
 	}
     // hide the drop zone
     dropzoneWrapper.hidden = true;

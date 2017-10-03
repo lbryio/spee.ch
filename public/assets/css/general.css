@@ -174,6 +174,10 @@ input:-webkit-autofill {
 	background-color: white;
 }
 
+option {
+	font-family: monospace;
+}
+
 .select--no-arrow {
 	-moz-appearance:none;
 	-webkit-appearance: none;
@@ -183,9 +187,8 @@ input:-webkit-autofill {
 .select--arrow {
 	-moz-appearance:none;
 	-webkit-appearance: none;
-	align-items: left;
 	background: url('../img/down_triangle.png') no-repeat right;
-
+	padding-right: 1em;
 }
 
 .input-text--primary, .select--primary, .textarea--primary {
@@ -324,32 +327,41 @@ table {
 	border-bottom: 2px solid #1e90ff;
 }
 
-/* Publish Form */
+/* PUBLISH FORM */
+
+.dropzone {
+	border: 2px dashed lightgrey;
+	text-align: center;
+}
+
+.dropzone:hover {
+	border: 2px dashed #1e90ff;
+}
 
 #publish-dropzone-wrapper, #publish-form-wrapper {
 	height: 100%;
 }
 
 #publish-dropzone {
-	border: 2px dashed lightgrey;
-	height: calc(100% - 2px);
+	height: calc(100% - 4px);
 	position: relative;
 }
 
-#publish-dropzone:hover {
-	border: 2px dashed dodgerblue;
+#asset-preview-holder {
+	position: relative;
 }
 
-#publish-dropzone-instructions {
+#publish-dropzone-instructions, #preview-dropzone-instructions {
 	position: absolute;
 	top: 40%;
 	left: 50%;
 	transform: translateX(-50%) translateY(-40%);
 }
 
-.asset-preview {
+#asset-preview {
 	display: block;
-	width: 100%;
+	padding: 0.5rem;
+	width: calc(100% - 1rem);
 }
 
 /* Show page */
@@ -357,10 +369,6 @@ table {
 .asset-display {
 	display: block;
 	width: 100%;
-}
-
-.copy-input {
-
 }
 
 /* item lists */

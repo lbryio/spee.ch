@@ -4,16 +4,12 @@
     </div><div class="column column--7">
         <div id="input-error-channel-select" class="info-message info-message--failure"></div>
         <select type="text" id="channel-name-select" class="select select--primary select--arrow" value="channel" onchange="toggleChannel(event)">
-        <optgroup>
-            {{#if user}}
-                <option value="{{user.channelName}}" >@{{user.userName}}</option>
-            {{/if}}
+        {{#if user}}
+            <option value="{{user.channelName}}" >@{{user.userName}}</option>
+        {{/if}}
             <option value="none" >None</option>
-        </optgroup>
-        <optgroup>
             <option value="login">Login</option>
             <option value="new" >New</option>
-        </optgroup>
         </select>
     </div>
 </div>

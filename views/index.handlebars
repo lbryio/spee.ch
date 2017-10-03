@@ -3,7 +3,7 @@
 {{> topBar}}
 <div class="row row--full-height">
     <div id="publish-dropzone-wrapper">
-        <div id="publish-dropzone" class="align-content-center" ondrop="drop_handler(event);" ondragover="dragover_handler(event);" ondragend="dragend_handler(event)">
+        <div id="publish-dropzone" class="dropzone" ondrop="drop_handler(event);" ondragover="dragover_handler(event);" ondragend="dragend_handler(event)">
             <div id="publish-dropzone-instructions">
                 <div class="row">
                     <p>Drag & drop image or video here</p>
@@ -25,10 +25,24 @@
         <div class="column column--5 align-content-top" >
             <!-- preview -->
             <div class="row">
-                <div id="asset-preview-holder" class="asset-show"></div>
+                <div id="asset-preview-holder" class="dropzone" ondrop="drop_handler(event);" ondragover="dragover_handler(event);" ondragend="dragend_handler(event)" onmouseenter="showInstructions()" onmouseleave="hideInstructions()">
+                    <div id="asset-preview-target"></div>
+                    <div id="preview-dropzone-instructions" hidden="true">
+                        <div class="row">
+                            <p>Drag & drop image or video here</p>
+                            <p>OR</p>
+                            <form>
+                                <label class="input-file-label" for="siofu_input">CHOOSE FILE</label>
+                                <input class=" input-file" type="file" id="siofu_input" name="siofu_input" accept="video/*,image/*" onchange="previewAndStageFile(event.target.files[0])" enctype="multipart/form-data"/>
+                            </form>
+                        </div>
+                        <div class="info-message info-message--failure" id="" hidden="true"></div>
+                    </div>
+
+                </div>
             </div>
             <!-- description input -->
-            <textarea rows="3" id="publish-description" class="textarea textarea--large textarea--full-width" placeholder="Description (optional)"></textarea>
+            <textarea rows="2" id="publish-description" class="textarea textarea--large textarea--full-width" placeholder="Description (optional)"></textarea>
         </div><div class="column column--5 align-content-top">
         <div id="publish-status" class="row" hidden="true"></div>
         <div id="publish-progress-bar" class="row" hidden="true"></div>
@@ -47,15 +61,27 @@
 <script src="/assets/js/validationFunctions.js"></script>
 <script src="/assets/js/publishFileFunctions.js"></script>
 <script typ="text/javascript">
+
     var socket = io();
     var uploader = new SocketIOFileUpload(socket);
     var stagedFiles = null;
 
     /* drop zone functions */
-    function drop_handler(ev) {
-        ev.preventDefault();
+
+    function showInstructions () {
+        console.log('showing instructions');
+        document.getElementById('preview-dropzone-instructions').hidden = false;
+        document.getElementById('asset-preview').style.opacity = 0.3;
+    }
+    function hideInstructions () {
+        console.log('hiding instructions');
+        document.getElementById('preview-dropzone-instructions').hidden = true;
+        document.getElementById('asset-preview').style.opacity = 1;
+    }
+    function drop_handler(event) {
+        event.preventDefault();
         // if dropped items aren't files, reject them
-        var dt = ev.dataTransfer;
+        var dt = event.dataTransfer;
         if (dt.items) {
             if (dt.items[0].kind == 'file') {
                 var droppedFile = dt.items[0].getAsFile();
@@ -63,17 +89,17 @@
             }
         }
     }
-    function dragover_handler(ev) {
-        ev.preventDefault();
+    function dragover_handler(event) {
+        event.preventDefault();
     }
-    function dragend_handler(ev) {
-        var dt = ev.dataTransfer;
+    function dragend_handler(event) {
+        var dt = event.dataTransfer;
         if (dt.items) {
             for (var i = 0; i < dt.items.length; i++) {
                 dt.items.remove(i);
             }
         } else {
-            ev.dataTransfer.clearData();
+            event.dataTransfer.clearData();
         }
     }
 
