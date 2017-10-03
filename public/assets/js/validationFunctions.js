@@ -143,34 +143,43 @@ function checkChannelName(name){
 
 // validation function which checks all aspects of the publish submission
 function validateFilePublishSubmission(stagedFiles, claimName, channelName){
-	console.log(`validating name: ${claimName} channel: ${channelName} file:`, stagedFiles);
+	console.log(`validating publish submission > name: ${claimName} channel: ${channelName} file:`, stagedFiles);
 	return new Promise(function (resolve, reject) {
 		// 1. make sure 1 file was staged
 		if (!stagedFiles) {
-			return reject(new FileError("Please select a file"));
+			reject(new FileError("Please select a file"));
+            return;
 		} else if (stagedFiles.length > 1) {
-			return reject(new FileError("Only one file is allowed at a time"));
-		}
+			reject(new FileError("Only one file is allowed at a time"));
+            return;
+        }
 		// 2. validate the file's name, type, and size
 		try {
 			validateFile(stagedFiles[0]);
 		} catch (error) {
-			return reject(error);
-		}
+			reject(error);
+            return;
+        }
 		// 3. validate that a channel was chosen
 		if (channelName === 'new' || channelName === 'login') {
-			return reject(new ChannelNameError("Please select a valid channel"));
+			reject(new ChannelNameError("Please select a valid channel"));
+            return;
         };
 		// 4. validate the claim name
 		try {
 			validateClaimName(claimName);
 		} catch (error) {
-			return reject(error);
+			reject(error);
+            return;
 		}
 		// if all validation passes, check availability of the name
-		isNameAvailable(claimName, '/api/isClaimAvailable/')
-			.then(() => {
-				resolve();
+		return isNameAvailable(claimName, '/api/isClaimAvailable/')
+			.then(result => {
+				if (result) {
+					resolve();
+				} else {
+					reject(new NameError('that url ending is already taken'));
+				}
 			})
 			.catch(error => {
 				reject(error);
@@ -178,7 +187,7 @@ function validateFilePublishSubmission(stagedFiles, claimName, channelName){
 	});
 }
 
-// validation function which checks all aspects of the publish submission
+// validation function which checks all aspects of a new channel submission
 function validateNewChannelSubmission(channelName, password){
     return new Promise(function (resolve, reject) {
     	// 1. validate name
