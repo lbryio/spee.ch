@@ -9,7 +9,7 @@ function cancelPublish () {
 function previewAndStageFile(selectedFile){
 	const publishForm = document.getElementById('publish-form-wrapper');
     const assetPreview = document.getElementById('asset-preview-target');
-    const dropzoneWrapper = document.getElementById('publish-dropzone-wrapper');
+    const primaryDropzone = document.getElementById('primary-dropzone-wrapper');
     const previewReader = new FileReader();
     const nameInput = document.getElementById('claim-name-input');
 	const fileSelectionError = document.getElementById('input-error-file-selection');
@@ -36,7 +36,7 @@ function previewAndStageFile(selectedFile){
         assetPreview.innerHTML = `<img id="asset-preview" src="/assets/img/black_video_play.jpg"/>`
 	}
     // hide the drop zone
-    dropzoneWrapper.hidden = true;
+    primaryDropzone.hidden = true;
     publishForm.hidden = false;
 	// set the name input value to the image name if none is set yet
 	if (nameInput.value === "") {

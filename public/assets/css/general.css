@@ -346,11 +346,11 @@ table {
 	border: 2px dashed #1e90ff;
 }
 
-#publish-dropzone-wrapper, #publish-form-wrapper {
+#primary-dropzone-wrapper, #publish-form-wrapper {
 	height: 100%;
 }
 
-#publish-dropzone {
+#primary-dropzone {
 	height: calc(100% - 4px);
 	position: relative;
 }
@@ -359,7 +359,7 @@ table {
 	position: relative;
 }
 
-#publish-dropzone-instructions, #preview-dropzone-instructions {
+#primary-dropzone-instructions, #preview-dropzone-instructions {
 	position: absolute;
 	top: 40%;
 	left: 50%;
