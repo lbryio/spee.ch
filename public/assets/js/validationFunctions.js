@@ -131,7 +131,7 @@ function checkAvailability(name, successDisplayElement, errorDisplayElement, val
 function checkClaimName(name){
 	const successDisplayElement = document.getElementById('input-success-claim-name');
 	const errorDisplayElement = document.getElementById('input-error-claim-name');
-	checkAvailability(name, successDisplayElement, errorDisplayElement, validateClaimName, isNameAvailable, 'Sorry, that url ending has been taken by another user', '/api/isClaimAvailable/');
+	checkAvailability(name, successDisplayElement, errorDisplayElement, validateClaimName, isNameAvailable, 'Sorry, that url ending has been taken', '/api/isClaimAvailable/');
 }
 
 function checkChannelName(name){
@@ -162,7 +162,7 @@ function validateFilePublishSubmission(stagedFiles, claimName, channelName){
         }
 		// 3. validate that a channel was chosen
 		if (channelName === 'new' || channelName === 'login') {
-			reject(new ChannelNameError("Please select a valid channel"));
+			reject(new ChannelNameError("Please log in to a channel"));
             return;
         };
 		// 4. validate the claim name
@@ -172,7 +172,7 @@ function validateFilePublishSubmission(stagedFiles, claimName, channelName){
 			reject(error);
             return;
 		}
-		// if all validation passes, check availability of the name
+		// if all validation passes, check availability of the name (note: do we need to re-validate channel name vs. credentials as well?)
 		return isNameAvailable(claimName, '/api/isClaimAvailable/')
 			.then(result => {
 				if (result) {
@@ -188,7 +188,8 @@ function validateFilePublishSubmission(stagedFiles, claimName, channelName){
 }
 
 // validation function which checks all aspects of a new channel submission
-function validateNewChannelSubmission(channelName, password){
+function validateNewChannelSubmission(userName, password){
+    const channelName = `@${userName}`;
     return new Promise(function (resolve, reject) {
     	// 1. validate name
         try {
@@ -204,12 +205,17 @@ function validateNewChannelSubmission(channelName, password){
         }
         // 3. if all validation passes, check availability of the name
         isNameAvailable(channelName, '/api/isChannelAvailable/')  // validate the availability
-            .then(() => {
-                console.log('channel is available');
-                resolve();
+            .then(result => {
+                if (result) {
+                    console.log('channel is available');
+                    resolve();
+                } else {
+                    console.log('channel is not avaliable');
+                    reject(new ChannelNameError('that channel name has already been taken'));
+                }
             })
             .catch( error => {
-                console.log('error: channel is not avaliable');
+                console.log('error evaluating channel name availability', error);
                 reject(error);
             });
     });

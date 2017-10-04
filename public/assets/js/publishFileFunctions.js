@@ -50,14 +50,28 @@ function previewAndStageFile(selectedFile){
 
 // Validate the publish submission and then trigger publishing.
 function publishStagedFile(event) {
+    // prevent default so this script can handle submission
+    event.preventDefault();
+    // declare variables
     const claimName = document.getElementById('claim-name-input').value;
-    const channelName = document.getElementById('channel-name-select').value;
+    let channelName = document.getElementById('channel-name-select').value;
     const fileSelectionError = document.getElementById('input-error-file-selection');
     const claimNameError = document.getElementById('input-error-claim-name');
     const channelSelectError = document.getElementById('input-error-channel-select');
     const publishSubmitError = document.getElementById('input-error-publish-submit');
-    // prevent default so this script can handle submission
-    event.preventDefault();
+    let anonymousOrInChannel;
+    // replace channelName with 'anonymous' if needed
+    const radios = document.getElementsByName('anonymous-or-channel');
+    for (let i = 0; i < radios.length; i++) {
+        if (radios[i].checked) {
+            // do whatever you want with the checked radio
+            anonymousOrInChannel = radios[i].value;
+            // only one radio can be logically checked, don't check the rest
+            break;
+        }
+    }
+    if (anonymousOrInChannel === 'anonymous') {channelName = 'anonymous'};
+    console.log('channel name:', channelName);
 	// validate, submit, and handle response
 	validateFilePublishSubmission(stagedFiles, claimName, channelName)
 		.then(() => {

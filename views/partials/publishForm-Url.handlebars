@@ -5,8 +5,11 @@
     </div><div class="column column--6 column--sml-10">
         <div id="input-error-claim-name" class="info-message info-message--failure"  hidden="true"></div>
         <div class="input-text--primary">
-            <span class="url-text">Spee.ch/</span><span id="url-channel" class="url-text">{{#if user}}{{user.channelName}}:{{user.shortChannelId}}/{{/if}}</span><input type="text" id="claim-name-input" class="input-text" placeholder="your-url-here" oninput="checkClaimName(event.target.value)">
-            <span id="input-success-claim-name" class="info-message info-message--success"></span>
+            {{#if user}}
+                <span class="url-text">Spee.ch/</span><span id="url-channel" class="url-text url-text--primary">{{user.channelName}}:{{user.shortChannelId}}</span>/<input type="text" id="claim-name-input" class="input-text" placeholder="your-url-here" oninput="checkClaimName(event.target.value)"><span id="input-success-claim-name" class="info-message info-message--success"></span>
+            {{else}}
+                <span class="url-text">Spee.ch/</span><span id="url-channel" class="url-text url-text--secondary">xyz</span>/<input type="text" id="claim-name-input" class="input-text" placeholder="your-url-here" oninput="checkClaimName(event.target.value)"><span id="input-success-claim-name" class="info-message info-message--success"></span>
+            {{/if}}
         </div>
     </div>
 

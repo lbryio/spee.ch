@@ -39,7 +39,7 @@
 
 <script type="text/javascript">
  function publishNewChannel (event) {
-     const channelName = document.getElementById('new-channel-name').value;
+     const userName = document.getElementById('new-channel-name').value;
      const password = document.getElementById('new-channel-password').value;
      const channelNameErrorDisplayElement = document.getElementById('input-error-channel-name');
      const passwordErrorDisplayElement = document.getElementById('input-error-channel-password');
@@ -50,13 +50,13 @@
      // prevent default so this script can handle submission
      event.preventDefault();
      // validate submission
-     validateNewChannelSubmission(channelName, password)
+     validateNewChannelSubmission(userName, password)
          .then(() => {
              console.log('in progress');
              chanelCreateForm.hidden = true;
              inProgress.hidden = false;
              createProgressBar(document.getElementById('create-channel-progress-bar'), 12);
-             return sendAuthRequest(channelName, password, '/signup') // post the request
+             return sendAuthRequest(userName, password, '/signup') // post the request
          })
          .then(() => {
              console.log('success');
