@@ -52,4 +52,16 @@
 	.column--sml-10 {
 		width: 100%;
 	}
+
+	#publish-active-area > .row, #details-detail > .row, #channel-login-form > .row, #publish-channel-form > .row {
+		padding: 1em 0px 1em 0px;
+	}
+}
+
+@media (max-width: 350px) {
+
+	body, button, input, textarea, label, select, option {
+		font-size: medium;
+	}
+
 }

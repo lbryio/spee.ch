@@ -37,11 +37,11 @@ a, a:visited {
 /* HEADERS */
 
 h1 {
-	font-size: xx-large;
+	font-size: 2rem;
 }
 
 h2 {
-	font-size: x-large;
+	font-size: 1.5rem;
 }
 
 .h2--secondary {
@@ -54,7 +54,7 @@ h2 {
 }
 
 h3 {
-	font-size: large;
+	font-size: 1rem;
 	font-weight: normal;
 }
 
@@ -231,7 +231,7 @@ option {
 }
 
 .input-text--large, .select--large, .textarea--large {
-	font-size: 2rem;
+	font-size: 1.5rem;
 	border-left: 1px solid dodgerblue;
 }
 
