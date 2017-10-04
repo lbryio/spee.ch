@@ -2,10 +2,10 @@
 <div class="row">
     <div class="column column--10">
         <form>
-            <label class="label" for="anonymous-select">Anonymous:</label>
             <input type="radio" name="anonymous-or-channel" id="anonymous-select" class="" value="anonymous" {{#unless user}}checked {{/unless}} onchange="toggleChannel(event.target.value)"/>
-            <label class="label" for="in-a-channel-select">In a channel:</label>
+            <label class="label" for="anonymous-select">Anonymous</label>
             <input type="radio" name="anonymous-or-channel" id="in-a-channel-select" class="" value="in a channel" {{#if user}}checked {{/if}} onchange="toggleChannel(event.target.value)"/>
+            <label class="label" for="in-a-channel-select">In a channel</label>
         </form>
     </div>
 </div>
@@ -40,7 +40,7 @@
 <script type="text/javascript">
     function updateUrl (selectedOption) {
         const urlChannel = document.getElementById('url-channel');
-        if (selectedOption === 'new' || selectedOption === 'login'){
+        if (selectedOption === 'new' || selectedOption === 'login' || selectedOption === ''){
             // update URL
             urlChannel.innerText = '@channelName';
             //toolTipText.innerText = 'will be replaced by your channel and id';
@@ -63,24 +63,28 @@
         if (selectedOption === 'anonymous') {
             channelSelectOptions.hidden = true;
             channelSelectOptions.hidden = true;
+            // update url
+            updateUrl(selectedOption);
         } else if (selectedOption === 'in a channel') {
             channelSelectOptions.hidden = false;
+            // update url
+            const selectedChannel = document.getElementById('channel-name-select').selectedOptions[0].value
+            toggleChannelSelect(selectedChannel);
         } else {
             console.log('selected option was not recognized');
         }
-        // update url
-        updateUrl(selectedOption);
+
     }
     // show or hide the channel create/login tool
-    function toggleChannelSelect (selectedOption) {
+    function toggleChannelSelect (selectedChannel) {
          const createChannelTool = document.getElementById('channel-create-details');
          const loginToChannelTool = document.getElementById('channel-login-details');
-         console.log('toggleChannelSelect event triggered', selectedOption);
+         console.log('toggleChannelSelect event triggered', selectedChannel);
          // show/hide the login and new channel forms
-         if (selectedOption === 'new') {
+         if (selectedChannel === 'new') {
              createChannelTool.hidden = false;
              loginToChannelTool.hidden = true;
-         } else if (selectedOption === 'login') {
+         } else if (selectedChannel === 'login') {
              loginToChannelTool.hidden = false;
              createChannelTool.hidden = true;
          } else {
@@ -90,6 +94,6 @@
              hideError(document.getElementById('input-error-channel-select'));
          }
         // update url
-        updateUrl(selectedOption);
+        updateUrl(selectedChannel);
     }
 </script>
