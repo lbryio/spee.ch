@@ -40,7 +40,7 @@ module.exports = (app, siofu, hostedContentPath) => {
         NOTE: need to validate that client has the credentials to the channel they chose
         otherwise they could circumvent security client side.
          */
-        let channelName = file.meta.cannel;
+        let channelName = file.meta.channel;
         if (channelName === 'none') channelName = null;
         // prepare the publish parameters
         const publishParams = createPublishParams(file.pathName, file.meta.name, file.meta.title, file.meta.description, file.meta.license, file.meta.nsfw, channelName);
