@@ -7,24 +7,23 @@ module.exports = {
   publish (publishParams, fileName, fileType) {
     return new Promise((resolve, reject) => {
       let publishResults = {};
-      // 1. make sure the name is available
-      publishHelpers.checkClaimNameAvailability(publishParams.name)
-      // 2. publish the file
-      .then(result => {
-        if (result === true) {
-          return lbryApi.publishClaim(publishParams);
-        } else {
-          return new Error('That name is already in use by spee.ch.');
-        }
-      })
-      // 3. upsert File record (update is in case the claim has been published before by this daemon)
+      // 1. publish the file
+      lbryApi.publishClaim(publishParams)
+      // 2. upsert File record (update is in case the claim has been published before by this daemon)
       .then(tx => {
         logger.info(`Successfully published ${fileName}`, tx);
         publishResults = tx;
         return db.Channel.findOne({where: {channelName: publishParams.channel_name}});
       })
       .then(user => {
-        if (user) { logger.debug('successfully found user in User table') } else { logger.error('user for publish not found in User table') };
+        let certificateId;
+        if (user) {
+          certificateId = user.channelClaimId;
+          logger.debug('successfully found user in User table');
+        } else {
+          certificateId = null;
+          logger.debug('user for publish not found in User table');
+        };
         const fileRecord = {
           name       : publishParams.name,
           claimId    : publishResults.claim_id,
@@ -39,17 +38,17 @@ module.exports = {
           nsfw       : publishParams.metadata.nsfw,
         };
         const claimRecord = {
-          name         : publishParams.name,
-          claimId      : publishResults.claim_id,
-          title        : publishParams.metadata.title,
-          description  : publishParams.metadata.description,
-          address      : publishParams.claim_address,
-          outpoint     : `${publishResults.txid}:${publishResults.nout}`,
-          height       : 0,
-          contentType  : fileType,
-          nsfw         : publishParams.metadata.nsfw,
-          certificateId: user.channelClaimId,
-          amount       : publishParams.bid,
+          name       : publishParams.name,
+          claimId    : publishResults.claim_id,
+          title      : publishParams.metadata.title,
+          description: publishParams.metadata.description,
+          address    : publishParams.claim_address,
+          outpoint   : `${publishResults.txid}:${publishResults.nout}`,
+          height     : 0,
+          contentType: fileType,
+          nsfw       : publishParams.metadata.nsfw,
+          certificateId,
+          amount     : publishParams.bid,
         };
         const upsertCriteria = {
           name   : publishParams.name,

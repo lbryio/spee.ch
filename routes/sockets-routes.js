@@ -1,6 +1,6 @@
 const logger = require('winston');
-const publishController = require('../controllers/publishController.js');
-const publishHelpers = require('../helpers/publishHelpers.js');
+const { publish } = require('../controllers/publishController.js');
+const { createPublishParams } = require('../helpers/publishHelpers.js');
 const errorHandlers = require('../helpers/errorHandlers.js');
 const { postToStats } = require('../controllers/statsController.js');
 
@@ -40,12 +40,13 @@ module.exports = (app, siofu, hostedContentPath) => {
         NOTE: need to validate that client has the credentials to the channel they chose
         otherwise they could circumvent security client side.
          */
-
+        let channelName = file.meta.cannel;
+        if (channelName === 'none') channelName = null;
         // prepare the publish parameters
-        const publishParams = publishHelpers.createPublishParams(file.meta.name, file.pathName, file.meta.title, file.meta.description, file.meta.license, file.meta.nsfw, file.meta.channel);
+        const publishParams = createPublishParams(file.pathName, file.meta.name, file.meta.title, file.meta.description, file.meta.license, file.meta.nsfw, channelName);
         logger.debug(publishParams);
         // publish the file
-        publishController.publish(publishParams, file.name, file.meta.type)
+        publish(publishParams, file.name, file.meta.type)
         .then(result => {
           postToStats('PUBLISH', '/', null, null, null, 'success');
           socket.emit('publish-complete', { name: publishParams.name, result });
