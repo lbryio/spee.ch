@@ -6,10 +6,10 @@ function getRequest (url) {
         xhttp.responseType = 'json';
         xhttp.onreadystatechange = () => {
             if (xhttp.readyState == 4 ) {
-                console.log(xhttp);
                 if ( xhttp.status == 200) {
-                    console.log('response:', xhttp.response);
                     resolve(xhttp.response);
+                } else if (xhttp.status == 401) {
+                    reject('wrong username or password');
                 } else {
                     reject('request failed with status:' + xhttp.status);
                 };
@@ -28,10 +28,10 @@ function postRequest (url, params) {
         xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         xhttp.onreadystatechange = () => {
             if (xhttp.readyState == 4 ) {
-                console.log(xhttp);
                 if ( xhttp.status == 200) {
-                    console.log('response:', xhttp.response);
                     resolve(xhttp.response);
+                } else if (xhttp.status == 401) {
+                    reject('wrong username or password');
                 } else {
                     reject('request failed with status:' + xhttp.status);
                 };

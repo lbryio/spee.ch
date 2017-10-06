@@ -1,76 +1,92 @@
-<div class="panel">
-	<h2>Title</h2>
-	<p>{{fileInfo.title}}</>
+<h2 class="h2--top">Title</h2>
+<div class="row row--short">
+    {{fileInfo.title}}
 </div>
-<div class="panel links">
-	<h2>Links</h2>
-	{{!--short direct link to asset--}}
-	<div class="share-option">
-		<a href="/{{fileInfo.shortId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}">Permanent Short Link</a> (most convenient)
-		<div class="input-error" id="input-error-copy-short-link" hidden="true"></div>
-		<br/>
-		<input type="text" id="short-link" class="link" readonly spellcheck="false" value="https://spee.ch/{{fileInfo.shortId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}" onclick="select()"/>
-		<button class="copy-button" data-elementtocopy="short-link" onclick="copyToClipboard(event)">copy</button>
-	</div>
-	{{!-- link to show route for asset--}}
-	<div class="share-option">
-		<a href="/{{fileInfo.claimId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}">Permanent Long Link</a> (fastest service)
-		<div class="input-error" id="input-error-copy-long-link" hidden="true"></div>
-		</br>
-		<input type="text" id="long-link" class="link" readonly onclick="select()" spellcheck="false" value="https://spee.ch/{{fileInfo.claimId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}"/>
-		<button class="copy-button" data-elementtocopy="long-link" onclick="copyToClipboard(event)">copy</button>
-	</div>
-	{{!-- html text for embedding asset--}}
-	<div class="share-option">
-		Embed HTML
-		<div class="input-error" id="input-error-copy-embed-text" hidden="true"></div>
-		<br/>
-		{{#ifConditional fileInfo.fileType '===' 'video/mp4'}}
-			<input type="text" id="embed-text" class="link" readonly onclick="select()" spellcheck="false" value='&lt;video width="100%" controls src="https://spee.ch/{{fileInfo.claimId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}"/>&lt;/video>'/>
-		{{else}}
-			<input type="text" id="embed-text" class="link" readonly onclick="select()" spellcheck="false" value='&lt;img src="https://spee.ch/{{fileInfo.claimId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}" />'/>
-		{{/ifConditional}}
-		<button class="copy-button" data-elementtocopy="embed-text" onclick="copyToClipboard(event)">copy</button>
-	</div>
-	{{!--markdown text using asset--}}
-	{{#ifConditional fileInfo.fileType '===' 'video/mp4'}}
-	{{else}}
-	<div class="share-option">
-		Markdown
-		<div class="input-error" id="input-error-copy-markdown-text" hidden="true"></div>
-		<br/>
-		<input type="text" id="markdown-text" class="link" readonly onclick="select()" spellcheck="false" value='![{{fileInfo.name}}](https://spee.ch/{{fileInfo.claimId}}/{{fileInfo.name}}.{{fileInfo.fileExt}})'/>
-		<button class="copy-button" data-elementtocopy="markdown-text" onclick="copyToClipboard(event)">copy</button>
-	</div>
-	{{/ifConditional}}
+	<h2>Share via Social Media</h2>
+  <div class="row row--short">
+	<a class="twitter-share button" target="_blank" href="https://twitter.com/intent/tweet?text=https://spee.ch/{{fileInfo.shortId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}">
+		<img src="https://i.imgur.com/Vt1XU5f.png" />
+	</a>
+	<a class="fb-share button" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fspee.ch%2F{{fileInfo.shortId}}%2F{{fileInfo.name}}.{{fileInfo.fileExt}}&amp;src=sdkpreparse">
+		<img src="https://i.imgur.com/SpOUrdt.png" />
+	</a>
+	<a class="tumblr-share button" target="_blank" href="https://www.tumblr.com/widgets/share/tool?posttype=photo&title=Spee.ch%20%7C%20Share&caption=Shared%20From%20https://spee.ch%20A%20Decentralized%20Image%20Hosting%20Service%20Running%20On%20The%20LBRY%20Protocol%20&content=https://spee.ch/{{fileInfo.shortId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}&tags=lbry%2C%20spee.ch%2C%20lbry.io&canonicalUrl=https%3A%2F%2Fspee.ch%2F{{fileInfo.shortId}}%2F{{fileInfo.name}}.{{fileInfo.fileExt}}&shareSource=tumblr_share_button">
+		<img src="https://i.imgur.com/0g1xcRd.png" />
+	</a>
+	<a class="reddit-share button" target="_blank" href="https://www.reddit.com/submit?url=http%3A%2F%2Fspee.ch%2F{{fileInfo.shortId}}%2F{{fileInfo.name}}.{{fileInfo.fileExt}}&title={{fileInfo.name}}(Decentralized%20Hosting%20Provided%20By%20Spee.ch%20Using%20the%20LBRY%20Protocol)">
+		<img src="https://i.imgur.com/I57laEJ.png" />
+	</a>
 </div>
-<div class="panel">
-    <h2>Description</h2>
-    <p>{{fileInfo.description}}</p>
+<h2>Links</h2>
+{{!-- short direct link to asset --}}
+<div class="row row--short">
+    <div class="column column--7">
+        <p><a href="/{{fileInfo.shortId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}">Short Link</a></p>
+        <div class="input-error" id="input-error-copy-short-link" hidden="true"></div>
+        <br/>
+        <input type="text" id="short-link" class="input-disabled input-text--full-width" readonly spellcheck="false" value="https://spee.ch/{{fileInfo.shortId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}" onclick="select()"/>
+    </div><div class="column column--1"></div><div class="column column--2">
+        <button class="button--primary" data-elementtocopy="short-link" onclick="copyToClipboard(event)">copy</button>
+    </div>
 </div>
-<div class="panel">
-	<h2>Metadata</h2>
-	<table class="metadata-table" style="table-layout: fixed">
-		<tr class="metadata-row">
-			<td class="left-column">Name</td>
-			<td>{{fileInfo.name}}</td>
-		</tr>
-		<tr class="metadata-row">
-			<td class="left-column">Claim Id</td>
-			<td>{{fileInfo.claimId}}</td>
-		</tr>
-		<tr class="metadata-row">
-			<td class="left-column">File Name</td>
-			<td>{{fileInfo.fileName}}</td>
-		</tr>
-		<tr>
-			<td class="left-column">File Type</td>
-			<td>{{#if fileInfo.fileType}}
-					{{fileInfo.fileType}}
-				{{else}}
-					unknown
-				{{/if}}
-			</td>
-		</tr>
-	</table>
+{{!-- html text for embedding asset--}}
+<div class="row row--short">
+    <div class="column column--7">
+        <p>Embed HTML</p>
+        <div class="input-error" id="input-error-copy-embed-text" hidden="true"></div>
+        <br/>
+        {{#ifConditional fileInfo.fileType '===' 'video/mp4'}}
+            <input type="text" id="embed-text" class="input-disabled input-text--full-width" readonly onclick="select()" spellcheck="false" value='&lt;video width="100%" controls src="https://spee.ch/{{fileInfo.claimId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}"/>&lt;/video>'/>
+        {{else}}
+            <input type="text" id="embed-text" class="input-disabled input-text--full-width" readonly onclick="select()" spellcheck="false" value='&lt;img src="https://spee.ch/{{fileInfo.claimId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}"/>'/>
+        {{/ifConditional}}
+    </div><div class="column column--1"></div><div class="column column--2">
+        <button class="button--primary" data-elementtocopy="embed-text" onclick="copyToClipboard(event)">copy</button>
+    </div>
 </div>
+
+<h2>Description</h2>
+<div class="row row--short">
+    {{fileInfo.description}}
+</div>
+
+<h2>Metadata</h2>
+<div class="row row--short">
+    <table class="metadata-table" style="table-layout: fixed">
+        <tr class="metadata-row">
+            <td class="left-column">Name</td>
+            <td>{{fileInfo.name}}</td>
+        </tr>
+        <tr class="metadata-row">
+            <td class="left-column">Claim Id</td>
+            <td class="wrap-words">{{fileInfo.claimId}}</td>
+        </tr>
+        <tr class="metadata-row">
+            <td class="left-column">File Name</td>
+            <td>{{fileInfo.fileName}}</td>
+        </tr>
+        <tr>
+            <td class="left-column">File Type</td>
+            <td>{{#if fileInfo.fileType}}
+                    {{fileInfo.fileType}}
+                {{else}}
+                    unknown
+                {{/if}}
+            </td>
+        </tr>
+    </table>
+</div>
+
+<script type ="text/javascript">
+    function copyToClipboard(event){
+        var elementToCopy = event.target.dataset.elementtocopy;
+        var element = document.getElementById(elementToCopy);
+        var errorElement = 'input-error-copy-text' + elementToCopy;
+        element.select();
+        try {
+            document.execCommand('copy');
+        } catch (err) {
+            showError(errorElement, 'Oops, unable to copy');
+        }
+    }
+</script>

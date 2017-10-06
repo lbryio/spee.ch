@@ -3,9 +3,11 @@
 // validation function which checks the proposed file's type, size, and name
 function validateFile(file) {
 	if (!file) {
+		console.log('no file found');
 		throw new Error('no file provided');
 	}
 	if (/'/.test(file.name)) {
+		console.log('file name had apostrophe in it');
 		throw new Error('apostrophes are not allowed in the file name');
 	}
 	// validate size and type
@@ -13,17 +15,25 @@ function validateFile(file) {
 		case 'image/jpeg':
 		case 'image/jpg':
 		case 'image/png':
+            if (file.size > 10000000){
+                console.log('file was too big');
+                throw new Error('Sorry, images are limited to 10 megabytes.');
+            }
+            break;
 		case 'image/gif':
 			if (file.size > 50000000){
-				throw new Error('Sorry, images are limited to 50 megabytes.');
+				console.log('file was too big');
+				throw new Error('Sorry, .gifs are limited to 50 megabytes.');
 			}
 			break;
 		case 'video/mp4':
 			if (file.size > 50000000){
+                console.log('file was too big');
 				throw new Error('Sorry, videos are limited to 50 megabytes.');
 			}
 			break;
 		default:
+            console.log('file type is not supported');
 			throw new Error(file.type + ' is not a supported file type. Only, .jpeg, .png, .gif, and .mp4 files are currently supported.')
 	}
 }
@@ -121,45 +131,55 @@ function checkAvailability(name, successDisplayElement, errorDisplayElement, val
 function checkClaimName(name){
 	const successDisplayElement = document.getElementById('input-success-claim-name');
 	const errorDisplayElement = document.getElementById('input-error-claim-name');
-	checkAvailability(name, successDisplayElement, errorDisplayElement, validateClaimName, isNameAvailable, 'Sorry, that url ending has been taken by another user', '/api/isClaimAvailable/');
+	checkAvailability(name, successDisplayElement, errorDisplayElement, validateClaimName, isNameAvailable, 'Sorry, that url ending has been taken', '/api/isClaimAvailable/');
 }
 
 function checkChannelName(name){
     const successDisplayElement = document.getElementById('input-success-channel-name');
     const errorDisplayElement = document.getElementById('input-error-channel-name');
     name = `@${name}`;
-    checkAvailability(name, successDisplayElement, errorDisplayElement, validateChannelName, isNameAvailable, 'Sorry, that Channel has been taken by another user', '/api/isChannelAvailable/');
+    checkAvailability(name, successDisplayElement, errorDisplayElement, validateChannelName, isNameAvailable, 'Sorry, that Channel name has been taken by another user', '/api/isChannelAvailable/');
 }
 
 // validation function which checks all aspects of the publish submission
 function validateFilePublishSubmission(stagedFiles, claimName, channelName){
+	console.log(`validating publish submission > name: ${claimName} channel: ${channelName} file:`, stagedFiles);
 	return new Promise(function (resolve, reject) {
-		// 1. make sure only 1 file was selected
+		// 1. make sure 1 file was staged
 		if (!stagedFiles) {
-			return reject(new FileError("Please select a file"));
+			reject(new FileError("Please select a file"));
+            return;
 		} else if (stagedFiles.length > 1) {
-			return reject(new FileError("Only one file is allowed at a time"));
-		}
+			reject(new FileError("Only one file is allowed at a time"));
+            return;
+        }
 		// 2. validate the file's name, type, and size
 		try {
 			validateFile(stagedFiles[0]);
 		} catch (error) {
-			return reject(error);
-		}
+			reject(error);
+            return;
+        }
 		// 3. validate that a channel was chosen
 		if (channelName === 'new' || channelName === 'login') {
-			return reject(new ChannelNameError("Please select a valid channel"));
+			reject(new ChannelNameError("Please log in to a channel"));
+            return;
         };
 		// 4. validate the claim name
 		try {
 			validateClaimName(claimName);
 		} catch (error) {
-			return reject(error);
+			reject(error);
+            return;
 		}
-		// if all validation passes, check availability of the name
-		isNameAvailable(claimName, '/api/isClaimAvailable/')
-			.then(() => {
-				resolve();
+		// if all validation passes, check availability of the name (note: do we need to re-validate channel name vs. credentials as well?)
+		return isNameAvailable(claimName, '/api/isClaimAvailable/')
+			.then(result => {
+				if (result) {
+					resolve();
+				} else {
+					reject(new NameError('that url ending is already taken'));
+				}
 			})
 			.catch(error => {
 				reject(error);
@@ -167,8 +187,9 @@ function validateFilePublishSubmission(stagedFiles, claimName, channelName){
 	});
 }
 
-// validation function which checks all aspects of the publish submission
-function validateNewChannelSubmission(channelName, password){
+// validation function which checks all aspects of a new channel submission
+function validateNewChannelSubmission(userName, password){
+    const channelName = `@${userName}`;
     return new Promise(function (resolve, reject) {
     	// 1. validate name
         try {
@@ -184,12 +205,17 @@ function validateNewChannelSubmission(channelName, password){
         }
         // 3. if all validation passes, check availability of the name
         isNameAvailable(channelName, '/api/isChannelAvailable/')  // validate the availability
-            .then(() => {
-                console.log('channel is avaliable');
-                resolve();
+            .then(result => {
+                if (result) {
+                    console.log('channel is available');
+                    resolve();
+                } else {
+                    console.log('channel is not avaliable');
+                    reject(new ChannelNameError('that channel name has already been taken'));
+                }
             })
             .catch( error => {
-                console.log('error: channel is not avaliable');
+                console.log('error evaluating channel name availability', error);
                 reject(error);
             });
     });

@@ -1,28 +1,28 @@
 
 <form id="channel-login-form">
-
-    <div class="column column--3">
-        <label class="label" for="login-channel-name">Name:</label>
-    </div>
-    <div class="column column--9">
-        <div id="login-error-display-element" class="info-message info-message--failure"></div>
-        <div class="input-text--primary">
-            <span>@</span>
-            <input type="text" name="login-channel-name" id="login-channel-name" class="input-text" placeholder="" value="">
+    <div class="row row--wide">
+        <div class="column column--3 column--sml-10">
+            <label class="label" for="login-channel-name">Name:</label>
+        </div><div class="column column--6 column--sml-10">
+            <div id="login-error-display-element" class="info-message info-message--failure"></div>
+            <div class="input-text--primary">
+                <span>@</span>
+                <input type="text" name="login-channel-name" id="login-channel-name" class="input-text" placeholder="" value="">
+            </div>
         </div>
     </div>
-
-    <div class="column column--3">
-        <label class="label" for="login-channel-password" >Password:</label>
+    <div class="row row--wide">
+        <div class="column column--3 column--sml-10">
+            <label class="label" for="login-channel-password" >Password:</label>
+        </div><div class="column column--6 column--sml-10">
+            <input type="password" name="login-channel-password" id="login-channel-password" class="input-text input-text--primary" placeholder="" value="">
+        </div>
     </div>
-    <div class="column column--9">
-        <input type="password" name="login-channel-password" id="login-channel-password" class="input-text input-text--primary" placeholder="" value="">
+    <div class="row row--wide">
+        <button class="button--primary" onclick="loginToChannel(event)">Login</button>
     </div>
-
 </form>
-<div class="row row--wide">
-    <button onclick="loginToChannel(event)">Login</button>
-</div>
+
 
 <script type="text/javascript">
  function loginToChannel (event) {

@@ -1,20 +1,23 @@
-<div class="row top-bar">
-	<a href="https://en.wikipedia.org/wiki/Freedom_of_information" target="_blank"><img id="logo" src="/assets/img/content-freedom-64px.png"/></a>
-	<h1 id="title"><a href="/">Spee.ch</a></h1><span class="top-bar-left">(beta)</span>
-	<a href="/popular" class="top-bar-right">popular</a>
-	<a href="https://github.com/lbryio/spee.ch" target="_blank" class="top-bar-right">source</a>
-	<a href="/about" class="top-bar-right">help</a>
+<div class="row-wide nav-bar">
+    <div class="nav-bar-title-section">
+        <a href="/"><span class="nav-bar-title">spee&lt;h</span></a><span class="nav-bar-title nav-bar-title--superscript">(beta)</span>
+        <div class="nav-bar-link-section">
+            <a class="nav-bar-link" href="/">Upload</a>
+            <a class="nav-bar-link" href="/popular">Popular</a>
+            <a class="nav-bar-link" href="/about">About</a>
+            {{#if user}}
+                <select type="text" class="select select--no-arrow nav-bar-link" onchange="toggleLogin(event)">
+                    <option value="{{user.channelName}}:{{user.channelClaimId}}">@{{user.userName}}</option>
+                    <option value="view">View</option>
+                    <option value="logout">Logout</option>
+                </select>
+            {{else}}
+                <a class="nav-bar-link" href="/login">Login</a>
+            {{/if}}
+        </div>
+    </div>
 
-    {{#if user}}
-        <select type="text" class="select" onchange="toggleLogin(event)">
-            <option value="none">@{{user.userName}}</option>
-            <option value="view">view</option>
-            <option value="logout">logout</option>
-        </select>
-    {{else}}
-        <a href="/login" class="top-bar-right">login</a>
-    {{/if}}
-	<div class="top-bar-tagline">Open-source, decentralized image and video hosting.</div>
+
 </div>
 
 <script type="text/javascript">
@@ -27,6 +30,16 @@
         } else if (selectedOption === 'view') {
             console.log('view channel');
             window.location.href = '/{{user.channelName}}:{{user.channelClaimId}}';
+        }
+    }
+    // highlight the link for the current page
+    const navBarLinks = document.getElementsByClassName('nav-bar-link');
+    for (let i = 0; i < navBarLinks.length; i++){
+        const link = navBarLinks[i];
+        if (link.href == window.location.href) {
+            link.setAttribute('class', 'nav-bar-link nav-bar-link--active');
+        } else if (`/${link.value}` === window.location.pathname) {
+            link.setAttribute('class', 'select select--no-arrow nav-bar-link nav-bar-link--active');
         }
     }
 </script>

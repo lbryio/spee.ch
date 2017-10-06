@@ -31,7 +31,7 @@ module.exports = (app) => {
     getTrendingClaims(dateTime)
       .then(result => {
         // logger.debug(result);
-        res.status(200).render('trending', {
+        res.status(200).render('popular', {
           trendingAssets: result,
         });
       })
