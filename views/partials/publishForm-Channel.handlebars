@@ -38,23 +38,6 @@
 
 <script src="/assets/js/authFunctions.js"></script>
 <script type="text/javascript">
-    function updateUrl (selectedOption) {
-        const urlChannel = document.getElementById('url-channel');
-        if (selectedOption === 'new' || selectedOption === 'login' || selectedOption === ''){
-            // update URL
-            urlChannel.innerText = '@channelName';
-            //toolTipText.innerText = 'will be replaced by your channel and id';
-            urlChannel.setAttribute('class', 'url-text url-text--secondary')
-        } else if (selectedOption === 'anonymous'){
-            urlChannel.innerText = 'xyz';
-            //toolTipText.innerText = 'will be replaced by a random id';
-            urlChannel.setAttribute('class', 'url-text url-text--secondary')
-        } else {
-            urlChannel.innerText = `{{user.channelName}}:{{user.shortChannelId}}`;
-            //toolTipText.innerText = '';
-            urlChannel.setAttribute('class', 'url-text url-text--primary')
-        }
-    }
     // show or hide the channel selection tools
     function toggleChannel (selectedOption) {
         const channelSelectOptions = document.getElementById('channel-select-options');
@@ -95,5 +78,24 @@
          }
         // update url
         updateUrl(selectedChannel);
+    }
+    function updateUrl (selectedOption) {
+        const urlChannel = document.getElementById('url-channel');
+        const urlNoChannelPlaceholder = document.getElementById('url-no-channel-placeholder');
+        const urlChannelPlaceholder = document.getElementById('url-channel-placeholder');
+        if (selectedOption === 'new' || selectedOption === 'login' || selectedOption === ''){
+            urlChannel.hidden = true;
+            urlNoChannelPlaceholder.hidden = true;
+            urlChannelPlaceholder.hidden = false;
+        } else if (selectedOption === 'anonymous'){
+            urlChannel.hidden = true;
+            urlNoChannelPlaceholder.hidden = false;
+            urlChannelPlaceholder.hidden = true;
+        } else {
+            urlChannel.hidden = false;
+            urlChannel.innerText = `{{user.channelName}}:{{user.shortChannelId}}`;
+            urlNoChannelPlaceholder.hidden = true;
+            urlChannelPlaceholder.hidden = true;
+        }
     }
 </script>
