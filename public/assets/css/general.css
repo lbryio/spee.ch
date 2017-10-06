@@ -233,8 +233,9 @@ option {
 }
 
 
-.input-checkbox, .input-textarea {
+.input-checkbox {
 	border: 1px solid grey;
+	background: white;
 }
 
 .input-file {
@@ -271,7 +272,7 @@ option {
 }
 
 .input-text--primary:focus, .select--primary:focus, .textarea--primary:focus {
-	border-bottom: 1px solid grey;
+	border-bottom: 1px solid dodgerblue;
 }
 
 .input-text--large, .select--large, .textarea--large {
@@ -280,7 +281,7 @@ option {
 }
 
 .input-text--large:focus, .select--large:focus, .textarea--large:focus {
-	border-left: 1px solid grey;
+	border-left: 1px solid dodgerblue;
 }
 
 .input-text--full-width, .textarea--full-width {
