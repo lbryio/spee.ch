@@ -80,6 +80,31 @@ function createProgressBar(element, size){
 	setInterval(addOne, 300);
 }
 
+function getCookie(cname) {
+    const name = cname + "=";
+    const decodedCookie = decodeURIComponent(document.cookie);
+    const ca = decodedCookie.split(';');
+    for(let i = 0; i <ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
+
+function checkCookie() {
+    const channelName = getCookie("channel_name");
+    if (channelName != "") {
+        console.log(`cookie found for ${channelName}`);
+    } else {
+        console.log('no channel_name cookie found');
+    }
+}
+
 // Create new error objects, that prototypically inherit from the Error constructor
 function FileError(message) {
   this.name = 'FileError';

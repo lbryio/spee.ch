@@ -61,6 +61,8 @@
 <script src="/assets/js/publishFileFunctions.js"></script>
 <script typ="text/javascript">
 
+    checkCookie();
+
     var socket = io();
     var uploader = new SocketIOFileUpload(socket);
     var stagedFiles = null;
@@ -68,12 +70,10 @@
     /* drop zone functions */
 
     function showInstructions () {
-        console.log('showing instructions');
         document.getElementById('preview-dropzone-instructions').hidden = false;
         document.getElementById('asset-preview').style.opacity = 0.3;
     }
     function hideInstructions () {
-        console.log('hiding instructions');
         document.getElementById('preview-dropzone-instructions').hidden = true;
         document.getElementById('asset-preview').style.opacity = 1;
     }

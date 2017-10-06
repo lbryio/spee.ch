@@ -25,20 +25,41 @@
 
 
 <script type="text/javascript">
+
  function loginToChannel (event) {
-     const channelName = document.getElementById('login-channel-name').value;
+     const userName = document.getElementById('login-channel-name').value;
      const password = document.getElementById('login-channel-password').value;
      const loginErrorDisplayElement = document.getElementById('login-error-display-element');
      // prevent default
      event.preventDefault()
      // send request
-     sendAuthRequest(channelName, password, '/login')
-         .then(() => {
-             console.log('login success');
-             window.location.href = '/';
-             const channelLoginForm = document.getElementById('channel-login-form');
-
-
+     sendAuthRequest(userName, password, '/login')
+         // update session cookie with new channel name and ids
+         .then(result => {
+             console.log('login success', result);
+             // replace the current cookies
+             document.cookie = `channel_name=${result.channelName}`;
+             document.cookie = `channel_claim_id=${result.channelClaimId}`;
+             document.cookie = `short_channel_id=${result.shortChannelId}`;
+             return result;
+         })
+         // update channel selection
+         .then(result => {
+             const channelSelect = document.getElementById('channel-name-select');
+             // remove the old channel option
+             const oldChannel = document.getElementById('channel-option')
+             if (oldChannel){
+                 oldChannel.parentNode.removeChild(oldChannel);
+             }
+             // add new channel option & select it
+             const newChannelOption = document.createElement('option');
+             newChannelOption.setAttribute('value', result.channelName);
+             newChannelOption.setAttribute('id', 'channel-option');
+             newChannelOption.setAttribute('selected', '');
+             newChannelOption.innerText = result.channelName;
+             channelSelect.insertBefore(newChannelOption, channelSelect.firstChild);
+             // update selection
+             toggleSelectedChannel(result.channelName);
          })
          .catch(error => {
              showError(loginErrorDisplayElement, error);

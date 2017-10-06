@@ -25,7 +25,10 @@
         console.log(event);
         const selectedOption = event.target.selectedOptions[0].value;
         if (selectedOption === 'logout') {
-            console.log('login');
+            console.log('log out');
+            // remove session cookies
+
+            // send logout request to server
             window.location.href = '/logout';
         } else if (selectedOption === 'view') {
             console.log('view channel');

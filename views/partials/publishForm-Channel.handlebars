@@ -17,9 +17,9 @@
             <label class="label" for="channel-name-select">Channel:</label>
         </div><div class="column column--7 column--sml-10">
             <div id="input-error-channel-select" class="info-message info-message--failure"></div>
-            <select type="text" id="channel-name-select" class="select select--primary select--arrow" onchange="toggleChannelSelect(event.target.selectedOptions[0].value)">
+            <select type="text" id="channel-name-select" class="select select--primary select--arrow" onchange="toggleSelectedChannel(event.target.selectedOptions[0].value)">
             {{#if user}}
-                <option value="{{user.channelName}}" >{{user.channelName}}</option>
+                <option value="{{user.channelName}}" id="channel-option">{{user.channelName}}</option>
             {{/if}}
                 <option value="login">Existing</option>
                 <option value="new" >New</option>
@@ -51,18 +51,18 @@
         } else if (selectedOption === 'in a channel') {
             channelSelectOptions.hidden = false;
             // update url
-            const selectedChannel = document.getElementById('channel-name-select').selectedOptions[0].value
-            toggleChannelSelect(selectedChannel);
+            let selectedChannel = document.getElementById('channel-name-select').selectedOptions[0].value
+            toggleSelectedChannel(selectedChannel);
         } else {
             console.log('selected option was not recognized');
         }
 
     }
     // show or hide the channel create/login tool
-    function toggleChannelSelect (selectedChannel) {
+    function toggleSelectedChannel (selectedChannel) {
          const createChannelTool = document.getElementById('channel-create-details');
          const loginToChannelTool = document.getElementById('channel-login-details');
-         console.log('toggleChannelSelect event triggered', selectedChannel);
+         console.log('toggleSelectedChannel event triggered', selectedChannel);
          // show/hide the login and new channel forms
          if (selectedChannel === 'new') {
              createChannelTool.hidden = false;
@@ -93,7 +93,10 @@
             urlChannelPlaceholder.hidden = true;
         } else {
             urlChannel.hidden = false;
-            urlChannel.innerText = `{{user.channelName}}:{{user.shortChannelId}}`;
+            // show channel and short id
+            const selectedChannel = getCookie('channel_name');
+            const shortChannelId = getCookie('short_channel_id');
+            urlChannel.innerText = `${selectedChannel}:${shortChannelId}`;
             urlNoChannelPlaceholder.hidden = true;
             urlChannelPlaceholder.hidden = true;
         }
