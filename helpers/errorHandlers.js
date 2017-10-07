@@ -26,6 +26,23 @@ module.exports = {
       res.status(400).send(error);
     }
   },
+  handlePublishError (error) {
+    logger.error('Publish Error:', useObjectPropertiesIfNoKeys(error));
+    if (error.code === 'ECONNREFUSED') {
+      return 'Connection refused.  The daemon may not be running.';
+    } else if (error.response) {
+      if (error.response.data) {
+        if (error.response.data.message) {
+          return error.response.data.message;
+        } else if (error.response.data.error) {
+          return error.response.data.error.message;
+        }
+        return error.response.data;
+      }
+      return error.response;
+    } else {
+      return error;
+    }
   useObjectPropertiesIfNoKeys (err) {
     return useObjectPropertiesIfNoKeys(err);
   },

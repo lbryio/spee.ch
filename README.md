@@ -28,28 +28,24 @@ spee.ch is a single-serving site that reads and publishes images and videos to a
 
 #### GET
 * /api/resolve/:name
-	* a successfull request returns the resolve results for the claim at that name in JSON format
+	* example: `curl https://spee.ch/api/resolve/doitlive`
 * /api/claim_list/:name
-	* a successfull request returns a list of claims at that claim name in JSON format
-* /api/isClaimAvailable/:name
-	* a successfull request returns a boolean: `true` if the name is still available, `false` if the name has already been published to by spee.ch.
+	* example: `curl https://spee.ch/api/claim_list/doitlive`
+* /api/isClaimAvailable/:name (returns `true`/`false` for whether a name is available through spee.ch)
+	* example: `curl https://spee.ch/api/isClaimAvailable/doitlive`
 
 #### POST
 * /api/publish
-	* request parameters:
-		* body (form-data):
-			* name: string (optional)
-				* defaults to the file's name, sans extension
-				* names can only contain the following characters: `A-Z`, `a-z`, `_`, or `-`
-			* license: string (optional)
-				* defaults to "No License Provided"
-				* only "Public Domain" or "Creative Commons" licenses are allowed
-			* nsfw: string, number, or boolean (optional)
-				* defaults `true`
-				* nsfw can be a string ("on"/"off"), number (0 or 1), or boolean (`true`/`false`)
-		* files:
-			* the `files` object submitted must use "speech" or "null" as the key for the file's value object
-	* a successfull request will return the transaction details resulting from your published claim in JSON format
+  * example: `curl -X POST -F 'name=MyPictureName' -F 'nsfw=false' -F 'file=@/path/to/my/picture.jpeg' https://spee.ch/api/publish`
+  * Parameters:
+    * name (string)
+    * nsfw (boolean)
+    * file (.mp4, .jpeg, .jpg, .gif, or .png)
+    * license (string, optional)
+    * title (string, optional)
+    * description (string, optional)
+    * channelName(string, optional)
+    * channelPassword (string, optional)
 
 ## bugs
 If you find a bug or experience a problem, please report your issue here on github and find us in the lbry slack!

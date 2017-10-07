@@ -7,7 +7,7 @@ const { postToStats, sendGoogleAnalytics } = require('../controllers/statsContro
 const SERVE = 'SERVE';
 const SHOW = 'SHOW';
 const SHOWLITE = 'SHOWLITE';
-const DEFAULT_THUMBNAIL = 'https://spee.ch/assets/img/content-freedom-large.png';
+const DEFAULT_THUMBNAIL = 'https://spee.ch/assets/img/video_thumb_default.png';
 
 function checkForLocalAssetByClaimId (claimId, name) {
   return new Promise((resolve, reject) => {
