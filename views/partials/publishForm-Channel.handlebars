@@ -1,66 +1,104 @@
+<!-- select whether to publish anonymously or in a channel -->
 <div class="row">
-    <div class="column column--3">
-        <label class="label" for="channel-name-select">Channel:</label>
+    <div class="column column--10">
+        <form>
+            <input type="radio" name="anonymous-or-channel" id="anonymous-select" class="" value="anonymous" {{#unless user}}checked {{/unless}} onchange="toggleChannel(event.target.value)"/>
+            <label class="label" for="anonymous-select">Anonymous</label>
+            <input type="radio" name="anonymous-or-channel" id="in-a-channel-select" class="" value="in a channel" {{#if user}}checked {{/if}} onchange="toggleChannel(event.target.value)"/>
+            <label class="label" for="in-a-channel-select">In a channel</label>
+        </form>
     </div>
-    <div class="column column--9">
-        <div id="input-error-channel-select" class="info-message info-message--failure"></div>
-        <select type="text" id="channel-name-select" class="select select--primary" value="channel" onchange="toggleChannel(event)">
-        <optgroup>
+</div>
+
+<div id="channel-select-options" {{#unless user}}hidden="true"{{/unless}}>
+    <!-- select whether to create new or log in to existing channel -->
+    <div class="row">
+        <div class="column column--3 column--sml-10">
+            <label class="label" for="channel-name-select">Channel:</label>
+        </div><div class="column column--7 column--sml-10">
+            <div id="input-error-channel-select" class="info-message info-message--failure"></div>
+            <select type="text" id="channel-name-select" class="select select--primary select--arrow" onchange="toggleSelectedChannel(event.target.selectedOptions[0].value)">
             {{#if user}}
-                <option value="{{user.channelName}}" >@{{user.userName}}</option>
+                <option value="{{user.channelName}}" id="channel-option">{{user.channelName}}</option>
             {{/if}}
-            <option value="none" >None</option>
-        </optgroup>
-        <optgroup>
-            <option value="login">Login</option>
-            <option value="new" >New</option>
-        </optgroup>
-        </select>
+                <option value="login">Existing</option>
+                <option value="new" >New</option>
+            </select>
+        </div>
     </div>
-</div>
-
-<div id="channel-login-details" class="row" hidden="true">
-    {{> channelLoginForm}}
-</div>
-
-<div  id="channel-create-details" class="row" hidden="true">
-    {{> channelCreationForm}}
+    <!-- log into an existing channel -->
+    <div id="channel-login-details" class="row row--short" {{#if user}}hidden="true"{{/if}}>
+        {{> channelLoginForm}}
+    </div>
+    <!-- create a channel -->
+    <div  id="channel-create-details" class="row row--short" hidden="true">
+        {{> channelCreationForm}}
+    </div>
 </div>
 
 <script src="/assets/js/authFunctions.js"></script>
 <script type="text/javascript">
-    function toggleChannel (event) {
+    // show or hide the channel selection tools
+    function toggleChannel (selectedOption) {
+        const channelSelectOptions = document.getElementById('channel-select-options');
+        console.log('toggleChannel event triggered', selectedOption);
+        // show/hide the login and new channel forms
+        if (selectedOption === 'anonymous') {
+            channelSelectOptions.hidden = true;
+            channelSelectOptions.hidden = true;
+            // update url
+            updateUrl(selectedOption);
+        } else if (selectedOption === 'in a channel') {
+            channelSelectOptions.hidden = false;
+            // update url
+            let selectedChannel = document.getElementById('channel-name-select').selectedOptions[0].value
+            toggleSelectedChannel(selectedChannel);
+        } else {
+            console.log('selected option was not recognized');
+        }
+
+    }
+    // show or hide the channel create/login tool
+    function toggleSelectedChannel (selectedChannel) {
          const createChannelTool = document.getElementById('channel-create-details');
          const loginToChannelTool = document.getElementById('channel-login-details');
-         const selectedOption = event.target.selectedOptions[0].value;
-         const urlChannel = document.getElementById('url-channel');
-         console.log('toggle event triggered');
-         if (selectedOption === 'new') {
-             // show/hide the login and new channel forms
+         console.log('toggleSelectedChannel event triggered', selectedChannel);
+         // show/hide the login and new channel forms
+         if (selectedChannel === 'new') {
              createChannelTool.hidden = false;
              loginToChannelTool.hidden = true;
-             // update URL
-             urlChannel.innerText = '';
-         } else if (selectedOption === 'login') {
-             // show/hide the login and new channel forms
+         } else if (selectedChannel === 'login') {
              loginToChannelTool.hidden = false;
              createChannelTool.hidden = true;
-             // update URL
-             urlChannel.innerText = '';
          } else {
              // hide the login and new channel forms
              loginToChannelTool.hidden = true;
              createChannelTool.hidden = true;
              hideError(document.getElementById('input-error-channel-select'));
-             // update URL
-             if (selectedOption === 'none'){
-                 console.log('selected option: none');
-                 urlChannel.innerText = '';
-             } else {
-                 console.log('selected option:', selectedOption);
-                 // retrieve short url from db
-                 urlChannel.innerText = `{{user.channelName}}:{{user.shortChannelId}}/`;
-             }
          }
+        // update url
+        updateUrl(selectedChannel);
+    }
+    function updateUrl (selectedOption) {
+        const urlChannel = document.getElementById('url-channel');
+        const urlNoChannelPlaceholder = document.getElementById('url-no-channel-placeholder');
+        const urlChannelPlaceholder = document.getElementById('url-channel-placeholder');
+        if (selectedOption === 'new' || selectedOption === 'login' || selectedOption === ''){
+            urlChannel.hidden = true;
+            urlNoChannelPlaceholder.hidden = true;
+            urlChannelPlaceholder.hidden = false;
+        } else if (selectedOption === 'anonymous'){
+            urlChannel.hidden = true;
+            urlNoChannelPlaceholder.hidden = false;
+            urlChannelPlaceholder.hidden = true;
+        } else {
+            urlChannel.hidden = false;
+            // show channel and short id
+            const selectedChannel = getCookie('channel_name');
+            const shortChannelId = getCookie('short_channel_id');
+            urlChannel.innerText = `${selectedChannel}:${shortChannelId}`;
+            urlNoChannelPlaceholder.hidden = true;
+            urlChannelPlaceholder.hidden = true;
+        }
     }
 </script>

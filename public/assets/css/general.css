@@ -1,0 +1,516 @@
+html, body {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+}
+/* TEXT */
+
+body, button, input, textarea, label, select, option {
+	font-family: monospace;
+	font-size: large;
+	word-wrap: break-word;
+}
+
+p {
+	padding-left: 0.3em;
+}
+
+.center-text {
+	text-align: center;
+}
+
+.url-text {
+	margin:0px;
+	padding:0px;
+}
+
+.url-text--primary {
+	color: black;
+}
+
+.url-text--secondary {
+	color: lightgrey;
+}
+
+.pull-quote {
+	font-size: 3rem;
+}
+
+/* TOOL TIPS */
+/* Tooltip container */
+.tooltip {
+	position: relative;
+}
+/* Tooltip text */
+.tooltip > .tooltip-text {
+	visibility: hidden;
+	width: 15em;
+	background-color: dodgerblue;
+	color: #fff;
+	text-align: center;
+	padding: 0.5em;
+	/* Position the tooltip text */
+	position: absolute;
+	z-index: 1;
+	bottom: 110%;
+	left: 50%;
+	margin-left: -8em; /* Use half of the width (120/2 = 60), to center the tooltip */
+}
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover > .tooltip-text {
+	visibility: visible;
+}
+/* arrow at bottom of tooltip text */
+.tooltip > .tooltip-text::after {
+	content: " ";
+	position: absolute;
+	top: 100%;
+	left: 50%;
+	margin-left: -5px;
+	border-width: 5px;
+	border-style: solid;
+	border-color: dodgerblue transparent transparent transparent;
+}
+
+/* LINKS */
+
+a, a:visited {
+	text-decoration: none;
+}
+
+/* HEADERS */
+
+h1 {
+	font-size: 2rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+}
+
+.h2--secondary {
+	font-weight: normal;
+	color: lightgrey;
+}
+
+.h2--top {
+	margin-top: 0px;
+}
+
+h3 {
+	font-size: 1rem;
+	font-weight: normal;
+}
+
+/* COLUMNS AND ROWS */
+
+.row {
+	clear: both;
+	padding: 2rem 2rem 2rem 2rem;
+	margin: 0px;
+}
+
+.row--wide {
+	padding-right: 0px;
+	padding-left: 0px;
+}
+
+.row--short {
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.row--full-height {
+	height: calc(100% - 9rem);
+}
+
+.column {
+	display: inline-block;
+	padding: 0px;
+	margin: 0px;
+}
+
+.column--1 {
+	width: 10%;
+}
+
+.column--2 {
+	width: 20%;
+}
+
+.column--3 {
+	width: 30%;
+}
+
+.column--4 {
+	width: 40%;
+}
+
+.column--5 {
+	width: 50%;
+}
+
+.column--6 {
+	width: 60%;
+}
+
+.column--7 {
+	width: 70%;
+}
+
+.column--8 {
+	width: 80%;
+}
+
+.column--9 {
+	width: 90%;
+}
+
+.column--10 {
+	width: 100%;
+}
+
+/* ALIGNMENT */
+.align-content-left {
+	text-align: left;
+}
+
+.align-content-center {
+	text-align: center;
+}
+
+.align-content-right {
+	text-align: right;
+}
+
+.align-content-top {
+	vertical-align: top;
+}
+
+.align-content-right {
+	vertical-align: bottom;
+}
+
+/* ERROR MESSAGES */
+
+.info-message {
+	font-weight: bold;
+}
+
+.info-message--success {
+	color: green;
+}
+
+.info-message--failure {
+	color: red;
+}
+
+/* INPUT FIELDS */
+
+/* blocks */
+input:-webkit-autofill {
+ -webkit-box-shadow: 0 0 0px 1000px white inset;
+}
+
+.label, .input-text, .select, .textarea {
+	margin: 0px;
+	padding: 0.3em;
+	outline: none;
+	border: 0px;
+	background-color: white;
+}
+
+.input-disabled {
+	border: 1px solid black;
+	padding: 0.5em;
+	margin: 0px;
+	color: black;
+	background-color: white;
+}
+
+option {
+	font-family: monospace;
+}
+
+
+.input-checkbox {
+	border: 1px solid grey;
+	background: white;
+}
+
+.input-file {
+	width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+
+.input-file-label {
+	color: dodgerblue;
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+.select--no-arrow {
+	-moz-appearance:none;
+	-webkit-appearance: none;
+	cursor: pointer;
+}
+
+.select--arrow {
+	-moz-appearance:none;
+	-webkit-appearance: none;
+	background: url('../img/down_triangle.png') no-repeat right;
+	padding-right: 1em;
+}
+
+/* modifiers */
+.input-text--primary, .select--primary, .textarea--primary {
+	border-bottom: 1px solid dodgerblue;
+}
+
+.input-text--primary:focus, .select--primary:focus, .textarea--primary:focus {
+	border-bottom: 1px solid dodgerblue;
+}
+
+.input-text--large, .select--large, .textarea--large {
+	font-size: 1.5rem;
+	border-left: 1px solid dodgerblue;
+}
+
+.input-text--large:focus, .select--large:focus, .textarea--large:focus {
+	border-left: 1px solid dodgerblue;
+}
+
+.input-text--full-width, .textarea--full-width {
+	width: calc(100% - 0.6em);
+}
+
+.input-disabled--full-width {
+	width: calc(100% - 1em - 2px);
+}
+
+/* BUTTONS */
+
+button {
+	cursor: pointer;
+}
+
+.button--primary {
+	border: 1px solid black;
+	padding: 0.5em;
+	margin: 0.5em 0.3em 0.5em 0.3em;
+	color: black;
+	background-color: white;
+}
+
+.button--primary:hover {
+	border: 1px solid dodgerblue;
+	color: white;
+	background-color: dodgerblue;
+}
+
+.button--primary:active{
+	border: 1px solid dodgerblue;
+	color: white;
+	background-color: white;
+}
+
+.button--large{
+	margin: 0px;
+	width: calc(100% - 2px);
+	padding: 2rem;
+	font-size: x-large;
+}
+
+.button--cancel{
+	border: 0px;
+	background-color: white;
+	color: grey;
+}
+
+/* TABLES */
+
+table {
+	width: 100%;
+	text-align: left;
+}
+
+/* NAV BAR */
+
+.nav-bar {
+	height: 5rem;
+}
+
+.nav-bar-title-section, .nav-bar-link-section {
+	padding: 0px 1em 0px 1em;
+}
+
+.nav-bar-title-section {
+	overflow: hidden;
+	border-bottom: 2px solid #eaeaea;
+	position: relative;
+}
+
+.nav-bar-link-section {
+	position: absolute;
+	bottom: 0px;
+	right: 0px;
+	z-index: 1;
+}
+
+.nav-bar-logo, .nav-bar-title, .nav-bar-link {
+	padding: 2rem 0.5rem 1.5rem 0.5rem;
+	display: inline-block;
+	color: black;
+}
+
+.nav-bar-title--superscript {
+	font-size: small;
+	vertical-align: top;
+}
+
+.nav-bar-link {
+	border-bottom: 2px solid white;
+}
+.nav-bar-link--active {
+	color: #1e90ff;
+	border-bottom: 2px solid #1e90ff;
+}
+
+/* PUBLISH FORM */
+
+.dropzone {
+	border: 2px dashed lightgrey;
+	text-align: center;
+}
+
+.dropzone:hover {
+	border: 2px dashed #1e90ff;
+}
+
+#primary-dropzone-wrapper, #publish-form-wrapper {
+	height: 100%;
+}
+
+#primary-dropzone {
+	height: calc(100% - 4px);
+	position: relative;
+}
+
+#asset-preview-holder {
+	position: relative;
+}
+
+#primary-dropzone-instructions, #preview-dropzone-instructions {
+	position: absolute;
+	top: 40%;
+	left: 50%;
+	transform: translateX(-50%) translateY(-40%);
+}
+
+#asset-preview {
+	display: block;
+	padding: 0.5rem;
+	width: calc(100% - 1rem);
+}
+
+/* Show page */
+
+.asset-display {
+	display: block;
+	width: 100%;
+}
+
+/* item lists */
+
+.content-list-item {
+
+}
+
+.content-list-item-asset {
+	width: 90%;
+}
+
+.content-list-item-link {
+
+}
+
+/* other */
+
+.toggle-link {
+	float: right;
+}
+
+.wrap-words {
+	word-wrap: break-word;
+}
+
+/* Social Sharing Icons */
+
+  .button {
+    margin-right: 10px;
+    max-width: 100px;
+    display: inline;
+    padding: 8px;
+}
+
+a.reddit-share.button img {
+	width: 38px;
+	height: 38px;}
+
+.row--short img {
+    width: 40px;
+    height: 40px;
+}
+
+.row--short img:hover {
+  -webkit-animation: animation 20000ms linear both;
+  animation: animation 20000ms linear both;
+}
+
+@-webkit-keyframes animation {
+  0% { -webkit-transform: matrix3d(-0.5, -0.866, 0, 0, 0.866, -0.5, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(-0.5, -0.866, 0, 0, 0.866, -0.5, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  0.16% { -webkit-transform: matrix3d(-0.493, -0.875, 0, 0, 0.769, -0.646, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(-0.493, -0.875, 0, 0, 0.769, -0.646, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  0.32% { -webkit-transform: matrix3d(-0.546, -0.846, 0, 0, 0.699, -0.724, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(-0.546, -0.846, 0, 0, 0.699, -0.724, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  0.64% { -webkit-transform: matrix3d(-0.703, -0.715, 0, 0, 0.603, -0.801, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(-0.703, -0.715, 0, 0, 0.603, -0.801, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  0.95% { -webkit-transform: matrix3d(-0.836, -0.55, 0, 0, 0.509, -0.861, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(-0.836, -0.55, 0, 0, 0.509, -0.861, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  1.26% { -webkit-transform: matrix3d(-0.924, -0.383, 0, 0, 0.384, -0.923, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(-0.924, -0.383, 0, 0, 0.384, -0.923, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  1.57% { -webkit-transform: matrix3d(-0.974, -0.225, 0, 0, 0.236, -0.972, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(-0.974, -0.225, 0, 0, 0.236, -0.972, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  2.82% { -webkit-transform: matrix3d(-0.919, 0.394, 0, 0, -0.394, -0.919, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(-0.919, 0.394, 0, 0, -0.394, -0.919, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  4.07% { -webkit-transform: matrix3d(-0.538, 0.843, 0, 0, -0.843, -0.538, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(-0.538, 0.843, 0, 0, -0.843, -0.538, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  4.3% { -webkit-transform: matrix3d(-0.447, 0.894, 0, 0, -0.894, -0.447, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(-0.447, 0.894, 0, 0, -0.894, -0.447, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  5% { -webkit-transform: matrix3d(-0.161, 0.987, 0, 0, -0.987, -0.161, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(-0.161, 0.987, 0, 0, -0.987, -0.161, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  8.61% { -webkit-transform: matrix3d(0.873, 0.487, 0, 0, -0.487, 0.873, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(0.873, 0.487, 0, 0, -0.487, 0.873, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  12.91% { -webkit-transform: matrix3d(0.976, -0.217, 0, 0, 0.217, 0.976, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(0.976, -0.217, 0, 0, 0.217, 0.976, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  17.22% { -webkit-transform: matrix3d(0.925, -0.381, 0, 0, 0.381, 0.925, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(0.925, -0.381, 0, 0, 0.381, 0.925, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  28.33% { -webkit-transform: matrix3d(0.996, -0.086, 0, 0, 0.086, 0.996, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(0.996, -0.086, 0, 0, 0.086, 0.996, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  39.44% { -webkit-transform: matrix3d(1, 0.026, 0, 0, -0.026, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(1, 0.026, 0, 0, -0.026, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  61.66% { -webkit-transform: matrix3d(1, -0.002, 0, 0, 0.002, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(1, -0.002, 0, 0, 0.002, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  83.98% { -webkit-transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  100% { -webkit-transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+}
+
+@keyframes animation {
+  0% { -webkit-transform: matrix3d(-0.5, -0.866, 0, 0, 0.866, -0.5, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(-0.5, -0.866, 0, 0, 0.866, -0.5, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  0.16% { -webkit-transform: matrix3d(-0.493, -0.875, 0, 0, 0.769, -0.646, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(-0.493, -0.875, 0, 0, 0.769, -0.646, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  0.32% { -webkit-transform: matrix3d(-0.546, -0.846, 0, 0, 0.699, -0.724, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(-0.546, -0.846, 0, 0, 0.699, -0.724, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  0.64% { -webkit-transform: matrix3d(-0.703, -0.715, 0, 0, 0.603, -0.801, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(-0.703, -0.715, 0, 0, 0.603, -0.801, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  0.95% { -webkit-transform: matrix3d(-0.836, -0.55, 0, 0, 0.509, -0.861, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(-0.836, -0.55, 0, 0, 0.509, -0.861, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  1.26% { -webkit-transform: matrix3d(-0.924, -0.383, 0, 0, 0.384, -0.923, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(-0.924, -0.383, 0, 0, 0.384, -0.923, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  1.57% { -webkit-transform: matrix3d(-0.974, -0.225, 0, 0, 0.236, -0.972, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(-0.974, -0.225, 0, 0, 0.236, -0.972, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  2.82% { -webkit-transform: matrix3d(-0.919, 0.394, 0, 0, -0.394, -0.919, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(-0.919, 0.394, 0, 0, -0.394, -0.919, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  4.07% { -webkit-transform: matrix3d(-0.538, 0.843, 0, 0, -0.843, -0.538, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(-0.538, 0.843, 0, 0, -0.843, -0.538, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  4.3% { -webkit-transform: matrix3d(-0.447, 0.894, 0, 0, -0.894, -0.447, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(-0.447, 0.894, 0, 0, -0.894, -0.447, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  5% { -webkit-transform: matrix3d(-0.161, 0.987, 0, 0, -0.987, -0.161, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(-0.161, 0.987, 0, 0, -0.987, -0.161, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  8.61% { -webkit-transform: matrix3d(0.873, 0.487, 0, 0, -0.487, 0.873, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(0.873, 0.487, 0, 0, -0.487, 0.873, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  12.91% { -webkit-transform: matrix3d(0.976, -0.217, 0, 0, 0.217, 0.976, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(0.976, -0.217, 0, 0, 0.217, 0.976, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  17.22% { -webkit-transform: matrix3d(0.925, -0.381, 0, 0, 0.381, 0.925, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(0.925, -0.381, 0, 0, 0.381, 0.925, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  28.33% { -webkit-transform: matrix3d(0.996, -0.086, 0, 0, 0.086, 0.996, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(0.996, -0.086, 0, 0, 0.086, 0.996, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  39.44% { -webkit-transform: matrix3d(1, 0.026, 0, 0, -0.026, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(1, 0.026, 0, 0, -0.026, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  61.66% { -webkit-transform: matrix3d(1, -0.002, 0, 0, 0.002, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(1, -0.002, 0, 0, 0.002, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  83.98% { -webkit-transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  100% { -webkit-transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+}

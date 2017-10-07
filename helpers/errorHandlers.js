@@ -43,5 +43,7 @@ module.exports = {
     } else {
       return error;
     }
+  useObjectPropertiesIfNoKeys (err) {
+    return useObjectPropertiesIfNoKeys(err);
   },
 };

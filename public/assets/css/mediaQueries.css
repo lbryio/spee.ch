@@ -1,15 +1,5 @@
-@media (max-width: 1250px) {
-    .wrapper {
-		margin-left: 10%;
-		width:80%;
-	}
-}
 
 @media (max-width: 1000px) {
-    .wrapper {
-		margin-left: 10%;
-		width:80%;
-	}
 
 	.main {
 		float: none;
@@ -28,32 +18,50 @@
 }
 
 @media (max-width: 750px ) {
-	.col-left, .col-right {
-		float: none;
-		margin: 0px;
-		padding: 0px;
+
+	.column--med-10 {
 		width: 100%;
 	}
 
-	.col-right {
-		padding-top: 20px;
+	.h2--top {
+		margin-top: 1em;
+	}
+}
+
+
+@media (max-width: 475px) {
+
+	.nav-bar {
+		height: 8rem;
 	}
 
-	.all-claims-asset {
-		width:30%;
+	.nav-bar-title {
+		padding-bottom: 0px;
 	}
 
-	.all-claims-details {
-		font-size: small;
+	.nav-bar-link-section {
+		position: relative;
+		padding-left: 0px;
 	}
 
-	.show-asset-lite {
+	.row--full-height {
+
+		height: calc(100% - 11rem);
+	}
+
+	.column--sml-10 {
 		width: 100%;
 	}
 
-	.top-bar-tagline {
-		clear: both;
-		text-align: left;
-		width: 100%;
+	#publish-active-area > .row, #details-detail > .row, #channel-login-form > .row, #publish-channel-form > .row {
+		padding: 1em 0px 1em 0px;
 	}
+}
+
+@media (max-width: 350px) {
+
+	body, button, input, textarea, label, select, option {
+		font-size: medium;
+	}
+
 }

@@ -1,11 +1,8 @@
-<div class="wrapper">
-	{{> topBar}}
-	<div>
-        <h3>{{this.channelName}}<span class="h3--secondary">:{{this.longChannelId}}</span></h3>
-		<p>Below is all the free content in this channel.</p>
-		{{#each this.claims}}
-          {{> contentListItem}}
-		{{/each}}
-	</div>
-	{{> footer}}
+{{> topBar}}
+<div class="row row--full-height">
+    <h2>{{this.channelName}}<span class="h2--secondary">:{{this.longChannelId}}</span></h2>
+    <p>Below is all the free content in this channel.</p>
+    {{#each this.claims}}
+      {{> contentListItem}}
+    {{/each}}
 </div>

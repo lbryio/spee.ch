@@ -11,7 +11,7 @@ module.exports = new PassportLocalStrategy(
     passReqToCallback: true,  // we want to be able to read the post body message parameters in the callback
   },
   (req, username, password, done) => {
-    logger.debug(`new channel signup request: ${username} ${password}`);
+    logger.debug(`new channel signup request. user: ${username} pass: ${password} .`);
     let user;
     // server-side validaton of inputs (username, password)
 

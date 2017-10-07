@@ -1,5 +1,3 @@
-
-
 // validation function which checks the proposed file's type, size, and name
 function validateFile(file) {
     if (!file) {

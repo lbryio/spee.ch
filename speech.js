@@ -61,7 +61,7 @@ passport.deserializeUser((id, done) => {  // this populates req.user
   .then(shortChannelId => {
     userInfo['shortChannelId'] = shortChannelId;
     done(null, userInfo);
-    return null;
+    return null;  // note: why return null and not the done?
   })
   .catch(error => {
     logger.error('sequelize error', error);
@@ -85,7 +85,7 @@ app.set('view engine', 'handlebars');
 // middleware to pass user info back to client (for handlebars access), if user is logged in
 app.use((req, res, next) => {
   if (req.user) {
-    logger.verbose(req.user);
+    // logger.verbose(req.user);
     res.locals.user = {
       id            : req.user.id,
       userName      : req.user.userName,

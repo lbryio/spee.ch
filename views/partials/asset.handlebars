@@ -1,23 +1,19 @@
-<div class="row">
-	<div id="asset-placeholder">
-		<a href="/{{fileInfo.claimId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}">
-		{{#ifConditional fileInfo.fileType '===' 'video/mp4'}}
-			{{#ifConditional fileInfo.fileExt '===' 'gifv'}}
-				<video class="show-asset" autoplay loop muted>
-					<source src="/media/{{fileInfo.fileName}}">
-					{{!--fallback--}}
-					Your browser does not support the <code>video</code> element.
-				</video>
-			{{else}}
-				<video class="show-asset" autoplay controls>
-					<source src="/media/{{fileInfo.fileName}}">
-					{{!--fallback--}}
-					Your browser does not support the <code>video</code> element.
-				</video>
-			{{/ifConditional}}
-		{{else}}
-			<img  class="show-asset" src="/media/{{fileInfo.fileName}}" />
-		{{/ifConditional}}
-		</a>
-	</div>
-</div>
+<a href="/{{fileInfo.claimId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}">
+{{#ifConditional fileInfo.fileType '===' 'video/mp4'}}
+    {{#ifConditional fileInfo.fileExt '===' 'gifv'}}
+        <video class="asset-display" autoplay loop muted>
+            <source src="/media/{{fileInfo.fileName}}">
+            {{!--fallback--}}
+            Your browser does not support the <code>video</code> element.
+        </video>
+    {{else}}
+        <video class="asset-display" autoplay controls>
+            <source src="/media/{{fileInfo.fileName}}">
+            {{!--fallback--}}
+            Your browser does not support the <code>video</code> element.
+        </video>
+    {{/ifConditional}}
+{{else}}
+    <img  class="asset-display" src="/media/{{fileInfo.fileName}}" />
+{{/ifConditional}}
+</a>
