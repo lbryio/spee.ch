@@ -361,7 +361,7 @@ table {
 	z-index: 1;
 }
 
-.nav-bar-logo, .nav-bar-title, .nav-bar-link {
+.nav-bar-logo, .nav-bar-title, .nav-bar-link, .nav-bar-subtitle {
 	padding: 2rem 0.5rem 1.5rem 0.5rem;
 	display: inline-block;
 	color: black;
@@ -370,6 +370,15 @@ table {
 .nav-bar-title--superscript {
 	font-size: small;
 	vertical-align: top;
+}
+
+.nav-bar-subtitle {
+	font-size: small;
+	color:grey;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translateX(-50%) translateY(-50%);
 }
 
 .nav-bar-link {
