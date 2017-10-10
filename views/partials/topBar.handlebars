@@ -7,10 +7,10 @@
             <a class="nav-bar-link" href="/popular">Popular</a>
             <a class="nav-bar-link" href="/about">About</a>
             {{#if user}}
-                <select type="text" class="select select--no-arrow nav-bar-link" onchange="toggleLogin(event)">
-                    <option value="{{user.channelName}}:{{user.channelClaimId}}">@{{user.userName}}</option>
-                    <option value="view">View</option>
-                    <option value="logout">Logout</option>
+                <select type="text" id="nav-bar-channel-select" class="select select--no-arrow nav-bar-link" onchange="toggleLogin(event.target.selectedOptions[0].value)">
+                    <option id="nav-bar-channel-select-channel-option">@{{user.userName}}</option>
+                    <option value="VIEW">View</option>
+                    <option value="LOGOUT">Logout</option>
                 </select>
             {{else}}
                 <a class="nav-bar-link" href="/login">Login</a>
@@ -22,28 +22,21 @@
 </div>
 
 <script type="text/javascript">
-    function toggleLogin (event) {
-        console.log(event);
-        const selectedOption = event.target.selectedOptions[0].value;
-        if (selectedOption === 'logout') {
+    function toggleLogin (value) {
+        const selectedOption = value;
+        if (selectedOption === 'LOGOUT') {
             console.log('log out');
             // remove session cookies
-
+            clearCookies();
             // send logout request to server
             window.location.href = '/logout';
-        } else if (selectedOption === 'view') {
+        } else if (selectedOption === 'VIEW') {
             console.log('view channel');
-            window.location.href = '/{{user.channelName}}:{{user.channelClaimId}}';
-        }
-    }
-    // highlight the link for the current page
-    const navBarLinks = document.getElementsByClassName('nav-bar-link');
-    for (let i = 0; i < navBarLinks.length; i++){
-        const link = navBarLinks[i];
-        if (link.href == window.location.href) {
-            link.setAttribute('class', 'nav-bar-link nav-bar-link--active');
-        } else if (`/${link.value}` === window.location.pathname) {
-            link.setAttribute('class', 'select select--no-arrow nav-bar-link nav-bar-link--active');
+            // get channel info
+            const channelName = getCookie('channel_name');
+            const channelClaimId = getCookie('channel_claim_id');
+            // redirect to channel page
+            window.location.href = `/${channelName}:${channelClaimId}`;
         }
     }
 </script>

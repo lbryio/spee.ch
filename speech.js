@@ -5,6 +5,7 @@ const siofu = require('socketio-file-upload');
 const expressHandlebars = require('express-handlebars');
 const Handlebars = require('handlebars');
 const handlebarsHelpers = require('./helpers/handlebarsHelpers.js');
+const { populateLocalsDotUser, serializeSpeechUser, deserializeSpeechUser } = require('./helpers/authHelpers.js');
 const config = require('config');
 const logger = require('winston');
 const { getDownloadDirectory } = require('./helpers/lbryApi');
@@ -42,32 +43,8 @@ app.use((req, res, next) => {  // custom logging middleware to log all incoming 
 app.use(session({ secret: 'cats' }));
 app.use(passport.initialize());
 app.use(passport.session());
-passport.serializeUser((user, done) => {
-  done(null, user.id);
-});
-passport.deserializeUser((id, done) => {  // this populates req.user
-  let userInfo = {};
-  db.User.findOne({ where: { id } })
-  .then(user => {
-    userInfo['id'] = user.id;
-    userInfo['userName'] = user.userName;
-    return user.getChannel();
-  })
-  .then(channel => {
-    userInfo['channelName'] = channel.channelName;
-    userInfo['channelClaimId'] = channel.channelClaimId;
-    return db.getShortChannelIdFromLongChannelId(channel.channelClaimId, channel.channelName);
-  })
-  .then(shortChannelId => {
-    userInfo['shortChannelId'] = shortChannelId;
-    done(null, userInfo);
-    return null;  // note: why return null and not the done?
-  })
-  .catch(error => {
-    logger.error('sequelize error', error);
-    done(error, null);
-  });
-});
+passport.serializeUser(serializeSpeechUser);  // takes the user id from the db and serializes it
+passport.deserializeUser(deserializeSpeechUser); // this deserializes id then populates req.user with info
 const localSignupStrategy = require('./passport/local-signup.js');
 const localLoginStrategy = require('./passport/local-login.js');
 passport.use('local-signup', localSignupStrategy);
@@ -83,19 +60,7 @@ app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
 
 // middleware to pass user info back to client (for handlebars access), if user is logged in
-app.use((req, res, next) => {
-  if (req.user) {
-    // logger.verbose(req.user);
-    res.locals.user = {
-      id            : req.user.id,
-      userName      : req.user.userName,
-      channelName   : req.user.channelName,
-      channelClaimId: req.user.channelClaimId,
-      shortChannelId: req.user.shortChannelId,
-    };
-  }
-  next();
-});
+app.use(populateLocalsDotUser);
 
 // start the server
 db.sequelize

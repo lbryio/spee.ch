@@ -80,6 +80,10 @@ function createProgressBar(element, size){
 	setInterval(addOne, 300);
 }
 
+function setCookie(key, value) {
+    document.cookie = `${key}=${value}`;
+}
+
 function getCookie(cname) {
     const name = cname + "=";
     const decodedCookie = decodeURIComponent(document.cookie);
@@ -103,6 +107,10 @@ function checkCookie() {
     } else {
         console.log('no channel_name cookie found');
     }
+}
+
+function clearCookies() {
+
 }
 
 function copyToClipboard(event){

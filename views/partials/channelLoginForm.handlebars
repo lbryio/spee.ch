@@ -1,69 +1,23 @@
-
 <form id="channel-login-form">
     <div class="row row--wide row--short">
         <div class="column column--3 column--sml-10">
-            <label class="label" for="login-channel-name">Name:</label>
+            <label class="label" for="channel-login-name-input">Name:</label>
         </div><div class="column column--6 column--sml-10">
             <div id="login-error-display-element" class="info-message info-message--failure"></div>
             <div class="input-text--primary">
                 <span>@</span>
-                <input type="text" name="login-channel-name" id="login-channel-name" class="input-text" placeholder="" value="">
+                <input type="text" id="channel-login-name-input" class="input-text" placeholder="" value="">
             </div>
         </div>
     </div>
     <div class="row row--wide row--short">
         <div class="column column--3 column--sml-10">
-            <label class="label" for="login-channel-password" >Password:</label>
+            <label class="label" for="channel-login-password-input" >Password:</label>
         </div><div class="column column--6 column--sml-10">
-            <input type="password" name="login-channel-password" id="login-channel-password" class="input-text input-text--primary" placeholder="" value="">
+            <input type="password" id="channel-login-password-input" class="input-text input-text--primary" placeholder="" value="">
         </div>
     </div>
     <div class="row row--wide">
         <button class="button--primary" onclick="loginToChannel(event)">Authenticate</button>
     </div>
 </form>
-
-
-<script type="text/javascript">
-
- function loginToChannel (event) {
-     const userName = document.getElementById('login-channel-name').value;
-     const password = document.getElementById('login-channel-password').value;
-     const loginErrorDisplayElement = document.getElementById('login-error-display-element');
-     // prevent default
-     event.preventDefault()
-     // send request
-     sendAuthRequest(userName, password, '/login')
-         // update session cookie with new channel name and ids
-         .then(result => {
-             console.log('login success', result);
-             // replace the current cookies
-             document.cookie = `channel_name=${result.channelName}`;
-             document.cookie = `channel_claim_id=${result.channelClaimId}`;
-             document.cookie = `short_channel_id=${result.shortChannelId}`;
-             return result;
-         })
-         // update channel selection
-         .then(result => {
-             const channelSelect = document.getElementById('channel-name-select');
-             // remove the old channel option
-             const oldChannel = document.getElementById('channel-option')
-             if (oldChannel){
-                 oldChannel.parentNode.removeChild(oldChannel);
-             }
-             // add new channel option & select it
-             const newChannelOption = document.createElement('option');
-             newChannelOption.setAttribute('value', result.channelName);
-             newChannelOption.setAttribute('id', 'channel-option');
-             newChannelOption.setAttribute('selected', '');
-             newChannelOption.innerText = result.channelName;
-             channelSelect.insertBefore(newChannelOption, channelSelect.firstChild);
-             // update selection
-             toggleSelectedChannel(result.channelName);
-         })
-         .catch(error => {
-             showError(loginErrorDisplayElement, error);
-             console.log('login failure:', error);
-         })
- }
-</script>

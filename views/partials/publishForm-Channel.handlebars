@@ -22,7 +22,7 @@
             <div id="input-error-channel-select" class="info-message info-message--failure"></div>
             <select type="text" id="channel-name-select" class="select select--primary select--arrow" onchange="toggleSelectedChannel(event.target.selectedOptions[0].value)">
             {{#if user}}
-                <option value="{{user.channelName}}" id="channel-option">{{user.channelName}}</option>
+                <option value="{{user.channelName}}" id="publish-channel-select-channel-option">{{user.channelName}}</option>
             {{/if}}
                 <option value="login">Existing</option>
                 <option value="new" >New</option>
