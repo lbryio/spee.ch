@@ -402,6 +402,7 @@ table {
 
 .dropzone:hover {
 	border: 2px dashed #1e90ff;
+	cursor: pointer;
 }
 
 #primary-dropzone-wrapper, #publish-form-wrapper {

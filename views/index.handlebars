@@ -1,14 +1,14 @@
 {{> topBar}}
 <div class="row row--full-height">
     <div id="primary-dropzone-wrapper">
-        <div id="primary-dropzone" class="dropzone" ondrop="drop_handler(event);" ondragover="dragover_handler(event);" ondragend="dragend_handler(event)">
+        <div id="primary-dropzone" class="dropzone" ondrop="drop_handler(event);" ondragover="dragover_handler(event);" ondragend="dragend_handler(event)" onclick="triggerFileChooser('siofu_input', event)">
             <div id="primary-dropzone-instructions">
                 <div class="row">
                     <p>Drag & drop image or video here</p>
                     <p>OR</p>
                     <form>
                         <label class="input-file-label" for="siofu_input">CHOOSE FILE</label>
-                        <input class=" input-file" type="file" id="siofu_input" name="siofu_input" accept="video/*,image/*" onchange="previewAndStageFile(event.target.files[0])" enctype="multipart/form-data"/>
+                        <input class="input-file" type="file" id="siofu_input" name="siofu_input" accept="video/*,image/*" onchange="previewAndStageFile(event.target.files[0])" enctype="multipart/form-data"/>
                     </form>
                 </div>
                 <div class="info-message info-message--failure" id="input-error-file-selection" hidden="true"></div>
@@ -23,7 +23,7 @@
         <div class="column column--5 column--med-10 align-content-top" >
             <!-- preview -->
             <div class="row">
-                <div id="asset-preview-holder" class="dropzone" ondrop="drop_handler(event);" ondragover="dragover_handler(event);" ondragend="dragend_handler(event)" onmouseenter="showInstructions()" onmouseleave="hideInstructions()">
+                <div id="asset-preview-holder" class="dropzone" ondrop="drop_handler(event);" ondragover="dragover_handler(event);" ondragend="dragend_handler(event)" onmouseenter="showInstructions()" onmouseleave="hideInstructions()" onclick="triggerFileChooser('siofu_input', event)">
                     <div id="asset-preview-target"></div>
                     <div id="preview-dropzone-instructions" hidden="true">
                         <div class="row">
@@ -31,7 +31,7 @@
                             <p>OR</p>
                             <form>
                                 <label class="input-file-label" for="siofu_input">CHOOSE FILE</label>
-                                <input class=" input-file" type="file" id="siofu_input" name="siofu_input" accept="video/*,image/*" onchange="previewAndStageFile(event.target.files[0])" enctype="multipart/form-data"/>
+                                
                             </form>
                         </div>
                     </div>
@@ -66,7 +66,6 @@
     var stagedFiles = null;
 
     /* drop zone functions */
-
     function showInstructions () {
         document.getElementById('preview-dropzone-instructions').hidden = false;
         document.getElementById('asset-preview').style.opacity = 0.3;
@@ -98,6 +97,9 @@
         } else {
             event.dataTransfer.clearData();
         }
+    }
+    function triggerFileChooser(fileInputId, event) {
+        document.getElementById(fileInputId).click();
     }
 
 	/* socketio-file-upload listeners */
