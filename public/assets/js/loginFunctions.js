@@ -1,10 +1,3 @@
-
-function setUserCookies(channelName, channelClaimId, shortChannelId) {
-    setCookie('channel_name', channelName)
-    setCookie('channel_claim_id', channelClaimId);
-    setCookie('short_channel_id', shortChannelId);
-}
-
 function replaceChannelOptionInPublishChannelSelect() {
     // remove the old channel option
     const oldChannel = document.getElementById('publish-channel-select-channel-option')
@@ -42,13 +35,16 @@ function replaceChannelOptionInNavBarChannelSelect () {
     newChannelOption.innerText = loggedInChannel;
     // add the new option
     const channelSelect = document.getElementById('nav-bar-channel-select');
+    channelSelect.style.display = 'inline-block';
     channelSelect.insertBefore(newChannelOption, channelSelect.firstChild);
+    // hide login
+    const navBarLoginLink = document.getElementById('nav-bar-login-link');
+    navBarLoginLink.style.display = 'none';
 }
 
 function loginToChannel (event) {
     const userName = document.getElementById('channel-login-name-input').value;
     const password = document.getElementById('channel-login-password-input').value;
-    const loginErrorDisplayElement = document.getElementById('login-error-display-element');
     // prevent default
     event.preventDefault()
     // send request
@@ -59,15 +55,15 @@ function loginToChannel (event) {
             return result;
         })
         // update channel selection
-        .then(result => {
+        .then(() => {
             // remove old channel and replace with new one & select it
             replaceChannelOptionInPublishChannelSelect();
             // remove old channel and replace with new one & select it
             replaceChannelOptionInNavBarChannelSelect();
         })
         .catch(error => {
+            const loginErrorDisplayElement = document.getElementById('login-error-display-element');
             showError(loginErrorDisplayElement, error);
             console.log('login failure:', error);
         })
 }
-

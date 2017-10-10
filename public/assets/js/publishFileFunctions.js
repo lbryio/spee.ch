@@ -56,7 +56,7 @@ function previewAndStageFile(selectedFile){
 	stagedFiles = [selectedFile];
 }
 
-// Validate the publish submission and then trigger publishing.
+// Validate the publish submission and then trigger upload
 function publishStagedFile(event) {
     // prevent default so this script can handle submission
     event.preventDefault();
