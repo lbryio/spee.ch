@@ -250,6 +250,10 @@ option {
 	z-index: -1;
 }
 
+.input-radio, .label--pointer {
+	cursor: pointer;
+}
+
 .input-file-label {
 	color: dodgerblue;
 	text-decoration: underline;
