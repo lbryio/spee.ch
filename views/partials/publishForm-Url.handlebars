@@ -5,8 +5,8 @@
     </div><div class="column column--6 column--sml-10">
         <div id="input-error-claim-name" class="info-message info-message--failure"  hidden="true"></div>
         <div class="input-text--primary">
-            <span class="url-text">Spee.ch /</span>
-            <span id="url-channel" class="url-text url-text--primary" {{#if user}}{{else}}hidden="true"{{/if}}>{{user.channelName}}:{{user.shortChannelId}}</span>
+            <span class="url-text url-text--secondary">Spee.ch /</span>
+            <span id="url-channel" class="url-text url-text--secondary" {{#if user}}{{else}}hidden="true"{{/if}}>{{user.channelName}}:{{user.shortChannelId}}</span>
             <span id="url-no-channel-placeholder" class="url-text url-text--secondary tooltip" {{#if user}}hidden="true"{{else}}{{/if}}>xyz<span class="tooltip-text">This will be a random id</span></span>
             <span id="url-channel-placeholder" class="url-text url-text--secondary tooltip" hidden="true">@channel<span class="tooltip-text">Select a channel above</span></span>
             /
