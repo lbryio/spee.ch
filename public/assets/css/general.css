@@ -45,7 +45,7 @@ p {
 .tooltip > .tooltip-text {
 	visibility: hidden;
 	width: 15em;
-	background-color: dodgerblue;
+	background-color: grey;
 	color: #fff;
 	text-align: center;
 	padding: 0.5em;
@@ -69,7 +69,7 @@ p {
 	margin-left: -5px;
 	border-width: 5px;
 	border-style: solid;
-	border-color: dodgerblue transparent transparent transparent;
+	border-color: grey transparent transparent transparent;
 }
 
 /* LINKS */
@@ -99,7 +99,6 @@ h2 {
 
 h3 {
 	font-size: 1rem;
-	font-weight: normal;
 }
 
 .input-text--large, .textarea--large, .title-show, .description-show {
@@ -270,19 +269,19 @@ option {
 	padding-right: 1em;
 }
 .input-text--primary, .select--primary, .textarea--primary {
-	border-bottom: 1px solid grey;
-}
-
-.input-text--primary:focus, .select--primary:focus, .textarea--primary:focus {
 	border-bottom: 1px solid lightgrey;
 }
 
+.input-text--primary:focus, .select--primary:focus, .textarea--primary:focus {
+	border-bottom: 1px solid grey;
+}
+
 .input-text--large, .select--large, .textarea--large {
-	border-left: 1px solid grey;
+	border-left: 1px solid lightgrey;
 }
 
 .input-text--large:focus, .select--large:focus, .textarea--large:focus {
-	border-left: 1px solid lightgrey;
+	border-left: 1px solid grey;
 }
 
 .input-text--full-width, .textarea--full-width {
