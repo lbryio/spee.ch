@@ -2,14 +2,14 @@ const axios = require('axios');
 const logger = require('winston');
 
 function handleResponse ({ data }, resolve, reject) {
-  logger.debug('handling lbry api response');
+  logger.debug('handling lbry api response...');
   if (data.result) {
     // check for an error
     if (data.result.error) {
       reject(data.result.error);
       return;
     };
-    logger.debug('data.result', data.result);
+    // logger.debug('data.result', data.result);
     resolve(data.result);
     return;
   }

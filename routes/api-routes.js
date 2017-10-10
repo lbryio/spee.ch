@@ -25,7 +25,7 @@ module.exports = (app) => {
     });
   });
   // route to check whether spee.ch has published to a claim
-  app.get('/api/isClaimAvailable/:name', ({ ip, originalUrl, params }, res) => {
+  app.get('/api/isClaimAvailable/:name', ({ params }, res) => {
     // send response
     checkClaimNameAvailability(params.name)
     .then(result => {
@@ -72,7 +72,8 @@ module.exports = (app) => {
   });
   // route to run a publish request on the daemon
   app.post('/api/publish', multipartMiddleware, (req, res) => {
-    logger.debug(req);
+    logger.debug('req:', req);
+    // validate that mandatory parts of the request are present
     const body = req.body;
     const files = req.files;
     try {
@@ -82,16 +83,14 @@ module.exports = (app) => {
       res.status(400).json({success: false, message: error.message});
       return;
     }
-    // required inputs
+    // validate file, name, license, and nsfw
     const file = files.file;
     const fileName = file.name;
     const filePath = file.path;
     const fileType = file.type;
     const name = body.name;
     let nsfw = body.nsfw;
-    // cleanse nsfw
-    nsfw = cleanseNSFW(nsfw);
-    // validate file, name, license, and nsfw
+    nsfw = cleanseNSFW(nsfw);  // cleanse nsfw
     try {
       validatePublishSubmission(file, name, nsfw);
     } catch (error) {
@@ -104,6 +103,7 @@ module.exports = (app) => {
     const license = body.license || null;
     const title = body.title || null;
     const description = body.description || null;
+    const thumbnail = body.thumbnail || null;
     let channelName = body.channelName || null;
     channelName = cleanseChannelName(channelName);
     const channelPassword = body.channelPassword || null;
@@ -122,7 +122,7 @@ module.exports = (app) => {
         throw new Error('That name is already in use by spee.ch.');
       }
       // create publish parameters object
-      return createPublishParams(filePath, name, title, description, license, nsfw, channelName);
+      return createPublishParams(filePath, name, title, description, license, nsfw, thumbnail, channelName);
     })
     .then(publishParams => {
       logger.debug('publishParams:', publishParams);

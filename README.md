@@ -44,6 +44,7 @@ spee.ch is a single-serving site that reads and publishes images and videos to a
     * license (string, optional)
     * title (string, optional)
     * description (string, optional)
+    * thumbnail (string, optional) (for .mp4 uploads only)
     * channelName(string, optional)
     * channelPassword (string, optional)
 

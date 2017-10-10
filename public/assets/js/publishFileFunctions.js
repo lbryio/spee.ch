@@ -12,14 +12,16 @@ function previewAndStageFile(selectedFile){
     const primaryDropzone = document.getElementById('primary-dropzone-wrapper');
     const previewReader = new FileReader();
     const nameInput = document.getElementById('claim-name-input');
-	const fileSelectionError = document.getElementById('input-error-file-selection');
+	const fileSelectionInputError = document.getElementById('input-error-file-selection');
+	const thumbnailSelectionTool = document.getElementById('publish-thumbnail');
+    const thumbnailSelectionInput = document.getElementById('claim-thumbnail-input');
 	// validate the file's name, type, and size
 	try {
 		console.log('validating file');
 		validateFile(selectedFile);
 	} catch (error) {
 		console.log('file validation failed with error:', error);
-		showError(fileSelectionError, error.message);
+		showError(fileSelectionInputError, error.message);
 		return;
 	}
 	// set the image preview, if an image was provided
@@ -32,8 +34,14 @@ function previewAndStageFile(selectedFile){
 		previewReader.onloadend = function () {
             assetPreview.innerHTML = '<img id="asset-preview" src="' + previewReader.result + '" alt="image preview"/>';
 		};
+		// clear & hide the thumbnail selection input
+        thumbnailSelectionInput.value = '';
+		thumbnailSelectionTool.hidden = true;
 	} else {
-        assetPreview.innerHTML = `<img id="asset-preview" src="/assets/img/black_video_play.jpg"/>`
+        assetPreview.innerHTML = `<img id="asset-preview" src="/assets/img/black_video_play.jpg"/>`;
+        // clear & show the thumbnail selection input
+        thumbnailSelectionInput.value = '';
+        thumbnailSelectionTool.hidden = false;
 	}
     // hide the drop zone
     primaryDropzone.hidden = true;
@@ -55,12 +63,12 @@ function publishStagedFile(event) {
     // declare variables
     const claimName = document.getElementById('claim-name-input').value;
     let channelName = document.getElementById('channel-name-select').value;
-    const fileSelectionError = document.getElementById('input-error-file-selection');
+    const fileSelectionInputError = document.getElementById('input-error-file-selection');
     const claimNameError = document.getElementById('input-error-claim-name');
     const channelSelectError = document.getElementById('input-error-channel-select');
     const publishSubmitError = document.getElementById('input-error-publish-submit');
     let anonymousOrInChannel;
-    // replace channelName with 'anonymous' if needed
+    // replace channelName with 'anonymous' if appropriate
     const radios = document.getElementsByName('anonymous-or-channel');
     for (let i = 0; i < radios.length; i++) {
         if (radios[i].checked) {
@@ -70,7 +78,9 @@ function publishStagedFile(event) {
             break;
         }
     }
-    if (anonymousOrInChannel === 'anonymous') {channelName = 'anonymous'};
+    if (anonymousOrInChannel === 'anonymous') {
+    	channelName = null;
+    };
     console.log('channel name:', channelName);
 	// validate, submit, and handle response
 	validateFilePublishSubmission(stagedFiles, claimName, channelName)
@@ -79,7 +89,7 @@ function publishStagedFile(event) {
 		})
 		.catch(error => {
 			if (error.name === 'FileError') {
-                showError(fileSelectionError, error.message);
+                showError(fileSelectionInputError, error.message);
 			} else if (error.name === 'NameError') {
 				showError(claimNameError, error.message);
             } else if (error.name === 'ChannelNameError'){

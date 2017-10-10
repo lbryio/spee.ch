@@ -16,6 +16,7 @@ module.exports = {
         return db.Channel.findOne({where: {channelName: publishParams.channel_name}});
       })
       .then(user => {
+        logger.debug('user:', user);
         let certificateId;
         if (user) {
           certificateId = user.channelClaimId;

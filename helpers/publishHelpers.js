@@ -111,7 +111,7 @@ module.exports = {
     }
     throw new Error('NSFW must be set to either true or false');
   },
-  createPublishParams (filePath, name, title, description, license, nsfw, channelName) {
+  createPublishParams (filePath, name, title, description, license, nsfw, thumbnail, channelName) {
     logger.debug(`Creating Publish Parameters`);
     // provide defaults for title
     if (title === null || title.trim() === '') {
@@ -140,6 +140,10 @@ module.exports = {
       },
       claim_address: config.get('WalletConfig.LbryClaimAddress'),
     };
+    // add thumbnail to channel if video
+    if (thumbnail !== null) {
+      publishParams['metadata']['thumbnail'] = thumbnail;
+    }
     // add channel to params, if applicable
     if (channelName) {
       publishParams['channel_name'] = channelName;

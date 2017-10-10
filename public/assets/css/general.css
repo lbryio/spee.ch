@@ -268,20 +268,20 @@ option {
 
 /* modifiers */
 .input-text--primary, .select--primary, .textarea--primary {
-	border-bottom: 1px solid dodgerblue;
+	border-bottom: 1px solid grey;
 }
 
 .input-text--primary:focus, .select--primary:focus, .textarea--primary:focus {
-	border-bottom: 1px solid dodgerblue;
+	border-bottom: 1px solid lightgrey;
 }
 
 .input-text--large, .select--large, .textarea--large {
 	font-size: 1.5rem;
-	border-left: 1px solid dodgerblue;
+	border-left: 1px solid grey;
 }
 
 .input-text--large:focus, .select--large:focus, .textarea--large:focus {
-	border-left: 1px solid dodgerblue;
+	border-left: 1px solid lightgrey;
 }
 
 .input-text--full-width, .textarea--full-width {

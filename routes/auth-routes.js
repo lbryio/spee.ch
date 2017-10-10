@@ -9,7 +9,7 @@ module.exports = (app) => {
   });
   // route for log in
   app.post('/login', passport.authenticate('local-login'), (req, res) => {
-    logger.debug(req.user);
+    logger.debug('req.user:', req.user);
     logger.debug('successful login');
     res.status(200).json({
       success       : true,

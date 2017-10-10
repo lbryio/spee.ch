@@ -84,7 +84,7 @@
 		width: 100%;
 	}
 
-	#publish-active-area > .row, #details-detail > .row, #channel-login-form > .row, #publish-channel-form > .row {
+	#publish-active-area > .row, #publish-details > .row, #channel-login-form > .row, #publish-channel-form > .row {
 		padding: 1em 0px 1em 0px;
 	}
 }

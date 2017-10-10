@@ -34,7 +34,7 @@ app.use(bodyParser.urlencoded({ extended: true })); // 'body parser' for parsing
 app.use(siofu.router); // 'socketio-file-upload' router for uploading with socket.io
 app.use((req, res, next) => {  // custom logging middleware to log all incoming http requests
   logger.verbose(`Request on ${req.originalUrl} from ${req.ip}`);
-  logger.debug(req.body);
+  logger.debug('req.body:', req.body);
   next();
 });
 

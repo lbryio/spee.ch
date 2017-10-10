@@ -6,15 +6,15 @@
             <a class="nav-bar-link" href="/">Upload</a>
             <a class="nav-bar-link" href="/popular">Popular</a>
             <a class="nav-bar-link" href="/about">About</a>
-            <!--{{#if user}}-->
-                <!--<select type="text" class="select select--no-arrow nav-bar-link" onchange="toggleLogin(event)">-->
-                    <!--<option value="{{user.channelName}}:{{user.channelClaimId}}">@{{user.userName}}</option>-->
-                    <!--<option value="view">View</option>-->
-                    <!--<option value="logout">Logout</option>-->
-                <!--</select>-->
-            <!--{{else}}-->
-                <!--<a class="nav-bar-link" href="/login">Login</a>-->
-            <!--{{/if}}-->
+            {{#if user}}
+                <select type="text" class="select select--no-arrow nav-bar-link" onchange="toggleLogin(event)">
+                    <option value="{{user.channelName}}:{{user.channelClaimId}}">@{{user.userName}}</option>
+                    <option value="view">View</option>
+                    <option value="logout">Logout</option>
+                </select>
+            {{else}}
+                <a class="nav-bar-link" href="/login">Login</a>
+            {{/if}}
         </div>
     </div>
 

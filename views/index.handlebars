@@ -48,6 +48,7 @@
         <div id="publish-active-area">
             {{> publishForm-Channel}}
             {{> publishForm-Url}}
+            {{> publishForm-Thumbnail}}
             {{> publishForm-Details}}
             {{> publishForm-Submit}}
         </div>
@@ -107,19 +108,29 @@
         document.getElementById('publish-status').innerHTML = msg;
     }
 	uploader.addEventListener('start', function(event){
-		var name = document.getElementById('claim-name-input').value;
-		var title = document.getElementById('publish-title').value;
-		var description = document.getElementById('publish-description').value;
-		var license = document.getElementById('publish-license').value;
-		var nsfw = document.getElementById('publish-nsfw').checked;
-		var channel = document.getElementById('channel-name-select').value;
+	    console.log('starting upload');
+        const name = document.getElementById('claim-name-input').value;
+        const title = document.getElementById('publish-title').value;
+        const description = document.getElementById('publish-description').value;
+        const license = document.getElementById('publish-license').value;
+        const nsfw = document.getElementById('publish-nsfw').checked;
+        const anonymous = document.getElementById('anonymous-select').checked;
+        console.log('anonymous?', anonymous);
+        const channel = document.getElementById('channel-name-select').value;
+        console.log('channel:', channel);
+        const thumbnail = document.getElementById('claim-thumbnail-input').value;
 		event.file.meta.name = name;
 		event.file.meta.title = title;
 		event.file.meta.description = description;
 		event.file.meta.license = license;
 		event.file.meta.nsfw = nsfw;
 		event.file.meta.type = stagedFiles[0].type;
-        event.file.meta.channel = channel;
+		if (!anonymous) {
+		    event.file.meta.channel = channel;
+        }
+        if (thumbnail && (thumbnail.trim !== '')){
+            event.file.meta.thumbnail = thumbnail;
+        }
         // hide the submit area
         document.getElementById('publish-active-area').hidden = true;
 		// show the progress status and animation
@@ -146,6 +157,7 @@
 		document.getElementById('publish-progress-bar').hidden = true;
 	});
 	socket.on('publish-complete', function(msg){
+	    console.log(msg);
 		var showUrl = msg.result.claim_id + "/" + msg.name;
 		// update status
 		updatePublishStatus('<p>Your publish is complete! You are being redirected to it now.</p><p><a target="_blank" href="' + showUrl + '">If you do not get redirected, click here.</a></p>');
