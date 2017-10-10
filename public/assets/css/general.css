@@ -102,6 +102,9 @@ h3 {
 	font-weight: normal;
 }
 
+.input-text--large, .textarea--large, .title-show, .description-show {
+	font-size: 1.5rem;
+}
 /* COLUMNS AND ROWS */
 
 .row {
@@ -212,12 +215,13 @@ input:-webkit-autofill {
  -webkit-box-shadow: 0 0 0px 1000px white inset;
 }
 
-.label, .input-text, .select, .textarea {
+.label, .input-text, .select, .textarea, .title-show {
 	margin: 0px;
 	padding: 0.3em;
 	outline: none;
 	border: 0px;
 	background-color: white;
+	display: inline-block;
 }
 
 .input-disabled {
@@ -234,7 +238,7 @@ option {
 
 
 .input-checkbox {
-	border: 1px solid grey;
+	border: 1px solid lightgrey;
 	background: white;
 }
 
@@ -252,7 +256,7 @@ option {
 	text-decoration: underline;
 	cursor: pointer;
 }
-
+/* modifiers */
 .select--no-arrow {
 	-moz-appearance:none;
 	-webkit-appearance: none;
@@ -265,8 +269,6 @@ option {
 	background: url('../img/down_triangle.png') no-repeat right;
 	padding-right: 1em;
 }
-
-/* modifiers */
 .input-text--primary, .select--primary, .textarea--primary {
 	border-bottom: 1px solid grey;
 }
@@ -276,7 +278,6 @@ option {
 }
 
 .input-text--large, .select--large, .textarea--large {
-	font-size: 1.5rem;
 	border-left: 1px solid grey;
 }
 
@@ -428,9 +429,13 @@ table {
 
 /* Show page */
 
-.asset-display {
+.video-show, .gifv-show, .image-show {
 	display: block;
 	width: 100%;
+}
+
+.video-show {
+
 }
 
 /* item lists */

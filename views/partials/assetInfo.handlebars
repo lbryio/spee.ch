@@ -1,60 +1,66 @@
-<h2 class="h2--top">Title</h2>
-<div class="row row--short">
-    {{fileInfo.title}}
-</div>
-
-<h2>Share</h2>
-<div class="row row--short">
-    <a target="_blank" href="https://twitter.com/intent/tweet?text=https://spee.ch/{{fileInfo.shortId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}">
-        twitter
-    </a>
-    <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fspee.ch%2F{{fileInfo.shortId}}%2F{{fileInfo.name}}.{{fileInfo.fileExt}}&amp;src=sdkpreparse">
-        facebook
-    </a>
-    <a target="_blank" href="https://www.tumblr.com/widgets/share/tool?posttype=photo&title=Spee.ch%20%7C%20Share&caption=Shared%20From%20https://spee.ch%20A%20Decentralized%20Image%20Hosting%20Service%20Running%20On%20The%20LBRY%20Protocol%20&content=https://spee.ch/{{fileInfo.shortId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}&tags=lbry%2C%20spee.ch%2C%20lbry.io&canonicalUrl=https%3A%2F%2Fspee.ch%2F{{fileInfo.shortId}}%2F{{fileInfo.name}}.{{fileInfo.fileExt}}&shareSource=tumblr_share_button">
-        tublr
-    </a>
-    <a target="_blank" href="https://www.reddit.com/submit?url=http%3A%2F%2Fspee.ch%2F{{fileInfo.shortId}}%2F{{fileInfo.name}}.{{fileInfo.fileExt}}&title={{fileInfo.name}}(Decentralized%20Hosting%20Provided%20By%20Spee.ch%20Using%20the%20LBRY%20Protocol)">
-        reddit
-    </a>
-</div>
-
-<h2>Links</h2>
-{{!-- short direct link to asset --}}
-<div class="row row--short">
-    <div class="column column--7">
-        <p><a href="/{{fileInfo.shortId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}">Short Link</a></p>
-        <div class="input-error" id="input-error-copy-short-link" hidden="true"></div>
-        <br/>
-        <input type="text" id="short-link" class="input-disabled input-text--full-width" readonly spellcheck="false" value="https://spee.ch/{{fileInfo.shortId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}" onclick="select()"/>
-    </div><div class="column column--1"></div><div class="column column--2">
-        <button class="button--primary" data-elementtocopy="short-link" onclick="copyToClipboard(event)">copy</button>
+<div id="show-share-buttons">
+    <div class="row row--wide row--short">
+        <div class="column column--2 column--sml-10">
+            <h3>Share:</h3>
+        </div><div class="column column--8 column--sml-10">
+            <div class="row row--short">
+                <div class="column column--2">
+                    <a target="_blank" href="https://twitter.com/intent/tweet?text=https://spee.ch/{{fileInfo.shortId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}">twitter</a>
+                </div>
+                <div class="column column--2">
+                    <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fspee.ch%2F{{fileInfo.shortId}}%2F{{fileInfo.name}}.{{fileInfo.fileExt}}&amp;src=sdkpreparse">facebook</a>
+                </div>
+                <div class="column column--2">
+                    <a target="_blank" href="https://www.tumblr.com/widgets/share/tool?posttype=photo&title=Spee.ch%20%7C%20Share&caption=Shared%20From%20https://spee.ch%20A%20Decentralized%20Image%20Hosting%20Service%20Running%20On%20The%20LBRY%20Protocol%20&content=https://spee.ch/{{fileInfo.shortId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}&tags=lbry%2C%20spee.ch%2C%20lbry.io&canonicalUrl=https%3A%2F%2Fspee.ch%2F{{fileInfo.shortId}}%2F{{fileInfo.name}}.{{fileInfo.fileExt}}&shareSource=tumblr_share_button">tublr</a>
+                </div>
+                <div class="column column--2">
+                    <a target="_blank" href="https://www.reddit.com/submit?url=http%3A%2F%2Fspee.ch%2F{{fileInfo.shortId}}%2F{{fileInfo.name}}.{{fileInfo.fileExt}}&title={{fileInfo.name}}(Decentralized%20Hosting%20Provided%20By%20Spee.ch%20Using%20the%20LBRY%20Protocol)">reddit</a>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
-{{!-- html text for embedding asset--}}
-<div class="row row--short">
-    <div class="column column--7">
-        <p>Embed HTML</p>
-        <div class="input-error" id="input-error-copy-embed-text" hidden="true"></div>
-        <br/>
-        {{#ifConditional fileInfo.fileType '===' 'video/mp4'}}
-            <input type="text" id="embed-text" class="input-disabled input-text--full-width" readonly onclick="select()" spellcheck="false" value='&lt;video width="100%" controls src="https://spee.ch/{{fileInfo.claimId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}"/>&lt;/video>'/>
-        {{else}}
-            <input type="text" id="embed-text" class="input-disabled input-text--full-width" readonly onclick="select()" spellcheck="false" value='&lt;img src="https://spee.ch/{{fileInfo.claimId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}"/>'/>
-        {{/ifConditional}}
-    </div><div class="column column--1"></div><div class="column column--2">
-        <button class="button--primary" data-elementtocopy="embed-text" onclick="copyToClipboard(event)">copy</button>
+<div id="show-short-link">
+    <div class="row row--wide row--short">
+        <div class="column column--2 column--sml-10">
+            <h3>Link:</h3>
+        </div><div class="column column--8 column--sml-10">
+            <div class="row row--short">
+                <div class="column column--7">
+                    <div class="input-error" id="input-error-copy-short-link" hidden="true"></div>
+                    <input type="text" id="short-link" class="input-disabled input-text--full-width" readonly spellcheck="false" value="https://spee.ch/{{fileInfo.shortId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}" onclick="select()"/>
+                </div><div class="column column--1"></div><div class="column column--2">
+                    <button class="button--primary" data-elementtocopy="short-link" onclick="copyToClipboard(event)">copy</button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
-<h2>Description</h2>
-<div class="row row--short">
-    {{fileInfo.description}}
+<div id="show-embed-code">
+    <div class="row row--wide row--short">
+        <div class="column column--2 column--sml-10">
+            <h3>Embed:</h3>
+        </div><div class="column column--8 column--sml-10">
+        <div class="row row--short">
+            <div class="column column--7">
+                <div class="input-error" id="input-error-copy-embed-text" hidden="true"></div>
+                {{#ifConditional fileInfo.fileType '===' 'video/mp4'}}
+                    <input type="text" id="embed-text" class="input-disabled input-text--full-width" readonly onclick="select()" spellcheck="false" value='&lt;video width="100%" controls poster="{{fileInfo.thumbnail}}" src="https://spee.ch/{{fileInfo.claimId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}"/>&lt;/video>'/>
+                {{else}}
+                    <input type="text" id="embed-text" class="input-disabled input-text--full-width" readonly onclick="select()" spellcheck="false" value='&lt;img src="https://spee.ch/{{fileInfo.claimId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}"/>'/>
+                {{/ifConditional}}
+            </div><div class="column column--1"></div><div class="column column--2">
+            <button class="button--primary" data-elementtocopy="embed-text" onclick="copyToClipboard(event)">copy</button>
+        </div>
+        </div>
+    </div>
+    </div>
 </div>
 
-<h2>Metadata</h2>
-<div class="row row--short">
+<h3><a class="label" id="show-details-toggle" href="#" onclick="toggleSection(event)" data-open="false" data-openlabel="[less]" data-closedlabel="[more]" data-slaveelementid="show-details">[more]</a></h3>
+<div id="show-details" hidden="true">
     <table class="metadata-table" style="table-layout: fixed">
         <tr class="metadata-row">
             <td class="left-column">Name</td>
@@ -79,17 +85,3 @@
         </tr>
     </table>
 </div>
-
-<script type ="text/javascript">
-    function copyToClipboard(event){
-        var elementToCopy = event.target.dataset.elementtocopy;
-        var element = document.getElementById(elementToCopy);
-        var errorElement = 'input-error-copy-text' + elementToCopy;
-        element.select();
-        try {
-            document.execCommand('copy');
-        } catch (err) {
-            showError(errorElement, 'Oops, unable to copy');
-        }
-    }
-</script>

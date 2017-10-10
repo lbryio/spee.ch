@@ -35,6 +35,7 @@ function validateFile(file) {
             throw new Error(file.type + ' is not a supported file type. Only, .jpeg, .png, .gif, and .mp4 files are currently supported.')
     }
 }
+
 // validation function that checks to make sure the claim name is valid
 function validateClaimName (name) {
     // ensure a name was entered

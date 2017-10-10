@@ -105,6 +105,18 @@ function checkCookie() {
     }
 }
 
+function copyToClipboard(event){
+    var elementToCopy = event.target.dataset.elementtocopy;
+    var element = document.getElementById(elementToCopy);
+    var errorElement = 'input-error-copy-text' + elementToCopy;
+    element.select();
+    try {
+        document.execCommand('copy');
+    } catch (err) {
+        showError(errorElement, 'Oops, unable to copy');
+    }
+}
+
 // Create new error objects, that prototypically inherit from the Error constructor
 function FileError(message) {
   this.name = 'FileError';
