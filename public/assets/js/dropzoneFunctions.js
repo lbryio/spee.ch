@@ -38,3 +38,13 @@ function dragend_handler(event) {
         event.dataTransfer.clearData();
     }
 }
+
+function dragenter_handler(event) {
+    console.log('drag enter', event);
+    document.getElementById(event.target.id).setAttribute('class', 'dropzone dropzone--drag-over');
+}
+
+function dragexit_handler(event) {
+    console.log('drag exit', event);
+    document.getElementById(event.target.id).setAttribute('class', 'dropzone');
+}

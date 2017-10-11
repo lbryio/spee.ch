@@ -405,11 +405,18 @@ table {
 .dropzone {
 	border: 2px dashed lightgrey;
 	text-align: center;
+	background-color: white;
 }
 
 .dropzone:hover {
 	border: 2px dashed #1e90ff;
+	background-color: lightgrey;
 	cursor: pointer;
+}
+
+.dropzone--drag-over {
+	background-color: lightgrey;
+	border: 2px dashed #1e90ff;
 }
 
 #primary-dropzone-wrapper, #publish-form-wrapper {
