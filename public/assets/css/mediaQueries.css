@@ -9,6 +9,7 @@
 		left: auto;
 		right: 0px;
 		top: auto;
+		bottom: calc(1.5rem + 2px);
 		transform: none;
 		padding-right: 2rem;
 	}
@@ -36,10 +37,6 @@
 	.h2--top {
 		margin-top: 1em;
 	}
-}
-
-
-@media (max-width: 475px) {
 
 	.nav-bar {
 		height: 12rem;
@@ -56,15 +53,12 @@
 
 	.nav-bar-subtitle {
 		position: relative;
-		display: inline-block;
+		display: block;
 		left: auto;
 		top: auto;
+        bottom: auto;
+        right: auto;
 		transform: none;
-	}
-
-	.row--full-height {
-
-		height: calc(100% - 11rem);
 	}
 
 	.column--sml-10 {
@@ -74,6 +68,10 @@
 	#publish-active-area > .row, #publish-details > .row, #channel-login-form > .row, #publish-channel-form > .row {
 		padding: 1em 0px 1em 0px;
 	}
+
+    .page-contents {
+        height: calc(100% - 12rem);
+    }
 }
 
 @media (max-width: 350px) {
