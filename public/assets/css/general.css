@@ -3,6 +3,13 @@ html, body {
 	padding: 0;
 	height: 100%;
 }
+
+.page-contents {
+	margin: 0px auto;
+	padding: 0px;
+	height: calc(100% - 5rem);
+    max-width: 1200px;
+}
 /* TEXT */
 
 body, button, input, textarea, label, select, option {
@@ -13,10 +20,6 @@ body, button, input, textarea, label, select, option {
 
 p {
 	padding-left: 0.3em;
-}
-
-.center-text {
-	text-align: center;
 }
 
 .url-text {
@@ -123,7 +126,7 @@ h3 {
 }
 
 .row--full-height {
-	height: calc(100% - 9rem);
+	height: calc(100% - 4rem);
 }
 
 .column {

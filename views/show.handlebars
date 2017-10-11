@@ -1,23 +1,20 @@
-
-	{{> navBar}}
-    <div class="row row--full-height">
-            <div class="column column--10">
-                <!-- title -->
-                <span class="title-show">{{fileInfo.title}}</span>
-            </div>
-            <div class="column column--5 column--med-10 align-content-top" >
-                <!-- asset -->
-                <div class="row">
-                    {{> asset}}
-                </div>
-                <div class="row row--wide">
-                    <span class="description-show">{{fileInfo.description}}</span>
-                </div>
-            </div><div class="column column--5 column--med-10 align-content-top">
-                <!-- details -->
-                <div class="row">
-                    {{> assetInfo}}
-                </div>
-            </div>
-
+<div class="row row--full-height">
+    <div class="column column--10">
+        <!-- title -->
+        <span class="title-show">{{fileInfo.title}}</span>
     </div>
+    <div class="column column--5 column--med-10 align-content-top" >
+        <!-- asset -->
+        <div class="row">
+            {{> asset}}
+        </div>
+        <div class="row row--wide">
+            <span class="description-show">{{fileInfo.description}}</span>
+        </div>
+    </div><div class="column column--5 column--med-10 align-content-top">
+        <!-- details -->
+        <div class="row">
+            {{> assetInfo}}
+        </div>
+    </div>
+</div>

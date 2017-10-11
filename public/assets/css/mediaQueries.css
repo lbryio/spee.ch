@@ -1,23 +1,6 @@
 
-@media (max-width: 1000px) {
+@media (max-width: 1050px) {
 
-	.main {
-		float: none;
-		width: 100%;
-		margin-right: 0px;
-		padding-right: 0px;
-		border-right: 0px;
-		margin-bottom: 5px;
-	}
-
-	.sidebar {
-		border-top: 1px solid lightgray;
-		float: none;
-		width: 100%;
-	}
-}
-
-@media (max-width: 850px) {
 	.nav-bar-title, .nav-bar-subtitle {
 		padding-bottom: 0px;
 	}
@@ -37,6 +20,10 @@
 
 	.nav-bar {
 		height: 8rem;
+	}
+
+	.page-contents {
+		height: calc(100% - 8rem);
 	}
 }
 

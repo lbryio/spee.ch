@@ -1,37 +1,32 @@
-
-	<div class="top-bar">
-		{{> navBar}}
-	</div>
-	<div>
-		<h3>Site Statistics</h3>
-		<p>Serve: {{ totals.totalServe }}</p>
-		<p>Publish: {{ totals.totalPublish }}</p>
-		<p>Show: {{ totals.totalShow }}</p>
-		<p>Percent Success: {{ percentSuccess}}%</p>
-		<table>
-			<tr>
-				<th>action</th>
-				<th >url</th> 
-				<th class="center-text">count</th>
-				<th class="center-text">success</th>
-				<th class="center-text">failure</th>
-			</tr>
-			{{#each records}}
-			<tr>
-				<td>{{ this.action }}</td>
-				<td class="stats-table-url">{{ this.url }}</td> 
-				<td class="center-text">{{ this.count }}</td>
-				<td class="center-text">{{ this.success }}</td>
-				<td class="center-text">{{ this.failure }}</td>
-			</tr>
-			{{/each}}
-			<tr>
-				<td></td>
-				<td></td> 
-				<td class="totals-row center-text">{{ totals.totalCount }}</td>
-				<td class="totals-row center-text">{{ totals.totalSuccess }}</td>
-				<td class="totals-row center-text">{{ totals.totalFailure }}</td>
-			</tr>
-		</table>
-
-	</div>
+<div>
+    <h3>Site Statistics</h3>
+    <p>Serve: {{ totals.totalServe }}</p>
+    <p>Publish: {{ totals.totalPublish }}</p>
+    <p>Show: {{ totals.totalShow }}</p>
+    <p>Percent Success: {{ percentSuccess}}%</p>
+    <table>
+        <tr>
+            <th>action</th>
+            <th >url</th>
+            <th class="">count</th>
+            <th class="">success</th>
+            <th class="">failure</th>
+        </tr>
+        {{#each records}}
+        <tr>
+            <td>{{ this.action }}</td>
+            <td class="stats-table-url">{{ this.url }}</td>
+            <td class="">{{ this.count }}</td>
+            <td class="">{{ this.success }}</td>
+            <td class="">{{ this.failure }}</td>
+        </tr>
+        {{/each}}
+        <tr>
+            <td></td>
+            <td></td>
+            <td class="">{{ totals.totalCount }}</td>
+            <td class="">{{ totals.totalSuccess }}</td>
+            <td class="">{{ totals.totalFailure }}</td>
+        </tr>
+    </table>
+</div>
