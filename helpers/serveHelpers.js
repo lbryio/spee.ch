@@ -40,6 +40,6 @@ module.exports = {
   },
   showFileLite (fileInfo, res) {
     const openGraphInfo = createOpenGraphInfo(fileInfo);
-    res.status(200).render('showLite', { layout: 'show', fileInfo, openGraphInfo });
+    res.status(200).render('showLite', { layout: 'showlite', fileInfo, openGraphInfo });
   },
 };
