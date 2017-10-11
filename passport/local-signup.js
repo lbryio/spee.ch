@@ -12,7 +12,7 @@ module.exports = new PassportLocalStrategy(
   },
   (req, username, password, done) => {
     logger.debug(`new channel signup request. user: ${username} pass: ${password} .`);
-    let user;
+    let userInfo = {};
     // server-side validaton of inputs (username, password)
 
     // create the channel and retrieve the metadata
@@ -41,16 +41,24 @@ module.exports = new PassportLocalStrategy(
         return Promise.all([db.User.create(userData), db.Channel.create(channelData), db.Certificate.create(certificateData)]);
       })
       .then(([newUser, newChannel, newCertificate]) => {
-        user = newUser;
         logger.debug('user and certificate successfully created');
         logger.debug('user result >', newUser.dataValues);
-        logger.debug('user result >', newChannel.dataValues);
+        userInfo['id'] = newUser.id;
+        userInfo['userName'] = newUser.userName;
+        logger.debug('channel result >', newChannel.dataValues);
+        userInfo['channelName'] = newChannel.channelName;
+        userInfo['channelClaimId'] = newChannel.channelClaimId;
         logger.debug('certificate result >', newCertificate.dataValues);
         // associate the instances
         return Promise.all([newCertificate.setChannel(newChannel), newChannel.setUser(newUser)]);
-      }).then(() => {
+      })
+      .then(() => {
         logger.debug('user and certificate successfully associated');
-        return done(null, user);
+        return db.getShortChannelIdFromLongChannelId(userInfo.channelClaimId, userInfo.channelName);
+      })
+      .then(shortChannelId => {
+        userInfo['shortChannelId'] = shortChannelId;
+        return done(null, userInfo);
       })
       .catch(error => {
         logger.error('signup error', error);

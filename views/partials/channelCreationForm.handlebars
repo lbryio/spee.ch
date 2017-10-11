@@ -1,4 +1,3 @@
-
 <form id="publish-channel-form">
     <div class="row row--wide row--short">
         <div class="column column--3 column--sml-10">
@@ -35,44 +34,3 @@
 <div id="channel-publish-done" hidden="true">
     <p>Your channel has been successfully created!</p>
 </div>
-
-
-<script type="text/javascript">
- function publishNewChannel (event) {
-     const userName = document.getElementById('new-channel-name').value;
-     const password = document.getElementById('new-channel-password').value;
-     const channelNameErrorDisplayElement = document.getElementById('input-error-channel-name');
-     const passwordErrorDisplayElement = document.getElementById('input-error-channel-password');
-     const chanelCreateForm = document.getElementById('publish-channel-form');
-     const inProgress = document.getElementById('channel-publish-in-progress');
-     const done = document.getElementById('channel-publish-done');
-
-     // prevent default so this script can handle submission
-     event.preventDefault();
-     // validate submission
-     validateNewChannelSubmission(userName, password)
-         .then(() => {
-             console.log('in progress');
-             chanelCreateForm.hidden = true;
-             inProgress.hidden = false;
-             createProgressBar(document.getElementById('create-channel-progress-bar'), 12);
-             return sendAuthRequest(userName, password, '/signup') // post the request
-         })
-         .then(() => {
-             console.log('success');
-             inProgress.hidden=true;
-             done.hidden = false;
-             // refresh window logged in as the channel
-             window.location.href = '/';
-         })
-         .catch(error => {
-             if (error.name === 'ChannelNameError'){
-                 showError(channelNameErrorDisplayElement, error.message);
-             } else if (error.name === 'ChannelPasswordError'){
-                 showError(passwordErrorDisplayElement, error.message);
-             } else {
-                 console.log('failure:', error);
-             }
-         })
- }
-</script>

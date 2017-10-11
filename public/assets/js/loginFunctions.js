@@ -52,7 +52,6 @@ function loginToChannel (event) {
         // update session cookie with new channel name and id's
         .then(result => {
             setUserCookies(result.channelName, result.channelClaimId, result.shortChannelId); // replace the current cookies
-            return result;
         })
         // update channel selection
         .then(() => {
