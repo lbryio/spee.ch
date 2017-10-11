@@ -32,10 +32,14 @@ function publishNewChannel (event) {
             setUserCookies(result.channelName, result.channelClaimId, result.shortChannelId); // set cookies
         })
         .then(() => {
-            // remove old channel and replace with new one & select it
-            replaceChannelOptionInPublishChannelSelect();
-            // remove old channel and replace with new one & select it
-            replaceChannelOptionInNavBarChannelSelect();
+            if (window.location.pathname === '/') {
+                // remove old channel and replace with new one & select it
+                replaceChannelOptionInPublishChannelSelect();
+                // remove old channel and replace with new one & select it
+                replaceChannelOptionInNavBarChannelSelect();
+            } else {
+                window.location = '/';
+            }
         })
         .catch(error => {
             if (error.name === 'ChannelNameError'){

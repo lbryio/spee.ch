@@ -55,10 +55,15 @@ function loginToChannel (event) {
         })
         // update channel selection
         .then(() => {
-            // remove old channel and replace with new one & select it
-            replaceChannelOptionInPublishChannelSelect();
-            // remove old channel and replace with new one & select it
-            replaceChannelOptionInNavBarChannelSelect();
+            if (window.location.pathname === '/') {
+                // remove old channel and replace with new one & select it
+                replaceChannelOptionInPublishChannelSelect();
+                // remove old channel and replace with new one & select it
+                replaceChannelOptionInNavBarChannelSelect();
+            } else {
+                window.location = '/';
+            }
+
         })
         .catch(error => {
             const loginErrorDisplayElement = document.getElementById('login-error-display-element');
