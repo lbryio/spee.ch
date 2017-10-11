@@ -275,11 +275,19 @@ option {
 	background: url('../img/down_triangle.png') no-repeat right;
 	padding-right: 1em;
 }
-.input-text--primary, .select--primary, .textarea--primary {
+.input-text--primary, .select--primary {
 	border-bottom: 1px solid lightgrey;
 }
 
-.input-text--primary:focus, .select--primary:focus, .textarea--primary:focus {
+.input-text--primary:focus, .select--primary:focus {
+	border-bottom: 1px solid grey;
+}
+
+.textarea--primary {
+	border-bottom: 1px solid lightgrey;
+}
+
+.textarea--primary:focus {
 	border-bottom: 1px solid grey;
 }
 
