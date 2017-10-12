@@ -47,14 +47,18 @@ function loginToChannel (event) {
     const password = document.getElementById('channel-login-password-input').value;
     // prevent default
     event.preventDefault()
-    // send request
-    sendAuthRequest(userName, password, '/login')
-        // update session cookie with new channel name and id's
+    validateNewChannelLogin(userName, password)
+        .then(() => {
+            console.log('channel login in progress');
+            // send request
+            return sendAuthRequest(userName, password, '/login')
+        })
         .then(result => {
+            // update session cookie with new channel name and id's
             setUserCookies(result.channelName, result.channelClaimId, result.shortChannelId); // replace the current cookies
         })
-        // update channel selection
         .then(() => {
+            // update channel selection
             if (window.location.pathname === '/') {
                 // remove old channel and replace with new one & select it
                 replaceChannelOptionInPublishChannelSelect();
@@ -67,7 +71,11 @@ function loginToChannel (event) {
         })
         .catch(error => {
             const loginErrorDisplayElement = document.getElementById('login-error-display-element');
-            showError(loginErrorDisplayElement, error);
-            console.log('login failure:', error);
+            if (error.name){
+                showError(loginErrorDisplayElement, error.message);
+            } else {
+                console.log('login failure:', error);
+                showError(loginErrorDisplayElement, 'There was an error logging into your channel');
+            }
         })
 }

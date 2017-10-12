@@ -26,16 +26,20 @@ module.exports = new PassportLocalStrategy(
           logger.debug('user found:', user.dataValues);
           userInfo['id'] = user.id;
           userInfo['userName'] = user.userName;
-          return user.getChannel();
-        })
-        .then(channel => {
-          userInfo['channelName'] = channel.channelName;
-          userInfo['channelClaimId'] = channel.channelClaimId;
-          return db.getShortChannelIdFromLongChannelId(channel.channelClaimId, channel.channelName);
-        })
-        .then(shortChannelId => {
-          userInfo['shortChannelId'] = shortChannelId;
-          return done(null, userInfo);
+          // channel stuff
+          return user.getChannel()
+            .then(channel => {
+              userInfo['channelName'] = channel.channelName;
+              userInfo['channelClaimId'] = channel.channelClaimId;
+              return db.getShortChannelIdFromLongChannelId(channel.channelClaimId, channel.channelName);
+            })
+            .then(shortChannelId => {
+              userInfo['shortChannelId'] = shortChannelId;
+              return done(null, userInfo);
+            })
+            .catch(error => {
+              throw error;
+            });
         })
         .catch(error => {
           return done(error);

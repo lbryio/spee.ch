@@ -45,7 +45,7 @@ function validateClaimName (name) {
     // validate the characters in the 'name' field
     const invalidCharacters = /[^A-Za-z0-9,-]/g.exec(name);
     if (invalidCharacters) {
-        throw new NameError('"' + invalidCharacters + '" characters are not allowed in the url.');
+        throw new NameError('"' + invalidCharacters + '" characters are not allowed');
     }
 }
 
@@ -58,7 +58,7 @@ function validateChannelName (name) {
     // validate the characters in the 'name' field
     const invalidCharacters = /[^A-Za-z0-9,-,@]/g.exec(name);
     if (invalidCharacters) {
-        throw new ChannelNameError('"' + invalidCharacters + '" characters are not allowed in the channel name.');
+        throw new ChannelNameError('"' + invalidCharacters + '" characters are not allowed');
     }
 }
 
@@ -217,5 +217,24 @@ function validateNewChannelSubmission(userName, password){
                 console.log('error evaluating channel name availability', error);
                 reject(error);
             });
+    });
+}
+// validation function which checks all aspects of a new channel login
+function validateNewChannelLogin(userName, password){
+    const channelName = `@${userName}`;
+    return new Promise(function (resolve, reject) {
+        // 1. validate name
+        try {
+            validateChannelName(channelName);
+        } catch (error) {
+            return reject(error);
+        }
+        // 2. validate password
+        try {
+            validatePassword(password);
+        } catch (error) {
+            return reject(error);
+        }
+        resolve();
     });
 }

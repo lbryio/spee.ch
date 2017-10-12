@@ -47,7 +47,6 @@ function publishNewChannel (event) {
             }
         })
         .catch(error => {
-
             if (error.name === 'ChannelNameError' || error.name === 'ChannelPasswordError'){
                 const channelNameErrorDisplayElement = document.getElementById('input-error-channel-name');
                 showError(channelNameErrorDisplayElement, error.message);

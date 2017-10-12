@@ -31,7 +31,7 @@ function postRequest (url, params) {
                 if ( xhttp.status == 200) {
                     resolve(xhttp.response);
                 } else if (xhttp.status == 401) {
-                    reject('wrong username or password');
+                    reject( new AuthenticationError('wrong username or password'));
                 } else {
                     reject('request failed with status:' + xhttp.status);
                 };
@@ -169,3 +169,11 @@ function ChannelPasswordError(message) {
 }
 ChannelPasswordError.prototype = Object.create(Error.prototype);
 ChannelPasswordError.prototype.constructor = ChannelPasswordError;
+
+function AuthenticationError(message) {
+    this.name = 'AuthenticationError';
+    this.message = message || 'Default Message';
+    this.stack = (new Error()).stack;
+}
+AuthenticationError.prototype = Object.create(Error.prototype);
+AuthenticationError.prototype.constructor = AuthenticationError;
