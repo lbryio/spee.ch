@@ -4,9 +4,9 @@
     </form>
     <div id="primary-dropzone-wrapper">
         <div id="primary-dropzone" class="dropzone" ondrop="drop_handler(event);" ondragover="dragover_handler(event);" ondragend="dragend_handler(event)" ondragenter="dragenter_handler(event)" ondragleave="dragexit_handler(event)" onclick="triggerFileChooser('siofu_input', event)">
-            <div id="primary-dropzone-instructions">
-                <div class="info-message-placeholder">
-                    <div class="info-message-placeholder"><div class="info-message info-message--failure" id="input-error-file-selection" hidden="true"></div></div>
+            <div id="primary-dropzone-instructions" class="align-content-vcenter-hcenter">
+                <div class="info-message-placeholder align-content-center">
+                    <div class="info-message info-message--failure" id="input-error-file-selection" hidden="true"></div>
                 </div>
                 <div class="row">
                     <p>Drag & drop image or video here</p>
@@ -26,7 +26,7 @@
             <div class="row">
                 <div id="asset-preview-holder" class="dropzone" ondrop="drop_handler(event);" ondragover="dragover_handler(event);" ondragend="dragend_handler(event)" onmouseenter="showInstructions()" onmouseleave="hideInstructions()" onclick="triggerFileChooser('siofu_input', event)">
                     <div id="asset-preview-target"></div>
-                    <div id="preview-dropzone-instructions" hidden="true">
+                    <div id="preview-dropzone-instructions" class="align-content-vcenter-hcenter" hidden="true">
                         <div class="row">
                             <p>Drag & drop image or video here</p>
                             <p>OR</p>
@@ -37,8 +37,6 @@
                 </div>
             </div>
         </div><div class="column column--5 column--med-10 align-content-top">
-            <div id="publish-status" class="row" hidden="true"></div>
-            <div id="publish-progress-bar" class="row" hidden="true"></div>
             <div id="publish-active-area">
                 {{> publishForm-Channel}}
                 {{> publishForm-Url}}
@@ -47,6 +45,11 @@
                 {{> publishForm-Submit}}
             </div>
         </div>
+    </div>
+    <div class="align-content-vcenter-hcenter">
+        <div id="publish-status" class="row align-content-center" hidden="true"></div>
+        <div id="publish-progress-bar" class="row align-content-center" hidden="true"></div>
+        <div id="upload-percent" class="row align-content-center" hidden="true"></div>
     </div>
 </div>
 
@@ -57,70 +60,104 @@
 
     checkCookie();
 
-    var socket = io();
-    var uploader = new SocketIOFileUpload(socket);
-    var stagedFiles = null;
+    const socket = io();
+    const uploader = new SocketIOFileUpload(socket);
+    let stagedFiles = null;
+
+    const publishFormWrapper = document.getElementById('publish-form-wrapper');
+    const publishStatus = document.getElementById('publish-status');
+    const publishProgressBar = document.getElementById('publish-progress-bar');
+    const uploadPercent = document.getElementById('upload-percent');
 
 	/* socketio-file-upload listeners */
-    function updatePublishStatus(msg){
-        document.getElementById('publish-status').innerHTML = msg;
-    }
 	uploader.addEventListener('start', function(event){
 	    console.log('starting upload');
+        addInputValuesToFileMetaData(event)
+        // hide the publish tool
+        hidePublishTools();
+		// show the progress status and animation
+        showPublishStatus();
+        updatePublishStatus('File is loading to server')
+        showPublishProgressBar();
+        showUploadPercent();
+	});
+	uploader.addEventListener('progress', function(event){
+		var percent = event.bytesLoaded / event.file.size * 100;
+		updateUploadPercent(`${percent.toFixed(2)} %`)
+	});
+	/* socket.io message listeners */
+	socket.on('publish-status', function(msg){
+		updatePublishStatus(msg);
+        hideUploadPercent();
+	});
+	socket.on('publish-failure', function(msg){
+        updatePublishStatus('<p> --(✖╭╮✖)→ </p><p>' + JSON.stringify(msg) + '</p><strong>For help, post the above error text in the #speech channel on the <a href="https://lbry.slack.com/" target="_blank">lbry slack</a></strong>');
+	    hidePublishProgressBar();
+	    hideUploadPercent();
+	});
+	socket.on('publish-complete', function(msg){
+		const showUrl = msg.result.claim_id + "/" + msg.name;
+		// update status
+		updatePublishStatus('<p>Your publish is complete! You are being redirected to it now.</p><p><a target="_blank" href="' + showUrl + '">If you do not get redirected, click here.</a></p>');
+        hidePublishProgressBar();
+        hideUploadPercent();
+        // redirect the user
+		window.location.href = showUrl;
+	});
+
+	function hidePublishTools() {
+        publishFormWrapper.hidden = true;
+    }
+    // publish status functions
+    function showPublishStatus() {
+        publishStatus.hidden = false;
+    }
+    function updatePublishStatus(msg){
+        publishStatus.innerHTML = msg;
+    }
+    // progress bar functions
+    function showPublishProgressBar(){
+        publishProgressBar.hidden = false;
+        createProgressBar(publishProgressBar, 12);
+    }
+    function hidePublishProgressBar(){
+        publishProgressBar.hidden = true;
+    }
+    // upload percent functions
+    function showUploadPercent(){
+        uploadPercent.hidden = false;
+    }
+    function updateUploadPercent(msg){
+        uploadPercent.innerHTML = msg;
+    }
+    function hideUploadPercent(){
+        uploadPercent.hidden = true;
+    }
+
+    function addInputValuesToFileMetaData(event) {
+        // get values from inputs
         const name = document.getElementById('claim-name-input').value;
         const title = document.getElementById('publish-title').value;
         const description = document.getElementById('publish-description').value;
         const license = document.getElementById('publish-license').value;
         const nsfw = document.getElementById('publish-nsfw').checked;
         const anonymous = document.getElementById('anonymous-select').checked;
-        console.log('anonymous?', anonymous);
         const channel = document.getElementById('channel-name-select').value;
-        console.log('channel:', channel);
         const thumbnail = document.getElementById('claim-thumbnail-input').value;
-		event.file.meta.name = name;
-		event.file.meta.title = title;
-		event.file.meta.description = description;
-		event.file.meta.license = license;
-		event.file.meta.nsfw = nsfw;
-		event.file.meta.type = stagedFiles[0].type;
-		if (!anonymous) {
-		    event.file.meta.channel = channel;
+        // set values on file meta data
+        event.file.meta.name = name;
+        event.file.meta.title = title;
+        event.file.meta.description = description;
+        event.file.meta.license = license;
+        event.file.meta.nsfw = nsfw;
+        event.file.meta.type = stagedFiles[0].type;
+        console.log('anonymous?', anonymous);
+        if (!anonymous) {
+            console.log('channel:', channel);
+            event.file.meta.channel = channel;
         }
         if (thumbnail && (thumbnail.trim !== '')){
             event.file.meta.thumbnail = thumbnail;
         }
-        // hide the submit area
-        document.getElementById('publish-active-area').hidden = true;
-		// show the progress status and animation
-		document.getElementById('publish-status').hidden = false;
-        document.getElementById('publish-progress-bar').hidden = false;
-		createProgressBar(document.getElementById('publish-progress-bar'), 12);
-		// google analytics
-		ga('send', {
-			hitType: 'event',
-			eventCategory: 'publish',
-			eventAction: name
-		});
-	});
-	uploader.addEventListener('progress', function(event){
-		var percent = event.bytesLoaded / event.file.size * 100;
-		updatePublishStatus('File is ' + percent.toFixed(2) + '% loaded to the server');
-	});
-	/* socket.io message listeners */
-	socket.on('publish-status', function(msg){
-		updatePublishStatus(msg);
-	});
-	socket.on('publish-failure', function(msg){
-		updatePublishStatus('<p> --(✖╭╮✖)→ </p><p>' + JSON.stringify(msg) + '</p><strong>For help, post the above error text in the #speech channel on the <a href="https://lbry.slack.com/" target="_blank">lbry slack</a></strong>');
-		document.getElementById('publish-progress-bar').hidden = true;
-	});
-	socket.on('publish-complete', function(msg){
-	    console.log(msg);
-		var showUrl = msg.result.claim_id + "/" + msg.name;
-		// update status
-		updatePublishStatus('<p>Your publish is complete! You are being redirected to it now.</p><p><a target="_blank" href="' + showUrl + '">If you do not get redirected, click here.</a></p>');
-        document.getElementById('publish-progress-bar').hidden = true;
-        // redirect the user
-		window.location.href = showUrl;
-	});
+    }
 </script>

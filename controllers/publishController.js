@@ -8,7 +8,7 @@ module.exports = {
     return new Promise((resolve, reject) => {
       let publishResults = {};
       // 1. publish the file
-      lbryApi.publishClaim(publishParams)
+      return lbryApi.publishClaim(publishParams)
       // 2. upsert File record (update is in case the claim has been published before by this daemon)
       .then(tx => {
         logger.info(`Successfully published ${fileName}`, tx);
@@ -67,6 +67,7 @@ module.exports = {
         resolve(publishResults); // resolve the promise with the result from lbryApi.publishClaim;
       })
       .catch(error => {
+        logger.error('publishController.publish, error', error);
         publishHelpers.deleteTemporaryFile(publishParams.file_path); // delete the local file
         reject(error);
       });

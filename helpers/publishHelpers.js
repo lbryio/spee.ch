@@ -152,7 +152,10 @@ module.exports = {
   },
   deleteTemporaryFile (filePath) {
     fs.unlink(filePath, err => {
-      if (err) throw err;
+      if (err) {
+        logger.error(`error deleting temporary file ${filePath}`);
+        throw err;
+      }
       logger.debug(`successfully deleted ${filePath}`);
     });
   },

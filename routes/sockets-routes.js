@@ -58,17 +58,14 @@ module.exports = (app, siofu, hostedContentPath) => {
         publish(publishParams, file.name, file.meta.type)
         .then(result => {
           socket.emit('publish-complete', { name: publishParams.name, result });
-          postToStats('PUBLISH', '/', null, null, null, 'success');
         })
         .catch(error => {
-          socket.emit('publish-failure', error);
           logger.error('Publish Error:', useObjectPropertiesIfNoKeys(error));
-          postToStats('PUBLISH', '/', null, null, null, error);
+          socket.emit('publish-failure', error.message);
         });
       } else {
         socket.emit('publish-failure', 'File uploaded, but with errors');
         logger.error(`An error occurred in uploading the client's file`);
-        postToStats('PUBLISH', '/', null, null, null, 'File uploaded, but with errors');
         // to-do: remove the file, if not done automatically
       }
     });

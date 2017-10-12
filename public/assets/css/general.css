@@ -202,7 +202,8 @@ h3 {
 }
 
 /* ALIGNMENT */
-.align-content-left {
+.
+align-content-left {
 	text-align: left;
 }
 
@@ -221,6 +222,14 @@ h3 {
 .align-content-right {
 	vertical-align: bottom;
 }
+
+.align-content-vcenter-hcenter {
+	position: absolute;
+	top: 40%;
+	left: 50%;
+	transform: translateX(-50%) translateY(-40%);
+}
+
 
 /* ERROR MESSAGES */
 
@@ -473,10 +482,10 @@ table {
 }
 
 #primary-dropzone-instructions, #preview-dropzone-instructions {
-	position: absolute;
-	top: 40%;
-	left: 50%;
-	transform: translateX(-50%) translateY(-40%);
+	/*position: absolute;*/
+	/*top: 40%;*/
+	/*left: 50%;*/
+	/*transform: translateX(-50%) translateY(-40%);*/
 }
 
 #asset-preview {
