@@ -5,12 +5,14 @@
     <div id="primary-dropzone-wrapper">
         <div id="primary-dropzone" class="dropzone" ondrop="drop_handler(event);" ondragover="dragover_handler(event);" ondragend="dragend_handler(event)" ondragenter="dragenter_handler(event)" ondragleave="dragexit_handler(event)" onclick="triggerFileChooser('siofu_input', event)">
             <div id="primary-dropzone-instructions">
+                <div class="info-message-placeholder">
+                    <div class="info-message-placeholder"><div class="info-message info-message--failure" id="input-error-file-selection" hidden="true"></div></div>
+                </div>
                 <div class="row">
                     <p>Drag & drop image or video here</p>
                     <p>OR</p>
                     <label class="input-file-label">CHOOSE FILE</label>
                 </div>
-                <div class="info-message info-message--failure" id="input-error-file-selection" hidden="true"></div>
             </div>
         </div>
     </div>

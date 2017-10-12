@@ -3,7 +3,9 @@
         <div class="column column--3 column--sml-10">
             <label class="label" for="new-channel-name">Name:</label>
         </div><div class="column column--6 column--sml-10">
-            <div id="input-error-channel-name" class="info-message info-message--failure"></div>
+            <div class="info-message-placeholder">
+                <div id="input-error-channel-name" class="info-message info-message--failure"></div>
+            </div>
             <div class="input-text--primary">
                 <span>@</span>
                 <input type="text" name="new-channel-name" id="new-channel-name" class="input-text" placeholder="exampleChannelName" value="" oninput="checkChannelName(event.target.value)">
@@ -15,7 +17,9 @@
         <div class="column column--3 column--sml-10">
             <label class="label" for="new-channel-password">Password:</label>
         </div><div class="column column--6 column--sml-10">
-            <div id="input-error-channel-password" class="info-message info-message--failure"></div>
+            <div class="info-message-placeholder">
+                <div id="input-error-channel-password" class="info-message info-message--failure"></div>
+            </div>
             <div class="input-text--primary">
                 <input type="password" name="new-channel-password" id="new-channel-password" class="input-text"  placeholder="" value="" >
             </div>
