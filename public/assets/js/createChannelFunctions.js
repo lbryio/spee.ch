@@ -42,12 +42,9 @@ function publishNewChannel (event) {
             }
         })
         .catch(error => {
-            if (error.name === 'ChannelNameError'){
+            if (error.name === 'ChannelNameError' || error.name === 'ChannelPasswordError'){
                 const channelNameErrorDisplayElement = document.getElementById('input-error-channel-name');
                 showError(channelNameErrorDisplayElement, error.message);
-            } else if (error.name === 'ChannelPasswordError'){
-                const passwordErrorDisplayElement = document.getElementById('input-error-channel-password');
-                showError(passwordErrorDisplayElement, error.message);
             } else {
                 console.log('signup failure:', error);
             }

@@ -177,7 +177,7 @@ function validateFilePublishSubmission(stagedFiles, claimName, channelName){
                 if (result) {
                     resolve();
                 } else {
-                    reject(new NameError('that url ending is already taken'));
+                    reject(new NameError('Sorry, that ending is already taken'));
                 }
             })
             .catch(error => {
