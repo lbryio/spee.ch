@@ -13,6 +13,11 @@ function showChannelCreateDoneDisplay() {
     done.hidden = false;
 }
 
+function showChannelCreationError(msg) {
+    const inProgress = document.getElementById('channel-publish-in-progress');
+    inProgress.innerText = msg;
+}
+
 function publishNewChannel (event) {
     const userName = document.getElementById('new-channel-name').value;
     const password = document.getElementById('new-channel-password').value;
@@ -42,11 +47,13 @@ function publishNewChannel (event) {
             }
         })
         .catch(error => {
+
             if (error.name === 'ChannelNameError' || error.name === 'ChannelPasswordError'){
                 const channelNameErrorDisplayElement = document.getElementById('input-error-channel-name');
                 showError(channelNameErrorDisplayElement, error.message);
             } else {
                 console.log('signup failure:', error);
+                showChannelCreationError('Unfortunately, Spee.ch encountered an error while creating your channel :(');
             }
         })
 }

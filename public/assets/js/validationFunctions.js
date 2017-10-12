@@ -210,7 +210,7 @@ function validateNewChannelSubmission(userName, password){
                     resolve();
                 } else {
                     console.log('channel is not available');
-                    reject(new ChannelNameError('that channel name has already been taken'));
+                    reject(new ChannelNameError('Sorry, that name is already taken'));
                 }
             })
             .catch( error => {
