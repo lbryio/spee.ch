@@ -130,14 +130,14 @@ function checkAvailability(name, successDisplayElement, errorDisplayElement, val
 function checkClaimName(name){
     const successDisplayElement = document.getElementById('input-success-claim-name');
     const errorDisplayElement = document.getElementById('input-error-claim-name');
-    checkAvailability(name, successDisplayElement, errorDisplayElement, validateClaimName, isNameAvailable, 'Sorry, that url ending has been taken', '/api/isClaimAvailable/');
+    checkAvailability(name, successDisplayElement, errorDisplayElement, validateClaimName, isNameAvailable, 'Sorry, that ending is already taken', '/api/isClaimAvailable/');
 }
 
 function checkChannelName(name){
     const successDisplayElement = document.getElementById('input-success-channel-name');
     const errorDisplayElement = document.getElementById('input-error-channel-name');
     name = `@${name}`;
-    checkAvailability(name, successDisplayElement, errorDisplayElement, validateChannelName, isNameAvailable, 'Sorry, that name has already been taken', '/api/isChannelAvailable/');
+    checkAvailability(name, successDisplayElement, errorDisplayElement, validateChannelName, isNameAvailable, 'Sorry, that name is already taken', '/api/isChannelAvailable/');
 }
 
 // validation function which checks all aspects of the publish submission
