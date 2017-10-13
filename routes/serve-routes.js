@@ -7,7 +7,9 @@ const SHOW = 'SHOW';
 const SHOWLITE = 'SHOWLITE';
 const CHANNEL = 'CHANNEL';
 const CLAIM = 'CLAIM';
-const CHANNELID_INDICATOR = ':';
+const CLAIM_ID_CHAR = ':';
+const CHANNEL_CHAR = '@';
+const CLAIMS_PER_PAGE = 10;
 
 function isValidClaimId (claimId) {
   return ((claimId.length === 40) && !/[^A-Za-z0-9]/g.test(claimId));
@@ -30,6 +32,48 @@ function getAsset (claimType, channelName, channelId, name, claimId) {
     default:
       return new Error('that claim type was not found');
   }
+}
+
+function getPage (query) {
+  if (query.p) {
+    return parseInt(query.p);
+  }
+  return 0;
+}
+
+function extractPageFromClaims (claims, pageNumber) {
+  logger.debug('claims is array?', Array.isArray(claims));
+  logger.debug('pageNumber is number?', Number.isInteger(pageNumber));
+  return claims.slice(pageNumber * 10, pageNumber + 10);
+}
+
+function determineTotalPages (totalClaims) {
+  if (totalClaims === 0) {
+    return -1;
+  }
+  if (totalClaims < CLAIMS_PER_PAGE) {
+    return 0;
+  }
+  const fullPages = Math.floor(totalClaims / CLAIMS_PER_PAGE);
+  const remainder = totalClaims % CLAIMS_PER_PAGE;
+  if (remainder === 0) {
+    return fullPages - 1;
+  }
+  return fullPages;
+}
+
+function determinePreviousPage (currentPage) {
+  if (currentPage === 0) {
+    return 0;
+  }
+  return currentPage - 1;
+}
+
+function determineNextPage (totalPages, currentPage) {
+  if (currentPage === totalPages) {
+    return currentPage;
+  }
+  return currentPage + 1;
 }
 
 module.exports = (app) => {
@@ -75,7 +119,7 @@ module.exports = (app) => {
     if (identifier.charAt(0) === '@') {
       channelName = identifier;
       claimType = CHANNEL;
-      const channelIdIndex = channelName.indexOf(CHANNELID_INDICATOR);
+      const channelIdIndex = channelName.indexOf(CLAIM_ID_CHAR);
       if (channelIdIndex !== -1) {
         channelId = channelName.substring(channelIdIndex + 1);
         channelName = channelName.substring(0, channelIdIndex);
@@ -105,16 +149,18 @@ module.exports = (app) => {
     });
   });
   // route to serve the winning asset at a claim
-  app.get('/:name', ({ headers, ip, originalUrl, params }, res) => {
+  app.get('/:name', ({ headers, ip, originalUrl, params, query }, res) => {
     // parse name param
     let name = params.name;
     let method;
     let fileExtension;
     let channelName = null;
     let channelId = null;
-    if (name.charAt(0) === '@') {
+    // (a) handle channel requests
+    if (name.charAt(0) === CHANNEL_CHAR) {
       channelName = name;
-      const channelIdIndex = channelName.indexOf(CHANNELID_INDICATOR);
+      const paginationPage = getPage(query);
+      const channelIdIndex = channelName.indexOf(CLAIM_ID_CHAR);
       if (channelIdIndex !== -1) {
         channelId = channelName.substring(channelIdIndex + 1);
         channelName = channelName.substring(0, channelIdIndex);
@@ -125,16 +171,27 @@ module.exports = (app) => {
       getChannelContents(channelName, channelId)
       // 2. respond to the request
       .then(result => {
-        logger.debug('result');
+        const totalPages = determineTotalPages(result.claims.length);
         if (!result.claims) {
           res.status(200).render('noChannel');
         } else {
-          res.status(200).render('channel', result);
+          res.status(200).render('channel', {
+            channelName   : result.channelName,
+            longChannelId : result.longChannelId,
+            shortChannelId: result.shortChannelId,
+            claims        : extractPageFromClaims(result.claims, paginationPage),
+            previousPage  : determinePreviousPage(paginationPage),
+            currentPage   : paginationPage,
+            nextPage      : determineNextPage(totalPages, paginationPage),
+            totalPages,
+            totalResults  : result.claims.length,
+          });
         }
       })
       .catch(error => {
         handleRequestError('serve', originalUrl, ip, error, res);
       });
+    // (b) handle stream requests
     } else {
       if (name.indexOf('.') !== -1) {
         method = SERVE;

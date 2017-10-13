@@ -144,21 +144,17 @@ module.exports = {
     return new Promise((resolve, reject) => {
       let longChannelId;
       let shortChannelId;
-      // 1. get the long channel Id
       db
-        .getLongChannelId(channelName, channelId)
-        // 2. get all claims for that channel
-        .then(result => {
+        .getLongChannelId(channelName, channelId)  // 1. get the long channel Id
+        .then(result => {  // 2. get all claims for that channel
           longChannelId = result;
           return db.getShortChannelIdFromLongChannelId(longChannelId, channelName);
         })
-        // 3. get all Claim records for this channel
-        .then(result => {
+        .then(result => {  // 3. get all Claim records for this channel
           shortChannelId = result;
           return db.getAllChannelClaims(longChannelId);
         })
-        // 4. add extra data not available from Claim table
-        .then(allChannelClaims => {
+        .then(allChannelClaims => {  // 4. add extra data not available from Claim table
           if (allChannelClaims) {
             allChannelClaims.forEach(element => {
               const fileExtenstion = element.contentType.substring(element.contentType.lastIndexOf('/') + 1);

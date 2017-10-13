@@ -1,6 +1,12 @@
 <div class="row row--full-height">
     <h2>{{this.channelName}}<span class="h2--secondary">:{{this.longChannelId}}</span></h2>
-    <p>Below is all the free content in this channel.</p>
+    <p>Page: {{this.currentPage}}/{{this.totalPages}}, Total Files: {{this.totalResults}}</p>
+    <p>
+        <a href="/{{this.channelName}}:{{this.longChannelId}}?p=0">First Page</a> |
+        <a href="/{{this.channelName}}:{{this.longChannelId}}?p={{this.previousPage}}">Last Page</a> |
+        <a href="/{{this.channelName}}:{{this.longChannelId}}?p={{this.nextPage}}">Next Page</a> |
+        <a href="/{{this.channelName}}:{{this.longChannelId}}?p={{this.totalPages}}">Last Page</a>
+    </p>
     {{#each this.claims}}
       {{> contentListItem}}
     {{/each}}
