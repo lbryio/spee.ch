@@ -1,13 +1,24 @@
 <div class="row row--full-height">
-    <h2>{{this.channelName}}<span class="h2--secondary">:{{this.longChannelId}}</span></h2>
-    <p>Page: {{this.currentPage}}/{{this.totalPages}}, Total Files: {{this.totalResults}}</p>
-    <p>
-        <a href="/{{this.channelName}}:{{this.longChannelId}}?p=0">First Page</a> |
-        <a href="/{{this.channelName}}:{{this.longChannelId}}?p={{this.previousPage}}">Last Page</a> |
-        <a href="/{{this.channelName}}:{{this.longChannelId}}?p={{this.nextPage}}">Next Page</a> |
-        <a href="/{{this.channelName}}:{{this.longChannelId}}?p={{this.totalPages}}">Last Page</a>
-    </p>
-    {{#each this.claims}}
-      {{> contentListItem}}
-    {{/each}}
+    <div class="column column--10 align-content-center">
+        <h2>{{this.channelName}}<span class="h2--secondary">:{{this.longChannelId}}</span></h2>
+    </div>
+    <div class="column column--10 align-content-center">
+        <p>Total Pages: {{this.totalPages}}, Total Files: {{this.totalResults}}</p>
+    </div>
+    <div class="row">
+        {{#each this.claims}}
+            {{> contentListItem}}
+        {{/each}}
+    </div>
+    <div class="row">
+        <div class="column column--3 align-content--left">
+            <a href="/{{this.channelName}}:{{this.longChannelId}}?p=0">First Page [0]</a>
+        </div><div class="column column--4 align-content-center">
+            <a href="/{{this.channelName}}:{{this.longChannelId}}?p={{this.previousPage}}">Previous Page [{{this.previousPage}}]</a> |
+            <a href="/{{this.channelName}}:{{this.longChannelId}}?p={{this.nextPage}}">Next Page [{{this.nextPage}}]</a>
+        </div><div class="column column--3 align-content-right">
+            <a href="/{{this.channelName}}:{{this.longChannelId}}?p={{this.totalPages}}">Last Page [{{this.totalPages}}]</a>
+        </div>
+    </div>
+
 </div>

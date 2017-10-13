@@ -43,8 +43,14 @@ function getPage (query) {
 
 function extractPageFromClaims (claims, pageNumber) {
   logger.debug('claims is array?', Array.isArray(claims));
-  logger.debug('pageNumber is number?', Number.isInteger(pageNumber));
-  return claims.slice(pageNumber * 10, pageNumber + 10);
+  logger.debug(`pageNumber ${pageNumber} is number?`, Number.isInteger(pageNumber));
+  const claimStartIndex = pageNumber * CLAIMS_PER_PAGE;
+  console.log('claim start index:', claimStartIndex);
+  const claimEndIndex = claimStartIndex + 10;
+  console.log('claim end index:', claimEndIndex);
+  const pageOfClaims = claims.slice(claimStartIndex, claimEndIndex);
+  logger.debug('page of claims:', pageOfClaims);
+  return pageOfClaims;
 }
 
 function determineTotalPages (totalClaims) {
@@ -183,7 +189,7 @@ module.exports = (app) => {
             previousPage  : determinePreviousPage(paginationPage),
             currentPage   : paginationPage,
             nextPage      : determineNextPage(totalPages, paginationPage),
-            totalPages,
+            totalPages    : totalPages,
             totalResults  : result.claims.length,
           });
         }
