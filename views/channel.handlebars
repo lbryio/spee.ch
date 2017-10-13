@@ -3,7 +3,7 @@
         <h2>{{this.channelName}}<span class="h2--secondary">:{{this.longChannelId}}</span></h2>
     </div>
     <div class="column column--10 align-content-center">
-        <p>Total Pages: {{this.totalPages}}, Total Files: {{this.totalResults}}</p>
+        <p>Page {{this.currentPage}} / {{this.totalPages}}, Total Files: {{this.totalResults}}</p>
     </div>
     <div class="row">
         {{#each this.claims}}
@@ -12,10 +12,19 @@
     </div>
     <div class="row">
         <div class="column column--3 align-content--left">
-            <a href="/{{this.channelName}}:{{this.longChannelId}}?p=0">First Page [0]</a>
+            <a href="/{{this.channelName}}:{{this.longChannelId}}?p=1">First Page [1]</a>
         </div><div class="column column--4 align-content-center">
-            <a href="/{{this.channelName}}:{{this.longChannelId}}?p={{this.previousPage}}">Previous Page [{{this.previousPage}}]</a> |
-            <a href="/{{this.channelName}}:{{this.longChannelId}}?p={{this.nextPage}}">Next Page [{{this.nextPage}}]</a>
+            {{#if this.previousPage}}
+                <a href="/{{this.channelName}}:{{this.longChannelId}}?p={{this.previousPage}}">Previous Page [{{this.previousPage}}]</a>
+            {{else}}
+                <a disabled>Previous Page</a>
+            {{/if}}
+            |
+            {{#if this.nextPage}}
+                <a href="/{{this.channelName}}:{{this.longChannelId}}?p={{this.nextPage}}">Next Page [{{this.nextPage}}]</a>
+            {{else}}
+                <a disabled>Next Page</a>
+            {{/if}}
         </div><div class="column column--3 align-content-right">
             <a href="/{{this.channelName}}:{{this.longChannelId}}?p={{this.totalPages}}">Last Page [{{this.totalPages}}]</a>
         </div>

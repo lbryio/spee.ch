@@ -38,13 +38,13 @@ function getPage (query) {
   if (query.p) {
     return parseInt(query.p);
   }
-  return 0;
+  return 1;
 }
 
 function extractPageFromClaims (claims, pageNumber) {
   logger.debug('claims is array?', Array.isArray(claims));
   logger.debug(`pageNumber ${pageNumber} is number?`, Number.isInteger(pageNumber));
-  const claimStartIndex = pageNumber * CLAIMS_PER_PAGE;
+  const claimStartIndex = (pageNumber - 1) * CLAIMS_PER_PAGE;
   console.log('claim start index:', claimStartIndex);
   const claimEndIndex = claimStartIndex + 10;
   console.log('claim end index:', claimEndIndex);
@@ -55,29 +55,29 @@ function extractPageFromClaims (claims, pageNumber) {
 
 function determineTotalPages (totalClaims) {
   if (totalClaims === 0) {
-    return -1;
+    return 0;
   }
   if (totalClaims < CLAIMS_PER_PAGE) {
-    return 0;
+    return 1;
   }
   const fullPages = Math.floor(totalClaims / CLAIMS_PER_PAGE);
   const remainder = totalClaims % CLAIMS_PER_PAGE;
   if (remainder === 0) {
-    return fullPages - 1;
+    return fullPages;
   }
-  return fullPages;
+  return fullPages + 1;
 }
 
 function determinePreviousPage (currentPage) {
-  if (currentPage === 0) {
-    return 0;
+  if (currentPage === 1) {
+    return null;
   }
   return currentPage - 1;
 }
 
 function determineNextPage (totalPages, currentPage) {
   if (currentPage === totalPages) {
-    return currentPage;
+    return null;
   }
   return currentPage + 1;
 }
