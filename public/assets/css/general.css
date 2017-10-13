@@ -528,3 +528,13 @@ table {
 .wrap-words {
 	word-wrap: break-word;
 }
+
+/* ---- grid items ---- */
+
+.grid-item {
+	width: calc(30% - 2rem);
+	padding: 0px;
+	margin: 1rem;
+	float: left;
+	display: block;
+}
