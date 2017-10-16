@@ -1,12 +1,12 @@
 <div class="row row--no-top">
-    <div class="column column--2 column--sml-10">
+    <div class="column column--3 column--sml-10">
         <label class="label">URL:</label>
-    </div><div class="column column--8 column--sml-10">
+    </div><div class="column column--7 column--sml-10">
         <div class="info-message-placeholder">
             <div id="input-error-claim-name" class="info-message info-message--failure"  hidden="true"></div>
         </div>
         <div class="input-text--primary">
-            <span class="url-text url-text--secondary">Spee.ch /</span>
+            <span class="url-text url-text--secondary">spee.ch /</span>
             <span id="url-channel" class="url-text url-text--secondary" {{#if user}}{{else}}hidden="true"{{/if}}>{{user.channelName}}:{{user.shortChannelId}}</span>
             <span id="url-no-channel-placeholder" class="url-text url-text--secondary tooltip" {{#if user}}hidden="true"{{else}}{{/if}}>xyz<span class="tooltip-text">This will be a random id</span></span>
             <span id="url-channel-placeholder" class="url-text url-text--secondary tooltip" hidden="true">@channel<span class="tooltip-text">Select a channel above</span></span>
