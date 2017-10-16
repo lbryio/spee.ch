@@ -54,8 +54,16 @@ p {
 	color: grey;
 }
 
+.instructions-text--large {
+	font-size: 2rem;
+}
+
 .pull-quote {
 	font-size: 3rem;
+}
+
+.publish-fine-print {
+	font-size: small;
 }
 
 /* TOOL TIPS */
@@ -479,13 +487,6 @@ table {
 
 #asset-preview-holder {
 	position: relative;
-}
-
-#primary-dropzone-instructions, #preview-dropzone-instructions {
-	/*position: absolute;*/
-	/*top: 40%;*/
-	/*left: 50%;*/
-	/*transform: translateX(-50%) translateY(-40%);*/
 }
 
 #asset-preview {

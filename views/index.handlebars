@@ -9,9 +9,9 @@
                     <div class="info-message info-message--failure" id="input-error-file-selection" hidden="true"></div>
                 </div>
                 <div class="row">
-                    <p class="pull-quote">Drag & drop image or video here</p>
+                    <p class="instructions-text--large">Drag & drop image or video here to publish</p>
                     <p>OR</p>
-                    <p class="pull-quote"><label class="input-file-label pull-quote">CHOOSE FILE</label></p>
+                    <p class="instructions-text--large"><label class="input-file-label instructions-text--large">CHOOSE FILE</label></p>
                 </div>
             </div>
         </div>
@@ -88,7 +88,7 @@
 	/* socket.io message listeners */
 	socket.on('publish-status', function(msg){
 		updatePublishStatus(msg);
-        hideUploadPercent();
+        updateUploadPercent(`<p>Curious what magic is happening here? <a target="blank" href="https://lbry.io/faq/what-is-lbry">[learn more]</a></p>`);
 	});
 	socket.on('publish-failure', function(msg){
         updatePublishStatus('<p> --(✖╭╮✖)→ </p><p>' + JSON.stringify(msg) + '</p><strong>For help, post the above error text in the #speech channel on the <a href="https://lbry.slack.com/" target="_blank">lbry slack</a></strong>');
