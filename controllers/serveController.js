@@ -8,6 +8,7 @@ const SERVE = 'SERVE';
 const SHOW = 'SHOW';
 const SHOWLITE = 'SHOWLITE';
 const DEFAULT_THUMBNAIL = 'https://spee.ch/assets/img/video_thumb_default.png';
+const NO_CHANNEL = 'NO_CHANNEL';
 
 function checkForLocalAssetByClaimId (claimId, name) {
   return new Promise((resolve, reject) => {
@@ -148,16 +149,26 @@ module.exports = {
       db
         .getLongChannelId(channelName, channelId)  // 1. get the long channel Id
         .then(result => {  // 2. get all claims for that channel
+          if (result === NO_CHANNEL) {
+            return NO_CHANNEL;
+          }
           longChannelId = result;
           return db.getShortChannelIdFromLongChannelId(longChannelId, channelName);
         })
         .then(result => {  // 3. get all Claim records for this channel
+          if (result === NO_CHANNEL) {
+            return NO_CHANNEL;
+          }
           shortChannelId = result;
           return db.getAllChannelClaims(longChannelId);
         })
-        .then(allChannelClaims => {  // 4. add extra data not available from Claim table
-          if (allChannelClaims) {
-            allChannelClaims.forEach(element => {
+        .then(result => {  // 4. add extra data not available from Claim table
+          if (result === NO_CHANNEL) {
+            resolve(NO_CHANNEL);
+            return;
+          }
+          if (result) {
+            result.forEach(element => {
               const fileExtenstion = element.contentType.substring(element.contentType.lastIndexOf('/') + 1);
               element['showUrlLong'] = `/${channelName}:${longChannelId}/${element.name}`;
               element['directUrlLong'] = `/${channelName}:${longChannelId}/${element.name}.${fileExtenstion}`;
@@ -165,11 +176,11 @@ module.exports = {
               element['thumbnail'] = chooseThumbnail(element, DEFAULT_THUMBNAIL);
             });
           }
-          return resolve({
+          resolve({
             channelName,
             longChannelId,
             shortChannelId,
-            claims: allChannelClaims,
+            claims: result,
           });
         })
         .catch(error => {

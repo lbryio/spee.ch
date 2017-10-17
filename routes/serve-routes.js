@@ -10,6 +10,7 @@ const CLAIM = 'CLAIM';
 const CLAIM_ID_CHAR = ':';
 const CHANNEL_CHAR = '@';
 const CLAIMS_PER_PAGE = 10;
+const NO_CHANNEL = 'NO_CHANNEL';
 
 function isValidClaimId (claimId) {
   return ((claimId.length === 40) && !/[^A-Za-z0-9]/g.test(claimId));
@@ -178,7 +179,9 @@ module.exports = (app) => {
       getChannelContents(channelName, channelId)
       // 2. respond to the request
       .then(result => {
-        if (!result.claims) {
+        if (result === NO_CHANNEL) { // no channel found
+          res.status(200).json('no channel found');
+        } else if (!result.claims) {  // channel found, but no claims
           res.status(200).render('channel', {
             channelName   : result.channelName,
             longChannelId : result.longChannelId,
@@ -190,7 +193,7 @@ module.exports = (app) => {
             totalPages    : 0,
             totalResults  : 0,
           });
-        } else {
+        } else {  // channel found, with claims
           const totalPages = determineTotalPages(result.claims.length);
           res.status(200).render('channel', {
             channelName   : result.channelName,

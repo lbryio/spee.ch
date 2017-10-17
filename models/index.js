@@ -6,6 +6,8 @@ const config = require('config');
 const db = {};
 const logger = require('winston');
 
+const NO_CHANNEL = 'NO_CHANNEL';
+
 const database = config.get('Database.Database');
 const username = config.get('Database.Username');
 const password = config.get('Database.Password');
@@ -88,7 +90,7 @@ function getLongChannelIdFromShortChannelId (channelName, channelId) {
       .then(result => {
         switch (result.length) {
           case 0:
-            throw new Error('That is an invalid Short Channel Id');
+            return resolve(NO_CHANNEL);
           default: // note results must be sorted
             return resolve(result[0].claimId);
         }
@@ -100,13 +102,14 @@ function getLongChannelIdFromShortChannelId (channelName, channelId) {
 }
 
 function getLongChannelIdFromChannelName (channelName) {
+  logger.debug(`getLongChannelIdFromChannelName(${channelName})`);
   return new Promise((resolve, reject) => {
     db
       .sequelize.query(`SELECT claimId, amount, height FROM Certificate WHERE name = '${channelName}' ORDER BY effectiveAmount DESC, height ASC LIMIT 1;`, { type: db.sequelize.QueryTypes.SELECT })
       .then(result => {
         switch (result.length) {
           case 0:
-            throw new Error('That is an invalid Channel Name');
+            return resolve(NO_CHANNEL);
           default:
             return resolve(result[0].claimId);
         }
