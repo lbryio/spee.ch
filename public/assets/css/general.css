@@ -417,7 +417,7 @@ table {
 }
 
 .nav-bar-logo, .nav-bar-title, .nav-bar-link, .nav-bar-subtitle {
-	padding: 2rem 0.5rem 1.5rem 0.5rem;
+	padding: 2rem 1rem 1.5rem 1rem;
 	display: inline-block;
 	color: black;
 }
@@ -464,6 +464,7 @@ table {
 .dropzone:hover, .dropzone--drag-over {
 	border: 2px dashed dodgerblue;
 	cursor: pointer;
+	background-color: #FCFCFC;
 }
 
 #primary-dropzone-wrapper, #publish-form-wrapper {

@@ -4,7 +4,7 @@ const passport = require('passport');
 module.exports = (app) => {
   // route for sign up
   app.post('/signup', passport.authenticate('local-signup'), (req, res) => {
-    logger.debug('successful signup');
+    logger.verbose(`successful signup for ${req.user.channelName}`);
     res.status(200).json({
       success       : true,
       channelName   : req.user.channelName,
