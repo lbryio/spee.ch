@@ -437,16 +437,16 @@ table {
 
 .nav-bar-link {
 	font-weight: normal;
-	color: #9b9b9b;
+	color: black;
 	border-bottom: 2px solid white;
 }
 .nav-bar-link:hover {
-	color: black;
+	color: dodgerblue;
 }
 
 .nav-bar-link--active {
-	color: black;
-	border-bottom: 2px solid black;
+	color: dodgerblue;
+	border-bottom: 2px solid dodgerblue;
 }
 
 .nav-bar-link-icon {
@@ -457,12 +457,12 @@ table {
 /* PUBLISH FORM */
 
 .dropzone {
-	border: 2px dashed dodgerblue;
+	border: 2px dashed #9b9b9b;
 	text-align: center;
 }
 
 .dropzone:hover, .dropzone--drag-over {
-	border: 2px dashed #9b9b9b;
+	border: 2px dashed dodgerblue;
 	cursor: pointer;
 }
 
