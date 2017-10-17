@@ -492,8 +492,8 @@ table {
 	width: 100%;
 }
 
-.video-show {
-
+#video-player {
+	cursor: pointer;
 }
 
 /* item lists */
