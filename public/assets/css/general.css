@@ -51,7 +51,7 @@ p {
 }
 
 .url-text--secondary {
-	color: grey;
+	color: #9b9b9b;
 }
 
 .instructions-text--large {
@@ -75,7 +75,7 @@ p {
 .tooltip > .tooltip-text {
 	visibility: hidden;
 	width: 15em;
-	background-color: grey;
+	background-color: #9b9b9b;
 	color: #fff;
 	text-align: center;
 	padding: 0.5em;
@@ -99,7 +99,7 @@ p {
 	margin-left: -5px;
 	border-width: 5px;
 	border-style: solid;
-	border-color: grey transparent transparent transparent;
+	border-color: #9b9b9b transparent transparent transparent;
 }
 
 /* LINKS */
@@ -119,7 +119,7 @@ h2 {
 }
 
 .h2--secondary {
-	color: lightgrey;
+	color: #9b9b9b;
 }
 
 .h2--top {
@@ -288,7 +288,7 @@ option {
 
 
 .input-checkbox {
-	border: 1px solid lightgrey;
+	border: 1px solid black;
 	background: white;
 }
 
@@ -324,27 +324,19 @@ option {
 	padding-right: 1em;
 }
 .input-text--primary, .select--primary {
-	border-bottom: 1px solid lightgrey;
+	border-bottom: 1px solid #9b9b9b;
 }
 
 .input-text--primary:focus, .select--primary:focus {
-	border-bottom: 1px solid grey;
+	border-bottom: 1px solid #9b9b9b;
 }
 
 .textarea--primary {
-	border-bottom: 1px solid lightgrey;
+	border-bottom: 1px solid #9b9b9b;
 }
 
 .textarea--primary:focus {
-	border-bottom: 1px solid grey;
-}
-
-.input-text--large, .select--large, .textarea--large {
-	border-left: 1px solid lightgrey;
-}
-
-.input-text--large:focus, .select--large:focus, .textarea--large:focus {
-	border-left: 1px solid grey;
+	border-bottom: 1px solid #9b9b9b;
 }
 
 .input-text--full-width, .textarea--full-width {
@@ -391,7 +383,7 @@ button {
 .button--cancel{
 	border: 0px;
 	background-color: white;
-	color: grey;
+	color: #9b9b9b;
 }
 
 /* TABLES */
@@ -445,7 +437,7 @@ table {
 
 .nav-bar-link {
 	font-weight: normal;
-	color: grey;
+	color: #9b9b9b;
 	border-bottom: 2px solid white;
 }
 .nav-bar-link:hover {
@@ -464,14 +456,9 @@ table {
 	text-align: center;
 }
 
-.dropzone:hover {
-	border: 2px dashed lightgrey;
+.dropzone:hover, .dropzone--drag-over {
+	border: 2px dashed #9b9b9b;
 	cursor: pointer;
-}
-
-.dropzone--drag-over {
-	background-color: gainsboro;
-	border: 2px dashed dodgerblue;
 }
 
 #primary-dropzone-wrapper, #publish-form-wrapper {
