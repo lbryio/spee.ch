@@ -209,6 +209,12 @@ h3 {
 	width: 100%;
 }
 
+div#show-share-buttons {
+    width: 400px;
+    height: 30px;
+    margin: -30px;
+}
+
 /* ALIGNMENT */
 .
 align-content-left {
