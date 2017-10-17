@@ -1,19 +1,19 @@
 {{#ifConditional fileInfo.fileType '===' 'video/mp4'}}
     {{#ifConditional fileInfo.fileExt '===' 'gifv'}}
         <video class="gifv-show" autoplay loop muted>
-            <source src="/media/{{fileInfo.fileName}}">
+            <source src="/{{fileInfo.claimId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}">
             {{!--fallback--}}
             Your browser does not support the <code>video</code> element.
         </video>
     {{else}}
         <video id="video-player" class="video-show" controls poster="{{fileInfo.thumbnail}}">
-            <source src="/media/{{fileInfo.fileName}}">
+            <source src="/{{fileInfo.claimId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}">
             {{!--fallback--}}
             Your browser does not support the <code>video</code> element.
         </video>
     {{/ifConditional}}
 {{else}}
     <a href="/{{fileInfo.claimId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}">
-        <img  class="image-show" src="/media/{{fileInfo.fileName}}" />
+        <img  class="image-show" src="/{{fileInfo.claimId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}" />
     </a>
 {{/ifConditional}}
