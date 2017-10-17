@@ -11,6 +11,7 @@ const CLAIM_ID_CHAR = ':';
 const CHANNEL_CHAR = '@';
 const CLAIMS_PER_PAGE = 10;
 const NO_CHANNEL = 'NO_CHANNEL';
+const NO_CLAIM = 'NO_CLAIM';
 
 function isValidClaimId (claimId) {
   return ((claimId.length === 40) && !/[^A-Za-z0-9]/g.test(claimId));
@@ -88,7 +89,7 @@ module.exports = (app) => {
   app.get('/:identifier/:name', ({ headers, ip, originalUrl, params }, res) => {
     let identifier = params.identifier;
     let name = params.name;
-    let claimType;
+    let claimOrChannel;
     let channelName = null;
     let claimId = null;
     let channelId = null;
@@ -125,7 +126,7 @@ module.exports = (app) => {
     // parse identifier for whether it is a channel, short url, or claim_id
     if (identifier.charAt(0) === '@') {
       channelName = identifier;
-      claimType = CHANNEL;
+      claimOrChannel = CHANNEL;
       const channelIdIndex = channelName.indexOf(CLAIM_ID_CHAR);
       if (channelIdIndex !== -1) {
         channelId = channelName.substring(channelIdIndex + 1);
@@ -135,18 +136,20 @@ module.exports = (app) => {
     } else {
       claimId = identifier;
       logger.debug('claim id =', claimId);
-      claimType = CLAIM;
+      claimOrChannel = CLAIM;
     }
     // 1. retrieve the asset and information
-    getAsset(claimType, channelName, channelId, name, claimId)
+    getAsset(claimOrChannel, channelName, channelId, name, claimId)
     // 2. serve or show
-    .then(fileInfo => {
-      logger.debug('file info found:', fileInfo);
-      if (!fileInfo) {
-        res.status(200).render('noClaims');
-      } else {
-        return serveOrShowAsset(fileInfo, fileExtension, method, headers, originalUrl, ip, res);
+    .then(result => {
+      if (result === NO_CLAIM) {
+        res.status(200).json({success: true, message: 'no matching claims were found'});  // res.status(200).render('noClaims');
+        return;
+      } else if (result === NO_CHANNEL) {
+        res.status(200).json({success: true, message: 'no matching channel was found'});
+        return;
       }
+      return serveOrShowAsset(result, fileExtension, method, headers, originalUrl, ip, res);
     })
     // 3. update the file
     .then(fileInfoForUpdate => {
@@ -180,7 +183,7 @@ module.exports = (app) => {
       // 2. respond to the request
       .then(result => {
         if (result === NO_CHANNEL) { // no channel found
-          res.status(200).json('no channel found');
+          res.status(200).json({ success: true, message: 'no matching channel found' });
         } else if (!result.claims) {  // channel found, but no claims
           res.status(200).render('channel', {
             channelName   : result.channelName,

@@ -9,6 +9,7 @@ const SHOW = 'SHOW';
 const SHOWLITE = 'SHOWLITE';
 const DEFAULT_THUMBNAIL = 'https://spee.ch/assets/img/video_thumb_default.png';
 const NO_CHANNEL = 'NO_CHANNEL';
+const NO_CLAIM = 'NO_CLAIM';
 
 function checkForLocalAssetByClaimId (claimId, name) {
   return new Promise((resolve, reject) => {
@@ -80,7 +81,7 @@ function getAssetByLongClaimId (fullClaimId, name) {
             // insert a record in the File table & Update Claim table
             return db.File.create(fileRecord);
           })
-          .then(fileRecordResults => {
+          .then(() => {
             logger.debug('File record successfully updated');
             resolve(fileRecord);
           })
@@ -109,13 +110,15 @@ module.exports = {
   getAssetByClaim (claimName, claimId) {
     logger.debug('getting asset by claim');
     return new Promise((resolve, reject) => {
-      // 1. get the long claim id
-      db
-        .getLongClaimId(claimName, claimId)
+      db.getLongClaimId(claimName, claimId) // 1. get the long claim id
         // 2. get the claim Id
-        .then(longClaimId => {
-          logger.debug('long claim id = ', longClaimId);
-          resolve(getAssetByLongClaimId(longClaimId, claimName));
+        .then(result => {
+          if (result === NO_CLAIM || !result) {
+            resolve(NO_CLAIM);
+            return;
+          }
+          logger.debug('long claim id = ', result);
+          resolve(getAssetByLongClaimId(result, claimName));
         })
         .catch(error => {
           reject(error);
@@ -125,17 +128,21 @@ module.exports = {
   getAssetByChannel (channelName, channelId, claimName) {
     logger.debug('getting asset by channel');
     return new Promise((resolve, reject) => {
-      // 1. get the long channel id
-      db
-        .getLongChannelId(channelName, channelId)
-        // 2. get the claim Id
-        .then(longChannelId => {
-          return db.getClaimIdByLongChannelId(longChannelId, claimName);
+      db.getLongChannelId(channelName, channelId) // 1. get the long channel id
+        .then(result => { // 2. get the claim Id
+          if (result === NO_CHANNEL) {
+            resolve(result);
+            return;
+          }
+          return db.getClaimIdByLongChannelId(result, claimName);
         })
-        // 3. get the asset by this claim id and name
-        .then(claimId => {
-          logger.debug('asset claim id = ', claimId);
-          resolve(getAssetByLongClaimId(claimId, claimName));
+        .then(result => { // 3. get the asset by this claim id and name
+          logger.debug('asset claim id =', result);
+          if (result === NO_CHANNEL || result === NO_CLAIM) {
+            resolve(result);
+            return;
+          }
+          resolve(getAssetByLongClaimId(result, claimName));
         })
         .catch(error => {
           reject(error);

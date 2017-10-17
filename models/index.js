@@ -7,6 +7,7 @@ const db = {};
 const logger = require('winston');
 
 const NO_CHANNEL = 'NO_CHANNEL';
+const NO_CLAIM = 'NO_CLAIM';
 
 const database = config.get('Database.Database');
 const username = config.get('Database.Username');
@@ -54,7 +55,7 @@ function getLongClaimIdFromShortClaimId (name, shortId) {
       .then(result => {
         switch (result.length) {
           case 0:
-            throw new Error('That is an invalid Short Claim Id');
+            return resolve(NO_CLAIM);
           default: // note results must be sorted
             return resolve(result[0].claimId);
         }
@@ -258,7 +259,7 @@ db['getClaimIdByLongChannelId'] = (channelId, claimName) => {
       .then(result => {
         switch (result.length) {
           case 0:
-            throw new Error('There is no such claim for that channel');
+            return resolve(NO_CLAIM);
           default:
             return resolve(result[0].claimId);
         }
@@ -290,23 +291,23 @@ db['getAllChannelClaims'] = (channelId) => {
 
 db['getLongClaimId'] = (claimName, claimId) => {
   logger.debug(`getLongClaimId (${claimName}, ${claimId})`);
-  if (claimId && (claimId.length === 40)) {
+  if (claimId && (claimId.length === 40)) {  // if a full claim id is provided
     return new Promise((resolve, reject) => resolve(claimId));
   } else if (claimId && claimId.length < 40) {
-    return getLongClaimIdFromShortClaimId(claimName, claimId);  // need to create this function
-  } else {  // if no claim id provided
-    return getTopFreeClaimIdByClaimName(claimName);
+    return getLongClaimIdFromShortClaimId(claimName, claimId);  // if a short claim id is provided
+  } else {
+    return getTopFreeClaimIdByClaimName(claimName);  // if no claim id is provided
   }
 };
 
 db['getLongChannelId'] = (channelName, channelId) => {
   logger.debug(`getLongChannelId (${channelName}, ${channelId})`);
-  if (channelId && (channelId.length === 40)) {  // full channel id
+  if (channelId && (channelId.length === 40)) {  // if a full channel id is provided
     return new Promise((resolve, reject) => resolve(channelId));
-  } else if (channelId && channelId.length < 40) {  // short channel id
+  } else if (channelId && channelId.length < 40) {  // if a short channel id is provided
     return getLongChannelIdFromShortChannelId(channelName, channelId);
   } else {
-    return getLongChannelIdFromChannelName(channelName);  // no channelId provided
+    return getLongChannelIdFromChannelName(channelName);  // if no channel id provided
   }
 };
 
