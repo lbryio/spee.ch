@@ -3,7 +3,7 @@
         <a href="/"><span class="nav-bar-title">spee&lt;h</span></a><span class="nav-bar-title nav-bar-title--superscript">(beta)</span>
         <span class="nav-bar-subtitle">Open-source, decentralized image and video hosting.</span>
         <div class="nav-bar-link-section">
-            <a class="nav-bar-link" href="/">Upload</a>
+            <a class="nav-bar-link" href="/"><img src="/assets/icon/upload.svg" class="nav-bar-link-icon" alt="upload"/> Upload</a>
             <a class="nav-bar-link" href="/popular">Popular</a>
             <a class="nav-bar-link" href="/about">About</a>
             <select type="text" id="nav-bar-channel-select" class="select select--no-arrow nav-bar-link" onchange="toggleNavBarSelection(event.target.selectedOptions[0].value)" {{#unless user}}style="display:none"{{/unless}}>
@@ -27,4 +27,5 @@
            link.setAttribute('class', 'select select--no-arrow nav-bar-link nav-bar-link--active');
         }
    }
+
 </script>

@@ -449,6 +449,11 @@ table {
 	border-bottom: 2px solid black;
 }
 
+.nav-bar-link-icon {
+	vertical-align: text-bottom;
+	padding-bottom: 0.25em;
+}
+
 /* PUBLISH FORM */
 
 .dropzone {
