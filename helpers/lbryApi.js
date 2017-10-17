@@ -118,9 +118,11 @@ module.exports = {
           },
         })
         .then(response => {
+          logger.verbose('createChannel response:', response);
           handleResponse(response, resolve, reject);
         })
         .catch(error => {
+          logger.error('createChannel error:', error);
           reject(error);
         });
     });
