@@ -140,6 +140,7 @@ module.exports = (app) => {
     getAsset(claimType, channelName, channelId, name, claimId)
     // 2. serve or show
     .then(fileInfo => {
+      logger.debug('file info found:', fileInfo);
       if (!fileInfo) {
         res.status(200).render('noClaims');
       } else {
@@ -177,10 +178,20 @@ module.exports = (app) => {
       getChannelContents(channelName, channelId)
       // 2. respond to the request
       .then(result => {
-        const totalPages = determineTotalPages(result.claims.length);
         if (!result.claims) {
-          res.status(200).render('noChannel');
+          res.status(200).render('channel', {
+            channelName   : result.channelName,
+            longChannelId : result.longChannelId,
+            shortChannelId: result.shortChannelId,
+            claims        : [],
+            previousPage  : 0,
+            currentPage   : 0,
+            nextPage      : 0,
+            totalPages    : 0,
+            totalResults  : 0,
+          });
         } else {
+          const totalPages = determineTotalPages(result.claims.length);
           res.status(200).render('channel', {
             channelName   : result.channelName,
             longChannelId : result.longChannelId,

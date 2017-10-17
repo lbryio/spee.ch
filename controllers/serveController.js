@@ -56,7 +56,8 @@ function getAssetByLongClaimId (fullClaimId, name) {
       // if a result was found, return early with the result
       if (dataValues) {
         logger.debug('found a local file for this name and claimId');
-        return resolve(dataValues);
+        resolve(dataValues);
+        return;
       }
       logger.debug('no local file found for this name and claimId');
       // 2. if no local claim, resolve and get the claim

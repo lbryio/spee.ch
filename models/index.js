@@ -102,7 +102,7 @@ function getLongChannelIdFromShortChannelId (channelName, channelId) {
 function getLongChannelIdFromChannelName (channelName) {
   return new Promise((resolve, reject) => {
     db
-      .sequelize.query(`SELECT claimId, amount, height FROM Certificate WHERE name = '${channelName}' ORDER BY amount DESC, height ASC LIMIT 1;`, { type: db.sequelize.QueryTypes.SELECT })
+      .sequelize.query(`SELECT claimId, amount, height FROM Certificate WHERE name = '${channelName}' ORDER BY effectiveAmount DESC, height ASC LIMIT 1;`, { type: db.sequelize.QueryTypes.SELECT })
       .then(result => {
         switch (result.length) {
           case 0:
@@ -286,6 +286,7 @@ db['getAllChannelClaims'] = (channelId) => {
 };
 
 db['getLongClaimId'] = (claimName, claimId) => {
+  logger.debug(`getLongClaimId (${claimName}, ${claimId})`);
   if (claimId && (claimId.length === 40)) {
     return new Promise((resolve, reject) => resolve(claimId));
   } else if (claimId && claimId.length < 40) {
@@ -296,12 +297,13 @@ db['getLongClaimId'] = (claimName, claimId) => {
 };
 
 db['getLongChannelId'] = (channelName, channelId) => {
+  logger.debug(`getLongChannelId (${channelName}, ${channelId})`);
   if (channelId && (channelId.length === 40)) {  // full channel id
     return new Promise((resolve, reject) => resolve(channelId));
   } else if (channelId && channelId.length < 40) {  // short channel id
     return getLongChannelIdFromShortChannelId(channelName, channelId);
   } else {
-    return getLongChannelIdFromChannelName(channelName);
+    return getLongChannelIdFromChannelName(channelName);  // no channelId provided
   }
 };
 
