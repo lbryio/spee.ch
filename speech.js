@@ -40,7 +40,7 @@ app.use((req, res, next) => {  // custom logging middleware to log all incoming 
 });
 
 // initialize passport
-app.use(session({ secret: 'cats' }));
+app.use(session({ secret: 'cats', resave: false, saveUninitialized: false }));
 app.use(passport.initialize());
 app.use(passport.session());
 passport.serializeUser(serializeSpeechUser);  // takes the user id from the db and serializes it
