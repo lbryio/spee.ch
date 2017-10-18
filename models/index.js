@@ -71,6 +71,7 @@ function getTopFreeClaimIdByClaimName (name) {
     db
       .sequelize.query(`SELECT claimId FROM Claim WHERE name = '${name}' ORDER BY effectiveAmount DESC, height ASC LIMIT 1`, { type: db.sequelize.QueryTypes.SELECT })
       .then(result => {
+        logger.debug('getTopFreeClaimIdByClaimName result:', result);
         switch (result.length) {
           case 0:
             return resolve(NO_CLAIM);
@@ -290,7 +291,7 @@ db['getAllChannelClaims'] = (channelId) => {
 };
 
 db['getLongClaimId'] = (claimName, claimId) => {
-  logger.debug(`getLongClaimId (${claimName}, ${claimId})`);
+  logger.debug(`getLongClaimId(${claimName}, ${claimId})`);
   if (claimId && (claimId.length === 40)) {  // if a full claim id is provided
     return new Promise((resolve, reject) => resolve(claimId));
   } else if (claimId && claimId.length < 40) {

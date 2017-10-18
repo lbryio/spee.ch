@@ -142,11 +142,12 @@ module.exports = (app) => {
     getAsset(claimOrChannel, channelName, channelId, name, claimId)
     // 2. serve or show
     .then(result => {
-      if (!result || result === NO_CLAIM) {
-        res.status(200).json({success: true, message: 'no matching claims were found'});
+      logger.debug('getAsset result:', result);
+      if (result === NO_CLAIM) {
+        res.status(200).render('noClaim');
         return;
       } else if (result === NO_CHANNEL) {
-        res.status(200).json({success: true, message: 'no matching channel was found'});
+        res.status(200).render('noChannel');
         return;
       }
       return serveOrShowAsset(result, fileExtension, method, headers, originalUrl, ip, res);
@@ -183,7 +184,7 @@ module.exports = (app) => {
       // 2. respond to the request
       .then(result => {
         if (result === NO_CHANNEL) { // no channel found
-          res.status(200).json({ success: true, message: 'no matching channel found' });
+          res.status(200).render('noChannel');
         } else if (!result.claims) {  // channel found, but no claims
           res.status(200).render('channel', {
             channelName   : result.channelName,
@@ -235,11 +236,12 @@ module.exports = (app) => {
       // 1. retrieve the asset and information
       getAsset(CLAIM, null, null, name, null)
       // 2. respond to the request
-      .then(fileInfo => {
-        if (!fileInfo) {
-          res.status(200).render('noClaims');
+      .then(result => {
+        logger.debug('getAsset result', result);
+        if (result === NO_CLAIM) {
+          res.status(200).render('noClaim');
         } else {
-          return serveOrShowAsset(fileInfo, fileExtension, method, headers, originalUrl, ip, res);
+          return serveOrShowAsset(result, fileExtension, method, headers, originalUrl, ip, res);
         }
       })
       // 3. update the database

@@ -108,15 +108,16 @@ function chooseThumbnail (claimInfo, defaultThumbnail) {
 
 module.exports = {
   getAssetByClaim (claimName, claimId) {
-    logger.debug('getting asset by claim');
+    logger.debug(`getAssetByClaim(${claimName}, ${claimId})`);
     return new Promise((resolve, reject) => {
       db.getLongClaimId(claimName, claimId) // 1. get the long claim id
         .then(result => {  // 2. get the asset using the long claim id
+          logger.debug('getLongClaimId result:', result);
           if (result === NO_CLAIM) {
+            logger.debug('resolving NO_CLAIM');
             resolve(NO_CLAIM);
             return;
           }
-          logger.debug('long claim id = ', result);
           resolve(getAssetByLongClaimId(result, claimName));
         })
         .catch(error => {
