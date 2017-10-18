@@ -3,7 +3,7 @@ const { postToStats } = require('../controllers/statsController.js');
 
 module.exports = {
   handleRequestError (action, originalUrl, ip, error, res) {
-    logger.error('Request Error:', module.exports.useObjectPropertiesIfNoKeys(error));
+    logger.error(`Request Error: ${originalUrl}`, module.exports.useObjectPropertiesIfNoKeys(error));
     postToStats(action, originalUrl, ip, null, null, error);
     if (error.response) {
       res.status(error.response.status).send(error.response.data.error.message);

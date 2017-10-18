@@ -36,7 +36,7 @@ module.exports = (app) => {
         });
       })
       .catch(error => {
-        errorHandlers.handleRequestError(error, res);
+        errorHandlers.handleRequestError(null, null, null, error, res);
       });
   });
   // route to display a list of the trending images
@@ -49,7 +49,7 @@ module.exports = (app) => {
         });
       })
       .catch(error => {
-        errorHandlers.handleRequestError(error, res);
+        errorHandlers.handleRequestError(null, null, null, error, res);
       });
   });
   // route to show statistics for spee.ch
@@ -66,7 +66,7 @@ module.exports = (app) => {
         });
       })
       .catch(error => {
-        errorHandlers.handleRequestError(error, res);
+        errorHandlers.handleRequestError(null, null, null, error, res);
       });
   });
   // route to send embedable video player (for twitter)

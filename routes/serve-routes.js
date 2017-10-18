@@ -142,8 +142,8 @@ module.exports = (app) => {
     getAsset(claimOrChannel, channelName, channelId, name, claimId)
     // 2. serve or show
     .then(result => {
-      if (result === NO_CLAIM) {
-        res.status(200).json({success: true, message: 'no matching claims were found'});  // res.status(200).render('noClaims');
+      if (!result || result === NO_CLAIM) {
+        res.status(200).json({success: true, message: 'no matching claims were found'});
         return;
       } else if (result === NO_CHANNEL) {
         res.status(200).json({success: true, message: 'no matching channel was found'});
