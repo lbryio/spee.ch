@@ -416,10 +416,15 @@ table {
 	z-index: 1;
 }
 
-.nav-bar-logo, .nav-bar-title, .nav-bar-link, .nav-bar-subtitle {
+.nav-bar-title, .nav-bar-link {
 	padding: 2rem 1rem 1.5rem 1rem;
 	display: inline-block;
 	color: black;
+}
+
+.nav-bar-logo {
+	vertical-align: text-bottom;
+	height: 2em;
 }
 
 .nav-bar-title--superscript {
@@ -427,9 +432,9 @@ table {
 	vertical-align: top;
 }
 
-.nav-bar-subtitle {
+.nav-bar-title--tagline {
 	font-size: small;
-	padding-left: 4rem;
+	vertical-align: bottom;
 }
 
 .nav-bar-link {
