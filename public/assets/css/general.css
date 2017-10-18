@@ -429,10 +429,6 @@ table {
 
 .nav-bar-subtitle {
 	font-size: small;
-	position: absolute;
-	left: 50%;
-	top: 50%;
-	transform: translateX(-50%) translateY(-50%);
 }
 
 .nav-bar-link {
@@ -524,7 +520,7 @@ table {
 /* ---- grid items ---- */
 
 .grid-item {
-	width: calc(30% - 2rem);
+	width: calc(31% - 2rem);
 	padding: 0px;
 	margin: 1rem;
 	float: left;

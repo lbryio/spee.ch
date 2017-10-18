@@ -5,15 +5,6 @@
 		padding-bottom: 0px;
 	}
 
-	.nav-bar-subtitle {
-		left: auto;
-		right: 0px;
-		top: auto;
-		bottom: calc(1.5rem + 2px);
-		transform: none;
-		padding-right: 2rem;
-	}
-
 	.nav-bar-link-section {
 		position: relative;
 		padding-left: 0px;
@@ -49,16 +40,6 @@
 	.nav-bar-link-section {
 		position: relative;
 		padding-left: 0px;
-	}
-
-	.nav-bar-subtitle {
-		position: relative;
-		display: block;
-		left: auto;
-		top: auto;
-        bottom: auto;
-        right: auto;
-		transform: none;
 	}
 
 	.column--sml-10 {
