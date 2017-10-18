@@ -1,25 +1,16 @@
 
 @media (max-width: 1050px) {
 
-	.nav-bar-title, .nav-bar-subtitle {
-		padding-bottom: 0px;
-	}
-
-	.nav-bar-link-section {
-		position: relative;
-		padding-left: 0px;
-	}
-
-	.nav-bar {
-		height: 8rem;
-	}
-
-	.page-contents {
-		height: calc(100% - 8rem);
+	.nav-bar-subtitle {
+		display: none;
 	}
 }
 
 @media (max-width: 750px ) {
+
+	body, button, input, textarea, label, select, option {
+		font-size: medium;
+	}
 
 	.column--med-10 {
 		width: 100%;
@@ -30,10 +21,14 @@
 	}
 
 	.nav-bar {
-		height: 12rem;
+		height: 9rem;
 	}
 
-	.nav-bar-title, .nav-bar-subtitle {
+	.row--full-height {
+		height: calc(100% - 16rem);
+	}
+
+	.nav-bar-title {
 		padding-bottom: 0px;
 	}
 
@@ -50,15 +45,12 @@
 		padding: 1em 0px 1em 0px;
 	}
 
-    .page-contents {
-        height: calc(100% - 12rem);
-    }
 }
 
-@media (max-width: 350px) {
+@media (max-width: 450px) {
 
 	body, button, input, textarea, label, select, option {
-		font-size: medium;
+		font-size: small;
 	}
 
 }

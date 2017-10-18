@@ -23,12 +23,6 @@ html, body {
 	height: 100%;
 }
 
-.page-contents {
-	margin: 0px auto;
-	padding: 0px;
-	height: calc(100% - 7rem);
-    max-width: 1200px;
-}
 /* TEXT */
 
 body, button, input, textarea, label, select, option {
@@ -146,13 +140,19 @@ h3 {
 	padding-left: 0px;
 }
 
+
+.row--narrow {
+	margin: 0px auto;
+	max-width: 1200px;
+}
+
 .row--short {
 	padding-top: 0px;
 	padding-bottom: 0px;
 }
 
 .row--full-height {
-	height: calc(100% - 4rem);
+	height: calc(100% - 11rem);
 }
 
 .row--no-top {
@@ -429,6 +429,7 @@ table {
 
 .nav-bar-subtitle {
 	font-size: small;
+	padding-left: 4rem;
 }
 
 .nav-bar-link {
