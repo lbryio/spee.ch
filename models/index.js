@@ -73,7 +73,7 @@ function getTopFreeClaimIdByClaimName (name) {
       .then(result => {
         switch (result.length) {
           case 0:
-            return resolve(null);
+            return resolve(NO_CLAIM);
           default:
             return resolve(result[0].claimId);
         }

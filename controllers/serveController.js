@@ -112,7 +112,7 @@ module.exports = {
     return new Promise((resolve, reject) => {
       db.getLongClaimId(claimName, claimId) // 1. get the long claim id
         .then(result => {  // 2. get the asset using the long claim id
-          if (result === NO_CLAIM || !result) {
+          if (result === NO_CLAIM) {
             resolve(NO_CLAIM);
             return;
           }
@@ -129,7 +129,7 @@ module.exports = {
     return new Promise((resolve, reject) => {
       db.getLongChannelId(channelName, channelId) // 1. get the long channel id
         .then(result => { // 2. get the long claim Id
-          if (result === NO_CHANNEL || !result) {
+          if (result === NO_CHANNEL) {
             resolve(NO_CHANNEL);
             return;
           }
@@ -139,9 +139,6 @@ module.exports = {
           logger.debug('asset claim id =', result);
           if (result === NO_CHANNEL || result === NO_CLAIM) {
             resolve(result);
-            return;
-          } else if (!result) {
-            resolve(NO_CLAIM);
             return;
           }
           resolve(getAssetByLongClaimId(result, claimName));
