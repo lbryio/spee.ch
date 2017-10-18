@@ -12,6 +12,10 @@
 		font-size: medium;
 	}
 
+	.instructions-text--large, .pull-quote {
+		font-size: 1.5rem;
+	}
+
 	.column--med-10 {
 		width: 100%;
 	}
@@ -51,6 +55,18 @@
 
 	body, button, input, textarea, label, select, option {
 		font-size: small;
+	}
+
+	.instructions-text--large, .pull-quote {
+		font-size: 1rem;
+	}
+
+}
+
+@media (max-width: 360px) {
+
+	body, button, input, textarea, label, select, option {
+		font-size: x-small;
 	}
 
 }
