@@ -69,7 +69,7 @@
 		font-size: small;
 	}
 
-	.instructions-text--large, .pull-quote {
+	.instructions-text--large, .pull-quote, .input-text--large, .button--large {
 		font-size: medium;
 	}
 
@@ -88,8 +88,8 @@
 		font-size: x-small;
 	}
 
-	.instructions-text--large, .pull-quote {
-		font-size: small;
+	.instructions-text--large, .pull-quote, .input-text--large, .button--large {
+		font-size: x-small;
 	}
 
 }
