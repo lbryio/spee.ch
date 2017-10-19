@@ -65,7 +65,7 @@
 
 @media (max-width: 450px) {
 
-	body, button, input, textarea, label, select, option {
+	body, button, input, textarea, label, select, option, .publish-fine-print {
 		font-size: small;
 	}
 
@@ -84,7 +84,7 @@
 
 @media (max-width: 360px) {
 
-	body, button, input, textarea, label, select, option {
+	body, button, input, textarea, label, select, option, .publish-fine-print {
 		font-size: x-small;
 	}
 

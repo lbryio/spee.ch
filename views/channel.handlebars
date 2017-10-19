@@ -12,21 +12,21 @@
     </div>
     <div class="row">
         <div class="column column--3 align-content--left">
-            <a href="/{{this.channelName}}:{{this.longChannelId}}?p=1">First Page [1]</a>
+            <a href="/{{this.channelName}}:{{this.longChannelId}}?p=1">First [1]</a>
         </div><div class="column column--4 align-content-center">
             {{#if this.previousPage}}
-                <a href="/{{this.channelName}}:{{this.longChannelId}}?p={{this.previousPage}}">Previous Page [{{this.previousPage}}]</a>
+                <a href="/{{this.channelName}}:{{this.longChannelId}}?p={{this.previousPage}}">Previous</a>
             {{else}}
-                <a disabled>Previous Page</a>
+                <a disabled>Previous </a>
             {{/if}}
             |
             {{#if this.nextPage}}
-                <a href="/{{this.channelName}}:{{this.longChannelId}}?p={{this.nextPage}}">Next Page [{{this.nextPage}}]</a>
+                <a href="/{{this.channelName}}:{{this.longChannelId}}?p={{this.nextPage}}">Next</a>
             {{else}}
-                <a disabled>Next Page</a>
+                <a disabled>Next</a>
             {{/if}}
         </div><div class="column column--3 align-content-right">
-            <a href="/{{this.channelName}}:{{this.longChannelId}}?p={{this.totalPages}}">Last Page [{{this.totalPages}}]</a>
+            <a href="/{{this.channelName}}:{{this.longChannelId}}?p={{this.totalPages}}">Last [{{this.totalPages}}]</a>
         </div>
     </div>
 
