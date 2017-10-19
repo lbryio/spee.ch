@@ -1,10 +1,23 @@
 
+@media (max-width: 1200px) {
+
+	.nav-bar-title--tagline {
+		font-size: small;
+		position: absolute;
+		left: 40%;
+		top: 50%;
+		transform: translateX(-40%) translateY(-50%);
+	}
+}
+
 @media (max-width: 1050px) {
 
 	.nav-bar-title--tagline {
 		display: none;
 	}
+
 }
+
 
 @media (max-width: 750px ) {
 
@@ -58,7 +71,7 @@
 	}
 
 	.instructions-text--large, .pull-quote {
-		font-size: 1rem;
+		font-size: medium;
 	}
 
 }
@@ -67,6 +80,10 @@
 
 	body, button, input, textarea, label, select, option {
 		font-size: x-small;
+	}
+
+	.instructions-text--large, .pull-quote {
+		font-size: small;
 	}
 
 }
