@@ -1,7 +1,9 @@
-<div class="row row--narrow grid">
-    {{#each trendingAssets}}
-        {{> gridItem}}
-    {{/each}}
+<div class="row row--narrow">
+    <div class="grid">
+        {{#each trendingAssets}}
+            {{> gridItem}}
+        {{/each}}
+    </div>
 </div>
 
 <script src="/assets/vendors/masonry/masonry.pkgd.min.js"></script>
@@ -19,8 +21,4 @@
         });
     });
 
-    // init with selector
-//    var msnry = new Masonry( '.grid', {
-//        // options...
-//    });
 </script>

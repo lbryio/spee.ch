@@ -529,7 +529,7 @@ table {
 /* ---- grid items ---- */
 
 .grid-item {
-	width: calc(31% - 2rem);
+	width: calc(33% - 2rem);
 	padding: 0px;
 	margin: 1rem;
 	float: left;
