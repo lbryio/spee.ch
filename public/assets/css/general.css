@@ -33,6 +33,7 @@ body, button, input, textarea, label, select, option {
 
 p {
 	padding-left: 0.3em;
+	font-size: 18px;
 }
 
 .url-text {
@@ -53,7 +54,7 @@ p {
 }
 
 .pull-quote {
-	font-size: 3rem;
+	font-size: 24px;
 }
 
 .publish-fine-print {
