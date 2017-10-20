@@ -1,13 +1,10 @@
 <div class="row row--full-height row--narrow">
-    <div class="column column--10 align-content-center">
+    <div class="column column--10">
         <h2>{{this.channelName}}<span class="h2--secondary">:{{this.longChannelId}}</span></h2>
     </div>
-    <div class="column column--10 align-content-center">
-        <p>Page {{this.currentPage}} / {{this.totalPages}}, Total Files: {{this.totalResults}}</p>
-    </div>
-    <div class="row">
+    <div class="grid">
         {{#each this.claims}}
-            {{> contentListItem}}
+            {{> gridItem}}
         {{/each}}
     </div>
     <div class="row">
@@ -31,3 +28,20 @@
     </div>
 
 </div>
+
+<script src="/assets/vendors/masonry/masonry.pkgd.min.js"></script>
+<script src="/assets/vendors/imagesloaded/imagesloaded.pkgd.min.js"></script>
+<script>
+    // init masonry with element
+    var grid = document.querySelector('.grid');
+    var msnry;
+
+    imagesLoaded( grid, function() {
+        msnry = new Masonry( grid, {
+            itemSelector: '.grid-item',
+            columnWidth: 3,
+            percentPosition: true
+        });
+    });
+
+</script>
