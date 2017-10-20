@@ -141,12 +141,6 @@ h3 {
 	padding-left: 0px;
 }
 
-
-.row--narrow {
-	margin: 0px auto;
-	max-width: 1200px;
-}
-
 .row--short {
 	padding-top: 0px;
 	padding-bottom: 0px;
@@ -502,6 +496,10 @@ table {
 #video-player {
 	background-color: black;
 	cursor: pointer;
+}
+
+.show-asset-light {
+    max-width: 100%;
 }
 
 /* item lists */
