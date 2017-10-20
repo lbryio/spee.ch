@@ -33,29 +33,39 @@
 		width: 100%;
 	}
 
+	.column--sml-10 {
+		width: 100%;
+	}
+
 	.h2--top {
 		margin-top: 1em;
 	}
 
-	.nav-bar {
-		height: 9rem;
-	}
-
-	.row--full-height {
-		height: calc(100% - 16rem);
+	.nav-bar-title-section {
+		width:100%;
+		padding: 0px;
 	}
 
 	.nav-bar-title {
-		padding-bottom: 0px;
+		width: calc(25% - 2rem);
+		padding: 1rem;
+	}
+
+	.nav-bar-logo {
+		height: 1.5rem;
 	}
 
 	.nav-bar-link-section {
-		position: relative;
-		padding-left: 0px;
+		width: 75%;
+		padding: 0px;
 	}
 
-	.column--sml-10 {
-		width: 100%;
+	.nav-bar-link {
+		float: left;
+		text-align: center;
+		width: calc(25% - 2rem);
+		padding: 1rem;
+		margin: 0px;
 	}
 
 	#publish-active-area > .row, #publish-details > .row, #channel-login-form > .row, #publish-channel-form > .row {
@@ -63,7 +73,17 @@
 	}
 }
 
-@media (max-width: 450px) {
+@media (max-width: 500px) {
+
+	.nav-bar-logo {
+		height: 1rem;
+	}
+
+	.nav-bar-link {
+		font-size: small;
+		width: calc(25% - 1rem);
+		padding: 1rem 0.5rem 1rem 0.5rem;
+	}
 
 	body, button, input, textarea, label, select, option, p, .publish-fine-print {
 		font-size: small;
@@ -83,6 +103,10 @@
 }
 
 @media (max-width: 360px) {
+
+	.nav-bar-link {
+		font-size: x-small;
+	}
 
 	body, button, input, textarea, label, select, option, p, .publish-fine-print, .instructions-text--large {
 		font-size: x-small;

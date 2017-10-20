@@ -412,14 +412,14 @@ table {
 }
 
 .nav-bar-title, .nav-bar-link {
-	padding: 2rem 1rem 1.5rem 1rem;
+	padding: 2rem 1rem 2rem 1rem;
 	display: inline-block;
 	color: black;
 }
 
 .nav-bar-logo {
 	vertical-align: text-bottom;
-	height: 2em;
+	height: 2rem;
 }
 
 .nav-bar-title--superscript {
