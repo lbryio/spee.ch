@@ -119,7 +119,7 @@ module.exports = {
     }
     // provide default for description
     if (description === null || description.trim() === '') {
-      description = `${name} published via spee.ch`;
+      description = '';
     }
     // provide default for license
     if (license === null || license.trim() === '') {
