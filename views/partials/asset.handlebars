@@ -6,11 +6,21 @@
             Your browser does not support the <code>video</code> element.
         </video>
     {{else}}
-        <video id="video-player" class="video-show" controls poster="{{fileInfo.thumbnail}}">
-            <source src="/{{fileInfo.claimId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}">
-            {{!--fallback--}}
-            Your browser does not support the <code>video</code> element.
-        </video>
+
+            <video id="video-player" class="video-show video" controls poster="{{fileInfo.thumbnail}}">
+                <source src="/{{fileInfo.claimId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}">
+                {{!--fallback--}}
+                Your browser does not support the <code>video</code> element.
+            </video>
+            <script type="text/javascript">
+                document.addEventListener('DOMContentLoaded', resizeVideoPlayer)
+                window.addEventListener("resize", resizeVideoPlayer);
+                function resizeVideoPlayer() {
+                    const div = document.getElementById('video-player');
+                    const width = div.offsetWidth;
+                    div.height = (width * 9 / 16);
+                }
+            </script>
     {{/ifConditional}}
 {{else}}
     <a href="/{{fileInfo.claimId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}">

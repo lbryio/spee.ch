@@ -500,6 +500,7 @@ table {
 }
 
 #video-player {
+	background-color: black;
 	cursor: pointer;
 }
 
