@@ -1,32 +1,31 @@
 <div class="row row--full-height row--narrow">
-    <div class="column column--10">
-        <h2>{{this.channelName}}<span class="h2--secondary">:{{this.longChannelId}}</span></h2>
-    </div>
-    <div class="grid">
-        {{#each this.claims}}
-            {{> gridItem}}
-        {{/each}}
-    </div>
     <div class="row">
-        <div class="column column--3 align-content--left">
-            <a href="/{{this.channelName}}:{{this.longChannelId}}?p=1">First [1]</a>
-        </div><div class="column column--4 align-content-center">
-            {{#if this.previousPage}}
-                <a href="/{{this.channelName}}:{{this.longChannelId}}?p={{this.previousPage}}">Previous</a>
-            {{else}}
-                <a disabled>Previous </a>
-            {{/if}}
-            |
-            {{#if this.nextPage}}
-                <a href="/{{this.channelName}}:{{this.longChannelId}}?p={{this.nextPage}}">Next</a>
-            {{else}}
-                <a disabled>Next</a>
-            {{/if}}
-        </div><div class="column column--3 align-content-right">
-            <a href="/{{this.channelName}}:{{this.longChannelId}}?p={{this.totalPages}}">Last [{{this.totalPages}}]</a>
+        <h2>{{this.channelName}}<span class="h2--secondary">:{{this.longChannelId}}</span></h2>
+        <div class="grid">
+            {{#each this.claims}}
+                {{> gridItem}}
+            {{/each}}
+        </div>
+        <div class="row">
+            <div class="column column--3 align-content--left">
+                <a href="/{{this.channelName}}:{{this.longChannelId}}?p=1">First [1]</a>
+            </div><div class="column column--4 align-content-center">
+                {{#if this.previousPage}}
+                    <a href="/{{this.channelName}}:{{this.longChannelId}}?p={{this.previousPage}}">Previous</a>
+                {{else}}
+                    <a disabled>Previous </a>
+                {{/if}}
+                |
+                {{#if this.nextPage}}
+                    <a href="/{{this.channelName}}:{{this.longChannelId}}?p={{this.nextPage}}">Next</a>
+                {{else}}
+                    <a disabled>Next</a>
+                {{/if}}
+            </div><div class="column column--3 align-content-right">
+                <a href="/{{this.channelName}}:{{this.longChannelId}}?p={{this.totalPages}}">Last [{{this.totalPages}}]</a>
+            </div>
         </div>
     </div>
-
 </div>
 
 <script src="/assets/vendors/masonry/masonry.pkgd.min.js"></script>

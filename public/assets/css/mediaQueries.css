@@ -16,12 +16,17 @@
 		display: none;
 	}
 
+	.row--narrow {
+		margin: 0px;
+		padding: 0px;
+	}
+
 }
 
 
 @media (max-width: 750px ) {
 
-	body, button, input, textarea, label, select, option {
+	body, button, input, textarea, label, select, option, p {
 		font-size: medium;
 	}
 
@@ -65,7 +70,7 @@
 
 @media (max-width: 450px) {
 
-	body, button, input, textarea, label, select, option, .publish-fine-print {
+	body, button, input, textarea, label, select, option, p, .publish-fine-print {
 		font-size: small;
 	}
 
@@ -74,9 +79,9 @@
 	}
 
 	.grid-item {
-		width: 100%;
+		width: calc(100% - 2em);
 		float: none;
-		padding-bottom: 2rem;
+		padding: 1em;
 		margin: 0px;
 	}
 
@@ -84,12 +89,12 @@
 
 @media (max-width: 360px) {
 
-	body, button, input, textarea, label, select, option, .publish-fine-print {
+	body, button, input, textarea, label, select, option, p, .publish-fine-print, .instructions-text--large {
 		font-size: x-small;
 	}
 
-	.instructions-text--large, .pull-quote, .input-text--large, .button--large {
-		font-size: x-small;
+	.pull-quote, .input-text--large, .button--large {
+		font-size: small;
 	}
 
 }

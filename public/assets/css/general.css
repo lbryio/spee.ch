@@ -25,7 +25,7 @@ html, body {
 
 /* TEXT */
 
-body, button, input, textarea, label, select, option {
+body, button, input, textarea, label, select, option, p {
 	font-family: 'Lekton', monospace;
 	font-size: medium;
 	word-wrap: break-word;
