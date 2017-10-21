@@ -88,7 +88,7 @@
 	/* socket.io message listeners */
 	socket.on('publish-status', function(msg){
 		updatePublishStatus(msg);
-        updateUploadPercent(`<p>Curious what magic is happening here? <a target="blank" href="https://lbry.io/faq/what-is-lbry">[learn more]</a></p>`);
+        updateUploadPercent(`<p>Curious what magic is happening here? <a target="blank" href="https://lbry.io/faq/what-is-lbry">learn more</a></p>`);
 	});
 	socket.on('publish-failure', function(msg){
         updatePublishStatus('<p> --(✖╭╮✖)→ </p><p>' + JSON.stringify(msg) + '</p><strong>For help, post the above error text in the #speech channel on the <a href="https://lbry.slack.com/" target="_blank">lbry slack</a></strong>');
