@@ -11,6 +11,7 @@ module.exports = new PassportLocalStrategy(
   },
   (req, username, password, done) => {
     logger.debug(`verifying loggin attempt ${username} ${password}`);
+    let userInfo = {};
     return db.User
         .findOne({where: {userName: username}})
         .then(user => {
@@ -23,9 +24,22 @@ module.exports = new PassportLocalStrategy(
             return done(null, false, {message: 'Incorrect username or password.'});
           }
           logger.debug('user found:', user.dataValues);
-          return user.getChannel().then(channel => {
-            return done(null, user);
-          });
+          userInfo['id'] = user.id;
+          userInfo['userName'] = user.userName;
+          // channel stuff
+          return user.getChannel()
+            .then(channel => {
+              userInfo['channelName'] = channel.channelName;
+              userInfo['channelClaimId'] = channel.channelClaimId;
+              return db.getShortChannelIdFromLongChannelId(channel.channelClaimId, channel.channelName);
+            })
+            .then(shortChannelId => {
+              userInfo['shortChannelId'] = shortChannelId;
+              return done(null, userInfo);
+            })
+            .catch(error => {
+              throw error;
+            });
         })
         .catch(error => {
           return done(error);

@@ -155,7 +155,7 @@ module.exports = {
             element['directUrlLong'] = `/${element.claimId}/${element.name}.${fileExtenstion}`;
             element['directUrlShort'] = `/${element.claimId}/${element.name}.${fileExtenstion}`;
             element['contentType'] = element.fileType;
-            element['thumbnail'] = 'https://spee.ch/assets/img/content-freedom-large.png';
+            element['thumbnail'] = 'https://spee.ch/assets/img/video_thumb_default.png';
           });
         }
         resolve(results);

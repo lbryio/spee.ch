@@ -1,76 +1,102 @@
-<div class="panel">
-	<h2>Title</h2>
-	<p>{{fileInfo.title}}</>
+{{#ifConditional fileInfo.description '!==' ''}}
+<div class="row row--wide row--short">
+    <p class="label">{{fileInfo.description}}</p>
 </div>
-<div class="panel links">
-	<h2>Links</h2>
-	{{!--short direct link to asset--}}
-	<div class="share-option">
-		<a href="/{{fileInfo.shortId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}">Permanent Short Link</a> (most convenient)
-		<div class="input-error" id="input-error-copy-short-link" hidden="true"></div>
-		<br/>
-		<input type="text" id="short-link" class="link" readonly spellcheck="false" value="https://spee.ch/{{fileInfo.shortId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}" onclick="select()"/>
-		<button class="copy-button" data-elementtocopy="short-link" onclick="copyToClipboard(event)">copy</button>
-	</div>
-	{{!-- link to show route for asset--}}
-	<div class="share-option">
-		<a href="/{{fileInfo.claimId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}">Permanent Long Link</a> (fastest service)
-		<div class="input-error" id="input-error-copy-long-link" hidden="true"></div>
-		</br>
-		<input type="text" id="long-link" class="link" readonly onclick="select()" spellcheck="false" value="https://spee.ch/{{fileInfo.claimId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}"/>
-		<button class="copy-button" data-elementtocopy="long-link" onclick="copyToClipboard(event)">copy</button>
-	</div>
-	{{!-- html text for embedding asset--}}
-	<div class="share-option">
-		Embed HTML
-		<div class="input-error" id="input-error-copy-embed-text" hidden="true"></div>
-		<br/>
-		{{#ifConditional fileInfo.fileType '===' 'video/mp4'}}
-			<input type="text" id="embed-text" class="link" readonly onclick="select()" spellcheck="false" value='&lt;video width="100%" controls src="https://spee.ch/{{fileInfo.claimId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}"/>&lt;/video>'/>
-		{{else}}
-			<input type="text" id="embed-text" class="link" readonly onclick="select()" spellcheck="false" value='&lt;img src="https://spee.ch/{{fileInfo.claimId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}" />'/>
-		{{/ifConditional}}
-		<button class="copy-button" data-elementtocopy="embed-text" onclick="copyToClipboard(event)">copy</button>
-	</div>
-	{{!--markdown text using asset--}}
-	{{#ifConditional fileInfo.fileType '===' 'video/mp4'}}
-	{{else}}
-	<div class="share-option">
-		Markdown
-		<div class="input-error" id="input-error-copy-markdown-text" hidden="true"></div>
-		<br/>
-		<input type="text" id="markdown-text" class="link" readonly onclick="select()" spellcheck="false" value='![{{fileInfo.name}}](https://spee.ch/{{fileInfo.claimId}}/{{fileInfo.name}}.{{fileInfo.fileExt}})'/>
-		<button class="copy-button" data-elementtocopy="markdown-text" onclick="copyToClipboard(event)">copy</button>
-	</div>
-	{{/ifConditional}}
+{{/ifConditional}}
+
+<div class="row row--wide">
+    <div id="show-short-link">
+        <div class="column column--2 column--sml-10">
+            <a href="/{{fileInfo.shortId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}"><span class="label">Link:</span></a>
+        </div><div class="column column--8 column--sml-10">
+            <div class="row row--short row--wide">
+                <div class="column column--7">
+                    <div class="input-error" id="input-error-copy-short-link" hidden="true"></div>
+                    <input type="text" id="short-link" class="input-disabled input-text--full-width" readonly spellcheck="false" value="https://spee.ch/{{fileInfo.shortId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}" onclick="select()"/>
+                </div><div class="column column--1"></div><div class="column column--2">
+                    <button class="button--primary" data-elementtocopy="short-link" onclick="copyToClipboard(event)">copy</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="show-embed-code">
+        <div class="column column--2 column--sml-10">
+            <span class="label">Embed:</span>
+        </div><div class="column column--8 column--sml-10">
+            <div class="row row--short row--wide">
+                <div class="column column--7">
+                    <div class="input-error" id="input-error-copy-embed-text" hidden="true"></div>
+                    {{#ifConditional fileInfo.fileType '===' 'video/mp4'}}
+                        <input type="text" id="embed-text" class="input-disabled input-text--full-width" readonly onclick="select()" spellcheck="false" value='&lt;video width="100%" controls poster="{{fileInfo.thumbnail}}" src="https://spee.ch/{{fileInfo.claimId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}"/>&lt;/video>'/>
+                    {{else}}
+                        <input type="text" id="embed-text" class="input-disabled input-text--full-width" readonly onclick="select()" spellcheck="false" value='&lt;img src="https://spee.ch/{{fileInfo.claimId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}"/>'/>
+                    {{/ifConditional}}
+                </div><div class="column column--1"></div><div class="column column--2">
+                <button class="button--primary" data-elementtocopy="embed-text" onclick="copyToClipboard(event)">copy</button>
+            </div>
+        </div>
+    </div>
+    </div>
 </div>
-<div class="panel">
-    <h2>Description</h2>
-    <p>{{fileInfo.description}}</p>
+
+<div id="show-share-buttons">
+    <div class="row row--wide row--short">
+        <div class="column column--2 column--sml-10">
+            <span class="label">Share:</span>
+        </div><div class="column column--8 column--sml-10">
+        <div class="row row--short row--wide">
+            <div class="column column--2">
+                <a target="_blank" href="https://twitter.com/intent/tweet?text=https://spee.ch/{{fileInfo.shortId}}/{{fileInfo.name}}">twitter</a>
+            </div>
+            <div class="column column--2">
+                <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://spee.ch/{{fileInfo.shortId}}/{{fileInfo.name}}">facebook</a>
+            </div>
+            <div class="column column--2">
+                <a target="_blank" href="http://tumblr.com/widgets/share/tool?canonicalUrl=https://spee.ch/{{fileInfo.shortId}}/{{fileInfo.name}}">tumblr</a>
+            </div>
+            <div class="column column--2">
+                <a target="_blank" href="https://www.reddit.com/submit?url=https://spee.ch/{{fileInfo.shortId}}/{{fileInfo.name}}&title={{fileInfo.name}}">reddit</a>
+            </div>
+        </div>
+    </div>
+    </div>
 </div>
-<div class="panel">
-	<h2>Metadata</h2>
-	<table class="metadata-table" style="table-layout: fixed">
-		<tr class="metadata-row">
-			<td class="left-column">Name</td>
-			<td>{{fileInfo.name}}</td>
-		</tr>
-		<tr class="metadata-row">
-			<td class="left-column">Claim Id</td>
-			<td>{{fileInfo.claimId}}</td>
-		</tr>
-		<tr class="metadata-row">
-			<td class="left-column">File Name</td>
-			<td>{{fileInfo.fileName}}</td>
-		</tr>
-		<tr>
-			<td class="left-column">File Type</td>
-			<td>{{#if fileInfo.fileType}}
-					{{fileInfo.fileType}}
-				{{else}}
-					unknown
-				{{/if}}
-			</td>
-		</tr>
-	</table>
+
+<div class="row row--wide">
+    <a class="label" id="show-details-toggle" href="#" onclick="toggleSection(event)" data-open="false" data-openlabel="[less]" data-closedlabel="[more]" data-slaveelementid="show-details">[more]</a>
+</div>
+
+<div id="show-details" hidden="true">
+    <div id="show-claim-name">
+        <div class="column column--2 column--sml-10">
+            <span class="label">Name:</span>
+        </div><div class="column column--8 column--sml-10">
+        {{fileInfo.name}}
+        </div>
+    </div>
+    <div id="show-claim-id">
+        <div class="column column--2 column--sml-10">
+            <span class="label">Claim Id:</span>
+        </div><div class="column column--8 column--sml-10">
+        {{fileInfo.claimId}}
+        </div>
+    </div>
+    <div id="show-claim-id">
+        <div class="column column--2 column--sml-10">
+            <span class="label">File Name:</span>
+        </div><div class="column column--8 column--sml-10">
+        {{fileInfo.fileName}}
+        </div>
+    </div>
+    <div id="show-claim-id">
+        <div class="column column--2 column--sml-10">
+            <span class="label">File Type:</span>
+        </div><div class="column column--8 column--sml-10">
+        {{#if fileInfo.fileType}}
+            {{fileInfo.fileType}}
+        {{else}}
+            unknown
+        {{/if}}
+        </div>
+    </div>
 </div>

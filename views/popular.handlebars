@@ -1,0 +1,24 @@
+<div class="row">
+    <div class="grid">
+        {{#each trendingAssets}}
+            {{> gridItem}}
+        {{/each}}
+    </div>
+</div>
+
+<script src="/assets/vendors/masonry/masonry.pkgd.min.js"></script>
+<script src="/assets/vendors/imagesloaded/imagesloaded.pkgd.min.js"></script>
+<script>
+    // init masonry with element
+    var grid = document.querySelector('.grid');
+    var msnry;
+
+    imagesLoaded( grid, function() {
+        msnry = new Masonry( grid, {
+            itemSelector: '.grid-item',
+            columnWidth: 3,
+            percentPosition: true
+        });
+    });
+
+</script>

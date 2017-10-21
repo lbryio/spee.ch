@@ -1,15 +1,15 @@
-<div class='content-list-card'>
-    <a href="{{this.showUrlLong}}"><span class='content-list-card-link'></span></a>
-    {{#ifConditional this.contentType '===' 'video/mp4'}}
-         <img class="content-list-asset" src="{{this.thumbnail}}"/>
-    {{else}}
-        <img  class="content-list-asset" src="{{this.directUrlLong}}" />
-    {{/ifConditional}}
-    <div class="content-list-details">
-        <ul>
-            <li class="content-list-title">{{this.title}}</li>
-            <li><a href="{{this.directUrlShort}}">spee.ch{{this.directUrlShort}}</a></li>
-        </ul>
+<div class='row row--wide'>
+    <div class="column column--3 align-content-top">
+        <a href="{{this.showUrlLong}}">
+        {{#ifConditional this.contentType '===' 'video/mp4'}}
+            <img class="content-list-item-asset" src="{{this.thumbnail}}"/>
+        {{else}}
+            <img  class="content-list-item-asset" src="{{this.directUrlLong}}" />
+        {{/ifConditional}}
+        </a>
+    </div><div class="column column--7 align-content-top">
+        <p>{{this.title}}</p>
+        <a href="{{this.showUrlShort}}">spee.ch{{this.showUrlShort}}</a>
     </div>
 </div>
 

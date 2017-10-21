@@ -1,59 +1,119 @@
-@media (max-width: 1250px) {
-    .wrapper {
-		margin-left: 10%;
-		width:80%;
+
+@media (max-width: 1200px) {
+
+	.nav-bar-title--tagline {
+		font-size: small;
+		position: absolute;
+		left: 40%;
+		top: 50%;
+		transform: translateX(-40%) translateY(-50%);
 	}
 }
 
-@media (max-width: 1000px) {
-    .wrapper {
-		margin-left: 10%;
-		width:80%;
+@media (max-width: 1050px) {
+
+	.nav-bar-title--tagline {
+		display: none;
 	}
 
-	.main {
-		float: none;
-		width: 100%;
-		margin-right: 0px;
-		padding-right: 0px;
-		border-right: 0px;
-		margin-bottom: 5px;
-	}
-
-	.sidebar {
-		border-top: 1px solid lightgray;
-		float: none;
-		width: 100%;
-	}
 }
+
 
 @media (max-width: 750px ) {
-	.col-left, .col-right {
-		float: none;
-		margin: 0px;
-		padding: 0px;
+
+	body, button, input, textarea, label, select, option, p {
+		font-size: medium;
+	}
+
+	.instructions-text--large, .pull-quote {
+		font-size: 1.5rem;
+	}
+
+	.column--med-10 {
 		width: 100%;
 	}
 
-	.col-right {
-		padding-top: 20px;
+	.column--sml-10 {
+		width: 100%;
 	}
 
-	.all-claims-asset {
-		width:30%;
+	.h2--top {
+		margin-top: 1em;
 	}
 
-	.all-claims-details {
+	.nav-bar-title-section {
+		width:100%;
+		padding: 0px;
+	}
+
+	.nav-bar-title {
+		width: calc(25% - 2rem);
+		padding: 1rem;
+	}
+
+	.nav-bar-logo {
+		height: 1.5rem;
+	}
+
+	.nav-bar-link-section {
+		width: 75%;
+		padding: 0px;
+	}
+
+	.nav-bar-link {
+		float: left;
+		text-align: center;
+		width: calc(25% - 2rem);
+		padding: 1rem;
+		margin: 0px;
+	}
+
+	#publish-active-area > .row, #publish-details > .row, #channel-login-form > .row, #publish-channel-form > .row {
+		padding: 1em 0px 1em 0px;
+	}
+}
+
+@media (max-width: 500px) {
+
+	.nav-bar-logo {
+		height: 1rem;
+	}
+
+	.nav-bar-link {
+		font-size: small;
+		width: calc(25% - 1rem);
+		padding: 1rem 0.5rem 1rem 0.5rem;
+	}
+
+	body, button, input, textarea, label, select, option, p, .publish-fine-print {
 		font-size: small;
 	}
 
-	.show-asset-lite {
-		width: 100%;
+	.instructions-text--large, .pull-quote, .input-text--large, .button--large {
+		font-size: medium;
 	}
 
-	.top-bar-tagline {
-		clear: both;
-		text-align: left;
-		width: 100%;
+	.grid-item {
+		width: calc(100% - 2em);
+		float: none;
+		padding: 1em;
+		margin: 0px;
 	}
+
+}
+
+@media (max-width: 360px) {
+
+	.nav-bar-link {
+		font-size: x-small;
+	}
+
+	body, button, input, textarea, label, select, option, p, .publish-fine-print, .instructions-text--large {
+		font-size: x-small;
+	}
+
+	.pull-quote, .input-text--large, .button--large {
+		font-size: small;
+	}
+
 }

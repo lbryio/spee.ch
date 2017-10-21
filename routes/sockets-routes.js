@@ -1,7 +1,7 @@
 const logger = require('winston');
-const publishController = require('../controllers/publishController.js');
-const publishHelpers = require('../helpers/publishHelpers.js');
-const errorHandlers = require('../helpers/errorHandlers.js');
+const { publish } = require('../controllers/publishController.js');
+const { createPublishParams } = require('../helpers/publishHelpers.js');
+const { useObjectPropertiesIfNoKeys } = require('../helpers/errorHandlers.js');
 const { postToStats } = require('../controllers/statsController.js');
 
 module.exports = (app, siofu, hostedContentPath) => {
@@ -35,30 +35,37 @@ module.exports = (app, siofu, hostedContentPath) => {
       if (file.success) {
         logger.debug(`Client successfully uploaded ${file.name}`);
         socket.emit('publish-status', 'File upload successfully completed. Your image is being published to LBRY (this might take a second)...');
-
-        /*
-        NOTE: need to validate that client has the credentials to the channel they chose
-        otherwise they could circumvent security client side.
-         */
-
+        // /*
+        // NOTE: need to validate that client has the credentials to the channel they chose
+        // otherwise they could circumvent security.
+        //  */
+        let thumbnail;
+        if (file.meta.thumbnail) {
+          thumbnail = file.meta.thumbnail;
+        } else {
+          thumbnail = null;
+        }
+        let channelName;
+        if (file.meta.channel) {
+          channelName = file.meta.channel;
+        } else {
+          channelName = null;
+        }
         // prepare the publish parameters
-        const publishParams = publishHelpers.createPublishParams(file.meta.name, file.pathName, file.meta.title, file.meta.description, file.meta.license, file.meta.nsfw, file.meta.channel);
-        logger.debug(publishParams);
+        const publishParams = createPublishParams(file.pathName, file.meta.name, file.meta.title, file.meta.description, file.meta.license, file.meta.nsfw, thumbnail, channelName);
+        logger.debug('publish parameters:', publishParams);
         // publish the file
-        publishController.publish(publishParams, file.name, file.meta.type)
+        publish(publishParams, file.name, file.meta.type)
         .then(result => {
-          postToStats('PUBLISH', '/', null, null, null, 'success');
           socket.emit('publish-complete', { name: publishParams.name, result });
         })
         .catch(error => {
-          error = errorHandlers.handlePublishError(error);
-          postToStats('PUBLISH', '/', null, null, null, error);
-          socket.emit('publish-failure', error);
+          logger.error('Publish Error:', useObjectPropertiesIfNoKeys(error));
+          socket.emit('publish-failure', error.message);
         });
       } else {
-        logger.error(`An error occurred in uploading the client's file`);
         socket.emit('publish-failure', 'File uploaded, but with errors');
-        postToStats('PUBLISH', '/', null, null, null, 'File uploaded, but with errors');
+        logger.error(`An error occurred in uploading the client's file`);
         // to-do: remove the file, if not done automatically
       }
     });

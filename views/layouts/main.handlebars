@@ -6,8 +6,7 @@
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<title>Spee.ch</title>
     <link rel="stylesheet" href="/assets/css/reset.css" type="text/css">
-	<link rel="stylesheet" href="/assets/css/BEM.css" type="text/css">
-	<link rel="stylesheet" href="/assets/css/componentStyle.css" type="text/css">
+	<link rel="stylesheet" href="/assets/css/general.css" type="text/css">
     <link rel="stylesheet" href="/assets/css/mediaQueries.css" type="text/css">
 	<meta name="twitter:card" content="summary" />
 	<meta name="twitter:site" content="@lbryio" />
@@ -21,6 +20,16 @@
 	{{ googleAnalytics }}
 </head>
 <body>
-	{{{ body }}}
+    <script src="/assets/js/generalFunctions.js"></script>
+    <script src="/assets/js/validationFunctions.js"></script>
+    <script src="/assets/js/publishFileFunctions.js"></script>
+    <script src="/assets/js/authFunctions.js"></script>
+    <script src="/assets/js/loginFunctions.js"></script>
+    <script src="/assets/js/dropzoneFunctions.js"></script>
+    <script src="/assets/js/createChannelFunctions.js"></script>
+    <script src="/assets/js/navBarFunctions.js"></script>
+    {{> releaseBanner}}
+    {{> navBar}}
+    {{{ body }}}
 </body>
 </html>

@@ -1,77 +1,129 @@
 const logger = require('winston');
-const config = require('config');
 const fs = require('fs');
 const db = require('../models');
+const config = require('config');
 
 module.exports = {
-  validateFile (file, name, license, nsfw) {
+  validateApiPublishRequest (body, files) {
+    if (!body) {
+      throw new Error('no body found in request');
+    }
+    if (!body.name) {
+      throw new Error('no name field found in request');
+    }
+    if (!body.nsfw) {
+      throw new Error('no nsfw field found in request');
+    }
+    if (!files) {
+      throw new Error('no files found in request');
+    }
+    if (!files.file) {
+      throw new Error('no file with key of [file] found in request');
+    }
+  },
+  validatePublishSubmission (file, claimName, nsfw) {
+    try {
+      module.exports.validateFile(file);
+      module.exports.validateClaimName(claimName);
+      module.exports.validateNSFW(nsfw);
+    } catch (error) {
+      throw error;
+    }
+  },
+  validateFile (file) {
     if (!file) {
-      throw new Error('No file was submitted or the key used was incorrect.  Files posted through this route must use a key of "speech" or null');
+      logger.debug('publish > file validation > no file found');
+      throw new Error('no file provided');
+    }
+    // check the file name
+    if (/'/.test(file.name)) {
+      logger.debug('publish > file validation > file name had apostrophe in it');
+      throw new Error('apostrophes are not allowed in the file name');
     }
     // check file type and size
     switch (file.type) {
       case 'image/jpeg':
+      case 'image/jpg':
       case 'image/png':
+        if (file.size > 10000000) {
+          logger.debug('publish > file validation > .jpeg/.jpg/.png was too big');
+          throw new Error('Sorry, images are limited to 10 megabytes.');
+        }
+        break;
       case 'image/gif':
         if (file.size > 50000000) {
-          throw new Error('Your image exceeds the 50 megabyte limit.');
+          logger.debug('publish > file validation > .gif was too big');
+          throw new Error('Sorry, .gifs are limited to 50 megabytes.');
         }
         break;
       case 'video/mp4':
         if (file.size > 50000000) {
-          throw new Error('Your video exceeds the 50 megabyte limit.');
+          logger.debug('publish > file validation > .mp4 was too big');
+          throw new Error('Sorry, videos are limited to 50 megabytes.');
         }
         break;
       default:
-        throw new Error('The ' + file.Type + ' content type is not supported.  Only, .jpeg, .png, .gif, and .mp4 files are currently supported.');
+        logger.debug('publish > file validation > unrecognized file type');
+        throw new Error('The ' + file.type + ' content type is not supported.  Only, .jpeg, .png, .gif, and .mp4 files are currently supported.');
     }
-    // validate claim name
-    const invalidCharacters = /[^A-Za-z0-9,-]/.exec(name);
+    return file;
+  },
+  validateClaimName (claimName) {
+    const invalidCharacters = /[^A-Za-z0-9,-]/.exec(claimName);
     if (invalidCharacters) {
-      throw new Error('The url name you provided is not allowed.  Only the following characters are allowed: A-Z, a-z, 0-9, and "-"');
+      throw new Error('The claim name you provided is not allowed.  Only the following characters are allowed: A-Z, a-z, 0-9, and "-"');
     }
-    // validate license
+  },
+  validateLicense (license) {
     if ((license.indexOf('Public Domain') === -1) && (license.indexOf('Creative Commons') === -1)) {
-      throw new Error('Only posts with a "Public Domain" license,  or one of the Creative Commons licenses are eligible for publishing through spee.ch');
+      throw new Error('Only posts with a "Public Domain" or "Creative Commons" license are eligible for publishing through spee.ch');
     }
+  },
+  cleanseNSFW (nsfw) {
     switch (nsfw) {
       case true:
-      case false:
-      case 'true':
-      case 'false':
       case 'on':
+      case 'true':
+      case 1:
+      case '1':
+        return true;
+      case false:
+      case 'false':
       case 'off':
       case 0:
       case '0':
-      case 1:
-      case '1':
-        break;
+        return false;
       default:
-        throw new Error('NSFW value was not accepted.  NSFW must be set to either true, false, "on", or "off"');
+        return null;
     }
   },
-  createPublishParams (name, filePath, title, description, license, nsfw, channel) {
-    logger.debug(`Creating Publish Parameters for "${name}"`);
-    const claimAddress = config.get('WalletConfig.LbryClaimAddress');
-    const defaultChannel = config.get('WalletConfig.DefaultChannel');
-    // filter nsfw and ensure it is a boolean
-    if (nsfw === false) {
-      nsfw = false;
-    } else if (typeof nsfw === 'string') {
-      if (nsfw.toLowerCase === 'false' || nsfw.toLowerCase === 'off' || nsfw === '0') {
-        nsfw = false;
+  cleanseChannelName (channelName) {
+    if (channelName) {
+      if (channelName.indexOf('@') !== 0) {
+        channelName = `@${channelName}`;
       }
-    } else if (nsfw === 0) {
-      nsfw = false;
-    } else {
-      nsfw = true;
     }
-    // provide defaults for title & description
-    if (title === null || title === '') {
+    return channelName;
+  },
+  validateNSFW (nsfw) {
+    if (nsfw === true || nsfw === false) {
+      return;
+    }
+    throw new Error('NSFW must be set to either true or false');
+  },
+  createPublishParams (filePath, name, title, description, license, nsfw, thumbnail, channelName) {
+    logger.debug(`Creating Publish Parameters`);
+    // provide defaults for title
+    if (title === null || title.trim() === '') {
       title = name;
     }
+    // provide default for description
     if (description === null || description.trim() === '') {
-      description = `${name} published via spee.ch`;
+      description = '';
+    }
+    // provide default for license
+    if (license === null || license.trim() === '') {
+      license = 'All Rights Reserved';
     }
     // create the publish params
     const publishParams = {
@@ -86,21 +138,24 @@ module.exports = {
         license,
         nsfw,
       },
-      claim_address: claimAddress,
+      claim_address: config.get('WalletConfig.LbryClaimAddress'),
     };
-    // add channel if applicable
-    if (channel !== 'none') {
-      publishParams['channel_name'] = channel;
-    } else {
-      publishParams['channel_name'] = defaultChannel;
+    // add thumbnail to channel if video
+    if (thumbnail !== null) {
+      publishParams['metadata']['thumbnail'] = thumbnail;
     }
-
-    logger.debug('publishParams:', publishParams);
+    // add channel to params, if applicable
+    if (channelName) {
+      publishParams['channel_name'] = channelName;
+    }
     return publishParams;
   },
   deleteTemporaryFile (filePath) {
     fs.unlink(filePath, err => {
-      if (err) throw err;
+      if (err) {
+        logger.error(`error deleting temporary file ${filePath}`);
+        throw err;
+      }
       logger.debug(`successfully deleted ${filePath}`);
     });
   },

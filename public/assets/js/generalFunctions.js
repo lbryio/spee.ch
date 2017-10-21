@@ -6,10 +6,10 @@ function getRequest (url) {
         xhttp.responseType = 'json';
         xhttp.onreadystatechange = () => {
             if (xhttp.readyState == 4 ) {
-                console.log(xhttp);
                 if ( xhttp.status == 200) {
-                    console.log('response:', xhttp.response);
                     resolve(xhttp.response);
+                } else if (xhttp.status == 401) {
+                    reject('wrong username or password');
                 } else {
                     reject('request failed with status:' + xhttp.status);
                 };
@@ -28,10 +28,10 @@ function postRequest (url, params) {
         xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         xhttp.onreadystatechange = () => {
             if (xhttp.readyState == 4 ) {
-                console.log(xhttp);
                 if ( xhttp.status == 200) {
-                    console.log('response:', xhttp.response);
                     resolve(xhttp.response);
+                } else if (xhttp.status == 401) {
+                    reject( new AuthenticationError('wrong username or password'));
                 } else {
                     reject('request failed with status:' + xhttp.status);
                 };
@@ -80,6 +80,63 @@ function createProgressBar(element, size){
 	setInterval(addOne, 300);
 }
 
+function setCookie(key, value) {
+    document.cookie = `${key}=${value}`;
+}
+
+function getCookie(cname) {
+    const name = cname + "=";
+    const decodedCookie = decodeURIComponent(document.cookie);
+    const ca = decodedCookie.split(';');
+    for(let i = 0; i <ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
+
+function checkCookie() {
+    const channelName = getCookie("channel_name");
+    if (channelName != "") {
+        console.log(`cookie found for ${channelName}`);
+    } else {
+        console.log('no channel_name cookie found');
+    }
+}
+
+function clearCookie(name) {
+    document.cookie = `${name}=; expires=Thu, 01-Jan-1970 00:00:01 GMT;`;
+}
+
+function setUserCookies(channelName, channelClaimId, shortChannelId) {
+    setCookie('channel_name', channelName)
+    setCookie('channel_claim_id', channelClaimId);
+    setCookie('short_channel_id', shortChannelId);
+}
+
+function clearUserCookies() {
+    clearCookie('channel_name')
+    clearCookie('channel_claim_id');
+    clearCookie('short_channel_id');
+}
+
+function copyToClipboard(event){
+    var elementToCopy = event.target.dataset.elementtocopy;
+    var element = document.getElementById(elementToCopy);
+    var errorElement = 'input-error-copy-text' + elementToCopy;
+    element.select();
+    try {
+        document.execCommand('copy');
+    } catch (err) {
+        showError(errorElement, 'Oops, unable to copy');
+    }
+}
+
 // Create new error objects, that prototypically inherit from the Error constructor
 function FileError(message) {
   this.name = 'FileError';
@@ -112,3 +169,11 @@ function ChannelPasswordError(message) {
 }
 ChannelPasswordError.prototype = Object.create(Error.prototype);
 ChannelPasswordError.prototype.constructor = ChannelPasswordError;
+
+function AuthenticationError(message) {
+    this.name = 'AuthenticationError';
+    this.message = message || 'Default Message';
+    this.stack = (new Error()).stack;
+}
+AuthenticationError.prototype = Object.create(Error.prototype);
+AuthenticationError.prototype.constructor = AuthenticationError;

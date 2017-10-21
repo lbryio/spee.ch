@@ -7,7 +7,11 @@ const SHOW = 'SHOW';
 const SHOWLITE = 'SHOWLITE';
 const CHANNEL = 'CHANNEL';
 const CLAIM = 'CLAIM';
-const CHANNELID_INDICATOR = ':';
+const CLAIM_ID_CHAR = ':';
+const CHANNEL_CHAR = '@';
+const CLAIMS_PER_PAGE = 10;
+const NO_CHANNEL = 'NO_CHANNEL';
+const NO_CLAIM = 'NO_CLAIM';
 
 function isValidClaimId (claimId) {
   return ((claimId.length === 40) && !/[^A-Za-z0-9]/g.test(claimId));
@@ -32,12 +36,60 @@ function getAsset (claimType, channelName, channelId, name, claimId) {
   }
 }
 
+function getPage (query) {
+  if (query.p) {
+    return parseInt(query.p);
+  }
+  return 1;
+}
+
+function extractPageFromClaims (claims, pageNumber) {
+  logger.debug('claims is array?', Array.isArray(claims));
+  logger.debug(`pageNumber ${pageNumber} is number?`, Number.isInteger(pageNumber));
+  const claimStartIndex = (pageNumber - 1) * CLAIMS_PER_PAGE;
+  console.log('claim start index:', claimStartIndex);
+  const claimEndIndex = claimStartIndex + 10;
+  console.log('claim end index:', claimEndIndex);
+  const pageOfClaims = claims.slice(claimStartIndex, claimEndIndex);
+  logger.debug('page of claims:', pageOfClaims);
+  return pageOfClaims;
+}
+
+function determineTotalPages (totalClaims) {
+  if (totalClaims === 0) {
+    return 0;
+  }
+  if (totalClaims < CLAIMS_PER_PAGE) {
+    return 1;
+  }
+  const fullPages = Math.floor(totalClaims / CLAIMS_PER_PAGE);
+  const remainder = totalClaims % CLAIMS_PER_PAGE;
+  if (remainder === 0) {
+    return fullPages;
+  }
+  return fullPages + 1;
+}
+
+function determinePreviousPage (currentPage) {
+  if (currentPage === 1) {
+    return null;
+  }
+  return currentPage - 1;
+}
+
+function determineNextPage (totalPages, currentPage) {
+  if (currentPage === totalPages) {
+    return null;
+  }
+  return currentPage + 1;
+}
+
 module.exports = (app) => {
   // route to serve a specific asset
   app.get('/:identifier/:name', ({ headers, ip, originalUrl, params }, res) => {
     let identifier = params.identifier;
     let name = params.name;
-    let claimType;
+    let claimOrChannel;
     let channelName = null;
     let claimId = null;
     let channelId = null;
@@ -74,8 +126,8 @@ module.exports = (app) => {
     // parse identifier for whether it is a channel, short url, or claim_id
     if (identifier.charAt(0) === '@') {
       channelName = identifier;
-      claimType = CHANNEL;
-      const channelIdIndex = channelName.indexOf(CHANNELID_INDICATOR);
+      claimOrChannel = CHANNEL;
+      const channelIdIndex = channelName.indexOf(CLAIM_ID_CHAR);
       if (channelIdIndex !== -1) {
         channelId = channelName.substring(channelIdIndex + 1);
         channelName = channelName.substring(0, channelIdIndex);
@@ -84,17 +136,21 @@ module.exports = (app) => {
     } else {
       claimId = identifier;
       logger.debug('claim id =', claimId);
-      claimType = CLAIM;
+      claimOrChannel = CLAIM;
     }
     // 1. retrieve the asset and information
-    getAsset(claimType, channelName, channelId, name, claimId)
+    getAsset(claimOrChannel, channelName, channelId, name, claimId)
     // 2. serve or show
-    .then(fileInfo => {
-      if (!fileInfo) {
-        res.status(200).render('noClaims');
-      } else {
-        return serveOrShowAsset(fileInfo, fileExtension, method, headers, originalUrl, ip, res);
+    .then(result => {
+      logger.debug('getAsset result:', result);
+      if (result === NO_CLAIM) {
+        res.status(200).render('noClaim');
+        return;
+      } else if (result === NO_CHANNEL) {
+        res.status(200).render('noChannel');
+        return;
       }
+      return serveOrShowAsset(result, fileExtension, method, headers, originalUrl, ip, res);
     })
     // 3. update the file
     .then(fileInfoForUpdate => {
@@ -105,16 +161,18 @@ module.exports = (app) => {
     });
   });
   // route to serve the winning asset at a claim
-  app.get('/:name', ({ headers, ip, originalUrl, params }, res) => {
+  app.get('/:name', ({ headers, ip, originalUrl, params, query }, res) => {
     // parse name param
     let name = params.name;
     let method;
     let fileExtension;
     let channelName = null;
     let channelId = null;
-    if (name.charAt(0) === '@') {
+    // (a) handle channel requests
+    if (name.charAt(0) === CHANNEL_CHAR) {
       channelName = name;
-      const channelIdIndex = channelName.indexOf(CHANNELID_INDICATOR);
+      const paginationPage = getPage(query);
+      const channelIdIndex = channelName.indexOf(CLAIM_ID_CHAR);
       if (channelIdIndex !== -1) {
         channelId = channelName.substring(channelIdIndex + 1);
         channelName = channelName.substring(0, channelIdIndex);
@@ -125,16 +183,39 @@ module.exports = (app) => {
       getChannelContents(channelName, channelId)
       // 2. respond to the request
       .then(result => {
-        logger.debug('result');
-        if (!result.claims) {
+        if (result === NO_CHANNEL) { // no channel found
           res.status(200).render('noChannel');
-        } else {
-          res.status(200).render('channel', result);
+        } else if (!result.claims) {  // channel found, but no claims
+          res.status(200).render('channel', {
+            channelName   : result.channelName,
+            longChannelId : result.longChannelId,
+            shortChannelId: result.shortChannelId,
+            claims        : [],
+            previousPage  : 0,
+            currentPage   : 0,
+            nextPage      : 0,
+            totalPages    : 0,
+            totalResults  : 0,
+          });
+        } else {  // channel found, with claims
+          const totalPages = determineTotalPages(result.claims.length);
+          res.status(200).render('channel', {
+            channelName   : result.channelName,
+            longChannelId : result.longChannelId,
+            shortChannelId: result.shortChannelId,
+            claims        : extractPageFromClaims(result.claims, paginationPage),
+            previousPage  : determinePreviousPage(paginationPage),
+            currentPage   : paginationPage,
+            nextPage      : determineNextPage(totalPages, paginationPage),
+            totalPages    : totalPages,
+            totalResults  : result.claims.length,
+          });
         }
       })
       .catch(error => {
         handleRequestError('serve', originalUrl, ip, error, res);
       });
+    // (b) handle stream requests
     } else {
       if (name.indexOf('.') !== -1) {
         method = SERVE;
@@ -155,11 +236,12 @@ module.exports = (app) => {
       // 1. retrieve the asset and information
       getAsset(CLAIM, null, null, name, null)
       // 2. respond to the request
-      .then(fileInfo => {
-        if (!fileInfo) {
-          res.status(200).render('noClaims');
+      .then(result => {
+        logger.debug('getAsset result', result);
+        if (result === NO_CLAIM) {
+          res.status(200).render('noClaim');
         } else {
-          return serveOrShowAsset(fileInfo, fileExtension, method, headers, originalUrl, ip, res);
+          return serveOrShowAsset(result, fileExtension, method, headers, originalUrl, ip, res);
         }
       })
       // 3. update the database
