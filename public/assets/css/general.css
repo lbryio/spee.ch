@@ -63,7 +63,7 @@ h2 {
 }
 
 p, h3 {
-	padding-left: 0.3em;
+
 	font-size: x-large;
 }
 
@@ -90,6 +90,7 @@ p, h3 {
 
 .pull-quote {
 	font-size: 3rem;
+	margin-top: 1rem;
 }
 
 .publish-fine-print {
@@ -242,8 +243,11 @@ align-content-left {
 
 /* ERROR MESSAGES */
 
-. info-message {
+.info-message {
 	font-weight: bold;
+	font-size: medium;
+	margin: 0px;
+	padding: 0.3em;
 }
 
 .info-message--success {
@@ -256,7 +260,7 @@ align-content-left {
 
 .info-message-placeholder {
 	display: block;
-	height: 2rem;
+	height: 3rem;
 }
 
 /* INPUT FIELDS */
