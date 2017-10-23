@@ -33,6 +33,7 @@ body, .flex-container {
 .flex-container--center {
 	justify-content: center;
 }
+
 .hidden {
 	display: none;
 }
@@ -460,6 +461,7 @@ table {
 .dropzone {
 	border: 2px dashed #9b9b9b;
 	text-align: center;
+	position: relative;
 }
 
 .dropzone:hover, .dropzone--drag-over {
@@ -468,8 +470,12 @@ table {
 	background-color: #FCFCFC;
 }
 
-.dropzone-instructions {
-	flex: 0 1 auto;
+.position-absolute {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	height: 100%;
+	width: 100%;
 }
 
 #asset-preview-holder {

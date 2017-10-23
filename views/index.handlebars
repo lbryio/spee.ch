@@ -4,12 +4,12 @@
     </form>
     <div id="primary-dropzone" class="dropzone row row--tall flex-container flex-container--center" ondrop="drop_handler(event);" ondragover="dragover_handler(event);" ondragend="dragend_handler(event)" ondragenter="dragenter_handler(event)" ondragleave="dragexit_handler(event)" onclick="triggerFileChooser('siofu_input', event)">
         <div id="primary-dropzone-instructions">
-            <div class="info-message-placeholder dropzone-instructions">
+            <div class="info-message-placeholder">
                 <div class="info-message info-message--failure" id="input-error-file-selection" hidden="true"></div>
             </div>
-            <p class="dropzone-instructions">Drag & drop image or video here to publish</p>
+            <p>Drag & drop image or video here to publish</p>
             <p>OR</p>
-            <p class="dropzone-instructions"><label class="input-file-label">CHOOSE FILE</label></p>
+            <p><label class="input-file-label">CHOOSE FILE</label></p>
         </div>
     </div>
     <div id="publish-form" class="hidden">
@@ -22,12 +22,10 @@
             <div class="row row--padded">
                 <div id="asset-preview-holder" class="dropzone" ondrop="drop_handler(event);" ondragover="dragover_handler(event);" ondragend="dragend_handler(event)" onmouseenter="showInstructions()" onmouseleave="hideInstructions()" onclick="triggerFileChooser('siofu_input', event)">
                     <div id="asset-preview-target"></div>
-                    <div id="preview-dropzone-instructions" class="flex-container" hidden="true">
-                        <div class="dropzone-instructions">
-                            <p>Drag & drop image or video here</p>
-                            <p>OR</p>
-                            <label class="input-file-label">CHOOSE FILE</label>
-                        </div>
+                    <div id="preview-dropzone-instructions" class="hidden">
+                        <p>Drag & drop image or video here</p>
+                        <p>OR</p>
+                        <label class="input-file-label">CHOOSE FILE</label>
                     </div>
                 </div>
             </div>
@@ -42,10 +40,10 @@
         </div>
     </div>
 
-    <div class="hidden">
-        <div id="publish-status" class="row align-content-center" hidden="true"></div>
-        <div id="publish-progress-bar" class="row align-content-center" hidden="true"></div>
-        <div id="upload-percent" class="row align-content-center" hidden="true"></div>
+    <div id="publish-status" class="hidden">
+        <div id="publish-update" class="row align-content-center"></div>
+        <div id="publish-progress-bar" class="row align-content-center"></div>
+        <div id="upload-percent" class="row align-content-center"></div>
     </div>
 </div>
 
@@ -62,6 +60,7 @@
 
     const publishFormWrapper = document.getElementById('publish-form');
     const publishStatus = document.getElementById('publish-status');
+    const publishUpdate = document.getElementById('publish-update');
     const publishProgressBar = document.getElementById('publish-progress-bar');
     const uploadPercent = document.getElementById('upload-percent');
 
@@ -73,17 +72,16 @@
         hidePublishTools();
 		// show the progress status and animation
         showPublishStatus();
-        updatePublishStatus('File is loading to server')
         showPublishProgressBar();
-        showUploadPercent();
 	});
 	uploader.addEventListener('progress', function(event){
 		var percent = event.bytesLoaded / event.file.size * 100;
-		updateUploadPercent(`${percent.toFixed(2)} %`)
+        updatePublishStatus('<p>File is loading to server</p>')
+		updateUploadPercent(`<p>${percent.toFixed(2)}%</p>`)
 	});
 	/* socket.io message listeners */
-	socket.on('publish-status', function(msg){
-		updatePublishStatus(msg);
+	socket.on('publish-update', function(msg){
+		updatePublishStatus(`<p>${msg}</p>`);
         updateUploadPercent(`<p>Curious what magic is happening here? <a target="blank" href="https://lbry.io/faq/what-is-lbry">learn more</a></p>`);
 	});
 	socket.on('publish-failure', function(msg){
@@ -94,35 +92,30 @@
 	socket.on('publish-complete', function(msg){
 		const showUrl = msg.result.claim_id + "/" + msg.name;
 		// update status
-		updatePublishStatus('<p>Your publish is complete! You are being redirected to it now.</p><p><a target="_blank" href="' + showUrl + '">If you do not get redirected, click here.</a></p>');
-        hidePublishProgressBar();
-        hideUploadPercent();
+		updatePublishStatus('<p>Your publish is complete! You are being redirected to it now.</p>');
+        updateUploadPercent('<p><a target="_blank" href="\' + showUrl + \'">If you do not get redirected, click here.</a></p>')
         // redirect the user
 		window.location.href = showUrl;
 	});
 
 	function hidePublishTools() {
-        publishFormWrapper.hidden = true;
+        publishFormWrapper.setAttribute('class', 'hidden');
     }
     // publish status functions
     function showPublishStatus() {
-        publishStatus.hidden = false;
+        publishStatus.setAttribute('class', 'row row--tall flex-container flex-container--center');
     }
     function updatePublishStatus(msg){
-        publishStatus.innerHTML = msg;
+        publishUpdate.innerHTML = msg;
     }
     // progress bar functions
     function showPublishProgressBar(){
-        publishProgressBar.hidden = false;
         createProgressBar(publishProgressBar, 12);
     }
     function hidePublishProgressBar(){
         publishProgressBar.hidden = true;
     }
     // upload percent functions
-    function showUploadPercent(){
-        uploadPercent.hidden = false;
-    }
     function updateUploadPercent(msg){
         uploadPercent.innerHTML = msg;
     }

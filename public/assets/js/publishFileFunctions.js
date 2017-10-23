@@ -81,7 +81,6 @@ function publishStagedFile(event) {
     if (anonymousOrInChannel === 'anonymous') {
     	channelName = null;
     };
-    console.log('channel name:', channelName);
 	// validate, submit, and handle response
 	validateFilePublishSubmission(stagedFiles, claimName, channelName)
 		.then(() => {

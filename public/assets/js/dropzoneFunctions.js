@@ -1,10 +1,10 @@
 function showInstructions () {
-    document.getElementById('preview-dropzone-instructions').hidden = false;
+    document.getElementById('preview-dropzone-instructions').setAttribute('class', 'flex-container flex-container--center position-absolute');
     document.getElementById('asset-preview').style.opacity = 0.3;
 }
 
 function hideInstructions () {
-    document.getElementById('preview-dropzone-instructions').hidden = true;
+    document.getElementById('preview-dropzone-instructions').setAttribute('class', 'hidden');
     document.getElementById('asset-preview').style.opacity = 1;
 }
 
