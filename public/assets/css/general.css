@@ -23,6 +23,20 @@ html, body {
 	height: 100%;
 }
 
+body, .flex-container {
+	display: -webkit-flex;
+	display: flex;
+	-webkit-flex-direction: column;
+	flex-direction: column;
+}
+
+.flex-container--center {
+	justify-content: center;
+}
+.hidden {
+	display: none;
+}
+
 /* TEXT */
 
 body, button, input, textarea, label, select, option {
@@ -127,8 +141,11 @@ a, a:visited {
 
 .row {
 	clear: both;
-	padding: 2rem 2rem 2rem 2rem;
 	margin: 0px;
+}
+
+.row--padded {
+	padding: 2rem;
 }
 
 .row--wide {
@@ -141,8 +158,8 @@ a, a:visited {
 	padding-bottom: 0px;
 }
 
-.row--full-height {
-	height: calc(100% - 11rem);
+.row--tall {
+	flex: 1 0 auto;
 }
 
 .row--no-top {
@@ -219,13 +236,6 @@ align-content-left {
 
 .align-content-right {
 	vertical-align: bottom;
-}
-
-.align-content-vcenter-hcenter {
-	position: absolute;
-	top: 40%;
-	left: 50%;
-	transform: translateX(-50%) translateY(-40%);
 }
 
 
@@ -385,10 +395,6 @@ table {
 
 /* NAV BAR */
 
-.nav-bar {
-	height: 5.5rem;
-}
-
 .nav-bar-title-section, .nav-bar-link-section {
 	padding: 0px 1em 0px 1em;
 }
@@ -462,13 +468,8 @@ table {
 	background-color: #FCFCFC;
 }
 
-#primary-dropzone-wrapper, #publish-form-wrapper {
-	height: 100%;
-}
-
-#primary-dropzone {
-	height: calc(100% - 4px);
-	position: relative;
+.dropzone-instructions {
+	flex: 0 1 auto;
 }
 
 #asset-preview-holder {
@@ -519,6 +520,13 @@ table {
 
 .wrap-words {
 	word-wrap: break-word;
+}
+
+#new-release-banner {
+	font-size: small;
+	background-color: dodgerblue;
+	color: white;
+	text-align: center;
 }
 
 /* ---- grid items ---- */

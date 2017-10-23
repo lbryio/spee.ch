@@ -3,10 +3,6 @@
 
 	.nav-bar-title--tagline {
 		font-size: small;
-		position: absolute;
-		left: 40%;
-		top: 50%;
-		transform: translateX(-40%) translateY(-50%);
 	}
 }
 

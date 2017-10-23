@@ -7,9 +7,9 @@ function cancelPublish () {
 // When a file is selected for publish, validate that file and
 // stage it so it will be ready when the publish button is clicked.
 function previewAndStageFile(selectedFile){
-	const publishForm = document.getElementById('publish-form-wrapper');
+	const publishForm = document.getElementById('publish-form');
     const assetPreview = document.getElementById('asset-preview-target');
-    const primaryDropzone = document.getElementById('primary-dropzone-wrapper');
+    const primaryDropzone = document.getElementById('primary-dropzone');
     const previewReader = new FileReader();
     const nameInput = document.getElementById('claim-name-input');
 	const fileSelectionInputError = document.getElementById('input-error-file-selection');
@@ -44,8 +44,8 @@ function previewAndStageFile(selectedFile){
         thumbnailSelectionTool.hidden = false;
 	}
     // hide the drop zone
-    primaryDropzone.hidden = true;
-    publishForm.hidden = false;
+    primaryDropzone.setAttribute('class', 'hidden');
+    publishForm.setAttribute('class', 'row')
 	// set the name input value to the image name if none is set yet
 	if (nameInput.value === "") {
 		var filename = selectedFile.name.substring(0, selectedFile.name.indexOf('.'))
