@@ -25,15 +25,35 @@ html, body {
 
 /* TEXT */
 
-body, button, input, textarea, label, select, option, p {
+body, button, input, textarea, label, select, option {
 	font-family: 'Lekton', monospace;
 	font-size: medium;
 	word-wrap: break-word;
 }
 
-p {
+h1 {
+	font-size: 2rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+}
+
+.h2--secondary {
+	color: #9b9b9b;
+}
+
+.h2--top {
+	margin-top: 0px;
+}
+
+p, h3 {
 	padding-left: 0.3em;
-	font-size: 18px;
+	font-size: x-large;
+}
+
+.input-text--large, .textarea--large, .title-show, .description-show {
+	font-size: 1.5rem;
 }
 
 .url-text {
@@ -54,7 +74,7 @@ p {
 }
 
 .pull-quote {
-	font-size: 24px;
+	font-size: 3rem;
 }
 
 .publish-fine-print {
@@ -103,31 +123,6 @@ a, a:visited {
 	text-decoration: none;
 }
 
-/* HEADERS */
-
-h1 {
-	font-size: 2rem;
-}
-
-h2 {
-	font-size: 1.5rem;
-}
-
-.h2--secondary {
-	color: #9b9b9b;
-}
-
-.h2--top {
-	margin-top: 0px;
-}
-
-h3 {
-	font-size: 1rem;
-}
-
-.input-text--large, .textarea--large, .title-show, .description-show {
-	font-size: 1.5rem;
-}
 /* COLUMNS AND ROWS */
 
 .row {
