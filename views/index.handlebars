@@ -79,7 +79,7 @@
 	uploader.addEventListener('progress', function(event){
 		var percent = event.bytesLoaded / event.file.size * 100;
         updatePublishStatus('<p>File is loading to server</p>')
-		updateUploadPercent(`<p>${percent.toFixed(2)}%</p>`)
+		updateUploadPercent(`<p class="blue">${percent.toFixed(2)}%</p>`)
 	});
 	/* socket.io message listeners */
 	socket.on('publish-update', function(msg){
@@ -127,14 +127,14 @@
 
     function addInputValuesToFileMetaData(event) {
         // get values from inputs
-        const name = document.getElementById('claim-name-input').value;
-        const title = document.getElementById('publish-title').value;
-        const description = document.getElementById('publish-description').value;
-        const license = document.getElementById('publish-license').value;
+        const name = document.getElementById('claim-name-input').value.trim();
+        const title = document.getElementById('publish-title').value.trim();
+        const description = document.getElementById('publish-description').value.trim();
+        const license = document.getElementById('publish-license').value.trim();
         const nsfw = document.getElementById('publish-nsfw').checked;
         const anonymous = document.getElementById('anonymous-select').checked;
-        const channel = document.getElementById('channel-name-select').value;
-        const thumbnail = document.getElementById('claim-thumbnail-input').value;
+        const channel = document.getElementById('channel-name-select').value.trim();
+        const thumbnail = document.getElementById('claim-thumbnail-input').value.trim();
         // set values on file meta data
         event.file.meta.name = name;
         event.file.meta.title = title;

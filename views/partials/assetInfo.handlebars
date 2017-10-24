@@ -1,8 +1,6 @@
-{{#ifConditional fileInfo.description '!==' ''}}
-<div class="row row--wide row--short">
-    <p class="label">{{fileInfo.description}}</p>
-</div>
-{{/ifConditional}}
+{{#if fileInfo.description}}
+    <p class="p--no-top">{{fileInfo.description}}</p>
+{{/if}}
 
 <div class="row row--wide">
     <div id="show-short-link">
@@ -40,7 +38,7 @@
 </div>
 
 <div id="show-share-buttons">
-    <div class="row row--wide row--short">
+    <div class="row row--padded row--wide">
         <div class="column column--2 column--sml-10">
             <span class="label">Share:</span>
         </div><div class="column column--8 column--sml-10">
@@ -66,7 +64,7 @@
     <a class="label" id="show-details-toggle" href="#" onclick="toggleSection(event)" data-open="false" data-openlabel="[less]" data-closedlabel="[more]" data-slaveelementid="show-details">[more]</a>
 </div>
 
-<div id="show-details" hidden="true">
+<div id="show-details" class="row row--padded row--wide" hidden="true">
     <div id="show-claim-name">
         <div class="column column--2 column--sml-10">
             <span class="label">Name:</span>

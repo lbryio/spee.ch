@@ -67,6 +67,10 @@ p, h3 {
 	font-size: x-large;
 }
 
+.p--no-top {
+	margin-top: 0px;
+}
+
 .input-text--large, .textarea--large, .title-show, .description-show {
 	font-size: 1.5rem;
 }
