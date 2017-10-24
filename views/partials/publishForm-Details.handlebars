@@ -36,6 +36,14 @@
 
 </div>
 
+<script type="text/javascript">
+    const textarea = document.getElementById('publish-description');
+    const limit = 200;
+    textarea.oninput = () => {
+        textarea.style.height = '';
+        textarea.style.height = Math.min(textarea.scrollHeight, limit) + 'px';
+    }
+</script>
 
 
 
