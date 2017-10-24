@@ -1,5 +1,5 @@
 {{#if fileInfo.description}}
-    <p class="p--no-top">{{fileInfo.description}}</p>
+    <p>{{fileInfo.description}}</p>
 {{/if}}
 
 <div class="row row--wide">
@@ -42,13 +42,13 @@
         <div class="column column--2 column--sml-10">
             <span class="label">Share:</span>
         </div><div class="column column--7 column--sml-10">
-        <div class="row row--short row--wide flex-container flex-container--row flex-container--wrap">
-            <a target="_blank" href="https://twitter.com/intent/tweet?text=https://spee.ch/{{fileInfo.shortId}}/{{fileInfo.name}}">twitter</a>
-            <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://spee.ch/{{fileInfo.shortId}}/{{fileInfo.name}}">facebook</a>
-            <a target="_blank" href="http://tumblr.com/widgets/share/tool?canonicalUrl=https://spee.ch/{{fileInfo.shortId}}/{{fileInfo.name}}">tumblr</a>
-            <a target="_blank" href="https://www.reddit.com/submit?url=https://spee.ch/{{fileInfo.shortId}}/{{fileInfo.name}}&title={{fileInfo.name}}">reddit</a>
+            <div class="row row--short row--wide flex-container flex-container--row flex-container--wrap">
+                <a target="_blank" href="https://twitter.com/intent/tweet?text=https://spee.ch/{{fileInfo.shortId}}/{{fileInfo.name}}">twitter</a>
+                <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://spee.ch/{{fileInfo.shortId}}/{{fileInfo.name}}">facebook</a>
+                <a target="_blank" href="http://tumblr.com/widgets/share/tool?canonicalUrl=https://spee.ch/{{fileInfo.shortId}}/{{fileInfo.name}}">tumblr</a>
+                <a target="_blank" href="https://www.reddit.com/submit?url=https://spee.ch/{{fileInfo.shortId}}/{{fileInfo.name}}&title={{fileInfo.name}}">reddit</a>
+            </div>
         </div>
-    </div>
     </div>
 </div>
 

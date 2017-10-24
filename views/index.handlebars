@@ -1,8 +1,8 @@
-<div class="row row--tall row--padded flex-container flex-container--column">
+<div class="row row--tall flex-container flex-container--column">
     <form>
         <input class="input-file" type="file" id="siofu_input" name="siofu_input" accept="video/*,image/*" onchange="previewAndStageFile(event.target.files[0])" enctype="multipart/form-data"/>
     </form>
-    <div id="primary-dropzone" class="dropzone row row--tall flex-container flex-container--column flex-container--center" ondrop="drop_handler(event);" ondragover="dragover_handler(event);" ondragend="dragend_handler(event)" ondragenter="dragenter_handler(event)" ondragleave="dragexit_handler(event)" onclick="triggerFileChooser('siofu_input', event)">
+    <div id="primary-dropzone" class="dropzone row row--margined row--padded row--tall flex-container flex-container--column flex-container--center" ondrop="drop_handler(event);" ondragover="dragover_handler(event);" ondragend="dragend_handler(event)" ondragenter="dragenter_handler(event)" ondragleave="dragexit_handler(event)" onclick="triggerFileChooser('siofu_input', event)">
         <div id="primary-dropzone-instructions">
             <div class="info-message-placeholder">
                 <div class="info-message info-message--failure" id="input-error-file-selection" hidden="true"></div>
@@ -18,12 +18,14 @@
     <div id="publish-form" class="hidden">
         <div class="column column--10">
             <!-- title input -->
-            <input type="text" id="publish-title" class="input-text input-text--large input-text--full-width" placeholder="Give your post a title...">
-        </div>
-        <div class="column column--5 column--med-10" >
-            <!-- preview -->
             <div class="row row--padded row--no-bottom">
-                <div id="asset-preview-holder" class="dropzone" ondrop="drop_handler(event);" ondragover="dragover_handler(event);" ondragend="dragend_handler(event)" onmouseenter="showInstructions()" onmouseleave="hideInstructions()" onclick="triggerFileChooser('siofu_input', event)">
+                <input type="text" id="publish-title" class="input-text input-text--large input-text--full-width" placeholder="Give your post a title...">
+            </div>
+        </div>
+        <div class="column column--6 column--med-10" >
+            <!-- preview -->
+            <div class="row row--margined">
+                <div id="asset-preview-holder" class="dropzone row--margined" ondrop="drop_handler(event);" ondragover="dragover_handler(event);" ondragend="dragend_handler(event)" onmouseenter="showInstructions()" onmouseleave="hideInstructions()" onclick="triggerFileChooser('siofu_input', event)">
                     <div id="asset-preview-target"></div>
                     <div id="preview-dropzone-instructions" class="hidden">
                         <p>Drag & drop image or video here</p>
@@ -32,8 +34,8 @@
                     </div>
                 </div>
             </div>
-        </div><div class="column column--5 column--med-10 align-content-top">
-            <div id="publish-active-area">
+        </div><div class="column column--4 column--med-10 align-content-top">
+            <div id="publish-active-area" class="row row--margined">
                 {{> publishForm-Channel}}
                 {{> publishForm-Url}}
                 {{> publishForm-Thumbnail}}
@@ -43,9 +45,11 @@
         </div>
     </div>
     <div id="publish-status" class="hidden">
-        <div id="publish-update" class="row align-content-center"></div>
-        <div id="publish-progress-bar" class="row align-content-center"></div>
-        <div id="upload-percent" class="row align-content-center"></div>
+        <div class="row row--margined">
+            <div id="publish-update" class="row align-content-center"></div>
+            <div id="publish-progress-bar" class="row align-content-center"></div>
+            <div id="upload-percent" class="row align-content-center"></div>
+        </div>
     </div>
 </div>
 

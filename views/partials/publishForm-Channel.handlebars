@@ -1,5 +1,5 @@
 <!-- select whether to publish anonymously or in a channel -->
-<div class="row row--padded row--no-bottom">
+<div class="row row--padded row--short row--wide">
     <div class="column column--10">
         <form>
             <div class="column column--3 column--sml-10">
@@ -14,7 +14,7 @@
 </div>
 
 <div id="channel-select-options" {{#unless user}}hidden="true"{{/unless}}>
-    <div class="row row--padded row--no-top row--no-bottom">
+    <div class="row row--padded row--no-top row--no-bottom row--wide">
         <!--error display-->
         <div class="info-message-placeholder">
             <div id="input-error-channel-select" class="info-message info-message--failure"></div>
@@ -33,11 +33,11 @@
         </div>
     </div>
     <!-- log into an existing channel -->
-    <div id="channel-login-details" class="row row--padded row--short" {{#if user}}hidden="true"{{/if}}>
+    <div id="channel-login-details" class="row row--padded row--short row--wide" {{#if user}}hidden="true"{{/if}}>
         {{> channelLoginForm}}
     </div>
     <!-- create a channel -->
-    <div  id="channel-create-details" class="row row--padded row--short" hidden="true">
+    <div  id="channel-create-details" class="row row--padded row--short row--wide" hidden="true">
         {{> channelCreationForm}}
     </div>
 </div>

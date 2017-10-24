@@ -81,6 +81,10 @@ p, h3 {
 	font-size: x-large;
 }
 
+.h3--no-bottom {
+	margin-bottom: 0px;
+}
+
 .p--no-top {
 	margin-top: 0px;
 }
@@ -169,7 +173,11 @@ a, a:visited {
 }
 
 .row--padded {
-	padding: 2rem;
+	padding: 3rem;
+}
+
+.row--margined {
+	margin: 3rem;
 }
 
 .row--wide {
@@ -282,7 +290,7 @@ align-content-left {
 
 .info-message-placeholder {
 	display: flex;
-	height: 3rem;
+	height: 2rem;
 	flex-direction: column;
 	justify-content: flex-end;
 }
@@ -424,8 +432,8 @@ table {
 
 /* NAV BAR */
 
-.nav-bar-title-section, .nav-bar-link-section {
-	padding: 0px 1em 0px 1em;
+.nav-bar-link-section {
+	padding: 0px;
 }
 
 .nav-bar-title-section {
@@ -440,9 +448,12 @@ table {
 	right: 0px;
 	z-index: 1;
 }
+.nav-bar-title {
+	padding: 2rem 0px 2rem 0px;
+}
 
-.nav-bar-title, .nav-bar-link {
-	padding: 2rem 1rem 2rem 1rem;
+.nav-bar-link {
+	padding: 2rem 1.5rem 2rem 1.5rem;
 	display: inline-block;
 	color: black;
 }
