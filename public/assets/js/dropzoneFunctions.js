@@ -40,11 +40,16 @@ function dragend_handler(event) {
 }
 
 function dragenter_handler(event) {
-    console.log('drag enter', event);
-    document.getElementById(event.target.id).setAttribute('class', 'dropzone dropzone--drag-over');
+    const dropzone = document.getElementById(event.target.id);
+    dropzone.setAttribute('class', 'dropzone dropzone--drag-over row row--tall flex-container flex-container--center');
+    dropzone.firstElementChild.setAttribute('class', 'hidden');
+    dropzone.lastElementChild.setAttribute('class', '');
+
 }
 
 function dragexit_handler(event) {
-    console.log('drag exit', event);
-    document.getElementById(event.target.id).setAttribute('class', 'dropzone');
+    const dropzone = document.getElementById(event.target.id);
+    dropzone.setAttribute('class', 'dropzone row row--tall flex-container flex-container--center');
+    dropzone.firstElementChild.setAttribute('class', '');
+    dropzone.lastElementChild.setAttribute('class', 'hidden');
 }

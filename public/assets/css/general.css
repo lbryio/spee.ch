@@ -93,8 +93,12 @@ p, h3 {
 	margin-top: 1rem;
 }
 
-.publish-fine-print {
+.fine-print {
 	font-size: small;
+}
+
+.blue {
+	color: dodgerblue;
 }
 
 /* TOOL TIPS */
@@ -310,7 +314,7 @@ option {
 	cursor: pointer;
 }
 
-.input-file-label {
+.blue-underlined-pointer {
 	color: dodgerblue;
 	text-decoration: underline;
 	cursor: pointer;
@@ -471,7 +475,10 @@ table {
 .dropzone:hover, .dropzone--drag-over {
 	border: 2px dashed dodgerblue;
 	cursor: pointer;
-	background-color: #FCFCFC;
+}
+
+#primary-dropzone-instructions, #dropbzone-dragover {
+	z-index: -1;
 }
 
 .position-absolute {
