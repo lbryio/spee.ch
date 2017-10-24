@@ -357,8 +357,9 @@ option {
 .select--arrow {
 	-moz-appearance:none;
 	-webkit-appearance: none;
-	background: url('../img/down_triangle.png') no-repeat right;
-	padding-right: 1em;
+	background: url('../icon/Shape.svg') no-repeat right;
+	padding-right: 1.5em;
+	margin-right: 2em;
 }
 .input-text--primary, .select--primary {
 	border-bottom: 1px solid #9b9b9b;
