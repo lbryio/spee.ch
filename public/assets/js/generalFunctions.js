@@ -62,22 +62,43 @@ function toggleSection(event){
 	}
 }
 
-function createProgressBar(element, size){ 
-	var x = 1;
+function createProgressBar(element, size){
+    console.log('creating progress bar');
+	var x = 0;
 	var adder = 1;
-	function addOne(){
-		var bars = '<p>|';
-		for (var i = 0; i < x; i++){ bars += ' | '; }
-		bars += '</p>';
-		element.innerHTML = bars;
-		if (x === size){
-			adder = -1;
-		} else if ( x === 0){
-			adder = 1;
-		}
-		x += adder;
+	// create the bar holder & place it
+    var barHolder = document.createElement('p');
+	for (var i = 0; i < size; i++) {
+        const bar = document.createElement('span');
+        bar.innerText = '| ';
+        bar.setAttribute('class', 'progress-bar progress-bar--inactive');
+        barHolder.appendChild(bar);
+    }
+    element.appendChild(barHolder);
+	// get the bars
+    const bars = document.getElementsByClassName('progress-bar');
+    // function to update the bars' classes
+	function updateOneBar(){
+        // update the appropriate bar
+        if (x > -1 && x < size){
+            if (adder === 1){
+                bars[x].setAttribute('class', 'progress-bar progress-bar--active');
+            } else {
+                bars[x].setAttribute('class', 'progress-bar progress-bar--inactive');
+            }
+        }
+        // set x
+        if (x === size){
+            adder = -1;
+        } else if ( x === -1){
+            adder = 1;
+        }
+        // update the adder
+        x += adder;
+
 	};
-	setInterval(addOne, 300);
+	// start updater
+	setInterval(updateOneBar, 300);
 }
 
 function setCookie(key, value) {

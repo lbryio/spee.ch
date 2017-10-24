@@ -539,6 +539,14 @@ table {
 	text-align: center;
 }
 
+.progress-bar--inactive {
+	color: lightgrey;
+}
+
+.progress-bar--active {
+	color: dodgerblue;
+}
+
 /* ---- grid items ---- */
 
 .grid-item {
