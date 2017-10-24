@@ -1,5 +1,5 @@
 <!-- select whether to publish anonymously or in a channel -->
-<div class="row row--padded">
+<div class="row row--padded row--no-bottom">
     <div class="column column--10">
         <form>
             <div class="column column--3 column--sml-10">
@@ -14,14 +14,15 @@
 </div>
 
 <div id="channel-select-options" {{#unless user}}hidden="true"{{/unless}}>
-    <!-- select whether to create new or log in to existing channel -->
-    <div class="row row--padded row--no-top">
-        <div class="column column--3 column--sml-10">
+    <div class="row row--padded row--no-top row--no-bottom">
+        <!--error display-->
+        <div class="info-message-placeholder">
+            <div id="input-error-channel-select" class="info-message info-message--failure"></div>
+        </div>
+        <!--channel login/create select-->
+        <div class="column column--3">
             <label class="label" for="channel-name-select">Channel:</label>
-        </div><div class="column column--7 column--sml-10">
-            <div class="info-message-placeholder">
-                <div id="input-error-channel-select" class="info-message info-message--failure"></div>
-            </div>
+        </div><div class="column column--7">
             <select type="text" id="channel-name-select" class="select select--primary select--arrow" onchange="toggleSelectedChannel(event.target.selectedOptions[0].value)">
             {{#if user}}
                 <option value="{{user.channelName}}" id="publish-channel-select-channel-option">{{user.channelName}}</option>

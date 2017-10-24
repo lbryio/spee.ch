@@ -17,7 +17,7 @@
 
 @media (max-width: 750px ) {
 
-	body, button, input, textarea, label, select, option, p {
+	body, button, input, textarea, label, select, option, p, h3 {
 		font-size: medium;
 	}
 
@@ -64,9 +64,7 @@
 		margin: 0px;
 	}
 
-	#publish-active-area > .row, #publish-details > .row, #channel-login-form > .row, #publish-channel-form > .row {
-		padding: 1em 0px 1em 0px;
-	}
+
 }
 
 @media (max-width: 500px) {
@@ -81,7 +79,7 @@
 		padding: 1rem 0.5rem 1rem 0.5rem;
 	}
 
-	body, button, input, textarea, label, select, option, p, .fine-print {
+	body, button, input, textarea, label, select, option, p, h3, .fine-print {
 		font-size: small;
 	}
 
@@ -96,6 +94,15 @@
 		margin: 0px;
 	}
 
+	.info-message-placeholder {
+		height: 2em;
+	}
+
+	.info-message {
+		font-size: small;
+	}
+
+
 }
 
 @media (max-width: 360px) {
@@ -104,7 +111,7 @@
 		font-size: x-small;
 	}
 
-	body, button, input, textarea, label, select, option, p, .fine-print, .instructions-text--large {
+	body, button, input, textarea, label, select, option, p, h3, .fine-print, .instructions-text--large {
 		font-size: x-small;
 	}
 

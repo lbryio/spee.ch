@@ -263,8 +263,10 @@ align-content-left {
 }
 
 .info-message-placeholder {
-	display: block;
+	display: flex;
 	height: 3rem;
+	flex-direction: column;
+	justify-content: flex-end;
 }
 
 /* INPUT FIELDS */

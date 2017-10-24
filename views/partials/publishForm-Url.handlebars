@@ -1,10 +1,12 @@
 <div class="row row--padded row--no-top">
+    <!--error display-->
+    <div class="info-message-placeholder">
+        <div id="input-error-claim-name" class="info-message info-message--failure"  hidden="true"></div>
+    </div>
+    <!--url selection-->
     <div class="column column--3 column--sml-10">
         <label class="label">URL:</label>
     </div><div class="column column--7 column--sml-10">
-        <div class="info-message-placeholder">
-            <div id="input-error-claim-name" class="info-message info-message--failure"  hidden="true"></div>
-        </div>
         <div class="input-text--primary">
             <span class="url-text url-text--secondary">spee.ch /</span>
             <span id="url-channel" class="url-text url-text--secondary" {{#if user}}{{else}}hidden="true"{{/if}}>{{user.channelName}}:{{user.shortChannelId}}</span>
