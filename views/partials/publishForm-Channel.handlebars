@@ -23,7 +23,7 @@
         <div class="column column--3">
             <label class="label" for="channel-name-select">Channel:</label>
         </div><div class="column column--7">
-            <select type="text" id="channel-name-select" class="select select--primary select--arrow" onchange="toggleSelectedChannel(event.target.selectedOptions[0].value)">
+            <select type="text" id="channel-name-select" class="select select--arrow" onchange="toggleSelectedChannel(event.target.selectedOptions[0].value)">
             {{#if user}}
                 <option value="{{user.channelName}}" id="publish-channel-select-channel-option">{{user.channelName}}</option>
             {{/if}}

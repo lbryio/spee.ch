@@ -1,10 +1,12 @@
 <div class="row row--wide nav-bar">
-    <div class="nav-bar-title-section row row--padded row--short">
-        <div class="nav-bar-title">
+    <div class="row row--padded row--short flex-container flex-container--row flex-container--align-center">
+        <div class="nav-bar--left">
             <a href="/"><img class="nav-bar-logo" src="/assets/icon/logo.svg" alt="spee.ch"/></a>
-            <span class="nav-bar-title nav-bar-title--tagline">Open-source, decentralized image and video sharing.</span>
         </div>
-        <div class="nav-bar-link-section">
+        <div class="nav-bar--center">
+            <span class="nav-bar-tagline">Open-source, decentralized image and video sharing.</span>
+        </div>
+        <div class="nav-bar--right">
             <a class="nav-bar-link" href="/">Upload</a>
             <a class="nav-bar-link" href="/popular">Popular</a>
             <a class="nav-bar-link" href="/about">About</a>
@@ -13,7 +15,7 @@
                 <option value="VIEW">View</option>
                 <option value="LOGOUT">Logout</option>
             </select>
-            <a id="nav-bar-login-link" class="nav-bar-link" href="/login" {{#if user}}style="display:none"{{/if}}>Channel</a>
+            <a id="nav-bar-login-link" class="nav-bar-link--last" href="/login" {{#if user}}style="display:none"{{/if}}>Channel</a>
         </div>
     </div>
 </div>
