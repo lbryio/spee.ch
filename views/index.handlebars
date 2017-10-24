@@ -1,8 +1,8 @@
-<div class="row row--tall row--padded flex-container">
+<div class="row row--tall row--padded flex-container flex-container--column">
     <form>
         <input class="input-file" type="file" id="siofu_input" name="siofu_input" accept="video/*,image/*" onchange="previewAndStageFile(event.target.files[0])" enctype="multipart/form-data"/>
     </form>
-    <div id="primary-dropzone" class="dropzone row row--tall flex-container flex-container--center" ondrop="drop_handler(event);" ondragover="dragover_handler(event);" ondragend="dragend_handler(event)" ondragenter="dragenter_handler(event)" ondragleave="dragexit_handler(event)" onclick="triggerFileChooser('siofu_input', event)">
+    <div id="primary-dropzone" class="dropzone row row--tall flex-container flex-container--column flex-container--center" ondrop="drop_handler(event);" ondragover="dragover_handler(event);" ondragend="dragend_handler(event)" ondragenter="dragenter_handler(event)" ondragleave="dragexit_handler(event)" onclick="triggerFileChooser('siofu_input', event)">
         <div id="primary-dropzone-instructions">
             <div class="info-message-placeholder">
                 <div class="info-message info-message--failure" id="input-error-file-selection" hidden="true"></div>
@@ -105,7 +105,7 @@
     }
     // publish status functions
     function showPublishStatus() {
-        publishStatus.setAttribute('class', 'row row--tall flex-container flex-container--center');
+        publishStatus.setAttribute('class', 'row row--tall flex-container flex-container--column flex-container--center');
     }
     function updatePublishStatus(msg){
         publishUpdate.innerHTML = msg;

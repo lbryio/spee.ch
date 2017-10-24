@@ -26,8 +26,22 @@ html, body {
 body, .flex-container {
 	display: -webkit-flex;
 	display: flex;
+}
+
+body, .flex-container--column {
 	-webkit-flex-direction: column;
 	flex-direction: column;
+}
+
+.flex-container--row {
+	-webkit-flex-direction: row;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+.flex-container--wrap {
+	-webkit-flex-wrap: wrap;
+	flex-wrap: wrap;
 }
 
 .flex-container--center {
