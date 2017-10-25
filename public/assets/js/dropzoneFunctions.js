@@ -13,6 +13,7 @@ function triggerFileChooser(fileInputId, event) {
 }
 
 function drop_handler(event) {
+    dragexit_handler(event)
     event.preventDefault();
     // if dropped items aren't files, reject them
     var dt = event.dataTransfer;
