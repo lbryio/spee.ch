@@ -1,19 +1,10 @@
-
-@media (max-width: 1200px) {
-
-	.nav-bar-title--tagline {
-		font-size: small;
-	}
-}
-
 @media (max-width: 1050px) {
 
-	.nav-bar-title--tagline {
+	.nav-bar--center {
 		display: none;
 	}
 
 }
-
 
 @media (max-width: 750px ) {
 
@@ -37,33 +28,14 @@
 		margin-top: 1em;
 	}
 
-	.nav-bar-title-section {
-		width:100%;
-		padding: 0px;
-	}
-
-	.nav-bar-title {
-		width: calc(25% - 2rem);
-		padding: 1rem;
-	}
-
 	.nav-bar-logo {
-		height: 1.5rem;
-	}
-
-	.nav-bar-link-section {
-		width: 75%;
-		padding: 0px;
+		height: 1rem;
 	}
 
 	.nav-bar-link {
-		float: left;
-		text-align: center;
-		width: calc(25% - 2rem);
-		padding: 1rem;
-		margin: 0px;
+		font-size: small;
+		padding: 1rem 0.5rem 1rem 0.5rem;
 	}
-
 
 }
 
@@ -73,10 +45,17 @@
 		height: 1rem;
 	}
 
-	.nav-bar-link {
-		font-size: small;
-		width: calc(25% - 1rem);
-		padding: 1rem 0.5rem 1rem 0.5rem;
+	.row--padded {
+		padding: 1rem;
+	}
+
+	.row--short {
+		padding-top: 0px;
+		padding-bottom: 0px;
+	}
+
+	.row--margined {
+		margin: 1rem;
 	}
 
 	body, button, input, textarea, label, select, option, p, h3, .fine-print {
