@@ -41,7 +41,7 @@ function dragend_handler(event) {
 
 function dragenter_handler(event) {
     const dropzone = document.getElementById(event.target.id);
-    dropzone.setAttribute('class', 'dropzone dropzone--drag-over row row--tall flex-container flex-container--column flex-container--center');
+    dropzone.setAttribute('class', 'dropzone dropzone--drag-over row row--margined row--padded row--tall flex-container flex-container--column flex-container--center');
     dropzone.firstElementChild.setAttribute('class', 'hidden');
     dropzone.lastElementChild.setAttribute('class', '');
 
@@ -49,7 +49,7 @@ function dragenter_handler(event) {
 
 function dragexit_handler(event) {
     const dropzone = document.getElementById(event.target.id);
-    dropzone.setAttribute('class', 'dropzone row row--tall flex-container flex-container--column flex-container--center');
+    dropzone.setAttribute('class', 'dropzone row row--tall row--margined row--padded flex-container flex-container--column flex-container--center');
     dropzone.firstElementChild.setAttribute('class', '');
     dropzone.lastElementChild.setAttribute('class', 'hidden');
 }
