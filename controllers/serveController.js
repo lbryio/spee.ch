@@ -221,9 +221,11 @@ module.exports = {
             return db.resolveClaim(fileInfo.name, fileInfo.claimId);
           })
           .then(resolveResult => {
+            logger.debug('resolve result >>', resolveResult);
             fileInfo['thumbnail'] = chooseThumbnail(resolveResult, DEFAULT_THUMBNAIL);
             fileInfo['title'] = resolveResult.title;
             fileInfo['description'] = resolveResult.description;
+            if (resolveResult.certificateId) { fileInfo['certificateId'] = resolveResult.certificateId };
             showFile(fileInfo, res);
             return fileInfo;
           })
