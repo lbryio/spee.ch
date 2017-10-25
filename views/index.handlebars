@@ -88,10 +88,10 @@
 	/* socket.io message listeners */
 	socket.on('publish-update', function(msg){
 		updatePublishStatus(`<p>${msg}</p>`);
-        updateUploadPercent(`<p>Curious what magic is happening here? <a target="blank" href="https://lbry.io/faq/what-is-lbry">learn more</a></p>`);
+        updateUploadPercent(`<p>Curious what magic is happening here? <a class="link--primary" target="blank" href="https://lbry.io/faq/what-is-lbry">Learn more.</a></p>`);
 	});
 	socket.on('publish-failure', function(msg){
-        updatePublishStatus('<p> --(✖╭╮✖)→ </p><p>' + JSON.stringify(msg) + '</p><strong>For help, post the above error text in the #speech channel on the <a href="https://lbry.slack.com/" target="_blank">lbry slack</a></strong>');
+        updatePublishStatus('<p> --(✖╭╮✖)→ </p><p>' + JSON.stringify(msg) + '</p><strong>For help, post the above error text in the #speech channel on the <a class="link--primary" href="https://discord.gg/YjYbwhS" target="_blank">lbry discord</a></strong>');
 	    hidePublishProgressBar();
 	    hideUploadPercent();
 	});
@@ -99,7 +99,7 @@
 		const showUrl = msg.result.claim_id + "/" + msg.name;
 		// update status
 		updatePublishStatus('<p>Your publish is complete! You are being redirected to it now.</p>');
-        updateUploadPercent('<p><a target="_blank" href="\' + showUrl + \'">If you do not get redirected, click here.</a></p>')
+        updateUploadPercent('<p><a class="link--primary" target="_blank" href="\' + showUrl + \'">If you do not get redirected, click here.</a></p>')
         // redirect the user
 		window.location.href = showUrl;
 	});

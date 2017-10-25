@@ -5,7 +5,7 @@
 <div class="row row--wide">
     <div id="show-short-link">
         <div class="column column--2 column--sml-10">
-            <a href="/{{fileInfo.shortId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}"><span class="label">Link:</span></a>
+            <a class="link--primary" href="/{{fileInfo.shortId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}"><span class="label">Link:</span></a>
         </div><div class="column column--8 column--sml-10">
             <div class="row row--short row--wide">
                 <div class="column column--7">
@@ -43,17 +43,17 @@
             <span class="label">Share:</span>
         </div><div class="column column--7 column--sml-10">
             <div class="row row--short row--wide flex-container flex-container--row flex-container--wrap">
-                <a target="_blank" href="https://twitter.com/intent/tweet?text=https://spee.ch/{{fileInfo.shortId}}/{{fileInfo.name}}">twitter</a>
-                <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://spee.ch/{{fileInfo.shortId}}/{{fileInfo.name}}">facebook</a>
-                <a target="_blank" href="http://tumblr.com/widgets/share/tool?canonicalUrl=https://spee.ch/{{fileInfo.shortId}}/{{fileInfo.name}}">tumblr</a>
-                <a target="_blank" href="https://www.reddit.com/submit?url=https://spee.ch/{{fileInfo.shortId}}/{{fileInfo.name}}&title={{fileInfo.name}}">reddit</a>
+                <a class="link--primary" target="_blank" href="https://twitter.com/intent/tweet?text=https://spee.ch/{{fileInfo.shortId}}/{{fileInfo.name}}">twitter</a>
+                <a class="link--primary" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://spee.ch/{{fileInfo.shortId}}/{{fileInfo.name}}">facebook</a>
+                <a class="link--primary" target="_blank" href="http://tumblr.com/widgets/share/tool?canonicalUrl=https://spee.ch/{{fileInfo.shortId}}/{{fileInfo.name}}">tumblr</a>
+                <a class="link--primary" target="_blank" href="https://www.reddit.com/submit?url=https://spee.ch/{{fileInfo.shortId}}/{{fileInfo.name}}&title={{fileInfo.name}}">reddit</a>
             </div>
         </div>
     </div>
 </div>
 
 <div class="row row--wide">
-    <a class="label" id="show-details-toggle" href="#" onclick="toggleSection(event)" data-open="false" data-openlabel="[less]" data-closedlabel="[more]" data-slaveelementid="show-details">[more]</a>
+    <a class="label link--primary" id="show-details-toggle" href="#" onclick="toggleSection(event)" data-open="false" data-openlabel="[less]" data-closedlabel="[more]" data-slaveelementid="show-details">[more]</a>
 </div>
 
 <div id="show-details" class="row row--padded row--wide" hidden="true">

@@ -8,21 +8,21 @@
         </div>
         <div class="row">
             <div class="column column--3 align-content--left">
-                <a href="/{{this.channelName}}:{{this.longChannelId}}?p=1">First [1]</a>
+                <a class="link--primary" href="/{{this.channelName}}:{{this.longChannelId}}?p=1">First [1]</a>
             </div><div class="column column--4 align-content-center">
                 {{#if this.previousPage}}
-                    <a href="/{{this.channelName}}:{{this.longChannelId}}?p={{this.previousPage}}">Previous</a>
+                    <a class="link--primary" href="/{{this.channelName}}:{{this.longChannelId}}?p={{this.previousPage}}">Previous</a>
                 {{else}}
                     <a disabled>Previous </a>
                 {{/if}}
                 |
                 {{#if this.nextPage}}
-                    <a href="/{{this.channelName}}:{{this.longChannelId}}?p={{this.nextPage}}">Next</a>
+                    <a class="link--primary" href="/{{this.channelName}}:{{this.longChannelId}}?p={{this.nextPage}}">Next</a>
                 {{else}}
                     <a disabled>Next</a>
                 {{/if}}
             </div><div class="column column--3 align-content-right">
-                <a href="/{{this.channelName}}:{{this.longChannelId}}?p={{this.totalPages}}">Last [{{this.totalPages}}]</a>
+                <a class="link--primary" href="/{{this.channelName}}:{{this.longChannelId}}?p={{this.totalPages}}">Last [{{this.totalPages}}]</a>
             </div>
         </div>
     </div>

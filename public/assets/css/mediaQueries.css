@@ -32,7 +32,7 @@
 		height: 1rem;
 	}
 
-	.nav-bar-link {
+	.link--nav {
 		font-size: small;
 		padding: 1rem 0.5rem 1rem 0.5rem;
 	}
@@ -86,7 +86,7 @@
 
 @media (max-width: 360px) {
 
-	.nav-bar-link {
+	.link--nav {
 		font-size: x-small;
 	}
 

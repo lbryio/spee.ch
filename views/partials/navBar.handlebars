@@ -24,28 +24,28 @@
             <span class="nav-bar-tagline">Open-source, decentralized image and video sharing.</span>
         </div>
         <div class="nav-bar--right">
-            <a class="nav-bar-link" href="/">Upload</a>
-            <a class="nav-bar-link" href="/popular">Popular</a>
-            <a class="nav-bar-link" href="/about">About</a>
-            <select type="text" id="nav-bar-channel-select" class="select select--arrow nav-bar-link" onchange="toggleNavBarSelection(event.target.selectedOptions[0].value)" {{#unless user}}style="display:none"{{/unless}}>
+            <a class="nav-bar-link link--nav" href="/">Upload</a>
+            <a class="nav-bar-link link--nav" href="/popular">Popular</a>
+            <a class="nav-bar-link link--nav" href="/about">About</a>
+            <select type="text" id="nav-bar-channel-select" class="select select--arrow link--nav" onchange="toggleNavBarSelection(event.target.selectedOptions[0].value)" {{#unless user}}style="display:none"{{/unless}}>
                 <option id="nav-bar-channel-select-channel-option">@{{user.userName}}</option>
                 <option value="VIEW">View</option>
                 <option value="LOGOUT">Logout</option>
             </select>
-            <a id="nav-bar-login-link" class="nav-bar-link nav-bar-link--last" href="/login" {{#if user}}style="display:none"{{/if}}>Channel</a>
+            <a id="nav-bar-login-link" class="nav-bar-link link--nav" href="/login" {{#if user}}style="display:none"{{/if}}>Channel</a>
         </div>
     </div>
 </div>
 
 <script type="text/javascript">
    // highlight the link for the current page
-   const navBarLinks = document.getElementsByClassName('nav-bar-link');
+   const navBarLinks = document.getElementsByClassName('link--nav');
    for (let i = 0; i < navBarLinks.length; i++){
        const link = navBarLinks[i];
        if (link.href == window.location.href) {
-           link.setAttribute('class', 'nav-bar-link nav-bar-link--active');
+           link.setAttribute('class', 'nav-bar-link link--nav-active');
        } else if (`/${link.value}` === window.location.pathname) {
-           link.setAttribute('class', 'select select--no-arrow nav-bar-link nav-bar-link--active');
-        }
+           link.setAttribute('class', 'select select--arrow link--nav-active');
+       }
    }
 </script>

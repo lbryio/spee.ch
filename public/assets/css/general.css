@@ -124,7 +124,7 @@ p, h3 {
 }
 
 .blue {
-	color: dodgerblue;
+	color: #4156C5;
 }
 
 /* TOOL TIPS */
@@ -169,6 +169,24 @@ a, a:visited {
 	text-decoration: none;
 }
 
+.link--primary, .link--primary:visited {
+	color: #4156C5;
+}
+
+.link--nav {
+	color: black;
+	border-bottom: 2px solid white;
+}
+
+.link--nav:hover {
+	color: #4156C5;
+}
+
+.link--nav-active {
+	color: #4156C5;
+	border-bottom: 2px solid #4156C5;
+}
+
 /* COLUMNS AND ROWS */
 
 .row {
@@ -204,6 +222,10 @@ a, a:visited {
 
 .row--no-bottom {
 	padding-bottom: 0px;
+}
+
+.row--no-right {
+	padding-right: 0px;
 }
 
 .column {
@@ -347,7 +369,7 @@ option {
 }
 
 .blue-underlined-pointer {
-	color: dodgerblue;
+	color: #4156C5;
 	text-decoration: underline;
 	cursor: pointer;
 }
@@ -399,13 +421,13 @@ button {
 }
 
 .button--primary:hover {
-	border: 1px solid dodgerblue;
+	border: 1px solid #4156C5;
 	color: white;
-	background-color: dodgerblue;
+	background-color: #4156C5;
 }
 
 .button--primary:active{
-	border: 1px solid dodgerblue;
+	border: 1px solid #4156C5;
 	color: white;
 	background-color: white;
 }
@@ -447,23 +469,6 @@ table {
 .nav-bar-link {
 	padding: 1.5rem;
 	display: inline-block;
-	color: black;
-	font-weight: normal;
-	color: black;
-	border-bottom: 2px solid white;
-}
-
-.nav-bar-link--last {
-	padding-right: 0px;
-}
-
-.nav-bar-link:hover {
-	color: dodgerblue;
-}
-
-.nav-bar-link--active {
-	color: dodgerblue;
-	border-bottom: 2px solid dodgerblue;
 }
 
 /* PUBLISH FORM */
@@ -475,7 +480,7 @@ table {
 }
 
 .dropzone:hover, .dropzone--drag-over {
-	border: 2px dashed dodgerblue;
+	border: 2px dashed #4156C5;
 	cursor: pointer;
 }
 
@@ -519,23 +524,21 @@ table {
 
 /* item lists */
 
-.content-list-item {
-
-}
-
 .content-list-item-asset {
 	width: 90%;
 }
 
-.content-list-item-link {
+/* progress bar */
 
+.progress-bar--inactive {
+	color: lightgrey;
+}
+
+.progress-bar--active {
+	color: #4156C5;
 }
 
 /* other */
-
-.toggle-link {
-	float: right;
-}
 
 .wrap-words {
 	word-wrap: break-word;
@@ -543,17 +546,9 @@ table {
 
 #new-release-banner {
 	font-size: small;
-	background-color: dodgerblue;
+	background-color: #4156C5;
 	color: white;
 	text-align: center;
-}
-
-.progress-bar--inactive {
-	color: lightgrey;
-}
-
-.progress-bar--active {
-	color: dodgerblue;
 }
 
 /* ---- grid items ---- */
