@@ -4,6 +4,10 @@
 		display: none;
 	}
 
+	.column--med-10 {
+		width: 100%;
+	}
+
 }
 
 @media (max-width: 750px ) {
@@ -14,10 +18,6 @@
 
 	.instructions-text--large, .pull-quote {
 		font-size: 1.5rem;
-	}
-
-	.column--med-10 {
-		width: 100%;
 	}
 
 	.column--sml-10 {
@@ -75,10 +75,6 @@
 		float: none;
 		padding: 1em;
 		margin: 0px;
-	}
-
-	.info-message-placeholder {
-		height: 2em;
 	}
 
 	.info-message {

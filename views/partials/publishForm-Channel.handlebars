@@ -2,10 +2,10 @@
 <div class="row row--padded row--short row--wide">
     <div class="column column--10">
         <form>
-            <div class="column column--3 column--sml-10">
+            <div class="column column--3 column--med-10">
                 <input type="radio" name="anonymous-or-channel" id="anonymous-select" class="input-radio" value="anonymous" {{#unless user}}checked {{/unless}} onchange="toggleChannel(event.target.value)"/>
                 <label class="label label--pointer" for="anonymous-select">Anonymous</label>
-            </div><div class="column column--7 column--sml-10">
+            </div><div class="column column--7 column--med-10">
                 <input type="radio" name="anonymous-or-channel" id="in-a-channel-select" class="input-radio" value="in a channel" {{#if user}}checked {{/if}} onchange="toggleChannel(event.target.value)"/>
                 <label class="label label--pointer" for="in-a-channel-select">In a channel</label>
             </div>
@@ -16,9 +16,7 @@
 <div id="channel-select-options" {{#unless user}}hidden="true"{{/unless}}>
     <div class="row row--padded row--no-top row--no-bottom row--wide">
         <!--error display-->
-        <div class="info-message-placeholder">
-            <div id="input-error-channel-select" class="info-message info-message--failure"></div>
-        </div>
+        <p id="input-error-channel-select" class="info-message-placeholder info-message info-message--failure"></p>
         <!--channel login/create select-->
         <div class="column column--3">
             <label class="label" for="channel-name-select">Channel:</label>

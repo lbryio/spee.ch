@@ -4,9 +4,7 @@
     </form>
     <div id="primary-dropzone" class="dropzone row row--margined row--padded row--tall flex-container flex-container--column flex-container--justify-center" ondrop="drop_handler(event);" ondragover="dragover_handler(event);" ondragend="dragend_handler(event)" ondragenter="dragenter_handler(event)" ondragleave="dragexit_handler(event)" onclick="triggerFileChooser('siofu_input', event)">
         <div id="primary-dropzone-instructions">
-            <div class="info-message-placeholder">
-                <div class="info-message info-message--failure" id="input-error-file-selection" hidden="true"></div>
-            </div>
+            <p class="info-message-placeholder info-message info-message--failure" id="input-error-file-selection" hidden="true"></p>
             <p>Drag & drop image or video here to publish</p>
             <p class="fine-print">OR</p>
             <p class="blue-underlined-pointer">CHOOSE FILE</p>
@@ -21,7 +19,7 @@
                 <!-- title input -->
                 <input type="text" id="publish-title" class="input-text input-text--large input-text--full-width" placeholder="Give your post a title...">
             </div>
-            <div class="column column--5 column--med-10" >
+            <div class="column column--5 column--sml-10" >
                 <!-- preview -->
                 <div class="row row--padded">
                     <div id="asset-preview-holder" class="dropzone" ondrop="drop_handler(event);" ondragover="dragover_handler(event);" ondragend="dragend_handler(event)" onmouseenter="showInstructions()" onmouseleave="hideInstructions()" onclick="triggerFileChooser('siofu_input', event)">
@@ -33,7 +31,7 @@
                         </div>
                     </div>
                 </div>
-            </div><div class="column column--5 column--med-10 align-content-top">
+            </div><div class="column column--5 column--sml-10 align-content-top">
                 <div id="publish-active-area" class="row row--padded">
                     {{> publishForm-Channel}}
                     {{> publishForm-Url}}

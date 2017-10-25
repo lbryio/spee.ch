@@ -319,10 +319,7 @@ align-content-left {
 }
 
 .info-message-placeholder {
-	display: flex;
-	height: 2rem;
-	flex-direction: column;
-	justify-content: flex-end;
+
 }
 
 /* INPUT FIELDS */
