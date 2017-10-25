@@ -32,9 +32,13 @@
 		height: 1rem;
 	}
 
-	.link--nav {
+	.link--nav, .link--nav-active {
 		font-size: small;
 		padding: 1rem 0.5rem 1rem 0.5rem;
+	}
+
+	.select--arrow {
+		padding-right: 1.5em;
 	}
 
 }
@@ -86,7 +90,7 @@
 
 @media (max-width: 360px) {
 
-	.link--nav {
+	.link--nav, .link--nav-active {
 		font-size: x-small;
 	}
 

@@ -198,3 +198,19 @@ function AuthenticationError(message) {
 }
 AuthenticationError.prototype = Object.create(Error.prototype);
 AuthenticationError.prototype.constructor = AuthenticationError;
+
+function showAssetDetails(event) {
+    var thisAssetHolder = document.getElementById(event.target.id);
+    var thisAssetImage = thisAssetHolder.firstElementChild;
+    var thisAssetDetails = thisAssetHolder.lastElementChild;
+    thisAssetImage.style.opacity = 0.2;
+    thisAssetDetails.setAttribute('class', 'grid-item-details flex-container flex-container--column flex-container--justify-center');
+}
+
+function hideAssetDetails(event) {
+    var thisAssetHolder = document.getElementById(event.target.id);
+    var thisAssetImage = thisAssetHolder.firstElementChild;
+    var thisAssetDetails = thisAssetHolder.lastElementChild;
+    thisAssetImage.style.opacity = 1;
+    thisAssetDetails.setAttribute('class', 'hidden');
+}

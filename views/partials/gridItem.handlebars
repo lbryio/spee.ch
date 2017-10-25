@@ -1,7 +1,12 @@
-<a href="{{this.showUrlLong}}">
-{{#ifConditional this.contentType '===' 'video/mp4'}}
-    <img class="grid-item" src="{{this.thumbnail}}"/>
-{{else}}
-    <img  class="grid-item" src="{{this.directUrlLong}}" />
-{{/ifConditional}}
-</a>
+    <div class="grid-item" id="grid-item-{{this.name}}-{{this.claimId}}" onmouseenter="showAssetDetails(event)" onmouseleave="hideAssetDetails(event)">
+            {{#ifConditional this.contentType '===' 'video/mp4'}}
+                <img class="grid-item-image" src="{{this.thumbnail}}"/>
+            {{else}}
+                <img  class="grid-item-image" src="{{this.directUrlLong}}" />
+            {{/ifConditional}}
+
+        <div class="hidden" onclick="window.location='{{this.showUrlLong}}'">
+            <p class="grid-item-details-text">{{this.name}}</p>
+        </div>
+
+    </div>

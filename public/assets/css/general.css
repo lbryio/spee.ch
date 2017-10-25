@@ -48,8 +48,12 @@ body, .flex-container--column {
 	flex-wrap: wrap;
 }
 
-.flex-container--center {
+.flex-container--justify-center {
 	justify-content: center;
+}
+
+.flex-container--justify-space-between {
+	justify-content: space-between;
 }
 
 .hidden {
@@ -558,5 +562,26 @@ table {
 	padding: 0px;
 	margin: 1rem;
 	float: left;
-	display: block;
+	border: 0.5px solid white;
+}
+
+.grid-item-image {
+	width: 100%;
+}
+
+.grid-item-details {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	height: 100%;
+	width: 100%;
+	cursor: pointer;
+}
+
+.grid-item-details-text {
+	font-size: medium;
+	margin: 0px;
+	text-align: center;
+	padding: 1em 0px 1em 0px;
+	width: 100%;
 }

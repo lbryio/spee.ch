@@ -1,6 +1,6 @@
 function showInstructions () {
-    document.getElementById('preview-dropzone-instructions').setAttribute('class', 'flex-container flex-container--column flex-container--center position-absolute');
-    document.getElementById('asset-preview').style.opacity = 0.3;
+    document.getElementById('preview-dropzone-instructions').setAttribute('class', 'flex-container flex-container--column flex-container--justify-center position-absolute');
+    document.getElementById('asset-preview').style.opacity = 0.2;
 }
 
 function hideInstructions () {
@@ -40,16 +40,16 @@ function dragend_handler(event) {
 }
 
 function dragenter_handler(event) {
-    const dropzone = document.getElementById(event.target.id);
-    dropzone.setAttribute('class', 'dropzone dropzone--drag-over row row--margined row--padded row--tall flex-container flex-container--column flex-container--center');
-    dropzone.firstElementChild.setAttribute('class', 'hidden');
-    dropzone.lastElementChild.setAttribute('class', '');
+    var thisDropzone = document.getElementById(event.target.id);
+    thisDropzone.setAttribute('class', 'dropzone dropzone--drag-over row row--margined row--padded row--tall flex-container flex-container--column flex-container--justify-center');
+    thisDropzone.firstElementChild.setAttribute('class', 'hidden');
+    thisDropzone.lastElementChild.setAttribute('class', '');
 
 }
 
 function dragexit_handler(event) {
-    const dropzone = document.getElementById(event.target.id);
-    dropzone.setAttribute('class', 'dropzone row row--tall row--margined row--padded flex-container flex-container--column flex-container--center');
-    dropzone.firstElementChild.setAttribute('class', '');
-    dropzone.lastElementChild.setAttribute('class', 'hidden');
+    var thisDropzone = document.getElementById(event.target.id);
+    thisDropzone.setAttribute('class', 'dropzone row row--tall row--margined row--padded flex-container flex-container--column flex-container--justify-center');
+    thisDropzone.firstElementChild.setAttribute('class', '');
+    thisDropzone.lastElementChild.setAttribute('class', 'hidden');
 }
