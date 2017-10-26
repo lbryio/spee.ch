@@ -41,6 +41,10 @@
 		padding-right: 1.5em;
 	}
 
+	.show-asset-light {
+		max-width: 100%;
+	}
+
 }
 
 @media (max-width: 500px) {
