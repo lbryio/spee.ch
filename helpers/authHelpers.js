@@ -32,9 +32,9 @@ module.exports = {
     })
     .then(shortChannelId => {
       userInfo['shortChannelId'] = shortChannelId;
-      return done(null, userInfo);
-      // done(null, userInfo);
-      // return null;
+      // return done(null, userInfo);
+      done(null, userInfo);
+      return null;
     })
     .catch(error => {
       logger.error(error);
