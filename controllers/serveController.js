@@ -226,6 +226,7 @@ module.exports = {
             fileInfo['title'] = resolveResult.title;
             fileInfo['description'] = resolveResult.description;
             if (resolveResult.certificateId) { fileInfo['certificateId'] = resolveResult.certificateId };
+            if (resolveResult.channelName) { fileInfo['channelName'] = resolveResult.channelName };
             showFile(fileInfo, res);
             return fileInfo;
           })

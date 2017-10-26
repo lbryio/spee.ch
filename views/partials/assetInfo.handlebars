@@ -1,12 +1,28 @@
+{{#if fileInfo.channelName}}
+<div class="row row--padded row--wide row--no-top">
+    <div class="column column--2 column--med-10">
+        <span class="text">Channel:</span>
+    </div><div class="column column--8 column--med-10">
+        <span class="text"><a href="/{{fileInfo.channelName}}:{{fileInfo.certificateId}}">{{fileInfo.channelName}}</a></span>
+    </div>
+</div>
+{{/if}}
+
 {{#if fileInfo.description}}
-    <p>{{fileInfo.description}}</p>
+<div class="row row--padded row--wide row--no-top">
+    <div class="column column--2 column--med-10">
+        <span class="text">Description:</span>
+    </div><div class="column column--8 column--med-10">
+        <span class="text">{{fileInfo.description}}</span>
+    </div>
+</div>
 {{/if}}
 
 <div class="row row--wide">
     <div id="show-short-link">
-        <div class="column column--2 column--sml-10">
-            <a class="link--primary" href="/{{fileInfo.shortId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}"><span class="label">Link:</span></a>
-        </div><div class="column column--8 column--sml-10">
+        <div class="column column--2 column--med-10">
+            <a class="link--primary" href="/{{fileInfo.shortId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}"><span class="text">Link:</span></a>
+        </div><div class="column column--8 column--med-10">
             <div class="row row--short row--wide">
                 <div class="column column--7">
                     <div class="input-error" id="input-error-copy-short-link" hidden="true"></div>
@@ -18,9 +34,9 @@
         </div>
     </div>
     <div id="show-embed-code">
-        <div class="column column--2 column--sml-10">
-            <span class="label">Embed:</span>
-        </div><div class="column column--8 column--sml-10">
+        <div class="column column--2 column--med-10">
+            <span class="text">Embed:</span>
+        </div><div class="column column--8 column--med-10">
             <div class="row row--short row--wide">
                 <div class="column column--7">
                     <div class="input-error" id="input-error-copy-embed-text" hidden="true"></div>
@@ -39,9 +55,9 @@
 
 <div id="show-share-buttons">
     <div class="row row--padded row--wide">
-        <div class="column column--2 column--sml-10">
-            <span class="label">Share:</span>
-        </div><div class="column column--7 column--sml-10">
+        <div class="column column--2 column--med-10">
+            <span class="text">Share:</span>
+        </div><div class="column column--7 column--med-10">
             <div class="row row--short row--wide flex-container flex-container--row flex-container--wrap">
                 <a class="link--primary" target="_blank" href="https://twitter.com/intent/tweet?text=https://spee.ch/{{fileInfo.shortId}}/{{fileInfo.name}}">twitter</a>
                 <a class="link--primary" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://spee.ch/{{fileInfo.shortId}}/{{fileInfo.name}}">facebook</a>
@@ -53,35 +69,35 @@
 </div>
 
 <div class="row row--wide">
-    <a class="label link--primary" id="show-details-toggle" href="#" onclick="toggleSection(event)" data-open="false" data-openlabel="[less]" data-closedlabel="[more]" data-slaveelementid="show-details">[more]</a>
+    <a class="text link--primary" id="show-details-toggle" href="#" onclick="toggleSection(event)" data-open="false" data-openlabel="[less]" data-closedlabel="[more]" data-slaveelementid="show-details">[more]</a>
 </div>
 
 <div id="show-details" class="row row--padded row--wide" hidden="true">
     <div id="show-claim-name">
-        <div class="column column--2 column--sml-10">
-            <span class="label">Name:</span>
-        </div><div class="column column--8 column--sml-10">
+        <div class="column column--2 column--med-10">
+            <span class="text">Name:</span>
+        </div><div class="column column--8 column--med-10">
         {{fileInfo.name}}
         </div>
     </div>
     <div id="show-claim-id">
-        <div class="column column--2 column--sml-10">
-            <span class="label">Claim Id:</span>
-        </div><div class="column column--8 column--sml-10">
+        <div class="column column--2 column--med-10">
+            <span class="text">Claim Id:</span>
+        </div><div class="column column--8 column--med-10">
         {{fileInfo.claimId}}
         </div>
     </div>
     <div id="show-claim-id">
-        <div class="column column--2 column--sml-10">
-            <span class="label">File Name:</span>
-        </div><div class="column column--8 column--sml-10">
+        <div class="column column--2 column--med-10">
+            <span class="text">File Name:</span>
+        </div><div class="column column--8 column--med-10">
         {{fileInfo.fileName}}
         </div>
     </div>
     <div id="show-claim-id">
-        <div class="column column--2 column--sml-10">
-            <span class="label">File Type:</span>
-        </div><div class="column column--8 column--sml-10">
+        <div class="column column--2 column--med-10">
+            <span class="text">File Type:</span>
+        </div><div class="column column--8 column--med-10">
         {{#if fileInfo.fileType}}
             {{fileInfo.fileType}}
         {{else}}
