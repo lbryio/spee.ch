@@ -1,19 +1,8 @@
-function showInstructions () {
-    document.getElementById('preview-dropzone-instructions').setAttribute('class', 'flex-container flex-container--column flex-container--justify-center position-absolute');
-    document.getElementById('asset-preview').style.opacity = 0.2;
-}
-
-function hideInstructions () {
-    document.getElementById('preview-dropzone-instructions').setAttribute('class', 'hidden');
-    document.getElementById('asset-preview').style.opacity = 1;
-}
-
 function triggerFileChooser(fileInputId, event) {
     document.getElementById(fileInputId).click();
 }
 
 function drop_handler(event) {
-    dragexit_handler(event)
     event.preventDefault();
     // if dropped items aren't files, reject them
     var dt = event.dataTransfer;
@@ -26,10 +15,12 @@ function drop_handler(event) {
 }
 
 function dragover_handler(event) {
+    console.log('dragover');
     event.preventDefault();
 }
 
 function dragend_handler(event) {
+    console.log('dragend');
     var dt = event.dataTransfer;
     if (dt.items) {
         for (var i = 0; i < dt.items.length; i++) {
@@ -54,3 +45,14 @@ function dragexit_handler(event) {
     thisDropzone.firstElementChild.setAttribute('class', '');
     thisDropzone.lastElementChild.setAttribute('class', 'hidden');
 }
+
+function preview_onmouseenter_handler () {
+    document.getElementById('asset-preview-dropzone-instructions').setAttribute('class', 'flex-container flex-container--column flex-container--justify-center position-absolute');
+    document.getElementById('asset-preview').style.opacity = 0.2;
+}
+
+function preview_onmouseleave_handler () {
+    document.getElementById('asset-preview-dropzone-instructions').setAttribute('class', 'hidden');
+    document.getElementById('asset-preview').style.opacity = 1;
+}
+

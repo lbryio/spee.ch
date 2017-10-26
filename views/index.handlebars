@@ -22,13 +22,13 @@
             <div class="column column--5 column--sml-10" >
                 <!-- preview -->
                 <div class="row row--padded">
-                    <div id="asset-preview-holder" class="dropzone" ondrop="drop_handler(event);" ondragover="dragover_handler(event);" ondragend="dragend_handler(event)" onmouseenter="showInstructions()" onmouseleave="hideInstructions()" onclick="triggerFileChooser('siofu_input', event)">
-                        <div id="asset-preview-target"></div>
-                        <div id="preview-dropzone-instructions" class="hidden">
+                    <div id="asset-preview-holder" class="dropzone" ondrop="drop_handler(event);" ondragover="dragover_handler(event);" ondragend="dragend_handler(event)"  ondragenter="preview_onmouseenter_handler()" ondragleave="preview_onmouseleave_handler()" onmouseenter="preview_onmouseenter_handler()" onmouseleave="preview_onmouseleave_handler()" onclick="triggerFileChooser('siofu_input', event)">
+                        <div id="asset-preview-dropzone-instructions" class="hidden">
                             <p>Drag & drop image or video here</p>
                             <p class="fine-print">OR</p>
                             <p class="blue-underlined-pointer">CHOOSE FILE</p>
                         </div>
+                        <div id="asset-preview-target"></div>
                     </div>
                 </div>
             </div><div class="column column--5 column--sml-10 align-content-top">
