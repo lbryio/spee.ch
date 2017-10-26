@@ -8,5 +8,8 @@
 	},
 	"Logging": {
 		"SlackWebHook": "SLACK_WEB_HOOK"
+	},
+	"Session": {
+		"SessionKey": "SESSION_KEY"
 	}
 }

@@ -13,16 +13,16 @@ module.exports = {
       .then(tx => {
         logger.info(`Successfully published ${fileName}`, tx);
         publishResults = tx;
-        return db.Channel.findOne({where: {channelName: publishParams.channel_name}});
+        return db.Channel.findOne({where: {channelName: publishParams.channel_name}});  // note: should this be db.User ??
       })
-      .then(user => {
+      .then(channel => {
         let certificateId;
-        if (user) {
-          certificateId = user.channelClaimId;
-          logger.debug('successfully found user in User table');
+        if (channel) {
+          certificateId = channel.channelClaimId;
+          logger.debug('successfully found channel in Channel table');
         } else {
           certificateId = null;
-          logger.debug('user for publish not found in User table');
+          logger.debug('channel for publish not found in Channel table');
         };
         const fileRecord = {
           name       : publishParams.name,
@@ -43,6 +43,7 @@ module.exports = {
           title      : publishParams.metadata.title,
           description: publishParams.metadata.description,
           address    : publishParams.claim_address,
+          thumbnail  : publishParams.metadata.thumbnail,
           outpoint   : `${publishResults.txid}:${publishResults.nout}`,
           height     : 0,
           contentType: fileType,

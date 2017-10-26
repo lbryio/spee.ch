@@ -14,7 +14,6 @@ const PORT = 3000; // set port
 const app = express(); // create an Express application
 const db = require('./models'); // require our models for syncing
 const passport = require('passport');
-// const session = require('express-session');
 const cookieSession = require('cookie-session');
 
 // configure logging
@@ -43,7 +42,7 @@ app.use((req, res, next) => {  // custom logging middleware to log all incoming 
 // initialize passport
 app.use(cookieSession({
   name  : 'session',
-  keys  : ['testcatstest'],
+  keys  : [config.get('Session.SessionKey')],
   maxAge: 24 * 60 * 60 * 1000, // 24 hours
 }));
 app.use(passport.initialize());
