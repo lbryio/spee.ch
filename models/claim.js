@@ -134,6 +134,11 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, ARRAY, DECIMAL, D
         type   : STRING,
         default: null,
       },
+      channelName: {
+        type     : STRING,
+        allowNull: true,
+        default  : null,
+      },
     },
     {
       freezeTableName: true,
