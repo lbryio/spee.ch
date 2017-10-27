@@ -76,7 +76,7 @@
 		margin: 0px;
 	}
 
-	.info-message {
+	.info-message--success, .info-message--failure {
 		font-size: small;
 	}
 

@@ -56,6 +56,11 @@ body, .flex-container--column {
 	justify-content: space-between;
 }
 
+.flex-container--left-bottom {
+	justify-content: flex-start;
+	align-items: baseline;
+}
+
 .hidden {
 	display: none;
 }
@@ -70,6 +75,11 @@ body, button, input, textarea, label, select, option {
 h3, p {
 
 	font-size: x-large;
+}
+
+
+.text--large {
+	font-size: 2rem;
 }
 
 .pull-quote {
@@ -238,8 +248,7 @@ a, a:visited {
 }
 
 /* ALIGNMENT */
-.
-align-content-left {
+.align-content-left {
 	text-align: left;
 }
 
@@ -262,7 +271,7 @@ align-content-left {
 
 /* ERROR MESSAGES */
 
-.info-message {
+.info-message--success, .info-message--failure {
 
 	font-size: medium;
 	margin: 0px;
@@ -328,21 +337,22 @@ option {
 	cursor: pointer;
 }
 
-.text--large {
-	font-size: 2rem;
+#claim-name-input {
+
 }
 
-.url-text--primary, .url-text--secondary {
-	margin:0px;
-	padding:0px;
+#input-success-claim-name {
+
 }
 
-.url-text--primary {
-	color: black;
+.span--relative {
+	position: relative;
 }
 
-.url-text--secondary {
-	color: #9b9b9b;
+.span--absolute {
+	position: absolute;
+	bottom: 0px;
+	right: 0px;
 }
 
 /* modifiers */
@@ -376,6 +386,19 @@ option {
 
 .input-disabled--full-width {
 	width: calc(100% - 1em - 2px);
+}
+
+.url-text--primary, .url-text--secondary {
+	margin:0px;
+	padding:0px;
+}
+
+.url-text--primary {
+	color: black;
+}
+
+.url-text--secondary {
+	color: #9b9b9b;
 }
 
 /* BUTTONS */
