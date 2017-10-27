@@ -1,6 +1,6 @@
 <div class="row row--padded">
     <div class="row">
-        <h2>{{this.channelName}}<span class="h2--secondary">:{{this.longChannelId}}</span></h2>
+        <p>Below are the contents for {{this.channelName}}:{{this.longChannelId}}</p>
         <div class="grid">
             {{#each this.claims}}
                 {{> gridItem}}
@@ -13,7 +13,7 @@
                 {{#if this.previousPage}}
                     <a class="link--primary" href="/{{this.channelName}}:{{this.longChannelId}}?p={{this.previousPage}}">Previous</a>
                 {{else}}
-                    <a disabled>Previous </a>
+                    <a disabled>Previous</a>
                 {{/if}}
                 |
                 {{#if this.nextPage}}
@@ -42,5 +42,6 @@
             percentPosition: true
         });
     });
+
 
 </script>

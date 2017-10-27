@@ -1,5 +1,5 @@
 const errorHandlers = require('../helpers/errorHandlers.js');
-const { postToStats, getStatsSummary, getTrendingClaims, getRecentClaims } = require('../controllers/statsController.js');
+const { getTrendingClaims, getRecentClaims } = require('../controllers/statsController.js');
 
 module.exports = (app) => {
   // route to log out
@@ -46,23 +46,6 @@ module.exports = (app) => {
         // logger.debug(result);
         res.status(200).render('new', {
           newClaims: result,
-        });
-      })
-      .catch(error => {
-        errorHandlers.handleRequestError(null, null, null, error, res);
-      });
-  });
-  // route to show statistics for spee.ch
-  app.get('/stats', ({ ip, originalUrl, user }, res) => {
-    // get and render the content
-    const startDate = new Date();
-    startDate.setDate(startDate.getDate() - 1);
-    getStatsSummary(startDate)
-      .then(result => {
-        postToStats('show', originalUrl, ip, null, null, 'success');
-        res.status(200).render('statistics', {
-          user,
-          result,
         });
       })
       .catch(error => {

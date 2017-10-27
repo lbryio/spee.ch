@@ -130,7 +130,6 @@ module.exports = (app) => {
       return publish(publishParams, fileName, fileType);
     })
     .then(result => {
-      // postToStats('publish', originalUrl, ip, null, null, 'success');
       res.status(200).json({
         success: true,
         message: {

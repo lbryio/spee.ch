@@ -77,7 +77,7 @@ h2 {
 }
 
 .h2--secondary {
-	color: #9b9b9b;
+	color: lightgrey;
 }
 
 .h2--top {
@@ -304,7 +304,6 @@ align-content-left {
 /* ERROR MESSAGES */
 
 .info-message {
-	font-weight: bold;
 	font-size: medium;
 	margin: 0px;
 	padding: 0.3em;
