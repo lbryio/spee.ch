@@ -123,7 +123,7 @@ module.exports = {
     }
     // provide default for license
     if (license === null || license.trim() === '') {
-      license = 'All Rights Reserved';
+      license = ' ';  // default to empty string
     }
     // create the publish params
     const publishParams = {
