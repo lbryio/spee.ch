@@ -28,7 +28,7 @@ function previewAndStageFile(selectedFile){
     console.log('file type:', selectedFile.type)
     if (selectedFile.type !== 'video/mp4') {
 		if (selectedFile.type === 'image/gif') {
-            assetPreview.innerHTML = `<h2>loading preview...</h2>`
+            assetPreview.innerHTML = `<p>loading preview...</p>`
 		}
 		previewReader.readAsDataURL(selectedFile);
 		previewReader.onloadend = function () {

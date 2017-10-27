@@ -39,13 +39,13 @@ body, .flex-container--column {
 	justify-content: space-between;
 }
 
-.flex-container--align-center {
-	align-items: center;
-}
-
 .flex-container--wrap {
 	-webkit-flex-wrap: wrap;
 	flex-wrap: wrap;
+}
+
+.flex-container--align-center {
+	align-items: center;
 }
 
 .flex-container--justify-center {
@@ -64,58 +64,12 @@ body, .flex-container--column {
 
 body, button, input, textarea, label, select, option {
 	font-family: 'Lekton', monospace;
-	font-size: medium;
-	word-wrap: break-word;
+	font-size: large;
 }
 
-h1 {
-	font-size: 2rem;
-}
-
-h2 {
-	font-size: 1.5rem;
-}
-
-.h2--secondary {
-	color: lightgrey;
-}
-
-.h2--top {
-	margin-top: 0px;
-}
-
-p, h3 {
+h3, p {
 
 	font-size: x-large;
-}
-
-.h3--no-bottom {
-	margin-bottom: 0px;
-}
-
-.p--no-top {
-	margin-top: 0px;
-}
-
-.input-text--large, .textarea--large, .title-show, .description-show {
-	font-size: 1.5rem;
-}
-
-.url-text {
-	margin:0px;
-	padding:0px;
-}
-
-.url-text--primary {
-	color: black;
-}
-
-.url-text--secondary {
-	color: #9b9b9b;
-}
-
-.instructions-text--large {
-	font-size: 2rem;
 }
 
 .pull-quote {
@@ -129,6 +83,11 @@ p, h3 {
 
 .blue {
 	color: #4156C5;
+}
+
+.blue--underlined {
+	color: #4156C5;
+	text-decoration: underline;
 }
 
 /* TOOL TIPS */
@@ -304,6 +263,7 @@ align-content-left {
 /* ERROR MESSAGES */
 
 .info-message {
+
 	font-size: medium;
 	margin: 0px;
 	padding: 0.3em;
@@ -328,7 +288,7 @@ input:-webkit-autofill {
  -webkit-box-shadow: 0 0 0px 1000px white inset;
 }
 
-.label, .input-text, .select, .textarea, .title-show {
+.label, .input-text, .select, .textarea, .text--large {
 	margin: 0px;
 	padding: 0.3em;
 	outline: none;
@@ -368,11 +328,23 @@ option {
 	cursor: pointer;
 }
 
-.blue-underlined-pointer {
-	color: #4156C5;
-	text-decoration: underline;
-	cursor: pointer;
+.text--large {
+	font-size: 2rem;
 }
+
+.url-text--primary, .url-text--secondary {
+	margin:0px;
+	padding:0px;
+}
+
+.url-text--primary {
+	color: black;
+}
+
+.url-text--secondary {
+	color: #9b9b9b;
+}
+
 /* modifiers */
 .select--arrow {
 	-moz-appearance:none;

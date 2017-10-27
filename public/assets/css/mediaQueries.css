@@ -16,7 +16,7 @@
 		font-size: medium;
 	}
 
-	.instructions-text--large, .pull-quote {
+	.pull-quote {
 		font-size: 1.5rem;
 	}
 
@@ -24,16 +24,11 @@
 		width: 100%;
 	}
 
-	.h2--top {
-		margin-top: 1em;
-	}
-
 	.nav-bar-logo {
 		height: 1rem;
 	}
 
 	.link--nav, .link--nav-active {
-		font-size: small;
 		padding: 1rem 0.5rem 1rem 0.5rem;
 	}
 
@@ -70,7 +65,7 @@
 		font-size: small;
 	}
 
-	.instructions-text--large, .pull-quote, .input-text--large, .button--large {
+	.pull-quote, .text--large, .button--large {
 		font-size: medium;
 	}
 
@@ -90,15 +85,11 @@
 
 @media (max-width: 360px) {
 
-	.link--nav, .link--nav-active {
+	body, button, input, textarea, label, select, option, p, h3, .fine-print {
 		font-size: x-small;
 	}
 
-	body, button, input, textarea, label, select, option, p, h3, .fine-print, .instructions-text--large {
-		font-size: x-small;
-	}
-
-	.pull-quote, .input-text--large, .button--large {
+	.pull-quote, .text--large, .button--large {
 		font-size: small;
 	}
 
