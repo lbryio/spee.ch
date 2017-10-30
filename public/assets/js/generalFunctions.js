@@ -201,7 +201,7 @@ function showAssetDetails(event) {
     var thisAssetImage = thisAssetHolder.firstElementChild;
     var thisAssetDetails = thisAssetHolder.lastElementChild;
     thisAssetImage.style.opacity = 0.2;
-    thisAssetDetails.setAttribute('class', 'grid-item-details flex-container flex-container--column flex-container--justify-center');
+    thisAssetDetails.setAttribute('class', 'grid-item-details flex-container--column flex-container--center-center');
 }
 
 function hideAssetDetails(event) {

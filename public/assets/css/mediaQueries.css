@@ -1,4 +1,4 @@
-@media (max-width: 1050px) {
+@media (max-width: 1120px) {
 
 	.nav-bar--center {
 		display: none;
@@ -10,7 +10,7 @@
 
 }
 
-@media (max-width: 750px ) {
+@media (max-width: 800px ) {
 
 	body, button, input, textarea, label, select, option, p, h3 {
 		font-size: medium;

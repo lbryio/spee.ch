@@ -31,7 +31,7 @@ function dragend_handler(event) {
 
 function dragenter_handler(event) {
     var thisDropzone = document.getElementById(event.target.id);
-    thisDropzone.setAttribute('class', 'dropzone dropzone--drag-over row row--margined row--padded row--tall flex-container flex-container--column flex-container--justify-center');
+    thisDropzone.setAttribute('class', 'dropzone dropzone--drag-over row row--margined row--padded row--tall flex-container--column flex-container--center-center');
     thisDropzone.firstElementChild.setAttribute('class', 'hidden');
     thisDropzone.lastElementChild.setAttribute('class', '');
 
@@ -39,13 +39,13 @@ function dragenter_handler(event) {
 
 function dragexit_handler(event) {
     var thisDropzone = document.getElementById(event.target.id);
-    thisDropzone.setAttribute('class', 'dropzone row row--tall row--margined row--padded flex-container flex-container--column flex-container--justify-center');
+    thisDropzone.setAttribute('class', 'dropzone row row--tall row--margined row--padded flex-container--column flex-container--center-center');
     thisDropzone.firstElementChild.setAttribute('class', '');
     thisDropzone.lastElementChild.setAttribute('class', 'hidden');
 }
 
 function preview_onmouseenter_handler () {
-    document.getElementById('asset-preview-dropzone-instructions').setAttribute('class', 'flex-container flex-container--column flex-container--justify-center position-absolute');
+    document.getElementById('asset-preview-dropzone-instructions').setAttribute('class', 'flex-container--column flex-container--center-center position-absolute');
     document.getElementById('asset-preview').style.opacity = 0.2;
 }
 
