@@ -1,11 +1,17 @@
 <div class="row row--padded">
     <div class="row">
-        <p>Below are the contents for {{this.channelName}}:{{this.longChannelId}}</p>
-        <div class="grid">
-            {{#each this.claims}}
-                {{> gridItem}}
-            {{/each}}
-        </div>
+        {{#ifConditional this.totalPages '===' 0}}
+            <p>There is no content in {{this.channelName}}:{{this.longChannelId}} yet.  Upload some!</p>
+        {{/ifConditional}}
+        {{#ifConditional this.totalPages '>=' 1}}
+            <p>Below are the contents for {{this.channelName}}:{{this.longChannelId}}</p>
+            <div class="grid">
+                {{#each this.claims}}
+                    {{> gridItem}}
+                {{/each}}
+            </div>
+        {{/ifConditional}}
+        {{#ifConditional this.totalPages '>' 1}}
         <div class="row">
             <div class="column column--3 align-content--left">
                 <a class="link--primary" href="/{{this.channelName}}:{{this.longChannelId}}?p=1">First [1]</a>
@@ -25,6 +31,7 @@
                 <a class="link--primary" href="/{{this.channelName}}:{{this.longChannelId}}?p={{this.totalPages}}">Last [{{this.totalPages}}]</a>
             </div>
         </div>
+        {{/ifConditional}}
     </div>
 </div>
 
