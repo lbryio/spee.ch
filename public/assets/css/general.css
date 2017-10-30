@@ -63,6 +63,11 @@ body, .flex-container--column {
 	align-items: baseline;
 }
 
+.flex-container--space-between-center {
+	justify-content: space-between;
+	align-items: center;
+}
+
 .hidden {
 	display: none;
 }
