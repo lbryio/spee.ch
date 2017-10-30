@@ -12,6 +12,7 @@ const NO_CHANNEL = 'NO_CHANNEL';
 const NO_CLAIM = 'NO_CLAIM';
 
 function checkForLocalAssetByClaimId (claimId, name) {
+  logger.debug(`checkForLocalAssetsByClaimId(${claimId}, ${name}`);
   return new Promise((resolve, reject) => {
     db.File
       .findOne({where: { name, claimId }})
@@ -69,7 +70,8 @@ function getAssetByLongClaimId (fullClaimId, name) {
           logger.debug('resolve result >> ', resolveResult);
           // if no result, return early (claim doesn't exist or isn't free)
           if (!resolveResult) {
-            return resolve(null);
+            resolve(NO_CLAIM);
+            return;
           }
           let fileRecord = {};
           // get the claim
