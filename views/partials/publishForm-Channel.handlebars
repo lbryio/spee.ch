@@ -45,7 +45,6 @@
     // show or hide the channel selection tools
     function toggleChannel (selectedOption) {
         const channelSelectOptions = document.getElementById('channel-select-options');
-        console.log('toggleChannel event triggered', selectedOption);
         // show/hide the login and new channel forms
         if (selectedOption === 'anonymous') {
             channelSelectOptions.hidden = true;
@@ -66,7 +65,6 @@
     function toggleSelectedChannel (selectedChannel) {
          const createChannelTool = document.getElementById('channel-create-details');
          const loginToChannelTool = document.getElementById('channel-login-details');
-         console.log('toggleSelectedChannel event triggered', selectedChannel);
          // show/hide the login and new channel forms
          if (selectedChannel === 'new') {
              createChannelTool.hidden = false;

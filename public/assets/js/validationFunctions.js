@@ -108,7 +108,6 @@ function checkAvailability(name, successDisplayElement, errorDisplayElement, val
         // check to make sure it is available
         isNameAvailable(name, apiUrl)
             .then(result => {
-                console.log('result:', result)
                 if (result === true) {
                     hideError(errorDisplayElement);
                     showSuccess(successDisplayElement)
@@ -142,7 +141,6 @@ function checkChannelName(name){
 
 // validation function which checks all aspects of the publish submission
 function validateFilePublishSubmission(stagedFiles, claimName, channelName){
-    console.log(`validating publish submission > name: ${claimName} channel: ${channelName} file:`, stagedFiles);
     return new Promise(function (resolve, reject) {
         // 1. make sure 1 file was staged
         if (!stagedFiles) {
@@ -206,10 +204,8 @@ function validateNewChannelSubmission(userName, password){
         isNameAvailable(channelName, '/api/isChannelAvailable/')  // validate the availability
             .then(result => {
                 if (result) {
-                    console.log('channel is available');
                     resolve();
                 } else {
-                    console.log('channel is not available');
                     reject(new ChannelNameError('Sorry, that name is already taken'));
                 }
             })

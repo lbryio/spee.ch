@@ -144,9 +144,7 @@
         event.file.meta.license = license;
         event.file.meta.nsfw = nsfw;
         event.file.meta.type = stagedFiles[0].type;
-        console.log('anonymous?', anonymous);
         if (!anonymous) {
-            console.log('channel:', channel);
             event.file.meta.channel = channel;
         }
         if (thumbnail && (thumbnail.trim !== '')){

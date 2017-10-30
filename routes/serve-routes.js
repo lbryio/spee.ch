@@ -47,9 +47,7 @@ function extractPageFromClaims (claims, pageNumber) {
   logger.debug('claims is array?', Array.isArray(claims));
   logger.debug(`pageNumber ${pageNumber} is number?`, Number.isInteger(pageNumber));
   const claimStartIndex = (pageNumber - 1) * CLAIMS_PER_PAGE;
-  console.log('claim start index:', claimStartIndex);
   const claimEndIndex = claimStartIndex + 10;
-  console.log('claim end index:', claimEndIndex);
   const pageOfClaims = claims.slice(claimStartIndex, claimEndIndex);
   logger.debug('page of claims:', pageOfClaims);
   return pageOfClaims;

@@ -15,12 +15,10 @@ function drop_handler(event) {
 }
 
 function dragover_handler(event) {
-    console.log('dragover');
     event.preventDefault();
 }
 
 function dragend_handler(event) {
-    console.log('dragend');
     var dt = event.dataTransfer;
     if (dt.items) {
         for (var i = 0; i < dt.items.length; i++) {

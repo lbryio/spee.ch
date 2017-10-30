@@ -49,7 +49,6 @@ function loginToChannel (event) {
     event.preventDefault()
     validateNewChannelLogin(userName, password)
         .then(() => {
-            console.log('channel login in progress');
             // send request
             return sendAuthRequest(userName, password, '/login')
         })
@@ -74,7 +73,6 @@ function loginToChannel (event) {
             if (error.name){
                 showError(loginErrorDisplayElement, error.message);
             } else {
-                console.log('login failure:', error);
                 showError(loginErrorDisplayElement, 'There was an error logging into your channel');
             }
         })

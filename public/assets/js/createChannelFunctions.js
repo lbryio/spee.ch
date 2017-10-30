@@ -26,12 +26,10 @@ function publishNewChannel (event) {
     // validate submission
     validateNewChannelSubmission(userName, password)
         .then(() => {
-            console.log('new channel creation is in progress');
             showChannelCreateInProgressDisplay();
             return sendAuthRequest(userName, password, '/signup') // post the request
         })
         .then(result => {
-            console.log('new channel successfully created', result);
             showChannelCreateDoneDisplay();
             // refresh window logged in as the channel
             setUserCookies(result.channelName, result.channelClaimId, result.shortChannelId); // set cookies

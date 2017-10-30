@@ -1,5 +1,4 @@
 function getRequest (url) {
-    console.log('making GET request to', url)
     return new Promise((resolve, reject) => {
         let xhttp = new XMLHttpRequest();
         xhttp.open('GET', url, true);
@@ -20,7 +19,6 @@ function getRequest (url) {
 }
 
 function postRequest (url, params) {
-    console.log('making POST request to', url)
     return new Promise((resolve, reject) => {
         let xhttp = new XMLHttpRequest();
         xhttp.open('POST', url, true);
@@ -63,7 +61,6 @@ function toggleSection(event){
 }
 
 function createProgressBar(element, size){
-    console.log('creating progress bar');
 	var x = 0;
 	var adder = 1;
 	// create the bar holder & place it

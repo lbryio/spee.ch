@@ -17,15 +17,12 @@ function previewAndStageFile(selectedFile){
     const thumbnailSelectionInput = document.getElementById('claim-thumbnail-input');
 	// validate the file's name, type, and size
 	try {
-		console.log('validating file');
 		validateFile(selectedFile);
 	} catch (error) {
-		console.log('file validation failed with error:', error);
 		showError(fileSelectionInputError, error.message);
 		return;
 	}
 	// set the image preview, if an image was provided
-    console.log('file type:', selectedFile.type)
     if (selectedFile.type !== 'video/mp4') {
 		if (selectedFile.type === 'image/gif') {
             assetPreview.innerHTML = `<p>loading preview...</p>`
