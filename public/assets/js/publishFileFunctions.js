@@ -35,7 +35,7 @@ function previewAndStageFile(selectedFile){
         thumbnailSelectionInput.value = '';
 		thumbnailSelectionTool.hidden = true;
 	} else {
-        assetPreview.innerHTML = `<img id="asset-preview" src="/assets/img/black_video_play.jpg"/>`;
+        assetPreview.innerHTML = `<img id="asset-preview" src="/assets/img/video_thumb_default.png"/>`;
         // clear & show the thumbnail selection input
         thumbnailSelectionInput.value = '';
         thumbnailSelectionTool.hidden = false;
