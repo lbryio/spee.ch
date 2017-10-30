@@ -27,6 +27,7 @@
   "homepage": "https://github.com/lbryio/spee.ch#readme",
   "dependencies": {
     "axios": "^0.16.1",
+    "bcrypt": "^1.0.3",
     "body-parser": "^1.17.1",
     "config": "^1.26.1",
     "connect-multiparty": "^2.0.0",
