@@ -23,7 +23,7 @@ html, body {
 	height: 100%;
 }
 
-body, .flex-container {
+body, .flex-container--column, .flex-container--row {
 	display: -webkit-flex;
 	display: flex;
 }
@@ -36,7 +36,6 @@ body, .flex-container--column {
 .flex-container--row {
 	-webkit-flex-direction: row;
 	flex-direction: row;
-	justify-content: space-between;
 }
 
 .flex-container--wrap {
@@ -44,20 +43,23 @@ body, .flex-container--column {
 	flex-wrap: wrap;
 }
 
-.flex-container--align-center {
+.flex-container--left-bottom {
+	justify-content: flex-start;
+	align-items: baseline;
+}
+
+.flex-container--left-center {
+	justify-content: flex-start;
 	align-items: center;
 }
 
-.flex-container--justify-center {
+.flex-container--center-center {
 	justify-content: center;
+	align-items: center;
 }
 
-.flex-container--justify-space-between {
+.flex-container--space-between-bottom {
 	justify-content: space-between;
-}
-
-.flex-container--left-bottom {
-	justify-content: flex-start;
 	align-items: baseline;
 }
 
