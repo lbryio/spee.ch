@@ -51,7 +51,7 @@ module.exports = {
     }
   },
   addTwitterCard (mimeType, source, embedUrl, directFileUrl) {
-    let basicTwitterTags = `<meta name="twitter:site" content="@speechch" >`;
+    let basicTwitterTags = `<meta name="twitter:site" content="@spee_ch" >`;
     if (mimeType === 'video/mp4') {
       return new Handlebars.SafeString(
                 `${basicTwitterTags} <meta name="twitter:card" content="player" >

@@ -1,15 +1,14 @@
 function getRequest (url) {
-    console.log('making GET request to', url)
     return new Promise((resolve, reject) => {
         let xhttp = new XMLHttpRequest();
         xhttp.open('GET', url, true);
         xhttp.responseType = 'json';
         xhttp.onreadystatechange = () => {
             if (xhttp.readyState == 4 ) {
-                console.log(xhttp);
                 if ( xhttp.status == 200) {
-                    console.log('response:', xhttp.response);
                     resolve(xhttp.response);
+                } else if (xhttp.status == 401) {
+                    reject('Wrong username or password');
                 } else {
                     reject('request failed with status:' + xhttp.status);
                 };
@@ -20,7 +19,6 @@ function getRequest (url) {
 }
 
 function postRequest (url, params) {
-    console.log('making POST request to', url)
     return new Promise((resolve, reject) => {
         let xhttp = new XMLHttpRequest();
         xhttp.open('POST', url, true);
@@ -28,10 +26,10 @@ function postRequest (url, params) {
         xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         xhttp.onreadystatechange = () => {
             if (xhttp.readyState == 4 ) {
-                console.log(xhttp);
                 if ( xhttp.status == 200) {
-                    console.log('response:', xhttp.response);
                     resolve(xhttp.response);
+                } else if (xhttp.status == 401) {
+                    reject( new AuthenticationError('Wrong username or password'));
                 } else {
                     reject('request failed with status:' + xhttp.status);
                 };
@@ -62,22 +60,99 @@ function toggleSection(event){
 	}
 }
 
-function createProgressBar(element, size){ 
-	var x = 1;
+function createProgressBar(element, size){
+	var x = 0;
 	var adder = 1;
-	function addOne(){
-		var bars = '<p>|';
-		for (var i = 0; i < x; i++){ bars += ' | '; }
-		bars += '</p>';
-		element.innerHTML = bars;
-		if (x === size){
-			adder = -1;
-		} else if ( x === 0){
-			adder = 1;
-		}
-		x += adder;
+	// create the bar holder & place it
+    var barHolder = document.createElement('p');
+	for (var i = 0; i < size; i++) {
+        const bar = document.createElement('span');
+        bar.innerText = '| ';
+        bar.setAttribute('class', 'progress-bar progress-bar--inactive');
+        barHolder.appendChild(bar);
+    }
+    element.appendChild(barHolder);
+	// get the bars
+    const bars = document.getElementsByClassName('progress-bar');
+    // function to update the bars' classes
+	function updateOneBar(){
+        // update the appropriate bar
+        if (x > -1 && x < size){
+            if (adder === 1){
+                bars[x].setAttribute('class', 'progress-bar progress-bar--active');
+            } else {
+                bars[x].setAttribute('class', 'progress-bar progress-bar--inactive');
+            }
+        }
+        // set x
+        if (x === size){
+            adder = -1;
+        } else if ( x === -1){
+            adder = 1;
+        }
+        // update the adder
+        x += adder;
+
 	};
-	setInterval(addOne, 300);
+	// start updater
+	setInterval(updateOneBar, 300);
+}
+
+function setCookie(key, value) {
+    document.cookie = `${key}=${value}`;
+}
+
+function getCookie(cname) {
+    const name = cname + "=";
+    const decodedCookie = decodeURIComponent(document.cookie);
+    const ca = decodedCookie.split(';');
+    for(let i = 0; i <ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
+
+function checkCookie() {
+    const channelName = getCookie("channel_name");
+    if (channelName != "") {
+        console.log(`cookie found for ${channelName}`);
+    } else {
+        console.log('no channel_name cookie found');
+    }
+}
+
+function clearCookie(name) {
+    document.cookie = `${name}=; expires=Thu, 01-Jan-1970 00:00:01 GMT;`;
+}
+
+function setUserCookies(channelName, channelClaimId, shortChannelId) {
+    setCookie('channel_name', channelName)
+    setCookie('channel_claim_id', channelClaimId);
+    setCookie('short_channel_id', shortChannelId);
+}
+
+function clearUserCookies() {
+    clearCookie('channel_name')
+    clearCookie('channel_claim_id');
+    clearCookie('short_channel_id');
+}
+
+function copyToClipboard(event){
+    var elementToCopy = event.target.dataset.elementtocopy;
+    var element = document.getElementById(elementToCopy);
+    var errorElement = 'input-error-copy-text' + elementToCopy;
+    element.select();
+    try {
+        document.execCommand('copy');
+    } catch (err) {
+        showError(errorElement, 'Oops, unable to copy');
+    }
 }
 
 // Create new error objects, that prototypically inherit from the Error constructor
@@ -112,3 +187,27 @@ function ChannelPasswordError(message) {
 }
 ChannelPasswordError.prototype = Object.create(Error.prototype);
 ChannelPasswordError.prototype.constructor = ChannelPasswordError;
+
+function AuthenticationError(message) {
+    this.name = 'AuthenticationError';
+    this.message = message || 'Default Message';
+    this.stack = (new Error()).stack;
+}
+AuthenticationError.prototype = Object.create(Error.prototype);
+AuthenticationError.prototype.constructor = AuthenticationError;
+
+function showAssetDetails(event) {
+    var thisAssetHolder = document.getElementById(event.target.id);
+    var thisAssetImage = thisAssetHolder.firstElementChild;
+    var thisAssetDetails = thisAssetHolder.lastElementChild;
+    thisAssetImage.style.opacity = 0.2;
+    thisAssetDetails.setAttribute('class', 'grid-item-details flex-container flex-container--column flex-container--justify-center');
+}
+
+function hideAssetDetails(event) {
+    var thisAssetHolder = document.getElementById(event.target.id);
+    var thisAssetImage = thisAssetHolder.firstElementChild;
+    var thisAssetDetails = thisAssetHolder.lastElementChild;
+    thisAssetImage.style.opacity = 1;
+    thisAssetDetails.setAttribute('class', 'hidden');
+}

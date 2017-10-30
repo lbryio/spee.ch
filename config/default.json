@@ -16,5 +16,8 @@
 		"SlackWebHook": null,
 		"SlackErrorChannel": null,
 		"SlackInfoChannel": null
+	},
+	"Session": {
+		"SessionKey": null
 	}
 }

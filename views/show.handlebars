@@ -1,24 +1,17 @@
-<div class="wrapper">
-	{{> topBar}}
-	<div class="main">
-		{{> asset}}
-	</div>
-	<div class="sidebar">
-		{{> assetInfo}}
-	</div>
-	{{> footer}}
+<div class="row row--tall row--padded">
+    <div class="column column--10">
+        <!-- title -->
+        <span class="text--large">{{fileInfo.title}}</span>
+    </div>
+    <div class="column column--5 column--sml-10 align-content-top">
+        <!-- asset -->
+        <div class="row row--padded">
+            {{> asset}}
+        </div>
+    </div><div class="column column--5 column--sml-10 align-content-top">
+        <!-- details -->
+        <div class="row row--padded">
+            {{> assetInfo}}
+        </div>
+    </div>
 </div>
-
-<script type ="text/javascript">
-	function copyToClipboard(event){
-		var elementToCopy = event.target.dataset.elementtocopy;
-		var element = document.getElementById(elementToCopy);
-		var errorElement = 'input-error-copy-text' + elementToCopy;
-		element.select();
-		try {
-			document.execCommand('copy');
-		} catch (err) {
-			showError(errorElement, 'Oops, unable to copy');
-		}
-	}
-</script>

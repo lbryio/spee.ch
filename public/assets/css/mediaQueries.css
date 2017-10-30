@@ -1,59 +1,96 @@
-@media (max-width: 1250px) {
-    .wrapper {
-		margin-left: 10%;
-		width:80%;
-	}
-}
+@media (max-width: 1050px) {
 
-@media (max-width: 1000px) {
-    .wrapper {
-		margin-left: 10%;
-		width:80%;
+	.nav-bar--center {
+		display: none;
 	}
 
-	.main {
-		float: none;
-		width: 100%;
-		margin-right: 0px;
-		padding-right: 0px;
-		border-right: 0px;
-		margin-bottom: 5px;
-	}
-
-	.sidebar {
-		border-top: 1px solid lightgray;
-		float: none;
+	.column--med-10 {
 		width: 100%;
 	}
+
 }
 
 @media (max-width: 750px ) {
-	.col-left, .col-right {
-		float: none;
-		margin: 0px;
-		padding: 0px;
+
+	body, button, input, textarea, label, select, option, p, h3 {
+		font-size: medium;
+	}
+
+	.pull-quote {
+		font-size: 1.5rem;
+	}
+
+	.column--sml-10 {
 		width: 100%;
 	}
 
-	.col-right {
-		padding-top: 20px;
+	.nav-bar-logo {
+		height: 1rem;
 	}
 
-	.all-claims-asset {
-		width:30%;
+	.link--nav, .link--nav-active {
+		padding: 1rem 0.5rem 1rem 0.5rem;
 	}
 
-	.all-claims-details {
+	.select--arrow {
+		padding-right: 1.5em;
+	}
+
+	.show-asset-light {
+		max-width: 100%;
+	}
+
+}
+
+@media (max-width: 500px) {
+
+	.nav-bar-logo {
+		height: 1rem;
+	}
+
+	.row--padded {
+		padding: 1rem;
+	}
+
+	.row--short {
+		padding-top: 0px;
+		padding-bottom: 0px;
+	}
+
+	.row--margined {
+		margin: 1rem;
+	}
+
+	body, button, input, textarea, label, select, option, p, h3, .fine-print {
 		font-size: small;
 	}
 
-	.show-asset-lite {
-		width: 100%;
+	.pull-quote, .text--large, .button--large {
+		font-size: medium;
 	}
 
-	.top-bar-tagline {
-		clear: both;
-		text-align: left;
-		width: 100%;
+	.grid-item {
+		width: calc(100% - 2em);
+		float: none;
+		padding: 1em;
+		margin: 0px;
 	}
+
+	.info-message--success, .info-message--failure {
+		font-size: small;
+	}
+
+
+}
+
+@media (max-width: 360px) {
+
+	body, button, input, textarea, label, select, option, p, h3, .fine-print {
+		font-size: x-small;
+	}
+
+	.pull-quote, .text--large, .button--large {
+		font-size: small;
+	}
+
 }

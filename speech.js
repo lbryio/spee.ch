@@ -5,6 +5,7 @@ const siofu = require('socketio-file-upload');
 const expressHandlebars = require('express-handlebars');
 const Handlebars = require('handlebars');
 const handlebarsHelpers = require('./helpers/handlebarsHelpers.js');
+const { populateLocalsDotUser, serializeSpeechUser, deserializeSpeechUser } = require('./helpers/authHelpers.js');
 const config = require('config');
 const logger = require('winston');
 const { getDownloadDirectory } = require('./helpers/lbryApi');
@@ -13,7 +14,7 @@ const PORT = 3000; // set port
 const app = express(); // create an Express application
 const db = require('./models'); // require our models for syncing
 const passport = require('passport');
-const session = require('express-session');
+const cookieSession = require('cookie-session');
 
 // configure logging
 const logLevel = config.get('Logging.LogLevel');
@@ -34,40 +35,20 @@ app.use(bodyParser.urlencoded({ extended: true })); // 'body parser' for parsing
 app.use(siofu.router); // 'socketio-file-upload' router for uploading with socket.io
 app.use((req, res, next) => {  // custom logging middleware to log all incoming http requests
   logger.verbose(`Request on ${req.originalUrl} from ${req.ip}`);
-  logger.debug(req.body);
+  logger.debug('req.body:', req.body);
   next();
 });
 
 // initialize passport
-app.use(session({ secret: 'cats' }));
+app.use(cookieSession({
+  name  : 'session',
+  keys  : [config.get('Session.SessionKey')],
+  maxAge: 24 * 60 * 60 * 1000, // 24 hours
+}));
 app.use(passport.initialize());
 app.use(passport.session());
-passport.serializeUser((user, done) => {
-  done(null, user.id);
-});
-passport.deserializeUser((id, done) => {  // this populates req.user
-  let userInfo = {};
-  db.User.findOne({ where: { id } })
-  .then(user => {
-    userInfo['id'] = user.id;
-    userInfo['userName'] = user.userName;
-    return user.getChannel();
-  })
-  .then(channel => {
-    userInfo['channelName'] = channel.channelName;
-    userInfo['channelClaimId'] = channel.channelClaimId;
-    return db.getShortChannelIdFromLongChannelId(channel.channelClaimId, channel.channelName);
-  })
-  .then(shortChannelId => {
-    userInfo['shortChannelId'] = shortChannelId;
-    done(null, userInfo);
-    return null;
-  })
-  .catch(error => {
-    logger.error('sequelize error', error);
-    done(error, null);
-  });
-});
+passport.serializeUser(serializeSpeechUser);  // takes the user id from the db and serializes it
+passport.deserializeUser(deserializeSpeechUser); // this deserializes id then populates req.user with info
 const localSignupStrategy = require('./passport/local-signup.js');
 const localLoginStrategy = require('./passport/local-login.js');
 passport.use('local-signup', localSignupStrategy);
@@ -83,19 +64,7 @@ app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
 
 // middleware to pass user info back to client (for handlebars access), if user is logged in
-app.use((req, res, next) => {
-  if (req.user) {
-    logger.verbose(req.user);
-    res.locals.user = {
-      id            : req.user.id,
-      userName      : req.user.userName,
-      channelName   : req.user.channelName,
-      channelClaimId: req.user.channelClaimId,
-      shortChannelId: req.user.shortChannelId,
-    };
-  }
-  next();
-});
+app.use(populateLocalsDotUser);
 
 // start the server
 db.sequelize

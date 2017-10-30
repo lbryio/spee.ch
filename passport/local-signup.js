@@ -11,8 +11,8 @@ module.exports = new PassportLocalStrategy(
     passReqToCallback: true,  // we want to be able to read the post body message parameters in the callback
   },
   (req, username, password, done) => {
-    logger.debug(`new channel signup request: ${username} ${password}`);
-    let user;
+    logger.verbose(`new channel signup request. user: ${username} pass: ${password} .`);
+    let userInfo = {};
     // server-side validaton of inputs (username, password)
 
     // create the channel and retrieve the metadata
@@ -23,34 +23,42 @@ module.exports = new PassportLocalStrategy(
           userName: username,
           password: password,
         };
-        logger.debug('userData >', userData);
+        logger.verbose('userData >', userData);
         // create user record
         const channelData = {
           channelName   : `@${username}`,
           channelClaimId: tx.claim_id,
         };
-        logger.debug('channelData >', channelData);
+        logger.verbose('channelData >', channelData);
         // create certificate record
         const certificateData = {
           claimId: tx.claim_id,
           name   : `@${username}`,
           // address,
         };
-        logger.debug('certificateData >', certificateData);
+        logger.verbose('certificateData >', certificateData);
         // save user and certificate to db
         return Promise.all([db.User.create(userData), db.Channel.create(channelData), db.Certificate.create(certificateData)]);
       })
       .then(([newUser, newChannel, newCertificate]) => {
-        user = newUser;
-        logger.debug('user and certificate successfully created');
+        logger.verbose('user and certificate successfully created');
         logger.debug('user result >', newUser.dataValues);
-        logger.debug('user result >', newChannel.dataValues);
-        logger.debug('certificate result >', newCertificate.dataValues);
+        userInfo['id'] = newUser.id;
+        userInfo['userName'] = newUser.userName;
+        logger.verbose('channel result >', newChannel.dataValues);
+        userInfo['channelName'] = newChannel.channelName;
+        userInfo['channelClaimId'] = newChannel.channelClaimId;
+        logger.verbose('certificate result >', newCertificate.dataValues);
         // associate the instances
         return Promise.all([newCertificate.setChannel(newChannel), newChannel.setUser(newUser)]);
-      }).then(() => {
-        logger.debug('user and certificate successfully associated');
-        return done(null, user);
+      })
+      .then(() => {
+        logger.verbose('user and certificate successfully associated');
+        return db.getShortChannelIdFromLongChannelId(userInfo.channelClaimId, userInfo.channelName);
+      })
+      .then(shortChannelId => {
+        userInfo['shortChannelId'] = shortChannelId;
+        return done(null, userInfo);
       })
       .catch(error => {
         logger.error('signup error', error);

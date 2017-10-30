@@ -1,23 +1,15 @@
-<div class="wrapper">
-    {{> topBar}}
-    <h2>Log In</h2>
-    <div class="row row--wide">
-
-        <div class="column column--6">
-            <p>Log in to an existing channel:</p>
-            {{>channelLoginForm}}
+<div class="row row--padded">
+    <div class="column column--5 column--med-10 align-content-top">
+        <div class="column column--8 column--med-10">
+            <p>Channels allow you to publish and group content under an identity. You can create a channel for yourself, or share one with like-minded friends.  You can create 1 channel, or 100, so whether you're <a class="link--primary" target="_blank" href="/@catalonia2017:43dcf47163caa21d8404d9fe9b30f78ef3e146a8">documenting important events</a>, or making a public repository for <a class="link--primary" target="_blank" href="/@catGifs">cat gifs</a> (password: '1234'), try creating a channel for it!</p>
         </div>
-    </div>
-    <h2>Create New</h2>
-    <div class="row row--wide">
-        <div class="column column--6">
-            <p>Create a brand new channel:</p>
+    </div><div class="column column--5 column--med-10 align-content-top">
+        <div class="column column--8 column--med-10">
+            <h3 class="h3--no-bottom">Log in to an existing channel:</h3>
+            {{>channelLoginForm}}
+            <h3 class="h3--no-bottom">Create a brand new channel:</h3>
             {{>channelCreationForm}}
         </div>
     </div>
-    {{> footer}}
 </div>
 
-<script src="/assets/js/generalFunctions.js"></script>
-<script src="/assets/js/validationFunctions.js"></script>
-<script src="/assets/js/authFunctions.js"></script>

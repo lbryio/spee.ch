@@ -4,8 +4,8 @@ function createOpenGraphInfo ({ fileType, claimId, name, fileName, fileExt }) {
   return {
     embedUrl     : `https://spee.ch/embed/${claimId}/${name}`,
     showUrl      : `https://spee.ch/${claimId}/${name}`,
-    source       : `https://spee.ch/${claimId}/${name}${fileExt}`,
-    directFileUrl: `https://spee.ch/media/${fileName}`,
+    source       : `https://spee.ch/${claimId}/${name}.${fileExt}`,
+    directFileUrl: `https://spee.ch/${claimId}/${name}.${fileExt}`,
   };
 }
 
@@ -40,6 +40,6 @@ module.exports = {
   },
   showFileLite (fileInfo, res) {
     const openGraphInfo = createOpenGraphInfo(fileInfo);
-    res.status(200).render('showLite', { layout: 'show', fileInfo, openGraphInfo });
+    res.status(200).render('showLite', { layout: 'showlite', fileInfo, openGraphInfo });
   },
 };

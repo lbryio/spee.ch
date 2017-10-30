@@ -1,13 +1,16 @@
-<div class="row">
-    <div class="column column--3">
+<div class="row row--padded row--wide">
+    <!--error display-->
+    <p id="input-error-claim-name" class="info-message-placeholder info-message--failure"  hidden="true"></p>
+    <!--url selection-->
+    <div class="column column--3 column--sml-10">
         <label class="label">URL:</label>
+    </div><div class="column column--7 column--sml-10 input-text--primary span--relative">
+            <span class="url-text--secondary">spee.ch /</span>
+            <span id="url-channel" class="url-text--secondary" {{#if user}}{{else}}hidden="true"{{/if}}>{{user.channelName}}:{{user.shortChannelId}}</span>
+            <span id="url-no-channel-placeholder" class="url-text--secondary tooltip" {{#if user}}hidden="true"{{else}}{{/if}}>xyz<span class="tooltip-text">This will be a random id</span></span>
+            <span id="url-channel-placeholder" class="url-text--secondary tooltip" hidden="true">@channel<span class="tooltip-text">Select a channel above</span></span> /
+            <input type="text" id="claim-name-input" class="input-text" placeholder="your-url-here" oninput="checkClaimName(event.target.value)">
+            <span id="input-success-claim-name" class="info-message--success span--absolute"></span>
     </div>
-    <div class="column column--9">
-        <div id="input-error-claim-name" class="info-message info-message--failure"  hidden="true"></div>
-        <div class="input-text--primary">
-            <span class="url-text">Spee.ch/</span><span id="url-channel" class="url-text">{{#if user}}{{user.channelName}}:{{user.shortChannelId}}/{{/if}}</span><input type="text" id="claim-name-input" class="input-text" placeholder="your-url-here" oninput="checkClaimName(event.target.value)">
-            <span id="input-success-claim-name" class="info-message info-message--success"></span>
-        </div>
 
-    </div>
 </div>

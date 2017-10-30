@@ -4,10 +4,10 @@ const multipartMiddleware = multipart();
 const db = require('../models');
 const { publish } = require('../controllers/publishController.js');
 const { getClaimList, resolveUri } = require('../helpers/lbryApi.js');
-const { createPublishParams, validateFile, checkClaimNameAvailability, checkChannelAvailability } = require('../helpers/publishHelpers.js');
+const { createPublishParams, validateApiPublishRequest, validatePublishSubmission, cleanseNSFW, cleanseChannelName, checkClaimNameAvailability, checkChannelAvailability } = require('../helpers/publishHelpers.js');
 const errorHandlers = require('../helpers/errorHandlers.js');
 const { postToStats, sendGoogleAnalytics } = require('../controllers/statsController.js');
-const { authenticateApiPublish } = require('../auth/authentication.js');
+const { authenticateChannelCredentials } = require('../auth/authentication.js');
 
 module.exports = (app) => {
   // route to run a claim_list request on the daemon
@@ -25,7 +25,7 @@ module.exports = (app) => {
     });
   });
   // route to check whether spee.ch has published to a claim
-  app.get('/api/isClaimAvailable/:name', ({ ip, originalUrl, params }, res) => {
+  app.get('/api/isClaimAvailable/:name', ({ params }, res) => {
     // send response
     checkClaimNameAvailability(params.name)
     .then(result => {
@@ -71,52 +71,79 @@ module.exports = (app) => {
     });
   });
   // route to run a publish request on the daemon
-  app.post('/api/publish', multipartMiddleware, ({ body, files, headers, ip, originalUrl }, res) => {
-    // google analytics
-    sendGoogleAnalytics('PUBLISH', headers, ip, originalUrl);
-    // validate that a file was provided
-    const file = files.speech || files.null;
-    const name = body.name || file.name.substring(0, file.name.indexOf('.'));
-    const title = body.title || null;
-    const description = body.description || null;
-    const license = body.license || 'No License Provided';
-    const nsfw = body.nsfw || null;
-    const channelName = body.channelName || 'none';
-    const channelPassword = body.channelPassword || null;
-    logger.debug(`name: ${name}, license: ${license}, nsfw: ${nsfw}`);
+  app.post('/api/publish', multipartMiddleware, (req, res) => {
+    logger.debug('req:', req);
+    // validate that mandatory parts of the request are present
+    const body = req.body;
+    const files = req.files;
     try {
-      validateFile(file, name, license, nsfw);
+      validateApiPublishRequest(body, files);
     } catch (error) {
-      postToStats('publish', originalUrl, ip, null, null, error.message);
-      logger.debug('rejected >>', error.message);
-      res.status(400).send(error.message);
+      logger.debug('publish request rejected, insufficient request parameters');
+      res.status(400).json({success: false, message: error.message});
       return;
     }
+    // validate file, name, license, and nsfw
+    const file = files.file;
     const fileName = file.name;
     const filePath = file.path;
     const fileType = file.type;
-    // channel authorization
-    authenticateApiPublish(channelName, channelPassword)
+    const name = body.name;
+    let nsfw = body.nsfw;
+    nsfw = cleanseNSFW(nsfw);  // cleanse nsfw
+    try {
+      validatePublishSubmission(file, name, nsfw);
+    } catch (error) {
+      logger.debug('publish request rejected');
+      res.status(400).json({success: false, message: error.message});
+      return;
+    }
+    logger.debug(`name: ${name}, nsfw: ${nsfw}`);
+    // optional inputs
+    const license = body.license || null;
+    const title = body.title || null;
+    const description = body.description || null;
+    const thumbnail = body.thumbnail || null;
+    let channelName = body.channelName || null;
+    channelName = cleanseChannelName(channelName);
+    const channelPassword = body.channelPassword || null;
+    logger.debug(`license: ${license} title: "${title}" description: "${description}" channelName: "${channelName}" channelPassword: "${channelPassword}"`);
+    // check channel authorization
+    authenticateChannelCredentials(channelName, channelPassword)
     .then(result => {
       if (!result) {
-        res.status(401).send('Authentication failed, you do not have access to that channel');
-        throw new Error('authentication failed');
+        throw new Error('Authentication failed, you do not have access to that channel');
       }
-      return createPublishParams(name, filePath, title, description, license, nsfw, channelName);
+      // make sure the claim name is available
+      return checkClaimNameAvailability(name);
     })
-    // create publish parameters object
+    .then(result => {
+      if (!result) {
+        throw new Error('That name is already in use by spee.ch.');
+      }
+      // create publish parameters object
+      return createPublishParams(filePath, name, title, description, license, nsfw, thumbnail, channelName);
+    })
     .then(publishParams => {
+      logger.debug('publishParams:', publishParams);
+      // publish the asset
       return publish(publishParams, fileName, fileType);
     })
-    // publish the asset
     .then(result => {
-      postToStats('publish', originalUrl, ip, null, null, 'success');
-      res.status(200).json(result);
+      res.status(200).json({
+        success: true,
+        message: {
+          url   : `spee.ch/${result.claim_id}/${name}`,
+          lbryTx: result,
+        },
+      });
     })
     .catch(error => {
       logger.error('publish api error', error);
+      res.status(400).json({success: false, message: error.message});
     });
   });
+
   // route to get a short claim id from long claim Id
   app.get('/api/shortClaimId/:longId/:name', ({ originalUrl, ip, params }, res) => {
     // serve content
@@ -134,7 +161,7 @@ module.exports = (app) => {
     // serve content
     db.getShortChannelIdFromLongChannelId(params.longId, params.name)
       .then(shortId => {
-        console.log('sending back short channel id', shortId);
+        logger.debug('sending back short channel id', shortId);
         res.status(200).json(shortId);
       })
       .catch(error => {
