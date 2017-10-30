@@ -1,11 +1,12 @@
 const axios = require('axios');
 const logger = require('winston');
 
-function handleResponse ({ data }, resolve, reject) {
-  logger.debug('handling lbry api response...');
+function handleLbrynetResponse ({ data }, resolve, reject) {
+  logger.debug('lbry api data:', data);
   if (data.result) {
     // check for an error
     if (data.result.error) {
+      logger.debug('Lbrynet api error:', data.result.error);
       reject(data.result.error);
       return;
     };
@@ -27,7 +28,7 @@ module.exports = {
           params: publishParams,
         })
         .then(response => {
-          handleResponse(response, resolve, reject);
+          handleLbrynetResponse(response, resolve, reject);
         })
         .catch(error => {
           reject(error);
@@ -43,7 +44,7 @@ module.exports = {
           params: { uri, timeout: 20 },
         })
         .then(response => {
-          handleResponse(response, resolve, reject);
+          handleLbrynetResponse(response, resolve, reject);
         })
         .catch(error => {
           reject(error);
@@ -59,7 +60,7 @@ module.exports = {
           params: { name: claimName },
         })
         .then(response => {
-          handleResponse(response, resolve, reject);
+          handleLbrynetResponse(response, resolve, reject);
         })
         .catch(error => {
           reject(error);
@@ -119,7 +120,7 @@ module.exports = {
         })
         .then(response => {
           logger.verbose('createChannel response:', response);
-          handleResponse(response, resolve, reject);
+          handleLbrynetResponse(response, resolve, reject);
         })
         .catch(error => {
           logger.error('createChannel error:', error);

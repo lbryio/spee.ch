@@ -6,13 +6,13 @@ module.exports = {
     logger.error(`Request Error: ${originalUrl}`, module.exports.useObjectPropertiesIfNoKeys(error));
     postToStats(action, originalUrl, ip, null, null, error);
     if (error.response) {
-      res.status(error.response.status).send(error.response.data.error.message);
+      res.status(error.response.status).render('requestError', {message: error.response.data.error.message, status: error.response.status});
     } else if (error.code === 'ECONNREFUSED') {
-      res.status(503).send('Connection refused.  The daemon may not be running.');
+      res.status(503).render('requestError', {message: 'Connection refused.  The daemon may not be running.', status: 503});
     } else if (error.message) {
-      res.status(400).send(error.message);
+      res.status(500).render('requestError', {message: error.message, status: 500});
     } else {
-      res.status(400).send(error);
+      res.status(400).render('requestError', {message: error, status: 400});
     }
   },
   handlePublishError (error) {
