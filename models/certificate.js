@@ -1,4 +1,5 @@
 const logger = require('winston');
+const NO_CHANNEL = 'NO_CHANNEL';
 
 function sortResult (result, longId) {
   let claimIndex;
@@ -24,7 +25,7 @@ function sortResult (result, longId) {
   return shortId;
 }
 
-module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, ARRAY, DECIMAL, DOUBLE }) => {
+module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, ARRAY, DECIMAL, DOUBLE, Op }) => {
   const Certificate = sequelize.define(
     'Certificate',
     {
@@ -143,6 +144,67 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, ARRAY, DECIMAL, D
           reject(error);
         });
     });
+  };
+
+  // sequelize.query(`SELECT claimId, height FROM Certificate WHERE name = '${channelName}' AND claimId LIKE '${channelId}%' ORDER BY height ASC LIMIT 1;`, { type: db.sequelize.QueryTypes.SELECT })
+  Certificate.getLongChannelIdFromShortChannelId = function (channelName, channelId) {
+    return new Promise((resolve, reject) => {
+      this
+        .findAll({
+          where: {
+            name   : channelName,
+            claimId: {
+              [Op.like]: `${channelId}%`,
+            },
+            order: [['height', 'ASC']],
+          },
+        })
+        .then(result => {
+          switch (result.length) {
+            case 0:
+              return resolve(NO_CHANNEL);
+            default: // note results must be sorted
+              return resolve(result[0].claimId);
+          }
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  };
+
+  // sequelize.query(`SELECT claimId, amount, height FROM Certificate WHERE name = '${channelName}' ORDER BY effectiveAmount DESC, height ASC LIMIT 1;`, { type: db.sequelize.QueryTypes.SELECT })
+  Certificate.getLongChannelIdFromChannelName = function (channelName) {
+    logger.debug(`getLongChannelIdFromChannelName(${channelName})`);
+    return new Promise((resolve, reject) => {
+      this
+        .findAll({
+          where: { name: channelName },
+          order: [['effectiveAmount', 'DESC'], ['height', 'ASC']],
+        })
+        .then(result => {
+          switch (result.length) {
+            case 0:
+              return resolve(NO_CHANNEL);
+            default:
+              return resolve(result[0].claimId);
+          }
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  };
+
+  Certificate.getLongChannelId = function (channelName, channelId) {
+    logger.debug(`getLongChannelId(${channelName}, ${channelId})`);
+    if (channelId && (channelId.length === 40)) {  // if a full channel id is provided
+      return new Promise((resolve, reject) => resolve(channelId));
+    } else if (channelId && channelId.length < 40) {  // if a short channel id is provided
+      return this.getLongChannelIdFromShortChannelId(channelName, channelId);
+    } else {
+      return this.getLongChannelIdFromChannelName(channelName);  // if no channel id provided
+    }
   };
 
   return Certificate;

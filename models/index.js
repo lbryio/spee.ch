@@ -6,8 +6,6 @@ const config = require('config');
 const db = {};
 const logger = require('winston');
 
-const NO_CHANNEL = 'NO_CHANNEL';
-
 const database = config.get('Database.Database');
 const username = config.get('Database.Username');
 const password = config.get('Database.Password');
@@ -23,43 +21,6 @@ const sequelize = new Sequelize(database, username, password, {
     acquire: 10000,
   },
 });
-
-function getLongChannelIdFromShortChannelId (channelName, channelId) {
-  return new Promise((resolve, reject) => {
-    db
-      .sequelize.query(`SELECT claimId, height FROM Certificate WHERE name = '${channelName}' AND claimId LIKE '${channelId}%' ORDER BY height ASC LIMIT 1;`, { type: db.sequelize.QueryTypes.SELECT })
-      .then(result => {
-        switch (result.length) {
-          case 0:
-            return resolve(NO_CHANNEL);
-          default: // note results must be sorted
-            return resolve(result[0].claimId);
-        }
-      })
-      .catch(error => {
-        reject(error);
-      });
-  });
-}
-
-function getLongChannelIdFromChannelName (channelName) {
-  logger.debug(`getLongChannelIdFromChannelName(${channelName})`);
-  return new Promise((resolve, reject) => {
-    db
-      .sequelize.query(`SELECT claimId, amount, height FROM Certificate WHERE name = '${channelName}' ORDER BY effectiveAmount DESC, height ASC LIMIT 1;`, { type: db.sequelize.QueryTypes.SELECT })
-      .then(result => {
-        switch (result.length) {
-          case 0:
-            return resolve(NO_CHANNEL);
-          default:
-            return resolve(result[0].claimId);
-        }
-      })
-      .catch(error => {
-        reject(error);
-      });
-  });
-}
 
 sequelize
   .authenticate()
@@ -133,17 +94,6 @@ db['resolveClaim'] = (name, claimId) => {
         reject(error);
       });
   });
-};
-
-db['getLongChannelId'] = (channelName, channelId) => {
-  logger.debug(`getLongChannelId (${channelName}, ${channelId})`);
-  if (channelId && (channelId.length === 40)) {  // if a full channel id is provided
-    return new Promise((resolve, reject) => resolve(channelId));
-  } else if (channelId && channelId.length < 40) {  // if a short channel id is provided
-    return getLongChannelIdFromShortChannelId(channelName, channelId);
-  } else {
-    return getLongChannelIdFromChannelName(channelName);  // if no channel id provided
-  }
 };
 
 module.exports = db;
