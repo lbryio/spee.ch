@@ -7,11 +7,11 @@ const db = {};
 const logger = require('winston');
 
 const NO_CHANNEL = 'NO_CHANNEL';
-const NO_CLAIM = 'NO_CLAIM';
 
 const database = config.get('Database.Database');
 const username = config.get('Database.Username');
 const password = config.get('Database.Password');
+
 const sequelize = new Sequelize(database, username, password, {
   host   : 'localhost',
   dialect: 'mysql',
@@ -23,43 +23,6 @@ const sequelize = new Sequelize(database, username, password, {
     acquire: 10000,
   },
 });
-
-function getLongClaimIdFromShortClaimId (name, shortId) {
-  return new Promise((resolve, reject) => {
-    db
-      .sequelize.query(`SELECT claimId FROM Claim WHERE name = '${name}' AND claimId LIKE '${shortId}%' ORDER BY height ASC LIMIT 1;`, { type: db.sequelize.QueryTypes.SELECT })
-      .then(result => {
-        switch (result.length) {
-          case 0:
-            return resolve(NO_CLAIM);
-          default: // note results must be sorted
-            return resolve(result[0].claimId);
-        }
-      })
-      .catch(error => {
-        reject(error);
-      });
-  });
-}
-
-function getTopFreeClaimIdByClaimName (name) {
-  return new Promise((resolve, reject) => {
-    db
-      .sequelize.query(`SELECT claimId FROM Claim WHERE name = '${name}' ORDER BY effectiveAmount DESC, height ASC LIMIT 1`, { type: db.sequelize.QueryTypes.SELECT })
-      .then(result => {
-        logger.debug('getTopFreeClaimIdByClaimName result:', result);
-        switch (result.length) {
-          case 0:
-            return resolve(NO_CLAIM);
-          default:
-            return resolve(result[0].claimId);
-        }
-      })
-      .catch(error => {
-        reject(error);
-      });
-  });
-};
 
 function getLongChannelIdFromShortChannelId (channelName, channelId) {
   return new Promise((resolve, reject) => {
@@ -170,17 +133,6 @@ db['resolveClaim'] = (name, claimId) => {
         reject(error);
       });
   });
-};
-
-db['getLongClaimId'] = (claimName, claimId) => {
-  logger.debug(`getLongClaimId(${claimName}, ${claimId})`);
-  if (claimId && (claimId.length === 40)) {  // if a full claim id is provided
-    return new Promise((resolve, reject) => resolve(claimId));
-  } else if (claimId && claimId.length < 40) {
-    return getLongClaimIdFromShortClaimId(claimName, claimId);  // if a short claim id is provided
-  } else {
-    return getTopFreeClaimIdByClaimName(claimName);  // if no claim id is provided
-  }
 };
 
 db['getLongChannelId'] = (channelName, channelId) => {

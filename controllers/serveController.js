@@ -112,7 +112,7 @@ module.exports = {
   getAssetByClaim (claimName, claimId) {
     logger.debug(`getAssetByClaim(${claimName}, ${claimId})`);
     return new Promise((resolve, reject) => {
-      db.getLongClaimId(claimName, claimId) // 1. get the long claim id
+      db.Claim.getLongClaimId(claimName, claimId) // 1. get the long claim id
         .then(result => {  // 2. get the asset using the long claim id
           logger.debug('long claim id ===', result);
           if (result === NO_CLAIM) {

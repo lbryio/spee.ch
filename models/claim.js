@@ -25,7 +25,7 @@ function sortResult (result, longId) {
   return shortId;
 }
 
-module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, ARRAY, DECIMAL, DOUBLE }) => {
+module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, ARRAY, DECIMAL, DOUBLE, Op }) => {
   const Claim = sequelize.define(
     'Claim',
     {
@@ -228,7 +228,7 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, ARRAY, DECIMAL, D
   Claim.getClaimIdByLongChannelId = function (channelId, claimName) {
     logger.debug(`finding claim id for claim ${claimName} from channel ${channelId}`);
     return new Promise((resolve, reject) => {
-      Claim
+      this
         .findAll({
           where: { name: claimName, certificateId: channelId },
           order: [['id', 'ASC']],
@@ -248,6 +248,65 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, ARRAY, DECIMAL, D
           reject(error);
         });
     });
+  };
+
+    // sequelize.query(`SELECT claimId FROM Claim WHERE name = '${name}' AND claimId LIKE '${shortId}%' ORDER BY height ASC LIMIT 1;`, { type: db.sequelize.QueryTypes.SELECT })
+  Claim.getLongClaimIdFromShortClaimId = function (name, shortId) {
+    return new Promise((resolve, reject) => {
+      this
+        .findAll({
+          where: {
+            name,
+            claimId: {
+              [Op.like]: `${shortId}%`,
+            }},
+          order: [['height', 'ASC']],
+        })
+        .then(result => {
+          switch (result.length) {
+            case 0:
+              return resolve(NO_CLAIM);
+            default: // note results must be sorted
+              return resolve(result[0].claimId);
+          }
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  };
+
+  Claim.getTopFreeClaimIdByClaimName = function (name) {
+    return new Promise((resolve, reject) => {
+      this
+        .findAll({
+          where: { name },
+          order: [['effectiveAmount', 'DESC'], ['height', 'ASC']],  // note: maybe height and effective amount need to switch?
+        })
+        .then(result => {
+          switch (result.length) {
+            case 0:
+              return resolve(NO_CLAIM);
+            default:
+              logger.debug('getTopFreeClaimIdByClaimName result:', result);
+              return resolve(result[0].claimId);
+          }
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  };
+
+  Claim.getLongClaimId = function (claimName, claimId) {
+    logger.debug(`getLongClaimId(${claimName}, ${claimId})`);
+    if (claimId && (claimId.length === 40)) {  // if a full claim id is provided
+      return new Promise((resolve, reject) => resolve(claimId));
+    } else if (claimId && claimId.length < 40) {
+      return this.getLongClaimIdFromShortClaimId(claimName, claimId);  // if a short claim id is provided
+    } else {
+      return this.getTopFreeClaimIdByClaimName(claimName);  // if no claim id is provided
+    }
   };
 
   return Claim;
