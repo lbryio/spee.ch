@@ -209,25 +209,6 @@ db['getClaimIdByLongChannelId'] = (channelId, claimName) => {
   });
 };
 
-db['getAllChannelClaims'] = (channelId) => {
-  return new Promise((resolve, reject) => {
-    logger.debug(`finding all claims in channel "${channelId}"`);
-    db
-      .sequelize.query(`SELECT name, claimId, outpoint, height, address, contentType, title, description, license, thumbnail FROM Claim WHERE certificateId = '${channelId}' ORDER BY height DESC;`, { type: db.sequelize.QueryTypes.SELECT })
-      .then(result => {
-        switch (result.length) {
-          case 0:
-            return resolve(null);
-          default:
-            return resolve(result);
-        }
-      })
-      .catch(error => {
-        reject(error);
-      });
-  });
-};
-
 db['getLongClaimId'] = (claimName, claimId) => {
   logger.debug(`getLongClaimId(${claimName}, ${claimId})`);
   if (claimId && (claimId.length === 40)) {  // if a full claim id is provided

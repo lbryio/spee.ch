@@ -181,11 +181,11 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, ARRAY, DECIMAL, D
   };
 
   Claim.getShortClaimIdFromLongClaimId = function (claimId, claimName) {
+    logger.debug(`Claim.getShortClaimIdFromLongClaimId for ${claimId}#${claimId}`);
     return new Promise((resolve, reject) => {
-      logger.debug(`finding short claim id for ${claimId}#${claimId}`);
       this
         .findAll({
-          where: {name: claimName},
+          where: { name: claimName },
           order: [['height', 'ASC']],
         })
         .then(result => {
@@ -194,6 +194,28 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, ARRAY, DECIMAL, D
               throw new Error('That is an invalid claim name');
             default:
               resolve(sortResult(result, claimId));
+          }
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  };
+
+  Claim.getAllChannelClaims = function (channelId) {
+    logger.debug(`Claim.getAllChannelClaims for ${channelId}`);
+    return new Promise((resolve, reject) => {
+      this
+        .findAll({
+          where: { certificateId: channelId },
+          order: [['height', 'ASC']],
+        })
+        .then(result => {
+          switch (result.length) {
+            case 0:
+              return resolve(null);
+            default:
+              return resolve(result);
           }
         })
         .catch(error => {

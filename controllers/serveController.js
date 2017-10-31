@@ -168,7 +168,7 @@ module.exports = {
             return NO_CHANNEL;
           }
           shortChannelId = result;
-          return db.getAllChannelClaims(longChannelId);
+          return db.Claim.getAllChannelClaims(longChannelId);
         })
         .then(result => {  // 4. add extra data not available from Claim table
           if (result === NO_CHANNEL) {
