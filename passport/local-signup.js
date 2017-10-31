@@ -54,7 +54,7 @@ module.exports = new PassportLocalStrategy(
       })
       .then(() => {
         logger.verbose('user and certificate successfully associated');
-        return db.getShortChannelIdFromLongChannelId(userInfo.channelClaimId, userInfo.channelName);
+        return db.Certificate.getShortChannelIdFromLongChannelId(userInfo.channelClaimId, userInfo.channelName);
       })
       .then(shortChannelId => {
         userInfo['shortChannelId'] = shortChannelId;

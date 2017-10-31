@@ -28,7 +28,7 @@ module.exports = {
     .then(channel => {
       userInfo['channelName'] = channel.channelName;
       userInfo['channelClaimId'] = channel.channelClaimId;
-      return db.getShortChannelIdFromLongChannelId(channel.channelClaimId, channel.channelName);
+      return db.Certificate.getShortChannelIdFromLongChannelId(channel.channelClaimId, channel.channelName);
     })
     .then(shortChannelId => {
       userInfo['shortChannelId'] = shortChannelId;

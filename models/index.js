@@ -24,30 +24,6 @@ const sequelize = new Sequelize(database, username, password, {
   },
 });
 
-function sortResult (result, longId) {
-  let claimIndex;
-  let shortId = longId.substring(0, 1); // default sort id is the first letter
-  let shortIdLength = 0;
-  // find the index of this certificate
-  claimIndex = result.findIndex(element => {
-    return element.claimId === longId;
-  });
-  if (claimIndex < 0) { throw new Error('claimid not found in possible sorted list') }
-  // get an array of all certificates with lower height
-  let possibleMatches = result.slice(0, claimIndex);
-  // remove certificates with the same prefixes until none are left.
-  while (possibleMatches.length > 0) {
-    shortIdLength += 1;
-    shortId = longId.substring(0, shortIdLength);
-    possibleMatches = possibleMatches.filter(element => {
-      return (element.claimId.substring(0, shortIdLength) === shortId);
-    });
-  }
-  // return the short Id
-  logger.debug('short channel id ===', shortId);
-  return shortId;
-}
-
 function getLongClaimIdFromShortClaimId (name, shortId) {
   return new Promise((resolve, reject) => {
     db
@@ -174,44 +150,6 @@ db['getTrendingClaims'] = (startDate) => {
 
 db['getRecentClaims'] = () => {
   return db.sequelize.query(`SELECT * FROM File WHERE nsfw != 1 AND trendingEligible = 1 ORDER BY createdAt DESC LIMIT 25;`, { type: db.sequelize.QueryTypes.SELECT });
-};
-
-db['getShortClaimIdFromLongClaimId'] = (claimId, claimName) => {
-  return new Promise((resolve, reject) => {
-    logger.debug('finding short channel id');
-    db
-      .sequelize.query(`SELECT claimId, height FROM Claim WHERE name = '${claimName}' ORDER BY height;`, { type: db.sequelize.QueryTypes.SELECT })
-      .then(result => {
-        switch (result.length) {
-          case 0:
-            throw new Error('That is an invalid claim name');
-          default:
-            return resolve(sortResult(result, claimId));
-        }
-      })
-      .catch(error => {
-        reject(error);
-      });
-  });
-};
-
-db['getShortChannelIdFromLongChannelId'] = (longChannelId, channelName) => {
-  return new Promise((resolve, reject) => {
-    logger.debug(`finding short channel id for ${longChannelId} ${channelName}`);
-    db
-      .sequelize.query(`SELECT claimId, height FROM Certificate WHERE name = '${channelName}' ORDER BY height;`, { type: db.sequelize.QueryTypes.SELECT })
-      .then(result => {
-        switch (result.length) {
-          case 0:
-            throw new Error('That is an invalid channel name');
-          default:
-            return resolve(sortResult(result, longChannelId));
-        }
-      })
-      .catch(error => {
-        reject(error);
-      });
-  });
 };
 
 db['getAllFreeClaims'] = (name) => {

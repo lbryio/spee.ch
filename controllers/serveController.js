@@ -114,7 +114,7 @@ module.exports = {
     return new Promise((resolve, reject) => {
       db.getLongClaimId(claimName, claimId) // 1. get the long claim id
         .then(result => {  // 2. get the asset using the long claim id
-          logger.debug('getLongClaimId result:', result);
+          logger.debug('long claim id ===', result);
           if (result === NO_CLAIM) {
             logger.debug('resolving NO_CLAIM');
             resolve(NO_CLAIM);
@@ -161,7 +161,7 @@ module.exports = {
             return NO_CHANNEL;
           }
           longChannelId = result;
-          return db.getShortChannelIdFromLongChannelId(longChannelId, channelName);
+          return db.Certificate.getShortChannelIdFromLongChannelId(longChannelId, channelName);
         })
         .then(result => {  // 3. get all Claim records for this channel
           if (result === NO_CHANNEL) {
@@ -216,7 +216,7 @@ module.exports = {
         showFileLite(fileInfo, res);
         return fileInfo;
       case SHOW:
-        return db
+        return db.Claim
           .getShortClaimIdFromLongClaimId(fileInfo.claimId, fileInfo.name)
           .then(shortId => {
             fileInfo['shortId'] = shortId;
