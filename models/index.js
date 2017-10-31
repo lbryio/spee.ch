@@ -31,6 +31,7 @@ sequelize
     logger.error('Sequelize was unable to connect to the database:', err);
   });
 
+// add each model to the db object
 fs
   .readdirSync(__dirname)
   .filter(file => {
@@ -41,6 +42,7 @@ fs
     db[model.name] = model;
   });
 
+// run model.association for each model in the db object that has an association
 Object.keys(db).forEach(modelName => {
   if (db[modelName].associate) {
     logger.info('Associating model:', modelName);
@@ -51,15 +53,15 @@ Object.keys(db).forEach(modelName => {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
-db['upsert'] = (Model, values, condition, tableName) => {
+db.upsert = (Model, values, condition, tableName) => {
   return Model
     .findOne({ where: condition })
-    .then(function (obj) {
+    .then(obj => {
       if (obj) {  // update
-        logger.debug(`updating "${values.name}" "${values.claimId}" in db.${tableName}`);
+        logger.debug(`updating record in db.${tableName}`);
         return obj.update(values);
       } else {  // insert
-        logger.debug(`creating "${values.name}" "${values.claimId}" in db.${tableName}`);
+        logger.debug(`creating record in db.${tableName}`);
         return Model.create(values);
       }
     })
@@ -68,32 +70,12 @@ db['upsert'] = (Model, values, condition, tableName) => {
     });
 };
 
-db['getTrendingClaims'] = (startDate) => {
+db.getTrendingClaims = (startDate) => {
   return db.sequelize.query(`SELECT COUNT(*), File.* FROM Request LEFT JOIN File ON Request.FileId = File.id WHERE FileId IS NOT NULL AND nsfw != 1 AND trendingEligible = 1 AND Request.createdAt > "${startDate}" GROUP BY FileId ORDER BY COUNT(*) DESC LIMIT 25;`, { type: db.sequelize.QueryTypes.SELECT });
 };
 
-db['getRecentClaims'] = () => {
+db.getRecentClaims = () => {
   return db.sequelize.query(`SELECT * FROM File WHERE nsfw != 1 AND trendingEligible = 1 ORDER BY createdAt DESC LIMIT 25;`, { type: db.sequelize.QueryTypes.SELECT });
-};
-
-db['resolveClaim'] = (name, claimId) => {
-  return new Promise((resolve, reject) => {
-    db
-      .sequelize.query(`SELECT name, claimId, outpoint, height, address, title, description, thumbnail, certificateId, channelName FROM Claim WHERE name = '${name}' AND claimId = '${claimId}'`, { type: db.sequelize.QueryTypes.SELECT })
-      .then(result => {
-        switch (result.length) {
-          case 0:
-            return resolve(null);
-          case 1:
-            return resolve(result[0]);
-          default:
-            throw new Error('more than one entry matches that name and claimID');
-        }
-      })
-      .catch(error => {
-        reject(error);
-      });
-  });
 };
 
 module.exports = db;

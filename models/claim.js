@@ -309,5 +309,29 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, ARRAY, DECIMAL, D
     }
   };
 
+  // sequelize.query(`SELECT name, claimId, outpoint, height, address, title, description, thumbnail, certificateId, channelName FROM Claim WHERE name = '${name}' AND claimId = '${claimId}'`, { type: db.sequelize.QueryTypes.SELECT })
+  Claim.resolveClaim = function (name, claimId) {
+    return new Promise((resolve, reject) => {
+      this
+        .findAll({
+          where: { name, claimId },
+        })
+        .then(result => {
+          switch (result.length) {
+            case 0:
+              return resolve(null);
+            case 1:
+              return resolve(result[0]);
+            default:
+              logger.error('more than one entry matches that name and claimID');
+              return resolve(result[0]);
+          }
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  };
+
   return Claim;
 };
