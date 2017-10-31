@@ -152,24 +152,6 @@ db['getRecentClaims'] = () => {
   return db.sequelize.query(`SELECT * FROM File WHERE nsfw != 1 AND trendingEligible = 1 ORDER BY createdAt DESC LIMIT 25;`, { type: db.sequelize.QueryTypes.SELECT });
 };
 
-db['getAllFreeClaims'] = (name) => {
-  return new Promise((resolve, reject) => {
-    db
-      .sequelize.query(`SELECT name, claimId, outpoint, height, address FROM Claim WHERE name = '${name}' ORDER BY amount DESC, height ASC`, { type: db.sequelize.QueryTypes.SELECT })
-      .then(result => {
-        switch (result.length) {
-          case 0:
-            return resolve(null);
-          default:
-            return resolve(result);
-        }
-      })
-      .catch(error => {
-        reject(error);
-      });
-  });
-};
-
 db['resolveClaim'] = (name, claimId) => {
   return new Promise((resolve, reject) => {
     db
@@ -182,25 +164,6 @@ db['resolveClaim'] = (name, claimId) => {
             return resolve(result[0]);
           default:
             throw new Error('more than one entry matches that name and claimID');
-        }
-      })
-      .catch(error => {
-        reject(error);
-      });
-  });
-};
-
-db['getClaimIdByLongChannelId'] = (channelId, claimName) => {
-  return new Promise((resolve, reject) => {
-    logger.debug(`finding claim id for claim "${claimName}" from channel "${channelId}"`);
-    db
-      .sequelize.query(`SELECT claimId FROM Claim WHERE name = '${claimName}' AND certificateId = '${channelId}' LIMIT 1;`, { type: db.sequelize.QueryTypes.SELECT })
-      .then(result => {
-        switch (result.length) {
-          case 0:
-            return resolve(NO_CLAIM);
-          default:
-            return resolve(result[0].claimId);
         }
       })
       .catch(error => {

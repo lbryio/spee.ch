@@ -136,7 +136,7 @@ module.exports = {
             resolve(NO_CHANNEL);
             return;
           }
-          return db.getClaimIdByLongChannelId(result, claimName);
+          return db.Claim.getClaimIdByLongChannelId(result, claimName);
         })
         .then(result => { // 3. get the asset using the long claim id
           logger.debug('asset claim id =', result);

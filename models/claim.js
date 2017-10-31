@@ -1,4 +1,5 @@
 const logger = require('winston');
+const NO_CLAIM = 'NO_CLAIM';
 
 function sortResult (result, longId) {
   let claimIndex;
@@ -216,6 +217,31 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, ARRAY, DECIMAL, D
               return resolve(null);
             default:
               return resolve(result);
+          }
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  };
+
+  Claim.getClaimIdByLongChannelId = function (channelId, claimName) {
+    logger.debug(`finding claim id for claim ${claimName} from channel ${channelId}`);
+    return new Promise((resolve, reject) => {
+      Claim
+        .findAll({
+          where: { name: claimName, certificateId: channelId },
+          order: [['id', 'ASC']],
+        })
+        .then(result => {
+          switch (result.length) {
+            case 0:
+              return resolve(NO_CLAIM);
+            case 1:
+              return resolve(result[0].claimId);
+            default:
+              logger.error(`${result.length} records found for ${claimName} from channel ${claimName}`);
+              return resolve(result[0].claimId);
           }
         })
         .catch(error => {
