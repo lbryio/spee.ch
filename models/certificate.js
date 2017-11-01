@@ -153,10 +153,10 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, ARRAY, DECIMAL, D
           where: {
             name   : channelName,
             claimId: {
-              [Op.like]: `${channelId}%`,
+              [sequelize.Op.like]: `${channelId}%`,
             },
-            order: [['height', 'ASC']],
           },
+          order: [['height', 'ASC']],
         })
         .then(result => {
           switch (result.length) {

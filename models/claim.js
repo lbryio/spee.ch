@@ -250,7 +250,6 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, ARRAY, DECIMAL, D
     });
   };
 
-    // sequelize.query(`SELECT claimId FROM Claim WHERE name = '${name}' AND claimId LIKE '${shortId}%' ORDER BY height ASC LIMIT 1;`, { type: db.sequelize.QueryTypes.SELECT })
   Claim.getLongClaimIdFromShortClaimId = function (name, shortId) {
     return new Promise((resolve, reject) => {
       this
@@ -258,7 +257,7 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, ARRAY, DECIMAL, D
           where: {
             name,
             claimId: {
-              [Op.like]: `${shortId}%`,
+              [sequelize.Op.like]: `${shortId}%`,
             }},
           order: [['height', 'ASC']],
         })
