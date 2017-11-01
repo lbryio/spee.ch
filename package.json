@@ -44,8 +44,6 @@
     "sequelize": "^4.1.0",
     "sequelize-cli": "^3.0.0-3",
     "sleep": "^5.1.1",
-    "socket.io": "^2.0.1",
-    "socketio-file-upload": "^0.6.0",
     "universal-analytics": "^0.4.13",
     "winston": "^2.3.1",
     "winston-slack-webhook": "billbitt/winston-slack-webhook"

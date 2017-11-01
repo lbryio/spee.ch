@@ -72,7 +72,7 @@ module.exports = (app) => {
   });
   // route to run a publish request on the daemon
   app.post('/api/publish', multipartMiddleware, (req, res) => {
-    logger.debug('req:', req);
+    logger.debug('req:', req.body, req.files);
     // validate that mandatory parts of the request are present
     const body = req.body;
     const files = req.files;
@@ -89,8 +89,7 @@ module.exports = (app) => {
     const filePath = file.path;
     const fileType = file.type;
     const name = body.name;
-    let nsfw = body.nsfw;
-    nsfw = cleanseNSFW(nsfw);  // cleanse nsfw
+    const nsfw = cleanseNSFW(body.nsfw);  // cleanse nsfw input
     try {
       validatePublishSubmission(file, name, nsfw);
     } catch (error) {
@@ -107,7 +106,7 @@ module.exports = (app) => {
     let channelName = body.channelName || null;
     channelName = cleanseChannelName(channelName);
     const channelPassword = body.channelPassword || null;
-    logger.debug(`license: ${license} title: "${title}" description: "${description}" channelName: "${channelName}" channelPassword: "${channelPassword}"`);
+    logger.debug(`license: ${license} title: "${title}" description: "${description}" channelName: "${channelName}" channelPassword: "${channelPassword}" nsfw: "${nsfw}"`);
     // check channel authorization
     authenticateChannelCredentials(channelName, channelPassword)
     .then(result => {

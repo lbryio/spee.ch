@@ -51,15 +51,10 @@
     </div>
 </div>
 
-
-<script src="/socket.io/socket.io.js"></script>
-<script src="/siofu/client.js"></script>
 <script typ="text/javascript">
 
     checkCookie();
 
-    const socket = io();
-    const uploader = new SocketIOFileUpload(socket);
     let stagedFiles = null;
 
     const publishFormWrapper = document.getElementById('publish-form');
@@ -68,8 +63,7 @@
     const publishProgressBar = document.getElementById('publish-progress-bar');
     const uploadPercent = document.getElementById('upload-percent');
 
-	/* socketio-file-upload listeners */
-	uploader.addEventListener('start', function(event){
+	function uploadStarted (event){
 	    console.log('starting upload');
         addInputValuesToFileMetaData(event)
         // hide the publish tool
@@ -77,30 +71,29 @@
 		// show the progress status and animation
         showPublishStatus();
         showPublishProgressBar();
-	});
-	uploader.addEventListener('progress', function(event){
+	};
+	function uploadProgress (event){
 		var percent = event.bytesLoaded / event.file.size * 100;
         updatePublishStatus('<p>File is loading to server</p>')
 		updateUploadPercent(`<p class="blue">${percent.toFixed(2)}%</p>`)
-	});
-	/* socket.io message listeners */
-	socket.on('publish-update', function(msg){
+	};
+	function filePublishUpdate (msg) {
 		updatePublishStatus(`<p>${msg}</p>`);
         updateUploadPercent(`<p>Curious what magic is happening here? <a class="link--primary" target="blank" href="https://lbry.io/faq/what-is-lbry">Learn more.</a></p>`);
-	});
-	socket.on('publish-failure', function(msg){
+	};
+	function filePublishFailure (msg){
         updatePublishStatus('<p> --(✖╭╮✖)→ </p><p>' + JSON.stringify(msg) + '</p><strong>For help, post the above error text in the #speech channel on the <a class="link--primary" href="https://discord.gg/YjYbwhS" target="_blank">lbry discord</a></strong>');
 	    hidePublishProgressBar();
 	    hideUploadPercent();
-	});
-	socket.on('publish-complete', function(msg){
+	};
+	function filePublishComplete (msg) {
 		const showUrl = msg.result.claim_id + "/" + msg.name;
 		// update status
 		updatePublishStatus('<p>Your publish is complete! You are being redirected to it now.</p>');
         updateUploadPercent('<p><a class="link--primary" target="_blank" href="\' + showUrl + \'">If you do not get redirected, click here.</a></p>')
         // redirect the user
 		window.location.href = showUrl;
-	});
+	};
 
 	function hidePublishTools() {
         publishFormWrapper.setAttribute('class', 'hidden');

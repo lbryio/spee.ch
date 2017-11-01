@@ -11,9 +11,6 @@ module.exports = {
     if (!body.name) {
       throw new Error('no name field found in request');
     }
-    if (!body.nsfw) {
-      throw new Error('no nsfw field found in request');
-    }
     if (!files) {
       throw new Error('no files found in request');
     }
@@ -94,7 +91,7 @@ module.exports = {
       case '0':
         return false;
       default:
-        return null;
+        return false;
     }
   },
   cleanseChannelName (channelName) {
@@ -138,7 +135,8 @@ module.exports = {
         license,
         nsfw,
       },
-      claim_address: config.get('WalletConfig.LbryClaimAddress'),
+      claim_address : config.get('WalletConfig.LbryClaimAddress'),
+      change_address: config.get('WalletConfig.LbryChangeAddress'),
     };
     // add thumbnail to channel if video
     if (thumbnail !== null) {

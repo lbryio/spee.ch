@@ -81,7 +81,7 @@ function publishStagedFile(event) {
 	// validate, submit, and handle response
 	validateFilePublishSubmission(stagedFiles, claimName, channelName)
 		.then(() => {
-			uploader.submitFiles(stagedFiles);
+			publishFile(stagedFiles[0], claimName);
 		})
 		.catch(error => {
 			if (error.name === 'FileError') {
@@ -97,3 +97,36 @@ function publishStagedFile(event) {
 			return;
 		})
 };
+
+var publishFile = function (file, name) {
+    var uri = "/api/publish";
+    var xhr = new XMLHttpRequest();
+    var fd = new FormData();
+
+	console.log('publish file, file:', file);
+	console.log('publish file, name:', name);
+    fd.append('file', file);
+    fd.append('name', name);
+
+    xhr.upload.addEventListener("progress", function(e) {
+        if (e.lengthComputable) {
+            var percentage = Math.round((e.loaded * 100) / e.total);
+            console.log('progress:', percentage);
+        }
+    }, false);
+
+    xhr.upload.addEventListener("load", function(e){
+        console.log('loaded 100%');
+    }, false);
+
+    xhr.open("POST", uri, true);
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            alert(xhr.responseText); // handle response.
+        } else {
+        	console.log('xhr.readyState', xhr.readyState, 'xhr.status', xhr.status);
+		}
+    };
+    // Initiate a multipart/form-data upload
+    xhr.send(fd);
+}

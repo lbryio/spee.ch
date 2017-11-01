@@ -82,7 +82,8 @@ db.sequelize
     require('./routes/page-routes.js')(app);
     require('./routes/serve-routes.js')(app);
     require('./routes/home-routes.js')(app);
-    return require('./routes/sockets-routes.js')(app, siofu, hostedContentPath);
+    const http = require('http');
+    return http.Server(app);
   })
   .then(server => { // start the server
     server.listen(PORT, () => {
