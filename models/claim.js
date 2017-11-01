@@ -288,7 +288,7 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, ARRAY, DECIMAL, D
             case 0:
               return resolve(NO_CLAIM);
             default:
-              logger.debug('getTopFreeClaimIdByClaimName result:', result);
+              logger.debug('getTopFreeClaimIdByClaimName result:', result.dataValues);
               return resolve(result[0].claimId);
           }
         })
