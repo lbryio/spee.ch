@@ -97,7 +97,7 @@ module.exports = {
     logger.debug('retrieving most recent claims');
     return new Promise((resolve, reject) => {
       // get the raw requests data
-      db.getRecentClaims()
+      db.File.getRecentClaims()
       .then(results => {
         resolve(results);
       })

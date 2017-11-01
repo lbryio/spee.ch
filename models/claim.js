@@ -309,7 +309,6 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, ARRAY, DECIMAL, D
     }
   };
 
-  // sequelize.query(`SELECT name, claimId, outpoint, height, address, title, description, thumbnail, certificateId, channelName FROM Claim WHERE name = '${name}' AND claimId = '${claimId}'`, { type: db.sequelize.QueryTypes.SELECT })
   Claim.resolveClaim = function (name, claimId) {
     return new Promise((resolve, reject) => {
       this

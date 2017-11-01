@@ -64,7 +64,7 @@ function getAssetByLongClaimId (fullClaimId, name) {
       }
       logger.debug('no local file found for this name and claimId');
       // 2. if no local claim, resolve and get the claim
-      db
+      db.Claim
         .resolveClaim(name, fullClaimId)
         .then(resolveResult => {
           logger.debug('resolve result >> ', resolveResult);
@@ -130,7 +130,7 @@ module.exports = {
   getAssetByChannel (channelName, channelId, claimName) {
     logger.debug('getting asset by channel');
     return new Promise((resolve, reject) => {
-      db.getLongChannelId(channelName, channelId) // 1. get the long channel id
+      db.Certificate.getLongChannelId(channelName, channelId) // 1. get the long channel id
         .then(result => { // 2. get the long claim Id
           if (result === NO_CHANNEL) {
             resolve(NO_CHANNEL);
@@ -155,7 +155,7 @@ module.exports = {
     return new Promise((resolve, reject) => {
       let longChannelId;
       let shortChannelId;
-      db.getLongChannelId(channelName, channelId)  // 1. get the long channel Id
+      db.Certificate.getLongChannelId(channelName, channelId)  // 1. get the long channel Id
         .then(result => {  // 2. get all claims for that channel
           if (result === NO_CHANNEL) {
             return NO_CHANNEL;
@@ -220,7 +220,7 @@ module.exports = {
           .getShortClaimIdFromLongClaimId(fileInfo.claimId, fileInfo.name)
           .then(shortId => {
             fileInfo['shortId'] = shortId;
-            return db.resolveClaim(fileInfo.name, fileInfo.claimId);
+            return db.Claim.resolveClaim(fileInfo.name, fileInfo.claimId);
           })
           .then(resolveResult => {
             logger.debug('resolve result >>', resolveResult);

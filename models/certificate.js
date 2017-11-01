@@ -146,7 +146,6 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, ARRAY, DECIMAL, D
     });
   };
 
-  // sequelize.query(`SELECT claimId, height FROM Certificate WHERE name = '${channelName}' AND claimId LIKE '${channelId}%' ORDER BY height ASC LIMIT 1;`, { type: db.sequelize.QueryTypes.SELECT })
   Certificate.getLongChannelIdFromShortChannelId = function (channelName, channelId) {
     return new Promise((resolve, reject) => {
       this
@@ -173,7 +172,6 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, ARRAY, DECIMAL, D
     });
   };
 
-  // sequelize.query(`SELECT claimId, amount, height FROM Certificate WHERE name = '${channelName}' ORDER BY effectiveAmount DESC, height ASC LIMIT 1;`, { type: db.sequelize.QueryTypes.SELECT })
   Certificate.getLongChannelIdFromChannelName = function (channelName) {
     logger.debug(`getLongChannelIdFromChannelName(${channelName})`);
     return new Promise((resolve, reject) => {
