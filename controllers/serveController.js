@@ -67,7 +67,7 @@ function getAssetByLongClaimId (fullClaimId, name) {
       db.Claim
         .resolveClaim(name, fullClaimId)
         .then(resolveResult => {
-          logger.debug('resolve result >> ', resolveResult);
+          logger.debug('resolve result >> ', resolveResult.dataValues);
           // if no result, return early (claim doesn't exist or isn't free)
           if (!resolveResult) {
             resolve(NO_CLAIM);
@@ -223,7 +223,7 @@ module.exports = {
             return db.Claim.resolveClaim(fileInfo.name, fileInfo.claimId);
           })
           .then(resolveResult => {
-            logger.debug('resolve result >>', resolveResult);
+            logger.debug('resolve result >>', resolveResult.dataValues);
             fileInfo['thumbnail'] = chooseThumbnail(resolveResult, DEFAULT_THUMBNAIL);
             fileInfo['title'] = resolveResult.title;
             fileInfo['description'] = resolveResult.description;
