@@ -6,7 +6,7 @@ function drop_handler(event) {
     if (dt.items) {
         if (dt.items[0].kind == 'file') {
             var droppedFile = dt.items[0].getAsFile();
-            previewAndStageFile(droppedFile);
+            publishFileFunctions.previewAndStageFile(droppedFile);
         }
     }
 }

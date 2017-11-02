@@ -38,7 +38,7 @@ function validateFile(file) {
 
 // validation function that checks to make sure the claim name is valid
 function validateClaimName (name) {
-    console.log('claim name:', name);
+    console.log('validating the claim name');
     // ensure a name was entered
     if (name.length < 1) {
         throw new NameError("You must enter a name for your url");

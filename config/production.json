@@ -1,6 +1,6 @@
 {
 	"WalletConfig": {
-		"DefaultChannel": "@speech",
+		"DefaultChannel": "@speech"
 	},
 	"AnalyticsConfig":{
 		"GoogleId": "UA-60403362-3"

@@ -129,6 +129,7 @@ module.exports = (app) => {
       res.status(200).json({
         success: true,
         message: {
+          name,
           url   : `spee.ch/${result.claim_id}/${name}`,
           lbryTx: result,
         },
