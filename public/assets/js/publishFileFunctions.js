@@ -123,29 +123,28 @@ var publishFileFunctions = {
         var uri = "/api/publish";
         var xhr = new XMLHttpRequest();
         var fd = this.appendDataToFormData(file, metadata);
-        console.log('fd2:', fd);
         xhr.upload.addEventListener("loadstart", function(e) {
-            uploadStarted();
+            showUploadStartedMessage();
         })
         xhr.upload.addEventListener("progress", function(e) {
             if (e.lengthComputable) {
                 var percentage = Math.round((e.loaded * 100) / e.total);
                 console.log('progress:', percentage);
-                uploadProgress(percentage);
+                showUploadProgressMessage(percentage);
             }
         }, false);
         xhr.upload.addEventListener("load", function(e){
             console.log('loaded 100%');
-            filePublishUpdate("Your file has been loaded, and is now being published to the blockchain.  Sit tight...")
+            showFilePublishUpdate("Your file has been loaded, and is now being published to the blockchain.  Sit tight...")
         }, false);
         xhr.open("POST", uri, true);
         xhr.onreadystatechange = function() {
             if (xhr.readyState == 4) {
                 if (xhr.status == 200) {
                     alert(xhr.responseText); // handle response.
-                    filePublishComplete(xhr.responseText);
+                    showFilePublishComplete(xhr.responseText);
                 } else {
-                    filePublishFailure(xhr.responseText);
+                    showFilePublishFailure(xhr.responseText);
                 }
             } else {
                 console.log('xhr.readyState', xhr.readyState, 'xhr.status', xhr.status);
@@ -184,7 +183,7 @@ var publishFileFunctions = {
     },
 }
 
-function uploadStarted (){
+function showUploadStartedMessage (){
     console.log('starting upload');
     // hide the publish tool
     hidePublishTools();
@@ -192,27 +191,27 @@ function uploadStarted (){
     showPublishStatus();
     showPublishProgressBar();
 };
-function uploadProgress (percentage){
+function showUploadProgressMessage (percentage){
     updatePublishStatus('<p>File is loading to server</p>')
     updateUploadPercent(`<p class="blue">${percentage}%</p>`)
 };
-function filePublishUpdate (msg) {
+function showFilePublishUpdate (msg) {
     updatePublishStatus(`<p>${msg}</p>`);
     updateUploadPercent(`<p>Curious what magic is happening here? <a class="link--primary" target="blank" href="https://lbry.io/faq/what-is-lbry">Learn more.</a></p>`);
 };
-function filePublishFailure (msg){
+function showFilePublishFailure (msg){
     updatePublishStatus('<p> --(✖╭╮✖)→ </p><p>' + JSON.stringify(msg) + '</p><strong>For help, post the above error text in the #speech channel on the <a class="link--primary" href="https://discord.gg/YjYbwhS" target="_blank">lbry discord</a></strong>');
     hidePublishProgressBar();
     hideUploadPercent();
 };
-function filePublishComplete (msg) {
-    console.log('filePublishComplete message:', msg);
+function showFilePublishComplete (msg) {
+    console.log('Publish complete! message:', msg);
     const showUrl = msg.result.claim_id + "/" + msg.name;
     // update status
     updatePublishStatus('<p>Your publish is complete! You are being redirected to it now.</p>');
     updateUploadPercent('<p><a class="link--primary" target="_blank" href="\' + showUrl + \'">If you do not get redirected, click here.</a></p>')
     // redirect the user
-    window.location.href = showUrl;
+    // window.location.href = showUrl;
 };
 
 function hidePublishTools() {

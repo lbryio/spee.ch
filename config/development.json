@@ -1,7 +1,6 @@
 {
 	"WalletConfig": {
 		"DefaultChannel": "@speechDev",
-		"LbryChangeAddress": "bPsZ4wmrNUsn7gMP9cZ9G6RjM5RpuJAeTt"
 	},
 	"AnalyticsConfig":{
 		"GoogleId": "UA-100747990-1"

@@ -135,8 +135,7 @@ module.exports = {
         license,
         nsfw,
       },
-      claim_address : config.get('WalletConfig.LbryClaimAddress'),
-      change_address: config.get('WalletConfig.LbryChangeAddress'),
+      claim_address: config.get('WalletConfig.LbryClaimAddress'),
     };
     // add thumbnail to channel if video
     if (thumbnail !== null) {

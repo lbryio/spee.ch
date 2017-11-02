@@ -1,7 +1,6 @@
 {
 	"WalletConfig": {
 		"LbryClaimAddress": null,
-		"LbryChangeAddress": null,
 		"DefaultChannel": null
 	},
 	"AnalyticsConfig":{

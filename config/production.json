@@ -1,7 +1,6 @@
 {
 	"WalletConfig": {
 		"DefaultChannel": "@speech",
-		"LbryChangeAddress": null
 	},
 	"AnalyticsConfig":{
 		"GoogleId": "UA-60403362-3"
