@@ -12,9 +12,9 @@ var publishFileFunctions = {
         // When a file is selected for publish, validate that file and
         // stage it so it will be ready when the publish button is clicked
         try {
-            validateFile(selectedFile); // validate the file's name, type, and size
+            validationFunctions.validateFile(selectedFile); // validate the file's name, type, and size
         } catch (error) {
-            showError(fileSelectionInputError, error.message);
+            validationFunctions.showError(fileSelectionInputError, error.message);
             return;
         }
         // set image preview, if an image was provided
@@ -36,8 +36,8 @@ var publishFileFunctions = {
         const nameInput = document.getElementById('claim-name-input');
         if (nameInput.value === "") {
             var filename = selectedFile.name.substring(0, selectedFile.name.indexOf('.'))
-            nameInput.value = cleanseClaimName(filename);
-            checkClaimName(nameInput.value);
+            nameInput.value = validationFunctions.cleanseClaimName(filename);
+            validationFunctions.checkClaimName(nameInput.value);
         }
     },
     setImagePreview: function (selectedFile) {
@@ -99,7 +99,6 @@ var publishFileFunctions = {
         }
     },
     appendDataToFormData: function (file, metadata) {
-        console.log(metadata);
         var fd = new FormData();
         fd.append('file', file)
         for (var key in metadata) {
@@ -156,20 +155,20 @@ var publishFileFunctions = {
         const channelSelectError = document.getElementById('input-error-channel-select');
         const publishSubmitError = document.getElementById('input-error-publish-submit');
         // validate, submit, and handle response
-        validateFilePublishSubmission(stagedFiles, metadata)
+        validationFunctions.validateFilePublishSubmission(stagedFiles, metadata)
             .then( function() {
                 that.publishFile(stagedFiles[0], metadata);
             })
             .catch(error => {
                 if (error.name === 'FileError') {
-                    showError(fileSelectionInputError, error.message);
+                    validationFunctions.showError(fileSelectionInputError, error.message);
                 } else if (error.name === 'NameError') {
-                    showError(claimNameError, error.message);
+                    validationFunctions.showError(claimNameError, error.message);
                 } else if (error.name === 'ChannelNameError'){
                     console.log(error);
-                    showError(channelSelectError, error.message);
+                    validationFunctions.showError(channelSelectError, error.message);
                 } else {
-                    showError(publishSubmitError, error.message);
+                    validationFunctions.showError(publishSubmitError, error.message);
                 }
                 return;
             })

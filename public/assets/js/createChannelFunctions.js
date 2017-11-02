@@ -24,7 +24,7 @@ function publishNewChannel (event) {
     // prevent default so this script can handle submission
     event.preventDefault();
     // validate submission
-    validateNewChannelSubmission(userName, password)
+    validationFunctions.validateNewChannelSubmission(userName, password)
         .then(() => {
             showChannelCreateInProgressDisplay();
             return sendAuthRequest(userName, password, '/signup') // post the request
