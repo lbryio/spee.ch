@@ -21,7 +21,7 @@ module.exports = (app) => {
       res.status(200).json(claimsList);
     })
     .catch(error => {
-      errorHandlers.handleRequestError('publish', originalUrl, ip, error, res);
+      errorHandlers.handleApiError('claim_list', originalUrl, ip, error, res);
     });
   });
   // route to check whether spee.ch has published to a claim
@@ -67,15 +67,12 @@ module.exports = (app) => {
       res.status(200).json(resolvedUri);
     })
     .catch(error => {
-      errorHandlers.handleRequestError('publish', originalUrl, ip, error, res);
+      errorHandlers.handleApiError('resolve', originalUrl, ip, error, res);
     });
   });
   // route to run a publish request on the daemon
-  app.post('/api/publish', multipartMiddleware, (req, res) => {
-    logger.debug('req:', req.body, req.files);
+  app.post('/api/publish', multipartMiddleware, ({ body, files, ip, originalUrl }, res) => {
     // validate that mandatory parts of the request are present
-    const body = req.body;
-    const files = req.files;
     try {
       validateApiPublishRequest(body, files);
     } catch (error) {
@@ -138,8 +135,7 @@ module.exports = (app) => {
       });
     })
     .catch(error => {
-      logger.error('publish api error', error);
-      res.status(400).json({success: false, message: error.message});
+      errorHandlers.handleApiError('publish', originalUrl, ip, error, res);
     });
   });
 
@@ -157,7 +153,7 @@ module.exports = (app) => {
       });
   });
   // route to get a short channel id from long channel Id
-  app.get('/api/shortChannelId/:longId/:name', ({ params }, res) => {
+  app.get('/api/shortChannelId/:longId/:name', ({ ip, originalUrl, params }, res) => {
     // serve content
     db.Certificate.getShortChannelIdFromLongChannelId(params.longId, params.name)
       .then(shortId => {
@@ -166,7 +162,7 @@ module.exports = (app) => {
       })
       .catch(error => {
         logger.error('api error getting short channel id', error);
-        res.status(400).json(error.message);
+        errorHandlers.handleApiError('short channel id', originalUrl, ip, error, res);
       });
   });
 };

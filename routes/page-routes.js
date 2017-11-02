@@ -24,7 +24,7 @@ module.exports = (app) => {
   app.get('/trending', (req, res) => {
     res.status(301).redirect('/popular');
   });
-  app.get('/popular', (req, res) => {
+  app.get('/popular', ({ ip, originalUrl }, res) => {
     const startDate = new Date();
     startDate.setDate(startDate.getDate() - 1);
     const dateTime = startDate.toISOString().slice(0, 19).replace('T', ' ');
@@ -36,20 +36,18 @@ module.exports = (app) => {
         });
       })
       .catch(error => {
-        errorHandlers.handleRequestError(null, null, null, error, res);
+        errorHandlers.handleRequestError('popular', originalUrl, ip, error, res);
       });
   });
   // route to display a list of the trending images
-  app.get('/new', (req, res) => {
+  app.get('/new', ({ ip, originalUrl }, res) => {
     getRecentClaims()
       .then(result => {
         // logger.debug(result);
-        res.status(200).render('new', {
-          newClaims: result,
-        });
+        res.status(200).render('new', { newClaims: result });
       })
       .catch(error => {
-        errorHandlers.handleRequestError(null, null, null, error, res);
+        errorHandlers.handleRequestError('new', originalUrl, ip, error, res);
       });
   });
   // route to send embedable video player (for twitter)
