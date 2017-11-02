@@ -1,6 +1,3 @@
-function triggerFileChooser(fileInputId, event) {
-    document.getElementById(fileInputId).click();
-}
 
 function drop_handler(event) {
     event.preventDefault();

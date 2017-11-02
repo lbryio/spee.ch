@@ -38,6 +38,7 @@ function validateFile(file) {
 
 // validation function that checks to make sure the claim name is valid
 function validateClaimName (name) {
+    console.log('claim name:', name);
     // ensure a name was entered
     if (name.length < 1) {
         throw new NameError("You must enter a name for your url");
@@ -140,7 +141,9 @@ function checkChannelName(name){
 }
 
 // validation function which checks all aspects of the publish submission
-function validateFilePublishSubmission(stagedFiles, claimName, channelName){
+function validateFilePublishSubmission(stagedFiles, metadata){
+    const channelName = metadata.channelName;
+    const claimName = metadata.name;
     return new Promise(function (resolve, reject) {
         // 1. make sure 1 file was staged
         if (!stagedFiles) {
