@@ -147,7 +147,8 @@ module.exports = (app) => {
   // route to get a short claim id from long claim Id
   app.get('/api/shortClaimId/:longId/:name', ({ originalUrl, ip, params }, res) => {
     // serve content
-    db.getShortClaimIdFromLongClaimId(params.longId, params.name)
+    db.Claim
+      .getShortClaimIdFromLongClaimId(params.longId, params.name)
       .then(shortId => {
         res.status(200).json(shortId);
       })
@@ -159,7 +160,7 @@ module.exports = (app) => {
   // route to get a short channel id from long channel Id
   app.get('/api/shortChannelId/:longId/:name', ({ params }, res) => {
     // serve content
-    db.getShortChannelIdFromLongChannelId(params.longId, params.name)
+    db.Certificate.getShortChannelIdFromLongChannelId(params.longId, params.name)
       .then(shortId => {
         logger.debug('sending back short channel id', shortId);
         res.status(200).json(shortId);

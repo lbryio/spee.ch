@@ -1,4 +1,31 @@
-module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, ARRAY, DECIMAL, DOUBLE }) => {
+const logger = require('winston');
+const NO_CLAIM = 'NO_CLAIM';
+
+function sortResult (result, longId) {
+  let claimIndex;
+  let shortId = longId.substring(0, 1); // default sort id is the first letter
+  let shortIdLength = 0;
+  // find the index of this certificate
+  claimIndex = result.findIndex(element => {
+    return element.claimId === longId;
+  });
+  if (claimIndex < 0) { throw new Error('claimid not found in possible sorted list') }
+  // get an array of all certificates with lower height
+  let possibleMatches = result.slice(0, claimIndex);
+  // remove certificates with the same prefixes until none are left.
+  while (possibleMatches.length > 0) {
+    shortIdLength += 1;
+    shortId = longId.substring(0, shortIdLength);
+    possibleMatches = possibleMatches.filter(element => {
+      return (element.claimId.substring(0, shortIdLength) === shortId);
+    });
+  }
+  // return the short Id
+  logger.debug('short claim id ===', shortId);
+  return shortId;
+}
+
+module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, ARRAY, DECIMAL, DOUBLE, Op }) => {
   const Claim = sequelize.define(
     'Claim',
     {
@@ -151,6 +178,156 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, ARRAY, DECIMAL, D
       foreignKey: {
         allowNull: true,
       },
+    });
+  };
+
+  Claim.getShortClaimIdFromLongClaimId = function (claimId, claimName) {
+    logger.debug(`Claim.getShortClaimIdFromLongClaimId for ${claimId}#${claimId}`);
+    return new Promise((resolve, reject) => {
+      this
+        .findAll({
+          where: { name: claimName },
+          order: [['height', 'ASC']],
+        })
+        .then(result => {
+          switch (result.length) {
+            case 0:
+              throw new Error('That is an invalid claim name');
+            default:
+              resolve(sortResult(result, claimId));
+          }
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  };
+
+  Claim.getAllChannelClaims = function (channelId) {
+    logger.debug(`Claim.getAllChannelClaims for ${channelId}`);
+    return new Promise((resolve, reject) => {
+      this
+        .findAll({
+          where: { certificateId: channelId },
+          order: [['height', 'ASC']],
+        })
+        .then(result => {
+          switch (result.length) {
+            case 0:
+              return resolve(null);
+            default:
+              return resolve(result);
+          }
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  };
+
+  Claim.getClaimIdByLongChannelId = function (channelId, claimName) {
+    logger.debug(`finding claim id for claim ${claimName} from channel ${channelId}`);
+    return new Promise((resolve, reject) => {
+      this
+        .findAll({
+          where: { name: claimName, certificateId: channelId },
+          order: [['id', 'ASC']],
+        })
+        .then(result => {
+          switch (result.length) {
+            case 0:
+              return resolve(NO_CLAIM);
+            case 1:
+              return resolve(result[0].claimId);
+            default:
+              logger.error(`${result.length} records found for ${claimName} from channel ${claimName}`);
+              return resolve(result[0].claimId);
+          }
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  };
+
+  Claim.getLongClaimIdFromShortClaimId = function (name, shortId) {
+    return new Promise((resolve, reject) => {
+      this
+        .findAll({
+          where: {
+            name,
+            claimId: {
+              [sequelize.Op.like]: `${shortId}%`,
+            }},
+          order: [['height', 'ASC']],
+        })
+        .then(result => {
+          switch (result.length) {
+            case 0:
+              return resolve(NO_CLAIM);
+            default: // note results must be sorted
+              return resolve(result[0].claimId);
+          }
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  };
+
+  Claim.getTopFreeClaimIdByClaimName = function (name) {
+    return new Promise((resolve, reject) => {
+      this
+        .findAll({
+          where: { name },
+          order: [['effectiveAmount', 'DESC'], ['height', 'ASC']],  // note: maybe height and effective amount need to switch?
+        })
+        .then(result => {
+          switch (result.length) {
+            case 0:
+              return resolve(NO_CLAIM);
+            default:
+              logger.debug('getTopFreeClaimIdByClaimName result:', result.dataValues);
+              return resolve(result[0].claimId);
+          }
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  };
+
+  Claim.getLongClaimId = function (claimName, claimId) {
+    logger.debug(`getLongClaimId(${claimName}, ${claimId})`);
+    if (claimId && (claimId.length === 40)) {  // if a full claim id is provided
+      return new Promise((resolve, reject) => resolve(claimId));
+    } else if (claimId && claimId.length < 40) {
+      return this.getLongClaimIdFromShortClaimId(claimName, claimId);  // if a short claim id is provided
+    } else {
+      return this.getTopFreeClaimIdByClaimName(claimName);  // if no claim id is provided
+    }
+  };
+
+  Claim.resolveClaim = function (name, claimId) {
+    return new Promise((resolve, reject) => {
+      this
+        .findAll({
+          where: { name, claimId },
+        })
+        .then(result => {
+          switch (result.length) {
+            case 0:
+              return resolve(null);
+            case 1:
+              return resolve(result[0]);
+            default:
+              logger.error('more than one entry matches that name and claimID');
+              return resolve(result[0]);
+          }
+        })
+        .catch(error => {
+          reject(error);
+        });
     });
   };
 

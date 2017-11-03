@@ -64,10 +64,10 @@ function getAssetByLongClaimId (fullClaimId, name) {
       }
       logger.debug('no local file found for this name and claimId');
       // 2. if no local claim, resolve and get the claim
-      db
+      db.Claim
         .resolveClaim(name, fullClaimId)
         .then(resolveResult => {
-          logger.debug('resolve result >> ', resolveResult);
+          logger.debug('resolve result >> ', resolveResult.dataValues);
           // if no result, return early (claim doesn't exist or isn't free)
           if (!resolveResult) {
             resolve(NO_CLAIM);
@@ -112,9 +112,9 @@ module.exports = {
   getAssetByClaim (claimName, claimId) {
     logger.debug(`getAssetByClaim(${claimName}, ${claimId})`);
     return new Promise((resolve, reject) => {
-      db.getLongClaimId(claimName, claimId) // 1. get the long claim id
+      db.Claim.getLongClaimId(claimName, claimId) // 1. get the long claim id
         .then(result => {  // 2. get the asset using the long claim id
-          logger.debug('getLongClaimId result:', result);
+          logger.debug('long claim id ===', result);
           if (result === NO_CLAIM) {
             logger.debug('resolving NO_CLAIM');
             resolve(NO_CLAIM);
@@ -130,13 +130,13 @@ module.exports = {
   getAssetByChannel (channelName, channelId, claimName) {
     logger.debug('getting asset by channel');
     return new Promise((resolve, reject) => {
-      db.getLongChannelId(channelName, channelId) // 1. get the long channel id
+      db.Certificate.getLongChannelId(channelName, channelId) // 1. get the long channel id
         .then(result => { // 2. get the long claim Id
           if (result === NO_CHANNEL) {
             resolve(NO_CHANNEL);
             return;
           }
-          return db.getClaimIdByLongChannelId(result, claimName);
+          return db.Claim.getClaimIdByLongChannelId(result, claimName);
         })
         .then(result => { // 3. get the asset using the long claim id
           logger.debug('asset claim id =', result);
@@ -155,20 +155,20 @@ module.exports = {
     return new Promise((resolve, reject) => {
       let longChannelId;
       let shortChannelId;
-      db.getLongChannelId(channelName, channelId)  // 1. get the long channel Id
+      db.Certificate.getLongChannelId(channelName, channelId)  // 1. get the long channel Id
         .then(result => {  // 2. get all claims for that channel
           if (result === NO_CHANNEL) {
             return NO_CHANNEL;
           }
           longChannelId = result;
-          return db.getShortChannelIdFromLongChannelId(longChannelId, channelName);
+          return db.Certificate.getShortChannelIdFromLongChannelId(longChannelId, channelName);
         })
         .then(result => {  // 3. get all Claim records for this channel
           if (result === NO_CHANNEL) {
             return NO_CHANNEL;
           }
           shortChannelId = result;
-          return db.getAllChannelClaims(longChannelId);
+          return db.Claim.getAllChannelClaims(longChannelId);
         })
         .then(result => {  // 4. add extra data not available from Claim table
           if (result === NO_CHANNEL) {
@@ -216,14 +216,14 @@ module.exports = {
         showFileLite(fileInfo, res);
         return fileInfo;
       case SHOW:
-        return db
+        return db.Claim
           .getShortClaimIdFromLongClaimId(fileInfo.claimId, fileInfo.name)
           .then(shortId => {
             fileInfo['shortId'] = shortId;
-            return db.resolveClaim(fileInfo.name, fileInfo.claimId);
+            return db.Claim.resolveClaim(fileInfo.name, fileInfo.claimId);
           })
           .then(resolveResult => {
-            logger.debug('resolve result >>', resolveResult);
+            logger.debug('resolve result >>', resolveResult.dataValues);
             fileInfo['thumbnail'] = chooseThumbnail(resolveResult, DEFAULT_THUMBNAIL);
             fileInfo['title'] = resolveResult.title;
             fileInfo['description'] = resolveResult.description;

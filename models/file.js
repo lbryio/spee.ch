@@ -55,5 +55,13 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER }) => {
     File.hasOne(db.Claim);
   };
 
+  File.getRecentClaims = function () {
+    return this.findAll({
+      where: { nsfw: false, trendingEligible: true },
+      order: [['createdAt', 'DESC']],
+      limit: 25,
+    });
+  };
+
   return File;
 };
