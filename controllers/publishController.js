@@ -15,13 +15,19 @@ module.exports = {
         publishResults = tx;
         if (publishParams.channel_name) {
           logger.debug(`this claim was published in channel: ${publishParams.channel_name}`);
-          return db.Channel.findOne({where: {channelName: publishParams.channel_name}}).then(channel => { return channel.channelClaimId });
+          return db.Channel.findOne({where: {channelName: publishParams.channel_name}});
         } else {
           logger.debug('this claim was published in channel: n/a');
           return null;
         }
       })
-      .then(certificateId => {
+      .then(channel => {
+        let certificateId = null;
+        let channelName = null;
+        if (channel) {
+          certificateId = channel.channelClaimId;
+          channelName = channel.channelName;
+        }
         logger.debug(`certificateId: ${certificateId}`);
         const fileRecord = {
           name       : publishParams.name,
@@ -47,8 +53,9 @@ module.exports = {
           height     : 0,
           contentType: fileType,
           nsfw       : publishParams.metadata.nsfw,
-          certificateId,
           amount     : publishParams.bid,
+          certificateId,
+          channelName,
         };
         const upsertCriteria = {
           name   : publishParams.name,
