@@ -13,17 +13,16 @@ module.exports = {
       .then(tx => {
         logger.info(`Successfully published ${fileName}`, tx);
         publishResults = tx;
-        return db.Channel.findOne({where: {channelName: publishParams.channel_name}});  // note: should this be db.User ??
-      })
-      .then(channel => {
-        let certificateId;
-        if (channel) {
-          certificateId = channel.channelClaimId;
-          logger.debug('successfully found channel in Channel table');
+        if (publishParams.channel_name) {
+          logger.debug(`this claim was published in channel: ${publishParams.channel_name}`);
+          return db.Channel.findOne({where: {channelName: publishParams.channel_name}}).then(channel => { return channel.channelClaimId });
         } else {
-          certificateId = null;
-          logger.debug('channel for publish not found in Channel table');
-        };
+          logger.debug('this claim was published in channel: n/a');
+          return null;
+        }
+      })
+      .then(certificateId => {
+        logger.debug(`certificateId: ${certificateId}`);
         const fileRecord = {
           name       : publishParams.name,
           claimId    : publishResults.claim_id,

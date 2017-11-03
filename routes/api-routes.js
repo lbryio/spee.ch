@@ -4,7 +4,7 @@ const multipartMiddleware = multipart();
 const db = require('../models');
 const { publish } = require('../controllers/publishController.js');
 const { getClaimList, resolveUri } = require('../helpers/lbryApi.js');
-const { createPublishParams, validateApiPublishRequest, validatePublishSubmission, cleanseNSFW, cleanseChannelName, checkClaimNameAvailability, checkChannelAvailability } = require('../helpers/publishHelpers.js');
+const { createPublishParams, validateApiPublishRequest, validatePublishSubmission, cleanseChannelName, checkClaimNameAvailability, checkChannelAvailability } = require('../helpers/publishHelpers.js');
 const errorHandlers = require('../helpers/errorHandlers.js');
 const { postToStats, sendGoogleAnalytics } = require('../controllers/statsController.js');
 const { authenticateChannelCredentials } = require('../auth/authentication.js');
@@ -71,7 +71,9 @@ module.exports = (app) => {
     });
   });
   // route to run a publish request on the daemon
-  app.post('/api/publish', multipartMiddleware, ({ body, files, ip, originalUrl }, res) => {
+  app.post('/api/publish', multipartMiddleware, ({ body, files, ip, originalUrl, user }, res) => {
+    logger.debug('api/publish body:', body);
+    let file, fileName, filePath, fileType, name, nsfw, license, title, description, thumbnail, anonymous, skipAuth, channelName, channelPassword;
     // validate that mandatory parts of the request are present
     try {
       validateApiPublishRequest(body, files);
@@ -81,12 +83,12 @@ module.exports = (app) => {
       return;
     }
     // validate file, name, license, and nsfw
-    const file = files.file;
-    const fileName = file.name;
-    const filePath = file.path;
-    const fileType = file.type;
-    const name = body.name;
-    const nsfw = cleanseNSFW(body.nsfw);  // cleanse nsfw input
+    file = files.file;
+    fileName = file.name;
+    filePath = file.path;
+    fileType = file.type;
+    name = body.name;
+    nsfw = (body.nsfw === 'true');
     try {
       validatePublishSubmission(file, name, nsfw);
     } catch (error) {
@@ -94,18 +96,36 @@ module.exports = (app) => {
       res.status(400).json({success: false, message: error.message});
       return;
     }
-    logger.debug(`name: ${name}, nsfw: ${nsfw}`);
     // optional inputs
-    const license = body.license || null;
-    const title = body.title || null;
-    const description = body.description || null;
-    const thumbnail = body.thumbnail || null;
-    let channelName = body.channelName || null;
+    license = body.license || null;
+    title = body.title || null;
+    description = body.description || null;
+    thumbnail = body.thumbnail || null;
+    anonymous = (body.channelName === 'null') || (body.channelName === undefined);
+    if (user) {
+      channelName = user.channelName || null;
+    } else {
+      channelName = body.channelName || null;
+    }
+    channelPassword = body.channelPassword || null;
+    skipAuth = false;
+    // case 1: publish from spee.ch, client logged in
+    if (user) {
+      skipAuth = true;
+      if (anonymous) {
+        channelName = null;
+      }
+    // case 2: publish from api or spee.ch, client not logged in
+    } else {
+      if (anonymous) {
+        skipAuth = true;
+        channelName = null;
+      }
+    }
     channelName = cleanseChannelName(channelName);
-    const channelPassword = body.channelPassword || null;
-    logger.debug(`license: ${license} title: "${title}" description: "${description}" channelName: "${channelName}" channelPassword: "${channelPassword}" nsfw: "${nsfw}"`);
+    logger.debug(`name: ${name}, license: ${license} title: "${title}" description: "${description}" channelName: "${channelName}" channelPassword: "${channelPassword}" nsfw: "${nsfw}"`);
     // check channel authorization
-    authenticateChannelCredentials(channelName, channelPassword)
+    authenticateChannelCredentials(skipAuth, channelName, channelPassword)
     .then(result => {
       if (!result) {
         throw new Error('Authentication failed, you do not have access to that channel');

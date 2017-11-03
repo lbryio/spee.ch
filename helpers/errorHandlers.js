@@ -3,11 +3,12 @@ const { postToStats } = require('../controllers/statsController.js');
 
 module.exports = {
   returnErrorMessageAndStatus: function (error) {
-    let status;
-    let message;
+    let status, message;
+    // check for daemon being turned off
     if (error.code === 'ECONNREFUSED') {
       status = 503;
       message = 'Connection refused.  The daemon may not be running.';
+    // check for errors from the deamon
     } else if (error.response) {
       status = error.response.status || 500;
       if (error.response.data) {
@@ -21,7 +22,13 @@ module.exports = {
       } else {
         message = error.response;
       }
+    // check for spee.ch thrown errors
+    } else if (error.message) {
+      status = 400;
+      message = error.message;
+    // fallback for everything else
     } else {
+      status = 400;
       message = error;
     }
     return [status, message];

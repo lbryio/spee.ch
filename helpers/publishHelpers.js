@@ -18,11 +18,10 @@ module.exports = {
       throw new Error('no file with key of [file] found in request');
     }
   },
-  validatePublishSubmission (file, claimName, nsfw) {
+  validatePublishSubmission (file, claimName) {
     try {
       module.exports.validateFile(file);
       module.exports.validateClaimName(claimName);
-      module.exports.validateNSFW(nsfw);
     } catch (error) {
       throw error;
     }
@@ -76,24 +75,6 @@ module.exports = {
       throw new Error('Only posts with a "Public Domain" or "Creative Commons" license are eligible for publishing through spee.ch');
     }
   },
-  cleanseNSFW (nsfw) {
-    switch (nsfw) {
-      case true:
-      case 'on':
-      case 'true':
-      case 1:
-      case '1':
-        return true;
-      case false:
-      case 'false':
-      case 'off':
-      case 0:
-      case '0':
-        return false;
-      default:
-        return false;
-    }
-  },
   cleanseChannelName (channelName) {
     if (channelName) {
       if (channelName.indexOf('@') !== 0) {
@@ -101,12 +82,6 @@ module.exports = {
       }
     }
     return channelName;
-  },
-  validateNSFW (nsfw) {
-    if (nsfw === true || nsfw === false) {
-      return;
-    }
-    throw new Error('NSFW must be set to either true or false');
   },
   createPublishParams (filePath, name, title, description, license, nsfw, thumbnail, channelName) {
     logger.debug(`Creating Publish Parameters`);

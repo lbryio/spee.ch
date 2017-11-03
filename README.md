@@ -36,17 +36,17 @@ spee.ch is a single-serving site that reads and publishes images and videos to a
 
 #### POST
 * /api/publish
-  * example: `curl -X POST -F 'name=MyPictureName' -F 'nsfw=false' -F 'file=@/path/to/my/picture.jpeg' https://spee.ch/api/publish`
+  * example: `curl -X POST -F 'name=MyPictureName' -F 'file=@/path/to/myPicture.jpeg' https://spee.ch/api/publish`
   * Parameters:
-    * name (string)
-    * nsfw (boolean)
-    * file (.mp4, .jpeg, .jpg, .gif, or .png)
-    * license (string, optional)
-    * title (string, optional)
-    * description (string, optional)
-    * thumbnail (string, optional) (for .mp4 uploads only)
-    * channelName(string, optional)
-    * channelPassword (string, optional)
+    * `name`
+    * `file` (.mp4, .jpeg, .jpg, .gif, or .png)
+    * `nsfw` (optional)
+    * `license` (optional)
+    * `title` (optional)
+    * `description` (optional)
+    * `thumbnail` url to thumbnail image, for .mp4 uploads only (optional)
+    * `channelName`(optional)
+    * `channelPassword` (optional,; required if `channelName` is provided)
 
 ## bugs
 If you find a bug or experience a problem, please report your issue here on github and find us in the lbry slack!

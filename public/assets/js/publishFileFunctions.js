@@ -64,20 +64,12 @@ var publishFileFunctions = {
         }
     },
     returnNullOrChannel: function () {
-        const channelInput = document.getElementById('channel-name-select');
-        const radios = document.getElementsByName('anonymous-or-channel');
-        let anonymousOrInChannel;
-        // replace channelName with 'anonymous' if appropriate
-        for (let i = 0; i < radios.length; i++) {
-            if (radios[i].checked) {
-                anonymousOrInChannel = radios[i].value; // do whatever you want with the checked radio
-                break; // only one radio can be logically checked, don't check the rest
-            }
+        const channelRadio = document.getElementById('channel-radio');
+        if (channelRadio.checked) {
+            const channelInput = document.getElementById('channel-name-select');
+            return channelInput.value.trim();
         }
-        if (anonymousOrInChannel === 'anonymous') {
-            return null;
-        };
-        return channelInput.value.trim();
+        return null;
     },
     createMetadata: function() {
         const nameInput = document.getElementById('claim-name-input');
@@ -89,13 +81,13 @@ var publishFileFunctions = {
 
         return {
             name: nameInput.value.trim(),
-            channel: this.returnNullOrChannel(),
+            channelName: this.returnNullOrChannel(),
             title: titleInput.value.trim(),
             description: descriptionInput.value.trim(),
             license: licenseInput.value.trim(),
             nsfw: nsfwInput.checked,
             type: stagedFiles[0].type,
-            thumbnail: thumbnailInput.value.trim()
+            thumbnail: thumbnailInput.value.trim(),
         }
     },
     appendDataToFormData: function (file, metadata) {
