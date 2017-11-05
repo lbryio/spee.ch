@@ -5,6 +5,7 @@ spee.ch is a single-serving site that reads and publishes images and videos to a
 * start mysql
 	* install mysql
 	* create a database called `lbry`
+	* Configure `SET NAMES 'utf8';` in the database
 	* save your connection `username` and `password` someplace handy
 * start lbrynet daemon
 	* install the [`lbry`](https://github.com/lbryio/lbry) daemon
