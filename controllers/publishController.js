@@ -22,6 +22,7 @@ module.exports = {
         }
       })
       .then(channel => {
+        // set channel information
         certificateId = null;
         channelName = null;
         if (channel) {
@@ -61,12 +62,12 @@ module.exports = {
           certificateId,
           channelName,
         };
-        // upsert File record (update is in case the claim has been published before by this daemon)
+        // upsert criteria
         const upsertCriteria = {
           name   : publishParams.name,
           claimId: publishResults.claim_id,
         };
-        // create the records
+        // upsert the records
         return Promise.all([db.upsert(db.File, fileRecord, upsertCriteria, 'File'), db.upsert(db.Claim, claimRecord, upsertCriteria, 'Claim')]);
       })
       .then(([file, claim]) => {
