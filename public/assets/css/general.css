@@ -152,7 +152,9 @@ a, a:visited {
 .link--primary, .link--primary:visited {
 	color: #4156C5;
 }
-
+.link--primary.fine-print {
+    text-align: center;
+}
 .link--nav {
 	color: black;
 	border-bottom: 2px solid white;
@@ -516,8 +518,12 @@ table {
 }
 
 #video-player {
-	background-color: black;
-	cursor: pointer;
+    background-color: #fff;
+    cursor: pointer;
+    margin: 0 auto;
+    margin-top: 2%;
+    border: 1px solid #d0d0d0;
+    padding: 6px 6px 5px 6px;
 }
 
 .show-asset-light {
