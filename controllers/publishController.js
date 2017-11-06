@@ -6,13 +6,13 @@ const publishHelpers = require('../helpers/publishHelpers.js');
 module.exports = {
   publish (publishParams, fileName, fileType) {
     return new Promise((resolve, reject) => {
-      let publishResults = {};
-      // 1. publish the file
+      let publishResults, certificateId, channelName;
+      // publish the file
       return lbryApi.publishClaim(publishParams)
-      // 2. upsert File record (update is in case the claim has been published before by this daemon)
       .then(tx => {
         logger.info(`Successfully published ${fileName}`, tx);
         publishResults = tx;
+        // get the channel information
         if (publishParams.channel_name) {
           logger.debug(`this claim was published in channel: ${publishParams.channel_name}`);
           return db.Channel.findOne({where: {channelName: publishParams.channel_name}});
@@ -22,13 +22,16 @@ module.exports = {
         }
       })
       .then(channel => {
-        let certificateId = null;
-        let channelName = null;
+        certificateId = null;
+        channelName = null;
         if (channel) {
           certificateId = channel.channelClaimId;
           channelName = channel.channelName;
         }
         logger.debug(`certificateId: ${certificateId}`);
+      })
+      .then(() => {
+        // create the File record
         const fileRecord = {
           name       : publishParams.name,
           claimId    : publishResults.claim_id,
@@ -42,6 +45,7 @@ module.exports = {
           fileType,
           nsfw       : publishParams.metadata.nsfw,
         };
+        // create the Claim record
         const claimRecord = {
           name       : publishParams.name,
           claimId    : publishResults.claim_id,
@@ -57,6 +61,7 @@ module.exports = {
           certificateId,
           channelName,
         };
+        // upsert File record (update is in case the claim has been published before by this daemon)
         const upsertCriteria = {
           name   : publishParams.name,
           claimId: publishResults.claim_id,

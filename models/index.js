@@ -66,7 +66,7 @@ db.upsert = (Model, values, condition, tableName) => {
       }
     })
     .catch(function (error) {
-      logger.error('Sequelize findOne error', error);
+      logger.error(`${tableName}.upsert error`, error);
     });
 };
 
