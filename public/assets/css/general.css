@@ -516,8 +516,12 @@ table {
 }
 
 #video-player {
-	background-color: black;
+	background-color: #fff;
 	cursor: pointer;
+	margin: 0 auto;
+    	margin-top: 2%;
+    	border: 1px solid #d0d0d0;
+    	padding: 1px 6px 5px 6px;
 }
 
 .show-asset-light {
