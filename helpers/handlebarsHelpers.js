@@ -1,10 +1,10 @@
 const Handlebars = require('handlebars');
-const config = require('config');
+const config = require('../config/speechConfig.js');
 
 module.exports = {
     // define any extra helpers you may need
   googleAnalytics () {
-    const googleApiKey = config.get('AnalyticsConfig.GoogleId');
+    const googleApiKey = config.analytics.googleId;
     return new Handlebars.SafeString(
             `<script>
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
