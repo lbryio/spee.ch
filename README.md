@@ -14,13 +14,10 @@ spee.ch is a single-serving site that reads and publishes images and videos to a
 * start spee.ch
 	* clone this repo
 	* run `npm install`
-	* to start the server, from your command line run `node speech.js` while passing three environmental variables: 
-		* (1) your lbry wallet address (`LBRY_CLAIM_ADDRESS`), 
-		* (2) your mysql username (`MYSQL_USERNAME`),
-		* (2) your mysql password (`MYSQL_PASSWORD`), 
-		* (3) the environment to run (`NODE_ENV`).
-		* i.e. `LBRY_CLAIM_ADDRESS=<your wallet address here> MYSQL_USERNAME=<username here> MYSQL_PASSWORD=<password here> NODE_ENV=development node speech.js`
-		* e.g. `LBRY_CLAIM_ADDRESS=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX MYSQL_USERNAME="lbry" MYSQL_PASSWORD="xxxxxx" NODE_ENV=development node speech.js`
+	* create your `speechConfig.js` file
+	  * copy `speechConfig_example.js` and name it `speechConfig.js`
+	  * replace the `null` values in the config file with the appropriate values for your environement
+	* to start the server, from your command line run `node speech.js`
 		* To run hot, use `nodemon` instead of `node`
 * visit [localhost:3000](http://localhost:3000)
 
