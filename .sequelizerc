@@ -1,5 +1,5 @@
 const path = require('path');
 
 module.exports = {
-  'config': path.resolve('config', 'sequelizeCliConfig.json'),
+  'config': path.resolve('config', 'sequelizeCliConfig.js'),
 }

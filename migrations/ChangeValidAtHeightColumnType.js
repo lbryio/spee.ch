@@ -1,11 +1,11 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     // logic for transforming into the new state
-    const p1 = queryInterface.addColumn(
+    const p1 = queryInterface.changeColumn(
       'Claim',
-      'channelName',
+      'validAtHeight',
       {
-        type     : Sequelize.STRING,
+        type     : Sequelize.INTEGER,
         allowNull: true,
       }
     );
@@ -13,9 +13,13 @@ module.exports = {
   },
   down: (queryInterface, Sequelize) => {
     // logic for reverting the changes
-    const p1 = queryInterface.removeColumn(
+    const p1 = queryInterface.changeColumn(
       'Claim',
-      'channelName'
+      'validAtHeight',
+      {
+        type     : Sequelize.STRING,
+        allowNull: true,
+      }
     );
     return Promise.all([p1]);
   },
