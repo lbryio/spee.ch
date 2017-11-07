@@ -1,6 +1,6 @@
 const logger = require('winston');
 const multipart = require('connect-multiparty');
-const multipartMiddleware = multipart();
+const multipartMiddleware = multipart({uploadDir: '/home/lbry/test/'});
 const db = require('../models');
 const { publish } = require('../controllers/publishController.js');
 const { getClaimList, resolveUri } = require('../helpers/lbryApi.js');
@@ -73,6 +73,7 @@ module.exports = (app) => {
   // route to run a publish request on the daemon
   app.post('/api/publish', multipartMiddleware, ({ body, files, ip, originalUrl, user }, res) => {
     logger.debug('api/publish body:', body);
+    logger.debug('api/publish body:', files);
     let file, fileName, filePath, fileType, name, nsfw, license, title, description, thumbnail, anonymous, skipAuth, channelName, channelPassword;
     // validate that mandatory parts of the request are present
     try {
@@ -84,7 +85,7 @@ module.exports = (app) => {
     }
     // validate file, name, license, and nsfw
     file = files.file;
-    fileName = file.name;
+    fileName = file.path.substring(file.path.lastIndexOf('/') + 1);
     filePath = file.path;
     fileType = file.type;
     name = body.name;

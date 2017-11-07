@@ -1,7 +1,7 @@
 const logger = require('winston');
 const fs = require('fs');
 const db = require('../models');
-const config = require('config');
+const config = require('../config/speechConfig.js');
 
 module.exports = {
   validateApiPublishRequest (body, files) {
@@ -110,7 +110,7 @@ module.exports = {
         license,
         nsfw,
       },
-      claim_address: config.get('WalletConfig.LbryClaimAddress'),
+      claim_address: config.wallet.lbryClaimAddress,
     };
     // add thumbnail to channel if video
     if (thumbnail !== null) {
@@ -137,7 +137,7 @@ module.exports = {
       db.File.findAll({ where: { name } })
       .then(result => {
         if (result.length >= 1) {
-          const claimAddress = config.get('WalletConfig.LbryClaimAddress');
+          const claimAddress = config.wallet.lbryClaimAddress;
           // filter out any results that were not published from spee.ch's wallet address
           const filteredResult = result.filter((claim) => {
             return (claim.address === claimAddress);

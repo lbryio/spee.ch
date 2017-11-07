@@ -175,7 +175,7 @@ var publishFileFunctions = {
     },
     showUploadProgressMessage: function (percentage){
         this.updatePublishStatus('<p>File is loading to server</p>');
-        this.updateUploadPercent('<p class="blue">' + percentage + '</p>');
+        this.updateUploadPercent('<p class="blue">' + percentage + '% </p>');
     },
     showFilePublishUpdate: function (msg) {
         this.updatePublishStatus('<p>' + msg + '</p>');

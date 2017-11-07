@@ -2,13 +2,13 @@ const fs = require('fs');
 const path = require('path');
 const Sequelize = require('sequelize');
 const basename = path.basename(module.filename);
-const config = require('config');
+const config = require('../config/speechConfig.js');
 const db = {};
 const logger = require('winston');
 
-const database = config.get('Database.Database');
-const username = config.get('Database.Username');
-const password = config.get('Database.Password');
+const database = config.sql.database;
+const username = config.sql.username;
+const password = config.sql.password;
 
 const sequelize = new Sequelize(database, username, password, {
   host   : 'localhost',
@@ -66,7 +66,7 @@ db.upsert = (Model, values, condition, tableName) => {
       }
     })
     .catch(function (error) {
-      logger.error('Sequelize findOne error', error);
+      logger.error(`${tableName}.upsert error`, error);
     });
 };
 
