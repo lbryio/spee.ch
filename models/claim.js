@@ -25,7 +25,7 @@ function sortResult (result, longId) {
   return shortId;
 }
 
-module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, ARRAY, DECIMAL, DOUBLE, Op }) => {
+module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DOUBLE }) => {
   const Claim = sequelize.define(
     'Claim',
     {
@@ -34,7 +34,7 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, ARRAY, DECIMAL, D
         default: null,
       },
       amount: {
-        type   : STRING,
+        type   : DOUBLE,
         default: null,
       },
       claimId: {
@@ -54,7 +54,7 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, ARRAY, DECIMAL, D
         default: null,
       },
       effectiveAmount: {
-        type   : STRING,
+        type   : DOUBLE,
         default: null,
       },
       hasSignature: {
@@ -62,7 +62,7 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, ARRAY, DECIMAL, D
         default: null,
       },
       height: {
-        type   : STRING,
+        type   : INTEGER,
         default: null,
       },
       hex: {
@@ -82,7 +82,7 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, ARRAY, DECIMAL, D
         default: null,
       },
       validAtHeight: {
-        type   : STRING,
+        type   : INTEGER,
         default: null,
       },
       outpoint: {
