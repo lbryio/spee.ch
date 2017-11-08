@@ -164,8 +164,7 @@ module.exports = (app) => {
   // route to get a short claim id from long claim Id
   app.get('/api/shortClaimId/:longId/:name', ({ originalUrl, ip, params }, res) => {
     // serve content
-    db.Claim
-      .getShortClaimIdFromLongClaimId(params.longId, params.name)
+    db.Claim.getShortClaimIdFromLongClaimId(params.longId, params.name)
       .then(shortId => {
         res.status(200).json(shortId);
       })
