@@ -1,7 +1,6 @@
 // load dependencies
 const express = require('express');
 const bodyParser = require('body-parser');
-const siofu = require('socketio-file-upload');
 const expressHandlebars = require('express-handlebars');
 const Handlebars = require('handlebars');
 const handlebarsHelpers = require('./helpers/handlebarsHelpers.js');
@@ -32,7 +31,6 @@ app.use(helmet()); // set HTTP headers to protect against well-known web vulnera
 app.use(express.static(`${__dirname}/public`)); // 'express.static' to serve static files from public directory
 app.use(bodyParser.json()); // 'body parser' for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // 'body parser' for parsing application/x-www-form-urlencoded
-app.use(siofu.router); // 'socketio-file-upload' router for uploading with socket.io
 app.use((req, res, next) => {  // custom logging middleware to log all incoming http requests
   logger.verbose(`Request on ${req.originalUrl} from ${req.ip}`);
   logger.debug('req.body:', req.body);
@@ -76,7 +74,7 @@ db.sequelize
   .then(hostedContentPath => {
     // add the hosted content folder at a static path
     app.use('/media', express.static(hostedContentPath));
-    // require routes & wrap in socket.io
+    // require routes
     require('./routes/auth-routes.js')(app);
     require('./routes/api-routes.js')(app);
     require('./routes/page-routes.js')(app);
