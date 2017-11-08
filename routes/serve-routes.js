@@ -227,9 +227,6 @@ module.exports = (app) => {
         logger.debug('file extension =', fileExtension);
       } else {
         method = SHOW;
-        if (headers['accept'] && !headers['accept'].split(',').includes('text/html')) {
-          method = SERVE;
-        }
       }
       logger.debug('claim name = ', name);
       logger.debug('method =', method);
