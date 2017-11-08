@@ -185,6 +185,7 @@ module.exports = (app) => {
           res.status(200).render('noChannel');
         } else if (!result.claims) {  // channel found, but no claims
           res.status(200).render('channel', {
+            layout        : 'channel',
             channelName   : result.channelName,
             longChannelId : result.longChannelId,
             shortChannelId: result.shortChannelId,
@@ -198,6 +199,7 @@ module.exports = (app) => {
         } else {  // channel found, with claims
           const totalPages = determineTotalPages(result.claims.length);
           res.status(200).render('channel', {
+            layout        : 'channel',
             channelName   : result.channelName,
             longChannelId : result.longChannelId,
             shortChannelId: result.shortChannelId,
