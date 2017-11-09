@@ -48,20 +48,17 @@ module.exports = {
   addTwitterCard (mimeType, source, embedUrl, directFileUrl) {
     let basicTwitterTags = `<meta name="twitter:site" content="@spee_ch" >`;
     if (mimeType === 'video/mp4') {
-      return new Handlebars.SafeString(
-                `${basicTwitterTags} <meta name="twitter:card" content="player" >
-          <meta name="twitter:player" content="${embedUrl}" >
-          <meta name="twitter:player:width" content="600" >
-          <meta name="twitter:text:player_width" content="600" >
-          <meta name="twitter:player:height" content="337" >
-          <meta name="twitter:player:stream" content="${directFileUrl}" >
-          <meta name="twitter:player:stream:content_type" content="video/mp4" >
-          `
-            );
+      let twitterName = '<meta name="twitter:card" content="player" >';
+      let twitterPlayer = `<meta name="twitter:player" content="${embedUrl}" >`;
+      let twitterPlayerWidth = '<meta name="twitter:player:width" content="600" >';
+      let twitterTextPlayerWidth = '<meta name="twitter:text:player_width" content="600" >';
+      let twitterPlayerHeight = '<meta name="twitter:player:height" content="337" >';
+      let twitterPlayerStream = `<meta name="twitter:player:stream" content="${directFileUrl}" >`;
+      let twitterPlayerStreamContentType = '<meta name="twitter:player:stream:content_type" content="video/mp4" >';
+      return new Handlebars.SafeString(`${basicTwitterTags} ${twitterName} ${twitterPlayer} ${twitterPlayerWidth} ${twitterTextPlayerWidth} ${twitterPlayerHeight} ${twitterPlayerStream} ${twitterPlayerStreamContentType}`);
     } else {
-      return new Handlebars.SafeString(
-                `${basicTwitterTags} <meta name="twitter:card" content="summary_large_image" >`
-            );
+      let twitterCard = '<meta name="twitter:card" content="summary_large_image" >';
+      return new Handlebars.SafeString(`${basicTwitterTags} ${twitterCard}`);
     }
   },
   ifConditional (varOne, operator, varTwo, options) {
