@@ -17,37 +17,32 @@ module.exports = {
         );
   },
   addOpenGraph (title, mimeType, showUrl, source, description, thumbnail) {
-    let basicTags = `<meta property="og:title" content="${title}"> 
-          <meta property="og:url" content="${showUrl}" > 
-          <meta property="og:site_name" content="Spee.ch" > 
-          <meta property="og:description" content="${description}">`;
+    console.log('title', title);
+    console.log('description', description);
+    let ogTitle = `<meta property="og:title" content="${title}" >`;
+    let ogUrl = `<meta property="og:url" content="${showUrl}" >`;
+    let ogSiteName = `<meta property="og:site_name" content="Spee.ch" >`;
+    let ogDescription = `<meta property="og:description" content="${description}" >`;
+    let ogImageWidth = '<meta property="og:image:width" content="600" >';
+    let ogImageHeight = '<meta property="og:image:height" content="315" >';
+    let basicTags = `${ogTitle} ${ogUrl} ${ogSiteName} ${ogDescription} ${ogImageWidth} ${ogImageHeight}`;
+    let ogImage = `<meta property="og:image" content="${source}" >`;
+    let ogImageType = `<meta property="og:image:type" content="${mimeType}" >`;
+    let ogType = `<meta property="og:type" content="article" >`;
     if (mimeType === 'video/mp4') {
-      return new Handlebars.SafeString(
-                `${basicTags} <meta property="og:image" content="${thumbnail}" > 
-          <meta property="og:image:type" content="image/png" >
-          <meta property="og:image:width" content="600" >
-          <meta property="og:image:height" content="315" >
-          <meta property="og:type" content="video" > 
-          <meta property="og:video" content="${source}" > 
-          <meta property="og:video:secure_url" content="${source}" > 
-          <meta property="og:video:type" content="${mimeType}" >`
-            );
-    } else if (mimeType === 'image/gif') {
-      return new Handlebars.SafeString(
-                `${basicTags} <meta property="og:image" content="${source}" > 
-          <meta property="og:image:type" content="${mimeType}" >
-          <meta property="og:image:width" content="600" >
-          <meta property="og:image:height" content="315" >
-          <meta property="og:type" content="video.other" >`
-            );
+      let ogVideo, ogVideoSecureUrl, ogVideoType;
+      ogImage = `<meta property="og:image" content="${thumbnail}" >`;
+      ogImageType = `<meta property="og:image:type" content="image/png" >`;
+      ogType = `<meta property="og:type" content="video" >`;
+      ogVideo = `<meta property="og:video" content="${source}" >`;
+      ogVideoSecureUrl = `<meta property="og:video:secure_url" content="${source}" >`;
+      ogVideoType = `<meta property="og:video:type" content="${mimeType}" >`;
+      return new Handlebars.SafeString(`${basicTags} ${ogImage} ${ogImageType} ${ogType} ${ogVideo} ${ogVideoSecureUrl} ${ogVideoType}`);
     } else {
-      return new Handlebars.SafeString(
-                `${basicTags} <meta property="og:image" content="${source}" > 
-          <meta property="og:image:type" content="${mimeType}" >
-          <meta property="og:image:width" content="600" >
-          <meta property="og:image:height" content="315" >
-          <meta property="og:type" content="article" >`
-            );
+      if (mimeType === 'image/gif') {
+        ogType = `<meta property="og:type" content="video.other" >`;
+      };
+      return new Handlebars.SafeString(`${basicTags} ${ogImage} ${ogImageType} ${ogType}`);
     }
   },
   addTwitterCard (mimeType, source, embedUrl, directFileUrl) {
@@ -55,7 +50,7 @@ module.exports = {
     if (mimeType === 'video/mp4') {
       return new Handlebars.SafeString(
                 `${basicTwitterTags} <meta name="twitter:card" content="player" >
-          <meta name="twitter:player" content="${embedUrl}>
+          <meta name="twitter:player" content="${embedUrl}" >
           <meta name="twitter:player:width" content="600" >
           <meta name="twitter:text:player_width" content="600" >
           <meta name="twitter:player:height" content="337" >

@@ -67,7 +67,7 @@ module.exports = {
         resolve(publishResults); // resolve the promise with the result from lbryApi.publishClaim;
       })
       .catch(error => {
-        logger.error('publishController.publish, error', error);
+        logger.error('caught a publishController.publish error');
         publishHelpers.deleteTemporaryFile(publishParams.file_path); // delete the local file
         reject(error);
       });
