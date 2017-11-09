@@ -516,7 +516,7 @@ table {
 	display: block;
 	width: 100%;
 }
-#video-player, .show-asset-light {
+#video-player, .showlite-asset {
     padding: 6px;
     border: 1px solid #555;
     background-color: #fff;
@@ -524,7 +524,8 @@ table {
 #video-player {
     cursor: pointer;
 }
-.show-asset-light {
+
+.showlite-asset {
     max-width: 50%;
     margin: 0 auto;
     margin-top: 2%;
