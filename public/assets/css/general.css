@@ -74,7 +74,7 @@ body, .flex-container--column {
 
 /* TEXT */
 
-body, button, input, textarea, label, select, option {
+body, button, input, textarea, label, select, option, #channel-publish-in-progress > p, #channel-publish-done > p {
 	font-family: 'Lekton', monospace;
 	font-size: large;
 }
