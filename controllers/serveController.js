@@ -67,12 +67,12 @@ function getAssetByLongClaimId (fullClaimId, name) {
       db.Claim
         .resolveClaim(name, fullClaimId)
         .then(resolveResult => {
-          logger.debug('resolve result >> ', resolveResult.dataValues);
           // if no result, return early (claim doesn't exist or isn't free)
           if (!resolveResult) {
             resolve(NO_CLAIM);
             return;
           }
+          logger.debug('resolve result >> ', resolveResult.dataValues);
           let fileRecord = {};
           // get the claim
           lbryApi.getClaim(`${name}#${fullClaimId}`)
