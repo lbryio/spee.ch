@@ -517,22 +517,20 @@ table {
 	width: 100%;
 }
 #video-player, .showlite-asset {
-    padding: 6px;
-    border: 1px solid #555;
-    background-color: #fff;
+   	display: block;
+   	margin: 0 auto;
+    	background-color: #fff;
 }
 #video-player {
-    cursor: pointer;
+    	cursor: pointer;
+  	margin-top: 2%;    	
+    	padding: 6px;   	
+    	max-width: 50%;
+	border: 1px solid #d0d0d0;
+	box-shadow: 0 0 50px -6px rgba(0, 0, 0, 0.72);
 }
-
 .showlite-asset {
-    max-width: 50%;
-    margin: 0 auto;
-    margin-top: 2%;
-    padding: 6px;
-    border: 1px solid #a2a2a2;
-//Optional Box Shadow - Looks better on a darker than white background.
-    box-shadow: 0 0 50px -6px rgba(0, 0, 0, 0.72);
+    	max-width: 100%;
 }
 
 /* item lists */
