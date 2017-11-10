@@ -1,11 +1,14 @@
+// display the content that shows channel creation has started
 function showChannelCreateInProgressDisplay () {
     const publishChannelForm = document.getElementById('publish-channel-form');
-    publishChannelForm.hidden = true;
     const inProgress = document.getElementById('channel-publish-in-progress');
+    const channelProgressBar = document.getElementById('create-channel-progress-bar');
+    publishChannelForm.hidden = true;
     inProgress.hidden = false;
-    createProgressBar(document.getElementById('create-channel-progress-bar'), 12);
+    createProgressBar(channelProgressBar, 12);
 }
 
+// display the content that shows channle creation is done
 function showChannelCreateDoneDisplay() {
     const inProgress = document.getElementById('channel-publish-in-progress');
     inProgress.hidden=true;
@@ -38,7 +41,6 @@ function publishNewChannel (event) {
             if (window.location.pathname === '/') {
                 // remove old channel and replace with new one & select it
                 replaceChannelOptionInPublishChannelSelect();
-                // remove old channel and replace with new one & select it
                 replaceChannelOptionInNavBarChannelSelect();
             } else {
                 window.location = '/';
@@ -47,7 +49,7 @@ function publishNewChannel (event) {
         .catch(error => {
             if (error.name === 'ChannelNameError' || error.name === 'ChannelPasswordError'){
                 const channelNameErrorDisplayElement = document.getElementById('input-error-channel-name');
-                showError(channelNameErrorDisplayElement, error.message);
+                validationFunctions.showError(channelNameErrorDisplayElement, error.message);
             } else {
                 console.log('signup failure:', error);
                 showChannelCreationError('Unfortunately, Spee.ch encountered an error while creating your channel.  Please let us know in slack!');

@@ -6,7 +6,7 @@ module.exports = (winston) => {
     // add a transport for errors to slack
     winston.add(winstonSlackWebHook, {
       name      : 'slack-errors-transport',
-      level     : 'error',
+      level     : 'warn',
       webhookUrl: config.logging.slackWebHook,
       channel   : config.logging.slackErrorChannel,
       username  : 'spee.ch',
@@ -21,9 +21,10 @@ module.exports = (winston) => {
       iconEmoji : ':nerd_face:',
     });
     // send test message
-    winston.error('Slack error logging is online.');
-    winston.info('Slack info logging is online.');
+    winston.error('Slack "error" logging is online.');
+    winston.warn('Slack "warning" logging is online.');
+    winston.info('Slack "info" logging is online.');
   } else {
-    winston.error('Slack logging is not enabled because no SLACK_WEB_HOOK env var provided.');
+    winston.warn('Slack logging is not enabled because no SLACK_WEB_HOOK env var provided.');
   }
 };

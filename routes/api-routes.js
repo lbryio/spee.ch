@@ -1,6 +1,7 @@
 const logger = require('winston');
 const multipart = require('connect-multiparty');
-const multipartMiddleware = multipart({uploadDir: '/home/lbry/test/'});
+const config = require('../config/speechConfig.js');
+const multipartMiddleware = multipart({uploadDir: config.files.uploadDirectory});
 const db = require('../models');
 const { publish } = require('../controllers/publishController.js');
 const { getClaimList, resolveUri } = require('../helpers/lbryApi.js');
