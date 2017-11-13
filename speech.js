@@ -6,7 +6,7 @@ const expressHandlebars = require('express-handlebars');
 const Handlebars = require('handlebars');
 const handlebarsHelpers = require('./helpers/handlebarsHelpers.js');
 const { populateLocalsDotUser, serializeSpeechUser, deserializeSpeechUser } = require('./helpers/authHelpers.js');
-const config = require('config');
+const config = require('./config/speechConfig.js');
 const logger = require('winston');
 const { getDownloadDirectory } = require('./helpers/lbryApi');
 const helmet = require('helmet');
@@ -17,9 +17,9 @@ const passport = require('passport');
 const cookieSession = require('cookie-session');
 
 // configure logging
-const logLevel = config.get('Logging.LogLevel');
+const logLevel = config.logging.logLevel;
 require('./config/loggerConfig.js')(logger, logLevel);
-require('./config/slackLoggerConfig.js')(logger);
+require('./config/slackConfig.js')(logger);
 
 // check for global config variables
 require('./helpers/configVarCheck.js')();
@@ -42,7 +42,7 @@ app.use((req, res, next) => {  // custom logging middleware to log all incoming 
 // initialize passport
 app.use(cookieSession({
   name  : 'session',
-  keys  : [config.get('Session.SessionKey')],
+  keys  : [config.session.sessionKey],
   maxAge: 24 * 60 * 60 * 1000, // 24 hours
 }));
 app.use(passport.initialize());
@@ -82,7 +82,8 @@ db.sequelize
     require('./routes/page-routes.js')(app);
     require('./routes/serve-routes.js')(app);
     require('./routes/home-routes.js')(app);
-    return require('./routes/sockets-routes.js')(app, siofu, hostedContentPath);
+    const http = require('http');
+    return http.Server(app);
   })
   .then(server => { // start the server
     server.listen(PORT, () => {

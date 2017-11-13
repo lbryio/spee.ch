@@ -298,7 +298,7 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, ARRAY, DECIMAL, D
             case 1:
               return resolve(result[0]);
             default:
-              logger.error('more than one entry matches that name and claimID');
+              logger.warn(`more than one entry matches that name (${name}) and claimID (${claimId})`);
               return resolve(result[0]);
           }
         })

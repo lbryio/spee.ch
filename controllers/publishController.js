@@ -6,24 +6,33 @@ const publishHelpers = require('../helpers/publishHelpers.js');
 module.exports = {
   publish (publishParams, fileName, fileType) {
     return new Promise((resolve, reject) => {
-      let publishResults = {};
-      // 1. publish the file
+      let publishResults, certificateId, channelName;
+      // publish the file
       return lbryApi.publishClaim(publishParams)
-      // 2. upsert File record (update is in case the claim has been published before by this daemon)
       .then(tx => {
         logger.info(`Successfully published ${fileName}`, tx);
         publishResults = tx;
-        return db.Channel.findOne({where: {channelName: publishParams.channel_name}});  // note: should this be db.User ??
+        // get the channel information
+        if (publishParams.channel_name) {
+          logger.debug(`this claim was published in channel: ${publishParams.channel_name}`);
+          return db.Channel.findOne({where: {channelName: publishParams.channel_name}});
+        } else {
+          logger.debug('this claim was published in channel: n/a');
+          return null;
+        }
       })
       .then(channel => {
-        let certificateId;
+        // set channel information
+        certificateId = null;
+        channelName = null;
         if (channel) {
           certificateId = channel.channelClaimId;
-          logger.debug('successfully found channel in Channel table');
-        } else {
-          certificateId = null;
-          logger.debug('channel for publish not found in Channel table');
-        };
+          channelName = channel.channelName;
+        }
+        logger.debug(`certificateId: ${certificateId}`);
+      })
+      .then(() => {
+        // create the File record
         const fileRecord = {
           name       : publishParams.name,
           claimId    : publishResults.claim_id,
@@ -37,6 +46,7 @@ module.exports = {
           fileType,
           nsfw       : publishParams.metadata.nsfw,
         };
+        // create the Claim record
         const claimRecord = {
           name       : publishParams.name,
           claimId    : publishResults.claim_id,
@@ -48,14 +58,16 @@ module.exports = {
           height     : 0,
           contentType: fileType,
           nsfw       : publishParams.metadata.nsfw,
-          certificateId,
           amount     : publishParams.bid,
+          certificateId,
+          channelName,
         };
+        // upsert criteria
         const upsertCriteria = {
           name   : publishParams.name,
           claimId: publishResults.claim_id,
         };
-        // create the records
+        // upsert the records
         return Promise.all([db.upsert(db.File, fileRecord, upsertCriteria, 'File'), db.upsert(db.Claim, claimRecord, upsertCriteria, 'Claim')]);
       })
       .then(([file, claim]) => {
@@ -67,7 +79,6 @@ module.exports = {
         resolve(publishResults); // resolve the promise with the result from lbryApi.publishClaim;
       })
       .catch(error => {
-        logger.error('caught a publishController.publish error');
         publishHelpers.deleteTemporaryFile(publishParams.file_path); // delete the local file
         reject(error);
       });

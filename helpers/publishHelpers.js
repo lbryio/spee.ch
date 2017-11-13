@@ -1,7 +1,7 @@
 const logger = require('winston');
 const fs = require('fs');
 const db = require('../models');
-const config = require('config');
+const config = require('../config/speechConfig.js');
 
 module.exports = {
   validateApiPublishRequest (body, files) {
@@ -11,9 +11,6 @@ module.exports = {
     if (!body.name) {
       throw new Error('no name field found in request');
     }
-    if (!body.nsfw) {
-      throw new Error('no nsfw field found in request');
-    }
     if (!files) {
       throw new Error('no files found in request');
     }
@@ -21,11 +18,10 @@ module.exports = {
       throw new Error('no file with key of [file] found in request');
     }
   },
-  validatePublishSubmission (file, claimName, nsfw) {
+  validatePublishSubmission (file, claimName) {
     try {
       module.exports.validateFile(file);
       module.exports.validateClaimName(claimName);
-      module.exports.validateNSFW(nsfw);
     } catch (error) {
       throw error;
     }
@@ -79,24 +75,6 @@ module.exports = {
       throw new Error('Only posts with a "Public Domain" or "Creative Commons" license are eligible for publishing through spee.ch');
     }
   },
-  cleanseNSFW (nsfw) {
-    switch (nsfw) {
-      case true:
-      case 'on':
-      case 'true':
-      case 1:
-      case '1':
-        return true;
-      case false:
-      case 'false':
-      case 'off':
-      case 0:
-      case '0':
-        return false;
-      default:
-        return null;
-    }
-  },
   cleanseChannelName (channelName) {
     if (channelName) {
       if (channelName.indexOf('@') !== 0) {
@@ -104,12 +82,6 @@ module.exports = {
       }
     }
     return channelName;
-  },
-  validateNSFW (nsfw) {
-    if (nsfw === true || nsfw === false) {
-      return;
-    }
-    throw new Error('NSFW must be set to either true or false');
   },
   createPublishParams (filePath, name, title, description, license, nsfw, thumbnail, channelName) {
     logger.debug(`Creating Publish Parameters`);
@@ -138,7 +110,7 @@ module.exports = {
         license,
         nsfw,
       },
-      claim_address: config.get('WalletConfig.LbryClaimAddress'),
+      claim_address: config.wallet.lbryClaimAddress,
     };
     // add thumbnail to channel if video
     if (thumbnail !== null) {
@@ -165,7 +137,7 @@ module.exports = {
       db.File.findAll({ where: { name } })
       .then(result => {
         if (result.length >= 1) {
-          const claimAddress = config.get('WalletConfig.LbryClaimAddress');
+          const claimAddress = config.wallet.lbryClaimAddress;
           // filter out any results that were not published from spee.ch's wallet address
           const filteredResult = result.filter((claim) => {
             return (claim.address === claimAddress);
