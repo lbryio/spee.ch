@@ -1,5 +1,5 @@
 // validation function which checks the proposed file's type, size, and name
-var validationFunctions = {
+const validationFunctions = {
     validateFile: function (file) {
         if (!file) {
             console.log('no file found');
