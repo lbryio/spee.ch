@@ -9,6 +9,13 @@ const errorHandlers = require('../helpers/errorHandlers.js');
 const { postToStats, sendGoogleAnalytics } = require('../controllers/statsController.js');
 const { authenticateChannelCredentials } = require('../auth/authentication.js');
 
+function authenticateOrSkip (skipAuth, channelName, channelPassword) {
+  if (skipAuth) {
+    return true;
+  }
+  return authenticateChannelCredentials(channelName, channelPassword);
+}
+
 module.exports = (app) => {
   // route to run a claim_list request on the daemon
   app.get('/api/claim_list/:name', ({ headers, ip, originalUrl, params }, res) => {
@@ -126,9 +133,9 @@ module.exports = (app) => {
     channelName = cleanseChannelName(channelName);
     logger.debug(`name: ${name}, license: ${license} title: "${title}" description: "${description}" channelName: "${channelName}" channelPassword: "${channelPassword}" nsfw: "${nsfw}"`);
     // check channel authorization
-    authenticateChannelCredentials(skipAuth, channelName, channelPassword)
-    .then(result => {
-      if (!result) {
+    authenticateOrSkip(skipAuth)
+    .then(authenticated => {
+      if (!authenticated) {
         throw new Error('Authentication failed, you do not have access to that channel');
       }
       // make sure the claim name is available
