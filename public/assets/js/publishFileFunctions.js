@@ -1,6 +1,6 @@
 var stagedFiles = null;
 
-var publishFileFunctions = {
+const publishFileFunctions = {
     triggerFileChooser: function (fileInputId) {
         document.getElementById(fileInputId).click();
     },
@@ -182,7 +182,7 @@ var publishFileFunctions = {
         this.updateUploadPercent('<p>Curious what magic is happening here? <a class="link--primary" target="blank" href="https://lbry.io/faq/what-is-lbry">Learn more.</a></p>');
     },
     showFilePublishFailure: function (msg){
-        this.updatePublishStatus('<p>Something went wrong...</p><p>' + msg + '</p><strong>For help, post the above error text in the #speech channel on the <a class="link--primary" href="https://discord.gg/YjYbwhS" target="_blank">lbry discord</a></strong>');
+        this.updatePublishStatus('<p>Something went wrong...</p><p><strong>' + msg + '</strong></p><p>For help, post the above error text in the #speech channel on the <a class="link--primary" href="https://discord.gg/YjYbwhS" target="_blank">lbry discord</a>');
         this.hidePublishProgressBar();
         this.hideUploadPercent();
     },

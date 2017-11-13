@@ -36,24 +36,18 @@ module.exports = {
   handleRequestError: function (action, originalUrl, ip, error, res) {
     logger.error(`Request Error on ${originalUrl}`, module.exports.useObjectPropertiesIfNoKeys(error));
     postToStats(action, originalUrl, ip, null, null, error);
-    const errorStatusAndMessage = this.returnErrorMessageAndStatus(error);
+    const [status, message] = this.returnErrorMessageAndStatus(error);
     res
-        .status(errorStatusAndMessage[0])
-        .render('requestError', {
-          status : errorStatusAndMessage[0],
-          message: errorStatusAndMessage[1],
-        });
+      .status(status)
+      .render('requestError', this.createErrorResponsePayload(status, message));
   },
   handleApiError: function (action, originalUrl, ip, error, res) {
     logger.error(`Api ${action} Error on ${originalUrl}`, module.exports.useObjectPropertiesIfNoKeys(error));
     postToStats(action, originalUrl, ip, null, null, error);
-    const errorStatusAndMessage = this.returnErrorMessageAndStatus(error);
+    const [status, message] = this.returnErrorMessageAndStatus(error);
     res
-        .status(errorStatusAndMessage[0])
-        .json({
-          success: false,
-          message: errorStatusAndMessage[1],
-        });
+      .status(status)
+      .json(this.createErrorResponsePayload(status, message));
   },
   useObjectPropertiesIfNoKeys: function (err) {
     if (Object.keys(err).length === 0) {
@@ -64,5 +58,12 @@ module.exports = {
       return newErrorObject;
     }
     return err;
+  },
+  createErrorResponsePayload (status, message) {
+    return {
+      status,
+      success: false,
+      message,
+    };
   },
 };

@@ -2,14 +2,8 @@ const db = require('../models');
 const logger = require('winston');
 
 module.exports = {
-  authenticateChannelCredentials (skipAuth, channelName, userPassword) {
+  authenticateChannelCredentials (channelName, userPassword) {
     return new Promise((resolve, reject) => {
-      // skip authentication if not needed
-      if (skipAuth) {
-        resolve(skipAuth);
-        return;
-      }
-      // authentication
       const userName = channelName.substring(1);
       logger.debug(`authenticateChannelCredentials > channelName: ${channelName} username: ${userName} pass: ${userPassword}`);
       db.User
@@ -38,6 +32,14 @@ module.exports = {
           .catch(error => {
             reject(error);
           });
+    });
+  },
+  authenticateOrSkip (skipAuth, channelName, channelPassword) {
+    return new Promise((resolve, reject) => {
+      if (skipAuth) {
+        return resolve(true);
+      }
+      return resolve(module.exports.authenticateChannelCredentials(channelName, channelPassword));
     });
   },
 };

@@ -8,7 +8,7 @@ const { getClaimList, resolveUri } = require('../helpers/lbryApi.js');
 const { createPublishParams, validateApiPublishRequest, validatePublishSubmission, cleanseChannelName, checkClaimNameAvailability, checkChannelAvailability } = require('../helpers/publishHelpers.js');
 const errorHandlers = require('../helpers/errorHandlers.js');
 const { postToStats, sendGoogleAnalytics } = require('../controllers/statsController.js');
-const { authenticateChannelCredentials } = require('../auth/authentication.js');
+const { authenticateOrSkip } = require('../auth/authentication.js');
 
 module.exports = (app) => {
   // route to run a claim_list request on the daemon
@@ -73,8 +73,6 @@ module.exports = (app) => {
   });
   // route to run a publish request on the daemon
   app.post('/api/publish', multipartMiddleware, ({ body, files, ip, originalUrl, user }, res) => {
-    logger.debug('api/publish body:', body);
-    logger.debug('api/publish body:', files);
     let file, fileName, filePath, fileType, name, nsfw, license, title, description, thumbnail, anonymous, skipAuth, channelName, channelPassword;
     // validate that mandatory parts of the request are present
     try {
@@ -125,11 +123,11 @@ module.exports = (app) => {
       }
     }
     channelName = cleanseChannelName(channelName);
-    logger.debug(`name: ${name}, license: ${license} title: "${title}" description: "${description}" channelName: "${channelName}" channelPassword: "${channelPassword}" nsfw: "${nsfw}"`);
+    logger.debug(`/api/publish > name: ${name}, license: ${license} title: "${title}" description: "${description}" channelName: "${channelName}" channelPassword: "${channelPassword}" nsfw: "${nsfw}"`);
     // check channel authorization
-    authenticateChannelCredentials(skipAuth, channelName, channelPassword)
-    .then(result => {
-      if (!result) {
+    authenticateOrSkip(skipAuth, channelName, channelPassword)
+    .then(authenticated => {
+      if (!authenticated) {
         throw new Error('Authentication failed, you do not have access to that channel');
       }
       // make sure the claim name is available
