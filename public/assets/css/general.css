@@ -520,14 +520,13 @@ table {
    	display: block;
    	margin: 0 auto;
     	background-color: #fff;
+	cursor: pointer;
 }
-#video-player {
-    	cursor: pointer;
+#showlite-body #video-player {
   	margin-top: 2%;    	
     	padding: 6px;   	
     	max-width: 50%;
 	border: 1px solid #d0d0d0;
-	box-shadow: 0 0 50px -6px rgba(0, 0, 0, 0.72);
 }
 .showlite-asset {
     	max-width: 100%;
