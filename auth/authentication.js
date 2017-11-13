@@ -34,4 +34,12 @@ module.exports = {
           });
     });
   },
+  authenticateOrSkip (skipAuth, channelName, channelPassword) {
+    return new Promise((resolve, reject) => {
+      if (skipAuth) {
+        return resolve(true);
+      }
+      return resolve(module.exports.authenticateChannelCredentials(channelName, channelPassword));
+    });
+  },
 };
