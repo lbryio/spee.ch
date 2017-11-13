@@ -1,6 +1,6 @@
 var stagedFiles = null;
 
-var publishFileFunctions = {
+const publishFileFunctions = {
     triggerFileChooser: function (fileInputId) {
         document.getElementById(fileInputId).click();
     },
