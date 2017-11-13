@@ -3,11 +3,11 @@
     <div class="column column--10">
         <form>
             <div class="column column--3 column--med-10">
-                <input type="radio" name="anonymous-or-channel" id="anonymous-select" class="input-radio" value="anonymous" {{#unless user}}checked {{/unless}} onchange="toggleChannel(event.target.value)"/>
-                <label class="label label--pointer" for="anonymous-select">Anonymous</label>
+                <input type="radio" name="anonymous-or-channel" id="anonymous-radio" class="input-radio" value="anonymous" {{#unless user}}checked {{/unless}} onchange="toggleChannel(event.target.value)"/>
+                <label class="label label--pointer" for="anonymous-radio">Anonymous</label>
             </div><div class="column column--7 column--med-10">
-                <input type="radio" name="anonymous-or-channel" id="in-a-channel-select" class="input-radio" value="in a channel" {{#if user}}checked {{/if}} onchange="toggleChannel(event.target.value)"/>
-                <label class="label label--pointer" for="in-a-channel-select">In a channel</label>
+                <input type="radio" name="anonymous-or-channel" id="channel-radio" class="input-radio" value="in a channel" {{#if user}}checked {{/if}} onchange="toggleChannel(event.target.value)"/>
+                <label class="label label--pointer" for="channel-radio">In a channel</label>
             </div>
         </form>
     </div>

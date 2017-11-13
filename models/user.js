@@ -25,7 +25,6 @@ module.exports = (sequelize, { STRING }) => {
   };
 
   User.prototype.comparePassword = function (password, callback) {
-    logger.debug(`User.prototype.comparePassword ${password} ${this.password}`);
     bcrypt.compare(password, this.password, callback);
   };
 

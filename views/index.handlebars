@@ -1,8 +1,8 @@
 <div class="row row--tall flex-container--column">
     <form>
-        <input class="input-file" type="file" id="siofu_input" name="siofu_input" accept="video/*,image/*" onchange="previewAndStageFile(event.target.files[0])" enctype="multipart/form-data"/>
+        <input class="input-file" type="file" id="siofu_input" name="siofu_input" accept="video/*,image/*" onchange="publishFileFunctions.previewAndStageFile(event.target.files[0])" enctype="multipart/form-data"/>
     </form>
-    <div id="primary-dropzone" class="dropzone row row--margined row--padded row--tall flex-container--column flex-container--center-center" ondrop="drop_handler(event);" ondragover="dragover_handler(event);" ondragend="dragend_handler(event)" ondragenter="dragenter_handler(event)" ondragleave="dragexit_handler(event)" onclick="triggerFileChooser('siofu_input', event)">
+    <div id="primary-dropzone" class="dropzone row row--margined row--padded row--tall flex-container--column flex-container--center-center" ondrop="drop_handler(event);" ondragover="dragover_handler(event);" ondragend="dragend_handler(event)" ondragenter="dragenter_handler(event)" ondragleave="dragexit_handler(event)" onclick="publishFileFunctions.triggerFileChooser('siofu_input', event)">
         <div id="primary-dropzone-instructions">
             <p class="info-message-placeholder info-message--failure" id="input-error-file-selection" hidden="true"></p>
             <p>Drag & drop image or video here to publish</p>
@@ -22,7 +22,7 @@
             <div class="column column--5 column--sml-10" >
                 <!-- preview -->
                 <div class="row row--padded">
-                    <div id="asset-preview-holder" class="dropzone" ondrop="drop_handler(event);" ondragover="dragover_handler(event);" ondragend="dragend_handler(event)"  ondragenter="preview_onmouseenter_handler()" ondragleave="preview_onmouseleave_handler()" onmouseenter="preview_onmouseenter_handler()" onmouseleave="preview_onmouseleave_handler()" onclick="triggerFileChooser('siofu_input', event)">
+                    <div id="asset-preview-holder" class="dropzone" ondrop="drop_handler(event);" ondragover="dragover_handler(event);" ondragend="dragend_handler(event)"  ondragenter="preview_onmouseenter_handler()" ondragleave="preview_onmouseleave_handler()" onmouseenter="preview_onmouseenter_handler()" onmouseleave="preview_onmouseleave_handler()" onclick="publishFileFunctions.triggerFileChooser('siofu_input', event)">
                         <div id="asset-preview-dropzone-instructions" class="hidden">
                             <p>Drag & drop image or video here</p>
                             <p class="fine-print">OR</p>
@@ -50,105 +50,3 @@
         </div>
     </div>
 </div>
-
-
-<script src="/socket.io/socket.io.js"></script>
-<script src="/siofu/client.js"></script>
-<script typ="text/javascript">
-
-    checkCookie();
-
-    const socket = io();
-    const uploader = new SocketIOFileUpload(socket);
-    let stagedFiles = null;
-
-    const publishFormWrapper = document.getElementById('publish-form');
-    const publishStatus = document.getElementById('publish-status');
-    const publishUpdate = document.getElementById('publish-update');
-    const publishProgressBar = document.getElementById('publish-progress-bar');
-    const uploadPercent = document.getElementById('upload-percent');
-
-	/* socketio-file-upload listeners */
-	uploader.addEventListener('start', function(event){
-	    console.log('starting upload');
-        addInputValuesToFileMetaData(event)
-        // hide the publish tool
-        hidePublishTools();
-		// show the progress status and animation
-        showPublishStatus();
-        showPublishProgressBar();
-	});
-	uploader.addEventListener('progress', function(event){
-		var percent = event.bytesLoaded / event.file.size * 100;
-        updatePublishStatus('<p>File is loading to server</p>')
-		updateUploadPercent(`<p class="blue">${percent.toFixed(2)}%</p>`)
-	});
-	/* socket.io message listeners */
-	socket.on('publish-update', function(msg){
-		updatePublishStatus(`<p>${msg}</p>`);
-        updateUploadPercent(`<p>Curious what magic is happening here? <a class="link--primary" target="blank" href="https://lbry.io/faq/what-is-lbry">Learn more.</a></p>`);
-	});
-	socket.on('publish-failure', function(msg){
-        updatePublishStatus('<p> --(✖╭╮✖)→ </p><p>' + JSON.stringify(msg) + '</p><strong>For help, post the above error text in the #speech channel on the <a class="link--primary" href="https://discord.gg/YjYbwhS" target="_blank">lbry discord</a></strong>');
-	    hidePublishProgressBar();
-	    hideUploadPercent();
-	});
-	socket.on('publish-complete', function(msg){
-		const showUrl = msg.result.claim_id + "/" + msg.name;
-		// update status
-		updatePublishStatus('<p>Your publish is complete! You are being redirected to it now.</p>');
-        updateUploadPercent('<p><a class="link--primary" target="_blank" href="\' + showUrl + \'">If you do not get redirected, click here.</a></p>')
-        // redirect the user
-		window.location.href = showUrl;
-	});
-
-	function hidePublishTools() {
-        publishFormWrapper.setAttribute('class', 'hidden');
-    }
-    // publish status functions
-    function showPublishStatus() {
-        publishStatus.setAttribute('class', 'row row--tall flex-container--column flex-container--center-center');
-    }
-    function updatePublishStatus(msg){
-        publishUpdate.innerHTML = msg;
-    }
-    // progress bar functions
-    function showPublishProgressBar(){
-        createProgressBar(publishProgressBar, 12);
-    }
-    function hidePublishProgressBar(){
-        publishProgressBar.hidden = true;
-    }
-    // upload percent functions
-    function updateUploadPercent(msg){
-        uploadPercent.innerHTML = msg;
-    }
-    function hideUploadPercent(){
-        uploadPercent.hidden = true;
-    }
-
-    function addInputValuesToFileMetaData(event) {
-        // get values from inputs
-        const name = document.getElementById('claim-name-input').value.trim();
-        const title = document.getElementById('publish-title').value.trim();
-        const description = document.getElementById('publish-description').value.trim();
-        const license = document.getElementById('publish-license').value.trim();
-        const nsfw = document.getElementById('publish-nsfw').checked;
-        const anonymous = document.getElementById('anonymous-select').checked;
-        const channel = document.getElementById('channel-name-select').value.trim();
-        const thumbnail = document.getElementById('claim-thumbnail-input').value.trim();
-        // set values on file meta data
-        event.file.meta.name = name;
-        event.file.meta.title = title;
-        event.file.meta.description = description;
-        event.file.meta.license = license;
-        event.file.meta.nsfw = nsfw;
-        event.file.meta.type = stagedFiles[0].type;
-        if (!anonymous) {
-            event.file.meta.channel = channel;
-        }
-        if (thumbnail && (thumbnail.trim !== '')){
-            event.file.meta.thumbnail = thumbnail;
-        }
-    }
-</script>

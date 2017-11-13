@@ -47,7 +47,7 @@ function loginToChannel (event) {
     const password = document.getElementById('channel-login-password-input').value;
     // prevent default
     event.preventDefault()
-    validateNewChannelLogin(userName, password)
+    validationFunctions.validateNewChannelLogin(userName, password)
         .then(() => {
             // send request
             return sendAuthRequest(userName, password, '/login')
@@ -71,9 +71,9 @@ function loginToChannel (event) {
         .catch(error => {
             const loginErrorDisplayElement = document.getElementById('login-error-display-element');
             if (error.name){
-                showError(loginErrorDisplayElement, error.message);
+                validationFunctions.showError(loginErrorDisplayElement, error.message);
             } else {
-                showError(loginErrorDisplayElement, 'There was an error logging into your channel');
+                validationFunctions.showError(loginErrorDisplayElement, 'There was an error logging into your channel');
             }
         })
 }

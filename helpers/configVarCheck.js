@@ -1,15 +1,13 @@
-const config = require('config');
+const config = require('../config/speechConfig.js');
 const logger = require('winston');
-const fs = require('fs');
 
 module.exports = function () {
   // get the config file
-  const defaultConfigFile = JSON.parse(fs.readFileSync('./config/default.json'));
 
-  for (let configCategoryKey in defaultConfigFile) {
-    if (defaultConfigFile.hasOwnProperty(configCategoryKey)) {
+  for (let configCategoryKey in config) {
+    if (config.hasOwnProperty(configCategoryKey)) {
         // get the final variables for each config category
-      const configVariables = config.get(configCategoryKey);
+      const configVariables = config[configCategoryKey];
       for (let configVarKey in configVariables) {
         if (configVariables.hasOwnProperty(configVarKey)) {
             // print each variable

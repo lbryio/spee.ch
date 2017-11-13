@@ -4,10 +4,6 @@ const logger = require('winston');
 module.exports = {
   authenticateChannelCredentials (channelName, userPassword) {
     return new Promise((resolve, reject) => {
-      if (!channelName) {
-        resolve(true);
-        return;
-      }
       const userName = channelName.substring(1);
       logger.debug(`authenticateChannelCredentials > channelName: ${channelName} username: ${userName} pass: ${userPassword}`);
       db.User
@@ -18,18 +14,32 @@ module.exports = {
               resolve(false);
               return;
             }
-            if (!user.validPassword(userPassword, user.password)) {
-              logger.debug('incorrect password');
-              resolve(false);
-              return;
-            }
-            logger.debug('user found:', user.dataValues);
-            resolve(true);
+            return user.comparePassword(userPassword, (passwordErr, isMatch) => {
+              if (passwordErr) {
+                logger.error('comparePassword error:', passwordErr);
+                resolve(false);
+                return;
+              }
+              if (!isMatch) {
+                logger.debug('incorrect password');
+                resolve(false);
+                return;
+              }
+              logger.debug('...password was a match...');
+              resolve(true);
+            });
           })
           .catch(error => {
-            logger.error(error);
-            reject();
+            reject(error);
           });
+    });
+  },
+  authenticateOrSkip (skipAuth, channelName, channelPassword) {
+    return new Promise((resolve, reject) => {
+      if (skipAuth) {
+        return resolve(true);
+      }
+      return resolve(module.exports.authenticateChannelCredentials(channelName, channelPassword));
     });
   },
 };
