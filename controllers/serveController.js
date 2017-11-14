@@ -204,7 +204,7 @@ module.exports = {
     } else {
       fileInfo['fileExt'] = fileInfo.fileName.substring(fileInfo.fileName.lastIndexOf('.') + 1);
     }
-    // add stats table
+    // add a record to the stats table
     postToStats(method, originalUrl, ip, fileInfo.name, fileInfo.claimId, 'success');
     // serve or show
     switch (method) {
@@ -213,8 +213,17 @@ module.exports = {
         sendGoogleAnalytics(method, headers, ip, originalUrl);
         return fileInfo;
       case SHOWLITE:
-        showFileLite(fileInfo, res);
-        return fileInfo;
+        return db.Claim.resolveClaim(fileInfo.name, fileInfo.claimId)
+         .then(claimRecord => {
+           fileInfo['title'] = claimRecord.title;
+           fileInfo['description'] = claimRecord.description;
+           showFileLite(fileInfo, res);
+           return fileInfo;
+         })
+         .catch(error => {
+           logger.error('throwing serverOrShowAsset SHOWLITE error...');
+           throw error;
+         });
       case SHOW:
         return db.Claim
           .getShortClaimIdFromLongClaimId(fileInfo.claimId, fileInfo.name)
@@ -233,7 +242,7 @@ module.exports = {
             return fileInfo;
           })
           .catch(error => {
-            logger.error('throwing serve/show error...');
+            logger.error('throwing serverOrShowAsset SHOW error...');
             throw error;
           });
       default:
