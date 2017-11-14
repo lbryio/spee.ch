@@ -36,18 +36,18 @@ module.exports = {
   handleRequestError: function (action, originalUrl, ip, error, res) {
     logger.error(`Request Error on ${originalUrl}`, module.exports.useObjectPropertiesIfNoKeys(error));
     postToStats(action, originalUrl, ip, null, null, error);
-    const [status, message] = this.returnErrorMessageAndStatus(error);
+    const [status, message] = module.exports.returnErrorMessageAndStatus(error);
     res
       .status(status)
-      .render('requestError', this.createErrorResponsePayload(status, message));
+      .render('requestError', module.exports.createErrorResponsePayload(status, message));
   },
   handleApiError: function (action, originalUrl, ip, error, res) {
     logger.error(`Api ${action} Error on ${originalUrl}`, module.exports.useObjectPropertiesIfNoKeys(error));
     postToStats(action, originalUrl, ip, null, null, error);
-    const [status, message] = this.returnErrorMessageAndStatus(error);
+    const [status, message] = module.exports.returnErrorMessageAndStatus(error);
     res
       .status(status)
-      .json(this.createErrorResponsePayload(status, message));
+      .json(module.exports.createErrorResponsePayload(status, message));
   },
   useObjectPropertiesIfNoKeys: function (err) {
     if (Object.keys(err).length === 0) {
