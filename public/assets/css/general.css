@@ -516,18 +516,20 @@ table {
 	display: block;
 	width: 100%;
 }
-
-#video-player {
-    background-color: #fff;
-    cursor: pointer;
-    margin: 0 auto;
-    margin-top: 2%;
-    border: 1px solid #d0d0d0;
-    padding:6px;
+#video-player, .showlite-asset {
+   	display: block;
+   	margin: 0 auto;
+    	background-color: #fff;
+	cursor: pointer;
 }
-
+#showlite-body #video-player {
+  	margin-top: 2%;    	
+    	padding: 6px;   	
+    	max-width: 50%;
+	border: 1px solid #d0d0d0;
+}
 .showlite-asset {
-    max-width: 50%;
+    	max-width: 100%;
 }
 
 /* item lists */
