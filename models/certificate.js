@@ -112,7 +112,7 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT }) => {
         .then(result => {
           switch (result.length) {
             case 0:
-              throw new Error('That is an invalid channel name');
+              throw new Error('No channel(s) found with that channel name');
             default:
               return resolve(returnShortId(result, longChannelId));
           }
