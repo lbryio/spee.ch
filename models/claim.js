@@ -169,7 +169,7 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, ARRAY, DECIMAL, D
         .then(result => {
           switch (result.length) {
             case 0:
-              throw new Error('That is an invalid claim name');
+              throw new Error('No claim(s) found with that claim name');
             default:
               resolve(returnShortId(result, claimId));
           }
