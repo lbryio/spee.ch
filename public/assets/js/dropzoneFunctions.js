@@ -75,6 +75,7 @@ const dropzoneFunctions = {
                 return;
             }
             publishFileFunctions.previewAndStageFile(selectedFile);
+            this.hideError();
         },
         onmouseenter_handler: function () {
             // show drag-and-drop instructions
@@ -89,22 +90,14 @@ const dropzoneFunctions = {
             document.getElementById('asset-preview').style.opacity = 1;
         },
         showError: function(errorMsg){
-            this.onmouseleave_handler();
-            // show error
-            const errorElement = document.getElementById('asset-preview-dropzone-error');
-            errorElement.setAttribute('class', 'flex-container--column flex-container--center-center position-absolute');
-            errorElement.innerHTML = `<p>${errorMsg}</p>`;
-            // set timer to hide error
-            setTimeout(this.hideError, 2000);
+            const errorDisplay = document.getElementById('asset-preview-dropzone-error');
+            errorDisplay.hidden = false;
+            errorDisplay.innerText = errorMsg;
         },
         hideError: function(){
-            // hide error
-            const errorElement = document.getElementById('asset-preview-dropzone-error');
-            errorElement.innerHTML = '';
-            errorElement.setAttribute('class', 'hidden');
-            // make image regular visibility
-            document.getElementById('asset-preview').style.opacity = 1;
-        }
+            const errorDisplay = document.getElementById('asset-preview-dropzone-error');
+            errorDisplay.hidden = true;
+        },
     }
 }
 
