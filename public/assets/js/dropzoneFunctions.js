@@ -67,6 +67,7 @@ const dropzoneFunctions = {
             }
         },
         selectFile(selectedFile){
+            this.onmouseleave_handler();
             try {
                 validationFunctions.validateFile(selectedFile); // validate the file's name, type, and size
             } catch (error) {
@@ -88,19 +89,18 @@ const dropzoneFunctions = {
             document.getElementById('asset-preview').style.opacity = 1;
         },
         showError: function(errorMsg){
+            this.onmouseleave_handler();
             // show error
             const errorElement = document.getElementById('asset-preview-dropzone-error');
             errorElement.setAttribute('class', 'flex-container--column flex-container--center-center position-absolute');
-            errorElement.innerText = errorMsg;
-            // make image lighter
-            document.getElementById('asset-preview').style.opacity = 0.2;
+            errorElement.innerHTML = `<p>${errorMsg}</p>`;
             // set timer to hide error
             setTimeout(this.hideError, 2000);
         },
         hideError: function(){
             // hide error
             const errorElement = document.getElementById('asset-preview-dropzone-error');
-            errorElement.innterText = '';
+            errorElement.innerHTML = '';
             errorElement.setAttribute('class', 'hidden');
             // make image regular visibility
             document.getElementById('asset-preview').style.opacity = 1;

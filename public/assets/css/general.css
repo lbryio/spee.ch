@@ -510,6 +510,17 @@ table {
 	width: calc(100% - 1rem);
 }
 
+#asset-preview-dropzone-error {
+	background-color: white;
+	color: red;
+	z-index: 1;
+}
+
+#asset-preview-dropzone-error > p {
+	padding: 1em;
+	font-size: large;
+}
+
 /* Show page */
 
 .video-show, .gifv-show, .image-show {
@@ -590,10 +601,4 @@ table {
 	text-align: center;
 	padding: 1em 0px 1em 0px;
 	width: 100%;
-}
-
-#asset-preview-dropzone-error {
-	background-color: white;
-	color: red;
-	font-weight: bold;
 }

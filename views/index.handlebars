@@ -24,7 +24,7 @@
                 <!-- preview -->
                 <div class="row row--padded">
                     <div id="asset-preview-holder" class="dropzone" ondrop="dropzoneFunctions.preview.drop_handler(event);" ondragover="dropzoneFunctions.dragover_handler(event);" ondragend="dropzoneFunctions.dragend_handler(event)"  ondragenter="dropzoneFunctions.preview.onmouseenter_handler()" ondragleave="dropzoneFunctions.preview.onmouseleave_handler()" onmouseenter="dropzoneFunctions.preview.onmouseenter_handler()" onmouseleave="dropzoneFunctions.preview.onmouseleave_handler()" onclick="dropzoneFunctions.triggerFileChooser('preview-file-chooser', event)">
-                        <div id="asset-preview-dropzone-error"></div>
+                        <div id="asset-preview-dropzone-error" class="hidden"></div>
                         <div id="asset-preview-dropzone-instructions" class="hidden">
                             <p>Drag & drop image or video here</p>
                             <p class="fine-print">OR</p>
