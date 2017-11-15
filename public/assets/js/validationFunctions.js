@@ -77,6 +77,7 @@ const validationFunctions = {
         return getRequest(url)
     },
     showError: function (errorDisplay, errorMsg) {
+        console.log('showing error:', errorMsg);
         errorDisplay.hidden = false;
         errorDisplay.innerText = errorMsg;
     },
