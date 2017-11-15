@@ -7,7 +7,7 @@ const validationFunctions = {
         }
         if (/'/.test(file.name)) {
             console.log('file name had apostrophe in it');
-            throw new Error('apostrophes are not allowed in the file name');
+            throw new Error('Apostrophes are not allowed in the file name.');
         }
         // validate size and type
         switch (file.type) {

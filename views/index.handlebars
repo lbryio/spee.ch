@@ -1,8 +1,9 @@
 <div class="row row--tall flex-container--column">
     <form>
-        <input class="input-file" type="file" id="siofu_input" name="siofu_input" accept="video/*,image/*" onchange="publishFileFunctions.previewAndStageFile(event.target.files[0])" enctype="multipart/form-data"/>
+        <input class="input-file" type="file" id="primary-file-chooser" name="siofu_input" accept="video/*,image/*" onchange="dropzoneFunctions.primary.selectFile(event.target.files[0])" enctype="multipart/form-data"/>
+        <input class="input-file" type="file" id="preview-file-chooser" name="siofu_input" accept="video/*,image/*" onchange="dropzoneFunctions.preview.selectFile(event.target.files[0])" enctype="multipart/form-data"/>
     </form>
-    <div id="primary-dropzone" class="dropzone row row--margined row--padded row--tall flex-container--column flex-container--center-center" ondrop="dropzoneFunctions.primary.drop_handler(event);" ondragover="dropzoneFunctions.dragover_handler(event);" ondragend="dropzoneFunctions.dragend_handler()" ondragenter="dropzoneFunctions.primary.dragenter_handler(event)" ondragleave="dropzoneFunctions.primary.dragexit_handler(event)" onclick="publishFileFunctions.triggerFileChooser('siofu_input', event)">
+    <div id="primary-dropzone" class="dropzone row row--margined row--padded row--tall flex-container--column flex-container--center-center" ondrop="dropzoneFunctions.primary.drop_handler(event);" ondragover="dropzoneFunctions.dragover_handler(event);" ondragend="dropzoneFunctions.dragend_handler()" ondragenter="dropzoneFunctions.primary.dragenter_handler(event)" ondragleave="dropzoneFunctions.primary.dragexit_handler(event)" onclick="dropzoneFunctions.triggerFileChooser('primary-file-chooser', event)">
         <div id="primary-dropzone-instructions">
             <p class="info-message-placeholder info-message--failure" id="input-error-file-selection" hidden="true"></p>
             <p>Drag & drop image or video here to publish</p>
@@ -22,8 +23,8 @@
             <div class="column column--5 column--sml-10" >
                 <!-- preview -->
                 <div class="row row--padded">
-                    <div id="asset-preview-holder" class="dropzone" ondrop="dropzoneFunctions.preview.drop_handler(event);" ondragover="dropzoneFunctions.dragover_handler(event);" ondragend="dropzoneFunctions.dragend_handler(event)"  ondragenter="dropzoneFunctions.preview.onmouseenter_handler()" ondragleave="dropzoneFunctions.preview.onmouseleave_handler()" onmouseenter="dropzoneFunctions.preview.onmouseenter_handler()" onmouseleave="dropzoneFunctions.preview.onmouseleave_handler()" onclick="publishFileFunctions.triggerFileChooser('siofu_input', event)">
-                        <div id="asset-preview-error"></div>
+                    <div id="asset-preview-holder" class="dropzone" ondrop="dropzoneFunctions.preview.drop_handler(event);" ondragover="dropzoneFunctions.dragover_handler(event);" ondragend="dropzoneFunctions.dragend_handler(event)"  ondragenter="dropzoneFunctions.preview.onmouseenter_handler()" ondragleave="dropzoneFunctions.preview.onmouseleave_handler()" onmouseenter="dropzoneFunctions.preview.onmouseenter_handler()" onmouseleave="dropzoneFunctions.preview.onmouseleave_handler()" onclick="dropzoneFunctions.triggerFileChooser('preview-file-chooser', event)">
+                        <div id="asset-preview-dropzone-error"></div>
                         <div id="asset-preview-dropzone-instructions" class="hidden">
                             <p>Drag & drop image or video here</p>
                             <p class="fine-print">OR</p>

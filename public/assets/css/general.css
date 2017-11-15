@@ -591,3 +591,9 @@ table {
 	padding: 1em 0px 1em 0px;
 	width: 100%;
 }
+
+#asset-preview-dropzone-error {
+	background-color: white;
+	color: red;
+	font-weight: bold;
+}
