@@ -1,29 +1,17 @@
 var stagedFiles = null;
 
 const publishFileFunctions = {
-    triggerFileChooser: function (fileInputId) {
-        document.getElementById(fileInputId).click();
-    },
-    cancelPublish: function () {
+    redirectUserHome: function () {
         window.location.href = '/';
     },
     previewAndStageFile: function (selectedFile) {
-        const fileSelectionInputError = document.getElementById('input-error-file-selection');
-        // When a file is selected for publish, validate that file and
-        // stage it so it will be ready when the publish button is clicked
-        try {
-            validationFunctions.validateFile(selectedFile); // validate the file's name, type, and size
-        } catch (error) {
-            validationFunctions.showError(fileSelectionInputError, error.message);
-            return;
-        }
+        // hide the primary drop zone (if applicable)
+        this.hidePrimaryDropzone();
         // set image preview, if an image was provided
         this.setImagePreview(selectedFile);
-        // hide the primary drop zone
-        this.hidePrimaryDropzone();
         // set the name input value to the image name if none is set yet
         this.updateClaimNameInputWithFileName(selectedFile);
-        // store the selected file for upload
+        // stage the selected file so it is ready for upload
         stagedFiles = [selectedFile];
     },
     hidePrimaryDropzone: function () {

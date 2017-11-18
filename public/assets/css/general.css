@@ -511,6 +511,10 @@ table {
 	width: calc(100% - 1rem);
 }
 
+#asset-preview-dropzone-error {
+	text-align: center;
+}
+
 /* Show page */
 
 .video-show, .gifv-show, .image-show {
