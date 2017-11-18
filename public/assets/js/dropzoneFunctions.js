@@ -15,26 +15,36 @@ const dropzoneFunctions = {
             event.dataTransfer.clearData();
         }
     },
+    validateAndSelectDroppedItem: function(event, that) {
+        var dt = event.dataTransfer;
+        if (dt.items) {
+            if (dt.items[0].kind == 'file') {
+                var droppedFile = dt.items[0].getAsFile();
+                that.selectFile(droppedFile, that);
+            } else {
+                that.showError('Only files may be dropped');
+            }
+        }
+    },
+    validateAndPreviewFile: function(selectedFile, that) {
+        try {
+            validationFunctions.validateFile(selectedFile); // validate the file's name, type, and size
+        } catch (error) {
+            that.showError(error.message);
+            return;
+        }
+        publishFileFunctions.previewAndStageFile(selectedFile);
+        // hide any errors from previous invalid files
+        if (that.hideError) {that.hideError();}
+    },
     primary: {
         drop_handler: function (event) {
             event.preventDefault();
             this.dragexit_handler();
-            var dt = event.dataTransfer;
-            if (dt.items) {
-                if (dt.items[0].kind == 'file') {
-                    var droppedFile = dt.items[0].getAsFile();
-                    this.selectFile(droppedFile);
-                }
-            }
+            dropzoneFunctions.validateAndSelectDroppedItem(event, this);
         },
-        selectFile(selectedFile){
-            try {
-                validationFunctions.validateFile(selectedFile); // validate the file's name, type, and size
-            } catch (error) {
-                this.showError(error.message);
-                return;
-            }
-            publishFileFunctions.previewAndStageFile(selectedFile);
+        selectFile(selectedFile, that){
+            dropzoneFunctions.validateAndPreviewFile(selectedFile, that);
         },
         dragenter_handler: function () {
             var primaryDropzone = document.getElementById('primary-dropzone');
@@ -58,24 +68,11 @@ const dropzoneFunctions = {
     preview: {
         drop_handler: function (event) {
             event.preventDefault();
-            var dt = event.dataTransfer;
-            if (dt.items) {
-                if (dt.items[0].kind == 'file') {
-                    var droppedFile = dt.items[0].getAsFile();
-                    this.selectFile(droppedFile);
-                }
-            }
+            dropzoneFunctions.validateAndSelectDroppedItem(event, this);
         },
-        selectFile(selectedFile){
+        selectFile(selectedFile, that){
             this.onmouseleave_handler();
-            try {
-                validationFunctions.validateFile(selectedFile); // validate the file's name, type, and size
-            } catch (error) {
-                this.showError(error.message);
-                return;
-            }
-            publishFileFunctions.previewAndStageFile(selectedFile);
-            this.hideError();
+            dropzoneFunctions.validateAndPreviewFile(selectedFile, that)
         },
         onmouseenter_handler: function () {
             // show drag-and-drop instructions
