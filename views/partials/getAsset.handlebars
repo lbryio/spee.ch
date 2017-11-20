@@ -1,0 +1,91 @@
+<div id="asset-holder">
+    <div id="peer-info">
+        <p id="peer-search-placeholder">Searching for peers for this asset...</p>
+        <p id="peer-search-success" hidden="true">Number of peers with content:<span id="peer-number">?</span></p>
+        <p id="peer-search-failure" hidden="true">Unfortunately, no peers could be located with that asset</p>
+    </div>
+    <div id="asset">
+        <div id="video-display" hidden="true">
+
+        </div>
+        <div id="gifv-display" hidden="true">
+
+        </div>
+        <div id="gif-display" hidden="true">
+
+        </div>
+        <div id="static-image-display" hidden="true">
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    const getAssetFunctions = {
+        showPeerListSuccess: function (numberOfPeers) {
+            const peerSearchPlaceholder = document.getElementById('peer-search-placeholder');
+            const peerSearchSuccess = document.getElementById('peer-search-success');
+            const peerSearchNumber = document.getElementById('peer-search-number');
+            peerSearchPlaceholder.hidden = true;
+            peerSearchSuccess.hidden = false;
+            peerSearchNumber.innerText = numberOfPeers;
+        },
+        showPeerListFailure: function () {
+            const peerSearchPlaceholder = document.getElementById('peer-search-placeholder');
+            const peerSearchFailure = document.getElementById('peer-search-failure');
+            peerSearchPlaceholder.hidden = true;
+            peerSearchFailure.hidden = false;
+        },
+        showAsset: function (claimName, claimId) {
+
+        },
+        showFailureMessage: function (msg) {
+            console.log(msg);
+        },
+        getAsset: function(claimName, claimId) {
+            console.log(`getting ${claimName}#${claimId}}`)
+            var uri = `/api/get/${claimName}/${claimId}`;
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", uri, true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4) {
+                    if (xhr.status == 200) {
+                        console.log('get returned successfully')
+                        this.showAsset(claimName, claimId);
+                    } else {
+                        console.log('get failed:', xhr.response);
+                    }
+                } else {
+                    console.log('xhr.readyState', xhr.readyState);
+                    this.showFailureMessage(xhr.readyState.message);
+                }
+            };
+            // Initiate a multipart/form-data upload
+            xhr.send();
+        },
+        getPeerList: function(claimName, claimId) {
+            var uri = `/api/peer_list/${claimName}/${claimId}`;
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", uri, true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4) {
+                    if (xhr.status == 200) {
+                        console.log('peer list retrieved:', JSON.parse(xhr.response).message);
+                        this.showPeerListSuccess(JSON.parse(xhr.response).message);
+                        this.getAsset(claimName, claimId);
+                    } else {
+                        console.log(xhr.response);
+                        console.log('unfortunately no peers could be found');
+                        this.showPeerListFailure(JSON.parse(xhr.response).message);
+                    }
+                } else {
+                    console.log('xhr.readyState', xhr.readyState);
+                }
+            };
+            // Initiate a multipart/form-data upload
+            xhr.send();
+        }
+    }
+
+    getAssetFunctions.getPeerList({{fileInfo.claimName}}, {{fileInfo.claimId}})
+</script>

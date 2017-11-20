@@ -6,11 +6,10 @@ function handleLbrynetResponse ({ data }, resolve, reject) {
   if (data.result) {
     // check for an error
     if (data.result.error) {
-      logger.debug('Lbrynet api error:', data.result.error);
+      logger.warn('Lbrynet api error:', data.result.error);
       reject(data.result.error);
       return;
     };
-    // logger.debug('data.result', data.result);
     resolve(data.result);
     return;
   }
