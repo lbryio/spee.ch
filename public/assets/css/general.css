@@ -488,11 +488,15 @@ table {
 	cursor: pointer;
 }
 
-#primary-dropzone-instructions, #dropbzone-dragover {
+#primary-dropzone-instructions {
 	z-index: -1;
 }
 
-.position-absolute {
+#asset-preview-dropzone {
+	position: relative;
+}
+
+#asset-preview-dropzone-instructions.front {
 	position: absolute;
 	top: 0px;
 	left: 0px;
@@ -500,18 +504,23 @@ table {
 	width: 100%;
 }
 
-#asset-preview-holder {
-	position: relative;
-}
-
 #asset-preview {
 	display: block;
 	padding: 0.5rem;
 	width: calc(100% - 1rem);
+	opacity: 1;
+}
+
+#asset-preview > .back {
+	opacity: 0.2;
 }
 
 #asset-preview-dropzone-error {
 	text-align: center;
+}
+
+#asset-preview:hover, .dropzone--drag-over > #asset-preview {
+	opacity: 0.2;
 }
 
 /* Show page */

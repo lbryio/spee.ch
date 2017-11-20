@@ -70,21 +70,29 @@ const dropzoneFunctions = {
             event.preventDefault();
             dropzoneFunctions.validateAndSelectDroppedItem(event, this);
         },
-        selectFile(selectedFile, that){
+        selectFile: function (selectedFile, that){
             this.onmouseleave_handler();
             dropzoneFunctions.validateAndPreviewFile(selectedFile, that)
         },
+        ondragenter_handler: function () {
+            this.showDropzoneInstructions();
+        },
+        ondragleave_handler: function () {
+            this.hideDropzoneInstructions();
+        },
         onmouseenter_handler: function () {
-            // show drag-and-drop instructions
-            document.getElementById('asset-preview-dropzone-instructions').setAttribute('class', 'flex-container--column flex-container--center-center position-absolute');
-            // make image lighter
-            document.getElementById('asset-preview').style.opacity = 0.2;
+            this.showDropzoneInstructions();
         },
         onmouseleave_handler: function () {
-            // hide instructions
+            this.hideDropzoneInstructions();
+        },
+        showDropzoneInstructions: function() {
+            document.getElementById('asset-preview-dropzone-instructions').setAttribute('class', 'flex-container--column flex-container--center-center front');
+            document.getElementById('asset-preview').setAttribute('class', 'back');
+        },
+        hideDropzoneInstructions: function() {
             document.getElementById('asset-preview-dropzone-instructions').setAttribute('class', 'hidden');
-            // make image regular visibility
-            document.getElementById('asset-preview').style.opacity = 1;
+            document.getElementById('asset-preview').setAttribute('class', '');
         },
         showError: function(errorMsg){
             const errorDisplay = document.getElementById('asset-preview-dropzone-error');
