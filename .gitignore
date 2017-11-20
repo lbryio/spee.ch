@@ -1,5 +1,4 @@
 node_modules
 .idea
-config/config.json
 config/sequelizeCliConfig.js
 config/speechConfig.js

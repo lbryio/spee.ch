@@ -19,4 +19,7 @@ module.exports = {
   session: {
     sessionKey: null,  // enter a secret key to be used for session encryption
   },
+  files: {
+    uploadDirectory: null,  // enter file path to where uploads/publishes should be stored
+  },
 };

@@ -151,7 +151,7 @@ function copyToClipboard(event){
     try {
         document.execCommand('copy');
     } catch (err) {
-        showError(errorElement, 'Oops, unable to copy');
+        validationFunctions.showError(errorElement, 'Oops, unable to copy');
     }
 }
 

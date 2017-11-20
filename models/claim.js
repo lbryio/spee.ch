@@ -2,7 +2,7 @@ const logger = require('winston');
 const { returnShortId } = require('../helpers/sequelizeHelpers.js');
 const NO_CLAIM = 'NO_CLAIM';
 
-module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, ARRAY, DECIMAL, DOUBLE, Op }) => {
+module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
   const Claim = sequelize.define(
     'Claim',
     {
@@ -11,7 +11,7 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, ARRAY, DECIMAL, D
         default: null,
       },
       amount: {
-        type   : STRING,
+        type   : DECIMAL(19, 8),
         default: null,
       },
       claimId: {
@@ -31,7 +31,7 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, ARRAY, DECIMAL, D
         default: null,
       },
       effectiveAmount: {
-        type   : STRING,
+        type   : DECIMAL(19, 8),
         default: null,
       },
       hasSignature: {
@@ -39,7 +39,7 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, ARRAY, DECIMAL, D
         default: null,
       },
       height: {
-        type   : STRING,
+        type   : INTEGER,
         default: null,
       },
       hex: {
@@ -59,7 +59,7 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, ARRAY, DECIMAL, D
         default: null,
       },
       validAtHeight: {
-        type   : STRING,
+        type   : INTEGER,
         default: null,
       },
       outpoint: {
