@@ -13,10 +13,10 @@ module.exports = {
     return new Handlebars.SafeString(gaCode);
   },
   addOpenGraph (title, mimeType, showUrl, source, description, thumbnail) {
-    if (title === null || title.trim() === '') {
+    if (!title || title.trim() === '') {
       title = 'Spee.ch';
     }
-    if (description === null || description.trim() === '') {
+    if (!description || description.trim() === '') {
       description = 'Open-source, decentralized image and video sharing.';
     }
     const ogTitle = `<meta property="og:title" content="${title}" >`;

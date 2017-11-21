@@ -171,10 +171,32 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
     });
   };
 
+  Certificate.validateLongChannelId = function (name, claimId) {
+    return new Promise((resolve, reject) => {
+      this.findOne({
+        where: {name, claimId},
+      })
+      .then(result => {
+        switch (result.length) {
+          case 0:
+            return resolve(NO_CHANNEL);
+          case 1:
+            return resolve(result[0]);
+          default:
+            logger.warn(`more than one entry matches that name (${name}) and certificate Id (${claimId})`);
+            return resolve(result[0]);
+        }
+      })
+      .catch(error => {
+        reject(error);
+      });
+    });
+  };
+
   Certificate.getLongChannelId = function (channelName, channelId) {
     logger.debug(`getLongChannelId(${channelName}, ${channelId})`);
     if (channelId && (channelId.length === 40)) {  // if a full channel id is provided
-      return new Promise((resolve, reject) => resolve(channelId));
+      return this.validateLongChannelId(channelName, channelId);
     } else if (channelId && channelId.length < 40) {  // if a short channel id is provided
       return this.getLongChannelIdFromShortChannelId(channelName, channelId);
     } else {

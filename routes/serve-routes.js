@@ -1,12 +1,14 @@
 const logger = require('winston');
-const { getAssetByClaim, getChannelContents, getAssetByChannel, serveOrShowAsset } = require('../controllers/serveController.js');
+const { getClaimId, getChannelContents, getLocalFileRecord, getClaimRecord } = require('../controllers/serveController.js');
+const { serveOrShowAsset } = require('../helpers/serveHelpers.js');
 const { handleRequestError } = require('../helpers/errorHandlers.js');
+const db = require('../models');
 
 const SERVE = 'SERVE';
 const SHOW = 'SHOW';
 const SHOWLITE = 'SHOWLITE';
-const CHANNEL = 'CHANNEL';
-const CLAIM = 'CLAIM';
+// const CHANNEL = 'CHANNEL';
+// const CLAIM = 'CLAIM';
 const CLAIM_ID_CHAR = ':';
 const CHANNEL_CHAR = '@';
 const CLAIMS_PER_PAGE = 10;
@@ -23,17 +25,6 @@ function isValidShortId (claimId) {
 
 function isValidShortIdOrClaimId (input) {
   return (isValidClaimId(input) || isValidShortId(input));
-}
-
-function getAsset (claimType, channelName, channelId, name, claimId) {
-  switch (claimType) {
-    case CHANNEL:
-      return getAssetByChannel(channelName, channelId, name);
-    case CLAIM:
-      return getAssetByClaim(name, claimId);
-    default:
-      return new Error('that claim type was not found');
-  }
 }
 
 function getPage (query) {
@@ -86,7 +77,6 @@ module.exports = (app) => {
   app.get('/:identifier/:name', ({ headers, ip, originalUrl, params }, res) => {
     let identifier = params.identifier;
     let name = params.name;
-    let claimOrChannel;
     let channelName = null;
     let claimId = null;
     let channelId = null;
@@ -123,7 +113,6 @@ module.exports = (app) => {
     // parse identifier for whether it is a channel, short url, or claim_id
     if (identifier.charAt(0) === '@') {
       channelName = identifier;
-      claimOrChannel = CHANNEL;
       const channelIdIndex = channelName.indexOf(CLAIM_ID_CHAR);
       if (channelIdIndex !== -1) {
         channelId = channelName.substring(channelIdIndex + 1);
@@ -133,13 +122,11 @@ module.exports = (app) => {
     } else {
       claimId = identifier;
       logger.debug('claim id =', claimId);
-      claimOrChannel = CLAIM;
     }
-    // 1. retrieve the asset and information
-    getAsset(claimOrChannel, channelName, channelId, name, claimId)
-    // 2. serve or show
+    // get the claim id
+    getClaimId(channelName, channelId, name, claimId)
     .then(result => {
-      logger.debug('getAsset result:', result);
+      logger.debug('getClaimId result:', result);
       if (result === NO_CLAIM) {
         res.status(200).render('noClaim');
         return;
@@ -147,7 +134,15 @@ module.exports = (app) => {
         res.status(200).render('noChannel');
         return;
       }
-      return serveOrShowAsset(result, fileExtension, method, headers, originalUrl, ip, res);
+      // check for local file info and resolve the claim
+      return Promise.all([getLocalFileRecord(result, name), getClaimRecord(result, name), db.Claim.getShortClaimIdFromLongClaimId(result, name)]);
+    })
+    .then(([fileInfo, claimInfo, shortClaimId]) => {
+      logger.debug(`file record:`, fileInfo);
+      logger.debug('claim record:', claimInfo);
+      logger.debug('short url:', shortClaimId);
+      // serve or show
+      return serveOrShowAsset(method, fileInfo, claimInfo, shortClaimId, res);
     })
     // 3. update the file
     .then(fileInfoForUpdate => {
@@ -229,24 +224,34 @@ module.exports = (app) => {
       }
       logger.debug('claim name = ', name);
       logger.debug('method =', method);
-      // 1. retrieve the asset and information
-      getAsset(CLAIM, null, null, name, null)
-      // 2. respond to the request
-      .then(result => {
-        logger.debug('getAsset result', result);
-        if (result === NO_CLAIM) {
-          res.status(200).render('noClaim');
-        } else {
-          return serveOrShowAsset(result, fileExtension, method, headers, originalUrl, ip, res);
-        }
-      })
-      // 3. update the database
-      .then(fileInfoForUpdate => {
-        // if needed, this is where we would update the file
-      })
-      .catch(error => {
-        handleRequestError('serve', originalUrl, ip, error, res);
-      });
+      // get the claim id
+      getClaimId(null, null, name, null)
+        .then(result => {
+          logger.debug('getClaimId result:', result);
+          if (result === NO_CLAIM) {
+            res.status(200).render('noClaim');
+            return;
+          } else if (result === NO_CHANNEL) {
+            res.status(200).render('noChannel');
+            return;
+          }
+            // check for local file info and resolve the claim
+          return Promise.all([getLocalFileRecord(result, name), getClaimRecord(result, name), db.Claim.getShortClaimIdFromLongClaimId(result, name)]);
+        })
+        .then(([fileInfo, claimInfo, shortClaimId]) => {
+          logger.debug(`fileInfo:`, fileInfo);
+          logger.debug('claimInfo:', claimInfo);
+          logger.debug('shortClaimId:', shortClaimId);
+          // serve or show
+          return serveOrShowAsset(method, fileInfo, claimInfo, shortClaimId, res);
+        })
+        // 3. update the file
+        .then(fileInfoForUpdate => {
+            // if needed, this is where we would update the file
+        })
+        .catch(error => {
+          handleRequestError('serve', originalUrl, ip, error, res);
+        });
     }
   });
 };

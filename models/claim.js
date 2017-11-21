@@ -274,10 +274,34 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
     });
   };
 
+  Claim.validateLongClaimId = function (name, claimId) {
+    return new Promise((resolve, reject) => {
+      this.findOne({
+        where: {name, claimId},
+      })
+      .then(result => {
+        // logger.debug('validateLongClaimId result:', result.dataValues);
+        logger.debug('validateLongClaimId result.length:', result.dataValues.length);
+        switch (result.dataValues.length) {
+          case 0:
+            return resolve(NO_CLAIM);
+          case 1:
+            return resolve(claimId);
+          default:
+            logger.warn(`more than one entry matches that name (${name}) and claimID (${claimId})`);
+            return resolve(claimId);
+        }
+      })
+      .catch(error => {
+        reject(error);
+      });
+    });
+  };
+
   Claim.getLongClaimId = function (claimName, claimId) {
     logger.debug(`getLongClaimId(${claimName}, ${claimId})`);
     if (claimId && (claimId.length === 40)) {  // if a full claim id is provided
-      return new Promise((resolve, reject) => resolve(claimId));
+      return this.validateLongClaimId(claimName, claimId);
     } else if (claimId && claimId.length < 40) {
       return this.getLongClaimIdFromShortClaimId(claimName, claimId);  // if a short claim id is provided
     } else {
