@@ -36,7 +36,7 @@
 		padding-right: 1.5em;
 	}
 
-	.showlite-asset {
+	#showlite-body > asset {
 		max-width: 100%;
 	}
 

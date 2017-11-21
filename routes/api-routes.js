@@ -30,57 +30,6 @@ function createFileRecord ({ name, claimId, outpoint, height, address, nsfw, con
   };
 }
 
-// function getAssetByLongClaimId (fullClaimId, name) {
-//   logger.debug('...getting asset by claim Id...');
-//   return new Promise((resolve, reject) => {
-//     // 1. check locally for claim
-//     checkForLocalAssetByClaimId(fullClaimId, name)
-//       .then(dataValues => {
-//           // if a result was found, return early with the result
-//         if (dataValues) {
-//           logger.debug('found a local file for this name and claimId');
-//           resolve(dataValues);
-//           return;
-//         }
-//         logger.debug('no local file found for this name and claimId');
-//           // 2. if no local claim, resolve and get the claim
-//         db.Claim
-//               .resolveClaim(name, fullClaimId)
-//               .then(resolveResult => {
-//                   // if no result, return early (claim doesn't exist or isn't free)
-//                 if (!resolveResult) {
-//                   resolve(NO_CLAIM);
-//                   return;
-//                 }
-//                 logger.debug('resolve result >> ', resolveResult.dataValues);
-//                 let fileRecord = {};
-//                   // get the claim
-//                 lbryApi.getClaim(`${name}#${fullClaimId}`)
-//                       .then(getResult => {
-//                         logger.debug('getResult >>', getResult);
-//                         fileRecord = createFileRecord(resolveResult);
-//                         fileRecord = addGetResultsToFileRecord(fileRecord, getResult);
-//                           // insert a record in the File table & Update Claim table
-//                         return db.File.create(fileRecord);
-//                       })
-//                       .then(() => {
-//                         logger.debug('File record successfully updated');
-//                         resolve(fileRecord);
-//                       })
-//                       .catch(error => {
-//                         reject(error);
-//                       });
-//               })
-//               .catch(error => {
-//                 reject(error);
-//               });
-//       })
-//       .catch(error => {
-//         reject(error);
-//       });
-//   });
-// }
-
 module.exports = (app) => {
   // route to run a claim_list request on the daemon
   app.get('/api/claim_list/:name', ({ ip, originalUrl, params }, res) => {
@@ -93,30 +42,42 @@ module.exports = (app) => {
       errorHandlers.handleApiError('claim_list', originalUrl, ip, error, res);
     });
   });
+  // route to see if asset is available locally
+  app.get('/api/local/:name/:claimId', ({ ip, originalUrl, params }, res) => {
+    const name = params.name;
+    const claimId = params.claimId;
+    let isLocalFileAvailable = false;
+    db.File.findOne({where: {name, claimId}})
+      .then(result => {
+        if (result) {
+          isLocalFileAvailable = true;
+        }
+        res.status(200).json({status: 'success', isLocalFileAvailable});
+      })
+      .catch(error => {
+        errorHandlers.handleApiError('get', originalUrl, ip, error, res);
+      });
+  });
   // route to get an asset
   app.get('/api/get/:name/:claimId', ({ ip, originalUrl, params }, res) => {
-    if (!params.name || !params.claimId) {
-      res.status(400).json({success: false, message: 'provide a claimId and/or a name'});
-    }
     let fileRecord;
-    // 1. resolve the claim
+    // resolve and get the claim
     db.Claim.resolveClaim(params.name, params.claimId)
       .then(resolveResult => {
         if (!resolveResult) {
           throw new Error('No matching uri found in Claim table');
         }
         fileRecord = createFileRecord(resolveResult);
-        // 2. get the claim
+        // get the claim
         return getClaim(`${params.name}#${params.claimId}`);
       })
       .then(getResult => {
-        res.status(200).json({status: 'success', message: getResult});
-        logger.debug('response was sent to the client');
         fileRecord = addGetResultsToFileRecord(fileRecord, getResult);
-        // 3. insert a record for the claim into the File table
+        // insert a record for the claim into the File table
         return db.File.create(fileRecord);
       })
       .then(() => {
+        res.status(200).json({status: 'success', message: 'content was successfully retrieved via lbrynet'});
         logger.debug('File record successfully created');
       })
       .catch(error => {

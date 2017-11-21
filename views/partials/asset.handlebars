@@ -1,41 +1,26 @@
-{{#ifConditional claimInfo.contentType '===' 'video/mp4'}}
-    {{#ifConditional claimInfo.fileExt '===' 'gifv'}}
-        <video class="gifv-show" autoplay loop muted>
-            <source src="/{{claimInfo.claimId}}/{{claimInfo.name}}.{{claimInfo.fileExt}}">
-            {{!--fallback--}}
-            Your browser does not support the <code>video</code> element.
-        </video>
-    {{else}}
-        <video id="video-player" class="video-show video" controls poster="{{claimInfo.thumbnail}}">
-            <source src="/{{claimInfo.claimId}}/{{claimInfo.name}}.{{claimInfo.fileExt}}">
-            {{!--fallback--}}
-            Your browser does not support the <code>video</code> element.
-        </video>
-        <script type="text/javascript">
-            document.addEventListener('DOMContentLoaded', resizeVideoPlayer)
-            window.addEventListener("resize", resizeVideoPlayer);
-            function resizeVideoPlayer() {
-                const div = document.getElementById('video-player');
-                const width = div.offsetWidth;
-                div.height = (width * 9 / 16);
-            }
+<div id="asset-display-component">
+    <p id="search-message" hidden="true">We're currently combing the blockchain for your asset!</p>
+    <p id="failure-message" hidden="true"></p>
+    <div id="asset-holder" hidden="true">
+        {{#ifConditional claimInfo.contentType '===' 'video/mp4'}}
+            <video id="video-player" controls poster="{{claimInfo.thumbnail}}">
+                <source id="asset">
+                <!--fallback-->
+                Your browser does not support the <code>video</code> element.
+            </video>
+            <!--dynamically resize video player-->
+            <script type="text/javascript">
+                document.addEventListener('DOMContentLoaded', resizeVideoPlayer)
+                window.addEventListener("resize", resizeVideoPlayer);
+                function resizeVideoPlayer() {
+                    const div = document.getElementById('video-player');
+                    const width = div.offsetWidth;
+                    div.height = (width * 9 / 16);
+                }
             </script>
-    {{/ifConditional}}
-{{else}}
-    <a href="/{{claimInfo.claimId}}/{{claimInfo.name}}.{{claimInfo.fileExt}}">
-        <img  class="image-show" src="/{{claimInfo.claimId}}/{{claimInfo.name}}.{{claimInfo.fileExt}}" />
-    </a>
-{{/ifConditional}}
-
-<div id="asset-holder">
-    <div id="search-message" hidden="true">
-        <p>We're currently combing the blockchain for your asset!</p>
-    </div>
-    <div id="failure-message" hidden="true">
-        <p>Hmmm, looks like no peers have your content.  How anti-social!</p>
-    </div>
-    <div id="asset" hidden="true">
-
+        {{else}}
+            <img  id="asset" class="asset" />
+        {{/ifConditional}}
     </div>
 </div>
 
@@ -44,9 +29,16 @@
     const getAssetFunctions = {
         showAsset: function () {
             const searchMessage = document.getElementById('search-message');
+            const assetHolder = document.getElementById('asset-holder');
             const asset = document.getElementById('asset');
             searchMessage.hidden = true;
-            asset.hidden = false;
+            assetHolder.hidden = false;
+            asset.setAttribute('src', `/{{claimInfo.claimId}}/{{claimInfo.name}}.{{claimInfo.fileExt}}`);
+        },
+        showSearchMessage: function (msg) {
+            console.log(msg);
+            const searchMessage = document.getElementById('search-message');
+            searchMessage.hidden = false;
         },
         showFailureMessage: function (msg) {
             console.log(msg);
@@ -54,31 +46,56 @@
             const failureMessage = document.getElementById('failure-message');
             searchMessage.hidden = true;
             failureMessage.hidden = false;
+            failureMessage.innerText(msg);
         },
-        displayAsset: function(contentType, source) {
-
+        checkClaimAvailability: function (claimName, claimId) {
+            console.log(`getting ${claimName}#${claimId}}`)
+            var uri = `/api/get/${claimName}/${claimId}`;
+            var xhr = new XMLHttpRequest();
+            var that = this;
+            xhr.open("GET", uri, true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4) {
+                    const response = JSON.parse(xhr.response);
+                    if (xhr.status == 200 && response.message === false) {
+                        that.showSearchMessage();
+                        that.getAsset(claimName, claimId)
+                    } else {
+                        console.log('get failed:', response);
+                        that.showFailureMessage('Well this sucks, but we can\'t seem to phone home');
+                    }
+                } else {
+                    console.log('xhr.readyState', xhr.readyState);
+                }
+            };
+            // Initiate a multipart/form-data upload
+            xhr.send();
         },
         getAsset: function(claimName, claimId) {
             console.log(`getting ${claimName}#${claimId}}`)
             var uri = `/api/get/${claimName}/${claimId}`;
             var xhr = new XMLHttpRequest();
+            var that = this;
             xhr.open("GET", uri, true);
             xhr.onreadystatechange = function() {
                 if (xhr.readyState == 4) {
+                    const response = JSON.parse(xhr.response);
                     if (xhr.status == 200) {
-                        console.log('get returned successfully', xhr.response);
-                        this.showAsset();
+                        console.log('get returned successfully', response);
+                        that.showAsset();
                     } else {
-                        console.log('get failed:', xhr.response);
+                        console.log('get failed:', response);
+                        that.showFailureMessage('Hmmm, looks like no peers have your content.  How anti-social!');
                     }
                 } else {
                     console.log('xhr.readyState', xhr.readyState);
-                    this.showFailureMessage(xhr.readyState.message);
                 }
             };
             // Initiate a multipart/form-data upload
             xhr.send();
         },
     }
+
+    getAssetFunctions.checkClaimAvailability('{{claimInfo.name}}', '{{claimInfo.claimId}}');
 
 </script>

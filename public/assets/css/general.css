@@ -99,6 +99,10 @@ h3, p {
 	font-size: small;
 }
 
+#show-body > .fine-print {
+	text-align: center;
+}
+
 .blue {
 	color: #4156C5;
 }
@@ -153,9 +157,7 @@ a, a:visited {
 .link--primary, .link--primary:visited {
 	color: #4156C5;
 }
-.link--primary.fine-print {
-    text-align: center;
-}
+
 .link--nav {
 	color: black;
 	border-bottom: 2px solid white;
@@ -513,24 +515,25 @@ table {
 
 /* Show page */
 
-.video-show, .gifv-show, .image-show {
-	display: block;
-	width: 100%;
-}
-#video-player, .showlite-asset {
+#video-player {
    	display: block;
    	margin: 0 auto;
-    	background-color: #fff;
+    background-color: #fff;
 	cursor: pointer;
 }
 #showlite-body #video-player {
   	margin-top: 2%;    	
-    	padding: 6px;   	
-    	max-width: 50%;
+    padding: 6px;
+    max-width: 50%;
 	border: 1px solid #d0d0d0;
 }
-.showlite-asset {
-    	max-width: 100%;
+
+.asset {
+	max-width: 100%;
+}
+
+#showlite-body > .asset {
+    max-width: 50%;
 }
 
 /* item lists */
