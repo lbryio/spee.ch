@@ -46,20 +46,25 @@
             const failureMessage = document.getElementById('failure-message');
             searchMessage.hidden = true;
             failureMessage.hidden = false;
-            failureMessage.innerText(msg);
+            failureMessage.innerText = msg;
         },
         checkClaimAvailability: function (claimName, claimId) {
             console.log(`getting ${claimName}#${claimId}}`)
-            var uri = `/api/get/${claimName}/${claimId}`;
+            var uri = `/api/local/${claimName}/${claimId}`;
             var xhr = new XMLHttpRequest();
             var that = this;
             xhr.open("GET", uri, true);
             xhr.onreadystatechange = function() {
                 if (xhr.readyState == 4) {
                     const response = JSON.parse(xhr.response);
-                    if (xhr.status == 200 && response.message === false) {
-                        that.showSearchMessage();
-                        that.getAsset(claimName, claimId)
+                    if (xhr.status == 200) {
+                        if (response.message === false) {
+                            that.showSearchMessage();
+                            that.getAsset(claimName, claimId)
+                        } else {
+                            console.log('local asset is available on spee.ch')
+                            that.showAsset();
+                        }
                     } else {
                         console.log('get failed:', response);
                         that.showFailureMessage('Well this sucks, but we can\'t seem to phone home');
