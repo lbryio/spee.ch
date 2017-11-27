@@ -12,6 +12,7 @@ const CHANNEL_CHAR = '@';
 const CLAIMS_PER_PAGE = 10;
 const NO_CHANNEL = 'NO_CHANNEL';
 const NO_CLAIM = 'NO_CLAIM';
+const NO_FILE = 'NO_FILE';
 
 function isValidClaimId (claimId) {
   return ((claimId.length === 40) && !/[^A-Za-z0-9]/g.test(claimId));
@@ -205,10 +206,10 @@ function serveAssetToClient (claimId, name, res) {
   return getLocalFileRecord(claimId, name)
       .then(fileInfo => {
         logger.debug('fileInfo:', fileInfo);
-        if (fileInfo) {
-          return serveHelpers.serveFile(fileInfo, res);
-        } else {
+        if (fileInfo === NO_FILE) {
           return res.status(307).json({status: 'success', message: 'resource temporarily unavailable'});
+        } else {
+          return serveHelpers.serveFile(fileInfo, claimId, name, res);
         }
       })
       .catch(error => {
@@ -247,24 +248,23 @@ module.exports = (app) => {
       logger.debug('claim id =', claimId);
     }
     // get the claim id
-    getClaimId(channelName, channelId, name, claimId)
-    .then(result => {
-      logger.debug('getClaimId result:', result);
-      if (result === NO_CLAIM) {
+    getClaimId(channelName, channelId, claimName, claimId)
+    .then(fullClaimId => {
+      if (fullClaimId === NO_CLAIM) {
         res.status(200).render('noClaim');
         return;
-      } else if (result === NO_CHANNEL) {
+      } else if (fullClaimId === NO_CHANNEL) {
         res.status(200).render('noChannel');
         return;
       }
       // show, showlite, or serve
       switch (responseType) {
         case SHOW:
-          return showAssetToClient(claimId, name, res);
+          return showAssetToClient(fullClaimId, claimName, res);
         case SHOWLITE:
-          return showPlainAssetToClient(claimId, name, res);
+          return showPlainAssetToClient(fullClaimId, claimName, res);
         case SERVE:
-          return serveAssetToClient(claimId, name, res);
+          return serveAssetToClient(fullClaimId, claimName, res);
         default:
           break;
       }
@@ -290,25 +290,24 @@ module.exports = (app) => {
       logger.debug('responseType ==', responseType);
       let fileExtension = determineFileExtension(uri);
       logger.debug('file extension ==', fileExtension);
-      let name = determineName(uri);
-      logger.debug('claim name == ', name);
+      let claimName = determineName(uri);
+      logger.debug('claim name == ', claimName);
       // get the claim id
-      getClaimId(null, null, name, null)
-        .then(claimId => {
-          logger.debug('getClaimId result:', claimId);
+      getClaimId(null, null, claimName, null)
+        .then(fullClaimId => {
           // if no claim id found, skip
-          if (claimId === NO_CLAIM) {
+          if (fullClaimId === NO_CLAIM) {
             res.status(200).render('noClaim');
             return;
           }
           // show, showlite, or serve
           switch (responseType) {
             case SHOW:
-              return showAssetToClient(claimId, name, res);
+              return showAssetToClient(fullClaimId, claimName, res);
             case SHOWLITE:
-              return showPlainAssetToClient(claimId, name, res);
+              return showPlainAssetToClient(fullClaimId, claimName, res);
             case SERVE:
-              return serveAssetToClient(claimId, name, res);
+              return serveAssetToClient(fullClaimId, claimName, res);
             default:
               break;
           }

@@ -2,10 +2,10 @@ const logger = require('winston');
 // const { postToStats, sendGoogleAnalytics } = require('../controllers/statsController.js');
 
 module.exports = {
-  serveFile ({ filePath }, { claimId, name, contentType }, res) {
+  serveFile ({ filePath, fileType }, claimId, name, res) {
     logger.verbose(`serving ${name}#${claimId}`);
     // set response options
-    const headerContentType = contentType || 'image/jpeg';
+    const headerContentType = fileType || 'image/jpeg';
     const options = {
       headers: {
         'X-Content-Type-Options': 'nosniff',

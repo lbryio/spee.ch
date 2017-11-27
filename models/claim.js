@@ -281,16 +281,10 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
       })
       .then(result => {
         // logger.debug('validateLongClaimId result:', result.dataValues);
-        logger.debug('validateLongClaimId result.length:', result.dataValues.length);
-        switch (result.dataValues.length) {
-          case 0:
-            return resolve(NO_CLAIM);
-          case 1:
-            return resolve(claimId);
-          default:
-            logger.warn(`more than one entry matches that name (${name}) and claimID (${claimId})`);
-            return resolve(claimId);
-        }
+        if (!result) {
+          return resolve(NO_CLAIM);
+        };
+        resolve(claimId);
       })
       .catch(error => {
         reject(error);
