@@ -177,43 +177,43 @@ function determineName (uri) {
 function showAssetToClient (claimId, name, res) {
     // check for local file info, resolve the claim, and get the short
   return Promise
-    .all([getClaimRecord(claimId, name), db.Claim.getShortClaimIdFromLongClaimId(claimId, name)])
-    .then(([claimInfo, shortClaimId]) => {
-      logger.debug('claimInfo:', claimInfo);
-      logger.debug('shortClaimId:', shortClaimId);
-      return serveHelpers.showFile(claimInfo, shortClaimId, res);
-    })
-    .catch(error => {
-      throw error;
-    });
+      .all([getClaimRecord(claimId, name), db.Claim.getShortClaimIdFromLongClaimId(claimId, name)])
+      .then(([claimInfo, shortClaimId]) => {
+        logger.debug('claimInfo:', claimInfo);
+        logger.debug('shortClaimId:', shortClaimId);
+        return serveHelpers.showFile(claimInfo, shortClaimId, res);
+      })
+      .catch(error => {
+        throw error;
+      });
 }
 
 function showPlainAssetToClient (claimId, name, res) {
   return Promise
-        .all([getClaimRecord(claimId, name), db.Claim.getShortClaimIdFromLongClaimId(claimId, name)])
-        .then(([claimInfo, shortClaimId]) => {
-          logger.debug('claimInfo:', claimInfo);
-          logger.debug('shortClaimId:', shortClaimId);
-          return serveHelpers.showFileLite(claimInfo, shortClaimId, res);
-        })
-        .catch(error => {
-          throw error;
-        });
+      .all([getClaimRecord(claimId, name), db.Claim.getShortClaimIdFromLongClaimId(claimId, name)])
+      .then(([claimInfo, shortClaimId]) => {
+        logger.debug('claimInfo:', claimInfo);
+        logger.debug('shortClaimId:', shortClaimId);
+        return serveHelpers.showFileLite(claimInfo, shortClaimId, res);
+      })
+      .catch(error => {
+        throw error;
+      });
 }
 
 function serveAssetToClient (claimId, name, res) {
   return getLocalFileRecord(claimId, name)
-        .then(fileInfo => {
-          logger.debug('fileInfo:', fileInfo);
-          if (fileInfo) {
-            return serveHelpers.serveFile(fileInfo, res);
-          } else {
-            return res.status(307).json({status: 'success', message: 'resource temporarily unavailable'});
-          }
-        })
-        .catch(error => {
-          throw error;
-        });
+      .then(fileInfo => {
+        logger.debug('fileInfo:', fileInfo);
+        if (fileInfo) {
+          return serveHelpers.serveFile(fileInfo, res);
+        } else {
+          return res.status(307).json({status: 'success', message: 'resource temporarily unavailable'});
+        }
+      })
+      .catch(error => {
+        throw error;
+      });
 }
 
 module.exports = (app) => {
@@ -259,11 +259,11 @@ module.exports = (app) => {
       }
       // show, showlite, or serve
       switch (responseType) {
-        case SERVE:
+        case SHOW:
           return showAssetToClient(claimId, name, res);
         case SHOWLITE:
           return showPlainAssetToClient(claimId, name, res);
-        case SHOW:
+        case SERVE:
           return serveAssetToClient(claimId, name, res);
         default:
           break;
@@ -303,11 +303,11 @@ module.exports = (app) => {
           }
           // show, showlite, or serve
           switch (responseType) {
-            case SERVE:
+            case SHOW:
               return showAssetToClient(claimId, name, res);
             case SHOWLITE:
               return showPlainAssetToClient(claimId, name, res);
-            case SHOW:
+            case SERVE:
               return serveAssetToClient(claimId, name, res);
             default:
               break;

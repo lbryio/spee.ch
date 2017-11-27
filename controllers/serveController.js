@@ -5,13 +5,6 @@ const DEFAULT_THUMBNAIL = 'https://spee.ch/assets/img/video_thumb_default.png';
 const NO_CHANNEL = 'NO_CHANNEL';
 const NO_FILE = 'NO_FILE';
 
-function chooseThumbnail (claimInfo, defaultThumbnail) {
-  if (!claimInfo.thumbnail || claimInfo.thumbnail.trim() === '') {
-    return defaultThumbnail;
-  }
-  return claimInfo.thumbnail;
-}
-
 module.exports = {
   getClaimId (channelName, channelId, name, claimId) {
     if (channelName) {
@@ -82,7 +75,7 @@ module.exports = {
               element['directUrlLong'] = `/${channelName}:${longChannelId}/${element.name}.${fileExtenstion}`;
               element['showUrlShort'] = `/${channelName}:${shortChannelId}/${element.name}`;
               element['directUrlShort'] = `/${channelName}:${shortChannelId}/${element.name}.${fileExtenstion}`;
-              element['thumbnail'] = chooseThumbnail(element, DEFAULT_THUMBNAIL);
+              element['thumbnail'] = module.exports.chooseThumbnail(element, DEFAULT_THUMBNAIL);
             });
           }
           resolve({
@@ -112,8 +105,32 @@ module.exports = {
           if (!claim) {
             throw new Error('no record found in Claim table');
           }
-          claim.dataValues.thumbnail = chooseThumbnail(claim.dataValues.thumbnail, DEFAULT_THUMBNAIL);
+          claim.dataValues.thumbnail = module.exports.chooseThumbnail(claim.dataValues.thumbnail, DEFAULT_THUMBNAIL);
+          claim.dataValues.fileExt = module.exports.determineFileExtensionFromContentType(claim.dataValues.contentType);
           return claim.dataValues;
         });
+  },
+  determineFileExtensionFromContentType (contentType) {
+    switch (contentType) {
+      case 'image/jpeg':
+        return 'jpeg';
+      case 'image/jpg':
+        return 'jpg';
+      case 'image/png':
+        return 'png';
+      case 'image/gif':
+        return 'gif';
+      case 'video/mp4':
+        return 'mp4';
+      default:
+        logger.info('showing unknown file type as image/jpeg');
+        return 'jpeg';
+    }
+  },
+  chooseThumbnail (claimInfo, defaultThumbnail) {
+    if (!claimInfo.thumbnail || claimInfo.thumbnail.trim() === '') {
+      return defaultThumbnail;
+    }
+    return claimInfo.thumbnail;
   },
 };
