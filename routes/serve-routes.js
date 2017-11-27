@@ -7,8 +7,6 @@ const db = require('../models');
 const SERVE = 'SERVE';
 const SHOW = 'SHOW';
 const SHOWLITE = 'SHOWLITE';
-// const CHANNEL = 'CHANNEL';
-// const CLAIM = 'CLAIM';
 const CLAIM_ID_CHAR = ':';
 const CHANNEL_CHAR = '@';
 const CLAIMS_PER_PAGE = 10;
@@ -27,6 +25,24 @@ function isValidShortIdOrClaimId (input) {
   return (isValidClaimId(input) || isValidShortId(input));
 }
 
+function isUriAChannel (name) {
+  return (name.charAt(0) === CHANNEL_CHAR);
+}
+
+function returnChannelNameFromUri (uri) {
+  if (uri.indexOf(CLAIM_ID_CHAR) !== -1) {
+    return uri.substring(0, uri.indexOf(CLAIM_ID_CHAR));
+  }
+  return uri;
+}
+
+function returnChannelIdFromUri (uri) {
+  if (uri.indexOf(CLAIM_ID_CHAR) !== -1) {
+    return uri.substring(uri.indexOf(CLAIM_ID_CHAR) + 1);
+  }
+  return null;
+}
+
 function getPage (query) {
   if (query.p) {
     return parseInt(query.p);
@@ -35,6 +51,9 @@ function getPage (query) {
 }
 
 function extractPageFromClaims (claims, pageNumber) {
+  if (!claims) {
+    return [];  // if no claims, return this default
+  }
   logger.debug('claims is array?', Array.isArray(claims));
   logger.debug(`pageNumber ${pageNumber} is number?`, Number.isInteger(pageNumber));
   const claimStartIndex = (pageNumber - 1) * CLAIMS_PER_PAGE;
@@ -43,19 +62,21 @@ function extractPageFromClaims (claims, pageNumber) {
   return pageOfClaims;
 }
 
-function determineTotalPages (totalClaims) {
-  if (totalClaims === 0) {
+function determineTotalPages (claims) {
+  if (!claims) {
     return 0;
+  } else {
+    const totalClaims = claims.length;
+    if (totalClaims < CLAIMS_PER_PAGE) {
+      return 1;
+    }
+    const fullPages = Math.floor(totalClaims / CLAIMS_PER_PAGE);
+    const remainder = totalClaims % CLAIMS_PER_PAGE;
+    if (remainder === 0) {
+      return fullPages;
+    }
+    return fullPages + 1;
   }
-  if (totalClaims < CLAIMS_PER_PAGE) {
-    return 1;
-  }
-  const fullPages = Math.floor(totalClaims / CLAIMS_PER_PAGE);
-  const remainder = totalClaims % CLAIMS_PER_PAGE;
-  if (remainder === 0) {
-    return fullPages;
-  }
-  return fullPages + 1;
 }
 
 function determinePreviousPage (currentPage) {
@@ -72,10 +93,86 @@ function determineNextPage (totalPages, currentPage) {
   return currentPage + 1;
 }
 
+function determineTotalClaims (result) {
+  if (!result.claims) {
+    return 0;
+  }
+  return result.claims.length;
+}
+
+function returnOptionsForChannelPageRendering (result, query) {
+  const totalPages = determineTotalPages(result.claims);
+  const paginationPage = getPage(query);
+  const options = {
+    layout        : 'channel',
+    channelName   : result.channelName,
+    longChannelId : result.longChannelId,
+    shortChannelId: result.shortChannelId,
+    claims        : extractPageFromClaims(result.claims, paginationPage),
+    previousPage  : determinePreviousPage(paginationPage),
+    currentPage   : paginationPage,
+    nextPage      : determineNextPage(totalPages, paginationPage),
+    totalPages    : totalPages,
+    totalResults  : determineTotalClaims(result),
+  };
+  return options;
+}
+
+function sendChannelContentsToClient (result, query, res) {
+  if (result === NO_CHANNEL) {              // (a) no channel found
+    res.status(200).render('noChannel');
+  } else {                                  // (b) channel found
+    const options = returnOptionsForChannelPageRendering(result, query);
+    res.status(200).render('channel', options);
+  }
+}
+
+function respondWithChannelPageToClient (uri, originalUrl, ip, query, res) {
+  let channelName = returnChannelNameFromUri(uri);
+  logger.debug('channel name =', channelName);
+  let channelId = returnChannelIdFromUri(uri);
+  logger.debug('channel Id =', channelId);
+  // 1. retrieve the channel contents
+  getChannelContents(channelName, channelId)
+    .then(result => {
+      sendChannelContentsToClient(result, query, res);
+    })
+    .catch(error => {
+      handleRequestError('serve', originalUrl, ip, error, res);
+    });
+}
+
+function determineResponseType (uri, headers) {
+  let responseType;
+  if (uri.indexOf('.') !== -1) {
+    responseType = SERVE;
+    if (headers['accept'] && headers['accept'].split(',').includes('text/html')) {
+      responseType = SHOWLITE;
+    }
+  } else {
+    responseType = SHOW;
+  }
+  return responseType;
+}
+
+function determineFileExtension (uri) {
+  if (uri.indexOf('.') !== -1) {
+    return uri.substring(uri.indexOf('.') + 1);
+  }
+  return null;
+}
+
+function determineName (uri) {
+  if (uri.indexOf('.') !== -1) {
+    return uri.substring(0, uri.indexOf('.'));
+  }
+  return uri;
+}
+
 module.exports = (app) => {
   // route to serve a specific asset
   app.get('/:identifier/:name', ({ headers, ip, originalUrl, params }, res) => {
-    let identifier = params.identifier;
+    let identifier = params.identifier;  // identifier will either be a channel or claim id
     let name = params.name;
     let channelName = null;
     let claimId = null;
@@ -111,13 +208,9 @@ module.exports = (app) => {
     logger.debug('claim name =', name);
     logger.debug('method =', method);
     // parse identifier for whether it is a channel, short url, or claim_id
-    if (identifier.charAt(0) === '@') {
-      channelName = identifier;
-      const channelIdIndex = channelName.indexOf(CLAIM_ID_CHAR);
-      if (channelIdIndex !== -1) {
-        channelId = channelName.substring(channelIdIndex + 1);
-        channelName = channelName.substring(0, channelIdIndex);
-      }
+    if (isUriAChannel(identifier)) {
+      channelName = returnChannelNameFromUri(identifier);
+      channelId = returnChannelIdFromUri(identifier);
       logger.debug('channel name =', channelName);
     } else {
       claimId = identifier;
@@ -153,77 +246,20 @@ module.exports = (app) => {
     });
   });
   // route to serve the winning asset at a claim
-  app.get('/:name', ({ headers, ip, originalUrl, params, query }, res) => {
+  app.get('/:uri', ({ headers, ip, originalUrl, params, query }, res) => {
     // parse name param
-    let name = params.name;
-    let method;
-    let fileExtension;
-    let channelName = null;
-    let channelId = null;
+    let uri = params.uri;
     // (a) handle channel requests
-    if (name.charAt(0) === CHANNEL_CHAR) {
-      channelName = name;
-      const paginationPage = getPage(query);
-      const channelIdIndex = channelName.indexOf(CLAIM_ID_CHAR);
-      if (channelIdIndex !== -1) {
-        channelId = channelName.substring(channelIdIndex + 1);
-        channelName = channelName.substring(0, channelIdIndex);
-      }
-      logger.debug('channel name =', channelName);
-      logger.debug('channel Id =', channelId);
-      // 1. retrieve the channel contents
-      getChannelContents(channelName, channelId)
-      // 2. respond to the request
-      .then(result => {
-        if (result === NO_CHANNEL) { // no channel found
-          res.status(200).render('noChannel');
-        } else if (!result.claims) {  // channel found, but no claims
-          res.status(200).render('channel', {
-            layout        : 'channel',
-            channelName   : result.channelName,
-            longChannelId : result.longChannelId,
-            shortChannelId: result.shortChannelId,
-            claims        : [],
-            previousPage  : 0,
-            currentPage   : 0,
-            nextPage      : 0,
-            totalPages    : 0,
-            totalResults  : 0,
-          });
-        } else {  // channel found, with claims
-          const totalPages = determineTotalPages(result.claims.length);
-          res.status(200).render('channel', {
-            layout        : 'channel',
-            channelName   : result.channelName,
-            longChannelId : result.longChannelId,
-            shortChannelId: result.shortChannelId,
-            claims        : extractPageFromClaims(result.claims, paginationPage),
-            previousPage  : determinePreviousPage(paginationPage),
-            currentPage   : paginationPage,
-            nextPage      : determineNextPage(totalPages, paginationPage),
-            totalPages    : totalPages,
-            totalResults  : result.claims.length,
-          });
-        }
-      })
-      .catch(error => {
-        handleRequestError('serve', originalUrl, ip, error, res);
-      });
+    if (isUriAChannel(uri)) {
+      respondWithChannelPageToClient(uri, originalUrl, ip, query, res);
     // (b) handle stream requests
     } else {
-      if (name.indexOf('.') !== -1) {
-        method = SERVE;
-        if (headers['accept'] && headers['accept'].split(',').includes('text/html')) {
-          method = SHOWLITE;
-        }
-        fileExtension = name.substring(name.indexOf('.') + 1);
-        name = name.substring(0, name.indexOf('.'));
-        logger.debug('file extension =', fileExtension);
-      } else {
-        method = SHOW;
-      }
-      logger.debug('claim name = ', name);
-      logger.debug('method =', method);
+      let responseType = determineResponseType(uri, headers);
+      logger.debug('responseType ==', responseType);
+      let fileExtension = determineFileExtension(uri);
+      logger.debug('file extension ==', fileExtension);
+      let name = determineName(uri);
+      logger.debug('claim name == ', name);
       // get the claim id
       getClaimId(null, null, name, null)
         .then(result => {
@@ -235,7 +271,7 @@ module.exports = (app) => {
           return Promise.all([getLocalFileRecord(result, name), getClaimRecord(result, name), db.Claim.getShortClaimIdFromLongClaimId(result, name)]);
         })
         .then(result => {
-          if (result === NO_CLAIM || result === NO_CHANNEL) {
+          if (result === NO_CLAIM) {
             res.status(200).render('noClaim');
             return;
           } else if (result === NO_CHANNEL) {
@@ -248,7 +284,7 @@ module.exports = (app) => {
           logger.debug('claimInfo:', claimInfo);
           logger.debug('shortClaimId:', shortClaimId);
           // serve or show
-          return serveOrShowAsset(method, fileInfo, claimInfo, shortClaimId, res);
+          return serveOrShowAsset(responseType, fileInfo, claimInfo, shortClaimId, res);
         })
         // 3. update the file
         .then(fileInfoForUpdate => {
