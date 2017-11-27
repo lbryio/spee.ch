@@ -37,7 +37,7 @@ module.exports = {
         break;
     }
   },
-  serveFile ({ filePath }, { claimId, name, contentType }, shortId, res) {
+  serveFile ({ filePath }, { claimId, name, contentType }, res) {
     logger.verbose(`serving ${name}#${claimId}`);
     // set response options
     const headerContentType = contentType || 'image/jpeg';
@@ -55,11 +55,11 @@ module.exports = {
       res.status(400).json({success: false, message: 'that claim is not hosted locally by Spee<ch yet'});
     }
   },
-  showFile (fileInfo, claimInfo, shortId, res) {
+  showFile (claimInfo, shortId, res) {
     const openGraphInfo = createOpenGraphInfo(claimInfo);
     res.status(200).render('show', { layout: 'show', claimInfo, shortId, openGraphInfo });
   },
-  showFileLite (fileInfo, claimInfo, shortId, res) {
+  showFileLite (claimInfo, shortId, res) {
     const openGraphInfo = createOpenGraphInfo(claimInfo);
     res.status(200).render('showLite', { layout: 'showlite', claimInfo, shortId, openGraphInfo });
   },
