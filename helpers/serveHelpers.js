@@ -16,8 +16,12 @@ function createOpenGraphInfo ({ claimId, name, fileExt }) {
 module.exports = {
   serveOrShowAsset (method, fileInfo, claimInfo, shortId, res) {
     // add file extension to the file info
-    claimInfo['fileExt'] = fileInfo.fileName.substring(fileInfo.fileName.lastIndexOf('.') + 1);
-      // serve or show
+    if (fileInfo.fileName) {
+      claimInfo['fileExt'] = fileInfo.fileName.substring(fileInfo.fileName.lastIndexOf('.') + 1);
+    } else {
+      claimInfo['fileExt'] = null;
+    }
+    // serve or show
     switch (method) {
       case SERVE:
         module.exports.serveFile(fileInfo, claimInfo, shortId, res);

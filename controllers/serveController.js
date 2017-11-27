@@ -3,6 +3,7 @@ const logger = require('winston');
 
 const DEFAULT_THUMBNAIL = 'https://spee.ch/assets/img/video_thumb_default.png';
 const NO_CHANNEL = 'NO_CHANNEL';
+const NO_FILE = 'NO_FILE';
 
 function chooseThumbnail (claimInfo, defaultThumbnail) {
   if (!claimInfo.thumbnail || claimInfo.thumbnail.trim() === '') {
@@ -100,7 +101,7 @@ module.exports = {
     return db.File.findOne({where: {claimId, name}})
       .then(file => {
         if (!file) {
-          return null;
+          return NO_FILE;
         }
         return file.dataValues;
       });

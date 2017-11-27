@@ -159,7 +159,7 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
   };
 
   Claim.getShortClaimIdFromLongClaimId = function (claimId, claimName) {
-    logger.debug(`Claim.getShortClaimIdFromLongClaimId for ${claimId}#${claimId}`);
+    logger.debug(`Claim.getShortClaimIdFromLongClaimId for ${claimName}#${claimId}`);
     return new Promise((resolve, reject) => {
       this
         .findAll({
@@ -260,12 +260,12 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
           order: [['effectiveAmount', 'DESC'], ['height', 'ASC']],  // note: maybe height and effective amount need to switch?
         })
         .then(result => {
+          logger.debug('length of result', result.length);
           switch (result.length) {
             case 0:
               return resolve(NO_CLAIM);
             default:
-              logger.debug('getTopFreeClaimIdByClaimName result:', result.dataValues);
-              return resolve(result[0].claimId);
+              return resolve(result[0].dataValues.claimId);
           }
         })
         .catch(error => {

@@ -228,17 +228,22 @@ module.exports = (app) => {
       getClaimId(null, null, name, null)
         .then(result => {
           logger.debug('getClaimId result:', result);
-          if (result === NO_CLAIM) {
+          if (result === NO_CLAIM || result === NO_CHANNEL) {
+            return result;
+          }
+          // check for local file info and resolve the claim
+          return Promise.all([getLocalFileRecord(result, name), getClaimRecord(result, name), db.Claim.getShortClaimIdFromLongClaimId(result, name)]);
+        })
+        .then(result => {
+          if (result === NO_CLAIM || result === NO_CHANNEL) {
             res.status(200).render('noClaim');
             return;
           } else if (result === NO_CHANNEL) {
             res.status(200).render('noChannel');
             return;
           }
-            // check for local file info and resolve the claim
-          return Promise.all([getLocalFileRecord(result, name), getClaimRecord(result, name), db.Claim.getShortClaimIdFromLongClaimId(result, name)]);
-        })
-        .then(([fileInfo, claimInfo, shortClaimId]) => {
+          let fileInfo, claimInfo, shortClaimId;
+          [fileInfo, claimInfo, shortClaimId] = result;
           logger.debug(`fileInfo:`, fileInfo);
           logger.debug('claimInfo:', claimInfo);
           logger.debug('shortClaimId:', shortClaimId);
