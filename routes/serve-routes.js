@@ -109,10 +109,9 @@ module.exports = (app) => {
         method = SERVE;
       }
     } else {
+      method = SHOW;
       if (!headers['accept'] || !headers['accept'].split(',').includes('text/html')) {
         method = SERVE;
-      } else {
-        method = SHOW;
       }
     }
     /* patch for backwards compatability with spee.ch/name/claim_id */
