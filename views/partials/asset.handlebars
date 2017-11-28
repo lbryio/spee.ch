@@ -3,23 +3,9 @@
     <p id="failure-message" hidden="true"></p>
     <div id="asset-holder" hidden="true">
         {{#ifConditional claimInfo.contentType '===' 'video/mp4'}}
-            <video id="video-player" controls poster="{{claimInfo.thumbnail}}">
-                <source id="asset">
-                <!--fallback-->
-                Your browser does not support the <code>video</code> element.
-            </video>
-            <!--dynamically resize video player-->
-            <script type="text/javascript">
-                document.addEventListener('DOMContentLoaded', resizeVideoPlayer)
-                window.addEventListener("resize", resizeVideoPlayer);
-                function resizeVideoPlayer() {
-                    const div = document.getElementById('video-player');
-                    const width = div.offsetWidth;
-                    div.height = (width * 9 / 16);
-                }
-            </script>
+            {{> video}}
         {{else}}
-            <img  id="asset" class="asset" />
+            {{> image}}
         {{/ifConditional}}
     </div>
 </div>
@@ -34,6 +20,7 @@
             searchMessage.hidden = true;
             assetHolder.hidden = false;
             asset.setAttribute('src', `/{{claimInfo.claimId}}/{{claimInfo.name}}.{{claimInfo.fileExt}}`);
+            asset.load();
         },
         showSearchMessage: function (msg) {
             console.log(msg);
@@ -58,12 +45,12 @@
                 if (xhr.readyState == 4) {
                     const response = JSON.parse(xhr.response);
                     if (xhr.status == 200) {
-                        if (response.message === false) {
-                            that.showSearchMessage();
-                            that.getAsset(claimName, claimId)
-                        } else {
+                        if (response.message === true) {
                             console.log('local asset is available on spee.ch')
                             that.showAsset();
+                        } else {
+                            that.showSearchMessage();
+                            that.getAsset(claimName, claimId)
                         }
                     } else {
                         console.log('get failed:', response);
@@ -87,7 +74,13 @@
                     const response = JSON.parse(xhr.response);
                     if (xhr.status == 200) {
                         console.log('get returned successfully', response);
-                        that.showAsset();
+                        if (response.completed === true) {
+                            console.log('lbrynet has finished downloading the asset');
+                            that.showAsset();
+                        } else {
+                            console.log('lbrynet is still downloading the asset');
+                            setTimeout(getAsset, 5000);
+                        }
                     } else {
                         console.log('get failed:', response);
                         that.showFailureMessage(`${response.message}`);

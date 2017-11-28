@@ -10,13 +10,13 @@ const errorHandlers = require('../helpers/errorHandlers.js');
 const { postToStats } = require('../controllers/statsController.js');
 const { authenticateOrSkip } = require('../auth/authentication.js');
 
-function addGetResultsToFileRecord (fileInfo, getResult) {
+function addGetResultsToFileData (fileInfo, getResult) {
   fileInfo.fileName = getResult.file_name;
   fileInfo.filePath = getResult.download_path;
   return fileInfo;
 }
 
-function createFileRecord ({ name, claimId, outpoint, height, address, nsfw, contentType }) {
+function createFileData ({ name, claimId, outpoint, height, address, nsfw, contentType }) {
   return {
     name,
     claimId,
@@ -60,24 +60,23 @@ module.exports = (app) => {
   });
   // route to get an asset
   app.get('/api/get_claim/:name/:claimId', ({ ip, originalUrl, params }, res) => {
-    let fileRecord;
-    // resolve and get the claim
+    // resolve the claim
     db.Claim.resolveClaim(params.name, params.claimId)
       .then(resolveResult => {
+        // make sure a claim actually exists at that uri
         if (!resolveResult) {
           throw new Error('No matching uri found in Claim table');
         }
-        fileRecord = createFileRecord(resolveResult);
+        let fileData = createFileData(resolveResult);
         // get the claim
-        return getClaim(`${params.name}#${params.claimId}`);
+        return Promise.all([fileData, getClaim(`${params.name}#${params.claimId}`)]);
       })
-      .then(getResult => {
-        fileRecord = addGetResultsToFileRecord(fileRecord, getResult);
-        // insert a record for the claim into the File table
-        return db.File.create(fileRecord);
+      .then(([ fileData, getResult ]) => {
+        fileData = addGetResultsToFileData(fileData, getResult);
+        return Promise.all([db.File.create(fileData), getResult]);  // insert a record for the claim into the File table
       })
-      .then(() => {
-        res.status(200).json({status: 'success', message: 'content was successfully retrieved via lbrynet'});
+      .then(([ fileRecord, {message, completed} ]) => {
+        res.status(200).json({ status: 'success', message, completed });
         logger.debug('File record successfully created');
       })
       .catch(error => {
