@@ -310,9 +310,10 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
           where: { name, claimId },
         })
         .then(result => {
+          if (!result) {
+            return resolve(null);
+          };
           switch (result.length) {
-            case 0:
-              return resolve(null);
             case 1:
               return resolve(result[0]);
             default:

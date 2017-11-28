@@ -177,15 +177,10 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
         where: {name, claimId},
       })
       .then(result => {
-        switch (result.length) {
-          case 0:
-            return resolve(NO_CHANNEL);
-          case 1:
-            return resolve(result[0]);
-          default:
-            logger.warn(`more than one entry matches that name (${name}) and certificate Id (${claimId})`);
-            return resolve(result[0]);
-        }
+        if (!result) {
+          return resolve(NO_CHANNEL);
+        };
+        resolve(claimId);
       })
       .catch(error => {
         reject(error);
