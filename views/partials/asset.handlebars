@@ -49,8 +49,8 @@
             failureMessage.innerText = msg;
         },
         checkClaimAvailability: function (claimName, claimId) {
-            console.log(`getting ${claimName}#${claimId}}`)
-            var uri = `/api/local/${claimName}/${claimId}`;
+            console.log(`getting ${claimName}#${claimId}`)
+            var uri = `/api/check_local_claim/${claimName}/${claimId}`;
             var xhr = new XMLHttpRequest();
             var that = this;
             xhr.open("GET", uri, true);
@@ -77,8 +77,8 @@
             xhr.send();
         },
         getAsset: function(claimName, claimId) {
-            console.log(`getting ${claimName}#${claimId}}`)
-            var uri = `/api/get/${claimName}/${claimId}`;
+            console.log(`getting ${claimName}#${claimId}`)
+            var uri = `/api/get_claim/${claimName}/${claimId}`;
             var xhr = new XMLHttpRequest();
             var that = this;
             xhr.open("GET", uri, true);
@@ -90,7 +90,7 @@
                         that.showAsset();
                     } else {
                         console.log('get failed:', response);
-                        that.showFailureMessage('Hmmm, looks like no peers have your content.  How anti-social!');
+                        that.showFailureMessage(`${response.message}`);
                     }
                 } else {
                     console.log('xhr.readyState', xhr.readyState);

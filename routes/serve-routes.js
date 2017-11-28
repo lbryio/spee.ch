@@ -207,7 +207,7 @@ function serveAssetToClient (claimId, name, res) {
       .then(fileInfo => {
         logger.debug('fileInfo:', fileInfo);
         if (fileInfo === NO_FILE) {
-          return res.status(307).json({status: 'success', message: 'resource temporarily unavailable'});
+          res.status(307).redirect(`/api/get_claim/${name}/${claimId}`);
         } else {
           return serveHelpers.serveFile(fileInfo, claimId, name, res);
         }

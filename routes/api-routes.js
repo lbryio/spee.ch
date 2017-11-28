@@ -43,7 +43,7 @@ module.exports = (app) => {
     });
   });
   // route to see if asset is available locally
-  app.get('/api/local/:name/:claimId', ({ ip, originalUrl, params }, res) => {
+  app.get('/api/check_local_claim/:name/:claimId', ({ ip, originalUrl, params }, res) => {
     const name = params.name;
     const claimId = params.claimId;
     let isLocalFileAvailable = false;
@@ -52,14 +52,14 @@ module.exports = (app) => {
         if (result) {
           isLocalFileAvailable = true;
         }
-        res.status(200).json({status: 'success', isLocalFileAvailable});
+        res.status(200).json({status: 'success', message: isLocalFileAvailable});
       })
       .catch(error => {
         errorHandlers.handleApiError('get', originalUrl, ip, error, res);
       });
   });
   // route to get an asset
-  app.get('/api/get/:name/:claimId', ({ ip, originalUrl, params }, res) => {
+  app.get('/api/get_claim/:name/:claimId', ({ ip, originalUrl, params }, res) => {
     let fileRecord;
     // resolve and get the claim
     db.Claim.resolveClaim(params.name, params.claimId)

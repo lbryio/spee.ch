@@ -13,12 +13,7 @@ module.exports = {
       },
     };
     // send the file
-    if (filePath) {
-      res.status(200).sendFile(filePath, options);
-    } else {
-      // res.status(307).redirect(`/api/get/${name}/${claimId}`);
-      res.status(400).json({success: false, message: 'that claim is not hosted locally by Spee<ch yet'});
-    }
+    res.status(200).sendFile(filePath, options);
   },
   showFile (claimInfo, shortId, res) {
     const openGraphInfo = module.exports.createOpenGraphInfo(claimInfo);
