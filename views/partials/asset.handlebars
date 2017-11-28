@@ -20,7 +20,6 @@
             searchMessage.hidden = true;
             assetHolder.hidden = false;
             asset.setAttribute('src', `/{{claimInfo.claimId}}/{{claimInfo.name}}.{{claimInfo.fileExt}}`);
-            asset.load();
         },
         showSearchMessage: function (msg) {
             console.log(msg);
