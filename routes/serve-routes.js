@@ -156,13 +156,6 @@ function determineResponseType (uri, headers) {
   return responseType;
 }
 
-function determineFileExtension (uri) {
-  if (uri.indexOf('.') !== -1) {
-    return uri.substring(uri.indexOf('.') + 1);
-  }
-  return null;
-}
-
 function determineName (uri) {
   /* patch because twitter player preview adds '>' before file extension.  Note: put this inside determineName()? */
   if (uri.indexOf('>') !== -1) {
@@ -217,61 +210,64 @@ function serveAssetToClient (claimId, name, res) {
       });
 }
 
+function showOrServeAsset (responseType, claimId, claimName, res) {
+  switch (responseType) {
+    case SHOW:
+      return showAssetToClient(claimId, claimName, res);
+    case SHOWLITE:
+      return showPlainAssetToClient(claimId, claimName, res);
+    case SERVE:
+      return serveAssetToClient(claimId, claimName, res);
+    default:
+      break;
+  }
+}
+
+function flipClaimNameAndIdForBackwardsCompatibility (identifier, name) {
+  if (isValidShortIdOrClaimId(name) && !isValidShortIdOrClaimId(identifier)) {
+    const tempName = name;
+    name = identifier;
+    identifier = tempName;
+  }
+  return [identifier, name];
+}
+
+function logRequestData (responseType, claimName, channelName, claimId) {
+  logger.debug('responseType ===', responseType);
+  logger.debug('claim name === ', claimName);
+  logger.debug('channel name ===', channelName);
+  logger.debug('claim id ===', claimId);
+}
+
 module.exports = (app) => {
   // route to serve a specific asset
   app.get('/:identifier/:name', ({ headers, ip, originalUrl, params }, res) => {
     let identifier = params.identifier;  // identifier will either be a @channel, @channel:channelId, or claimId
     let name = params.name;  // name will be example or example.ext
+    [identifier, name] = flipClaimNameAndIdForBackwardsCompatibility(identifier, name); // patch for backwards compatability with spee.ch/name/claim_id
     let channelName = null;
     let claimId = null;
     let channelId = null;
-    /* patch for backwards compatability with spee.ch/name/claim_id */
-    if (isValidShortIdOrClaimId(name) && !isValidShortIdOrClaimId(identifier)) {
-      let tempName = name;
-      name = identifier;
-      identifier = tempName;
-    }
-    /* end patch */
     let responseType = determineResponseType(name, headers);
-    logger.debug('responseType ==', responseType);
-    let fileExtension = determineFileExtension(name);
-    logger.debug('file extension ==', fileExtension);
     let claimName = determineName(name);
-    logger.debug('claim name == ', claimName);
     // parse identifier for whether it is a channel, short url, or claim_id
     if (isUriAChannel(identifier)) {
       channelName = returnChannelNameFromUri(identifier);
       channelId = returnChannelIdFromUri(identifier);
-      logger.debug('channel name =', channelName);
     } else {
       claimId = identifier;
-      logger.debug('claim id =', claimId);
     }
+    // consolidated logging
+    logRequestData(responseType, claimName, channelName, claimId);
     // get the claim id
     getClaimId(channelName, channelId, claimName, claimId)
     .then(fullClaimId => {
       if (fullClaimId === NO_CLAIM) {
-        res.status(200).render('noClaim');
-        return;
+        return res.status(200).render('noClaim');
       } else if (fullClaimId === NO_CHANNEL) {
-        res.status(200).render('noChannel');
-        return;
+        return res.status(200).render('noChannel');
       }
-      // show, showlite, or serve
-      switch (responseType) {
-        case SHOW:
-          return showAssetToClient(fullClaimId, claimName, res);
-        case SHOWLITE:
-          return showPlainAssetToClient(fullClaimId, claimName, res);
-        case SERVE:
-          return serveAssetToClient(fullClaimId, claimName, res);
-        default:
-          break;
-      }
-    })
-    // 3. update the file
-    .then(fileInfoForUpdate => {
-      // if needed, this is where we would update the file
+      showOrServeAsset(responseType, fullClaimId, claimName, res);
     })
     .catch(error => {
       handleRequestError('serve', originalUrl, ip, error, res);
@@ -287,33 +283,16 @@ module.exports = (app) => {
     // (b) handle stream requests
     } else {
       let responseType = determineResponseType(uri, headers);
-      logger.debug('responseType ==', responseType);
-      let fileExtension = determineFileExtension(uri);
-      logger.debug('file extension ==', fileExtension);
       let claimName = determineName(uri);
-      logger.debug('claim name == ', claimName);
+      // consolidated logging
+      logRequestData(responseType, claimName, null, null);
       // get the claim id
       getClaimId(null, null, claimName, null)
         .then(fullClaimId => {
-          // if no claim id found, skip
           if (fullClaimId === NO_CLAIM) {
-            res.status(200).render('noClaim');
-            return;
+            return res.status(200).render('noClaim');
           }
-          // show, showlite, or serve
-          switch (responseType) {
-            case SHOW:
-              return showAssetToClient(fullClaimId, claimName, res);
-            case SHOWLITE:
-              return showPlainAssetToClient(fullClaimId, claimName, res);
-            case SERVE:
-              return serveAssetToClient(fullClaimId, claimName, res);
-            default:
-              break;
-          }
-        })
-        .then(fileInfoForUpdate => {
-          // if needed, this is where we would update the file
+          showOrServeAsset(responseType, fullClaimId, claimName, res);
         })
         .catch(error => {
           handleRequestError(responseType, originalUrl, ip, error, res);
