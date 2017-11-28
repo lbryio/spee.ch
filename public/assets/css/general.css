@@ -531,6 +531,12 @@ table {
 }
 .showlite-asset {
     	max-width: 100%;
+	-webkit-transform: translateX(-50%) translateY(-50%);
+    	transform: translateX(-50%) translateY(-50%);
+   	position: absolute;
+   	left: 50%;
+   	top: 50%;
+    	text-align: center;
 }
 
 /* item lists */
