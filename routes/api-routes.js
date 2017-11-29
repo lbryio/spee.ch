@@ -84,7 +84,7 @@ module.exports = (app) => {
   });
 
   // route to check whether spee.ch has published to a claim
-  app.get('/api/isClaimAvailable/:name', ({ params }, res) => {
+  app.get('/api/is-claim-available/:name', ({ params }, res) => {
     checkClaimNameAvailability(params.name)
     .then(result => {
       if (result === true) {
@@ -99,7 +99,7 @@ module.exports = (app) => {
     });
   });
   // route to check whether spee.ch has published to a channel
-  app.get('/api/isChannelAvailable/:name', ({ params }, res) => {
+  app.get('/api/is-channel-available/:name', ({ params }, res) => {
     checkChannelAvailability(params.name)
       .then(result => {
         if (result === true) {
@@ -110,7 +110,7 @@ module.exports = (app) => {
         }
       })
       .catch(error => {
-        logger.debug('api/isChannelAvailable/ error', error);
+        logger.debug('api/is-channel-available/ error', error);
         res.status(500).json(error);
       });
   });
@@ -213,9 +213,8 @@ module.exports = (app) => {
       errorHandlers.handleApiError('publish', originalUrl, ip, error, res);
     });
   });
-
   // route to get a short claim id from long claim Id
-  app.get('/api/shortClaimId/:longId/:name', ({ params }, res) => {
+  app.get('/api/short-claim-id/:longId/:name', ({ params }, res) => {
     db.Claim.getShortClaimIdFromLongClaimId(params.longId, params.name)
       .then(shortId => {
         res.status(200).json(shortId);
@@ -226,7 +225,7 @@ module.exports = (app) => {
       });
   });
   // route to get a short channel id from long channel Id
-  app.get('/api/shortChannelId/:longId/:name', ({ ip, originalUrl, params }, res) => {
+  app.get('/api/short-channel-id/:longId/:name', ({ ip, originalUrl, params }, res) => {
     db.Certificate.getShortChannelIdFromLongChannelId(params.longId, params.name)
       .then(shortId => {
         logger.debug('sending back short channel id', shortId);
