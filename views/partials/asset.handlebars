@@ -9,6 +9,7 @@
             {{> image}}
         {{/ifConditional}}
     </div>
+    <a id="asset-boilerpate" class="link--primary fine-print" href="/{{claimInfo.claimId}}/{{claimInfo.name}}">hosted via Spee&lt;h</a>
 </div>
 
 <script type="text/javascript">
@@ -24,7 +25,7 @@
         },
         showVideo: function () {
             console.log('showing video');
-            const video = document.getElementById('video-player');
+            const video = document.getElementById('video-asset');
             const source = document.createElement('source');
             source.setAttribute('src', '/{{claimInfo.claimId}}/{{claimInfo.name}}.{{claimInfo.fileExt}}');
             video.appendChild(source);
@@ -32,7 +33,7 @@
         },
         showImage: function () {
             console.log('showing image');
-            const asset = document.getElementById('asset');
+            const asset = document.getElementById('image-asset');
             asset.setAttribute('src', "/{{claimInfo.claimId}}/{{claimInfo.name}}.{{claimInfo.fileExt}}");
         },
         hideMessages: function () {

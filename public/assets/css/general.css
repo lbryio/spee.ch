@@ -501,27 +501,32 @@ table {
 	width: calc(100% - 1rem);
 }
 
-/* Show page */
-
-#video-player {
-   	display: block;
-   	margin: 0 auto;
-    background-color: #fff;
-	cursor: pointer;
-}
-#showlite-body #video-player {
-  	margin-top: 2%;    	
-    padding: 6px;
-    max-width: 50%;
-	border: 1px solid #d0d0d0;
-}
+/* Assets */
 
 .asset {
 	max-width: 100%;
 }
 
-#showlite-body > .asset {
-    max-width: 50%;
+#show-body #asset-boilerpate {
+	display: none;
+}
+
+#showlite-body #asset-display-component {
+	max-width: 50%;
+	text-align: center;
+}
+
+/* video */
+
+#video-asset {
+    background-color: #fff;
+	cursor: pointer;
+}
+#showlite-body #video-asset {
+	width: calc(100% - 12px - 12px - 2px);
+	margin: 6px;
+	padding: 6px;
+	border: 1px solid #d0d0d0;
 }
 
 /* item lists */

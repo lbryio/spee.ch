@@ -36,7 +36,7 @@
 		padding-right: 1.5em;
 	}
 
-	#showlite-body > asset {
+	#showlite-body #asset-display-component {
 		max-width: 100%;
 	}
 
