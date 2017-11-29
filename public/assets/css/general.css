@@ -298,10 +298,6 @@ a, a:visited {
 	color: red;
 }
 
-.info-message-placeholder {
-
-}
-
 /* INPUT FIELDS */
 
 /* blocks */
@@ -347,14 +343,6 @@ option {
 
 .input-radio, .label--pointer {
 	cursor: pointer;
-}
-
-#claim-name-input {
-
-}
-
-#input-success-claim-name {
-
 }
 
 .span--relative {

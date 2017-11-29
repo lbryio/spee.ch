@@ -1,7 +1,8 @@
 <div id="asset-display-component">
-    <p id="search-message" hidden="true">We're currently combing the blockchain for your asset!</p>
+    <p id="searching-message" hidden="true">We're currently combing the blockchain for your asset!</p>
+    <p id="in-progress-message" hidden="true"></p>
     <p id="failure-message" hidden="true"></p>
-    <div id="asset-holder" hidden="true">
+    <div id="asset-holder">
         {{#ifConditional claimInfo.contentType '===' 'video/mp4'}}
             {{> video}}
         {{else}}
@@ -14,21 +15,46 @@
 
     const getAssetFunctions = {
         showAsset: function () {
-            const searchMessage = document.getElementById('search-message');
-            const assetHolder = document.getElementById('asset-holder');
-            const asset = document.getElementById('asset');
-            searchMessage.hidden = true;
-            assetHolder.hidden = false;
-            asset.setAttribute('src', `/{{claimInfo.claimId}}/{{claimInfo.name}}.{{claimInfo.fileExt}}`);
+            this.hideMessages();
+            {{#ifConditional claimInfo.contentType '===' 'video/mp4'}}
+                this.showVideo();
+            {{else}}
+                this.showImage();
+            {{/ifConditional}}
         },
-        showSearchMessage: function (msg) {
-            console.log(msg);
-            const searchMessage = document.getElementById('search-message');
+        showVideo: function () {
+            console.log('showing video');
+            const video = document.getElementById('video-player');
+            const source = document.createElement('source');
+            source.setAttribute('src', '/{{claimInfo.claimId}}/{{claimInfo.name}}.{{claimInfo.fileExt}}');
+            video.appendChild(source);
+            video.play();
+        },
+        showImage: function () {
+            console.log('showing image');
+            const asset = document.getElementById('asset');
+            asset.setAttribute('src', "/{{claimInfo.claimId}}/{{claimInfo.name}}.{{claimInfo.fileExt}}");
+        },
+        hideMessages: function () {
+            const searchMessage = document.getElementById('searching-message');
+            const inProgressMessage = document.getElementById('in-progress-message');
+            searchMessage.hidden = true;
+            inProgressMessage.hidden = true;
+        },
+        showSearchMessage: function () {
+            const searchMessage = document.getElementById('searching-message');
             searchMessage.hidden = false;
+        },
+        showInProgressMessage: function (msg) {
+            const searchMessage = document.getElementById('searching-message');
+            const inProgressMessage = document.getElementById('in-progress-message');
+            searchMessage.hidden = true;
+            inProgressMessage.hidden = false;
+            inProgressMessage.innerText = msg;
         },
         showFailureMessage: function (msg) {
             console.log(msg);
-            const searchMessage = document.getElementById('search-message');
+            const searchMessage = document.getElementById('searching-message');
             const failureMessage = document.getElementById('failure-message');
             searchMessage.hidden = true;
             failureMessage.hidden = false;
@@ -78,7 +104,8 @@
                             that.showAsset();
                         } else {
                             console.log('lbrynet is still downloading the asset');
-                            setTimeout(getAsset, 5000);
+                            that.showInProgressMessage(response.message);
+                            setTimeout(that.getAsset, 5000);
                         }
                     } else {
                         console.log('get failed:', response);
