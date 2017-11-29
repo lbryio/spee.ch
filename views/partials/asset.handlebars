@@ -1,7 +1,6 @@
 <div id="asset-display-component">
     <div id="asset-status">
         <p id="searching-message" hidden="true">Sit tight, we're combing the LBRY blockchain for your asset!</p>
-        <p id="in-progress-message" hidden="true">Hooray! We found peers with copies of your asset and we are downloading it from the blockchain now.</p>
         <div id="failure-message" hidden="true">
             <p>Unfortunately, we couldn't download your asset from LBRY.  You can help us out by sharing the below error message in the <a class="link--primary" href="https://discord.gg/YjYbwhS" target="_blank">LBRY discord</a>.</p>
             <i><p id="error-message"></p></i>
@@ -57,12 +56,6 @@
             const searchMessage = document.getElementById('searching-message');
             searchMessage.hidden = false;
         },
-        showInProgressMessage: function () {
-            const searchMessage = document.getElementById('searching-message');
-            const inProgressMessage = document.getElementById('in-progress-message');
-            searchMessage.hidden = true;
-            inProgressMessage.hidden = false;
-        },
         showFailureMessage: function (msg) {
             console.log(msg);
             const searchMessage = document.getElementById('searching-message');
@@ -111,14 +104,7 @@
                     const response = JSON.parse(xhr.response);
                     if (xhr.status == 200) {
                         console.log('get returned successfully', response);
-                        if (response.completed === true) {
-                            console.log('lbrynet has finished downloading the asset');
-                            that.showAsset();
-                        } else {
-                            console.log('lbrynet has not finished downloading the asset');
-                            that.showInProgressMessage();
-                            setTimeout(that.getAsset.bind(that, claimName, claimId), 5000);
-                        }
+                        that.showAsset();
                     } else {
                         console.log('get failed:', response);
                         that.showFailureMessage(`${response.message}`);
@@ -130,6 +116,33 @@
             // Initiate a multipart/form-data upload
             xhr.send();
         },
+        checkIfAssetIsFullyDownloaded: function(claimName, claimId) {
+            // make a get request, and see fi the asset is fully downloaded.
+            console.log(`getting ${claimName}#${claimId}`)
+            var uri = `/api/get_claim/${claimName}/${claimId}`;
+            var xhr = new XMLHttpRequest();
+            var that = this;
+            xhr.open("GET", uri, true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4) {
+                    const response = JSON.parse(xhr.response);
+                    if (xhr.status == 200) {
+                        console.log('get returned successfully', response);
+                        if (response.completed === true) {
+                            console.log('lbrynet has finished downloading the asset');
+                        } else {
+                            console.log('lbrynet has not finished downloading the asset');
+                            setTimeout(that.checkIfAssetIsFullyDownloaded.bind(that, claimName, claimId), 5000);
+                        }
+                    } else {
+                        console.log('get failed:', response);
+                    }
+                } else {
+                    console.log('xhr.readyState', xhr.readyState);
+                }
+            };
+            xhr.send();
+        }
     }
 
     getAssetFunctions.checkClaimAvailability('{{claimInfo.name}}', '{{claimInfo.claimId}}');
