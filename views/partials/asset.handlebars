@@ -1,22 +1,28 @@
 <div id="asset-display-component">
-    <p id="searching-message" hidden="true">We're currently combing the blockchain for your asset!</p>
-    <p id="in-progress-message" hidden="true"></p>
-    <p id="failure-message" hidden="true"></p>
-    <div id="asset-holder">
+    <div id="asset-status">
+        <p id="searching-message" hidden="true">We're currently combing the blockchain for your asset!</p>
+        <p id="in-progress-message" hidden="true"></p>
+        <div id="failure-message" hidden="true">
+            <p>Unfortunately, we couldn't download your asset from LBRY.  You can help us out by sharing the below error message in the <a class="link--primary" href="https://discord.gg/YjYbwhS" target="_blank">LBRY discord</a>.</p>
+            <i><p id="error-message"></p></i>
+        </div>
+    </div>
+    <div id="asset-holder" hidden="true">
         {{#ifConditional claimInfo.contentType '===' 'video/mp4'}}
             {{> video}}
         {{else}}
             {{> image}}
         {{/ifConditional}}
+        <a id="asset-boilerpate" class="link--primary fine-print" href="/{{claimInfo.claimId}}/{{claimInfo.name}}">hosted via Spee&lt;h</a>
     </div>
-    <a id="asset-boilerpate" class="link--primary fine-print" href="/{{claimInfo.claimId}}/{{claimInfo.name}}">hosted via Spee&lt;h</a>
 </div>
 
 <script type="text/javascript">
 
     const getAssetFunctions = {
         showAsset: function () {
-            this.hideMessages();
+            this.hideAssetStatus();
+            this.showAssetHolder();
             {{#ifConditional claimInfo.contentType '===' 'video/mp4'}}
                 this.showVideo();
             {{else}}
@@ -36,11 +42,13 @@
             const asset = document.getElementById('image-asset');
             asset.setAttribute('src', "/{{claimInfo.claimId}}/{{claimInfo.name}}.{{claimInfo.fileExt}}");
         },
-        hideMessages: function () {
-            const searchMessage = document.getElementById('searching-message');
-            const inProgressMessage = document.getElementById('in-progress-message');
-            searchMessage.hidden = true;
-            inProgressMessage.hidden = true;
+        hideAssetStatus: function () {
+            const assetStatus = document.getElementById('asset-status');
+            assetStatus.hidden = true;
+        },
+        showAssetHolder: function () {
+            const assetHolder = document.getElementById('asset-holder');
+            assetHolder.hidden = false;
         },
         showSearchMessage: function () {
             const searchMessage = document.getElementById('searching-message');
@@ -57,12 +65,13 @@
             console.log(msg);
             const searchMessage = document.getElementById('searching-message');
             const failureMessage = document.getElementById('failure-message');
+            const errorMessage = document.getElementById('error-message');
             searchMessage.hidden = true;
             failureMessage.hidden = false;
-            failureMessage.innerText = msg;
+            errorMessage.innerText = msg;
         },
         checkClaimAvailability: function (claimName, claimId) {
-            console.log(`getting ${claimName}#${claimId}`)
+            console.log(`checking local availability for ${claimName}#${claimId}`)
             var uri = `/api/check_local_claim/${claimName}/${claimId}`;
             var xhr = new XMLHttpRequest();
             var that = this;
