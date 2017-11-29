@@ -116,33 +116,6 @@
             // Initiate a multipart/form-data upload
             xhr.send();
         },
-        checkIfAssetIsFullyDownloaded: function(claimName, claimId) {
-            // make a get request, and see fi the asset is fully downloaded.
-            console.log(`getting ${claimName}#${claimId}`)
-            var uri = `/api/get_claim/${claimName}/${claimId}`;
-            var xhr = new XMLHttpRequest();
-            var that = this;
-            xhr.open("GET", uri, true);
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState == 4) {
-                    const response = JSON.parse(xhr.response);
-                    if (xhr.status == 200) {
-                        console.log('get returned successfully', response);
-                        if (response.completed === true) {
-                            console.log('lbrynet has finished downloading the asset');
-                        } else {
-                            console.log('lbrynet has not finished downloading the asset');
-                            setTimeout(that.checkIfAssetIsFullyDownloaded.bind(that, claimName, claimId), 5000);
-                        }
-                    } else {
-                        console.log('get failed:', response);
-                    }
-                } else {
-                    console.log('xhr.readyState', xhr.readyState);
-                }
-            };
-            xhr.send();
-        }
     }
 
     getAssetFunctions.checkClaimAvailability('{{claimInfo.name}}', '{{claimInfo.claimId}}');

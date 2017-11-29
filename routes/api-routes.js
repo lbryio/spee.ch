@@ -72,19 +72,12 @@ module.exports = (app) => {
         return Promise.all([fileData, getClaim(`${params.name}#${params.claimId}`)]);
       })
       .then(([ fileData, getResult ]) => {
-        if (getResult.completed !== true) {
-          return Promise.all([null, getResult]);  // pass get results to next function
-        }
         fileData = addGetResultsToFileData(fileData, getResult);
-        return Promise.all([db.File.create(fileData), getResult]);  // note: make this 'upsert' ?
+        return Promise.all([db.File.create(fileData), getResult]);  // insert a record for the claim into the File table
       })
       .then(([ fileRecord, {message, completed} ]) => {
         res.status(200).json({ status: 'success', message, completed });
-        if (fileRecord) {
-          logger.debug('File record successfully created');
-        } else {
-          logger.debug('No file record created');
-        }
+        logger.debug('File record successfully created');
       })
       .catch(error => {
         errorHandlers.handleApiError('get', originalUrl, ip, error, res);
