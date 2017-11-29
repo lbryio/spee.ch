@@ -1,15 +1,6 @@
+
 <video id="video-asset" class="asset" controls poster="{{claimInfo.thumbnail}}">
     <source>
     <!--fallback-->
     Your browser does not support the <code>video</code> element.
 </video>
-<!--dynamically resize video player-->
-<script type="text/javascript">
-    document.addEventListener('DOMContentLoaded', resizeVideoPlayer)
-    window.addEventListener("resize", resizeVideoPlayer);
-    function resizeVideoPlayer() {
-        const div = document.getElementById('video-player');
-        const width = div.offsetWidth;
-        div.height = (width * 9 / 16);
-    }
-</script>
