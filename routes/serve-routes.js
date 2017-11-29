@@ -152,12 +152,15 @@ function determineResponseType (uri, headers) {
     }
   } else {
     responseType = SHOW;
+    if (!headers['accept'] || !headers['accept'].split(',').includes('text/html')) {
+      responseType = SERVE;
+    }
   }
   return responseType;
 }
 
 function determineName (uri) {
-  /* patch because twitter player preview adds '>' before file extension.  Note: put this inside determineName()? */
+  /* patch because twitter player preview adds '>' before file extension. */
   if (uri.indexOf('>') !== -1) {
     return uri.substring(0, uri.indexOf('>'));
   }
