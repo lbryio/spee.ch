@@ -43,7 +43,7 @@ module.exports = (app) => {
     });
   });
   // route to see if asset is available locally
-  app.get('/api/check-local-claim/:name/:claimId', ({ ip, originalUrl, params }, res) => {
+  app.get('/api/local-file-available/:name/:claimId', ({ ip, originalUrl, params }, res) => {
     const name = params.name;
     const claimId = params.claimId;
     let isLocalFileAvailable = false;
@@ -60,8 +60,10 @@ module.exports = (app) => {
   });
   // route to get an asset
   app.get('/api/get-claim/:name/:claimId', ({ ip, originalUrl, params }, res) => {
+    const name = params.name;
+    const claimId = params.claimId;
     // resolve the claim
-    db.Claim.resolveClaim(params.name, params.claimId)
+    db.Claim.resolveClaim(name, claimId)
       .then(resolveResult => {
         // make sure a claim actually exists at that uri
         if (!resolveResult) {
@@ -69,11 +71,11 @@ module.exports = (app) => {
         }
         let fileData = createFileData(resolveResult);
         // get the claim
-        return Promise.all([fileData, getClaim(`${params.name}#${params.claimId}`)]);
+        return Promise.all([fileData, getClaim(`${name}#${claimId}`)]);
       })
       .then(([ fileData, getResult ]) => {
         fileData = addGetResultsToFileData(fileData, getResult);
-        return Promise.all([db.File.create(fileData), getResult]);  // note: should be upsert
+        return Promise.all([db.upsert(db.File, fileData, {name, claimId}, 'File'), getResult]);
       })
       .then(([ fileRecord, {message, completed} ]) => {
         res.status(200).json({ status: 'success', message, completed });

@@ -67,7 +67,7 @@
         },
         checkClaimAvailability: function (claimName, claimId) {
             console.log(`checking local availability for ${claimName}#${claimId}`)
-            var uri = `/api/check-local-claim/${claimName}/${claimId}`;
+            var uri = `/api/local-file-available/${claimName}/${claimId}`;
             var xhr = new XMLHttpRequest();
             var that = this;
             xhr.open("GET", uri, true);
