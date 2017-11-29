@@ -1,7 +1,7 @@
 <div id="asset-display-component">
     <div id="asset-status">
-        <p id="searching-message" hidden="true">We're currently combing the blockchain for your asset!</p>
-        <p id="in-progress-message" hidden="true"></p>
+        <p id="searching-message" hidden="true">Sit tight, we're combing the LBRY blockchain for your asset!</p>
+        <p id="in-progress-message" hidden="true">Hooray! We found peers with copies of your asset and we are downloading it from the blockchain now.</p>
         <div id="failure-message" hidden="true">
             <p>Unfortunately, we couldn't download your asset from LBRY.  You can help us out by sharing the below error message in the <a class="link--primary" href="https://discord.gg/YjYbwhS" target="_blank">LBRY discord</a>.</p>
             <i><p id="error-message"></p></i>
@@ -13,7 +13,10 @@
         {{else}}
             {{> image}}
         {{/ifConditional}}
-        <a id="asset-boilerpate" class="link--primary fine-print" href="/{{claimInfo.claimId}}/{{claimInfo.name}}">hosted via Spee&lt;h</a>
+        <div>
+            <a id="asset-boilerpate" class="link--primary fine-print" href="/{{claimInfo.claimId}}/{{claimInfo.name}}">hosted via Spee&lt;h</a>
+        </div>
+
     </div>
 </div>
 
@@ -54,12 +57,11 @@
             const searchMessage = document.getElementById('searching-message');
             searchMessage.hidden = false;
         },
-        showInProgressMessage: function (msg) {
+        showInProgressMessage: function () {
             const searchMessage = document.getElementById('searching-message');
             const inProgressMessage = document.getElementById('in-progress-message');
             searchMessage.hidden = true;
             inProgressMessage.hidden = false;
-            inProgressMessage.innerText = msg;
         },
         showFailureMessage: function (msg) {
             console.log(msg);
@@ -113,9 +115,9 @@
                             console.log('lbrynet has finished downloading the asset');
                             that.showAsset();
                         } else {
-                            console.log('lbrynet is still downloading the asset');
-                            that.showInProgressMessage(response.message);
-                            setTimeout(that.getAsset, 5000);
+                            console.log('lbrynet has not finished downloading the asset');
+                            that.showInProgressMessage();
+                            setTimeout(that.getAsset.bind(that, claimName, claimId), 5000);
                         }
                     } else {
                         console.log('get failed:', response);
