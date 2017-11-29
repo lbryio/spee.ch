@@ -26,8 +26,8 @@ spee.ch is a single-serving site that reads and publishes images and videos to a
 #### GET
 * /api/resolve/:name
 	* example: `curl https://spee.ch/api/resolve/doitlive`
-* /api/claim_list/:name
-	* example: `curl https://spee.ch/api/claim_list/doitlive`
+* /api/claim-list/:name
+	* example: `curl https://spee.ch/api/claim-list/doitlive`
 * /api/isClaimAvailable/:name (returns `true`/`false` for whether a name is available through spee.ch)
 	* example: `curl https://spee.ch/api/isClaimAvailable/doitlive`
 

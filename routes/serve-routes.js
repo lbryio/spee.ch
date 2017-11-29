@@ -200,7 +200,7 @@ function serveAssetToClient (claimId, name, res) {
       .then(fileInfo => {
         logger.debug('fileInfo:', fileInfo);
         if (fileInfo === NO_FILE) {
-          res.status(307).redirect(`/api/get_claim/${name}/${claimId}`);
+          res.status(307).redirect(`/api/get-claim/${name}/${claimId}`);
         } else {
           return serveHelpers.serveFile(fileInfo, claimId, name, res);
         }

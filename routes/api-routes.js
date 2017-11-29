@@ -32,7 +32,7 @@ function createFileData ({ name, claimId, outpoint, height, address, nsfw, conte
 
 module.exports = (app) => {
   // route to run a claim_list request on the daemon
-  app.get('/api/claim_list/:name', ({ ip, originalUrl, params }, res) => {
+  app.get('/api/claim-list/:name', ({ ip, originalUrl, params }, res) => {
     getClaimList(params.name)
     .then(claimsList => {
       postToStats('serve', originalUrl, ip, null, null, 'success');
@@ -43,7 +43,7 @@ module.exports = (app) => {
     });
   });
   // route to see if asset is available locally
-  app.get('/api/check_local_claim/:name/:claimId', ({ ip, originalUrl, params }, res) => {
+  app.get('/api/check-local-claim/:name/:claimId', ({ ip, originalUrl, params }, res) => {
     const name = params.name;
     const claimId = params.claimId;
     let isLocalFileAvailable = false;
@@ -59,7 +59,7 @@ module.exports = (app) => {
       });
   });
   // route to get an asset
-  app.get('/api/get_claim/:name/:claimId', ({ ip, originalUrl, params }, res) => {
+  app.get('/api/get-claim/:name/:claimId', ({ ip, originalUrl, params }, res) => {
     // resolve the claim
     db.Claim.resolveClaim(params.name, params.claimId)
       .then(resolveResult => {
@@ -73,11 +73,10 @@ module.exports = (app) => {
       })
       .then(([ fileData, getResult ]) => {
         fileData = addGetResultsToFileData(fileData, getResult);
-        return Promise.all([db.File.create(fileData), getResult]);  // insert a record for the claim into the File table
+        return Promise.all([db.File.create(fileData), getResult]);  // note: should be upsert
       })
       .then(([ fileRecord, {message, completed} ]) => {
         res.status(200).json({ status: 'success', message, completed });
-        logger.debug('File record successfully created');
       })
       .catch(error => {
         errorHandlers.handleApiError('get', originalUrl, ip, error, res);

@@ -67,7 +67,7 @@
         },
         checkClaimAvailability: function (claimName, claimId) {
             console.log(`checking local availability for ${claimName}#${claimId}`)
-            var uri = `/api/check_local_claim/${claimName}/${claimId}`;
+            var uri = `/api/check-local-claim/${claimName}/${claimId}`;
             var xhr = new XMLHttpRequest();
             var that = this;
             xhr.open("GET", uri, true);
@@ -95,7 +95,7 @@
         },
         getAsset: function(claimName, claimId) {
             console.log(`getting ${claimName}#${claimId}`)
-            var uri = `/api/get_claim/${claimName}/${claimId}`;
+            var uri = `/api/get-claim/${claimName}/${claimId}`;
             var xhr = new XMLHttpRequest();
             var that = this;
             xhr.open("GET", uri, true);
