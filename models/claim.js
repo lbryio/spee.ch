@@ -280,7 +280,6 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
         where: {name, claimId},
       })
       .then(result => {
-        // logger.debug('validateLongClaimId result:', result.dataValues);
         if (!result) {
           return resolve(NO_CLAIM);
         };
