@@ -6,12 +6,11 @@ const { returnUserAndChannelInfo } = require('../helpers/authHelpers.js');
 
 module.exports = new PassportLocalStrategy(
   {
-    usernameField    : 'username',  // username key in the request body
-    passwordField    : 'password',  // password key in the request body
-    session          : false,
-    passReqToCallback: true,
+    usernameField: 'username',
+    passwordField: 'password',
+    // session      : false,
   },
-  (req, username, password, done) => {
+  (username, password, done) => {
     logger.debug('logging user in');
     return db
         .User
