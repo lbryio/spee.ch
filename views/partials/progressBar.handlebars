@@ -1,0 +1,55 @@
+<p id="bar-holder"></p>
+
+<script type="text/javascript">
+    const progressBarFunctions = {
+        state: {
+            x: 0,
+            adder: 1,
+            bars: [],
+        },
+        setState: function (key, value) {
+          this.state[key] = value;
+        },
+        barHolder: document.getElementById('bar-holder'),
+        createProgressBar: function (size) {
+            this.setState('size', size);
+            for (var i = 0; i < size; i++) {
+                const bar = document.createElement('span');
+                bar.innerText = '| ';
+                bar.setAttribute('class', 'progress-bar progress-bar--inactive');
+                this.barHolder.appendChild(bar);
+                this.state.bars.push(bar);
+            }
+        },
+        startProgressBar: function () {
+            this.updateInterval = setInterval(this.updateProgressBar.bind(this), 300);
+        },
+        updateProgressBar: function () {
+            const x = this.state.x;
+            const adder = this.state.adder;
+            const size = this.state.size;
+            // update the appropriate bar
+            if (x > -1 && x < size){
+                if (adder === 1){
+                    this.state.bars[x].setAttribute('class', 'progress-bar progress-bar--active');
+                } else {
+                    this.state.bars[x].setAttribute('class', 'progress-bar progress-bar--inactive');
+                }
+            }
+            // update adder
+            if (x === size){
+                this.setState('adder', -1);
+            } else if ( x === -1){
+                this.setState('adder', 1);
+            }
+            // update x
+            this.setState('x', x + adder);
+        },
+        stopProgressBar: function () {
+            clearInterval(this.updateInterval);
+        },
+    }
+
+    progressBarFunctions.createProgressBar(10);
+    progressBarFunctions.startProgressBar();
+</script>

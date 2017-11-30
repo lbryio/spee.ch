@@ -1,6 +1,9 @@
 <div id="asset-display-component">
     <div id="asset-status">
-        <p id="searching-message" hidden="true">Sit tight, we're searching the LBRY blockchain for your asset!</p>
+        <div id="searching-message" hidden="true">
+            <p>Sit tight, we're searching the LBRY blockchain for your asset!</p>
+            {{> progressBar}}
+        </div>
         <div id="failure-message" hidden="true">
             <p>Unfortunately, we couldn't download your asset from LBRY.  You can help us out by sharing the below error message in the <a class="link--primary" href="https://discord.gg/YjYbwhS" target="_blank">LBRY discord</a>.</p>
             <i><p id="error-message"></p></i>
@@ -21,7 +24,7 @@
 
 <script type="text/javascript">
 
-    showFunctions.setState('src', '{{claimInfo.name}}', '{{claimInfo.claimId}}', '{{claimInfo.fileExt}}');
+    showFunctions.setState('src', '/{{claimInfo.claimId}}/{{claimInfo.name}}.{{claimInfo.fileExt}}');
     showFunctions.setState('claimName', '{{claimInfo.name}}');
     showFunctions.setState('claimId', '{{claimInfo.claimId}}');
     showFunctions.setState('fileExt', '{{claimInfo.fileExt}}');

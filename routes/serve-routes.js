@@ -172,7 +172,6 @@ function determineName (uri) {
 }
 
 function showAssetToClient (claimId, name, res) {
-    // check for local file info, resolve the claim, and get the short
   return Promise
       .all([getClaimRecord(claimId, name), db.Claim.getShortClaimIdFromLongClaimId(claimId, name)])
       .then(([claimInfo, shortClaimId]) => {

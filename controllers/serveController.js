@@ -105,7 +105,7 @@ module.exports = {
           if (!claim) {
             throw new Error('no record found in Claim table');
           }
-          claim.dataValues.thumbnail = module.exports.chooseThumbnail(claim.dataValues.thumbnail, DEFAULT_THUMBNAIL);
+          claim.dataValues.thumbnail = module.exports.chooseThumbnail(claim.dataValues, DEFAULT_THUMBNAIL);
           claim.dataValues.fileExt = module.exports.determineFileExtensionFromContentType(claim.dataValues.contentType);
           return claim.dataValues;
         });
