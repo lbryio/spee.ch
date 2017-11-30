@@ -76,12 +76,22 @@ module.exports = {
     }
   },
   cleanseChannelName (channelName) {
-    if (channelName) {
-      if (channelName.indexOf('@') !== 0) {
-        channelName = `@${channelName}`;
-      }
+    if (!channelName) {
+      return null;
+    }
+    if (channelName.indexOf('@') !== 0) {
+      channelName = `@${channelName}`;
     }
     return channelName;
+  },
+  cleanseUserName (userName) {
+    if (!userName) {
+      return null;
+    }
+    if (userName.indexOf('@') !== -1) {
+      userName = userName.substring(userName.indexOf('@'));
+    }
+    return userName;
   },
   createPublishParams (filePath, name, title, description, license, nsfw, thumbnail, channelName) {
     logger.debug(`Creating Publish Parameters`);

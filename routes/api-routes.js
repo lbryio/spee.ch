@@ -5,7 +5,7 @@ const multipartMiddleware = multipart({uploadDir: config.files.uploadDirectory})
 const db = require('../models');
 const { publish } = require('../controllers/publishController.js');
 const { getClaimList, resolveUri } = require('../helpers/lbryApi.js');
-const { createPublishParams, validateApiPublishRequest, validatePublishSubmission, cleanseChannelName, checkClaimNameAvailability, checkChannelAvailability } = require('../helpers/publishHelpers.js');
+const { createPublishParams, validateApiPublishRequest, validatePublishSubmission, cleanseChannelName, cleanseUserName, checkClaimNameAvailability, checkChannelAvailability } = require('../helpers/publishHelpers.js');
 const errorHandlers = require('../helpers/errorHandlers.js');
 const { postToStats, sendGoogleAnalytics } = require('../controllers/statsController.js');
 const { authenticateOrSkip } = require('../auth/authentication.js');
@@ -183,6 +183,46 @@ module.exports = (app) => {
       .catch(error => {
         logger.error('api error getting short channel id', error);
         errorHandlers.handleApiError('short channel id', originalUrl, ip, error, res);
+      });
+  });
+  app.put('/api/password', ({ body, ip, originalUrl }, res) => {
+    let userName;
+    let { channelName, oldPassword, newPassword } = body;
+    // validate all necessary params were provided
+    if (!channelName || !oldPassword || !newPassword) {
+      res.status(400).json({success: false, message: 'provide channelName, oldPassword, and newPassword'});
+    }
+    // cleanse channel name
+    userName = cleanseUserName(channelName);
+    // validate password and respond
+    db
+      .User
+      .findOne({where: {userName: userName}})
+      .then(user => {
+        if (!user) {
+          return res.status(401).json({success: false, message: 'Incorrect username or password.'});
+        }
+        return user.comparePassword(oldPassword, (passwordErr, isMatch) => {
+          if (passwordErr) {
+            throw passwordErr;
+          }
+          if (!isMatch) {
+            return res.status(401).json({success: false, message: 'Incorrect username or password.'});
+          }
+          logger.debug('Password was a match, updating password');
+          return user
+            .changePassword(newPassword)
+            .then(() => {
+              logger.debug('Password successfully updated');
+              res.status(200).json({success: true, message: 'password successfully changed'});
+            })
+            .catch(error => {
+              throw error;
+            });
+        });
+      })
+      .catch(error => {
+        errorHandlers.handleApiError('password reset', originalUrl, ip, error, res);
       });
   });
 };

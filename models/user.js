@@ -28,9 +28,40 @@ module.exports = (sequelize, { STRING }) => {
     bcrypt.compare(password, this.password, callback);
   };
 
+  User.prototype.changePassword = function (newPassword) {
+    return new Promise((resolve, reject) => {
+      // generate a salt string to use for hashing
+      bcrypt.genSalt((saltError, salt) => {
+        if (saltError) {
+          logger.error('salt error', saltError);
+          reject(saltError);
+          return;
+        }
+        // generate a hashed version of the user's password
+        bcrypt.hash(newPassword, salt, (hashError, hash) => {
+          // if there is an error with the hash generation return the error
+          if (hashError) {
+            logger.error('hash error', hashError);
+            reject(hashError);
+            return;
+          }
+          // replace the current password with the new hash
+          this
+            .update({password: hash})
+            .then(() => {
+              resolve();
+            })
+            .catch(error => {
+              reject(error);
+            });
+        });
+      });
+    });
+  };
+
   // pre-save hook method to hash the user's password before the user's info is saved to the db.
   User.hook('beforeCreate', (user, options) => {
-    logger.debug('...beforeCreate hook...');
+    logger.debug('User.beforeCreate hook...');
     return new Promise((resolve, reject) => {
       // generate a salt string to use for hashing
       bcrypt.genSalt((saltError, salt) => {
