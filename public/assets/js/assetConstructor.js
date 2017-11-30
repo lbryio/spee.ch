@@ -1,9 +1,9 @@
-const showFunctions = {
-    state: {},
-    setState: function(key, value) {
+const Asset = function () {
+    this.state = {};
+    this.setState = function(key, value) {
         this.state[key] = value;
-    },
-    addPlayPauseToVideo: function () {
+    };
+    this.addPlayPauseToVideo = function () {
         const that = this;
         const video = document.getElementById('video-asset');
         if (video) {
@@ -18,16 +18,16 @@ const showFunctions = {
                 }
             };
         }
-    },
-    playOrPause: function(video){
+    };
+    this.playOrPause = function(video){
         if (video.paused == true) {
             video.play();
         }
         else{
             video.pause();
         }
-    },
-    showAsset: function () {
+    };
+    this.showAsset = function () {
         this.hideAssetStatus();
         this.showAssetHolder();
         if (!this.state.src) {
@@ -41,33 +41,33 @@ const showFunctions = {
         } else {
             this.showImage();
         }
-    },
-    showVideo: function () {
+    };
+    this.showVideo = function () {
         console.log('showing video', this.state.src);
         const video = document.getElementById('video-asset');
         const source = document.createElement('source');
         source.setAttribute('src', this.state.src);
         video.appendChild(source);
         video.play();
-    },
-    showImage: function () {
+    };
+    this.showImage = function () {
         console.log('showing image', this.state.src);
         const asset = document.getElementById('image-asset');
         asset.setAttribute('src', this.state.src);
-    },
-    hideAssetStatus: function () {
+    };
+    this.hideAssetStatus = function () {
         const assetStatus = document.getElementById('asset-status');
         assetStatus.hidden = true;
-    },
-    showAssetHolder: function () {
+    };
+    this.showAssetHolder =function () {
         const assetHolder = document.getElementById('asset-holder');
         assetHolder.hidden = false;
-    },
-    showSearchMessage: function () {
+    };
+    this.showSearchMessage = function () {
         const searchMessage = document.getElementById('searching-message');
         searchMessage.hidden = false;
-    },
-    showFailureMessage: function (msg) {
+    };
+    this.showFailureMessage = function (msg) {
         console.log(msg);
         const searchMessage = document.getElementById('searching-message');
         const failureMessage = document.getElementById('failure-message');
@@ -75,8 +75,8 @@ const showFunctions = {
         searchMessage.hidden = true;
         failureMessage.hidden = false;
         errorMessage.innerText = msg;
-    },
-    checkClaimAvailability: function () {
+    };
+    this.checkClaimAvailability = function () {
         const that = this;
         const uri = `/api/local-file-available/${this.state.claimName}/${this.state.claimId}`;
         const xhr = new XMLHttpRequest();
@@ -100,8 +100,8 @@ const showFunctions = {
             }
         };
         xhr.send();
-    },
-    getAsset: function() {
+    };
+    this.getAsset = function() {
         const that = this;
         const uri = `/api/get-claim/${this.state.claimName}/${this.state.claimId}`;
         const xhr = new XMLHttpRequest();
@@ -120,5 +120,5 @@ const showFunctions = {
             }
         };
         xhr.send();
-    },
+    };
 };

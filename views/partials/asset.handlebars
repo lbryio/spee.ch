@@ -3,6 +3,7 @@
         <div id="searching-message" hidden="true">
             <p>Sit tight, we're searching the LBRY blockchain for your asset!</p>
             {{> progressBar}}
+            <p>Curious what magic is happening here? <a class="link--primary" target="blank" href="https://lbry.io/faq/what-is-lbry">Learn more.</a></p>
         </div>
         <div id="failure-message" hidden="true">
             <p>Unfortunately, we couldn't download your asset from LBRY.  You can help us out by sharing the below error message in the <a class="link--primary" href="https://discord.gg/YjYbwhS" target="_blank">LBRY discord</a>.</p>
@@ -24,12 +25,13 @@
 
 <script type="text/javascript">
 
-    showFunctions.setState('src', '/{{claimInfo.claimId}}/{{claimInfo.name}}.{{claimInfo.fileExt}}');
-    showFunctions.setState('claimName', '{{claimInfo.name}}');
-    showFunctions.setState('claimId', '{{claimInfo.claimId}}');
-    showFunctions.setState('fileExt', '{{claimInfo.fileExt}}');
-    showFunctions.setState('contentType', '{{claimInfo.contentType}}');
-    console.log(showFunctions.state);
-    showFunctions.checkClaimAvailability();
+    const asset = new Asset();
+    asset.setState('src', '/{{claimInfo.claimId}}/{{claimInfo.name}}.{{claimInfo.fileExt}}');
+    asset.setState('claimName', '{{claimInfo.name}}');
+    asset.setState('claimId', '{{claimInfo.claimId}}');
+    asset.setState('fileExt', '{{claimInfo.fileExt}}');
+    asset.setState('contentType', '{{claimInfo.contentType}}');
+    console.log('asset state:', asset.state);
+    asset.checkClaimAvailability();
 
 </script>
