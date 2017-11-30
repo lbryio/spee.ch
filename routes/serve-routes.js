@@ -226,6 +226,7 @@ function showOrServeAsset (responseType, claimId, claimName, res) {
 }
 
 function flipClaimNameAndIdForBackwardsCompatibility (identifier, name) {
+  // this is a patch for backwards compatability with 'spee.ch/name/claim_id' url format
   if (isValidShortIdOrClaimId(name) && !isValidShortIdOrClaimId(identifier)) {
     const tempName = name;
     name = identifier;
@@ -242,26 +243,25 @@ function logRequestData (responseType, claimName, channelName, claimId) {
 }
 
 module.exports = (app) => {
-  // route to serve a specific asset
+  // route to serve a specific asset using the channel or claim id
   app.get('/:identifier/:name', ({ headers, ip, originalUrl, params }, res) => {
-    let identifier = params.identifier;  // identifier will either be a @channel, @channel:channelId, or claimId
-    let name = params.name;  // name will be example or example.ext
-    [identifier, name] = flipClaimNameAndIdForBackwardsCompatibility(identifier, name); // patch for backwards compatability with spee.ch/name/claim_id
+    let identifier = params.identifier;  //  '@channel', '@channel:channelId', or 'claimId'
+    let name = params.name;  // 'example' or 'example.ext'
+    [identifier, name] = flipClaimNameAndIdForBackwardsCompatibility(identifier, name);
     let channelName = null;
     let claimId = null;
     let channelId = null;
     let responseType = determineResponseType(name, headers);
     let claimName = determineName(name);
-    // parse identifier for whether it is a channel, short url, or claim_id
     if (isUriAChannel(identifier)) {
       channelName = returnChannelNameFromUri(identifier);
       channelId = returnChannelIdFromUri(identifier);
     } else {
       claimId = identifier;
     }
-    // consolidated logging
+    // log the request data for debugging
     logRequestData(responseType, claimName, channelName, claimId);
-    // get the claim id
+    // get the claim Id and then serve/show the asset
     getClaimId(channelName, channelId, claimName, claimId)
     .then(fullClaimId => {
       if (fullClaimId === NO_CLAIM) {
@@ -275,20 +275,17 @@ module.exports = (app) => {
       handleRequestError('serve', originalUrl, ip, error, res);
     });
   });
-  // route to serve the winning asset at a claim
+  // route to serve the winning asset at a claim or a channel page
   app.get('/:uri', ({ headers, ip, originalUrl, params, query }, res) => {
-    // parse name param
     let uri = params.uri;
-    // (a) handle channel requests
     if (isUriAChannel(uri)) {
       showChannelPageToClient(uri, originalUrl, ip, query, res);
-    // (b) handle stream requests
     } else {
       let responseType = determineResponseType(uri, headers);
       let claimName = determineName(uri);
-      // consolidated logging
+      // log the request data for debugging
       logRequestData(responseType, claimName, null, null);
-      // get the claim id
+      // get the claim Id and then serve/show the asset
       getClaimId(null, null, claimName, null)
         .then(fullClaimId => {
           if (fullClaimId === NO_CLAIM) {
