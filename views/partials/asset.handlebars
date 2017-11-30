@@ -21,101 +21,12 @@
 
 <script type="text/javascript">
 
-    const getAssetFunctions = {
-        showAsset: function () {
-            this.hideAssetStatus();
-            this.showAssetHolder();
-            {{#ifConditional claimInfo.contentType '===' 'video/mp4'}}
-                this.showVideo();
-            {{else}}
-                this.showImage();
-            {{/ifConditional}}
-        },
-        showVideo: function () {
-            console.log('showing video');
-            const video = document.getElementById('video-asset');
-            const source = document.createElement('source');
-            source.setAttribute('src', '/{{claimInfo.claimId}}/{{claimInfo.name}}.{{claimInfo.fileExt}}');
-            video.appendChild(source);
-            video.play();
-        },
-        showImage: function () {
-            console.log('showing image');
-            const asset = document.getElementById('image-asset');
-            asset.setAttribute('src', "/{{claimInfo.claimId}}/{{claimInfo.name}}.{{claimInfo.fileExt}}");
-        },
-        hideAssetStatus: function () {
-            const assetStatus = document.getElementById('asset-status');
-            assetStatus.hidden = true;
-        },
-        showAssetHolder: function () {
-            const assetHolder = document.getElementById('asset-holder');
-            assetHolder.hidden = false;
-        },
-        showSearchMessage: function () {
-            const searchMessage = document.getElementById('searching-message');
-            searchMessage.hidden = false;
-        },
-        showFailureMessage: function (msg) {
-            console.log(msg);
-            const searchMessage = document.getElementById('searching-message');
-            const failureMessage = document.getElementById('failure-message');
-            const errorMessage = document.getElementById('error-message');
-            searchMessage.hidden = true;
-            failureMessage.hidden = false;
-            errorMessage.innerText = msg;
-        },
-        checkClaimAvailability: function (claimName, claimId) {
-            console.log(`checking local availability for ${claimName}#${claimId}`)
-            var uri = `/api/local-file-available/${claimName}/${claimId}`;
-            var xhr = new XMLHttpRequest();
-            var that = this;
-            xhr.open("GET", uri, true);
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState == 4) {
-                    const response = JSON.parse(xhr.response);
-                    if (xhr.status == 200) {
-                        if (response.message === true) {
-                            console.log('local asset is available on spee.ch')
-                            that.showAsset();
-                        } else {
-                            that.showSearchMessage();
-                            that.getAsset(claimName, claimId)
-                        }
-                    } else {
-                        console.log('get failed:', response);
-                        that.showFailureMessage('Well this sucks, but we can\'t seem to phone home');
-                    }
-                } else {
-                    console.log('xhr.readyState', xhr.readyState);
-                }
-            };
-            xhr.send();
-        },
-        getAsset: function(claimName, claimId) {
-            console.log(`getting ${claimName}#${claimId}`)
-            var uri = `/api/get-claim/${claimName}/${claimId}`;
-            var xhr = new XMLHttpRequest();
-            var that = this;
-            xhr.open("GET", uri, true);
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState == 4) {
-                    const response = JSON.parse(xhr.response);
-                    if (xhr.status == 200) {
-                        console.log('get returned successfully', response);
-                        that.showAsset();
-                    } else {
-                        console.log('get failed:', response);
-                        that.showFailureMessage(`${response.message}`);
-                    }
-                } else {
-                    console.log('xhr.readyState', xhr.readyState);
-                }
-            };
-            xhr.send();
-        },
-    }
-
-    getAssetFunctions.checkClaimAvailability('{{claimInfo.name}}', '{{claimInfo.claimId}}');
+    showFunctions.setState('src', '{{claimInfo.name}}', '{{claimInfo.claimId}}', '{{claimInfo.fileExt}}');
+    showFunctions.setState('claimName', '{{claimInfo.name}}');
+    showFunctions.setState('claimId', '{{claimInfo.claimId}}');
+    showFunctions.setState('fileExt', '{{claimInfo.fileExt}}');
+    showFunctions.setState('contentType', '{{claimInfo.contentType}}');
+    console.log(showFunctions.state);
+    showFunctions.checkClaimAvailability();
 
 </script>
