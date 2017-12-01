@@ -33,15 +33,13 @@ function publishNewChannel (event) {
             return sendAuthRequest(userName, password, '/signup') // post the request
         })
         .then(result => {
+            setUserCookies(result.channelName, result.channelClaimId, result.shortChannelId);
             showChannelCreateDoneDisplay();
-            // refresh window logged in as the channel
-            setUserCookies(result.channelName, result.channelClaimId, result.shortChannelId); // set cookies
-        })
-        .then(() => {
+            // if user is on the home page, update the needed elements without reloading
             if (window.location.pathname === '/') {
-                // remove old channel and replace with new one & select it
-                replaceChannelOptionInPublishChannelSelect();
-                replaceChannelOptionInNavBarChannelSelect();
+                replaceChannelOptionInPublishChannelSelect(result.channelName);
+                replaceChannelOptionInNavBarChannelSelect(result.channelName);
+            // if user is not on home page, redirect to home page
             } else {
                 window.location = '/';
             }
