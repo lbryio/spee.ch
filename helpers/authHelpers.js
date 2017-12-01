@@ -1,9 +1,10 @@
-const db = require('../models'); // require our models for syncing
+// const db = require('../models'); // require our models for syncing
 const logger = require('winston');
 
 module.exports = {
   populateLocalsDotUser (req, res, next) {
     if (req.user) {
+      logger.debug('populating res.locals.user');
       res.locals.user = {
         id            : req.user.id,
         userName      : req.user.userName,
@@ -14,42 +15,12 @@ module.exports = {
     }
     next();
   },
-  serializeSpeechUser (user, done) {  // returns user id to be serialized into session token
-    logger.debug('serializing session');
-    done(null, user.id);
+  serializeSpeechUser (user, done) {  // returns user data to be serialized into session
+    logger.debug('serializing user');
+    done(null, user);
   },
-  deserializeSpeechUser (id, done) {  // deserializes session token and provides user from user id
-    logger.debug('deserializing session');
-    return db.User.findOne({ where: { id } })
-    .then(user => {
-      return module.exports.returnUserAndChannelInfo(user);
-    })
-    .then((userInfo) => {
-      return done(null, userInfo);
-    })
-    .catch(error => {
-      return done(error);
-    });
-  },
-  returnUserAndChannelInfo (userInstance) {
-    return new Promise((resolve, reject) => {
-      let userInfo = {};
-      userInfo['id'] = userInstance.id;
-      userInfo['userName'] = userInstance.userName;
-      userInstance
-        .getChannel()
-        .then(({channelName, channelClaimId}) => {
-          userInfo['channelName'] = channelName;
-          userInfo['channelClaimId'] = channelClaimId;
-          return db.Certificate.getShortChannelIdFromLongChannelId(channelClaimId, channelName);
-        })
-        .then(shortChannelId => {
-          userInfo['shortChannelId'] = shortChannelId;
-          resolve(userInfo);
-        })
-        .catch(error => {
-          reject(error);
-        });
-    });
+  deserializeSpeechUser (user, done) {  // deserializes session and populates additional info to req.user
+    logger.debug('deserializing user');
+    done(null, user);
   },
 };

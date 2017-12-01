@@ -7,7 +7,6 @@ module.exports = new PassportLocalStrategy(
   {
     usernameField: 'username',
     passwordField: 'password',
-    // session: false, // set to false because we will use token approach to auth
   },
   (username, password, done) => {
     logger.verbose(`new channel signup request. user: ${username} pass: ${password} .`);
