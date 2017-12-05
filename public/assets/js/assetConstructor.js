@@ -1,8 +1,5 @@
 const Asset = function () {
-    this.state = {};
-    this.setState = function(key, value) {
-        this.state[key] = value;
-    };
+    this.data = {};
     this.addPlayPauseToVideo = function () {
         const that = this;
         const video = document.getElementById('video-asset');
@@ -30,30 +27,30 @@ const Asset = function () {
     this.showAsset = function () {
         this.hideAssetStatus();
         this.showAssetHolder();
-        if (!this.state.src) {
+        if (!this.data.src) {
             return console.log('error: src is not set')
         }
-        if (!this.state.contentType) {
+        if (!this.data.contentType) {
             return console.log('error: contentType is not set')
         }
-        if (this.state.contentType === 'video/mp4') {
+        if (this.data.contentType === 'video/mp4') {
             this.showVideo();
         } else {
             this.showImage();
         }
     };
     this.showVideo = function () {
-        console.log('showing video', this.state.src);
+        console.log('showing video', this.data.src);
         const video = document.getElementById('video-asset');
         const source = document.createElement('source');
-        source.setAttribute('src', this.state.src);
+        source.setAttribute('src', this.data.src);
         video.appendChild(source);
         video.play();
     };
     this.showImage = function () {
-        console.log('showing image', this.state.src);
+        console.log('showing image', this.data.src);
         const asset = document.getElementById('image-asset');
-        asset.setAttribute('src', this.state.src);
+        asset.setAttribute('src', this.data.src);
     };
     this.hideAssetStatus = function () {
         const assetStatus = document.getElementById('asset-status');
@@ -94,8 +91,8 @@ const Asset = function () {
             })
     };
     this.isFileAvailable = function () {
-        console.log(`checking if file is available for ${this.state.claimName}#${this.state.claimId}`)
-        const uri = `/api/file-is-available/${this.state.claimName}/${this.state.claimId}`;
+        console.log(`checking if file is available for ${this.data.claimName}#${this.data.claimId}`)
+        const uri = `/api/file-is-available/${this.data.claimName}/${this.data.claimId}`;
         const xhr = new XMLHttpRequest();
         return new Promise((resolve, reject) => {
             xhr.open("GET", uri, true);
@@ -119,8 +116,8 @@ const Asset = function () {
         })
     };
     this.getAssetOnSpeech = function() {
-        console.log(`getting claim for ${this.state.claimName}#${this.state.claimId}`)
-        const uri = `/api/claim-get/${this.state.claimName}/${this.state.claimId}`;
+        console.log(`getting claim for ${this.data.claimName}#${this.data.claimId}`)
+        const uri = `/api/claim-get/${this.data.claimName}/${this.data.claimId}`;
         const xhr = new XMLHttpRequest();
         return new Promise((resolve, reject) => {
             xhr.open("GET", uri, true);

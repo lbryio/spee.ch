@@ -26,12 +26,12 @@
 <script type="text/javascript">
 
     const asset = new Asset();
-    asset.setState('src', '/{{claimInfo.claimId}}/{{claimInfo.name}}.{{claimInfo.fileExt}}');
-    asset.setState('claimName', '{{claimInfo.name}}');
-    asset.setState('claimId', '{{claimInfo.claimId}}');
-    asset.setState('fileExt', '{{claimInfo.fileExt}}');
-    asset.setState('contentType', '{{claimInfo.contentType}}');
-    console.log('asset state:', asset.state);
+    asset.data['src'] = '/{{claimInfo.claimId}}/{{claimInfo.name}}.{{claimInfo.fileExt}}';
+    asset.data['claimName'] = '{{claimInfo.name}}';
+    asset.data['claimId'] = '{{claimInfo.claimId}}';
+    asset.data['fileExt'] = '{{claimInfo.fileExt}}';
+    asset.data['contentType'] = '{{claimInfo.contentType}}';
+    console.log('asset data:', asset.data);
     asset.checkFileAndRenderAsset();
 
 </script>
