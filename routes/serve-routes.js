@@ -105,16 +105,16 @@ function returnOptionsForChannelPageRendering (result, query) {
   const totalPages = determineTotalPages(result.claims);
   const paginationPage = getPage(query);
   const options = {
-    layout        : 'channel',
-    channelName   : result.channelName,
-    longChannelId : result.longChannelId,
-    shortChannelId: result.shortChannelId,
-    claims        : extractPageFromClaims(result.claims, paginationPage),
-    previousPage  : determinePreviousPage(paginationPage),
-    currentPage   : paginationPage,
-    nextPage      : determineNextPage(totalPages, paginationPage),
-    totalPages    : totalPages,
-    totalResults  : determineTotalClaims(result),
+    layout             : 'channel',
+    channelName        : result.channelName,
+    longChannelClaimId : result.longChannelClaimId,
+    shortChannelClaimId: result.shortChannelClaimId,
+    claims             : extractPageFromClaims(result.claims, paginationPage),
+    previousPage       : determinePreviousPage(paginationPage),
+    currentPage        : paginationPage,
+    nextPage           : determineNextPage(totalPages, paginationPage),
+    totalPages         : totalPages,
+    totalResults       : determineTotalClaims(result),
   };
   return options;
 }
@@ -131,10 +131,10 @@ function sendChannelContentsToClient (result, query, res) {
 function showChannelPageToClient (uri, originalUrl, ip, query, res) {
   let channelName = returnChannelNameFromUri(uri);
   logger.debug('channel name =', channelName);
-  let channelId = returnChannelIdFromUri(uri);
-  logger.debug('channel Id =', channelId);
+  let channelClaimId = returnChannelIdFromUri(uri);
+  logger.debug('channel Id =', channelClaimId);
   // 1. retrieve the channel contents
-  getChannelContents(channelName, channelId)
+  getChannelContents(channelName, channelClaimId)
     .then(result => {
       sendChannelContentsToClient(result, query, res);
     })
@@ -202,7 +202,7 @@ function serveAssetToClient (claimId, name, res) {
       .then(fileInfo => {
         logger.debug('fileInfo:', fileInfo);
         if (fileInfo === NO_FILE) {
-          res.status(307).redirect(`/api/get-claim/${name}/${claimId}`);
+          res.status(307).redirect(`/api/claim-get/${name}/${claimId}`);
         } else {
           return serveHelpers.serveFile(fileInfo, claimId, name, res);
         }

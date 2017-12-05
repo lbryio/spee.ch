@@ -6,9 +6,9 @@ const NO_CHANNEL = 'NO_CHANNEL';
 const NO_FILE = 'NO_FILE';
 
 module.exports = {
-  getClaimId (channelName, channelId, name, claimId) {
+  getClaimId (channelName, channelClaimId, name, claimId) {
     if (channelName) {
-      return module.exports.getClaimIdByChannel(channelName, channelId, name);
+      return module.exports.getClaimIdByChannel(channelName, channelClaimId, name);
     } else {
       return module.exports.getClaimIdByClaim(name, claimId);
     }
@@ -25,10 +25,10 @@ module.exports = {
         });
     });
   },
-  getClaimIdByChannel (channelName, channelId, claimName) {
-    logger.debug(`getClaimIdByChannel(${channelName}, ${channelId}, ${claimName})`);
+  getClaimIdByChannel (channelName, channelClaimId, claimName) {
+    logger.debug(`getClaimIdByChannel(${channelName}, ${channelClaimId}, ${claimName})`);
     return new Promise((resolve, reject) => {
-      db.Certificate.getLongChannelId(channelName, channelId) // 1. get the long channel id
+      db.Certificate.getLongChannelId(channelName, channelClaimId) // 1. get the long channel id
         .then(result => {
           if (result === NO_CHANNEL) {
             resolve(result);  // resolves NO_CHANNEL
@@ -44,24 +44,24 @@ module.exports = {
         });
     });
   },
-  getChannelContents (channelName, channelId) {
+  getChannelContents (channelName, channelClaimId) {
     return new Promise((resolve, reject) => {
-      let longChannelId;
-      let shortChannelId;
-      db.Certificate.getLongChannelId(channelName, channelId)  // 1. get the long channel Id
+      let longChannelClaimId;
+      let shortChannelClaimId;
+      db.Certificate.getLongChannelId(channelName, channelClaimId)  // 1. get the long channel Id
         .then(result => {  // 2. get all claims for that channel
           if (result === NO_CHANNEL) {
             return NO_CHANNEL;
           }
-          longChannelId = result;
-          return db.Certificate.getShortChannelIdFromLongChannelId(longChannelId, channelName);
+          longChannelClaimId = result;
+          return db.Certificate.getShortChannelIdFromLongChannelId(longChannelClaimId, channelName);
         })
         .then(result => {  // 3. get all Claim records for this channel
           if (result === NO_CHANNEL) {
             return NO_CHANNEL;
           }
-          shortChannelId = result;
-          return db.Claim.getAllChannelClaims(longChannelId);
+          shortChannelClaimId = result;
+          return db.Claim.getAllChannelClaims(longChannelClaimId);
         })
         .then(result => {  // 4. add extra data not available from Claim table
           if (result === NO_CHANNEL) {
@@ -71,17 +71,17 @@ module.exports = {
           if (result) {
             result.forEach(element => {
               const fileExtenstion = element.contentType.substring(element.contentType.lastIndexOf('/') + 1);
-              element['showUrlLong'] = `/${channelName}:${longChannelId}/${element.name}`;
-              element['directUrlLong'] = `/${channelName}:${longChannelId}/${element.name}.${fileExtenstion}`;
-              element['showUrlShort'] = `/${channelName}:${shortChannelId}/${element.name}`;
-              element['directUrlShort'] = `/${channelName}:${shortChannelId}/${element.name}.${fileExtenstion}`;
+              element['showUrlLong'] = `/${channelName}:${longChannelClaimId}/${element.name}`;
+              element['directUrlLong'] = `/${channelName}:${longChannelClaimId}/${element.name}.${fileExtenstion}`;
+              element['showUrlShort'] = `/${channelName}:${shortChannelClaimId}/${element.name}`;
+              element['directUrlShort'] = `/${channelName}:${shortChannelClaimId}/${element.name}.${fileExtenstion}`;
               element['thumbnail'] = module.exports.chooseThumbnail(element, DEFAULT_THUMBNAIL);
             });
           }
           resolve({
             channelName,
-            longChannelId,
-            shortChannelId,
+            longChannelClaimId,
+            shortChannelClaimId,
             claims: result,
           });
         })

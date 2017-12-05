@@ -119,13 +119,13 @@ const validationFunctions = {
     checkClaimName: function (name) {
         const successDisplayElement = document.getElementById('input-success-claim-name');
         const errorDisplayElement = document.getElementById('input-error-claim-name');
-        this.checkAvailability(name, successDisplayElement, errorDisplayElement, this.validateClaimName, 'Sorry, that ending is already taken', '/api/is-claim-available/');
+        this.checkAvailability(name, successDisplayElement, errorDisplayElement, this.validateClaimName, 'Sorry, that ending is already taken', '/api/claim-is-available/');
     },
     checkChannelName: function (name) {
         const successDisplayElement = document.getElementById('input-success-channel-name');
         const errorDisplayElement = document.getElementById('input-error-channel-name');
         name = `@${name}`;
-        this.checkAvailability(name, successDisplayElement, errorDisplayElement, this.validateChannelName, 'Sorry, that name is already taken', '/api/is-channel-available/');
+        this.checkAvailability(name, successDisplayElement, errorDisplayElement, this.validateChannelName, 'Sorry, that name is already taken', '/api/channel-is-available/');
     },
     // validation function which checks all aspects of the publish submission
     validateFilePublishSubmission: function (stagedFiles, metadata) {
@@ -162,7 +162,7 @@ const validationFunctions = {
                 return;
             }
             // if all validation passes, check availability of the name (note: do we need to re-validate channel name vs. credentials as well?)
-            return that.isNameAvailable(claimName, '/api/is-claim-available/')
+            return that.isNameAvailable(claimName, '/api/claim-is-available/')
                 .then(result => {
                     if (result) {
                         resolve();
@@ -193,7 +193,7 @@ const validationFunctions = {
                 return reject(error);
             }
             // 3. if all validation passes, check availability of the name
-            that.isNameAvailable(channelName, '/api/is-channel-available/')  // validate the availability
+            that.isNameAvailable(channelName, '/api/channel-is-available/')  // validate the availability
                 .then(function(result) {
                     if (result) {
                         resolve();

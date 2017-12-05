@@ -78,7 +78,7 @@ const Asset = function () {
     };
     this.checkClaimAvailability = function () {
         const that = this;
-        const uri = `/api/local-file-available/${this.state.claimName}/${this.state.claimId}`;
+        const uri = `/api/file-is-available/${this.state.claimName}/${this.state.claimId}`;
         const xhr = new XMLHttpRequest();
         console.log(`checking local availability for ${this.state.claimName}#${this.state.claimId}`)
         xhr.open("GET", uri, true);
@@ -103,7 +103,7 @@ const Asset = function () {
     };
     this.getAsset = function() {
         const that = this;
-        const uri = `/api/get-claim/${this.state.claimName}/${this.state.claimId}`;
+        const uri = `/api/claim-get/${this.state.claimName}/${this.state.claimId}`;
         const xhr = new XMLHttpRequest();
         console.log(`getting ${this.state.claimName}#${this.state.claimId}`)
         xhr.open("GET", uri, true);

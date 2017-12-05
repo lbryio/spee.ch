@@ -43,7 +43,7 @@ module.exports = (app) => {
     });
   });
   // route to see if asset is available locally
-  app.get('/api/local-file-available/:name/:claimId', ({ ip, originalUrl, params }, res) => {
+  app.get('/api/file-is-available/:name/:claimId', ({ ip, originalUrl, params }, res) => {
     const name = params.name;
     const claimId = params.claimId;
     let isLocalFileAvailable = false;
@@ -59,7 +59,7 @@ module.exports = (app) => {
       });
   });
   // route to get an asset
-  app.get('/api/get-claim/:name/:claimId', ({ ip, originalUrl, params }, res) => {
+  app.get('/api/claim-get/:name/:claimId', ({ ip, originalUrl, params }, res) => {
     const name = params.name;
     const claimId = params.claimId;
     // resolve the claim
@@ -86,7 +86,7 @@ module.exports = (app) => {
   });
 
   // route to check whether spee.ch has published to a claim
-  app.get('/api/is-claim-available/:name', ({ params }, res) => {
+  app.get('/api/claim-is-available/:name', ({ params }, res) => {
     checkClaimNameAvailability(params.name)
     .then(result => {
       if (result === true) {
@@ -101,7 +101,7 @@ module.exports = (app) => {
     });
   });
   // route to check whether spee.ch has published to a channel
-  app.get('/api/is-channel-available/:name', ({ params }, res) => {
+  app.get('/api/channel-is-available/:name', ({ params }, res) => {
     checkChannelAvailability(params.name)
       .then(result => {
         if (result === true) {
@@ -112,12 +112,12 @@ module.exports = (app) => {
         }
       })
       .catch(error => {
-        logger.debug('api/is-channel-available/ error', error);
+        logger.debug('api/channel-is-available/ error', error);
         res.status(500).json(error);
       });
   });
   // route to run a resolve request on the daemon
-  app.get('/api/resolve/:uri', ({ headers, ip, originalUrl, params }, res) => {
+  app.get('/api/claim-resolve/:uri', ({ headers, ip, originalUrl, params }, res) => {
     resolveUri(params.uri)
     .then(resolvedUri => {
       postToStats('serve', originalUrl, ip, null, null, 'success');
@@ -128,7 +128,7 @@ module.exports = (app) => {
     });
   });
   // route to run a publish request on the daemon
-  app.post('/api/publish', multipartMiddleware, ({ body, files, ip, originalUrl, user }, res) => {
+  app.post('/api/claim-publish', multipartMiddleware, ({ body, files, ip, originalUrl, user }, res) => {
     let file, fileName, filePath, fileType, name, nsfw, license, title, description, thumbnail, anonymous, skipAuth, channelName, channelPassword;
     // validate that mandatory parts of the request are present
     try {
@@ -179,7 +179,7 @@ module.exports = (app) => {
       }
     }
     channelName = cleanseChannelName(channelName);
-    logger.debug(`/api/publish > name: ${name}, license: ${license} title: "${title}" description: "${description}" channelName: "${channelName}" channelPassword: "${channelPassword}" nsfw: "${nsfw}"`);
+    logger.debug(`name: ${name}, license: ${license} title: "${title}" description: "${description}" channelName: "${channelName}" channelPassword: "${channelPassword}" nsfw: "${nsfw}"`);
     // check channel authorization
     authenticateOrSkip(skipAuth, channelName, channelPassword)
     .then(authenticated => {
@@ -216,7 +216,7 @@ module.exports = (app) => {
     });
   });
   // route to get a short claim id from long claim Id
-  app.get('/api/short-claim-id/:longId/:name', ({ params }, res) => {
+  app.get('/api/claim-shorten-id/:longId/:name', ({ params }, res) => {
     db.Claim.getShortClaimIdFromLongClaimId(params.longId, params.name)
       .then(shortId => {
         res.status(200).json(shortId);
@@ -227,7 +227,7 @@ module.exports = (app) => {
       });
   });
   // route to get a short channel id from long channel Id
-  app.get('/api/short-channel-id/:longId/:name', ({ ip, originalUrl, params }, res) => {
+  app.get('/api/channel-shorten-id/:longId/:name', ({ ip, originalUrl, params }, res) => {
     db.Certificate.getShortChannelIdFromLongChannelId(params.longId, params.name)
       .then(shortId => {
         logger.debug('sending back short channel id', shortId);
