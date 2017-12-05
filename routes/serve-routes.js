@@ -245,24 +245,24 @@ function logRequestData (responseType, claimName, channelName, claimId) {
 module.exports = (app) => {
   // route to serve a specific asset using the channel or claim id
   app.get('/:identifier/:name', ({ headers, ip, originalUrl, params }, res) => {
-    let identifier = params.identifier;  //  '@channel', '@channel:channelId', or 'claimId'
+    let identifier = params.identifier;  //  '@channel', '@channel:channelClaimId', or 'claimId'
     let name = params.name;  // 'example' or 'example.ext'
     [identifier, name] = flipClaimNameAndIdForBackwardsCompatibility(identifier, name);
     let channelName = null;
     let claimId = null;
-    let channelId = null;
+    let channelClaimId = null;
     let responseType = determineResponseType(name, headers);
     let claimName = determineName(name);
     if (isUriAChannel(identifier)) {
       channelName = returnChannelNameFromUri(identifier);
-      channelId = returnChannelIdFromUri(identifier);
+      channelClaimId = returnChannelIdFromUri(identifier);
     } else {
       claimId = identifier;
     }
     // log the request data for debugging
     logRequestData(responseType, claimName, channelName, claimId);
     // get the claim Id and then serve/show the asset
-    getClaimId(channelName, channelId, claimName, claimId)
+    getClaimId(channelName, channelClaimId, claimName, claimId)
     .then(fullClaimId => {
       if (fullClaimId === NO_CLAIM) {
         return res.status(200).render('noClaim');

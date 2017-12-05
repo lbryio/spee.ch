@@ -180,12 +180,12 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
     });
   };
 
-  Claim.getAllChannelClaims = function (channelId) {
-    logger.debug(`Claim.getAllChannelClaims for ${channelId}`);
+  Claim.getAllChannelClaims = function (channelClaimId) {
+    logger.debug(`Claim.getAllChannelClaims for ${channelClaimId}`);
     return new Promise((resolve, reject) => {
       this
         .findAll({
-          where: { certificateId: channelId },
+          where: { certificateId: channelClaimId },
           order: [['height', 'ASC']],
         })
         .then(result => {
@@ -202,12 +202,12 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
     });
   };
 
-  Claim.getClaimIdByLongChannelId = function (channelId, claimName) {
-    logger.debug(`finding claim id for claim ${claimName} from channel ${channelId}`);
+  Claim.getClaimIdByLongChannelId = function (channelClaimId, claimName) {
+    logger.debug(`finding claim id for claim ${claimName} from channel ${channelClaimId}`);
     return new Promise((resolve, reject) => {
       this
         .findAll({
-          where: { name: claimName, certificateId: channelId },
+          where: { name: claimName, certificateId: channelClaimId },
           order: [['id', 'ASC']],
         })
         .then(result => {

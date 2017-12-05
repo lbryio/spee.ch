@@ -123,14 +123,14 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
     });
   };
 
-  Certificate.getLongChannelIdFromShortChannelId = function (channelName, channelId) {
+  Certificate.getLongChannelIdFromShortChannelId = function (channelName, channelClaimId) {
     return new Promise((resolve, reject) => {
       this
         .findAll({
           where: {
             name   : channelName,
             claimId: {
-              $like: `${channelId}%`,
+              $like: `${channelClaimId}%`,
             },
           },
           order: [['height', 'ASC']],
@@ -188,12 +188,12 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
     });
   };
 
-  Certificate.getLongChannelId = function (channelName, channelId) {
-    logger.debug(`getLongChannelId(${channelName}, ${channelId})`);
-    if (channelId && (channelId.length === 40)) {  // if a full channel id is provided
-      return this.validateLongChannelId(channelName, channelId);
-    } else if (channelId && channelId.length < 40) {  // if a short channel id is provided
-      return this.getLongChannelIdFromShortChannelId(channelName, channelId);
+  Certificate.getLongChannelId = function (channelName, channelClaimId) {
+    logger.debug(`getLongChannelId(${channelName}, ${channelClaimId})`);
+    if (channelClaimId && (channelClaimId.length === 40)) {  // if a full channel id is provided
+      return this.validateLongChannelId(channelName, channelClaimId);
+    } else if (channelClaimId && channelClaimId.length < 40) {  // if a short channel id is provided
+      return this.getLongChannelIdFromShortChannelId(channelName, channelClaimId);
     } else {
       return this.getLongChannelIdFromChannelName(channelName);  // if no channel id provided
     }
