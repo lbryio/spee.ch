@@ -76,49 +76,67 @@ const Asset = function () {
         failureMessage.hidden = false;
         errorMessage.innerText = msg;
     };
-    this.checkClaimAvailability = function () {
+    this.checkFileAndRenderAsset = function () {
         const that = this;
+        this.isFileAvailable()
+            .then(isAvailable => {
+                if (!isAvailable) {
+                    console.log('file is not yet available on spee.ch');
+                    that.showSearchMessage();
+                    return that.getAssetOnSpeech();
+                }
+            })
+            .then(() => {
+                that.showAsset();
+            })
+            .catch(error => {
+                that.showFailureMessage(error);
+            })
+    };
+    this.isFileAvailable = function () {
+        console.log(`checking if file is available for ${this.state.claimName}#${this.state.claimId}`)
         const uri = `/api/file-is-available/${this.state.claimName}/${this.state.claimId}`;
         const xhr = new XMLHttpRequest();
-        console.log(`checking local availability for ${this.state.claimName}#${this.state.claimId}`)
-        xhr.open("GET", uri, true);
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState == 4) {
-                const response = JSON.parse(xhr.response);
-                if (xhr.status == 200) {
-                    if (response.message === true) {
-                        console.log('local asset is available on spee.ch')
-                        that.showAsset();
+        return new Promise((resolve, reject) => {
+            xhr.open("GET", uri, true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4) {
+                    const response = JSON.parse(xhr.response);
+                    if (xhr.status == 200) {
+                        console.log('isFileAvailable succeeded:', response);
+                        if (response.message === true) {
+                            resolve(true);
+                        } else {
+                            resolve(false);
+                        }
                     } else {
-                        that.showSearchMessage();
-                        that.getAsset()
+                        console.log('isFileAvailable failed:', response);
+                        reject('Well this sucks, but we can\'t seem to phone home');
                     }
-                } else {
-                    console.log('get failed:', response);
-                    that.showFailureMessage('Well this sucks, but we can\'t seem to phone home');
                 }
-            }
-        };
-        xhr.send();
+            };
+            xhr.send();
+        })
     };
-    this.getAsset = function() {
-        const that = this;
+    this.getAssetOnSpeech = function() {
+        console.log(`getting claim for ${this.state.claimName}#${this.state.claimId}`)
         const uri = `/api/claim-get/${this.state.claimName}/${this.state.claimId}`;
         const xhr = new XMLHttpRequest();
-        console.log(`getting ${this.state.claimName}#${this.state.claimId}`)
-        xhr.open("GET", uri, true);
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState == 4) {
-                const response = JSON.parse(xhr.response);
-                if (xhr.status == 200) {
-                    console.log('get returned successfully', response);
-                    that.showAsset();
-                } else {
-                    console.log('get failed:', response);
-                    that.showFailureMessage(`${response.message}`);
+        return new Promise((resolve, reject) => {
+            xhr.open("GET", uri, true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4) {
+                    const response = JSON.parse(xhr.response);
+                    if (xhr.status == 200) {
+                        console.log('getAssetOnSpeech succeeded:', response)
+                        resolve(true);
+                    } else {
+                        console.log('getAssetOnSpeech failed:', response);
+                        reject(response.message);
+                    }
                 }
-            }
-        };
-        xhr.send();
+            };
+            xhr.send();
+        })
     };
 };
