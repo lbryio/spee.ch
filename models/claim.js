@@ -1,6 +1,8 @@
 const logger = require('winston');
 const { returnShortId } = require('../helpers/sequelizeHelpers.js');
 const DEFAULT_THUMBNAIL = 'https://spee.ch/assets/img/video_thumb_default.png';
+const DEFAULT_TITLE = '';
+const DEFAULT_DESCRIPTION = '';
 
 function determineFileExtensionFromContentType (contentType) {
   switch (contentType) {
@@ -19,11 +21,23 @@ function determineFileExtensionFromContentType (contentType) {
   }
 };
 
-function determineThumbnail (storedThumbnail, defaultThumbnail) {
-  if (storedThumbnail === '') {
-    return defaultThumbnail;
+function ifEmptyReturnOther (value, replacement) {
+  if (value === '') {
+    return replacement;
   }
-  return storedThumbnail;
+  return value;
+}
+
+function determineThumbnail (storedThumbnail, defaultThumbnail) {
+  return ifEmptyReturnOther(storedThumbnail, defaultThumbnail);
+};
+
+function determineOgTitle (storedTitle, defaultTitle) {
+  return ifEmptyReturnOther(storedTitle, defaultTitle);
+};
+
+function determineOgDescription (storedDescription, defaultDescription) {
+  return ifEmptyReturnOther(storedDescription, defaultDescription);
 };
 
 function addOpengraphDataToClaim (claim) {
@@ -31,6 +45,8 @@ function addOpengraphDataToClaim (claim) {
   claim['showUrl'] = `https://spee.ch/${claim.claimId}/${claim.name}`;
   claim['source'] = `https://spee.ch/${claim.claimId}/${claim.name}.${claim.fileExt}`;
   claim['directFileUrl'] = `https://spee.ch/${claim.claimId}/${claim.name}.${claim.fileExt}`;
+  claim['ogTitle'] = determineOgTitle(claim.title, DEFAULT_TITLE);
+  claim['ogDescription'] = determineOgDescription(claim.description, DEFAULT_DESCRIPTION);
 };
 
 function prepareClaimData (claimData) {

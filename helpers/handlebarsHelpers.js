@@ -12,36 +12,30 @@ module.exports = {
         ga('send', 'pageview');</script>`;
     return new Handlebars.SafeString(gaCode);
   },
-  addOpenGraph ({ title, contentType, description, thumbnail, showUrl, source }) {
-    if (!title || title.trim() === '') {
-      title = 'Spee.ch';
-    }
-    if (!description || description.trim() === '') {
-      description = 'Open-source, decentralized image and video sharing.';
-    }
-    const ogTitle = `<meta property="og:title" content="${title}" >`;
-    const ogUrl = `<meta property="og:url" content="${showUrl}" >`;
-    const ogSiteName = `<meta property="og:site_name" content="Spee.ch" >`;
-    const ogDescription = `<meta property="og:description" content="${description}" >`;
-    const ogImageWidth = '<meta property="og:image:width" content="600" >';
-    const ogImageHeight = '<meta property="og:image:height" content="315" >';
-    const basicTags = `${ogTitle} ${ogUrl} ${ogSiteName} ${ogDescription} ${ogImageWidth} ${ogImageHeight}`;
-    let ogImage = `<meta property="og:image" content="${source}" >`;
-    let ogImageType = `<meta property="og:image:type" content="${contentType}" >`;
-    let ogType = `<meta property="og:type" content="article" >`;
+  addOpenGraph ({ ogTitle, contentType, ogDescription, thumbnail, showUrl, source }) {
+    const ogTitleTag = `<meta property="og:title" content="${ogTitle}" >`;
+    const ogUrlTag = `<meta property="og:url" content="${showUrl}" >`;
+    const ogSiteNameTag = `<meta property="og:site_name" content="Spee.ch" >`;
+    const ogDescriptionTag = `<meta property="og:description" content="${ogDescription}" >`;
+    const ogImageWidthTag = '<meta property="og:image:width" content="600" >';
+    const ogImageHeightTag = '<meta property="og:image:height" content="315" >';
+    const basicTags = `${ogTitleTag} ${ogUrlTag} ${ogSiteNameTag} ${ogDescriptionTag} ${ogImageWidthTag} ${ogImageHeightTag}`;
+    let ogImageTag = `<meta property="og:image" content="${source}" >`;
+    let ogImageTypeTag = `<meta property="og:image:type" content="${contentType}" >`;
+    let ogTypeTag = `<meta property="og:type" content="article" >`;
     if (contentType === 'video/mp4') {
-      const ogVideo = `<meta property="og:video" content="${source}" >`;
-      const ogVideoSecureUrl = `<meta property="og:video:secure_url" content="${source}" >`;
-      const ogVideoType = `<meta property="og:video:type" content="${contentType}" >`;
-      ogImage = `<meta property="og:image" content="${thumbnail}" >`;
-      ogImageType = `<meta property="og:image:type" content="image/png" >`;
-      ogType = `<meta property="og:type" content="video" >`;
-      return new Handlebars.SafeString(`${basicTags} ${ogImage} ${ogImageType} ${ogType} ${ogVideo} ${ogVideoSecureUrl} ${ogVideoType}`);
+      const ogVideoTag = `<meta property="og:video" content="${source}" >`;
+      const ogVideoSecureUrlTag = `<meta property="og:video:secure_url" content="${source}" >`;
+      const ogVideoTypeTag = `<meta property="og:video:type" content="${contentType}" >`;
+      ogImageTag = `<meta property="og:image" content="${thumbnail}" >`;
+      // ogImageTypeTag = `<meta property="og:image:type" content="image/png" >`;  // note: might not be png.  needs to check if gif or jpg etc depending on thubmnail
+      ogTypeTag = `<meta property="og:type" content="video" >`;
+      return new Handlebars.SafeString(`${basicTags} ${ogImageTag} ${ogImageTypeTag} ${ogTypeTag} ${ogVideoTag} ${ogVideoSecureUrlTag} ${ogVideoTypeTag}`);
     } else {
       if (contentType === 'image/gif') {
-        ogType = `<meta property="og:type" content="video.other" >`;
+        ogTypeTag = `<meta property="og:type" content="video.other" >`;
       };
-      return new Handlebars.SafeString(`${basicTags} ${ogImage} ${ogImageType} ${ogType}`);
+      return new Handlebars.SafeString(`${basicTags} ${ogImageTag} ${ogImageTypeTag} ${ogTypeTag}`);
     }
   },
   addTwitterCard ({ contentType, source, embedUrl, directFileUrl }) {
