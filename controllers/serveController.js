@@ -1,10 +1,17 @@
 const db = require('../models');
 const logger = require('winston');
 
-const DEFAULT_THUMBNAIL = 'https://spee.ch/assets/img/video_thumb_default.png';
 const NO_CHANNEL = 'NO_CHANNEL';
 const NO_CLAIM = 'NO_CLAIM';
 const NO_FILE = 'NO_FILE';
+
+function addUrlInformation (claim, channelName, longChannelClaimId, shortChannelClaimId, name, fileExtension) {
+  claim['showUrlLong'] = `/${channelName}:${longChannelClaimId}/${name}`;
+  claim['directUrlLong'] = `/${channelName}:${longChannelClaimId}/${name}.${fileExtension}`;
+  claim['showUrlShort'] = `/${channelName}:${shortChannelClaimId}/${name}`;
+  claim['directUrlShort'] = `/${channelName}:${shortChannelClaimId}/${name}.${fileExtension}`;
+  return claim;
+}
 
 module.exports = {
   getClaimId (channelName, channelClaimId, name, claimId) {
@@ -53,35 +60,29 @@ module.exports = {
         });
     });
   },
-  getChannelContents (channelName, channelClaimId) {
+  getChannelInfoAndContent (channelName, channelClaimId) { // note: move down to model layer?
     return new Promise((resolve, reject) => {
-      db.Certificate.getLongChannelId(channelName, channelClaimId)  // 1. get the long channel Id
-        .then(longChannelClaimId => {  // 2. get all claims for that channel
+      // 1. get the long channel Id (make sure channel exists)
+      db.Certificate.getLongChannelId(channelName, channelClaimId)
+        .then(longChannelClaimId => {
           if (!longChannelClaimId) {
             return [null, null, null];
           }
+          // 2. get the short ID and all claims for that channel
           return Promise.all([longChannelClaimId, db.Certificate.getShortChannelIdFromLongChannelId(longChannelClaimId, channelName), db.Claim.getAllChannelClaims(longChannelClaimId)]);
         })
-        .then(([longChannelClaimId, shortChannelClaimId, channelClaimsArray]) => {  // 4. add extra data not available from Claim table
+        .then(([longChannelClaimId, shortChannelClaimId, channelClaimsArray]) => {
           if (!longChannelClaimId) {
             return resolve(NO_CHANNEL);
           }
+          // 3. add url information to each claim
           if (channelClaimsArray) {
-            channelClaimsArray.forEach(element => {
-              const fileExtenstion = element.contentType.substring(element.contentType.lastIndexOf('/') + 1);
-              element['showUrlLong'] = `/${channelName}:${longChannelClaimId}/${element.name}`;
-              element['directUrlLong'] = `/${channelName}:${longChannelClaimId}/${element.name}.${fileExtenstion}`;
-              element['showUrlShort'] = `/${channelName}:${shortChannelClaimId}/${element.name}`;
-              element['directUrlShort'] = `/${channelName}:${shortChannelClaimId}/${element.name}.${fileExtenstion}`;
-              element['thumbnail'] = module.exports.chooseThumbnail(element, DEFAULT_THUMBNAIL);
+            channelClaimsArray.forEach(claim => {
+              return addUrlInformation(claim);
             });
           }
-          resolve({
-            channelName,
-            longChannelClaimId,
-            shortChannelClaimId,
-            claims: channelClaimsArray,
-          });
+          // 4. return all the channel information and contents
+          resolve({ channelName, longChannelClaimId, shortChannelClaimId, claims: channelClaimsArray });
         })
         .catch(error => {
           reject(error);
@@ -96,39 +97,5 @@ module.exports = {
         }
         return file.dataValues;
       });
-  },
-  getClaimRecord (claimId, name) {
-    return db.Claim.findOne({where: {claimId, name}})
-        .then(claim => {
-          if (!claim) {
-            throw new Error('no record found in Claim table');
-          }
-          claim.dataValues.thumbnail = module.exports.chooseThumbnail(claim.dataValues, DEFAULT_THUMBNAIL);
-          claim.dataValues.fileExt = module.exports.determineFileExtensionFromContentType(claim.dataValues.contentType);
-          return claim.dataValues;
-        });
-  },
-  determineFileExtensionFromContentType (contentType) {
-    switch (contentType) {
-      case 'image/jpeg':
-        return 'jpeg';
-      case 'image/jpg':
-        return 'jpg';
-      case 'image/png':
-        return 'png';
-      case 'image/gif':
-        return 'gif';
-      case 'video/mp4':
-        return 'mp4';
-      default:
-        logger.info('showing unknown file type as image/jpeg');
-        return 'jpeg';
-    }
-  },
-  chooseThumbnail (claimInfo, defaultThumbnail) {
-    if (!claimInfo.thumbnail || claimInfo.thumbnail.trim() === '') {
-      return defaultThumbnail;
-    }
-    return claimInfo.thumbnail;
   },
 };

@@ -1,5 +1,5 @@
 const logger = require('winston');
-const { getClaimId, getChannelContents, getLocalFileRecord, getClaimRecord } = require('../controllers/serveController.js');
+const { getClaimId, getChannelInfoAndContent, getLocalFileRecord } = require('../controllers/serveController.js');
 const serveHelpers = require('../helpers/serveHelpers.js');
 const { handleRequestError } = require('../helpers/errorHandlers.js');
 const db = require('../models');
@@ -119,7 +119,7 @@ function returnOptionsForChannelPageRendering (result, query) {
   return options;
 }
 
-function sendChannelContentsToClient (result, query, res) {
+function sendChannelInfoAndContentToClient (result, query, res) {
   if (result === NO_CHANNEL) {              // (a) no channel found
     res.status(200).render('noChannel');
   } else {                                  // (b) channel found
@@ -134,9 +134,9 @@ function showChannelPageToClient (uri, originalUrl, ip, query, res) {
   let channelClaimId = returnChannelIdFromUri(uri);
   logger.debug('channel Id =', channelClaimId);
   // 1. retrieve the channel contents
-  getChannelContents(channelName, channelClaimId)
+  getChannelInfoAndContent(channelName, channelClaimId)
     .then(result => {
-      sendChannelContentsToClient(result, query, res);
+      sendChannelInfoAndContentToClient(result, query, res);
     })
     .catch(error => {
       handleRequestError('serve', originalUrl, ip, error, res);
@@ -173,7 +173,7 @@ function determineName (uri) {
 
 function showAssetToClient (claimId, name, res) {
   return Promise
-      .all([getClaimRecord(claimId, name), db.Claim.getShortClaimIdFromLongClaimId(claimId, name)])
+      .all([db.Claim.resolveClaim(name, claimId), db.Claim.getShortClaimIdFromLongClaimId(claimId, name)])
       .then(([claimInfo, shortClaimId]) => {
         logger.debug('claimInfo:', claimInfo);
         logger.debug('shortClaimId:', shortClaimId);
@@ -186,7 +186,7 @@ function showAssetToClient (claimId, name, res) {
 
 function showPlainAssetToClient (claimId, name, res) {
   return Promise
-      .all([getClaimRecord(claimId, name), db.Claim.getShortClaimIdFromLongClaimId(claimId, name)])
+      .all([db.Claim.resolveClaim(claimId, name), db.Claim.getShortClaimIdFromLongClaimId(claimId, name)])
       .then(([claimInfo, shortClaimId]) => {
         logger.debug('claimInfo:', claimInfo);
         logger.debug('shortClaimId:', shortClaimId);

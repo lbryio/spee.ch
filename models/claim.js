@@ -1,5 +1,30 @@
 const logger = require('winston');
 const { returnShortId } = require('../helpers/sequelizeHelpers.js');
+const DEFAULT_THUMBNAIL = 'https://spee.ch/assets/img/video_thumb_default.png';
+
+function determineFileExtensionFromContentType (contentType) {
+  switch (contentType) {
+    case 'image/jpeg':
+    case 'image/jpg':
+      return 'jpg';
+    case 'image/png':
+      return 'png';
+    case 'image/gif':
+      return 'gif';
+    case 'video/mp4':
+      return 'mp4';
+    default:
+      logger.info('setting unknown file type as file extension jpg');
+      return 'jpg';
+  }
+};
+
+function determineThumbnail (storedThumbnail, defaultThumbnail) {
+  if (storedThumbnail === '') {
+    return defaultThumbnail;
+  }
+  return storedThumbnail;
+};
 
 module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
   const Claim = sequelize.define(
@@ -187,12 +212,17 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
           where: { certificateId: channelClaimId },
           order: [['height', 'ASC']],
         })
-        .then(result => {
-          switch (result.length) {
+        .then(channelClaimsArray => {
+          switch (channelClaimsArray.length) {
             case 0:
               return resolve(null);
             default:
-              return resolve(result);
+              channelClaimsArray.forEach(claim => {
+                claim['fileExt'] = determineFileExtensionFromContentType(claim.contentType);
+                claim['thumbnail'] = determineThumbnail(claim.thumbnail, DEFAULT_THUMBNAIL);
+                return claim;
+              });
+              return resolve(channelClaimsArray);
           }
         })
         .catch(error => {
@@ -313,6 +343,8 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
           };
           switch (result.length) {
             case 1:
+              result[0].dataValues.thumbnail = determineThumbnail(result[0].dataValues.thumbnail, DEFAULT_THUMBNAIL);
+              result[0].dataValues.fileExt = determineFileExtensionFromContentType(result[0].dataValues.contentType);
               return resolve(result[0]);
             default:
               logger.warn(`more than one entry matches that name (${name}) and claimID (${claimId})`);
