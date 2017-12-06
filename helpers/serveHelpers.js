@@ -16,11 +16,9 @@ module.exports = {
     res.status(200).sendFile(filePath, options);
   },
   showFile (claimInfo, shortId, res) {
-    const openGraphInfo = module.exports.createOpenGraphInfo(claimInfo);
-    res.status(200).render('show', { layout: 'show', claimInfo, shortId, openGraphInfo });
+    res.status(200).render('show', { layout: 'show', claimInfo, shortId });
   },
   showFileLite (claimInfo, shortId, res) {
-    const openGraphInfo = module.exports.createOpenGraphInfo(claimInfo);
-    res.status(200).render('showLite', { layout: 'showlite', claimInfo, shortId, openGraphInfo });
+    res.status(200).render('showLite', { layout: 'showlite', claimInfo, shortId });
   },
 };

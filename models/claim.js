@@ -1,8 +1,8 @@
 const logger = require('winston');
 const { returnShortId } = require('../helpers/sequelizeHelpers.js');
 const DEFAULT_THUMBNAIL = 'https://spee.ch/assets/img/video_thumb_default.png';
-const DEFAULT_TITLE = '';
-const DEFAULT_DESCRIPTION = '';
+const DEFAULT_TITLE = 'Spee<ch';
+const DEFAULT_DESCRIPTION = 'Decentralized video and content hosting.';
 
 function determineFileExtensionFromContentType (contentType) {
   switch (contentType) {
@@ -72,13 +72,15 @@ function addOpengraphDataToClaim (claim) {
   claim['ogTitle'] = determineOgTitle(claim.title, DEFAULT_TITLE);
   claim['ogDescription'] = determineOgDescription(claim.description, DEFAULT_DESCRIPTION);
   claim['ogThumbnailContentType'] = determineOgThumbnailContentType(claim.thumbnail);
+  return claim;
 };
 
-function prepareClaimData (claimData) {
-  claimData['thumbnail'] = determineThumbnail(claimData.thumbnail, DEFAULT_THUMBNAIL);
-  claimData['fileExt'] = determineFileExtensionFromContentType(claimData.contentType);
-  claimData = addOpengraphDataToClaim(claimData);
-  return claimData;
+function prepareClaimData (claim) {
+  // logger.debug('preparing claim data based on resolved data:', claim);
+  claim['thumbnail'] = determineThumbnail(claim.thumbnail, DEFAULT_THUMBNAIL);
+  claim['fileExt'] = determineFileExtensionFromContentType(claim.contentType);
+  claim = addOpengraphDataToClaim(claim);
+  return claim;
 };
 
 module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
@@ -393,6 +395,7 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
           where: { name, claimId },
         })
         .then(claimArray => {
+          logger.debug('claims found on resolve:', claimArray.length);
           switch (claimArray.length) {
             case 0:
               return resolve(null);

@@ -184,9 +184,9 @@ function showAssetToClient (claimId, name, res) {
       });
 }
 
-function showPlainAssetToClient (claimId, name, res) {
+function showLiteAssetToClient (claimId, name, res) {
   return Promise
-      .all([db.Claim.resolveClaim(claimId, name), db.Claim.getShortClaimIdFromLongClaimId(claimId, name)])
+      .all([db.Claim.resolveClaim(name, claimId), db.Claim.getShortClaimIdFromLongClaimId(claimId, name)])
       .then(([claimInfo, shortClaimId]) => {
         logger.debug('claimInfo:', claimInfo);
         logger.debug('shortClaimId:', shortClaimId);
@@ -217,7 +217,7 @@ function showOrServeAsset (responseType, claimId, claimName, res) {
     case SHOW:
       return showAssetToClient(claimId, claimName, res);
     case SHOWLITE:
-      return showPlainAssetToClient(claimId, claimName, res);
+      return showLiteAssetToClient(claimId, claimName, res);
     case SERVE:
       return serveAssetToClient(claimId, claimName, res);
     default:
