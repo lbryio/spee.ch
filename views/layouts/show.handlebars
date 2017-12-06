@@ -10,8 +10,8 @@
     <link rel="stylesheet" href="/assets/css/mediaQueries.css" type="text/css">
 	<meta property="fb:app_id" content="1371961932852223">
 	{{#unless claimInfo.nsfw}}
-	    {{{addTwitterCard claimInfo.contentType openGraphInfo.source openGraphInfo.embedUrl openGraphInfo.directFileUrl}}}
-	    {{{addOpenGraph claimInfo.title claimInfo.contentType openGraphInfo.showUrl openGraphInfo.source claimInfo.description claimInfo.thumbnail}}}
+	    {{{addTwitterCard claimInfo }}}
+	    {{{addOpenGraph claimInfo }}}
 	{{/unless}}
     <!--google font-->
     <link href="https://fonts.googleapis.com/css?family=Roboto:300" rel="stylesheet">

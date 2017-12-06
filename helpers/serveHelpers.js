@@ -23,12 +23,4 @@ module.exports = {
     const openGraphInfo = module.exports.createOpenGraphInfo(claimInfo);
     res.status(200).render('showLite', { layout: 'showlite', claimInfo, shortId, openGraphInfo });
   },
-  createOpenGraphInfo ({ claimId, name, fileExt }) {
-    return {
-      embedUrl     : `https://spee.ch/embed/${claimId}/${name}`,
-      showUrl      : `https://spee.ch/${claimId}/${name}`,
-      source       : `https://spee.ch/${claimId}/${name}.${fileExt}`,
-      directFileUrl: `https://spee.ch/${claimId}/${name}.${fileExt}`,
-    };
-  },
 };

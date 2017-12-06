@@ -12,7 +12,7 @@ module.exports = {
         ga('send', 'pageview');</script>`;
     return new Handlebars.SafeString(gaCode);
   },
-  addOpenGraph (title, mimeType, showUrl, source, description, thumbnail) {
+  addOpenGraph ({ title, contentType, description, thumbnail, showUrl, source }) {
     if (!title || title.trim() === '') {
       title = 'Spee.ch';
     }
@@ -27,26 +27,26 @@ module.exports = {
     const ogImageHeight = '<meta property="og:image:height" content="315" >';
     const basicTags = `${ogTitle} ${ogUrl} ${ogSiteName} ${ogDescription} ${ogImageWidth} ${ogImageHeight}`;
     let ogImage = `<meta property="og:image" content="${source}" >`;
-    let ogImageType = `<meta property="og:image:type" content="${mimeType}" >`;
+    let ogImageType = `<meta property="og:image:type" content="${contentType}" >`;
     let ogType = `<meta property="og:type" content="article" >`;
-    if (mimeType === 'video/mp4') {
+    if (contentType === 'video/mp4') {
       const ogVideo = `<meta property="og:video" content="${source}" >`;
       const ogVideoSecureUrl = `<meta property="og:video:secure_url" content="${source}" >`;
-      const ogVideoType = `<meta property="og:video:type" content="${mimeType}" >`;
+      const ogVideoType = `<meta property="og:video:type" content="${contentType}" >`;
       ogImage = `<meta property="og:image" content="${thumbnail}" >`;
       ogImageType = `<meta property="og:image:type" content="image/png" >`;
       ogType = `<meta property="og:type" content="video" >`;
       return new Handlebars.SafeString(`${basicTags} ${ogImage} ${ogImageType} ${ogType} ${ogVideo} ${ogVideoSecureUrl} ${ogVideoType}`);
     } else {
-      if (mimeType === 'image/gif') {
+      if (contentType === 'image/gif') {
         ogType = `<meta property="og:type" content="video.other" >`;
       };
       return new Handlebars.SafeString(`${basicTags} ${ogImage} ${ogImageType} ${ogType}`);
     }
   },
-  addTwitterCard (mimeType, source, embedUrl, directFileUrl) {
+  addTwitterCard ({ contentType, source, embedUrl, directFileUrl }) {
     const basicTwitterTags = `<meta name="twitter:site" content="@spee_ch" >`;
-    if (mimeType === 'video/mp4') {
+    if (contentType === 'video/mp4') {
       const twitterName = '<meta name="twitter:card" content="player" >';
       const twitterPlayer = `<meta name="twitter:player" content="${embedUrl}" >`;
       const twitterPlayerWidth = '<meta name="twitter:player:width" content="600" >';

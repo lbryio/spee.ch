@@ -26,6 +26,20 @@ function determineThumbnail (storedThumbnail, defaultThumbnail) {
   return storedThumbnail;
 };
 
+function addOpengraphDataToClaim (claim) {
+  claim['embedUrl'] = `https://spee.ch/embed/${claim.claimId}/${claim.name}`;
+  claim['showUrl'] = `https://spee.ch/${claim.claimId}/${claim.name}`;
+  claim['source'] = `https://spee.ch/${claim.claimId}/${claim.name}.${claim.fileExt}`;
+  claim['directFileUrl'] = `https://spee.ch/${claim.claimId}/${claim.name}.${claim.fileExt}`;
+};
+
+function prepareClaimData (claimData) {
+  claimData['thumbnail'] = determineThumbnail(claimData.thumbnail, DEFAULT_THUMBNAIL);
+  claimData['fileExt'] = determineFileExtensionFromContentType(claimData.contentType);
+  claimData = addOpengraphDataToClaim(claimData);
+  return claimData;
+};
+
 module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
   const Claim = sequelize.define(
     'Claim',
@@ -337,18 +351,15 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
         .findAll({
           where: { name, claimId },
         })
-        .then(result => {
-          if (!result) {
-            return resolve(null);
-          };
-          switch (result.length) {
+        .then(claimArray => {
+          switch (claimArray.length) {
+            case 0:
+              return resolve(null);
             case 1:
-              result[0].dataValues.thumbnail = determineThumbnail(result[0].dataValues.thumbnail, DEFAULT_THUMBNAIL);
-              result[0].dataValues.fileExt = determineFileExtensionFromContentType(result[0].dataValues.contentType);
-              return resolve(result[0]);
+              return resolve(prepareClaimData(claimArray[0].dataValues));
             default:
-              logger.warn(`more than one entry matches that name (${name}) and claimID (${claimId})`);
-              return resolve(result[0]);
+              logger.error(`more than one entry matches that name (${name}) and claimID (${claimId})`);
+              return resolve(prepareClaimData(claimArray[0].dataValues));
           }
         })
         .catch(error => {
