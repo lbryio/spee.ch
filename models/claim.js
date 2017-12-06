@@ -21,6 +21,23 @@ function determineFileExtensionFromContentType (contentType) {
   }
 };
 
+function determineContentTypeFromFileExtension (fileExtension) {
+  switch (fileExtension) {
+    case 'jpeg':
+    case 'jpg':
+      return 'image/jpg';
+    case 'png':
+      return 'image/png';
+    case 'gif':
+      return 'image/gif';
+    case 'mp4':
+      return 'video/mp4';
+    default:
+      logger.info('setting unknown file type as type image/jpg');
+      return 'image/jpg';
+  }
+};
+
 function ifEmptyReturnOther (value, replacement) {
   if (value === '') {
     return replacement;
@@ -40,6 +57,13 @@ function determineOgDescription (storedDescription, defaultDescription) {
   return ifEmptyReturnOther(storedDescription, defaultDescription);
 };
 
+function determineOgThumbnailContentType (thumbnail) {
+  if (thumbnail.lastIndexOf('.') !== -1) {
+    return determineContentTypeFromFileExtension(thumbnail.substring(thumbnail.lastIndexOf('.')));
+  }
+  return '';
+}
+
 function addOpengraphDataToClaim (claim) {
   claim['embedUrl'] = `https://spee.ch/embed/${claim.claimId}/${claim.name}`;
   claim['showUrl'] = `https://spee.ch/${claim.claimId}/${claim.name}`;
@@ -47,6 +71,7 @@ function addOpengraphDataToClaim (claim) {
   claim['directFileUrl'] = `https://spee.ch/${claim.claimId}/${claim.name}.${claim.fileExt}`;
   claim['ogTitle'] = determineOgTitle(claim.title, DEFAULT_TITLE);
   claim['ogDescription'] = determineOgDescription(claim.description, DEFAULT_DESCRIPTION);
+  claim['ogThumbnailContentType'] = determineOgThumbnailContentType(claim.thumbnail);
 };
 
 function prepareClaimData (claimData) {

@@ -12,7 +12,7 @@ module.exports = {
         ga('send', 'pageview');</script>`;
     return new Handlebars.SafeString(gaCode);
   },
-  addOpenGraph ({ ogTitle, contentType, ogDescription, thumbnail, showUrl, source }) {
+  addOpenGraph ({ ogTitle, contentType, ogDescription, thumbnail, showUrl, source, ogThumbnailContentType }) {
     const ogTitleTag = `<meta property="og:title" content="${ogTitle}" >`;
     const ogUrlTag = `<meta property="og:url" content="${showUrl}" >`;
     const ogSiteNameTag = `<meta property="og:site_name" content="Spee.ch" >`;
@@ -28,7 +28,7 @@ module.exports = {
       const ogVideoSecureUrlTag = `<meta property="og:video:secure_url" content="${source}" >`;
       const ogVideoTypeTag = `<meta property="og:video:type" content="${contentType}" >`;
       ogImageTag = `<meta property="og:image" content="${thumbnail}" >`;
-      // ogImageTypeTag = `<meta property="og:image:type" content="image/png" >`;  // note: might not be png.  needs to check if gif or jpg etc depending on thubmnail
+      ogImageTypeTag = `<meta property="og:image:type" content="${ogThumbnailContentType}" >`;
       ogTypeTag = `<meta property="og:type" content="video" >`;
       return new Handlebars.SafeString(`${basicTags} ${ogImageTag} ${ogImageTypeTag} ${ogTypeTag} ${ogVideoTag} ${ogVideoSecureUrlTag} ${ogVideoTypeTag}`);
     } else {
