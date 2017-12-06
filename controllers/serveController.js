@@ -3,6 +3,7 @@ const logger = require('winston');
 
 const DEFAULT_THUMBNAIL = 'https://spee.ch/assets/img/video_thumb_default.png';
 const NO_CHANNEL = 'NO_CHANNEL';
+const NO_CLAIM = 'NO_CLAIM';
 const NO_FILE = 'NO_FILE';
 
 module.exports = {
@@ -16,9 +17,12 @@ module.exports = {
   getClaimIdByClaim (claimName, claimId) {
     logger.debug(`getClaimIdByClaim(${claimName}, ${claimId})`);
     return new Promise((resolve, reject) => {
-      db.Claim.getLongClaimId(claimName, claimId) // get the long claim id
-        .then(result => {
-          resolve(result);  // resolves with NO_CLAIM or valid claim id
+      db.Claim.getLongClaimId(claimName, claimId)
+        .then(longClaimId => {
+          if (!longClaimId) {
+            resolve(NO_CLAIM);
+          }
+          resolve(longClaimId);
         })
         .catch(error => {
           reject(error);
@@ -29,15 +33,20 @@ module.exports = {
     logger.debug(`getClaimIdByChannel(${channelName}, ${channelClaimId}, ${claimName})`);
     return new Promise((resolve, reject) => {
       db.Certificate.getLongChannelId(channelName, channelClaimId) // 1. get the long channel id
-        .then(result => {
-          if (result === NO_CHANNEL) {
-            resolve(result);  // resolves NO_CHANNEL
-            return;
+        .then(longChannelId => {
+          if (!longChannelId) {
+            return [null, null];
           }
-          return db.Claim.getClaimIdByLongChannelId(result, claimName);  // 2. get the long claim id
+          return Promise.all([longChannelId, db.Claim.getClaimIdByLongChannelId(longChannelId, claimName)]);  // 2. get the long claim id
         })
-        .then(result => {
-          resolve(result);  // resolves with NO_CLAIM or valid claim id
+        .then(([longChannelId, longClaimId]) => {
+          if (!longChannelId) {
+            return resolve(NO_CHANNEL);
+          }
+          if (!longClaimId) {
+            return resolve(NO_CLAIM);
+          }
+          resolve(longClaimId);
         })
         .catch(error => {
           reject(error);
@@ -46,30 +55,19 @@ module.exports = {
   },
   getChannelContents (channelName, channelClaimId) {
     return new Promise((resolve, reject) => {
-      let longChannelClaimId;
-      let shortChannelClaimId;
       db.Certificate.getLongChannelId(channelName, channelClaimId)  // 1. get the long channel Id
-        .then(result => {  // 2. get all claims for that channel
-          if (result === NO_CHANNEL) {
-            return NO_CHANNEL;
+        .then(longChannelClaimId => {  // 2. get all claims for that channel
+          if (!longChannelClaimId) {
+            return [null, null, null];
           }
-          longChannelClaimId = result;
-          return db.Certificate.getShortChannelIdFromLongChannelId(longChannelClaimId, channelName);
+          return Promise.all([longChannelClaimId, db.Certificate.getShortChannelIdFromLongChannelId(longChannelClaimId, channelName), db.Claim.getAllChannelClaims(longChannelClaimId)]);
         })
-        .then(result => {  // 3. get all Claim records for this channel
-          if (result === NO_CHANNEL) {
-            return NO_CHANNEL;
+        .then(([longChannelClaimId, shortChannelClaimId, channelClaimsArray]) => {  // 4. add extra data not available from Claim table
+          if (!longChannelClaimId) {
+            return resolve(NO_CHANNEL);
           }
-          shortChannelClaimId = result;
-          return db.Claim.getAllChannelClaims(longChannelClaimId);
-        })
-        .then(result => {  // 4. add extra data not available from Claim table
-          if (result === NO_CHANNEL) {
-            resolve(result);
-            return;
-          }
-          if (result) {
-            result.forEach(element => {
+          if (channelClaimsArray) {
+            channelClaimsArray.forEach(element => {
               const fileExtenstion = element.contentType.substring(element.contentType.lastIndexOf('/') + 1);
               element['showUrlLong'] = `/${channelName}:${longChannelClaimId}/${element.name}`;
               element['directUrlLong'] = `/${channelName}:${longChannelClaimId}/${element.name}.${fileExtenstion}`;
@@ -82,7 +80,7 @@ module.exports = {
             channelName,
             longChannelClaimId,
             shortChannelClaimId,
-            claims: result,
+            claims: channelClaimsArray,
           });
         })
         .catch(error => {

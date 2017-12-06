@@ -213,7 +213,7 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
         .then(result => {
           switch (result.length) {
             case 0:
-              return resolve(NO_CLAIM);
+              return resolve(null);
             case 1:
               return resolve(result[0].claimId);
             default:
@@ -241,7 +241,7 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
         .then(result => {
           switch (result.length) {
             case 0:
-              return resolve(NO_CLAIM);
+              return resolve(null);
             default: // note results must be sorted
               return resolve(result[0].claimId);
           }
@@ -263,7 +263,7 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
           logger.debug('length of result', result.length);
           switch (result.length) {
             case 0:
-              return resolve(NO_CLAIM);
+              return resolve(null);
             default:
               return resolve(result[0].dataValues.claimId);
           }
@@ -281,7 +281,7 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
       })
       .then(result => {
         if (!result) {
-          return resolve(NO_CLAIM);
+          return resolve(null);
         };
         resolve(claimId);
       })

@@ -1,6 +1,5 @@
 const logger = require('winston');
 const { returnShortId } = require('../helpers/sequelizeHelpers.js');
-const NO_CHANNEL = 'NO_CHANNEL';
 
 module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
   const Certificate = sequelize.define(
@@ -138,7 +137,7 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
         .then(result => {
           switch (result.length) {
             case 0:
-              return resolve(NO_CHANNEL);
+              return resolve(null);
             default: // note results must be sorted
               return resolve(result[0].claimId);
           }
@@ -160,7 +159,7 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
         .then(result => {
           switch (result.length) {
             case 0:
-              return resolve(NO_CHANNEL);
+              return resolve(null);
             default:
               return resolve(result[0].claimId);
           }
@@ -178,7 +177,7 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
       })
       .then(result => {
         if (!result) {
-          return resolve(NO_CHANNEL);
+          return resolve(null);
         };
         resolve(claimId);
       })
