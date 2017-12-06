@@ -1,6 +1,5 @@
 const logger = require('winston');
 const { returnShortId } = require('../helpers/sequelizeHelpers.js');
-const NO_CLAIM = 'NO_CLAIM';
 
 module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
   const Claim = sequelize.define(
