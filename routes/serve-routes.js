@@ -143,16 +143,24 @@ function showChannelPageToClient (uri, originalUrl, ip, query, res) {
     });
 }
 
+function characterExistsInString (character, string) {
+  return (string.indexOf(character) !== -1);
+}
+
+function clientAcceptsHtml (headers) {
+  return headers['accept'] && headers['accept'].split(',').includes('text/html');
+}
+
 function determineResponseType (uri, headers) {
   let responseType;
-  if (uri.indexOf('.') !== -1) {
+  if (characterExistsInString('.', uri)) {
     responseType = SERVE;
-    if (headers['accept'] && headers['accept'].split(',').includes('text/html')) {
+    if (clientAcceptsHtml(headers)) {  // this is in case a serve request comes from a browser
       responseType = SHOWLITE;
     }
   } else {
     responseType = SHOW;
-    if (!headers['accept'] || !headers['accept'].split(',').includes('text/html')) {
+    if (!clientAcceptsHtml(headers)) {  // this is in case someone embeds a show url
       responseType = SERVE;
     }
   }
@@ -161,11 +169,11 @@ function determineResponseType (uri, headers) {
 
 function determineName (uri) {
   /* patch because twitter player preview adds '>' before file extension. */
-  if (uri.indexOf('>') !== -1) {
+  if (characterExistsInString('>', uri)) {
     return uri.substring(0, uri.indexOf('>'));
   }
   /* end patch */
-  if (uri.indexOf('.') !== -1) {
+  if (characterExistsInString('.', uri)) {
     return uri.substring(0, uri.indexOf('.'));
   }
   return uri;

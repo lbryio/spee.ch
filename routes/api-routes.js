@@ -92,7 +92,7 @@ module.exports = (app) => {
       if (result === true) {
         res.status(200).json(true);
       } else {
-        logger.debug(`Rejecting '${params.name}' because that name has already been claimed on spee.ch`);
+        // logger.debug(`Rejecting '${params.name}' because that name has already been claimed on spee.ch`);
         res.status(200).json(false);
       }
     })
@@ -107,12 +107,11 @@ module.exports = (app) => {
         if (result === true) {
           res.status(200).json(true);
         } else {
-          logger.debug(`Rejecting '${params.name}' because that channel has already been claimed on spee.ch`);
+          // logger.debug(`Rejecting '${params.name}' because that channel has already been claimed on spee.ch`);
           res.status(200).json(false);
         }
       })
       .catch(error => {
-        logger.debug('api/channel-is-available/ error', error);
         res.status(500).json(error);
       });
   });
