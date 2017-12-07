@@ -2,6 +2,10 @@ const Handlebars = require('handlebars');
 const config = require('../config/speechConfig.js');
 
 module.exports = {
+  placeCommonHeaderTags () {
+    const headerBoilerplate = `<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no"><meta http-equiv="X-UA-Compatible" content="ie=edge"><title>Spee.ch</title><link rel="stylesheet" href="/assets/css/reset.css" type="text/css"><link rel="stylesheet" href="/assets/css/general.css" type="text/css"><link rel="stylesheet" href="/assets/css/mediaQueries.css" type="text/css">`;
+    return new Handlebars.SafeString(headerBoilerplate);
+  },
   googleAnalytics () {
     const googleApiKey = config.analytics.googleId;
     const gaCode = `<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
