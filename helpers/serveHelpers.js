@@ -1,5 +1,4 @@
 const logger = require('winston');
-// const { postToStats, sendGoogleAnalytics } = require('../controllers/statsController.js');
 
 module.exports = {
   serveFile ({ filePath, fileType }, claimId, name, res) {

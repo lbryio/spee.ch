@@ -1,5 +1,4 @@
 const logger = require('winston');
-// const { postToStats, sendGoogleAnalytics } = require('../controllers/statsController.js');
 
 module.exports = {
   REGEXP_INVALID_CLAIM  : /[^A-Za-z0-9-]/g,

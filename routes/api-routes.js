@@ -7,7 +7,6 @@ const { publish } = require('../controllers/publishController.js');
 const { getClaimList, resolveUri, getClaim } = require('../helpers/lbryApi.js');
 const { createPublishParams, validateApiPublishRequest, validatePublishSubmission, cleanseChannelName, checkClaimNameAvailability, checkChannelAvailability } = require('../helpers/publishHelpers.js');
 const errorHandlers = require('../helpers/errorHandlers.js');
-const { postToStats } = require('../controllers/statsController.js');
 const { authenticateOrSkip } = require('../auth/authentication.js');
 
 function addGetResultsToFileData (fileInfo, getResult) {
@@ -35,7 +34,6 @@ module.exports = (app) => {
   app.get('/api/claim-list/:name', ({ ip, originalUrl, params }, res) => {
     getClaimList(params.name)
     .then(claimsList => {
-      postToStats('serve', originalUrl, ip, null, null, 'success');
       res.status(200).json(claimsList);
     })
     .catch(error => {
@@ -119,7 +117,6 @@ module.exports = (app) => {
   app.get('/api/claim-resolve/:uri', ({ headers, ip, originalUrl, params }, res) => {
     resolveUri(params.uri)
     .then(resolvedUri => {
-      postToStats('serve', originalUrl, ip, null, null, 'success');
       res.status(200).json(resolvedUri);
     })
     .catch(error => {

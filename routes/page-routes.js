@@ -43,7 +43,6 @@ module.exports = (app) => {
   app.get('/new', ({ ip, originalUrl }, res) => {
     getRecentClaims()
       .then(result => {
-        // logger.debug(result);
         res.status(200).render('new', { newClaims: result });
       })
       .catch(error => {

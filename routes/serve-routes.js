@@ -2,8 +2,9 @@ const logger = require('winston');
 const { getClaimId, getChannelInfoAndClaims, getLocalFileRecord } = require('../controllers/serveController.js');
 const serveHelpers = require('../helpers/serveHelpers.js');
 const { handleRequestError } = require('../helpers/errorHandlers.js');
+const { postToStats } = require('../controllers/statsController.js');
 const db = require('../models');
-const lbryuri = require('../helpers/lbryuri.js');
+const lbryUri = require('../helpers/lbryUri.js');
 
 const SERVE = 'SERVE';
 const SHOW = 'SHOW';
@@ -171,10 +172,9 @@ function serveAssetToClient (claimId, name, res) {
       .then(fileInfo => {
         logger.debug('fileInfo:', fileInfo);
         if (fileInfo === NO_FILE) {
-          res.status(307).redirect(`/api/claim-get/${name}/${claimId}`);
-        } else {
-          return serveHelpers.serveFile(fileInfo, claimId, name, res);
+          return res.status(307).redirect(`/api/claim-get/${name}/${claimId}`);
         }
+        return serveHelpers.serveFile(fileInfo, claimId, name, res);
       })
       .catch(error => {
         throw error;
@@ -216,8 +216,8 @@ module.exports = (app) => {
   app.get('/:identifier/:name', ({ headers, ip, originalUrl, params }, res) => {
     let isChannel, channelName, channelClaimId, claimId, claimName, isServeRequest;
     try {
-      ({ isChannel, channelName, channelClaimId, claimId } = lbryuri.parseIdentifier(params.identifier));
-      ({ claimName, isServeRequest } = lbryuri.parseName(params.name));
+      ({ isChannel, channelName, channelClaimId, claimId } = lbryUri.parseIdentifier(params.identifier));
+      ({ claimName, isServeRequest } = lbryUri.parseName(params.name));
     } catch (error) {
       return handleRequestError(originalUrl, ip, error, res);
     }
@@ -236,6 +236,7 @@ module.exports = (app) => {
         return res.status(200).render('noChannel');
       }
       showOrServeAsset(responseType, fullClaimId, claimName, res);
+      postToStats(responseType, originalUrl, ip, claimName, fullClaimId, 'success');
     })
     .catch(error => {
       handleRequestError(originalUrl, ip, error, res);
@@ -245,7 +246,7 @@ module.exports = (app) => {
   app.get('/:identifier', ({ headers, ip, originalUrl, params, query }, res) => {
     let isChannel, channelName, channelClaimId;
     try {
-      ({ isChannel, channelName, channelClaimId } = lbryuri.parseIdentifier(params.identifier));
+      ({ isChannel, channelName, channelClaimId } = lbryUri.parseIdentifier(params.identifier));
     } catch (error) {
       return handleRequestError(originalUrl, ip, error, res);
     }
@@ -257,7 +258,7 @@ module.exports = (app) => {
     } else {
       let claimName, isServeRequest;
       try {
-        ({claimName, isServeRequest} = lbryuri.parseName(params.identifier));
+        ({claimName, isServeRequest} = lbryUri.parseName(params.identifier));
       } catch (error) {
         return handleRequestError(originalUrl, ip, error, res);
       }
@@ -271,6 +272,7 @@ module.exports = (app) => {
             return res.status(200).render('noClaim');
           }
           showOrServeAsset(responseType, fullClaimId, claimName, res);
+          postToStats(responseType, originalUrl, ip, claimName, fullClaimId, 'success');
         })
         .catch(error => {
           handleRequestError(originalUrl, ip, error, res);
