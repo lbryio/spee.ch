@@ -30,7 +30,6 @@ module.exports = (app) => {
     const dateTime = startDate.toISOString().slice(0, 19).replace('T', ' ');
     getTrendingClaims(dateTime)
       .then(result => {
-        // logger.debug(result);
         res.status(200).render('popular', {
           trendingAssets: result,
         });

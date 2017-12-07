@@ -73,8 +73,8 @@ db.upsert = (Model, values, condition, tableName) => {
     });
 };
 
-// add a 'getTrendingClaims' method to the db object
-db.getTrendingClaims = (startDate) => {
+// add a 'getTrendingFiles' method to the db object.  note: change this to get claims directly.  might need new association between Request and Claim
+db.getTrendingFiles = (startDate) => {
   return db.sequelize.query(`SELECT COUNT(*), File.* FROM Request LEFT JOIN File ON Request.FileId = File.id WHERE FileId IS NOT NULL AND nsfw != 1 AND trendingEligible = 1 AND Request.createdAt > "${startDate}" GROUP BY FileId ORDER BY COUNT(*) DESC LIMIT 25;`, { type: db.sequelize.QueryTypes.SELECT });
 };
 
