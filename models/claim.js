@@ -268,8 +268,10 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
         .findAll({
           where: { certificateId: channelClaimId },
           order: [['height', 'ASC']],
+          raw  : true,  // returns an array of only data, not an array of instances
         })
         .then(channelClaimsArray => {
+          // logger.debug('channelclaimsarray length:', channelClaimsArray.length);
           switch (channelClaimsArray.length) {
             case 0:
               return resolve(null);

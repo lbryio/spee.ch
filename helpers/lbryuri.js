@@ -2,10 +2,11 @@ const logger = require('winston');
 // const { postToStats, sendGoogleAnalytics } = require('../controllers/statsController.js');
 
 module.exports = {
-  REGEXP_INVALID_URI: /[^A-Za-z0-9-]/g,
-  REGEXP_ADDRESS    : /^b(?=[^0OIl]{32,33})[0-9A-Za-z]{32,33}$/,
-  CHANNEL_CHAR      : '@',
-  parseIdentifier   : function (identifier) {
+  REGEXP_INVALID_CLAIM  : /[^A-Za-z0-9-]/g,
+  REGEXP_INVALID_CHANNEL: /[^A-Za-z0-9-@]/g,
+  REGEXP_ADDRESS        : /^b(?=[^0OIl]{32,33})[0-9A-Za-z]{32,33}$/,
+  CHANNEL_CHAR          : '@',
+  parseIdentifier       : function (identifier) {
     logger.debug('parsing identifier:', identifier);
     const componentsRegex = new RegExp(
       '([^:$#/]*)' + // value (stops at the first separator or end)
@@ -24,7 +25,7 @@ module.exports = {
       if (!channelName) {
         throw new Error('No channel name after @.');
       }
-      const nameBadChars = (channelName).match(module.exports.REGEXP_INVALID_URI);
+      const nameBadChars = (channelName).match(module.exports.REGEXP_INVALID_CHANNEL);
       if (nameBadChars) {
         throw new Error(`Invalid characters in channel name: ${nameBadChars.join(', ')}.`);
       }
@@ -67,7 +68,7 @@ module.exports = {
     if (!claimName) {
       throw new Error('No claim name provided before .');
     }
-    const nameBadChars = (claimName).match(module.exports.REGEXP_INVALID_URI);
+    const nameBadChars = (claimName).match(module.exports.REGEXP_INVALID_CLAIM);
     if (nameBadChars) {
       throw new Error(`Invalid characters in claim name: ${nameBadChars.join(', ')}.`);
     }

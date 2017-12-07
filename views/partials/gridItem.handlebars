@@ -2,10 +2,10 @@
             {{#ifConditional this.contentType '===' 'video/mp4'}}
                 <img class="grid-item-image" src="{{this.thumbnail}}"/>
             {{else}}
-                <img  class="grid-item-image" src="{{this.directUrlLong}}" />
+                <img  class="grid-item-image" src="{{this.claimId}}/{{this.name}}.{{this.fileExt}}" />
             {{/ifConditional}}
 
-        <div class="hidden" onclick="window.location='{{this.showUrlLong}}'">
+        <div class="hidden" onclick="window.location='{{this.claimId}}/{{this.name}}'">
             <p class="grid-item-details-text">{{this.name}}</p>
         </div>
 

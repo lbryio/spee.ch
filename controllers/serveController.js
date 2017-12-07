@@ -5,14 +5,6 @@ const NO_CHANNEL = 'NO_CHANNEL';
 const NO_CLAIM = 'NO_CLAIM';
 const NO_FILE = 'NO_FILE';
 
-function addUrlInformation (claim, channelName, longChannelClaimId, shortChannelClaimId, name, fileExtension) {
-  claim['showUrlLong'] = `/${channelName}:${longChannelClaimId}/${name}`;
-  claim['directUrlLong'] = `/${channelName}:${longChannelClaimId}/${name}.${fileExtension}`;
-  claim['showUrlShort'] = `/${channelName}:${shortChannelClaimId}/${name}`;
-  claim['directUrlShort'] = `/${channelName}:${shortChannelClaimId}/${name}.${fileExtension}`;
-  return claim;
-}
-
 module.exports = {
   getClaimId (channelName, channelClaimId, name, claimId) {
     if (channelName) {
@@ -60,7 +52,7 @@ module.exports = {
         });
     });
   },
-  getChannelInfoAndContent (channelName, channelClaimId) { // note: move down to model layer?
+  getChannelInfoAndClaims (channelName, channelClaimId) {
     return new Promise((resolve, reject) => {
       // 1. get the long channel Id (make sure channel exists)
       db.Certificate.getLongChannelId(channelName, channelClaimId)
@@ -75,13 +67,7 @@ module.exports = {
           if (!longChannelClaimId) {
             return resolve(NO_CHANNEL);
           }
-          // 3. add url information to each claim
-          if (channelClaimsArray) {
-            channelClaimsArray.forEach(claim => {
-              return addUrlInformation(claim);
-            });
-          }
-          // 4. return all the channel information and contents
+          // 3. return all the channel information and contents
           resolve({ channelName, longChannelClaimId, shortChannelClaimId, claims: channelClaimsArray });
         })
         .catch(error => {

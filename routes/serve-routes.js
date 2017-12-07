@@ -1,5 +1,5 @@
 const logger = require('winston');
-const { getClaimId, getChannelInfoAndContent, getLocalFileRecord } = require('../controllers/serveController.js');
+const { getClaimId, getChannelInfoAndClaims, getLocalFileRecord } = require('../controllers/serveController.js');
 const serveHelpers = require('../helpers/serveHelpers.js');
 const { handleRequestError } = require('../helpers/errorHandlers.js');
 const db = require('../models');
@@ -100,20 +100,20 @@ function returnOptionsForChannelPageRendering (result, query) {
   return options;
 }
 
-function sendChannelInfoAndContentToClient (result, query, res) {
-  if (result === NO_CHANNEL) {              // (a) no channel found
+function sendChannelInfoAndContentToClient (channelInfoAndClaims, query, res) {
+  if (channelInfoAndClaims === NO_CHANNEL) { // (a) no channel found
     res.status(200).render('noChannel');
   } else {                                  // (b) channel found
-    const options = returnOptionsForChannelPageRendering(result, query);
+    const options = returnOptionsForChannelPageRendering(channelInfoAndClaims, query);
     res.status(200).render('channel', options);
   }
 }
 
 function showChannelPageToClient (channelName, channelClaimId, originalUrl, ip, query, res) {
   // 1. retrieve the channel contents
-  getChannelInfoAndContent(channelName, channelClaimId)
-    .then(result => {
-      sendChannelInfoAndContentToClient(result, query, res);
+  getChannelInfoAndClaims(channelName, channelClaimId)
+    .then(channelInfoAndClaims => {
+      sendChannelInfoAndContentToClient(channelInfoAndClaims, query, res);
     })
     .catch(error => {
       handleRequestError(originalUrl, ip, error, res);
