@@ -36,7 +36,7 @@ module.exports = (app) => {
         });
       })
       .catch(error => {
-        errorHandlers.handleRequestError('popular', originalUrl, ip, error, res);
+        errorHandlers.handleRequestError(originalUrl, ip, error, res);
       });
   });
   // route to display a list of the trending images
@@ -47,7 +47,7 @@ module.exports = (app) => {
         res.status(200).render('new', { newClaims: result });
       })
       .catch(error => {
-        errorHandlers.handleRequestError('new', originalUrl, ip, error, res);
+        errorHandlers.handleRequestError(originalUrl, ip, error, res);
       });
   });
   // route to send embedable video player (for twitter)

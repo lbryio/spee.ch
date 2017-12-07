@@ -39,7 +39,7 @@ module.exports = (app) => {
       res.status(200).json(claimsList);
     })
     .catch(error => {
-      errorHandlers.handleApiError('claim_list', originalUrl, ip, error, res);
+      errorHandlers.handleApiError(originalUrl, ip, error, res);
     });
   });
   // route to see if asset is available locally
@@ -55,7 +55,7 @@ module.exports = (app) => {
         res.status(200).json({status: 'success', message: isLocalFileAvailable});
       })
       .catch(error => {
-        errorHandlers.handleApiError('get', originalUrl, ip, error, res);
+        errorHandlers.handleApiError(originalUrl, ip, error, res);
       });
   });
   // route to get an asset
@@ -81,7 +81,7 @@ module.exports = (app) => {
         res.status(200).json({ status: 'success', message, completed });
       })
       .catch(error => {
-        errorHandlers.handleApiError('get', originalUrl, ip, error, res);
+        errorHandlers.handleApiError(originalUrl, ip, error, res);
       });
   });
 
@@ -123,7 +123,7 @@ module.exports = (app) => {
       res.status(200).json(resolvedUri);
     })
     .catch(error => {
-      errorHandlers.handleApiError('resolve', originalUrl, ip, error, res);
+      errorHandlers.handleApiError(originalUrl, ip, error, res);
     });
   });
   // route to run a publish request on the daemon
@@ -211,7 +211,7 @@ module.exports = (app) => {
       });
     })
     .catch(error => {
-      errorHandlers.handleApiError('publish', originalUrl, ip, error, res);
+      errorHandlers.handleApiError(originalUrl, ip, error, res);
     });
   });
   // route to get a short claim id from long claim Id
@@ -234,7 +234,7 @@ module.exports = (app) => {
       })
       .catch(error => {
         logger.error('api error getting short channel id', error);
-        errorHandlers.handleApiError('short channel id', originalUrl, ip, error, res);
+        errorHandlers.handleApiError(originalUrl, ip, error, res);
       });
   });
 };
