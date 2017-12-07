@@ -1,5 +1,5 @@
 const logger = require('winston');
-const { getClaimId, getChannelInfoAndClaims, getLocalFileRecord } = require('../controllers/serveController.js');
+const { getClaimId, getChannelViewData, getLocalFileRecord } = require('../controllers/serveController.js');
 const serveHelpers = require('../helpers/serveHelpers.js');
 const { handleRequestError } = require('../helpers/errorHandlers.js');
 const { postToStats } = require('../controllers/statsController.js');
@@ -9,7 +9,6 @@ const lbryUri = require('../helpers/lbryUri.js');
 const SERVE = 'SERVE';
 const SHOW = 'SHOW';
 const SHOWLITE = 'SHOWLITE';
-const CLAIMS_PER_PAGE = 10;
 const NO_CHANNEL = 'NO_CHANNEL';
 const NO_CLAIM = 'NO_CLAIM';
 const NO_FILE = 'NO_FILE';
@@ -26,95 +25,19 @@ function isValidShortIdOrClaimId (input) {
   return (isValidClaimId(input) || isValidShortId(input));
 }
 
-function getPage (query) {
-  if (query.p) {
-    return parseInt(query.p);
-  }
-  return 1;
-}
-
-function extractPageFromClaims (claims, pageNumber) {
-  if (!claims) {
-    return [];  // if no claims, return this default
-  }
-  logger.debug('claims is array?', Array.isArray(claims));
-  logger.debug(`pageNumber ${pageNumber} is number?`, Number.isInteger(pageNumber));
-  const claimStartIndex = (pageNumber - 1) * CLAIMS_PER_PAGE;
-  const claimEndIndex = claimStartIndex + 10;
-  const pageOfClaims = claims.slice(claimStartIndex, claimEndIndex);
-  return pageOfClaims;
-}
-
-function determineTotalPages (claims) {
-  if (!claims) {
-    return 0;
-  } else {
-    const totalClaims = claims.length;
-    if (totalClaims < CLAIMS_PER_PAGE) {
-      return 1;
-    }
-    const fullPages = Math.floor(totalClaims / CLAIMS_PER_PAGE);
-    const remainder = totalClaims % CLAIMS_PER_PAGE;
-    if (remainder === 0) {
-      return fullPages;
-    }
-    return fullPages + 1;
-  }
-}
-
-function determinePreviousPage (currentPage) {
-  if (currentPage === 1) {
-    return null;
-  }
-  return currentPage - 1;
-}
-
-function determineNextPage (totalPages, currentPage) {
-  if (currentPage === totalPages) {
-    return null;
-  }
-  return currentPage + 1;
-}
-
-function determineTotalClaims (result) {
-  if (!result.claims) {
-    return 0;
-  }
-  return result.claims.length;
-}
-
-function returnOptionsForChannelPageRendering (result, query) {
-  const totalPages = determineTotalPages(result.claims);
-  const paginationPage = getPage(query);
-  const options = {
-    layout             : 'channel',
-    channelName        : result.channelName,
-    longChannelClaimId : result.longChannelClaimId,
-    shortChannelClaimId: result.shortChannelClaimId,
-    claims             : extractPageFromClaims(result.claims, paginationPage),
-    previousPage       : determinePreviousPage(paginationPage),
-    currentPage        : paginationPage,
-    nextPage           : determineNextPage(totalPages, paginationPage),
-    totalPages         : totalPages,
-    totalResults       : determineTotalClaims(result),
-  };
-  return options;
-}
-
-function sendChannelInfoAndContentToClient (channelInfoAndClaims, query, res) {
-  if (channelInfoAndClaims === NO_CHANNEL) { // (a) no channel found
+function sendChannelInfoAndContentToClient (channelPageData, res) {
+  if (channelPageData === NO_CHANNEL) {
     res.status(200).render('noChannel');
-  } else {                                  // (b) channel found
-    const options = returnOptionsForChannelPageRendering(channelInfoAndClaims, query);
-    res.status(200).render('channel', options);
+  } else {
+    res.status(200).render('channel', channelPageData);
   }
 }
 
 function showChannelPageToClient (channelName, channelClaimId, originalUrl, ip, query, res) {
   // 1. retrieve the channel contents
-  getChannelInfoAndClaims(channelName, channelClaimId)
-    .then(channelInfoAndClaims => {
-      sendChannelInfoAndContentToClient(channelInfoAndClaims, query, res);
+  getChannelViewData(channelName, channelClaimId, query)
+    .then(channelViewData => {
+      sendChannelInfoAndContentToClient(channelViewData, res);
     })
     .catch(error => {
       handleRequestError(originalUrl, ip, error, res);

@@ -1,5 +1,6 @@
 const db = require('../models');
 const logger = require('winston');
+const { returnPaginatedChannelViewData } = require('../helpers/channelPagination.js');
 
 const NO_CHANNEL = 'NO_CHANNEL';
 const NO_CLAIM = 'NO_CLAIM';
@@ -52,7 +53,7 @@ module.exports = {
         });
     });
   },
-  getChannelInfoAndClaims (channelName, channelClaimId) {
+  getChannelViewData (channelName, channelClaimId, query) {
     return new Promise((resolve, reject) => {
       // 1. get the long channel Id (make sure channel exists)
       db.Certificate.getLongChannelId(channelName, channelClaimId)
@@ -67,8 +68,10 @@ module.exports = {
           if (!longChannelClaimId) {
             return resolve(NO_CHANNEL);
           }
-          // 3. return all the channel information and contents
-          resolve({ channelName, longChannelClaimId, shortChannelClaimId, claims: channelClaimsArray });
+          // 3. format the data for the view, including pagination
+          let paginatedChannelViewData = returnPaginatedChannelViewData(channelName, longChannelClaimId, shortChannelClaimId, channelClaimsArray, query);
+          // 4. return all the channel information and contents
+          resolve(paginatedChannelViewData);
         })
         .catch(error => {
           reject(error);
