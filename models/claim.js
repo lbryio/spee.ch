@@ -58,8 +58,10 @@ function determineOgDescription (storedDescription, defaultDescription) {
 };
 
 function determineOgThumbnailContentType (thumbnail) {
-  if (thumbnail.lastIndexOf('.') !== -1) {
-    return determineContentTypeFromFileExtension(thumbnail.substring(thumbnail.lastIndexOf('.')));
+  if (thumbnail) {
+    if (thumbnail.lastIndexOf('.') !== -1) {
+      return determineContentTypeFromFileExtension(thumbnail.substring(thumbnail.lastIndexOf('.')));
+    }
   }
   return '';
 }
