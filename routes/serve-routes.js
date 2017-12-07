@@ -7,7 +7,6 @@ const db = require('../models');
 const SERVE = 'SERVE';
 const SHOW = 'SHOW';
 const SHOWLITE = 'SHOWLITE';
-const CLAIM_ID_CHAR = ':';
 const CHANNEL_CHAR = '@';
 const CLAIMS_PER_PAGE = 10;
 const NO_CHANNEL = 'NO_CHANNEL';
@@ -24,24 +23,6 @@ function isValidShortId (claimId) {
 
 function isValidShortIdOrClaimId (input) {
   return (isValidClaimId(input) || isValidShortId(input));
-}
-
-function isUriAChannel (name) {
-  return (name.charAt(0) === CHANNEL_CHAR);
-}
-
-function returnChannelNameFromUri (uri) {
-  if (uri.indexOf(CLAIM_ID_CHAR) !== -1) {
-    return uri.substring(0, uri.indexOf(CLAIM_ID_CHAR));
-  }
-  return uri;
-}
-
-function returnChannelIdFromUri (uri) {
-  if (uri.indexOf(CLAIM_ID_CHAR) !== -1) {
-    return uri.substring(uri.indexOf(CLAIM_ID_CHAR) + 1);
-  }
-  return null;
 }
 
 function getPage (query) {
@@ -128,11 +109,7 @@ function sendChannelInfoAndContentToClient (result, query, res) {
   }
 }
 
-function showChannelPageToClient (uri, originalUrl, ip, query, res) {
-  let channelName = returnChannelNameFromUri(uri);
-  logger.debug('channel name =', channelName);
-  let channelClaimId = returnChannelIdFromUri(uri);
-  logger.debug('channel Id =', channelClaimId);
+function showChannelPageToClient (channelName, channelClaimId, originalUrl, ip, query, res) {
   // 1. retrieve the channel contents
   getChannelInfoAndContent(channelName, channelClaimId)
     .then(result => {
@@ -143,17 +120,13 @@ function showChannelPageToClient (uri, originalUrl, ip, query, res) {
     });
 }
 
-function characterExistsInString (character, string) {
-  return (string.indexOf(character) !== -1);
-}
-
 function clientAcceptsHtml (headers) {
   return headers['accept'] && headers['accept'].split(',').includes('text/html');
 }
 
-function determineResponseType (uri, headers) {
+function determineResponseType (isServeRequest, headers) {
   let responseType;
-  if (characterExistsInString('.', uri)) {
+  if (isServeRequest) {
     responseType = SERVE;
     if (clientAcceptsHtml(headers)) {  // this is in case a serve request comes from a browser
       responseType = SHOWLITE;
@@ -165,18 +138,6 @@ function determineResponseType (uri, headers) {
     }
   }
   return responseType;
-}
-
-function determineName (uri) {
-  /* patch because twitter player preview adds '>' before file extension. */
-  if (characterExistsInString('>', uri)) {
-    return uri.substring(0, uri.indexOf('>'));
-  }
-  /* end patch */
-  if (characterExistsInString('.', uri)) {
-    return uri.substring(0, uri.indexOf('.'));
-  }
-  return uri;
 }
 
 function showAssetToClient (claimId, name, res) {
@@ -250,23 +211,110 @@ function logRequestData (responseType, claimName, channelName, claimId) {
   logger.debug('claim id ===', claimId);
 }
 
+const lbryuri = {};
+
+lbryuri.REGEXP_INVALID_URI = /[^A-Za-z0-9-]/g;
+lbryuri.REGEXP_ADDRESS = /^b(?=[^0OIl]{32,33})[0-9A-Za-z]{32,33}$/;
+
+lbryuri.parseIdentifier = function (identifier) {
+  logger.debug('parsing identifier:', identifier);
+  const componentsRegex = new RegExp(
+    '([^:$#/]*)' + // value (stops at the first separator or end)
+    '([:$#]?)([^/]*)' // modifier separator, modifier (stops at the first path separator or end)
+  );
+  const [proto, value, modifierSeperator, modifier] = componentsRegex
+    .exec(identifier)
+    .map(match => match || null);
+  logger.debug(`${proto}, ${value}, ${modifierSeperator}, ${modifier}`);
+
+  // Validate and process name
+  const isChannel = value.startsWith(CHANNEL_CHAR);
+  const channelName = isChannel ? value : null;
+  let claimId;
+  if (isChannel) {
+    if (!channelName) {
+      throw new Error('No channel name after @.');
+    }
+    const nameBadChars = (channelName).match(lbryuri.REGEXP_INVALID_URI);
+    if (nameBadChars) {
+      throw new Error(`Invalid characters in channel name: ${nameBadChars.join(', ')}.`);
+    }
+  } else {
+    claimId = value;
+  }
+
+  // Validate and process modifier
+  let channelClaimId;
+  if (modifierSeperator) {
+    if (!modifier) {
+      throw new Error(`No modifier provided after separator ${modifierSeperator}.`);
+    }
+
+    if (modifierSeperator === ':') {
+      channelClaimId = modifier;
+    } else {
+      throw new Error(`The ${modifierSeperator} modifier is not currently supported.`);
+    }
+  }
+  return {
+    isChannel,
+    channelName,
+    channelClaimId,
+    claimId,
+  };
+};
+
+lbryuri.parseName = function (name) {
+  logger.debug('parsing name:', name);
+  const componentsRegex = new RegExp(
+    '([^:$#/.]*)' + // name (stops at the first modifier)
+    '([:$#.]?)([^/]*)' // modifier separator, modifier (stops at the first path separator or end)
+  );
+  const [proto, claimName, modifierSeperator, modifier] = componentsRegex
+    .exec(name)
+    .map(match => match || null);
+  logger.debug(`${proto}, ${claimName}, ${modifierSeperator}, ${modifier}`);
+
+  // Validate and process name
+  if (!claimName) {
+    throw new Error('No claim name provided before .');
+  }
+  const nameBadChars = (claimName).match(lbryuri.REGEXP_INVALID_URI);
+  if (nameBadChars) {
+    throw new Error(`Invalid characters in claim name: ${nameBadChars.join(', ')}.`);
+  }
+  // Validate and process modifier
+  let isServeRequest = false;
+  if (modifierSeperator) {
+    if (!modifier) {
+      throw new Error(`No file extension provided after separator ${modifierSeperator}.`);
+    }
+    if (modifierSeperator !== '.') {
+      throw new Error(`The ${modifierSeperator} modifier is not supported in the claim name`);
+    }
+    isServeRequest = true;
+  }
+  return {
+    claimName,
+    isServeRequest,
+  };
+};
+
 module.exports = (app) => {
   // route to serve a specific asset using the channel or claim id
   app.get('/:identifier/:name', ({ headers, ip, originalUrl, params }, res) => {
-    let identifier = params.identifier;  //  '@channel', '@channel:channelClaimId', or 'claimId'
-    let name = params.name;  // 'example' or 'example.ext'
-    [identifier, name] = flipClaimNameAndIdForBackwardsCompatibility(identifier, name);
-    let channelName = null;
-    let claimId = null;
-    let channelClaimId = null;
-    let responseType = determineResponseType(name, headers);
-    let claimName = determineName(name);
-    if (isUriAChannel(identifier)) {
-      channelName = returnChannelNameFromUri(identifier);
-      channelClaimId = returnChannelIdFromUri(identifier);
-    } else {
-      claimId = identifier;
+    let isChannel, channelName, channelClaimId, claimId, claimName, isServeRequest;
+    try {
+      ({ isChannel, channelName, channelClaimId, claimId } = lbryuri.parseIdentifier(params.identifier));
+      ({ claimName, isServeRequest } = lbryuri.parseName(params.name));
+    } catch (error) {
+      logger.error(error);
+      return res.status(400).json({success: false, message: error});
     }
+    if (!isChannel) {
+      [claimId, claimName] = flipClaimNameAndIdForBackwardsCompatibility(claimId, claimName);
+    }
+    let responseType = determineResponseType(isServeRequest, headers);
     // log the request data for debugging
     logRequestData(responseType, claimName, channelName, claimId);
     // get the claim Id and then serve/show the asset
@@ -284,13 +332,28 @@ module.exports = (app) => {
     });
   });
   // route to serve the winning asset at a claim or a channel page
-  app.get('/:uri', ({ headers, ip, originalUrl, params, query }, res) => {
-    let uri = params.uri;
-    if (isUriAChannel(uri)) {
-      showChannelPageToClient(uri, originalUrl, ip, query, res);
+  app.get('/:identifier', ({ headers, ip, originalUrl, params, query }, res) => {
+    let isChannel, channelName, channelClaimId;
+    try {
+      ({ isChannel, channelName, channelClaimId } = lbryuri.parseIdentifier(params.identifier));
+    } catch (error) {
+      logger.error(error);
+      return res.status(400).json({success: false, message: error});
+    }
+    if (isChannel) {
+      // log the request data for debugging
+      logRequestData(null, null, channelName, null);
+      // handle showing the channel page
+      showChannelPageToClient(channelName, channelClaimId, originalUrl, ip, query, res);
     } else {
-      let responseType = determineResponseType(uri, headers);
-      let claimName = determineName(uri);
+      let claimName, isServeRequest;
+      try {
+        ({claimName, isServeRequest} = lbryuri.parseName(params.identifier));
+      } catch (error) {
+        logger.error(error);
+        return res.status(400).json({success: false, message: error});
+      }
+      let responseType = determineResponseType(isServeRequest, headers);
       // log the request data for debugging
       logRequestData(responseType, claimName, null, null);
       // get the claim Id and then serve/show the asset
