@@ -2,6 +2,7 @@ const logger = require('winston');
 const db = require('../models');
 const lbryApi = require('../helpers/lbryApi.js');
 const publishHelpers = require('../helpers/publishHelpers.js');
+const config = require('../config/speechConfig.js');
 
 module.exports = {
   publish (publishParams, fileName, fileType) {
@@ -82,6 +83,47 @@ module.exports = {
         publishHelpers.deleteTemporaryFile(publishParams.file_path); // delete the local file
         reject(error);
       });
+    });
+  },
+  checkClaimNameAvailability (name) {
+    return new Promise((resolve, reject) => {
+      // find any records where the name is used
+      db.File.findAll({ where: { name } })
+        .then(result => {
+          if (result.length >= 1) {
+            const claimAddress = config.wallet.lbryClaimAddress;
+            // filter out any results that were not published from spee.ch's wallet address
+            const filteredResult = result.filter((claim) => {
+              return (claim.address === claimAddress);
+            });
+            // return based on whether any non-spee.ch claims were left
+            if (filteredResult.length >= 1) {
+              resolve(false);
+            } else {
+              resolve(true);
+            }
+          } else {
+            resolve(true);
+          }
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  },
+  checkChannelAvailability (name) {
+    return new Promise((resolve, reject) => {
+      // find any records where the name is used
+      db.Channel.findAll({ where: { channelName: name } })
+        .then(result => {
+          if (result.length >= 1) {
+            return resolve(false);
+          }
+          resolve(true);
+        })
+        .catch(error => {
+          reject(error);
+        });
     });
   },
 };
