@@ -57,27 +57,12 @@ module.exports = {
     };
   },
   parsePublishApiChannel ({channelName, channelPassword}, user) {
+    // anonymous if no channel name provided
     let anonymous = (channelName === null || channelName === undefined || channelName === '');
+    // if a channel name is provided, get password from the user token
     if (user) {
-      channelName = user.channelName || null;
-    } else {
-      channelName = channelName || null;
-    }
-    channelPassword = channelPassword || null;
-    let skipAuth = false;
-    // case 1: publish from spee.ch, client logged in
-    if (user) {
-      skipAuth = true;
-      if (anonymous) {
-        channelName = null;
-      }
-      // case 2: publish from api or spee.ch, client not logged in
-    } else {
-      if (anonymous) {
-        skipAuth = true;
-        channelName = null;
-      }
-    }
+      channelPassword = user.channelPassword;
+    } ;
     // cleanse channel name
     if (channelName) {
       if (channelName.indexOf('@') !== 0) {
@@ -85,9 +70,9 @@ module.exports = {
       }
     }
     return {
+      anonymous,
       channelName,
       channelPassword,
-      skipAuth,
     };
   },
   validateFileTypeAndSize (file) {

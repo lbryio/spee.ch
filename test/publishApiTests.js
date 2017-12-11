@@ -1,14 +1,6 @@
 const assert = require('assert');
 
-describe('Array', function () {
-  describe('indexOf()', function () {
-    it('should return -1 when the value is not present', function () {
-      assert.equal(-1, [1, 2, 3].indexOf(4));
-    });
-  });
-});
-
-describe('controllers', function () {
+describe('api', function () {
   describe('api/publish', function () {
     describe('publishHelpers.js', function () {
       const publishHelpers = require('../helpers/publishHelpers.js');
@@ -69,6 +61,27 @@ describe('controllers', function () {
             },
           };
           assert.doesNotThrow(publishHelpers.parsePublishApiRequestFiles.bind(this, filesNoProblems), Error);
+        });
+      });
+
+      describe('#parsePublishApiChannel()', function () {
+        it('should return a channel name if one is provided', function () {
+          // assert.throws(publishHelpers.parsePublishApiRequestFiles.bind(this, null), Error);
+        });
+        it('should return a password if one is provided', function () {
+          // assert.throws(publishHelpers.parsePublishApiRequestFiles.bind(this, filesNoFile), Error);
+        });
+        it('should return a channel name if one is provided in req.user', function () {
+          // assert.throws(publishHelpers.parsePublishApiRequestFiles.bind(this, filesTooBig), Error);
+        });
+        it('should return a password if one is provided in req.user', function () {
+          // assert.throws(publishHelpers.parsePublishApiRequestFiles.bind(this, filesNoProblems), Error);
+        });
+        it('should return anonymous === true if meant to be anonymous even if req.user is filled', function () {
+          // assert.throws(publishHelpers.parsePublishApiRequestFiles.bind(this, filesNoProblems), Error);
+        });
+        it('should return anonymous === false a channel is provided', function () {
+          // assert.throws(publishHelpers.parsePublishApiRequestFiles.bind(this, filesNoProblems), Error);
         });
       });
     });

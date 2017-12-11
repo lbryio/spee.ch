@@ -73,21 +73,20 @@ module.exports = (app) => {
   });
   // route to run a publish request on the daemon
   app.post('/api/publish', multipartMiddleware, ({ body, files, ip, originalUrl, user }, res) => {
-    let  name, fileName, filePath, fileType, nsfw, license, title, description, thumbnail, skipAuth, channelName, channelPassword;
+    let  name, fileName, filePath, fileType, nsfw, license, title, description, thumbnail, anonymous, channelName, channelPassword;
     // validate the body and files of the request
     try {
       // validateApiPublishRequest(body, files);
       ({name, nsfw, license, title, description, thumbnail} = parsePublishApiRequestBody(body));
       ({fileName, filePath, fileType} = parsePublishApiRequestFiles(files));
-      ({channelName, channelPassword, skipAuth} = parsePublishApiChannel(body, user));
+      ({anonymous, channelName, channelPassword} = parsePublishApiChannel(body, user));
     } catch (error) {
       logger.debug('publish request rejected, insufficient request parameters');
       return res.status(400).json({success: false, message: error.message});
     }
-
     logger.debug(`/api/publish > name: ${name}, license: ${license} title: "${title}" description: "${description}" channelName: "${channelName}" channelPassword: "${channelPassword}" nsfw: "${nsfw}"`);
     // check channel authorization
-    authenticateOrSkip(skipAuth, channelName, channelPassword)
+    authenticateOrSkip(anonymous, channelName, channelPassword)
     .then(authenticated => {
       if (!authenticated) {
         throw new Error('Authentication failed, you do not have access to that channel');
