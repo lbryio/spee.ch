@@ -1,5 +1,4 @@
 const logger = require('winston');
-const { postToStats } = require('../controllers/statsController.js');
 
 module.exports = {
   returnErrorMessageAndStatus: function (error) {
@@ -33,17 +32,15 @@ module.exports = {
     }
     return [status, message];
   },
-  handleRequestError: function (action, originalUrl, ip, error, res) {
+  handleRequestError: function (originalUrl, ip, error, res) {
     logger.error(`Request Error on ${originalUrl}`, module.exports.useObjectPropertiesIfNoKeys(error));
-    postToStats(action, originalUrl, ip, null, null, error);
     const [status, message] = module.exports.returnErrorMessageAndStatus(error);
     res
       .status(status)
       .render('requestError', module.exports.createErrorResponsePayload(status, message));
   },
-  handleApiError: function (action, originalUrl, ip, error, res) {
-    logger.error(`Api ${action} Error on ${originalUrl}`, module.exports.useObjectPropertiesIfNoKeys(error));
-    postToStats(action, originalUrl, ip, null, null, error);
+  handleApiError: function (originalUrl, ip, error, res) {
+    logger.error(`Api Error on ${originalUrl}`, module.exports.useObjectPropertiesIfNoKeys(error));
     const [status, message] = module.exports.returnErrorMessageAndStatus(error);
     res
       .status(status)

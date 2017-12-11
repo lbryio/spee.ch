@@ -1,21 +1,3 @@
-{{#ifConditional fileInfo.fileType '===' 'video/mp4'}}
-    {{#ifConditional fileInfo.fileExt '===' '.gifv'}}
-        <video class="showlite-asset" autoplay loop muted>
-            <source src="/{{fileInfo.claimId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}">
-            {{!--fallback--}}
-            Your browser does not support the <code>video</code> element.
-        </video>
-    {{else}}
-        <video class="showlite-asset" controls id="video-player">
-            <source src="/{{fileInfo.claimId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}">
-            {{!--fallback--}}
-            Your browser does not support the <code>video</code> element.
-        </video>
-    {{/ifConditional}}
-    <br/>
-    <a class="link--primary fine-print" href="/{{fileInfo.claimId}}/{{fileInfo.name}}">hosted via spee&lt;h</a>
-{{else}}
-<a href="/{{fileInfo.claimId}}/{{fileInfo.name}}">
-    <img class="showlite-asset" src="/{{fileInfo.claimId}}/{{fileInfo.name}}.{{fileInfo.fileExt}}" alt="{{fileInfo.fileName}}"/>
-</a>
-{{/ifConditional}}
+<div class="row row--tall flex-container--column flex-container--center-center">
+    {{> asset }}
+</div>

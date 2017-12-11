@@ -10,7 +10,6 @@ function handleLbrynetResponse ({ data }, resolve, reject) {
       reject(data.result.error);
       return;
     };
-    // logger.debug('data.result', data.result);
     resolve(data.result);
     return;
   }

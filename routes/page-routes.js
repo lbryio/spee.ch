@@ -30,24 +30,22 @@ module.exports = (app) => {
     const dateTime = startDate.toISOString().slice(0, 19).replace('T', ' ');
     getTrendingClaims(dateTime)
       .then(result => {
-        // logger.debug(result);
         res.status(200).render('popular', {
           trendingAssets: result,
         });
       })
       .catch(error => {
-        errorHandlers.handleRequestError('popular', originalUrl, ip, error, res);
+        errorHandlers.handleRequestError(originalUrl, ip, error, res);
       });
   });
   // route to display a list of the trending images
   app.get('/new', ({ ip, originalUrl }, res) => {
     getRecentClaims()
       .then(result => {
-        // logger.debug(result);
         res.status(200).render('new', { newClaims: result });
       })
       .catch(error => {
-        errorHandlers.handleRequestError('new', originalUrl, ip, error, res);
+        errorHandlers.handleRequestError(originalUrl, ip, error, res);
       });
   });
   // route to send embedable video player (for twitter)
