@@ -36,8 +36,12 @@
 		padding-right: 1.5em;
 	}
 
-	.showlite-asset {
+	#showlite-body #asset-display-component {
 		max-width: 100%;
+	}
+
+	#showlite-body #asset-status {
+		padding: 2em;
 	}
 
 }

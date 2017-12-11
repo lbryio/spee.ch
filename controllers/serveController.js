@@ -1,253 +1,90 @@
-const lbryApi = require('../helpers/lbryApi.js');
 const db = require('../models');
 const logger = require('winston');
-const { serveFile, showFile, showFileLite } = require('../helpers/serveHelpers.js');
-const { postToStats, sendGoogleAnalytics } = require('../controllers/statsController.js');
+const { returnPaginatedChannelViewData } = require('../helpers/channelPagination.js');
 
-const SERVE = 'SERVE';
-const SHOW = 'SHOW';
-const SHOWLITE = 'SHOWLITE';
-const DEFAULT_THUMBNAIL = 'https://spee.ch/assets/img/video_thumb_default.png';
 const NO_CHANNEL = 'NO_CHANNEL';
 const NO_CLAIM = 'NO_CLAIM';
-
-function checkForLocalAssetByClaimId (claimId, name) {
-  logger.debug(`checkForLocalAssetsByClaimId(${claimId}, ${name}`);
-  return new Promise((resolve, reject) => {
-    db.File
-      .findOne({where: { name, claimId }})
-      .then(result => {
-        if (result) {
-          resolve(result.dataValues);
-        } else {
-          resolve(null);
-        }
-      })
-      .catch(error => {
-        reject(error);
-      });
-  });
-}
-
-function addGetResultsToFileRecord (fileInfo, getResult) {
-  fileInfo.fileName = getResult.file_name;
-  fileInfo.filePath = getResult.download_path;
-  fileInfo.fileType = getResult.mime_type;
-  return fileInfo;
-}
-
-function createFileRecord ({ name, claimId, outpoint, height, address, nsfw }) {
-  return {
-    name,
-    claimId,
-    outpoint,
-    height,
-    address,
-    fileName: '',
-    filePath: '',
-    fileType: '',
-    nsfw,
-  };
-}
-
-function getAssetByLongClaimId (fullClaimId, name) {
-  logger.debug('...getting asset by claim Id...');
-  return new Promise((resolve, reject) => {
-    // 1. check locally for claim
-    checkForLocalAssetByClaimId(fullClaimId, name)
-    .then(dataValues => {
-      // if a result was found, return early with the result
-      if (dataValues) {
-        logger.debug('found a local file for this name and claimId');
-        resolve(dataValues);
-        return;
-      }
-      logger.debug('no local file found for this name and claimId');
-      // 2. if no local claim, resolve and get the claim
-      db.Claim
-        .resolveClaim(name, fullClaimId)
-        .then(resolveResult => {
-          // if no result, return early (claim doesn't exist or isn't free)
-          if (!resolveResult) {
-            resolve(NO_CLAIM);
-            return;
-          }
-          logger.debug('resolve result >> ', resolveResult.dataValues);
-          let fileRecord = {};
-          // get the claim
-          lbryApi.getClaim(`${name}#${fullClaimId}`)
-          .then(getResult => {
-            logger.debug('getResult >>', getResult);
-            fileRecord = createFileRecord(resolveResult);
-            fileRecord = addGetResultsToFileRecord(fileRecord, getResult);
-            // insert a record in the File table & Update Claim table
-            return db.File.create(fileRecord);
-          })
-          .then(() => {
-            logger.debug('File record successfully updated');
-            resolve(fileRecord);
-          })
-          .catch(error => {
-            reject(error);
-          });
-        })
-        .catch(error => {
-          reject(error);
-        });
-    })
-    .catch(error => {
-      reject(error);
-    });
-  });
-}
-
-function chooseThumbnail (claimInfo, defaultThumbnail) {
-  if (!claimInfo.thumbnail || claimInfo.thumbnail.trim() === '') {
-    return defaultThumbnail;
-  }
-  return claimInfo.thumbnail;
-}
+const NO_FILE = 'NO_FILE';
 
 module.exports = {
-  getAssetByClaim (claimName, claimId) {
-    logger.debug(`getAssetByClaim(${claimName}, ${claimId})`);
-    return new Promise((resolve, reject) => {
-      db.Claim.getLongClaimId(claimName, claimId) // 1. get the long claim id
-        .then(result => {  // 2. get the asset using the long claim id
-          logger.debug('long claim id ===', result);
-          if (result === NO_CLAIM) {
-            logger.debug('resolving NO_CLAIM');
-            resolve(NO_CLAIM);
-            return;
-          }
-          resolve(getAssetByLongClaimId(result, claimName));
-        })
-        .catch(error => {
-          reject(error);
-        });
-    });
-  },
-  getAssetByChannel (channelName, channelId, claimName) {
-    logger.debug('getting asset by channel');
-    return new Promise((resolve, reject) => {
-      db.Certificate.getLongChannelId(channelName, channelId) // 1. get the long channel id
-        .then(result => { // 2. get the long claim Id
-          if (result === NO_CHANNEL) {
-            resolve(NO_CHANNEL);
-            return;
-          }
-          return db.Claim.getClaimIdByLongChannelId(result, claimName);
-        })
-        .then(result => { // 3. get the asset using the long claim id
-          logger.debug('asset claim id =', result);
-          if (result === NO_CHANNEL || result === NO_CLAIM) {
-            resolve(result);
-            return;
-          }
-          resolve(getAssetByLongClaimId(result, claimName));
-        })
-        .catch(error => {
-          reject(error);
-        });
-    });
-  },
-  getChannelContents (channelName, channelId) {
-    return new Promise((resolve, reject) => {
-      let longChannelId;
-      let shortChannelId;
-      db.Certificate.getLongChannelId(channelName, channelId)  // 1. get the long channel Id
-        .then(result => {  // 2. get all claims for that channel
-          if (result === NO_CHANNEL) {
-            return NO_CHANNEL;
-          }
-          longChannelId = result;
-          return db.Certificate.getShortChannelIdFromLongChannelId(longChannelId, channelName);
-        })
-        .then(result => {  // 3. get all Claim records for this channel
-          if (result === NO_CHANNEL) {
-            return NO_CHANNEL;
-          }
-          shortChannelId = result;
-          return db.Claim.getAllChannelClaims(longChannelId);
-        })
-        .then(result => {  // 4. add extra data not available from Claim table
-          if (result === NO_CHANNEL) {
-            resolve(NO_CHANNEL);
-            return;
-          }
-          if (result) {
-            result.forEach(element => {
-              const fileExtenstion = element.contentType.substring(element.contentType.lastIndexOf('/') + 1);
-              element['showUrlLong'] = `/${channelName}:${longChannelId}/${element.name}`;
-              element['directUrlLong'] = `/${channelName}:${longChannelId}/${element.name}.${fileExtenstion}`;
-              element['showUrlShort'] = `/${channelName}:${shortChannelId}/${element.name}`;
-              element['directUrlShort'] = `/${channelName}:${shortChannelId}/${element.name}.${fileExtenstion}`;
-              element['thumbnail'] = chooseThumbnail(element, DEFAULT_THUMBNAIL);
-            });
-          }
-          resolve({
-            channelName,
-            longChannelId,
-            shortChannelId,
-            claims: result,
-          });
-        })
-        .catch(error => {
-          reject(error);
-        });
-    });
-  },
-  serveOrShowAsset (fileInfo, extension, method, headers, originalUrl, ip, res) {
-    // add file extension to the file info
-    if (extension === 'gifv') {
-      fileInfo['fileExt'] = 'gifv';
+  getClaimId (channelName, channelClaimId, name, claimId) {
+    if (channelName) {
+      return module.exports.getClaimIdByChannel(channelName, channelClaimId, name);
     } else {
-      fileInfo['fileExt'] = fileInfo.fileName.substring(fileInfo.fileName.lastIndexOf('.') + 1);
+      return module.exports.getClaimIdByClaim(name, claimId);
     }
-    // add a record to the stats table
-    postToStats(method, originalUrl, ip, fileInfo.name, fileInfo.claimId, 'success');
-    // serve or show
-    switch (method) {
-      case SERVE:
-        serveFile(fileInfo, res);
-        sendGoogleAnalytics(method, headers, ip, originalUrl);
-        return fileInfo;
-      case SHOWLITE:
-        return db.Claim.resolveClaim(fileInfo.name, fileInfo.claimId)
-         .then(claimRecord => {
-           fileInfo['title'] = claimRecord.title;
-           fileInfo['description'] = claimRecord.description;
-           showFileLite(fileInfo, res);
-           return fileInfo;
-         })
-         .catch(error => {
-           logger.error('throwing serverOrShowAsset SHOWLITE error...');
-           throw error;
-         });
-      case SHOW:
-        return db.Claim
-          .getShortClaimIdFromLongClaimId(fileInfo.claimId, fileInfo.name)
-          .then(shortId => {
-            fileInfo['shortId'] = shortId;
-            return db.Claim.resolveClaim(fileInfo.name, fileInfo.claimId);
-          })
-          .then(resolveResult => {
-            logger.debug('resolve result >>', resolveResult.dataValues);
-            fileInfo['thumbnail'] = chooseThumbnail(resolveResult, DEFAULT_THUMBNAIL);
-            fileInfo['title'] = resolveResult.title;
-            fileInfo['description'] = resolveResult.description;
-            if (resolveResult.certificateId) { fileInfo['certificateId'] = resolveResult.certificateId };
-            if (resolveResult.channelName) { fileInfo['channelName'] = resolveResult.channelName };
-            showFile(fileInfo, res);
-            return fileInfo;
-          })
-          .catch(error => {
-            logger.error('throwing serverOrShowAsset SHOW error...');
-            throw error;
-          });
-      default:
-        logger.error('I did not recognize that method');
-        break;
-    }
+  },
+  getClaimIdByClaim (claimName, claimId) {
+    logger.debug(`getClaimIdByClaim(${claimName}, ${claimId})`);
+    return new Promise((resolve, reject) => {
+      db.Claim.getLongClaimId(claimName, claimId)
+        .then(longClaimId => {
+          if (!longClaimId) {
+            resolve(NO_CLAIM);
+          }
+          resolve(longClaimId);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  },
+  getClaimIdByChannel (channelName, channelClaimId, claimName) {
+    logger.debug(`getClaimIdByChannel(${channelName}, ${channelClaimId}, ${claimName})`);
+    return new Promise((resolve, reject) => {
+      db.Certificate.getLongChannelId(channelName, channelClaimId) // 1. get the long channel id
+        .then(longChannelId => {
+          if (!longChannelId) {
+            return [null, null];
+          }
+          return Promise.all([longChannelId, db.Claim.getClaimIdByLongChannelId(longChannelId, claimName)]);  // 2. get the long claim id
+        })
+        .then(([longChannelId, longClaimId]) => {
+          if (!longChannelId) {
+            return resolve(NO_CHANNEL);
+          }
+          if (!longClaimId) {
+            return resolve(NO_CLAIM);
+          }
+          resolve(longClaimId);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  },
+  getChannelViewData (channelName, channelClaimId, query) {
+    return new Promise((resolve, reject) => {
+      // 1. get the long channel Id (make sure channel exists)
+      db.Certificate.getLongChannelId(channelName, channelClaimId)
+        .then(longChannelClaimId => {
+          if (!longChannelClaimId) {
+            return [null, null, null];
+          }
+          // 2. get the short ID and all claims for that channel
+          return Promise.all([longChannelClaimId, db.Certificate.getShortChannelIdFromLongChannelId(longChannelClaimId, channelName), db.Claim.getAllChannelClaims(longChannelClaimId)]);
+        })
+        .then(([longChannelClaimId, shortChannelClaimId, channelClaimsArray]) => {
+          if (!longChannelClaimId) {
+            return resolve(NO_CHANNEL);
+          }
+          // 3. format the data for the view, including pagination
+          let paginatedChannelViewData = returnPaginatedChannelViewData(channelName, longChannelClaimId, shortChannelClaimId, channelClaimsArray, query);
+          // 4. return all the channel information and contents
+          resolve(paginatedChannelViewData);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  },
+  getLocalFileRecord (claimId, name) {
+    return db.File.findOne({where: {claimId, name}})
+      .then(file => {
+        if (!file) {
+          return NO_FILE;
+        }
+        return file.dataValues;
+      });
   },
 };

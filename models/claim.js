@@ -1,6 +1,89 @@
 const logger = require('winston');
 const { returnShortId } = require('../helpers/sequelizeHelpers.js');
-const NO_CLAIM = 'NO_CLAIM';
+const DEFAULT_THUMBNAIL = 'https://spee.ch/assets/img/video_thumb_default.png';
+const DEFAULT_TITLE = 'Spee<ch';
+const DEFAULT_DESCRIPTION = 'Decentralized video and content hosting.';
+
+function determineFileExtensionFromContentType (contentType) {
+  switch (contentType) {
+    case 'image/jpeg':
+    case 'image/jpg':
+      return 'jpg';
+    case 'image/png':
+      return 'png';
+    case 'image/gif':
+      return 'gif';
+    case 'video/mp4':
+      return 'mp4';
+    default:
+      logger.info('setting unknown file type as file extension jpg');
+      return 'jpg';
+  }
+};
+
+function determineContentTypeFromFileExtension (fileExtension) {
+  switch (fileExtension) {
+    case 'jpeg':
+    case 'jpg':
+      return 'image/jpg';
+    case 'png':
+      return 'image/png';
+    case 'gif':
+      return 'image/gif';
+    case 'mp4':
+      return 'video/mp4';
+    default:
+      logger.info('setting unknown file type as type image/jpg');
+      return 'image/jpg';
+  }
+};
+
+function ifEmptyReturnOther (value, replacement) {
+  if (value === '') {
+    return replacement;
+  }
+  return value;
+}
+
+function determineThumbnail (storedThumbnail, defaultThumbnail) {
+  return ifEmptyReturnOther(storedThumbnail, defaultThumbnail);
+};
+
+function determineOgTitle (storedTitle, defaultTitle) {
+  return ifEmptyReturnOther(storedTitle, defaultTitle);
+};
+
+function determineOgDescription (storedDescription, defaultDescription) {
+  return ifEmptyReturnOther(storedDescription, defaultDescription);
+};
+
+function determineOgThumbnailContentType (thumbnail) {
+  if (thumbnail) {
+    if (thumbnail.lastIndexOf('.') !== -1) {
+      return determineContentTypeFromFileExtension(thumbnail.substring(thumbnail.lastIndexOf('.')));
+    }
+  }
+  return '';
+}
+
+function addOpengraphDataToClaim (claim) {
+  claim['embedUrl'] = `https://spee.ch/embed/${claim.claimId}/${claim.name}`;
+  claim['showUrl'] = `https://spee.ch/${claim.claimId}/${claim.name}`;
+  claim['source'] = `https://spee.ch/${claim.claimId}/${claim.name}.${claim.fileExt}`;
+  claim['directFileUrl'] = `https://spee.ch/${claim.claimId}/${claim.name}.${claim.fileExt}`;
+  claim['ogTitle'] = determineOgTitle(claim.title, DEFAULT_TITLE);
+  claim['ogDescription'] = determineOgDescription(claim.description, DEFAULT_DESCRIPTION);
+  claim['ogThumbnailContentType'] = determineOgThumbnailContentType(claim.thumbnail);
+  return claim;
+};
+
+function prepareClaimData (claim) {
+  // logger.debug('preparing claim data based on resolved data:', claim);
+  claim['thumbnail'] = determineThumbnail(claim.thumbnail, DEFAULT_THUMBNAIL);
+  claim['fileExt'] = determineFileExtensionFromContentType(claim.contentType);
+  claim = addOpengraphDataToClaim(claim);
+  return claim;
+};
 
 module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
   const Claim = sequelize.define(
@@ -159,7 +242,7 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
   };
 
   Claim.getShortClaimIdFromLongClaimId = function (claimId, claimName) {
-    logger.debug(`Claim.getShortClaimIdFromLongClaimId for ${claimId}#${claimId}`);
+    logger.debug(`Claim.getShortClaimIdFromLongClaimId for ${claimName}#${claimId}`);
     return new Promise((resolve, reject) => {
       this
         .findAll({
@@ -180,20 +263,27 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
     });
   };
 
-  Claim.getAllChannelClaims = function (channelId) {
-    logger.debug(`Claim.getAllChannelClaims for ${channelId}`);
+  Claim.getAllChannelClaims = function (channelClaimId) {
+    logger.debug(`Claim.getAllChannelClaims for ${channelClaimId}`);
     return new Promise((resolve, reject) => {
       this
         .findAll({
-          where: { certificateId: channelId },
+          where: { certificateId: channelClaimId },
           order: [['height', 'ASC']],
+          raw  : true,  // returns an array of only data, not an array of instances
         })
-        .then(result => {
-          switch (result.length) {
+        .then(channelClaimsArray => {
+          // logger.debug('channelclaimsarray length:', channelClaimsArray.length);
+          switch (channelClaimsArray.length) {
             case 0:
               return resolve(null);
             default:
-              return resolve(result);
+              channelClaimsArray.forEach(claim => {
+                claim['fileExt'] = determineFileExtensionFromContentType(claim.contentType);
+                claim['thumbnail'] = determineThumbnail(claim.thumbnail, DEFAULT_THUMBNAIL);
+                return claim;
+              });
+              return resolve(channelClaimsArray);
           }
         })
         .catch(error => {
@@ -202,18 +292,18 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
     });
   };
 
-  Claim.getClaimIdByLongChannelId = function (channelId, claimName) {
-    logger.debug(`finding claim id for claim ${claimName} from channel ${channelId}`);
+  Claim.getClaimIdByLongChannelId = function (channelClaimId, claimName) {
+    logger.debug(`finding claim id for claim ${claimName} from channel ${channelClaimId}`);
     return new Promise((resolve, reject) => {
       this
         .findAll({
-          where: { name: claimName, certificateId: channelId },
+          where: { name: claimName, certificateId: channelClaimId },
           order: [['id', 'ASC']],
         })
         .then(result => {
           switch (result.length) {
             case 0:
-              return resolve(NO_CLAIM);
+              return resolve(null);
             case 1:
               return resolve(result[0].claimId);
             default:
@@ -241,7 +331,7 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
         .then(result => {
           switch (result.length) {
             case 0:
-              return resolve(NO_CLAIM);
+              return resolve(null);
             default: // note results must be sorted
               return resolve(result[0].claimId);
           }
@@ -260,12 +350,12 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
           order: [['effectiveAmount', 'DESC'], ['height', 'ASC']],  // note: maybe height and effective amount need to switch?
         })
         .then(result => {
+          logger.debug('length of result', result.length);
           switch (result.length) {
             case 0:
-              return resolve(NO_CLAIM);
+              return resolve(null);
             default:
-              logger.debug('getTopFreeClaimIdByClaimName result:', result.dataValues);
-              return resolve(result[0].claimId);
+              return resolve(result[0].dataValues.claimId);
           }
         })
         .catch(error => {
@@ -274,10 +364,27 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
     });
   };
 
+  Claim.validateLongClaimId = function (name, claimId) {
+    return new Promise((resolve, reject) => {
+      this.findOne({
+        where: {name, claimId},
+      })
+      .then(result => {
+        if (!result) {
+          return resolve(null);
+        };
+        resolve(claimId);
+      })
+      .catch(error => {
+        reject(error);
+      });
+    });
+  };
+
   Claim.getLongClaimId = function (claimName, claimId) {
     logger.debug(`getLongClaimId(${claimName}, ${claimId})`);
     if (claimId && (claimId.length === 40)) {  // if a full claim id is provided
-      return new Promise((resolve, reject) => resolve(claimId));
+      return this.validateLongClaimId(claimName, claimId);
     } else if (claimId && claimId.length < 40) {
       return this.getLongClaimIdFromShortClaimId(claimName, claimId);  // if a short claim id is provided
     } else {
@@ -291,15 +398,16 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
         .findAll({
           where: { name, claimId },
         })
-        .then(result => {
-          switch (result.length) {
+        .then(claimArray => {
+          logger.debug('claims found on resolve:', claimArray.length);
+          switch (claimArray.length) {
             case 0:
               return resolve(null);
             case 1:
-              return resolve(result[0]);
+              return resolve(prepareClaimData(claimArray[0].dataValues));
             default:
-              logger.warn(`more than one entry matches that name (${name}) and claimID (${claimId})`);
-              return resolve(result[0]);
+              logger.error(`more than one entry matches that name (${name}) and claimID (${claimId})`);
+              return resolve(prepareClaimData(claimArray[0].dataValues));
           }
         })
         .catch(error => {

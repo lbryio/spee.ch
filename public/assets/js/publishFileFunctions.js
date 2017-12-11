@@ -102,7 +102,7 @@ const publishFileFunctions = {
         return fd;
     },
     publishFile: function (file, metadata) {
-        var uri = "/api/publish";
+        var uri = "/api/claim-publish";
         var xhr = new XMLHttpRequest();
         var fd = this.appendDataToFormData(file, metadata);
         var that = this;
