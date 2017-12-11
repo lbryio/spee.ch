@@ -79,6 +79,7 @@ module.exports = {
         resolve(publishResults); // resolve the promise with the result from lbryApi.publishClaim;
       })
       .catch(error => {
+        logger.error('PUBLISH ERROR', error);
         publishHelpers.deleteTemporaryFile(publishParams.file_path); // delete the local file
         reject(error);
       });
