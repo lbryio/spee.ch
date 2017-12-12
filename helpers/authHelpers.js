@@ -1,9 +1,10 @@
-const db = require('../models'); // require our models for syncing
+// const db = require('../models'); // require our models for syncing
 const logger = require('winston');
 
 module.exports = {
   populateLocalsDotUser (req, res, next) {
     if (req.user) {
+      logger.debug('populating res.locals.user');
       res.locals.user = {
         id            : req.user.id,
         userName      : req.user.userName,
@@ -14,31 +15,12 @@ module.exports = {
     }
     next();
   },
-  serializeSpeechUser (user, done) {
-    done(null, user.id);
+  serializeSpeechUser (user, done) {  // returns user data to be serialized into session
+    logger.debug('serializing user');
+    done(null, user);
   },
-  deserializeSpeechUser (id, done) {
-    let userInfo = {};
-    db.User.findOne({ where: { id } })
-    .then(user => {
-      userInfo['id'] = user.id;
-      userInfo['userName'] = user.userName;
-      return user.getChannel();
-    })
-    .then(channel => {
-      userInfo['channelName'] = channel.channelName;
-      userInfo['channelClaimId'] = channel.channelClaimId;
-      return db.Certificate.getShortChannelIdFromLongChannelId(channel.channelClaimId, channel.channelName);
-    })
-    .then(shortChannelId => {
-      userInfo['shortChannelId'] = shortChannelId;
-      // return done(null, userInfo);
-      done(null, userInfo);
-      return null;
-    })
-    .catch(error => {
-      logger.error(error);
-      done(error, null);
-    });
+  deserializeSpeechUser (user, done) {  // deserializes session and populates additional info to req.user
+    logger.debug('deserializing user');
+    done(null, user);
   },
 };

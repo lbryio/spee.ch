@@ -33,10 +33,16 @@ app.use(bodyParser.json()); // 'body parser' for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // 'body parser' for parsing application/x-www-form-urlencoded
 app.use((req, res, next) => {  // custom logging middleware to log all incoming http requests
   logger.verbose(`Request on ${req.originalUrl} from ${req.ip}`);
-  logger.debug('req.body:', req.body);
   next();
 });
 
+// configure passport
+passport.serializeUser(serializeSpeechUser);
+passport.deserializeUser(deserializeSpeechUser);
+const localSignupStrategy = require('./passport/local-signup.js');
+const localLoginStrategy = require('./passport/local-login.js');
+passport.use('local-signup', localSignupStrategy);
+passport.use('local-login', localLoginStrategy);
 // initialize passport
 app.use(cookieSession({
   name  : 'session',
@@ -45,12 +51,6 @@ app.use(cookieSession({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
-passport.serializeUser(serializeSpeechUser);  // takes the user id from the db and serializes it
-passport.deserializeUser(deserializeSpeechUser); // this deserializes id then populates req.user with info
-const localSignupStrategy = require('./passport/local-signup.js');
-const localLoginStrategy = require('./passport/local-login.js');
-passport.use('local-signup', localSignupStrategy);
-passport.use('local-login', localLoginStrategy);
 
 // configure handlebars & register it with express app
 const hbs = expressHandlebars.create({
