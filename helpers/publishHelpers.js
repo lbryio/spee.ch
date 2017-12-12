@@ -70,11 +70,6 @@ module.exports = {
       throw new Error('The claim name you provided is not allowed.  Only the following characters are allowed: A-Z, a-z, 0-9, and "-"');
     }
   },
-  validateLicense (license) {
-    if ((license.indexOf('Public Domain') === -1) && (license.indexOf('Creative Commons') === -1)) {
-      throw new Error('Only posts with a "Public Domain" or "Creative Commons" license are eligible for publishing through spee.ch');
-    }
-  },
   cleanseChannelName (channelName) {
     if (!channelName) {
       return null;
@@ -83,15 +78,6 @@ module.exports = {
       channelName = `@${channelName}`;
     }
     return channelName;
-  },
-  cleanseUserName (userName) {
-    if (!userName) {
-      return null;
-    }
-    if (userName.indexOf('@') !== -1) {
-      userName = userName.substring(userName.indexOf('@'));
-    }
-    return userName;
   },
   createPublishParams (filePath, name, title, description, license, nsfw, thumbnail, channelName) {
     logger.debug(`Creating Publish Parameters`);
