@@ -4,36 +4,93 @@ const config = require('../config/speechConfig.js');
 const multipartMiddleware = multipart({uploadDir: config.files.uploadDirectory});
 const db = require('../models');
 const { publish } = require('../controllers/publishController.js');
-const { getClaimList, resolveUri } = require('../helpers/lbryApi.js');
+const { getClaimList, resolveUri, getClaim } = require('../helpers/lbryApi.js');
 const { createPublishParams, validateApiPublishRequest, validatePublishSubmission, cleanseChannelName, cleanseUserName, checkClaimNameAvailability, checkChannelAvailability } = require('../helpers/publishHelpers.js');
 const errorHandlers = require('../helpers/errorHandlers.js');
-const { postToStats, sendGoogleAnalytics } = require('../controllers/statsController.js');
 const { authenticateOrSkip } = require('../auth/authentication.js');
+
+function addGetResultsToFileData (fileInfo, getResult) {
+  fileInfo.fileName = getResult.file_name;
+  fileInfo.filePath = getResult.download_path;
+  return fileInfo;
+}
+
+function createFileData ({ name, claimId, outpoint, height, address, nsfw, contentType }) {
+  return {
+    name,
+    claimId,
+    outpoint,
+    height,
+    address,
+    fileName: '',
+    filePath: '',
+    fileType: contentType,
+    nsfw,
+  };
+}
 
 module.exports = (app) => {
   // route to run a claim_list request on the daemon
-  app.get('/api/claim_list/:name', ({ headers, ip, originalUrl, params }, res) => {
-    // google analytics
-    sendGoogleAnalytics('SERVE', headers, ip, originalUrl);
-    // serve the content
+  app.get('/api/claim-list/:name', ({ ip, originalUrl, params }, res) => {
     getClaimList(params.name)
     .then(claimsList => {
-      postToStats('serve', originalUrl, ip, null, null, 'success');
       res.status(200).json(claimsList);
     })
     .catch(error => {
-      errorHandlers.handleApiError('claim_list', originalUrl, ip, error, res);
+      errorHandlers.handleApiError(originalUrl, ip, error, res);
     });
   });
+  // route to see if asset is available locally
+  app.get('/api/file-is-available/:name/:claimId', ({ ip, originalUrl, params }, res) => {
+    const name = params.name;
+    const claimId = params.claimId;
+    let isLocalFileAvailable = false;
+    db.File.findOne({where: {name, claimId}})
+      .then(result => {
+        if (result) {
+          isLocalFileAvailable = true;
+        }
+        res.status(200).json({status: 'success', message: isLocalFileAvailable});
+      })
+      .catch(error => {
+        errorHandlers.handleApiError(originalUrl, ip, error, res);
+      });
+  });
+  // route to get an asset
+  app.get('/api/claim-get/:name/:claimId', ({ ip, originalUrl, params }, res) => {
+    const name = params.name;
+    const claimId = params.claimId;
+    // resolve the claim
+    db.Claim.resolveClaim(name, claimId)
+      .then(resolveResult => {
+        // make sure a claim actually exists at that uri
+        if (!resolveResult) {
+          throw new Error('No matching uri found in Claim table');
+        }
+        let fileData = createFileData(resolveResult);
+        // get the claim
+        return Promise.all([fileData, getClaim(`${name}#${claimId}`)]);
+      })
+      .then(([ fileData, getResult ]) => {
+        fileData = addGetResultsToFileData(fileData, getResult);
+        return Promise.all([db.upsert(db.File, fileData, {name, claimId}, 'File'), getResult]);
+      })
+      .then(([ fileRecord, {message, completed} ]) => {
+        res.status(200).json({ status: 'success', message, completed });
+      })
+      .catch(error => {
+        errorHandlers.handleApiError(originalUrl, ip, error, res);
+      });
+  });
+
   // route to check whether spee.ch has published to a claim
-  app.get('/api/isClaimAvailable/:name', ({ params }, res) => {
-    // send response
+  app.get('/api/claim-is-available/:name', ({ params }, res) => {
     checkClaimNameAvailability(params.name)
     .then(result => {
       if (result === true) {
         res.status(200).json(true);
       } else {
-        logger.debug(`Rejecting '${params.name}' because that name has already been claimed on spee.ch`);
+        // logger.debug(`Rejecting '${params.name}' because that name has already been claimed on spee.ch`);
         res.status(200).json(false);
       }
     })
@@ -42,37 +99,32 @@ module.exports = (app) => {
     });
   });
   // route to check whether spee.ch has published to a channel
-  app.get('/api/isChannelAvailable/:name', ({ params }, res) => {
+  app.get('/api/channel-is-available/:name', ({ params }, res) => {
     checkChannelAvailability(params.name)
       .then(result => {
         if (result === true) {
           res.status(200).json(true);
         } else {
-          logger.debug(`Rejecting '${params.name}' because that channel has already been claimed on spee.ch`);
+          // logger.debug(`Rejecting '${params.name}' because that channel has already been claimed on spee.ch`);
           res.status(200).json(false);
         }
       })
       .catch(error => {
-        logger.debug('api/isChannelAvailable/ error', error);
         res.status(500).json(error);
       });
   });
   // route to run a resolve request on the daemon
-  app.get('/api/resolve/:uri', ({ headers, ip, originalUrl, params }, res) => {
-    // google analytics
-    sendGoogleAnalytics('SERVE', headers, ip, originalUrl);
-    // serve content
+  app.get('/api/claim-resolve/:uri', ({ headers, ip, originalUrl, params }, res) => {
     resolveUri(params.uri)
     .then(resolvedUri => {
-      postToStats('serve', originalUrl, ip, null, null, 'success');
       res.status(200).json(resolvedUri);
     })
     .catch(error => {
-      errorHandlers.handleApiError('resolve', originalUrl, ip, error, res);
+      errorHandlers.handleApiError(originalUrl, ip, error, res);
     });
   });
   // route to run a publish request on the daemon
-  app.post('/api/publish', multipartMiddleware, ({ body, files, ip, originalUrl, user }, res) => {
+  app.post('/api/claim-publish', multipartMiddleware, ({ body, files, ip, originalUrl, user }, res) => {
     let file, fileName, filePath, fileType, name, nsfw, license, title, description, thumbnail, anonymous, skipAuth, channelName, channelPassword;
     // validate that mandatory parts of the request are present
     try {
@@ -123,7 +175,7 @@ module.exports = (app) => {
       }
     }
     channelName = cleanseChannelName(channelName);
-    logger.debug(`/api/publish > name: ${name}, license: ${license} title: "${title}" description: "${description}" channelName: "${channelName}" channelPassword: "${channelPassword}" nsfw: "${nsfw}"`);
+    logger.debug(`name: ${name}, license: ${license} title: "${title}" description: "${description}" channelName: "${channelName}" channelPassword: "${channelPassword}" nsfw: "${nsfw}"`);
     // check channel authorization
     authenticateOrSkip(skipAuth, channelName, channelPassword)
     .then(authenticated => {
@@ -156,13 +208,11 @@ module.exports = (app) => {
       });
     })
     .catch(error => {
-      errorHandlers.handleApiError('publish', originalUrl, ip, error, res);
+      errorHandlers.handleApiError(originalUrl, ip, error, res);
     });
   });
-
   // route to get a short claim id from long claim Id
-  app.get('/api/shortClaimId/:longId/:name', ({ originalUrl, ip, params }, res) => {
-    // serve content
+  app.get('/api/claim-shorten-id/:longId/:name', ({ params }, res) => {
     db.Claim.getShortClaimIdFromLongClaimId(params.longId, params.name)
       .then(shortId => {
         res.status(200).json(shortId);
@@ -173,8 +223,7 @@ module.exports = (app) => {
       });
   });
   // route to get a short channel id from long channel Id
-  app.get('/api/shortChannelId/:longId/:name', ({ ip, originalUrl, params }, res) => {
-    // serve content
+  app.get('/api/channel-shorten-id/:longId/:name', ({ ip, originalUrl, params }, res) => {
     db.Certificate.getShortChannelIdFromLongChannelId(params.longId, params.name)
       .then(shortId => {
         logger.debug('sending back short channel id', shortId);
@@ -182,7 +231,7 @@ module.exports = (app) => {
       })
       .catch(error => {
         logger.error('api error getting short channel id', error);
-        errorHandlers.handleApiError('short channel id', originalUrl, ip, error, res);
+        errorHandlers.handleApiError(originalUrl, ip, error, res);
       });
   });
   app.put('/api/password', ({ body, ip, originalUrl }, res) => {
