@@ -48,9 +48,9 @@ function clientAcceptsHtml ({accept}) {
   return accept && accept.match(/text\/html/);
 }
 
-function clientWantsAsset ({accept}) {
+function clientWantsAsset ({accept, range}) {
   const imageIsWanted = accept && accept.match(/image\/.*/) && !accept.match(/text\/html/) && !accept.match(/text\/\*/);  // checks if an image is accepted, but not a video
-  const videoIsWanted = false;
+  const videoIsWanted = accept && range;
   return imageIsWanted || videoIsWanted;
 }
 
