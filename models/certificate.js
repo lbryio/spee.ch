@@ -93,7 +93,6 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
 
   Certificate.associate = db => {
     Certificate.belongsTo(db.Channel, {
-      onDelete  : 'cascade',
       foreignKey: {
         allowNull: true,
       },

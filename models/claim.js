@@ -234,7 +234,6 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
 
   Claim.associate = db => {
     Claim.belongsTo(db.File, {
-      onDelete  : 'cascade',
       foreignKey: {
         allowNull: true,
       },
