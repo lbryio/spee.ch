@@ -8,7 +8,7 @@ function determineFileExtensionFromContentType (contentType) {
   switch (contentType) {
     case 'image/jpeg':
     case 'image/jpg':
-      return 'jpg';
+      return 'jpeg';
     case 'image/png':
       return 'png';
     case 'image/gif':
@@ -16,8 +16,8 @@ function determineFileExtensionFromContentType (contentType) {
     case 'video/mp4':
       return 'mp4';
     default:
-      logger.debug('setting unknown file type as file extension jpg');
-      return 'jpg';
+      logger.debug('setting unknown file type as file extension jpeg');
+      return 'jpeg';
   }
 };
 
@@ -25,7 +25,7 @@ function determineContentTypeFromFileExtension (fileExtension) {
   switch (fileExtension) {
     case 'jpeg':
     case 'jpg':
-      return 'image/jpg';
+      return 'image/jpeg';
     case 'png':
       return 'image/png';
     case 'gif':
@@ -33,8 +33,8 @@ function determineContentTypeFromFileExtension (fileExtension) {
     case 'mp4':
       return 'video/mp4';
     default:
-      logger.debug('setting unknown file type as type image/jpg');
-      return 'image/jpg';
+      logger.debug('setting unknown file type as type image/jpeg');
+      return 'image/jpeg';
   }
 };
 
