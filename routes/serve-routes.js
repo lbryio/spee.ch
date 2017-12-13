@@ -44,8 +44,14 @@ function showChannelPageToClient (channelName, channelClaimId, originalUrl, ip, 
     });
 }
 
-function clientAcceptsHtml (headers) {
-  return headers['accept'] && headers['accept'].split(',').includes('text/html');
+function clientAcceptsHtml ({accept}) {
+  return accept && accept.match(/text\/html/);
+}
+
+function clientWantsAsset ({accept}) {
+  const imageIsWanted = accept && accept.match(/image\/.*/) && !accept.match(/text\/html/) && !accept.match(/text\/\*/);  // checks if an image is accepted, but not a video
+  const videoIsWanted = false;
+  return imageIsWanted || videoIsWanted;
 }
 
 function determineResponseType (isServeRequest, headers) {
@@ -57,7 +63,8 @@ function determineResponseType (isServeRequest, headers) {
     }
   } else {
     responseType = SHOW;
-    if (!clientAcceptsHtml(headers)) {  // this is in case someone embeds a show url
+    if (clientWantsAsset(headers)) {  // this is in case someone embeds a show url
+      logger.debug('Show request actually want\'s an asset!');
       responseType = SERVE;
     }
   }
@@ -68,8 +75,8 @@ function showAssetToClient (claimId, name, res) {
   return Promise
       .all([db.Claim.resolveClaim(name, claimId), db.Claim.getShortClaimIdFromLongClaimId(claimId, name)])
       .then(([claimInfo, shortClaimId]) => {
-        logger.debug('claimInfo:', claimInfo);
-        logger.debug('shortClaimId:', shortClaimId);
+        // logger.debug('claimInfo:', claimInfo);
+        // logger.debug('shortClaimId:', shortClaimId);
         return serveHelpers.showFile(claimInfo, shortClaimId, res);
       })
       .catch(error => {
@@ -81,8 +88,8 @@ function showLiteAssetToClient (claimId, name, res) {
   return Promise
       .all([db.Claim.resolveClaim(name, claimId), db.Claim.getShortClaimIdFromLongClaimId(claimId, name)])
       .then(([claimInfo, shortClaimId]) => {
-        logger.debug('claimInfo:', claimInfo);
-        logger.debug('shortClaimId:', shortClaimId);
+        // logger.debug('claimInfo:', claimInfo);
+        // logger.debug('shortClaimId:', shortClaimId);
         return serveHelpers.showFileLite(claimInfo, shortClaimId, res);
       })
       .catch(error => {
@@ -93,7 +100,7 @@ function showLiteAssetToClient (claimId, name, res) {
 function serveAssetToClient (claimId, name, res) {
   return getLocalFileRecord(claimId, name)
       .then(fileInfo => {
-        logger.debug('fileInfo:', fileInfo);
+        // logger.debug('fileInfo:', fileInfo);
         if (fileInfo === NO_FILE) {
           return res.status(307).redirect(`/api/claim-get/${name}/${claimId}`);
         }
