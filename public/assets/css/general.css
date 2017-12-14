@@ -466,6 +466,10 @@ table {
 	display: inline-block;
 }
 
+.nav-bar-logo {
+	cursor: pointer;
+}
+
 /* PUBLISH FORM */
 
 .dropzone {
