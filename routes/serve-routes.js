@@ -48,11 +48,13 @@ function clientAcceptsHtml ({accept}) {
   return accept && accept.match(/text\/html/);
 }
 
+function requestIsFromBrowser (headers) {
+  return headers['user-agent'] && headers['user-agent'].match(/Mozilla/);
+};
+
 function clientWantsAsset ({accept, range}) {
   const imageIsWanted = accept && accept.match(/image\/.*/) && !accept.match(/text\/html/) && !accept.match(/text\/\*/);
-  const videoIsWanted = false; // accept && range;
-  logger.debug('image is wanted:', imageIsWanted);
-  logger.debug('video is wanted:', videoIsWanted);
+  const videoIsWanted = accept && range;
   return imageIsWanted || videoIsWanted;
 }
 
@@ -65,8 +67,8 @@ function determineResponseType (isServeRequest, headers) {
     }
   } else {
     responseType = SHOW;
-    if (clientWantsAsset(headers)) {  // this is in case someone embeds a show url
-      logger.debug('Show request actually want\'s an asset!');
+    if (clientWantsAsset(headers) && requestIsFromBrowser(headers)) {  // this is in case someone embeds a show url
+      logger.debug('Show request actually wants an asset!');
       responseType = SERVE;
     }
   }
