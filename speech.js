@@ -33,7 +33,7 @@ app.use(bodyParser.json()); // 'body parser' for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // 'body parser' for parsing application/x-www-form-urlencoded
 app.use((req, res, next) => {  // custom logging middleware to log all incoming http requests
   logger.verbose(`Request on ${req.originalUrl} from ${req.ip}`);
-  logger.debug('req.headers:', req.headers);
+  // logger.debug('req.headers:', req.headers);
   next();
 });
 
