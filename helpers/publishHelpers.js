@@ -70,16 +70,12 @@ module.exports = {
       throw new Error('The claim name you provided is not allowed.  Only the following characters are allowed: A-Z, a-z, 0-9, and "-"');
     }
   },
-  validateLicense (license) {
-    if ((license.indexOf('Public Domain') === -1) && (license.indexOf('Creative Commons') === -1)) {
-      throw new Error('Only posts with a "Public Domain" or "Creative Commons" license are eligible for publishing.');
-    }
-  },
   cleanseChannelName (channelName) {
-    if (channelName) {
-      if (channelName.indexOf('@') !== 0) {
-        channelName = `@${channelName}`;
-      }
+    if (!channelName) {
+      return null;
+    }
+    if (channelName.indexOf('@') !== 0) {
+      channelName = `@${channelName}`;
     }
     return channelName;
   },

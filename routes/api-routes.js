@@ -134,6 +134,7 @@ module.exports = (app) => {
       res.status(400).json({success: false, message: error.message});
       return;
     }
+    logger.debug('publish req.files:', files);
     // validate file, name, license, and nsfw
     file = files.file;
     fileName = file.path.substring(file.path.lastIndexOf('/') + 1);

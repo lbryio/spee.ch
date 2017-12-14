@@ -5,12 +5,10 @@ const logger = require('winston');
 
 module.exports = new PassportLocalStrategy(
   {
-    usernameField    : 'username',  // sets the custom name of parameters in the POST body message
-    passwordField    : 'password',  // sets the custom name of parameters in the POST body message
-    session          : false, // set to false because we will use token approach to auth
-    passReqToCallback: true,  // we want to be able to read the post body message parameters in the callback
+    usernameField: 'username',
+    passwordField: 'password',
   },
-  (req, username, password, done) => {
+  (username, password, done) => {
     logger.verbose(`new channel signup request. user: ${username} pass: ${password} .`);
     let userInfo = {};
     // server-side validaton of inputs (username, password)

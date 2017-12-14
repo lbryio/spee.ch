@@ -10,7 +10,7 @@ module.exports = {
       // publish the file
       return lbryApi.publishClaim(publishParams)
       .then(tx => {
-        logger.info(`Successfully published ${fileName}`, tx);
+        logger.info(`Successfully published ${publishParams.name} ${fileName}`, tx);
         publishResults = tx;
         // get the channel information
         if (publishParams.channel_name) {
@@ -79,6 +79,7 @@ module.exports = {
         resolve(publishResults); // resolve the promise with the result from lbryApi.publishClaim;
       })
       .catch(error => {
+        logger.error('PUBLISH ERROR', error);
         publishHelpers.deleteTemporaryFile(publishParams.file_path); // delete the local file
         reject(error);
       });
