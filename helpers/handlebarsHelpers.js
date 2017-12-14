@@ -1,13 +1,13 @@
 const Handlebars = require('handlebars');
-const config = require('../config/speechConfig.js');
+const { site, analytics } = require('../config/speechConfig.js');
 
 module.exports = {
   placeCommonHeaderTags () {
-    const headerBoilerplate = `<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no"><meta http-equiv="X-UA-Compatible" content="ie=edge"><title>Spee.ch</title><link rel="stylesheet" href="/assets/css/reset.css" type="text/css"><link rel="stylesheet" href="/assets/css/general.css" type="text/css"><link rel="stylesheet" href="/assets/css/mediaQueries.css" type="text/css">`;
+    const headerBoilerplate = `<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no"><meta http-equiv="X-UA-Compatible" content="ie=edge"><title>${site.title}</title><link rel="stylesheet" href="/assets/css/reset.css" type="text/css"><link rel="stylesheet" href="/assets/css/general.css" type="text/css"><link rel="stylesheet" href="/assets/css/mediaQueries.css" type="text/css">`;
     return new Handlebars.SafeString(headerBoilerplate);
   },
   googleAnalytics () {
-    const googleApiKey = config.analytics.googleId;
+    const googleApiKey = analytics.googleId;
     const gaCode = `<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
         (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
         m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
@@ -19,7 +19,7 @@ module.exports = {
   addOpenGraph ({ ogTitle, contentType, ogDescription, thumbnail, showUrl, source, ogThumbnailContentType }) {
     const ogTitleTag = `<meta property="og:title" content="${ogTitle}" />`;
     const ogUrlTag = `<meta property="og:url" content="${showUrl}" />`;
-    const ogSiteNameTag = `<meta property="og:site_name" content="Spee.ch" />`;
+    const ogSiteNameTag = `<meta property="og:site_name" content="${site.title}" />`;
     const ogDescriptionTag = `<meta property="og:description" content="${ogDescription}" />`;
     const ogImageWidthTag = '<meta property="og:image:width" content="600" />';
     const ogImageHeightTag = '<meta property="og:image:height" content="315" />';

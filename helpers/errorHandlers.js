@@ -21,7 +21,7 @@ module.exports = {
       } else {
         message = error.response;
       }
-    // check for spee.ch thrown errors
+    // check for thrown errors
     } else if (error.message) {
       status = 400;
       message = error.message;

@@ -129,7 +129,7 @@ function showOrServeAsset (responseType, claimId, claimName, res) {
 }
 
 function flipClaimNameAndIdForBackwardsCompatibility (identifier, name) {
-  // this is a patch for backwards compatability with 'spee.ch/name/claim_id' url format
+  // this is a patch for backwards compatability with '/name/claim_id' url format
   if (isValidShortIdOrClaimId(name) && !isValidShortIdOrClaimId(identifier)) {
     const tempName = name;
     name = identifier;

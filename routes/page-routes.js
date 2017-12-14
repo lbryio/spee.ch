@@ -1,5 +1,6 @@
 const errorHandlers = require('../helpers/errorHandlers.js');
 const { getTrendingClaims, getRecentClaims } = require('../controllers/statsController.js');
+const { site } = require('../config/speechConfig.js');
 
 module.exports = (app) => {
   // route to log out
@@ -15,7 +16,7 @@ module.exports = (app) => {
       res.status(200).render('login');
     }
   });
-  // route to show 'about' page for spee.ch
+  // route to show 'about' page
   app.get('/about', (req, res) => {
     // get and render the content
     res.status(200).render('about');
@@ -52,8 +53,9 @@ module.exports = (app) => {
   app.get('/embed/:claimId/:name', ({ params }, res) => {
     const claimId = params.claimId;
     const name = params.name;
+    const host = site.host;
     // get and render the content
-    res.status(200).render('embed', { layout: 'embed', claimId, name });
+    res.status(200).render('embed', { layout: 'embed', host, claimId, name });
   });
   // route to display all free public claims at a given name
   app.get('/:name/all', (req, res) => {

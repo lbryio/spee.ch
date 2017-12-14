@@ -1,7 +1,7 @@
 const logger = require('winston');
 const multipart = require('connect-multiparty');
-const config = require('../config/speechConfig.js');
-const multipartMiddleware = multipart({uploadDir: config.files.uploadDirectory});
+const { files, site } = require('../config/speechConfig.js');
+const multipartMiddleware = multipart({uploadDir: files.uploadDirectory});
 const db = require('../models');
 const { publish } = require('../controllers/publishController.js');
 const { getClaimList, resolveUri, getClaim } = require('../helpers/lbryApi.js');
@@ -83,14 +83,14 @@ module.exports = (app) => {
       });
   });
 
-  // route to check whether spee.ch has published to a claim
+  // route to check whether this site published to a claim
   app.get('/api/claim-is-available/:name', ({ params }, res) => {
     checkClaimNameAvailability(params.name)
     .then(result => {
       if (result === true) {
         res.status(200).json(true);
       } else {
-        // logger.debug(`Rejecting '${params.name}' because that name has already been claimed on spee.ch`);
+        // logger.debug(`Rejecting '${params.name}' because that name has already been claimed by this site`);
         res.status(200).json(false);
       }
     })
@@ -98,14 +98,14 @@ module.exports = (app) => {
       res.status(500).json(error);
     });
   });
-  // route to check whether spee.ch has published to a channel
+  // route to check whether site has published to a channel
   app.get('/api/channel-is-available/:name', ({ params }, res) => {
     checkChannelAvailability(params.name)
       .then(result => {
         if (result === true) {
           res.status(200).json(true);
         } else {
-          // logger.debug(`Rejecting '${params.name}' because that channel has already been claimed on spee.ch`);
+          // logger.debug(`Rejecting '${params.name}' because that channel has already been claimed`);
           res.status(200).json(false);
         }
       })
@@ -161,13 +161,13 @@ module.exports = (app) => {
     }
     channelPassword = body.channelPassword || null;
     skipAuth = false;
-    // case 1: publish from spee.ch, client logged in
+    // case 1: publish from client, client logged in
     if (user) {
       skipAuth = true;
       if (anonymous) {
         channelName = null;
       }
-    // case 2: publish from api or spee.ch, client not logged in
+    // case 2: publish from api or client, client not logged in
     } else {
       if (anonymous) {
         skipAuth = true;
@@ -187,7 +187,7 @@ module.exports = (app) => {
     })
     .then(result => {
       if (!result) {
-        throw new Error('That name is already in use by spee.ch.');
+        throw new Error('That name is already claimed by another user.');
       }
       // create publish parameters object
       return createPublishParams(filePath, name, title, description, license, nsfw, thumbnail, channelName);
@@ -202,7 +202,7 @@ module.exports = (app) => {
         success: true,
         message: {
           name,
-          url   : `spee.ch/${result.claim_id}/${name}`,
+          url   : `${site.host}/${result.claim_id}/${name}`,
           lbryTx: result,
         },
       });

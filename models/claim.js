@@ -1,8 +1,8 @@
 const logger = require('winston');
 const { returnShortId } = require('../helpers/sequelizeHelpers.js');
-const DEFAULT_THUMBNAIL = 'https://spee.ch/assets/img/video_thumb_default.png';
-const DEFAULT_TITLE = 'Spee<ch';
-const DEFAULT_DESCRIPTION = 'Decentralized video and content hosting.';
+const { publishing, site } = require('../config/speechConfig.js');
+const { defaultTitle, defaultThumbnail, defaultDescription } = publishing;
+const { host } = site;
 
 function determineFileExtensionFromContentType (contentType) {
   switch (contentType) {
@@ -67,19 +67,20 @@ function determineOgThumbnailContentType (thumbnail) {
 }
 
 function addOpengraphDataToClaim (claim) {
-  claim['embedUrl'] = `https://spee.ch/embed/${claim.claimId}/${claim.name}`;
-  claim['showUrl'] = `https://spee.ch/${claim.claimId}/${claim.name}`;
-  claim['source'] = `https://spee.ch/${claim.claimId}/${claim.name}.${claim.fileExt}`;
-  claim['directFileUrl'] = `https://spee.ch/${claim.claimId}/${claim.name}.${claim.fileExt}`;
-  claim['ogTitle'] = determineOgTitle(claim.title, DEFAULT_TITLE);
-  claim['ogDescription'] = determineOgDescription(claim.description, DEFAULT_DESCRIPTION);
+  claim['host'] = host;
+  claim['embedUrl'] = `${host}/${claim.claimId}/${claim.name}`;
+  claim['showUrl'] = `${host}/${claim.claimId}/${claim.name}`;
+  claim['source'] = `${host}/${claim.claimId}/${claim.name}.${claim.fileExt}`;
+  claim['directFileUrl'] = `${host}/${claim.claimId}/${claim.name}.${claim.fileExt}`;
+  claim['ogTitle'] = determineOgTitle(claim.title, defaultTitle);
+  claim['ogDescription'] = determineOgDescription(claim.description, defaultDescription);
   claim['ogThumbnailContentType'] = determineOgThumbnailContentType(claim.thumbnail);
   return claim;
 };
 
 function prepareClaimData (claim) {
   // logger.debug('preparing claim data based on resolved data:', claim);
-  claim['thumbnail'] = determineThumbnail(claim.thumbnail, DEFAULT_THUMBNAIL);
+  claim['thumbnail'] = determineThumbnail(claim.thumbnail, defaultThumbnail);
   claim['fileExt'] = determineFileExtensionFromContentType(claim.contentType);
   claim = addOpengraphDataToClaim(claim);
   return claim;
@@ -280,7 +281,7 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
             default:
               channelClaimsArray.forEach(claim => {
                 claim['fileExt'] = determineFileExtensionFromContentType(claim.contentType);
-                claim['thumbnail'] = determineThumbnail(claim.thumbnail, DEFAULT_THUMBNAIL);
+                claim['thumbnail'] = determineThumbnail(claim.thumbnail, defaultThumbnail);
                 return claim;
               });
               return resolve(channelClaimsArray);
