@@ -68,7 +68,7 @@ function determineResponseType (isServeRequest, headers) {
   } else {
     responseType = SHOW;
     if (clientWantsAsset(headers) && requestIsFromBrowser(headers)) {  // this is in case someone embeds a show url
-      logger.debug('Show request actually wants an asset!');
+      logger.debug('Show request came from browser and wants an image/video; changing response to serve.');
       responseType = SERVE;
     }
   }
