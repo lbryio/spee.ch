@@ -57,7 +57,12 @@ module.exports = {
     };
   },
   parsePublishApiChannel ({channelName, channelPassword}, user) {
+    logger.debug('publish api parser input:', {channelName, channelPassword, user});
     // if no channel name provided, publish will be anonymous
+    // if anonymous or '' provided, publish will be anonymous (even if client is logged in)
+    if (channelName === 'anonymous' || channelName === '') {
+      channelName = null;
+    }
     // if a channel name is provided...
     if (channelName) {
       // make sure a password was provided
