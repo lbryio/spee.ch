@@ -124,7 +124,7 @@ module.exports = (app) => {
     });
   });
   // route to run a publish request on the daemon
-  app.post('/api/publish', multipartMiddleware, ({ body, files, ip, originalUrl, user }, res) => {
+  app.post('/api/claim-publish', multipartMiddleware, ({ body, files, ip, originalUrl, user }, res) => {
     let  name, fileName, filePath, fileType, nsfw, license, title, description, thumbnail, anonymous, channelName, channelPassword;
     // validate the body and files of the request
     try {
