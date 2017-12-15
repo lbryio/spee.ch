@@ -2,10 +2,11 @@ const chai = require('chai');
 const expect = chai.expect;
 const chaiHttp = require('chai-http');
 const { host } = require('../../config/speechConfig.js').site;
+const timeout = 600000;
 
 chai.use(chaiHttp);
 
-function testFor200StatusResponse (host, url, timeout) {
+function testFor200StatusResponse (host, url) {
   return it(`should receive a status code 200 within ${timeout}ms`, function (done) {
     chai.request(host)
       .get(url)
@@ -17,7 +18,7 @@ function testFor200StatusResponse (host, url, timeout) {
   }).timeout(timeout);
 }
 
-function testShowRequestFor200StatusResponse (host, url, timeout) {
+function testShowRequestFor200StatusResponse (host, url) {
   return it(`should receive a status code 200 within ${timeout}ms`, function (done) {
     chai.request(host)
       .get(url)
@@ -37,13 +38,13 @@ describe('end-to-end', function () {
     const claimUrlWithLongClaimId = '/ca3023187e901df9e9aabd95d6ae09b6cc69b3f0/doitlive.jpg';
 
     describe(claimUrl, function () {
-      testFor200StatusResponse(host, claimUrl, 10000);
+      testFor200StatusResponse(host, claimUrl);
     });
     describe(claimUrlWithShortClaimId, function () {
-      testFor200StatusResponse(host, claimUrlWithShortClaimId, 10000);
+      testFor200StatusResponse(host, claimUrlWithShortClaimId);
     });
     describe(claimUrlWithLongClaimId, function () {
-      testFor200StatusResponse(host, claimUrlWithShortClaimId, 10000);
+      testFor200StatusResponse(host, claimUrlWithShortClaimId);
     });
   });
 
@@ -53,13 +54,13 @@ describe('end-to-end', function () {
     const claimUrlWithLongClaimId = '/ca3023187e901df9e9aabd95d6ae09b6cc69b3f0/doitlive';
 
     describe(claimUrl, function () {
-      testShowRequestFor200StatusResponse(host, claimUrl, 10000);
+      testShowRequestFor200StatusResponse(host, claimUrl);
     });
     describe(claimUrlWithShortClaimId, function () {
-      testShowRequestFor200StatusResponse(host, claimUrlWithShortClaimId, 10000);
+      testShowRequestFor200StatusResponse(host, claimUrlWithShortClaimId);
     });
     describe(claimUrlWithLongClaimId, function () {
-      testShowRequestFor200StatusResponse(host, claimUrlWithShortClaimId, 10000);
+      testShowRequestFor200StatusResponse(host, claimUrlWithShortClaimId);
     });
   });
 
@@ -69,13 +70,13 @@ describe('end-to-end', function () {
     const claimUrlWithLongClaimId = '/ca3023187e901df9e9aabd95d6ae09b6cc69b3f0/doitlive.jpg';
 
     describe(claimUrl, function () {
-      testShowRequestFor200StatusResponse(host, claimUrl, 10000);
+      testShowRequestFor200StatusResponse(host, claimUrl);
     });
     describe(claimUrlWithShortClaimId, function () {
-      testShowRequestFor200StatusResponse(host, claimUrlWithShortClaimId, 10000);
+      testShowRequestFor200StatusResponse(host, claimUrlWithShortClaimId);
     });
     describe(claimUrlWithLongClaimId, function () {
-      testShowRequestFor200StatusResponse(host, claimUrlWithShortClaimId, 10000);
+      testShowRequestFor200StatusResponse(host, claimUrlWithShortClaimId);
     });
   });
 });
