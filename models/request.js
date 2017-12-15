@@ -27,7 +27,6 @@ module.exports = (sequelize, { STRING, BOOLEAN, TEXT }) => {
 
   Request.associate = db => {
     Request.belongsTo(db.File, {
-      onDelete  : 'cascade',
       foreignKey: {
         allowNull: true,
       },
