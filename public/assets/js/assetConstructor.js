@@ -78,7 +78,7 @@ const Asset = function () {
         this.isFileAvailable()
             .then(isAvailable => {
                 if (!isAvailable) {
-                    console.log('file is not yet available on spee.ch');
+                    console.log('file is not yet available');
                     that.showSearchMessage();
                     return that.getAssetOnSpeech();
                 }

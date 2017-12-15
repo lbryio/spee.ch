@@ -50,7 +50,7 @@ function publishNewChannel (event) {
                 validationFunctions.showError(channelNameErrorDisplayElement, error.message);
             } else {
                 console.log('signup failure:', error);
-                showChannelCreationError('Unfortunately, Spee.ch encountered an error while creating your channel.  Please let us know in slack!');
+                showChannelCreationError('Unfortunately, we encountered an error while creating your channel.  Please let us know in slack!');
             }
         })
 }

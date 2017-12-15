@@ -44,8 +44,18 @@ function showChannelPageToClient (channelName, channelClaimId, originalUrl, ip, 
     });
 }
 
-function clientAcceptsHtml (headers) {
-  return headers['accept'] && headers['accept'].split(',').includes('text/html');
+function clientAcceptsHtml ({accept}) {
+  return accept && accept.match(/text\/html/);
+}
+
+function requestIsFromBrowser (headers) {
+  return headers['user-agent'] && headers['user-agent'].match(/Mozilla/);
+};
+
+function clientWantsAsset ({accept, range}) {
+  const imageIsWanted = accept && accept.match(/image\/.*/) && !accept.match(/text\/html/) && !accept.match(/text\/\*/);
+  const videoIsWanted = accept && range;
+  return imageIsWanted || videoIsWanted;
 }
 
 function determineResponseType (isServeRequest, headers) {
@@ -57,7 +67,8 @@ function determineResponseType (isServeRequest, headers) {
     }
   } else {
     responseType = SHOW;
-    if (!clientAcceptsHtml(headers)) {  // this is in case someone embeds a show url
+    if (clientWantsAsset(headers) && requestIsFromBrowser(headers)) {  // this is in case someone embeds a show url
+      logger.debug('Show request came from browser and wants an image/video; changing response to serve.');
       responseType = SERVE;
     }
   }
@@ -68,8 +79,8 @@ function showAssetToClient (claimId, name, res) {
   return Promise
       .all([db.Claim.resolveClaim(name, claimId), db.Claim.getShortClaimIdFromLongClaimId(claimId, name)])
       .then(([claimInfo, shortClaimId]) => {
-        logger.debug('claimInfo:', claimInfo);
-        logger.debug('shortClaimId:', shortClaimId);
+        // logger.debug('claimInfo:', claimInfo);
+        // logger.debug('shortClaimId:', shortClaimId);
         return serveHelpers.showFile(claimInfo, shortClaimId, res);
       })
       .catch(error => {
@@ -81,8 +92,8 @@ function showLiteAssetToClient (claimId, name, res) {
   return Promise
       .all([db.Claim.resolveClaim(name, claimId), db.Claim.getShortClaimIdFromLongClaimId(claimId, name)])
       .then(([claimInfo, shortClaimId]) => {
-        logger.debug('claimInfo:', claimInfo);
-        logger.debug('shortClaimId:', shortClaimId);
+        // logger.debug('claimInfo:', claimInfo);
+        // logger.debug('shortClaimId:', shortClaimId);
         return serveHelpers.showFileLite(claimInfo, shortClaimId, res);
       })
       .catch(error => {
@@ -93,7 +104,7 @@ function showLiteAssetToClient (claimId, name, res) {
 function serveAssetToClient (claimId, name, res) {
   return getLocalFileRecord(claimId, name)
       .then(fileInfo => {
-        logger.debug('fileInfo:', fileInfo);
+        // logger.debug('fileInfo:', fileInfo);
         if (fileInfo === NO_FILE) {
           return res.status(307).redirect(`/api/claim-get/${name}/${claimId}`);
         }
@@ -118,7 +129,7 @@ function showOrServeAsset (responseType, claimId, claimName, res) {
 }
 
 function flipClaimNameAndIdForBackwardsCompatibility (identifier, name) {
-  // this is a patch for backwards compatability with 'spee.ch/name/claim_id' url format
+  // this is a patch for backwards compatability with '/name/claim_id' url format
   if (isValidShortIdOrClaimId(name) && !isValidShortIdOrClaimId(identifier)) {
     const tempName = name;
     name = identifier;

@@ -22,4 +22,13 @@ module.exports = {
   files: {
     uploadDirectory: null,  // enter file path to where uploads/publishes should be stored
   },
+  site: {
+    name: 'Spee.ch',
+    host: 'https://spee.ch',
+  },
+  publishing: {
+    defaultTitle      : 'Spee.ch',
+    defaultThumbnail  : 'https://spee.ch/assets/img/video_thumb_default.png',
+    defaultDescription: 'Open-source, decentralized image and video sharing.',
+  },
 };

@@ -1,7 +1,7 @@
 const logger = require('winston');
 const fs = require('fs');
 const db = require('../models');
-const config = require('../config/speechConfig.js');
+const { site, wallet } = require('../config/speechConfig.js');
 
 module.exports = {
   validateApiPublishRequest (body, files) {
@@ -101,12 +101,12 @@ module.exports = {
       metadata : {
         description,
         title,
-        author  : 'spee.ch',
+        author  : site.title,
         language: 'en',
         license,
         nsfw,
       },
-      claim_address: config.wallet.lbryClaimAddress,
+      claim_address: wallet.lbryClaimAddress,
     };
     // add thumbnail to channel if video
     if (thumbnail !== null) {
@@ -133,12 +133,12 @@ module.exports = {
       db.File.findAll({ where: { name } })
       .then(result => {
         if (result.length >= 1) {
-          const claimAddress = config.wallet.lbryClaimAddress;
-          // filter out any results that were not published from spee.ch's wallet address
+          const claimAddress = wallet.lbryClaimAddress;
+          // filter out any results that were not published from the site's wallet address
           const filteredResult = result.filter((claim) => {
             return (claim.address === claimAddress);
           });
-          // return based on whether any non-spee.ch claims were left
+          // return based on whether any claims were left
           if (filteredResult.length >= 1) {
             resolve(false);
           } else {

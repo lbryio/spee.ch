@@ -1,14 +1,14 @@
 const logger = require('winston');
 const { returnShortId } = require('../helpers/sequelizeHelpers.js');
-const DEFAULT_THUMBNAIL = 'https://spee.ch/assets/img/video_thumb_default.png';
-const DEFAULT_TITLE = 'Spee<ch';
-const DEFAULT_DESCRIPTION = 'Decentralized video and content hosting.';
+const { publishing, site } = require('../config/speechConfig.js');
+const { defaultTitle, defaultThumbnail, defaultDescription } = publishing;
+const { host } = site;
 
 function determineFileExtensionFromContentType (contentType) {
   switch (contentType) {
     case 'image/jpeg':
     case 'image/jpg':
-      return 'jpg';
+      return 'jpeg';
     case 'image/png':
       return 'png';
     case 'image/gif':
@@ -16,8 +16,8 @@ function determineFileExtensionFromContentType (contentType) {
     case 'video/mp4':
       return 'mp4';
     default:
-      logger.debug('setting unknown file type as file extension jpg');
-      return 'jpg';
+      logger.debug('setting unknown file type as file extension jpeg');
+      return 'jpeg';
   }
 };
 
@@ -25,7 +25,7 @@ function determineContentTypeFromFileExtension (fileExtension) {
   switch (fileExtension) {
     case 'jpeg':
     case 'jpg':
-      return 'image/jpg';
+      return 'image/jpeg';
     case 'png':
       return 'image/png';
     case 'gif':
@@ -33,8 +33,8 @@ function determineContentTypeFromFileExtension (fileExtension) {
     case 'mp4':
       return 'video/mp4';
     default:
-      logger.debug('setting unknown file type as type image/jpg');
-      return 'image/jpg';
+      logger.debug('setting unknown file type as type image/jpeg');
+      return 'image/jpeg';
   }
 };
 
@@ -67,19 +67,20 @@ function determineOgThumbnailContentType (thumbnail) {
 }
 
 function addOpengraphDataToClaim (claim) {
-  claim['embedUrl'] = `https://spee.ch/embed/${claim.claimId}/${claim.name}`;
-  claim['showUrl'] = `https://spee.ch/${claim.claimId}/${claim.name}`;
-  claim['source'] = `https://spee.ch/${claim.claimId}/${claim.name}.${claim.fileExt}`;
-  claim['directFileUrl'] = `https://spee.ch/${claim.claimId}/${claim.name}.${claim.fileExt}`;
-  claim['ogTitle'] = determineOgTitle(claim.title, DEFAULT_TITLE);
-  claim['ogDescription'] = determineOgDescription(claim.description, DEFAULT_DESCRIPTION);
+  claim['host'] = host;
+  claim['embedUrl'] = `${host}/${claim.claimId}/${claim.name}`;
+  claim['showUrl'] = `${host}/${claim.claimId}/${claim.name}`;
+  claim['source'] = `${host}/${claim.claimId}/${claim.name}.${claim.fileExt}`;
+  claim['directFileUrl'] = `${host}/${claim.claimId}/${claim.name}.${claim.fileExt}`;
+  claim['ogTitle'] = determineOgTitle(claim.title, defaultTitle);
+  claim['ogDescription'] = determineOgDescription(claim.description, defaultDescription);
   claim['ogThumbnailContentType'] = determineOgThumbnailContentType(claim.thumbnail);
   return claim;
 };
 
 function prepareClaimData (claim) {
   // logger.debug('preparing claim data based on resolved data:', claim);
-  claim['thumbnail'] = determineThumbnail(claim.thumbnail, DEFAULT_THUMBNAIL);
+  claim['thumbnail'] = determineThumbnail(claim.thumbnail, defaultThumbnail);
   claim['fileExt'] = determineFileExtensionFromContentType(claim.contentType);
   claim = addOpengraphDataToClaim(claim);
   return claim;
@@ -279,7 +280,7 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
             default:
               channelClaimsArray.forEach(claim => {
                 claim['fileExt'] = determineFileExtensionFromContentType(claim.contentType);
-                claim['thumbnail'] = determineThumbnail(claim.thumbnail, DEFAULT_THUMBNAIL);
+                claim['thumbnail'] = determineThumbnail(claim.thumbnail, defaultThumbnail);
                 return claim;
               });
               return resolve(channelClaimsArray);
