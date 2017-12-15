@@ -57,20 +57,25 @@ module.exports = {
     };
   },
   parsePublishApiChannel ({channelName, channelPassword}, user) {
-    // anonymous if no channel name provided
-    let anonymous = (channelName === null || channelName === undefined || channelName === '');
-    // if a channel name is provided, get password from the user token
-    if (user) {
-      channelPassword = user.channelPassword;
-    } ;
-    // cleanse channel name
+    // if no channel name provided, publish will be anonymous
+    // if a channel name is provided...
     if (channelName) {
+      // make sure a password was provided
+      if (!channelPassword) {
+        throw new Error('Channel name provided without password');
+      }
+      // if request comes from the client and is logged in
+      // ensure it is the same channel and get the password
+      if (user) {
+        channelName = user.channelName;
+        channelPassword = user.channelPassword;
+      } ;
+      // add the @ if the channel name is missing it
       if (channelName.indexOf('@') !== 0) {
         channelName = `@${channelName}`;
       }
     }
     return {
-      anonymous,
       channelName,
       channelPassword,
     };
