@@ -18,7 +18,7 @@
     ],
     "semi": [
       "error",
-      "always", 
+      "always",
       { "omitLastInOneLineBlock": true }
       ],
     "key-spacing": [

@@ -4,7 +4,7 @@
   "description": "a single-serving site that reads and publishes images to and from the LBRY blockchain",
   "main": "speech.js",
   "scripts": {
-    "test": "mocha",
+    "test": "mocha --recursive",
     "start": "node speech.js",
     "lint": "eslint .",
     "fix": "eslint . --fix",
@@ -40,6 +40,8 @@
     "nodemon": "^1.11.0",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
+    "request": "^2.83.0",
+    "request-promise": "^4.2.2",
     "sequelize": "^4.1.0",
     "sequelize-cli": "^3.0.0-3",
     "sleep": "^5.1.1",
@@ -48,6 +50,8 @@
     "winston-slack-webhook": "billbitt/winston-slack-webhook"
   },
   "devDependencies": {
+    "chai": "^4.1.2",
+    "chai-http": "^3.0.0",
     "eslint": "3.19.0",
     "eslint-config-standard": "10.2.1",
     "eslint-plugin-import": "^2.2.0",
