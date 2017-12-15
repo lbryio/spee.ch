@@ -126,6 +126,7 @@ module.exports = (app) => {
   // route to run a publish request on the daemon
   app.post('/api/claim-publish', multipartMiddleware, ({ body, files, ip, originalUrl, user }, res) => {
     logger.debug('api/claim-publish body:', body);
+    logger.debug('api/claim-publish files:', files);
     let  name, fileName, filePath, fileType, nsfw, license, title, description, thumbnail, channelName, channelPassword;
     // validate the body and files of the request
     try {
@@ -134,7 +135,7 @@ module.exports = (app) => {
       ({fileName, filePath, fileType} = parsePublishApiRequestFiles(files));
       ({channelName, channelPassword} = parsePublishApiChannel(body, user));
     } catch (error) {
-      logger.debug('publish request rejected, insufficient request parameters');
+      logger.debug('publish request rejected, insufficient request parameters', error);
       return res.status(400).json({success: false, message: error.message});
     }
     // check channel authorization

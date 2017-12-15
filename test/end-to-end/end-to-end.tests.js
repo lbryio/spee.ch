@@ -2,12 +2,14 @@ const chai = require('chai');
 const expect = chai.expect;
 const chaiHttp = require('chai-http');
 const { host } = require('../../config/speechConfig.js').site;
-const timeout = 600000;
+const requestTimeout = 20000;
+const publishTimeout = 120000;
+const fs = require('fs');
 
 chai.use(chaiHttp);
 
 function testFor200StatusResponse (host, url) {
-  return it(`should receive a status code 200 within ${timeout}ms`, function (done) {
+  return it(`should receive a status code 200 within ${requestTimeout}ms`, function (done) {
     chai.request(host)
       .get(url)
       .end(function (err, res) {
@@ -15,11 +17,11 @@ function testFor200StatusResponse (host, url) {
         expect(res).to.have.status(200);
         done();
       });
-  }).timeout(timeout);
+  }).timeout(requestTimeout);
 }
 
 function testShowRequestFor200StatusResponse (host, url) {
-  return it(`should receive a status code 200 within ${timeout}ms`, function (done) {
+  return it(`should receive a status code 200 within ${requestTimeout}ms`, function (done) {
     chai.request(host)
       .get(url)
       .set('accept', 'text/html')
@@ -28,7 +30,7 @@ function testShowRequestFor200StatusResponse (host, url) {
         expect(res).to.have.status(200);
         done();
       });
-  }).timeout(timeout);
+  }).timeout(requestTimeout);
 }
 
 describe('end-to-end', function () {
@@ -79,4 +81,29 @@ describe('end-to-end', function () {
       testShowRequestFor200StatusResponse(host, claimUrlWithShortClaimId);
     });
   });
+
+  describe('publish', function () {
+    const publishUrl = '/api/claim-publish';
+    const name = 'test-name2';
+    const filePath = './test/mock-files/bird.jpeg';
+    const fileName = 'byrd.jpeg';
+
+    describe(publishUrl, function () {
+      it(`should receive a status code 200 within ${publishTimeout}ms`, function (done) {
+        chai.request(host)
+          .post(publishUrl)
+          .type('form')
+          .attach('file', fs.readFileSync(filePath), fileName)
+          .field('name', name)
+          .end(function (err, res) {
+            // expect(err).to.be.null;
+            expect(res).to.have.status(200);
+            done();
+          });
+      }).timeout(publishTimeout);
+    });
+
+  });
+
+
 });

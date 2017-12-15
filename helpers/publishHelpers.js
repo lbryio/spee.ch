@@ -29,6 +29,7 @@ module.exports = {
     };
   },
   parsePublishApiRequestFiles ({file}) {
+    logger.debug('file', file);
     // make sure a file was provided
     if (!file) {
       throw new Error('no file with key of [file] found in request');
