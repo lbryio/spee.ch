@@ -1,7 +1,7 @@
 const chai = require('chai');
 const expect = chai.expect;
 const chaiHttp = require('chai-http');
-const host = 'http://dev1.spee.ch';
+const { host } = require('../../config/speechConfig.js').site;
 
 chai.use(chaiHttp);
 

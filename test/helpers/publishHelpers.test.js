@@ -1,31 +1,26 @@
-const assert = require('assert');
+const chai = require('chai');
+const expect = chai.expect;
 
 describe('publishHelpers.js', function () {
   const publishHelpers = require('../../helpers/publishHelpers.js');
 
   describe('#parsePublishApiRequestBody()', function () {
     it('should throw an error if no body', function () {
-      assert.throws(publishHelpers.parsePublishApiRequestBody.bind(this, null), Error);
+      expect(publishHelpers.parsePublishApiRequestBody.bind(this, null)).to.throw();
     });
     it('should throw an error if no body.name', function () {
       const bodyNoName = {};
-      assert.throws(publishHelpers.parsePublishApiRequestBody.bind(this, bodyNoName), Error);
-    });
-    it('should throw an error if no body.name', function () {
-      const body = {
-        name: 'bob',
-      };
-      assert.doesNotThrow(publishHelpers.parsePublishApiRequestBody.bind(this, body), Error);
+      expect(publishHelpers.parsePublishApiRequestBody.bind(this, bodyNoName)).to.throw();
     });
   });
 
   describe('#parsePublishApiRequestFiles()', function () {
     it('should throw an error if no files', function () {
-      assert.throws(publishHelpers.parsePublishApiRequestFiles.bind(this, null), Error);
+      expect(publishHelpers.parsePublishApiRequestFiles.bind(this, null)).to.throw();
     });
     it('should throw an error if no files.file', function () {
       const filesNoFile = {};
-      assert.throws(publishHelpers.parsePublishApiRequestFiles.bind(this, filesNoFile), Error);
+      expect(publishHelpers.parsePublishApiRequestFiles.bind(this, filesNoFile)).to.throw();
     });
     it('should throw an error if file.size is too large', function () {
       const filesTooBig = {
@@ -36,10 +31,10 @@ describe('publishHelpers.js', function () {
           size: 10000001,
         },
       };
-      assert.throws(publishHelpers.parsePublishApiRequestFiles.bind(this, filesTooBig), Error);
+      expect(publishHelpers.parsePublishApiRequestFiles.bind(this, filesTooBig)).to.throw();
     });
     it('should throw error if not an accepted file type', function () {
-      const filesNoProblems = {
+      const filesWrongType = {
         file: {
           name: 'file.jpg',
           path: '/path/to/file.jpg',
@@ -47,7 +42,7 @@ describe('publishHelpers.js', function () {
           size: 10000000,
         },
       };
-      assert.throws(publishHelpers.parsePublishApiRequestFiles.bind(this, filesNoProblems), Error);
+      expect(publishHelpers.parsePublishApiRequestFiles.bind(this, filesWrongType)).to.throw();
     });
     it('should throw NO error if no problems', function () {
       const filesNoProblems = {
@@ -58,7 +53,7 @@ describe('publishHelpers.js', function () {
           size: 10000000,
         },
       };
-      assert.doesNotThrow(publishHelpers.parsePublishApiRequestFiles.bind(this, filesNoProblems), Error);
+      expect(publishHelpers.parsePublishApiRequestFiles.bind(this, filesNoProblems)).to.not.throw();
     });
   });
 
