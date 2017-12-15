@@ -135,8 +135,6 @@ const publishFileFunctions = {
                 } else {
                   that.showFilePublishFailure(JSON.parse(xhr.response).message);
                 }
-            } else {
-                console.log('xhr.readyState', xhr.readyState, 'xhr.status', xhr.status);
             }
         };
         // Initiate a multipart/form-data upload

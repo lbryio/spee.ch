@@ -137,7 +137,6 @@ module.exports = (app) => {
       logger.debug('publish request rejected, insufficient request parameters');
       return res.status(400).json({success: false, message: error.message});
     }
-    logger.debug(`/api/publish > name: ${name}, license: ${license} title: "${title}" description: "${description}" channelName: "${channelName}" channelPassword: "${channelPassword}" nsfw: "${nsfw}"`);
     // check channel authorization
     authenticateIfNoUserToken(channelName, channelPassword, user)
     .then(authenticated => {
