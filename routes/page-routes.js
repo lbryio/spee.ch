@@ -1,5 +1,6 @@
 const errorHandlers = require('../helpers/errorHandlers.js');
 const { getTrendingClaims, getRecentClaims } = require('../controllers/statsController.js');
+const { site } = require('../config/speechConfig.js');
 
 module.exports = (app) => {
   // route to log out
@@ -15,7 +16,7 @@ module.exports = (app) => {
       res.status(200).render('login');
     }
   });
-  // route to show 'about' page for spee.ch
+  // route to show 'about' page
   app.get('/about', (req, res) => {
     // get and render the content
     res.status(200).render('about');
@@ -30,32 +31,31 @@ module.exports = (app) => {
     const dateTime = startDate.toISOString().slice(0, 19).replace('T', ' ');
     getTrendingClaims(dateTime)
       .then(result => {
-        // logger.debug(result);
         res.status(200).render('popular', {
           trendingAssets: result,
         });
       })
       .catch(error => {
-        errorHandlers.handleRequestError('popular', originalUrl, ip, error, res);
+        errorHandlers.handleRequestError(originalUrl, ip, error, res);
       });
   });
   // route to display a list of the trending images
   app.get('/new', ({ ip, originalUrl }, res) => {
     getRecentClaims()
       .then(result => {
-        // logger.debug(result);
         res.status(200).render('new', { newClaims: result });
       })
       .catch(error => {
-        errorHandlers.handleRequestError('new', originalUrl, ip, error, res);
+        errorHandlers.handleRequestError(originalUrl, ip, error, res);
       });
   });
   // route to send embedable video player (for twitter)
   app.get('/embed/:claimId/:name', ({ params }, res) => {
     const claimId = params.claimId;
     const name = params.name;
+    const host = site.host;
     // get and render the content
-    res.status(200).render('embed', { layout: 'embed', claimId, name });
+    res.status(200).render('embed', { layout: 'embed', host, claimId, name });
   });
   // route to display all free public claims at a given name
   app.get('/:name/all', (req, res) => {

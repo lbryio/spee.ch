@@ -1,17 +1,11 @@
 <!DOCTYPE html>
 <html lang="en" prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
-	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<title>Spee.ch</title>
-    <link rel="stylesheet" href="/assets/css/reset.css" type="text/css">
-    <link rel="stylesheet" href="/assets/css/general.css" type="text/css">
-    <link rel="stylesheet" href="/assets/css/mediaQueries.css" type="text/css">
+	{{ placeCommonHeaderTags }}
 	<meta property="fb:app_id" content="1371961932852223">
-	{{#unless fileInfo.nsfw}}
-	    {{{addTwitterCard fileInfo.fileType openGraphInfo.source openGraphInfo.embedUrl openGraphInfo.directFileUrl}}}
-	    {{{addOpenGraph fileInfo.title fileInfo.fileType openGraphInfo.showUrl openGraphInfo.source fileInfo.description fileInfo.thumbnail}}}
+	{{#unless claimInfo.nsfw}}
+	    {{{addTwitterCard claimInfo }}}
+	    {{{addOpenGraph claimInfo }}}
 	{{/unless}}
     <!--google font-->
     <link href="https://fonts.googleapis.com/css?family=Roboto:300" rel="stylesheet">
@@ -21,9 +15,9 @@
 <body id="show-body">
     <script src="/assets/js/generalFunctions.js"></script>
     <script src="/assets/js/navBarFunctions.js"></script>
+    <script src="/assets/js/assetConstructor.js"></script>
     {{> navBar}}
     {{{ body }}}
-    <script src="/assets/js/showFunctions.js"></script>
 </body>
 </html>
 

@@ -1,11 +1,9 @@
-function replaceChannelOptionInPublishChannelSelect() {
+function replaceChannelOptionInPublishChannelSelect(loggedInChannel) {
     // remove the old channel option
     const oldChannel = document.getElementById('publish-channel-select-channel-option')
     if (oldChannel){
         oldChannel.parentNode.removeChild(oldChannel);
     }
-    // get channel details from cookies
-    const loggedInChannel = getCookie('channel_name');
     // create new channel option
     const newChannelOption = document.createElement('option');
     newChannelOption.setAttribute('value', loggedInChannel);
@@ -19,14 +17,12 @@ function replaceChannelOptionInPublishChannelSelect() {
     toggleSelectedChannel(loggedInChannel);
 }
 
-function replaceChannelOptionInNavBarChannelSelect () {
+function replaceChannelOptionInNavBarChannelSelect (loggedInChannel) {
     // remove the old channel option
     const oldChannel = document.getElementById('nav-bar-channel-select-channel-option');
     if (oldChannel){
         oldChannel.parentNode.removeChild(oldChannel);
     }
-    // get channel details from cookies
-    const loggedInChannel = getCookie('channel_name');
     // create new channel option & select it
     const newChannelOption = document.createElement('option');
     newChannelOption.setAttribute('value', loggedInChannel);
@@ -49,20 +45,15 @@ function loginToChannel (event) {
     event.preventDefault()
     validationFunctions.validateNewChannelLogin(userName, password)
         .then(() => {
-            // send request
             return sendAuthRequest(userName, password, '/login')
         })
         .then(result => {
-            // update session cookie with new channel name and id's
-            setUserCookies(result.channelName, result.channelClaimId, result.shortChannelId); // replace the current cookies
-        })
-        .then(() => {
-            // update channel selection
+            setUserCookies(result.channelName, result.channelClaimId, result.shortChannelId);
+            // if user is on the home page, update the needed elements without reloading
             if (window.location.pathname === '/') {
-                // remove old channel and replace with new one & select it
-                replaceChannelOptionInPublishChannelSelect();
-                // remove old channel and replace with new one & select it
-                replaceChannelOptionInNavBarChannelSelect();
+                replaceChannelOptionInPublishChannelSelect(result.channelName);
+                replaceChannelOptionInNavBarChannelSelect(result.channelName);
+            // if user is not on home page, redirect to home page
             } else {
                 window.location = '/';
             }

@@ -1,6 +1,5 @@
 const logger = require('winston');
 const { returnShortId } = require('../helpers/sequelizeHelpers.js');
-const NO_CHANNEL = 'NO_CHANNEL';
 
 module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
   const Certificate = sequelize.define(
@@ -94,7 +93,6 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
 
   Certificate.associate = db => {
     Certificate.belongsTo(db.Channel, {
-      onDelete  : 'cascade',
       foreignKey: {
         allowNull: true,
       },
@@ -123,14 +121,14 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
     });
   };
 
-  Certificate.getLongChannelIdFromShortChannelId = function (channelName, channelId) {
+  Certificate.getLongChannelIdFromShortChannelId = function (channelName, channelClaimId) {
     return new Promise((resolve, reject) => {
       this
         .findAll({
           where: {
             name   : channelName,
             claimId: {
-              $like: `${channelId}%`,
+              $like: `${channelClaimId}%`,
             },
           },
           order: [['height', 'ASC']],
@@ -138,7 +136,7 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
         .then(result => {
           switch (result.length) {
             case 0:
-              return resolve(NO_CHANNEL);
+              return resolve(null);
             default: // note results must be sorted
               return resolve(result[0].claimId);
           }
@@ -160,7 +158,7 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
         .then(result => {
           switch (result.length) {
             case 0:
-              return resolve(NO_CHANNEL);
+              return resolve(null);
             default:
               return resolve(result[0].claimId);
           }
@@ -171,12 +169,29 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
     });
   };
 
-  Certificate.getLongChannelId = function (channelName, channelId) {
-    logger.debug(`getLongChannelId(${channelName}, ${channelId})`);
-    if (channelId && (channelId.length === 40)) {  // if a full channel id is provided
-      return new Promise((resolve, reject) => resolve(channelId));
-    } else if (channelId && channelId.length < 40) {  // if a short channel id is provided
-      return this.getLongChannelIdFromShortChannelId(channelName, channelId);
+  Certificate.validateLongChannelId = function (name, claimId) {
+    return new Promise((resolve, reject) => {
+      this.findOne({
+        where: {name, claimId},
+      })
+      .then(result => {
+        if (!result) {
+          return resolve(null);
+        };
+        resolve(claimId);
+      })
+      .catch(error => {
+        reject(error);
+      });
+    });
+  };
+
+  Certificate.getLongChannelId = function (channelName, channelClaimId) {
+    logger.debug(`getLongChannelId(${channelName}, ${channelClaimId})`);
+    if (channelClaimId && (channelClaimId.length === 40)) {  // if a full channel id is provided
+      return this.validateLongChannelId(channelName, channelClaimId);
+    } else if (channelClaimId && channelClaimId.length < 40) {  // if a short channel id is provided
+      return this.getLongChannelIdFromShortChannelId(channelName, channelClaimId);
     } else {
       return this.getLongChannelIdFromChannelName(channelName);  // if no channel id provided
     }

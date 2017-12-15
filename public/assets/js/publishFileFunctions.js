@@ -102,7 +102,7 @@ const publishFileFunctions = {
         return fd;
     },
     publishFile: function (file, metadata) {
-        var uri = "/api/publish";
+        var uri = "/api/claim-publish";
         var xhr = new XMLHttpRequest();
         var fd = this.appendDataToFormData(file, metadata);
         var that = this;
@@ -123,12 +123,14 @@ const publishFileFunctions = {
         xhr.open("POST", uri, true);
         xhr.onreadystatechange = function() {
             if (xhr.readyState == 4) {
+              console.log('publish response:', xhr.response)
                 if (xhr.status == 200) {
-                    console.log('publish complete!');
-                    that.showFilePublishComplete(JSON.parse(xhr.response).message);
+                  console.log('publish complete!');
+                  that.showFilePublishComplete(JSON.parse(xhr.response).message);
+                } else if (xhr.status == 502){
+                  that.showFilePublishFailure('Spee.ch was not able to get a response from the LBRY network.');
                 } else {
-                    console.log(xhr.response);
-                    that.showFilePublishFailure(JSON.parse(xhr.response).message);
+                  that.showFilePublishFailure(JSON.parse(xhr.response).message);
                 }
             } else {
                 console.log('xhr.readyState', xhr.readyState, 'xhr.status', xhr.status);

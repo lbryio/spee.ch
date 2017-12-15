@@ -70,25 +70,23 @@ module.exports = {
     });
   },
   getTrendingClaims (startDate) {
-    logger.debug('retrieving trending requests');
+    logger.debug('retrieving trending');
     return new Promise((resolve, reject) => {
       // get the raw requests data
-      db.getTrendingClaims(startDate)
-      .then(results => {
-        if (results) {
-          results.forEach(element => {
-            const fileExtenstion = element.fileType.substring(element.fileType.lastIndexOf('/') + 1);
-            element['showUrlLong'] = `/${element.claimId}/${element.name}`;
-            element['directUrlLong'] = `/${element.claimId}/${element.name}.${fileExtenstion}`;
-            element['directUrlShort'] = `/${element.claimId}/${element.name}.${fileExtenstion}`;
-            element['contentType'] = element.fileType;
-            element['thumbnail'] = 'https://spee.ch/assets/img/video_thumb_default.png';
+      db.getTrendingFiles(startDate)
+      .then(fileArray => {
+        let claimsPromiseArray = [];
+        if (fileArray) {
+          fileArray.forEach(file => {
+            claimsPromiseArray.push(db.Claim.resolveClaim(file.name, file.claimId));
           });
+          return Promise.all(claimsPromiseArray);
         }
-        resolve(results);
+      })
+      .then(claimsArray => {
+        resolve(claimsArray);
       })
       .catch(error => {
-        logger.error('sequelize error >>', error);
         reject(error);
       });
     });
