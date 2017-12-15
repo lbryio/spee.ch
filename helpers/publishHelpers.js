@@ -68,7 +68,6 @@ module.exports = {
       // ensure it is the same channel and get the password
       if (user) {
         channelName = user.channelName;
-        channelPassword = user.channelPassword;
       } ;
       // add the @ if the channel name is missing it
       if (channelName.indexOf('@') !== 0) {

@@ -7,7 +7,7 @@ const { checkClaimNameAvailability, checkChannelAvailability, publish } = requir
 const { getClaimList, resolveUri, getClaim } = require('../helpers/lbryApi.js');
 const { createPublishParams, parsePublishApiRequestBody, parsePublishApiRequestFiles, parsePublishApiChannel } = require('../helpers/publishHelpers.js');
 const errorHandlers = require('../helpers/errorHandlers.js');
-const { authenticateOrSkip } = require('../auth/authentication.js');
+const { authenticateIfNoUserToken } = require('../auth/authentication.js');
 
 function addGetResultsToFileData (fileInfo, getResult) {
   fileInfo.fileName = getResult.file_name;
@@ -125,20 +125,20 @@ module.exports = (app) => {
   });
   // route to run a publish request on the daemon
   app.post('/api/claim-publish', multipartMiddleware, ({ body, files, ip, originalUrl, user }, res) => {
-    let  name, fileName, filePath, fileType, nsfw, license, title, description, thumbnail, anonymous, channelName, channelPassword;
+    let  name, fileName, filePath, fileType, nsfw, license, title, description, thumbnail, channelName, channelPassword;
     // validate the body and files of the request
     try {
       // validateApiPublishRequest(body, files);
       ({name, nsfw, license, title, description, thumbnail} = parsePublishApiRequestBody(body));
       ({fileName, filePath, fileType} = parsePublishApiRequestFiles(files));
-      ({anonymous, channelName, channelPassword} = parsePublishApiChannel(body, user));
+      ({channelName, channelPassword} = parsePublishApiChannel(body, user));
     } catch (error) {
       logger.debug('publish request rejected, insufficient request parameters');
       return res.status(400).json({success: false, message: error.message});
     }
     logger.debug(`/api/publish > name: ${name}, license: ${license} title: "${title}" description: "${description}" channelName: "${channelName}" channelPassword: "${channelPassword}" nsfw: "${nsfw}"`);
     // check channel authorization
-    authenticateOrSkip(anonymous, channelName, channelPassword)
+    authenticateIfNoUserToken(channelName, channelPassword, user)
     .then(authenticated => {
       if (!authenticated) {
         throw new Error('Authentication failed, you do not have access to that channel');
