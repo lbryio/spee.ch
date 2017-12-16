@@ -1,7 +1,7 @@
 const logger = require('winston');
 const { returnShortId } = require('../helpers/sequelizeHelpers.js');
-const { publishing, site } = require('../config/speechConfig.js');
-const { defaultTitle, defaultThumbnail, defaultDescription } = publishing;
+const { claim, site } = require('../config/speechConfig.js');
+const { defaultTitle, defaultThumbnail, defaultDescription } = claim;
 const { host } = site;
 
 function determineFileExtensionFromContentType (contentType) {

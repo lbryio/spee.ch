@@ -3,7 +3,7 @@ const logger = require('winston');
 const db = require('../models/index'); // require our models for syncing
 // configure logging
 const config = require('../config/speechConfig.js');
-const logLevel = config.logging.logLevel;
+const { logLevel } = config.logging;
 require('../config/loggerConfig.js')(logger, logLevel);
 
 const userName = process.argv[2];
