@@ -3,11 +3,11 @@ const multipart = require('connect-multiparty');
 const { files, site } = require('../config/speechConfig.js');
 const multipartMiddleware = multipart({uploadDir: files.uploadDirectory});
 const db = require('../models');
-const { publish } = require('../controllers/publishController.js');
+const { checkClaimNameAvailability, checkChannelAvailability, publish } = require('../controllers/publishController.js');
 const { getClaimList, resolveUri, getClaim } = require('../helpers/lbryApi.js');
-const { createPublishParams, validateApiPublishRequest, validatePublishSubmission, cleanseChannelName, checkClaimNameAvailability, checkChannelAvailability } = require('../helpers/publishHelpers.js');
+const { createPublishParams, parsePublishApiRequestBody, parsePublishApiRequestFiles, parsePublishApiChannel } = require('../helpers/publishHelpers.js');
 const errorHandlers = require('../helpers/errorHandlers.js');
-const { authenticateOrSkip } = require('../auth/authentication.js');
+const { authenticateIfNoUserToken } = require('../auth/authentication.js');
 
 function addGetResultsToFileData (fileInfo, getResult) {
   fileInfo.fileName = getResult.file_name;
@@ -125,60 +125,21 @@ module.exports = (app) => {
   });
   // route to run a publish request on the daemon
   app.post('/api/claim-publish', multipartMiddleware, ({ body, files, ip, originalUrl, user }, res) => {
-    let file, fileName, filePath, fileType, name, nsfw, license, title, description, thumbnail, anonymous, skipAuth, channelName, channelPassword;
-    // validate that mandatory parts of the request are present
+    logger.debug('api/claim-publish body:', body);
+    logger.debug('api/claim-publish files:', files);
+    let  name, fileName, filePath, fileType, nsfw, license, title, description, thumbnail, channelName, channelPassword;
+    // validate the body and files of the request
     try {
-      validateApiPublishRequest(body, files);
+      // validateApiPublishRequest(body, files);
+      ({name, nsfw, license, title, description, thumbnail} = parsePublishApiRequestBody(body));
+      ({fileName, filePath, fileType} = parsePublishApiRequestFiles(files));
+      ({channelName, channelPassword} = parsePublishApiChannel(body, user));
     } catch (error) {
-      logger.debug('publish request rejected, insufficient request parameters');
-      res.status(400).json({success: false, message: error.message});
-      return;
+      logger.debug('publish request rejected, insufficient request parameters', error);
+      return res.status(400).json({success: false, message: error.message});
     }
-    logger.debug('publish req.files:', files);
-    // validate file, name, license, and nsfw
-    file = files.file;
-    fileName = file.path.substring(file.path.lastIndexOf('/') + 1);
-    filePath = file.path;
-    fileType = file.type;
-    name = body.name;
-    nsfw = (body.nsfw === 'true');
-    try {
-      validatePublishSubmission(file, name, nsfw);
-    } catch (error) {
-      logger.debug('publish request rejected');
-      res.status(400).json({success: false, message: error.message});
-      return;
-    }
-    // optional inputs
-    license = body.license || null;
-    title = body.title || null;
-    description = body.description || null;
-    thumbnail = body.thumbnail || null;
-    anonymous = (body.channelName === 'null') || (body.channelName === undefined);
-    if (user) {
-      channelName = user.channelName || null;
-    } else {
-      channelName = body.channelName || null;
-    }
-    channelPassword = body.channelPassword || null;
-    skipAuth = false;
-    // case 1: publish from client, client logged in
-    if (user) {
-      skipAuth = true;
-      if (anonymous) {
-        channelName = null;
-      }
-    // case 2: publish from api or client, client not logged in
-    } else {
-      if (anonymous) {
-        skipAuth = true;
-        channelName = null;
-      }
-    }
-    channelName = cleanseChannelName(channelName);
-    logger.debug(`name: ${name}, license: ${license} title: "${title}" description: "${description}" channelName: "${channelName}" channelPassword: "${channelPassword}" nsfw: "${nsfw}"`);
     // check channel authorization
-    authenticateOrSkip(skipAuth, channelName, channelPassword)
+    authenticateIfNoUserToken(channelName, channelPassword, user)
     .then(authenticated => {
       if (!authenticated) {
         throw new Error('Authentication failed, you do not have access to that channel');

@@ -78,17 +78,20 @@ const publishFileFunctions = {
         const licenseInput = document.getElementById('publish-license');
         const nsfwInput = document.getElementById('publish-nsfw');
         const thumbnailInput = document.getElementById('claim-thumbnail-input');
-
-        return {
+        const channelName = this.returnNullOrChannel();
+        let metadata = {
             name: nameInput.value.trim(),
-            channelName: this.returnNullOrChannel(),
             title: titleInput.value.trim(),
             description: descriptionInput.value.trim(),
             license: licenseInput.value.trim(),
             nsfw: nsfwInput.checked,
             type: stagedFiles[0].type,
             thumbnail: thumbnailInput.value.trim(),
+        };
+        if (channelName) {
+            metadata['channelName'] = channelName;
         }
+        return metadata;
     },
     appendDataToFormData: function (file, metadata) {
         var fd = new FormData();
@@ -132,8 +135,6 @@ const publishFileFunctions = {
                 } else {
                   that.showFilePublishFailure(JSON.parse(xhr.response).message);
                 }
-            } else {
-                console.log('xhr.readyState', xhr.readyState, 'xhr.status', xhr.status);
             }
         };
         // Initiate a multipart/form-data upload
@@ -143,7 +144,7 @@ const publishFileFunctions = {
     publishStagedFile: function (event) {
         event.preventDefault();  // prevent default so this script can handle submission
         const metadata = this.createMetadata();
-        const that = this; // note: necessary ?
+        const that = this;
         const fileSelectionInputError = document.getElementById('input-error-file-selection');
         const claimNameError = document.getElementById('input-error-claim-name');
         const channelSelectError = document.getElementById('input-error-channel-select');

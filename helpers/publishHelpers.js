@@ -1,41 +1,87 @@
 const logger = require('winston');
 const fs = require('fs');
-const db = require('../models');
 const { site, wallet } = require('../config/speechConfig.js');
 
 module.exports = {
-  validateApiPublishRequest (body, files) {
-    if (!body) {
-      throw new Error('no body found in request');
-    }
-    if (!body.name) {
+  parsePublishApiRequestBody ({name, nsfw, license, title, description, thumbnail}) {
+    // validate name
+    if (!name) {
       throw new Error('no name field found in request');
     }
-    if (!files) {
-      throw new Error('no files found in request');
+    const invalidNameCharacters = /[^A-Za-z0-9,-]/.exec(name);
+    if (invalidNameCharacters) {
+      throw new Error('The claim name you provided is not allowed.  Only the following characters are allowed: A-Z, a-z, 0-9, and "-"');
     }
-    if (!files.file) {
+    // optional parameters
+    nsfw = (nsfw === 'true');
+    license = license || null;
+    title = title || null;
+    description = description || null;
+    thumbnail = thumbnail || null;
+    // return results
+    return {
+      name,
+      nsfw,
+      license,
+      title,
+      description,
+      thumbnail,
+    };
+  },
+  parsePublishApiRequestFiles ({file}) {
+    logger.debug('file', file);
+    // make sure a file was provided
+    if (!file) {
       throw new Error('no file with key of [file] found in request');
     }
-  },
-  validatePublishSubmission (file, claimName) {
-    try {
-      module.exports.validateFile(file);
-      module.exports.validateClaimName(claimName);
-    } catch (error) {
-      throw error;
+    if (!file.path) {
+      throw new Error('no file path found');
     }
-  },
-  validateFile (file) {
-    if (!file) {
-      logger.debug('publish > file validation > no file found');
-      throw new Error('no file provided');
+    if (!file.type) {
+      throw new Error('no file type found');
     }
-    // check the file name
+    if (!file.size) {
+      throw new Error('no file type found');
+    }
+    // validate the file name
     if (/'/.test(file.name)) {
       logger.debug('publish > file validation > file name had apostrophe in it');
       throw new Error('apostrophes are not allowed in the file name');
     }
+    // validate the file
+    module.exports.validateFileTypeAndSize(file);
+    // return results
+    return {
+      fileName: file.name,
+      filePath: file.path,
+      fileType: file.type,
+    };
+  },
+  parsePublishApiChannel ({channelName, channelPassword}, user) {
+    logger.debug('publish api parser input:', {channelName, channelPassword, user});
+    // if anonymous or '' provided, publish will be anonymous (even if client is logged in)
+    // if a channel name is provided...
+    if (channelName) {
+      // make sure a password was provided if no user token is provided
+      if (!user && !channelPassword) {
+        throw new Error('Unauthenticated channel name provided without password');
+      }
+      // if request comes from the client with a token
+      // ensure this publish uses that channel name
+      if (user) {
+        channelName = user.channelName;
+      } ;
+      // add the @ if the channel name is missing it
+      if (channelName.indexOf('@') !== 0) {
+        channelName = `@${channelName}`;
+      }
+    }
+    return {
+      channelName,
+      channelPassword,
+    };
+  },
+  validateFileTypeAndSize (file) {
     // check file type and size
     switch (file.type) {
       case 'image/jpeg':
@@ -63,21 +109,6 @@ module.exports = {
         throw new Error('The ' + file.type + ' content type is not supported.  Only, .jpeg, .png, .gif, and .mp4 files are currently supported.');
     }
     return file;
-  },
-  validateClaimName (claimName) {
-    const invalidCharacters = /[^A-Za-z0-9,-]/.exec(claimName);
-    if (invalidCharacters) {
-      throw new Error('The claim name you provided is not allowed.  Only the following characters are allowed: A-Z, a-z, 0-9, and "-"');
-    }
-  },
-  cleanseChannelName (channelName) {
-    if (!channelName) {
-      return null;
-    }
-    if (channelName.indexOf('@') !== 0) {
-      channelName = `@${channelName}`;
-    }
-    return channelName;
   },
   createPublishParams (filePath, name, title, description, license, nsfw, thumbnail, channelName) {
     logger.debug(`Creating Publish Parameters`);
@@ -127,45 +158,5 @@ module.exports = {
       logger.debug(`successfully deleted ${filePath}`);
     });
   },
-  checkClaimNameAvailability (name) {
-    return new Promise((resolve, reject) => {
-      // find any records where the name is used
-      db.File.findAll({ where: { name } })
-      .then(result => {
-        if (result.length >= 1) {
-          const claimAddress = wallet.lbryClaimAddress;
-          // filter out any results that were not published from the site's wallet address
-          const filteredResult = result.filter((claim) => {
-            return (claim.address === claimAddress);
-          });
-          // return based on whether any claims were left
-          if (filteredResult.length >= 1) {
-            resolve(false);
-          } else {
-            resolve(true);
-          }
-        } else {
-          resolve(true);
-        }
-      })
-      .catch(error => {
-        reject(error);
-      });
-    });
-  },
-  checkChannelAvailability (name) {
-    return new Promise((resolve, reject) => {
-      // find any records where the name is used
-      db.Channel.findAll({ where: { channelName: name } })
-        .then(result => {
-          if (result.length >= 1) {
-            return resolve(false);
-          }
-          resolve(true);
-        })
-        .catch(error => {
-          reject(error);
-        });
-    });
-  },
+
 };

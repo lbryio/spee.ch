@@ -34,9 +34,9 @@ module.exports = {
           });
     });
   },
-  authenticateOrSkip (skipAuth, channelName, channelPassword) {
+  authenticateIfNoUserToken (channelName, channelPassword, user) {
     return new Promise((resolve, reject) => {
-      if (skipAuth) {
+      if (user || !channelName) {
         return resolve(true);
       }
       return resolve(module.exports.authenticateChannelCredentials(channelName, channelPassword));
