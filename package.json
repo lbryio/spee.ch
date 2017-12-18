@@ -5,6 +5,7 @@
   "main": "speech.js",
   "scripts": {
     "test": "mocha --recursive",
+    "test-all": "mocha --recursive",
     "start": "node speech.js",
     "lint": "eslint .",
     "fix": "eslint . --fix",

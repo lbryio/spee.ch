@@ -21,6 +21,11 @@ spee.ch is a single-serving site that reads and publishes images and videos to a
 		* To run hot, use `nodemon` instead of `node`
 * visit [localhost:3000](http://localhost:3000)
 
+## Tests
+* Spee.ch uses `mocha` with `chai` for testing.  
+* To run all tests that do not require LBC, run `npm test -- --grep @usesLbc --invert`
+* To run all tests, including those that require LBC (like publishing), simply run `npm test`
+
 ## API
 
 #### GET

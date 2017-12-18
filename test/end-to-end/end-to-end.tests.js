@@ -86,11 +86,11 @@ describe('end-to-end', function () {
     const publishUrl = '/api/claim-publish';
     const date = new Date();
     const name = `test-publish-${date.getFullYear()}-${date.getMonth()}-${date.getDate()}-${date.getTime()}`;
-    const filePath = './test/mock-files/bird.jpeg';
+    const filePath = './test/mock-data/bird.jpeg';
     const fileName = 'byrd.jpeg';
 
     describe(publishUrl, function () {
-      it(`should receive a status code 200 within ${publishTimeout}ms`, function (done) {
+      it(`should receive a status code 200 within ${publishTimeout}ms @usesLbc`, function (done) {
         chai.request(host)
           .post(publishUrl)
           .type('form')
