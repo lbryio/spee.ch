@@ -26,7 +26,7 @@ module.exports = {
     name: 'Spee.ch',
     host: 'https://spee.ch',
   },
-  publishing: {
+  claim: {
     defaultTitle      : 'Spee.ch',
     defaultThumbnail  : 'https://spee.ch/assets/img/video_thumb_default.png',
     defaultDescription: 'Open-source, decentralized image and video sharing.',
