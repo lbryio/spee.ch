@@ -84,7 +84,8 @@ describe('end-to-end', function () {
 
   describe('publish', function () {
     const publishUrl = '/api/claim-publish';
-    const name = 'test-name2';
+    const date = new Date();
+    const name = `test-publish-${date.getFullYear()}-${date.getMonth()}-${date.getDate()}-${date.getTime()}`;
     const filePath = './test/mock-files/bird.jpeg';
     const fileName = 'byrd.jpeg';
 
