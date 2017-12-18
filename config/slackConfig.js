@@ -1,25 +1,26 @@
-const config = require('./speechConfig.js');
+const { logging } = require('./speechConfig.js');
+const { slackWebHook, slackErrorChannel, slackInfoChannel } = logging;
 const winstonSlackWebHook = require('winston-slack-webhook').SlackWebHook;
 
 module.exports = (winston) => {
-  if (config.logging.slackWebHook) {
+  if (slackWebHook) {
     // add a transport for errors to slack
-    if (config.logging.slackErrorChannel) {
+    if (slackErrorChannel) {
       winston.add(winstonSlackWebHook, {
         name      : 'slack-errors-transport',
         level     : 'warn',
-        webhookUrl: config.logging.slackWebHook,
-        channel   : config.logging.slackErrorChannel,
+        webhookUrl: slackWebHook,
+        channel   : slackErrorChannel,
         username  : 'spee.ch',
         iconEmoji : ':face_with_head_bandage:',
       });
     };
-    if (config.logging.slackInfoChannel) {
+    if (slackInfoChannel) {
       winston.add(winstonSlackWebHook, {
         name      : 'slack-info-transport',
         level     : 'info',
-        webhookUrl: config.logging.slackWebHook,
-        channel   : config.logging.slackInfoChannel,
+        webhookUrl: slackWebHook,
+        channel   : slackInfoChannel,
         username  : 'spee.ch',
         iconEmoji : ':nerd_face:',
       });

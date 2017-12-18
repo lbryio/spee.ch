@@ -4,9 +4,7 @@ const Sequelize = require('sequelize');
 const basename = path.basename(module.filename);
 const logger = require('winston');
 const config = require('../config/speechConfig.js');
-const database = config.sql.database;
-const username = config.sql.username;
-const password = config.sql.password;
+const { database, username, password } = config.sql;
 const db = {};
 
 // set sequelize options
