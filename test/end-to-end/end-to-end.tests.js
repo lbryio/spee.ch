@@ -88,14 +88,33 @@ describe('end-to-end', function () {
     const name = `test-publish-${date.getFullYear()}-${date.getMonth()}-${date.getDate()}-${date.getTime()}`;
     const filePath = './test/mock-data/bird.jpeg';
     const fileName = 'byrd.jpeg';
+    const channelName = '@testpublishchannel';
+    const channelPassword = 'password';
 
     describe(publishUrl, function () {
-      it(`should receive a status code 200 within ${publishTimeout}ms @usesLbc`, function (done) {
+      it(`non-channel publishes should receive a status code 200 within ${publishTimeout}ms @usesLbc`, function (done) {
         chai.request(host)
           .post(publishUrl)
           .type('form')
           .attach('file', fs.readFileSync(filePath), fileName)
           .field('name', name)
+          .end(function (err, res) {
+            // expect(err).to.be.null;
+            expect(res).to.have.status(200);
+            done();
+          });
+      }).timeout(publishTimeout);
+    });
+
+    describe(publishUrl, function () {
+      it(`channel publishes should receive a status code 200 within ${publishTimeout}ms @usesLbc`, function (done) {
+        chai.request(host)
+          .post(publishUrl)
+          .type('form')
+          .attach('file', fs.readFileSync(filePath), fileName)
+          .field('name', name)
+          .field('channelName', channelName)
+          .field('channelPassword', channelPassword)
           .end(function (err, res) {
             // expect(err).to.be.null;
             expect(res).to.have.status(200);
