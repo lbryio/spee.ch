@@ -69,7 +69,9 @@ module.exports = {
     return new Handlebars.SafeString(gaCode);
   },
   addOpenGraph (claim) {
-    const { ogTitle, contentType, ogDescription, thumbnail, showUrl, source, ogThumbnailContentType } = createOpenGraphDataFromClaim(claim, claimDefaults.defaultTitle, claimDefaults.defaultDescription);
+    const { ogTitle, ogDescription, showUrl, source, ogThumbnailContentType } = createOpenGraphDataFromClaim(claim, claimDefaults.defaultTitle, claimDefaults.defaultDescription);
+    const thumbnail = claim.thumbnail;
+    const contentType = claim.contentType;
     const ogTitleTag = `<meta property="og:title" content="${ogTitle}" />`;
     const ogUrlTag = `<meta property="og:url" content="${showUrl}" />`;
     const ogSiteNameTag = `<meta property="og:site_name" content="${site.title}" />`;
@@ -96,8 +98,9 @@ module.exports = {
     }
   },
   addTwitterCard (claim) {
-    const { contentType, embedUrl, directFileUrl } = createOpenGraphDataFromClaim(claim, claimDefaults.defaultTitle, claimDefaults.defaultDescription);
+    const { embedUrl, directFileUrl } = createOpenGraphDataFromClaim(claim, claimDefaults.defaultTitle, claimDefaults.defaultDescription);
     const basicTwitterTags = `<meta name="twitter:site" content="@spee_ch" >`;
+    const contentType = claim.contentType;
     if (contentType === 'video/mp4') {
       const twitterName = '<meta name="twitter:card" content="player" >';
       const twitterPlayer = `<meta name="twitter:player" content="${embedUrl}" >`;
