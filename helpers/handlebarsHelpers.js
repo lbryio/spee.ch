@@ -6,7 +6,12 @@ function determineOgTitle (storedTitle, defaultTitle) {
 };
 
 function determineOgDescription (storedDescription, defaultDescription) {
-  return ifEmptyReturnOther(storedDescription, defaultDescription);
+  const length = 200;
+  let description = ifEmptyReturnOther(storedDescription, defaultDescription);
+  if (description.length >= length) {
+    description = `${description.substring(0, length)}...`;
+  };
+  return description;
 };
 
 function ifEmptyReturnOther (value, replacement) {
