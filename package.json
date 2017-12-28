@@ -9,7 +9,9 @@
     "start": "node speech.js",
     "lint": "eslint .",
     "fix": "eslint . --fix",
-    "precommit": "eslint ."
+    "precommit": "eslint .",
+    "babel": "babel",
+    "webpack": "webpack"
   },
   "repository": {
     "type": "git",
