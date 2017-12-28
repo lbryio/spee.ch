@@ -1,7 +1,9 @@
 const chai = require('chai');
 const expect = chai.expect;
 const chaiHttp = require('chai-http');
-const { host } = require('../../config/speechConfig.js').site;
+const { site, testing } = require('../../config/speechConfig.js');
+const { host } = site;
+const { testChannel, testChannelPassword } = testing;
 const requestTimeout = 20000;
 const publishTimeout = 120000;
 const fs = require('fs');
@@ -88,14 +90,33 @@ describe('end-to-end', function () {
     const name = `test-publish-${date.getFullYear()}-${date.getMonth()}-${date.getDate()}-${date.getTime()}`;
     const filePath = './test/mock-data/bird.jpeg';
     const fileName = 'byrd.jpeg';
+    const channelName = testChannel;
+    const channelPassword = testChannelPassword;
 
     describe(publishUrl, function () {
-      it(`should receive a status code 200 within ${publishTimeout}ms @usesLbc`, function (done) {
+      it(`non-channel publishes should receive a status code 200 within ${publishTimeout}ms @usesLbc`, function (done) {
         chai.request(host)
           .post(publishUrl)
           .type('form')
           .attach('file', fs.readFileSync(filePath), fileName)
           .field('name', name)
+          .end(function (err, res) {
+            // expect(err).to.be.null;
+            expect(res).to.have.status(200);
+            done();
+          });
+      }).timeout(publishTimeout);
+    });
+
+    describe(publishUrl, function () {
+      it(`channel publishes should receive a status code 200 within ${publishTimeout}ms @usesLbc`, function (done) {
+        chai.request(host)
+          .post(publishUrl)
+          .type('form')
+          .attach('file', fs.readFileSync(filePath), fileName)
+          .field('name', name)
+          .field('channelName', channelName)
+          .field('channelPassword', channelPassword)
           .end(function (err, res) {
             // expect(err).to.be.null;
             expect(res).to.have.status(200);
