@@ -151,7 +151,7 @@ module.exports = {
   renameAndMoveTempFileToUploadDirectory (uploadDirectory, name, filePath) {
     const oldFilePath = filePath;
     const fileExtension = filePath.substring(filePath.lastIndexOf('.') + 1);
-    const newFileName = `${name}${Date.now()}.${fileExtension}`;
+    const newFileName = `${name}-${Date.now()}.${fileExtension}`;
     const newFilePath = `${uploadDirectory}${newFileName}`;
     return new Promise((resolve, reject) => {
       fs.rename(oldFilePath, newFilePath, (err) => {
