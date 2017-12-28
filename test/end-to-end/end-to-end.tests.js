@@ -84,17 +84,17 @@ describe('end-to-end', function () {
     });
   });
 
-  describe('publish', function () {
+  describe('publish requests', function () {
     const publishUrl = '/api/claim-publish';
-    const date = new Date();
-    const name = `test-publish-${date.getFullYear()}-${date.getMonth()}-${date.getDate()}-${date.getTime()}`;
     const filePath = './test/mock-data/bird.jpeg';
     const fileName = 'byrd.jpeg';
     const channelName = testChannel;
     const channelPassword = testChannelPassword;
 
-    describe(publishUrl, function () {
-      it(`non-channel publishes should receive a status code 200 within ${publishTimeout}ms @usesLbc`, function (done) {
+    describe('anonymous publishes', function () {
+      it(`should receive a status code 200 within ${publishTimeout}ms @usesLbc`, function (done) {
+        const date = new Date();
+        const name = `test-publish-${date.getFullYear()}-${date.getMonth()}-${date.getDate()}-${date.getTime()}`;
         chai.request(host)
           .post(publishUrl)
           .type('form')
@@ -108,8 +108,10 @@ describe('end-to-end', function () {
       }).timeout(publishTimeout);
     });
 
-    describe(publishUrl, function () {
-      it(`channel publishes should receive a status code 200 within ${publishTimeout}ms @usesLbc`, function (done) {
+    describe('in-channel publishes', function () {
+      it(`should receive a status code 200 within ${publishTimeout}ms @usesLbc`, function (done) {
+        const date = new Date();
+        const name = `test-publish-${date.getFullYear()}-${date.getMonth()}-${date.getDate()}-${date.getTime()}`;
         chai.request(host)
           .post(publishUrl)
           .type('form')
