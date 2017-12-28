@@ -17,6 +17,9 @@ module.exports = {
     logger.debug(`${proto}, ${value}, ${modifierSeperator}, ${modifier}`);
 
     // Validate and process name
+    if (!value) {
+      throw new Error(`Check your url.  No channel name provided before "${modifierSeperator}"`);
+    }
     const isChannel = value.startsWith(module.exports.CHANNEL_CHAR);
     const channelName = isChannel ? value : null;
     let claimId;
@@ -36,13 +39,13 @@ module.exports = {
     let channelClaimId;
     if (modifierSeperator) {
       if (!modifier) {
-        throw new Error(`No modifier provided after separator ${modifierSeperator}.`);
+        throw new Error(`No modifier provided after separator "${modifierSeperator}"`);
       }
 
       if (modifierSeperator === ':') {
         channelClaimId = modifier;
       } else {
-        throw new Error(`The ${modifierSeperator} modifier is not currently supported.`);
+        throw new Error(`The "${modifierSeperator}" modifier is not currently supported`);
       }
     }
     return {
