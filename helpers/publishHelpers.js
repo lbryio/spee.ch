@@ -29,7 +29,6 @@ module.exports = {
     };
   },
   parsePublishApiRequestFiles ({file}) {
-    logger.debug('file', file);
     // make sure a file was provided
     if (!file) {
       throw new Error('no file with key of [file] found in request');
@@ -41,7 +40,7 @@ module.exports = {
       throw new Error('no file type found');
     }
     if (!file.size) {
-      throw new Error('no file type found');
+      throw new Error('no file size found');
     }
     // validate the file name
     if (/'/.test(file.name)) {
@@ -149,6 +148,23 @@ module.exports = {
     }
     return publishParams;
   },
+  renameAndMoveTempFileToUploadDirectory (uploadDirectory, name, filePath) {
+    const oldFilePath = filePath;
+    const fileExtension = filePath.substring(filePath.lastIndexOf('.') + 1);
+    const newFileName = `${name}${Date.now()}.${fileExtension}`;
+    const newFilePath = `${uploadDirectory}${newFileName}`;
+    return new Promise((resolve, reject) => {
+      fs.rename(oldFilePath, newFilePath, (err) => {
+        if (err) {
+          if (err.code === 'EXDEV') {
+            resolve(module.exports.copyAndDeleteFile(oldFilePath, newFilePath));
+          }
+          reject(err);
+        }
+        resolve({fileName: newFileName, filePath: newFilePath});
+      });
+    });
+  },
   deleteTemporaryFile (filePath) {
     fs.unlink(filePath, err => {
       if (err) {
@@ -158,5 +174,18 @@ module.exports = {
       logger.debug(`successfully deleted ${filePath}`);
     });
   },
+  copyAndDeleteFile (oldFilePath, newFilePath) {
+    logger.debug('copyAndDeleteFile()');
+    const readStream = fs.createReadStream(oldFilePath);
+    const writeStream = fs.createWriteStream(newFilePath);
 
+    readStream.on('error', () => { throw new Error('read stream error') });
+    writeStream.on('error', () => { throw new Error('write stream error') });
+
+    readStream.on('close', () => {
+      fs.unlink(oldFilePath, () => { console.log('readstream closed') });
+    });
+
+    readStream.pipe(writeStream);
+  },
 };
