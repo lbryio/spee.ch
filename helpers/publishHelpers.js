@@ -1,6 +1,7 @@
 const logger = require('winston');
 const fs = require('fs');
 const { site, wallet } = require('../config/speechConfig.js');
+const mv = require('mv');
 
 module.exports = {
   parsePublishApiRequestBody ({name, nsfw, license, title, description, thumbnail}) {
@@ -154,11 +155,8 @@ module.exports = {
     const newFileName = `${name}-${Date.now()}.${fileExtension}`;
     const newFilePath = `${uploadDirectory}${newFileName}`;
     return new Promise((resolve, reject) => {
-      fs.rename(oldFilePath, newFilePath, (err) => {
+      mv(oldFilePath, newFilePath, (err) => {
         if (err) {
-          if (err.code === 'EXDEV') {
-            resolve(module.exports.copyAndDeleteFile(oldFilePath, newFilePath));
-          }
           reject(err);
         }
         resolve({fileName: newFileName, filePath: newFilePath});
@@ -173,19 +171,5 @@ module.exports = {
       }
       logger.debug(`successfully deleted ${filePath}`);
     });
-  },
-  copyAndDeleteFile (oldFilePath, newFilePath) {
-    logger.debug('copyAndDeleteFile()');
-    const readStream = fs.createReadStream(oldFilePath);
-    const writeStream = fs.createWriteStream(newFilePath);
-
-    readStream.on('error', () => { throw new Error('read stream error') });
-    writeStream.on('error', () => { throw new Error('write stream error') });
-
-    readStream.on('close', () => {
-      fs.unlink(oldFilePath, () => { console.log('readstream closed') });
-    });
-
-    readStream.pipe(writeStream);
   },
 };
