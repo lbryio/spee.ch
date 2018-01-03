@@ -258,6 +258,21 @@ process.umask = function() { return 0; };
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+if (process.env.NODE_ENV === 'production') {
+  module.exports = __webpack_require__(15);
+} else {
+  module.exports = __webpack_require__(16);
+}
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
 
 
 /**
@@ -296,7 +311,7 @@ emptyFunction.thatReturnsArgument = function (arg) {
 module.exports = emptyFunction;
 
 /***/ }),
-/* 2 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -393,7 +408,7 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -414,21 +429,6 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 module.exports = emptyObject;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
-
-/***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(process) {
-
-if (process.env.NODE_ENV === 'production') {
-  module.exports = __webpack_require__(15);
-} else {
-  module.exports = __webpack_require__(16);
-}
-
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
@@ -506,7 +506,7 @@ module.exports = invariant;
 
 
 
-var emptyFunction = __webpack_require__(1);
+var emptyFunction = __webpack_require__(2);
 
 /**
  * Similar to invariant but only logs a warning if the condition is not met.
@@ -682,7 +682,7 @@ module.exports = ExecutionEnvironment;
  * @typechecks
  */
 
-var emptyFunction = __webpack_require__(1);
+var emptyFunction = __webpack_require__(2);
 
 /**
  * Upstream version of event listener. Does not take into account specific
@@ -942,7 +942,7 @@ module.exports = focusNode;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _react = __webpack_require__(4);
+var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
@@ -950,7 +950,21 @@ var _reactDom = __webpack_require__(18);
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
+var _dropzone = __webpack_require__(27);
+
+var _dropzone2 = _interopRequireDefault(_dropzone);
+
+var _publishDetails = __webpack_require__(28);
+
+var _publishDetails2 = _interopRequireDefault(_publishDetails);
+
+var _publishStatus = __webpack_require__(29);
+
+var _publishStatus2 = _interopRequireDefault(_publishStatus);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -958,32 +972,85 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var App = function (_React$Component) {
-  _inherits(App, _React$Component);
+var DROPZONE = 'DROPZONE';
+var DETAILS = 'DETAILS';
+var STATUS = 'STATUS';
 
-  function App() {
-    _classCallCheck(this, App);
+var Uploader = function (_React$Component) {
+  _inherits(Uploader, _React$Component);
 
-    return _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).apply(this, arguments));
+  function Uploader(props) {
+    _classCallCheck(this, Uploader);
+
+    var _this = _possibleConstructorReturn(this, (Uploader.__proto__ || Object.getPrototypeOf(Uploader)).call(this, props));
+
+    _this.state = {
+      showComponent: DROPZONE, // DROPZONE, DETAILS, or PUBLISHING
+      file: null,
+      title: '',
+      channel: '',
+      url: '',
+      thumbnail: '',
+      description: '',
+      license: '',
+      nsfw: ''
+    };
+    // bind class methods with `this`
+    _this.updateUploaderState = _this.updateUploaderState.bind(_this);
+    _this.showComponent = _this.showComponent.bind(_this);
+    _this.stageFileAndShowDetails = _this.stageFileAndShowDetails.bind(_this);
+    return _this;
   }
 
-  _createClass(App, [{
+  _createClass(Uploader, [{
+    key: 'updateUploaderState',
+    value: function updateUploaderState(name, value) {
+      console.log('updateUploaderState ' + name + ' ' + value);
+      this.setState(_defineProperty({}, name, value));
+    }
+  }, {
+    key: 'showComponent',
+    value: function showComponent(component) {
+      this.setState({ showComponent: component });
+    }
+  }, {
+    key: 'stageFileAndShowDetails',
+    value: function stageFileAndShowDetails(selectedFile) {
+      console.log('stageFileAndShowDetails', selectedFile);
+      // store the selected file for upload
+      this.setState({ 'file': selectedFile });
+      // hide the dropzone and show the details
+      this.showComponent(DETAILS);
+    }
+  }, {
     key: 'render',
     value: function render() {
       return _react2.default.createElement(
-        'h1',
+        'div',
         null,
-        'Hello, I am a react app'
+        this.state.showComponent === DROPZONE && _react2.default.createElement(_dropzone2.default, { stageFileAndShowDetails: this.stageFileAndShowDetails }),
+        this.state.showComponent === DETAILS && _react2.default.createElement(_publishDetails2.default, {
+          updateUploaderState: this.updateUploaderState,
+          file: this.state.file,
+          title: this.state.title,
+          channel: this.state.channel,
+          url: this.state.url,
+          thumbnail: this.state.thumbnail,
+          description: this.state.description,
+          license: this.state.license,
+          nsfw: this.state.nsfw
+        }),
+        this.state.showComponent === STATUS && _react2.default.createElement(_publishStatus2.default, null)
       );
     }
   }]);
 
-  return App;
+  return Uploader;
 }(_react2.default.Component);
 
 ;
 
-_reactDom2.default.render(_react2.default.createElement(App, null), document.getElementById('react-app'));
+_reactDom2.default.render(_react2.default.createElement(Uploader, null), document.getElementById('react-uploader'));
 
 /***/ }),
 /* 15 */
@@ -999,7 +1066,7 @@ _reactDom2.default.render(_react2.default.createElement(App, null), document.get
  * LICENSE file in the root directory of this source tree.
  */
 
-var m=__webpack_require__(2),n=__webpack_require__(3),p=__webpack_require__(1),q="function"===typeof Symbol&&Symbol["for"],r=q?Symbol["for"]("react.element"):60103,t=q?Symbol["for"]("react.call"):60104,u=q?Symbol["for"]("react.return"):60105,v=q?Symbol["for"]("react.portal"):60106,w=q?Symbol["for"]("react.fragment"):60107,x="function"===typeof Symbol&&Symbol.iterator;
+var m=__webpack_require__(3),n=__webpack_require__(4),p=__webpack_require__(2),q="function"===typeof Symbol&&Symbol["for"],r=q?Symbol["for"]("react.element"):60103,t=q?Symbol["for"]("react.call"):60104,u=q?Symbol["for"]("react.return"):60105,v=q?Symbol["for"]("react.portal"):60106,w=q?Symbol["for"]("react.fragment"):60107,x="function"===typeof Symbol&&Symbol.iterator;
 function y(a){for(var b=arguments.length-1,e="Minified React error #"+a+"; visit http://facebook.github.io/react/docs/error-decoder.html?invariant\x3d"+a,c=0;c<b;c++)e+="\x26args[]\x3d"+encodeURIComponent(arguments[c+1]);b=Error(e+" for the full message or use the non-minified dev environment for full errors and additional helpful warnings.");b.name="Invariant Violation";b.framesToPop=1;throw b;}
 var z={isMounted:function(){return!1},enqueueForceUpdate:function(){},enqueueReplaceState:function(){},enqueueSetState:function(){}};function A(a,b,e){this.props=a;this.context=b;this.refs=n;this.updater=e||z}A.prototype.isReactComponent={};A.prototype.setState=function(a,b){"object"!==typeof a&&"function"!==typeof a&&null!=a?y("85"):void 0;this.updater.enqueueSetState(this,a,b,"setState")};A.prototype.forceUpdate=function(a){this.updater.enqueueForceUpdate(this,a,"forceUpdate")};
 function B(a,b,e){this.props=a;this.context=b;this.refs=n;this.updater=e||z}function C(){}C.prototype=A.prototype;var D=B.prototype=new C;D.constructor=B;m(D,A.prototype);D.isPureReactComponent=!0;function E(a,b,e){this.props=a;this.context=b;this.refs=n;this.updater=e||z}var F=E.prototype=new C;F.constructor=E;m(F,A.prototype);F.unstable_isAsyncReactComponent=!0;F.render=function(){return this.props.children};var G={current:null},H=Object.prototype.hasOwnProperty,I={key:!0,ref:!0,__self:!0,__source:!0};
@@ -1035,11 +1102,11 @@ if (process.env.NODE_ENV !== "production") {
   (function() {
 'use strict';
 
-var _assign = __webpack_require__(2);
-var emptyObject = __webpack_require__(3);
+var _assign = __webpack_require__(3);
+var emptyObject = __webpack_require__(4);
 var invariant = __webpack_require__(5);
 var warning = __webpack_require__(6);
-var emptyFunction = __webpack_require__(1);
+var emptyFunction = __webpack_require__(2);
 var checkPropTypes = __webpack_require__(7);
 
 // TODO: this is special because it gets imported during build.
@@ -2460,7 +2527,7 @@ if (process.env.NODE_ENV === 'production') {
 /*
  Modernizr 3.0.0pre (Custom Build) | MIT
 */
-var aa=__webpack_require__(4),l=__webpack_require__(8),B=__webpack_require__(2),C=__webpack_require__(1),ba=__webpack_require__(9),da=__webpack_require__(10),ea=__webpack_require__(11),fa=__webpack_require__(12),ia=__webpack_require__(13),D=__webpack_require__(3);
+var aa=__webpack_require__(1),l=__webpack_require__(8),B=__webpack_require__(3),C=__webpack_require__(2),ba=__webpack_require__(9),da=__webpack_require__(10),ea=__webpack_require__(11),fa=__webpack_require__(12),ia=__webpack_require__(13),D=__webpack_require__(4);
 function E(a){for(var b=arguments.length-1,c="Minified React error #"+a+"; visit http://facebook.github.io/react/docs/error-decoder.html?invariant\x3d"+a,d=0;d<b;d++)c+="\x26args[]\x3d"+encodeURIComponent(arguments[d+1]);b=Error(c+" for the full message or use the non-minified dev environment for full errors and additional helpful warnings.");b.name="Invariant Violation";b.framesToPop=1;throw b;}aa?void 0:E("227");
 var oa={children:!0,dangerouslySetInnerHTML:!0,defaultValue:!0,defaultChecked:!0,innerHTML:!0,suppressContentEditableWarning:!0,suppressHydrationWarning:!0,style:!0};function pa(a,b){return(a&b)===b}
 var ta={MUST_USE_PROPERTY:1,HAS_BOOLEAN_VALUE:4,HAS_NUMERIC_VALUE:8,HAS_POSITIVE_NUMERIC_VALUE:24,HAS_OVERLOADED_BOOLEAN_VALUE:32,HAS_STRING_BOOLEAN_VALUE:64,injectDOMPropertyConfig:function(a){var b=ta,c=a.Properties||{},d=a.DOMAttributeNamespaces||{},e=a.DOMAttributeNames||{};a=a.DOMMutationMethods||{};for(var f in c){ua.hasOwnProperty(f)?E("48",f):void 0;var g=f.toLowerCase(),h=c[f];g={attributeName:g,attributeNamespace:null,propertyName:f,mutationMethod:null,mustUseProperty:pa(h,b.MUST_USE_PROPERTY),
@@ -2757,18 +2824,18 @@ if (process.env.NODE_ENV !== "production") {
   (function() {
 'use strict';
 
-var React = __webpack_require__(4);
+var React = __webpack_require__(1);
 var invariant = __webpack_require__(5);
 var warning = __webpack_require__(6);
 var ExecutionEnvironment = __webpack_require__(8);
-var _assign = __webpack_require__(2);
-var emptyFunction = __webpack_require__(1);
+var _assign = __webpack_require__(3);
+var emptyFunction = __webpack_require__(2);
 var EventListener = __webpack_require__(9);
 var getActiveElement = __webpack_require__(10);
 var shallowEqual = __webpack_require__(11);
 var containsNode = __webpack_require__(12);
 var focusNode = __webpack_require__(13);
-var emptyObject = __webpack_require__(3);
+var emptyObject = __webpack_require__(4);
 var checkPropTypes = __webpack_require__(7);
 var hyphenateStyleName = __webpack_require__(23);
 var camelizeStyleName = __webpack_require__(25);
@@ -18292,6 +18359,655 @@ function camelize(string) {
 }
 
 module.exports = camelize;
+
+/***/ }),
+/* 27 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Dropzone = function (_React$Component) {
+  _inherits(Dropzone, _React$Component);
+
+  function Dropzone(props) {
+    _classCallCheck(this, Dropzone);
+
+    var _this = _possibleConstructorReturn(this, (Dropzone.__proto__ || Object.getPrototypeOf(Dropzone)).call(this, props));
+
+    _this.state = {
+      fileError: null
+    };
+    _this.handleDrop = _this.handleDrop.bind(_this);
+    _this.handleDragOver = _this.handleDragOver.bind(_this);
+    _this.handleDragEnd = _this.handleDragEnd.bind(_this);
+    _this.handleDragEnter = _this.handleDragEnter.bind(_this);
+    _this.handleDragLeave = _this.handleDragLeave.bind(_this);
+    _this.handleClick = _this.handleClick.bind(_this);
+    return _this;
+  }
+
+  _createClass(Dropzone, [{
+    key: 'validateFile',
+    value: function validateFile(file) {
+      if (!file) {
+        console.log('no file found');
+        throw new Error('no file provided');
+      }
+      if (/'/.test(file.name)) {
+        console.log('file name had apostrophe in it');
+        throw new Error('apostrophes are not allowed in the file name');
+      }
+      // validate size and type
+      switch (file.type) {
+        case 'image/jpeg':
+        case 'image/jpg':
+        case 'image/png':
+          if (file.size > 10000000) {
+            console.log('file was too big');
+            throw new Error('Sorry, images are limited to 10 megabytes.');
+          }
+          break;
+        case 'image/gif':
+          if (file.size > 50000000) {
+            console.log('file was too big');
+            throw new Error('Sorry, .gifs are limited to 50 megabytes.');
+          }
+          break;
+        case 'video/mp4':
+          if (file.size > 50000000) {
+            console.log('file was too big');
+            throw new Error('Sorry, videos are limited to 50 megabytes.');
+          }
+          break;
+        default:
+          console.log('file type is not supported');
+          throw new Error(file.type + ' is not a supported file type. Only, .jpeg, .png, .gif, and .mp4 files are currently supported.');
+      }
+    }
+  }, {
+    key: 'handleDrop',
+    value: function handleDrop(event) {
+      console.log('handleDrop', event);
+      event.preventDefault();
+      // if dropped items aren't files, reject them
+      var dt = event.dataTransfer;
+      console.log('dt', dt);
+      if (dt.items) {
+        if (dt.items[0].kind == 'file') {
+          var droppedFile = dt.items[0].getAsFile();
+          console.log('droppedFile', droppedFile);
+          // When a file is selected for publish, validate that file and
+          try {
+            this.validateFile(droppedFile); // validate the file's name, type, and size
+          } catch (error) {
+            return this.setState('fileError', error.message);
+          }
+          // stage it so it will be ready when the publish button is clicked
+          this.props.stageFileAndShowDetails(droppedFile);
+        }
+      }
+    }
+  }, {
+    key: 'handleDragOver',
+    value: function handleDragOver(event) {
+      event.preventDefault();
+    }
+  }, {
+    key: 'handleDragEnd',
+    value: function handleDragEnd(event) {
+      var dt = event.dataTransfer;
+      if (dt.items) {
+        for (var i = 0; i < dt.items.length; i++) {
+          dt.items.remove(i);
+        }
+      } else {
+        event.dataTransfer.clearData();
+      }
+    }
+  }, {
+    key: 'handleDragEnter',
+    value: function handleDragEnter() {
+      var thisDropzone = document.getElementById('primary-dropzone');
+      thisDropzone.setAttribute('class', 'dropzone dropzone--drag-over row row--margined row--padded row--tall flex-container--column flex-container--center-center');
+      thisDropzone.firstElementChild.setAttribute('class', 'hidden');
+      thisDropzone.lastElementChild.setAttribute('class', '');
+    }
+  }, {
+    key: 'handleDragLeave',
+    value: function handleDragLeave() {
+      var thisDropzone = document.getElementById('primary-dropzone');
+      thisDropzone.setAttribute('class', 'dropzone row row--tall row--margined row--padded flex-container--column flex-container--center-center');
+      thisDropzone.firstElementChild.setAttribute('class', '');
+      thisDropzone.lastElementChild.setAttribute('class', 'hidden');
+    }
+  }, {
+    key: 'handleClick',
+    value: function handleClick(event) {
+      event.preventDefault();
+      // trigger file input
+      document.getElementById('file_input').click();
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        'div',
+        null,
+        _react2.default.createElement(
+          'form',
+          null,
+          _react2.default.createElement('input', { className: 'input-file', type: 'file', id: 'file_input', name: 'file_input', accept: 'video/*,image/*', onChange: this.handleDrop, encType: 'multipart/form-data' })
+        ),
+        _react2.default.createElement(
+          'div',
+          { id: 'primary-dropzone', className: 'dropzone row row--margined row--padded row--tall flex-container--column flex-container--center-center', onDrop: this.handleDrop, onDragOver: this.handleDragOver, onDragEnd: this.handleDragEnd, onDragEnter: this.handleDragEnter, onDragLeave: this.handleDragLeave, onClick: this.handleClick },
+          _react2.default.createElement(
+            'div',
+            { id: 'primary-dropzone-instructions' },
+            _react2.default.createElement(
+              'p',
+              { className: 'info-message-placeholder info-message--failure', id: 'input-error-file-selection', hidden: 'true' },
+              this.state.fileError
+            ),
+            _react2.default.createElement(
+              'p',
+              null,
+              'Drag & drop image or video here to publish'
+            ),
+            _react2.default.createElement(
+              'p',
+              { className: 'fine-print' },
+              'OR'
+            ),
+            _react2.default.createElement(
+              'p',
+              { className: 'blue--underlined' },
+              'CHOOSE FILE'
+            )
+          ),
+          _react2.default.createElement(
+            'div',
+            { id: 'dropbzone-dragover', className: 'hidden' },
+            _react2.default.createElement(
+              'p',
+              { className: 'blue' },
+              'Drop it.'
+            )
+          )
+        )
+      );
+    }
+  }]);
+
+  return Dropzone;
+}(_react2.default.Component);
+
+;
+
+module.exports = Dropzone;
+
+/***/ }),
+/* 28 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _preview = __webpack_require__(30);
+
+var _preview2 = _interopRequireDefault(_preview);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Title = function (_React$Component) {
+  _inherits(Title, _React$Component);
+
+  function Title(props) {
+    _classCallCheck(this, Title);
+
+    var _this = _possibleConstructorReturn(this, (Title.__proto__ || Object.getPrototypeOf(Title)).call(this, props));
+
+    _this.handleInput = _this.handleInput.bind(_this);
+    return _this;
+  }
+
+  _createClass(Title, [{
+    key: 'handleInput',
+    value: function handleInput(e) {
+      e.preventDefault();
+      var name = e.target.name;
+      var value = e.target.value;
+      this.props.updateUploaderState(name, value);
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement('input', { type: 'text', id: 'publish-title', className: 'input-text text--large input-text--full-width', placeholder: 'Give your post a title...', onChange: this.handleInput, value: this.props.title });
+    }
+  }]);
+
+  return Title;
+}(_react2.default.Component);
+
+var Channel = function (_React$Component2) {
+  _inherits(Channel, _React$Component2);
+
+  function Channel() {
+    _classCallCheck(this, Channel);
+
+    return _possibleConstructorReturn(this, (Channel.__proto__ || Object.getPrototypeOf(Channel)).apply(this, arguments));
+  }
+
+  _createClass(Channel, [{
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        'div',
+        null,
+        _react2.default.createElement(
+          'h3',
+          null,
+          'channel component'
+        )
+      );
+    }
+  }]);
+
+  return Channel;
+}(_react2.default.Component);
+
+var Url = function (_React$Component3) {
+  _inherits(Url, _React$Component3);
+
+  function Url() {
+    _classCallCheck(this, Url);
+
+    return _possibleConstructorReturn(this, (Url.__proto__ || Object.getPrototypeOf(Url)).apply(this, arguments));
+  }
+
+  _createClass(Url, [{
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        'div',
+        null,
+        _react2.default.createElement(
+          'h3',
+          null,
+          'url component'
+        )
+      );
+    }
+  }]);
+
+  return Url;
+}(_react2.default.Component);
+
+var Thumbnail = function (_React$Component4) {
+  _inherits(Thumbnail, _React$Component4);
+
+  function Thumbnail() {
+    _classCallCheck(this, Thumbnail);
+
+    return _possibleConstructorReturn(this, (Thumbnail.__proto__ || Object.getPrototypeOf(Thumbnail)).apply(this, arguments));
+  }
+
+  _createClass(Thumbnail, [{
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        'div',
+        null,
+        _react2.default.createElement(
+          'h3',
+          null,
+          'thumbnail component'
+        )
+      );
+    }
+  }]);
+
+  return Thumbnail;
+}(_react2.default.Component);
+
+var Details = function (_React$Component5) {
+  _inherits(Details, _React$Component5);
+
+  function Details() {
+    _classCallCheck(this, Details);
+
+    return _possibleConstructorReturn(this, (Details.__proto__ || Object.getPrototypeOf(Details)).apply(this, arguments));
+  }
+
+  _createClass(Details, [{
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        'div',
+        null,
+        _react2.default.createElement(
+          'h3',
+          null,
+          'details component'
+        )
+      );
+    }
+  }]);
+
+  return Details;
+}(_react2.default.Component);
+
+var PublishDetails = function (_React$Component6) {
+  _inherits(PublishDetails, _React$Component6);
+
+  function PublishDetails(props) {
+    _classCallCheck(this, PublishDetails);
+
+    var _this6 = _possibleConstructorReturn(this, (PublishDetails.__proto__ || Object.getPrototypeOf(PublishDetails)).call(this, props));
+
+    _this6.state = {
+      showThumbnailSelector: false
+      // set defaults
+    };_this6.updateUploaderState = _this6.updateUploaderState.bind(_this6);
+    _this6.showThumbnailTool = _this6.showThumbnailTool.bind(_this6);
+    _this6.hideThumbnailTool = _this6.hideThumbnailTool.bind(_this6);
+    _this6.publish = _this6.publish.bind(_this6);
+    _this6.cancelPublish = _this6.cancelPublish.bind(_this6);
+    return _this6;
+  }
+
+  _createClass(PublishDetails, [{
+    key: 'updateUploaderState',
+    value: function updateUploaderState(name, value) {
+      this.props.updateUploaderState(name, value);
+    }
+  }, {
+    key: 'showThumbnailTool',
+    value: function showThumbnailTool() {
+      this.setState({ showThumbnailSelector: true });
+    }
+  }, {
+    key: 'hideThumbnailTool',
+    value: function hideThumbnailTool() {
+      this.setState({ showThumbnailSelector: false });
+    }
+  }, {
+    key: 'publish',
+    value: function publish() {
+      // publish the asset
+    }
+  }, {
+    key: 'cancelPublish',
+    value: function cancelPublish() {
+      // cancel this publish
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        'div',
+        { className: 'row row--padded row--no-bottom' },
+        _react2.default.createElement(
+          'div',
+          { className: 'column column--10' },
+          _react2.default.createElement(Title, { title: this.props.title, updateUploaderState: this.updateUploaderState })
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'column column--5 column--sml-10' },
+          _react2.default.createElement(
+            'div',
+            { className: 'row row--padded' },
+            _react2.default.createElement(_preview2.default, {
+              file: this.props.file,
+              hideThumbnailTool: this.hideThumbnailTool,
+              showThumbnailTool: this.showThumbnailTool
+            })
+          )
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'column column--5 column--sml-10 align-content-top' },
+          _react2.default.createElement(
+            'div',
+            { id: 'publish-active-area', className: 'row row--padded' },
+            _react2.default.createElement(Channel, null),
+            _react2.default.createElement(Url, { file: this.props.file }),
+            this.state.showThumbnailSelector && _react2.default.createElement(Thumbnail, { thumbnail: this.props.thumbnail }),
+            _react2.default.createElement(Details, null),
+            _react2.default.createElement(
+              'div',
+              { className: 'row row--padded row--wide' },
+              _react2.default.createElement(
+                'div',
+                { className: 'input-error', id: 'input-error-publish-submit', hidden: 'true' },
+                this.props.inputError
+              ),
+              _react2.default.createElement(
+                'button',
+                { id: 'publish-submit', className: 'button--primary button--large', onClick: this.publish },
+                'Upload'
+              )
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'row row--short align-content-center' },
+              _react2.default.createElement(
+                'button',
+                { className: 'button--cancel', onClick: this.cancelPublish },
+                'Cancel'
+              )
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'row row--short align-content-center' },
+              _react2.default.createElement(
+                'p',
+                { className: 'fine-print' },
+                'By clicking \'Upload\', you affirm that you have the rights to publish this content to the LBRY network, and that you understand the properties of publishing it to a decentralized, user-controlled network. ',
+                _react2.default.createElement(
+                  'a',
+                  { className: 'link--primary', target: '_blank', href: 'https://lbry.io/learn' },
+                  'Read more.'
+                )
+              )
+            )
+          )
+        )
+      );
+    }
+  }]);
+
+  return PublishDetails;
+}(_react2.default.Component);
+
+;
+
+module.exports = PublishDetails;
+
+/***/ }),
+/* 29 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var PublishStatus = function (_React$Component) {
+  _inherits(PublishStatus, _React$Component);
+
+  function PublishStatus() {
+    _classCallCheck(this, PublishStatus);
+
+    return _possibleConstructorReturn(this, (PublishStatus.__proto__ || Object.getPrototypeOf(PublishStatus)).apply(this, arguments));
+  }
+
+  _createClass(PublishStatus, [{
+    key: "render",
+    value: function render() {
+      return _react2.default.createElement(
+        "div",
+        { id: "publish-status", "class": "hidden" },
+        _react2.default.createElement(
+          "div",
+          { "class": "row row--margined" },
+          _react2.default.createElement("div", { id: "publish-update", "class": "row align-content-center" }),
+          _react2.default.createElement("div", { id: "publish-progress-bar", "class": "row align-content-center" }),
+          _react2.default.createElement("div", { id: "upload-percent", "class": "row align-content-center" }),
+          _react2.default.createElement(
+            "div",
+            null,
+            this.props.status
+          )
+        )
+      );
+    }
+  }]);
+
+  return PublishStatus;
+}(_react2.default.Component);
+
+;
+
+module.exports = PublishStatus;
+
+/***/ }),
+/* 30 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Preview = function (_React$Component) {
+  _inherits(Preview, _React$Component);
+
+  function Preview(props) {
+    _classCallCheck(this, Preview);
+
+    var _this = _possibleConstructorReturn(this, (Preview.__proto__ || Object.getPrototypeOf(Preview)).call(this, props));
+
+    _this.state = {
+      previewSource: ''
+    };
+    _this.previewFile = _this.previewFile.bind(_this);
+    return _this;
+  }
+
+  _createClass(Preview, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      console.log('props after mount', this.props);
+      this.previewFile(this.props.file);
+    }
+  }, {
+    key: 'previewFile',
+    value: function previewFile(file) {
+      console.log('previewFile', file);
+      var that = this;
+      if (file.type !== 'video/mp4') {
+        var previewReader = new FileReader();
+        previewReader.readAsDataURL(file);
+        previewReader.onloadend = function () {
+          that.setState({ previewSource: previewReader.result });
+        };
+        // clear & hide the thumbnail selection input
+        this.props.hideThumbnailTool();
+      } else {
+        that.setState({ previewSource: '/assets/img/video_thumb_default.png' });
+        // clear & show the thumbnail selection input
+        this.props.showThumbnailTool();
+      }
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        'div',
+        { id: 'asset-preview-holder', className: 'dropzone' },
+        _react2.default.createElement(
+          'div',
+          { id: 'asset-preview-dropzone-instructions', className: 'hidden' },
+          _react2.default.createElement(
+            'p',
+            null,
+            'Drag & drop image or video here'
+          ),
+          _react2.default.createElement(
+            'p',
+            { className: 'fine-print' },
+            'OR'
+          ),
+          _react2.default.createElement(
+            'p',
+            { className: 'blue--underlined' },
+            'CHOOSE FILE'
+          )
+        ),
+        _react2.default.createElement('img', { id: 'asset-preview', src: this.state.previewSource, alt: 'publish preview' })
+      );
+    }
+  }]);
+
+  return Preview;
+}(_react2.default.Component);
+
+;
+
+module.exports = Preview;
 
 /***/ })
 /******/ ]);

@@ -1,67 +1,15 @@
 var stagedFiles = null;
 
 const publishFileFunctions = {
-    triggerFileChooser: function (fileInputId) {
-        document.getElementById(fileInputId).click();
-    },
     cancelPublish: function () {
         window.location.href = '/';
     },
-    previewAndStageFile: function (selectedFile) {
-        const fileSelectionInputError = document.getElementById('input-error-file-selection');
-        // When a file is selected for publish, validate that file and
-        // stage it so it will be ready when the publish button is clicked
-        try {
-            validationFunctions.validateFile(selectedFile); // validate the file's name, type, and size
-        } catch (error) {
-            validationFunctions.showError(fileSelectionInputError, error.message);
-            return;
-        }
-        // set image preview, if an image was provided
-        this.setImagePreview(selectedFile);
-        // hide the primary drop zone
-        this.hidePrimaryDropzone();
-        // set the name input value to the image name if none is set yet
-        this.updateClaimNameInputWithFileName(selectedFile);
-        // store the selected file for upload
-        stagedFiles = [selectedFile];
-    },
+
     hidePrimaryDropzone: function () {
         const primaryDropzone = document.getElementById('primary-dropzone');
         const publishForm = document.getElementById('publish-form');
         primaryDropzone.setAttribute('class', 'hidden');
         publishForm.setAttribute('class', 'row')
-    },
-    updateClaimNameInputWithFileName: function (selectedFile) {
-        const nameInput = document.getElementById('claim-name-input');
-        if (nameInput.value === "") {
-            var filename = selectedFile.name.substring(0, selectedFile.name.indexOf('.'))
-            nameInput.value = validationFunctions.cleanseClaimName(filename);
-            validationFunctions.checkClaimName(nameInput.value);
-        }
-    },
-    setImagePreview: function (selectedFile) {
-        const assetPreview = document.getElementById('asset-preview-target');
-        const thumbnailInput = document.getElementById('claim-thumbnail-input');
-        const thumbnailInputTool = document.getElementById('publish-thumbnail');
-        if (selectedFile.type !== 'video/mp4') {
-            const previewReader = new FileReader();
-            if (selectedFile.type === 'image/gif') {
-                assetPreview.innerHTML = `<p>loading preview...</p>`
-            }
-            previewReader.readAsDataURL(selectedFile);
-            previewReader.onloadend = function () {
-                assetPreview.innerHTML = '<img id="asset-preview" src="' + previewReader.result + '" alt="image preview"/>';
-            };
-            // clear & hide the thumbnail selection input
-            thumbnailInput.value = '';
-            thumbnailInputTool.hidden = true;
-        } else {
-            assetPreview.innerHTML = `<img id="asset-preview" src="/assets/img/video_thumb_default.png"/>`;
-            // clear & show the thumbnail selection input
-            thumbnailInput.value = '';
-            thumbnailInputTool.hidden = false;
-        }
     },
     returnNullOrChannel: function () {
         const channelRadio = document.getElementById('channel-radio');
