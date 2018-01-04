@@ -112,11 +112,11 @@ class Dropzone extends React.Component {
   }
   render () {
     return (
-      <div className="row row--tall">
+      <div className="row row--tall flex-container--column">
         <form>
           <input className="input-file" type="file" id="file_input" name="file_input" accept="video/*,image/*" onChange={this.handleFileInput} encType="multipart/form-data"/>
         </form>
-        <div id="primary-dropzone" className={'dropzone row row--padded row--tall flex-container--column flex-container--center-center' + (this.state.dragOver && ' dropzone--drag-over')} onDrop={this.handleDrop} onDragOver={this.handleDragOver} onDragEnd={this.handleDragEnd} onDragEnter={this.handleDragEnter} onDragLeave={this.handleDragLeave} onClick={this.handleClick}>
+        <div id="primary-dropzone" className={'dropzone row row--padded row--tall flex-container--column flex-container--center-center' + (this.state.dragOver ? ' dropzone--drag-over' : '')} onDrop={this.handleDrop} onDragOver={this.handleDragOver} onDragEnd={this.handleDragEnd} onDragEnter={this.handleDragEnter} onDragLeave={this.handleDragLeave} onClick={this.handleClick}>
           { this.state.dragOver ? (
             <div id="dropbzone-dragover">
               <p className="blue">Drop it.</p>

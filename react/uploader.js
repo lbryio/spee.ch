@@ -48,7 +48,7 @@ class Uploader extends React.Component {
   }
   render () {
     return (
-      <div className="row row--tall">
+      <div className="row row--tall flex-container--column">
         { this.state.showComponent === DROPZONE &&
           <Dropzone stageFileAndShowDetails={this.stageFileAndShowDetails}/>
         }

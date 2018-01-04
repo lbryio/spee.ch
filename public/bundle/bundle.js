@@ -1034,7 +1034,7 @@ var Uploader = function (_React$Component) {
     value: function render() {
       return _react2.default.createElement(
         'div',
-        { className: 'row row--tall' },
+        { className: 'row row--tall flex-container--column' },
         this.state.showComponent === DROPZONE && _react2.default.createElement(_dropzone2.default, { stageFileAndShowDetails: this.stageFileAndShowDetails }),
         this.state.showComponent === DETAILS && _react2.default.createElement(_publishDetails2.default, {
           updateUploaderState: this.updateUploaderState,
@@ -18527,7 +18527,7 @@ var Dropzone = function (_React$Component) {
     value: function render() {
       return _react2.default.createElement(
         'div',
-        { className: 'row row--tall' },
+        { className: 'row row--tall flex-container--column' },
         _react2.default.createElement(
           'form',
           null,
@@ -18535,7 +18535,7 @@ var Dropzone = function (_React$Component) {
         ),
         _react2.default.createElement(
           'div',
-          { id: 'primary-dropzone', className: 'dropzone row row--padded row--tall flex-container--column flex-container--center-center' + (this.state.dragOver && ' dropzone--drag-over'), onDrop: this.handleDrop, onDragOver: this.handleDragOver, onDragEnd: this.handleDragEnd, onDragEnter: this.handleDragEnter, onDragLeave: this.handleDragLeave, onClick: this.handleClick },
+          { id: 'primary-dropzone', className: 'dropzone row row--padded row--tall flex-container--column flex-container--center-center' + (this.state.dragOver ? ' dropzone--drag-over' : ''), onDrop: this.handleDrop, onDragOver: this.handleDragOver, onDragEnd: this.handleDragEnd, onDragEnter: this.handleDragEnter, onDragLeave: this.handleDragLeave, onClick: this.handleClick },
           this.state.dragOver ? _react2.default.createElement(
             'div',
             { id: 'dropbzone-dragover' },
