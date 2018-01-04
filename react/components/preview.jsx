@@ -21,12 +21,8 @@ class Preview extends React.Component {
       previewReader.onloadend = function () {
         that.setState({previewSource: previewReader.result});
       };
-      // clear & hide the thumbnail selection input
-      this.props.hideThumbnailTool();
     } else {
       that.setState({previewSource: '/assets/img/video_thumb_default.png'});
-      // clear & show the thumbnail selection input
-      this.props.showThumbnailTool();
     }
   }
   render () {

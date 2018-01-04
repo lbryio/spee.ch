@@ -62,30 +62,19 @@ class Details extends React.Component {
 class PublishDetails extends React.Component {
   constructor (props) {
     super(props);
-    this.state = {
-      showThumbnailSelector: false,
-    }
     // set defaults
     this.updateUploaderState = this.updateUploaderState.bind(this);
-    this.showThumbnailTool = this.showThumbnailTool.bind(this);
-    this.hideThumbnailTool = this.hideThumbnailTool.bind(this);
-    this.publish = this.publish.bind(this);
     this.clearUploaderState = this.clearUploaderState.bind(this);
+    this.publish = this.publish.bind(this);
   }
   updateUploaderState (name, value) {
     this.props.updateUploaderState(name, value);
   }
-  showThumbnailTool () {
-    this.setState({showThumbnailSelector: true});
-  }
-  hideThumbnailTool () {
-    this.setState({showThumbnailSelector: false});
+  clearUploaderState () {
+    this.props.clearUploaderState();
   }
   publish () {
     // publish the asset
-  }
-  clearUploaderState () {
-    this.props.clearUploaderState();
   }
   render () {
     return (
@@ -97,8 +86,6 @@ class PublishDetails extends React.Component {
           <div className="row row--padded">
             <Preview
               file={this.props.file}
-              hideThumbnailTool={this.hideThumbnailTool}
-              showThumbnailTool={this.showThumbnailTool}
             />
           </div>
         </div>
@@ -106,7 +93,7 @@ class PublishDetails extends React.Component {
           <div id="publish-active-area" className="row row--padded">
             <Channel />
             <Url file={this.props.file}/>
-            { this.state.showThumbnailSelector && <Thumbnail thumbnail={this.props.thumbnail}/> }
+            { (this.props.file.type === 'video/mp4') && <Thumbnail thumbnail={this.props.thumbnail}/> }
             <Details />
 
             <div className="row row--padded row--wide">

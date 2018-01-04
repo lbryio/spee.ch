@@ -18749,16 +18749,12 @@ var PublishDetails = function (_React$Component6) {
   function PublishDetails(props) {
     _classCallCheck(this, PublishDetails);
 
+    // set defaults
     var _this6 = _possibleConstructorReturn(this, (PublishDetails.__proto__ || Object.getPrototypeOf(PublishDetails)).call(this, props));
 
-    _this6.state = {
-      showThumbnailSelector: false
-      // set defaults
-    };_this6.updateUploaderState = _this6.updateUploaderState.bind(_this6);
-    _this6.showThumbnailTool = _this6.showThumbnailTool.bind(_this6);
-    _this6.hideThumbnailTool = _this6.hideThumbnailTool.bind(_this6);
-    _this6.publish = _this6.publish.bind(_this6);
+    _this6.updateUploaderState = _this6.updateUploaderState.bind(_this6);
     _this6.clearUploaderState = _this6.clearUploaderState.bind(_this6);
+    _this6.publish = _this6.publish.bind(_this6);
     return _this6;
   }
 
@@ -18768,24 +18764,14 @@ var PublishDetails = function (_React$Component6) {
       this.props.updateUploaderState(name, value);
     }
   }, {
-    key: 'showThumbnailTool',
-    value: function showThumbnailTool() {
-      this.setState({ showThumbnailSelector: true });
-    }
-  }, {
-    key: 'hideThumbnailTool',
-    value: function hideThumbnailTool() {
-      this.setState({ showThumbnailSelector: false });
+    key: 'clearUploaderState',
+    value: function clearUploaderState() {
+      this.props.clearUploaderState();
     }
   }, {
     key: 'publish',
     value: function publish() {
       // publish the asset
-    }
-  }, {
-    key: 'clearUploaderState',
-    value: function clearUploaderState() {
-      this.props.clearUploaderState();
     }
   }, {
     key: 'render',
@@ -18805,9 +18791,7 @@ var PublishDetails = function (_React$Component6) {
             'div',
             { className: 'row row--padded' },
             _react2.default.createElement(_preview2.default, {
-              file: this.props.file,
-              hideThumbnailTool: this.hideThumbnailTool,
-              showThumbnailTool: this.showThumbnailTool
+              file: this.props.file
             })
           )
         ),
@@ -18819,7 +18803,7 @@ var PublishDetails = function (_React$Component6) {
             { id: 'publish-active-area', className: 'row row--padded' },
             _react2.default.createElement(Channel, null),
             _react2.default.createElement(Url, { file: this.props.file }),
-            this.state.showThumbnailSelector && _react2.default.createElement(Thumbnail, { thumbnail: this.props.thumbnail }),
+            this.props.file.type === 'video/mp4' && _react2.default.createElement(Thumbnail, { thumbnail: this.props.thumbnail }),
             _react2.default.createElement(Details, null),
             _react2.default.createElement(
               'div',
@@ -18924,12 +18908,8 @@ var Preview = function (_React$Component) {
         previewReader.onloadend = function () {
           that.setState({ previewSource: previewReader.result });
         };
-        // clear & hide the thumbnail selection input
-        this.props.hideThumbnailTool();
       } else {
         that.setState({ previewSource: '/assets/img/video_thumb_default.png' });
-        // clear & show the thumbnail selection input
-        this.props.showThumbnailTool();
       }
     }
   }, {
