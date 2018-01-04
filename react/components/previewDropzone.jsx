@@ -1,6 +1,6 @@
 import React from 'react';
 
-class Preview extends React.Component {
+class PreviewDropzone extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
@@ -39,4 +39,4 @@ class Preview extends React.Component {
   }
 };
 
-module.exports = Preview;
+module.exports = PreviewDropzone;
