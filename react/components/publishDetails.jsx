@@ -70,7 +70,7 @@ class PublishDetails extends React.Component {
     this.showThumbnailTool = this.showThumbnailTool.bind(this);
     this.hideThumbnailTool = this.hideThumbnailTool.bind(this);
     this.publish = this.publish.bind(this);
-    this.cancelPublish = this.cancelPublish.bind(this);
+    this.clearUploaderState = this.clearUploaderState.bind(this);
   }
   updateUploaderState (name, value) {
     this.props.updateUploaderState(name, value);
@@ -84,8 +84,8 @@ class PublishDetails extends React.Component {
   publish () {
     // publish the asset
   }
-  cancelPublish () {
-    // cancel this publish
+  clearUploaderState () {
+    this.props.clearUploaderState();
   }
   render () {
     return (

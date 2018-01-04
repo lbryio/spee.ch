@@ -975,6 +975,17 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var DROPZONE = 'DROPZONE';
 var DETAILS = 'DETAILS';
 var STATUS = 'STATUS';
+var initialState = {
+  showComponent: DROPZONE, // DROPZONE, DETAILS, or PUBLISHING
+  file: null,
+  title: '',
+  channel: '',
+  url: '',
+  thumbnail: '',
+  description: '',
+  license: '',
+  nsfw: ''
+};
 
 var Uploader = function (_React$Component) {
   _inherits(Uploader, _React$Component);
@@ -984,19 +995,10 @@ var Uploader = function (_React$Component) {
 
     var _this = _possibleConstructorReturn(this, (Uploader.__proto__ || Object.getPrototypeOf(Uploader)).call(this, props));
 
-    _this.state = {
-      showComponent: DROPZONE, // DROPZONE, DETAILS, or PUBLISHING
-      file: null,
-      title: '',
-      channel: '',
-      url: '',
-      thumbnail: '',
-      description: '',
-      license: '',
-      nsfw: ''
-    };
+    _this.state = initialState;
     // bind class methods with `this`
     _this.updateUploaderState = _this.updateUploaderState.bind(_this);
+    _this.clearUploaderState = _this.clearUploaderState.bind(_this);
     _this.showComponent = _this.showComponent.bind(_this);
     _this.stageFileAndShowDetails = _this.stageFileAndShowDetails.bind(_this);
     return _this;
@@ -1007,6 +1009,11 @@ var Uploader = function (_React$Component) {
     value: function updateUploaderState(name, value) {
       console.log('updateUploaderState ' + name + ' ' + value);
       this.setState(_defineProperty({}, name, value));
+    }
+  }, {
+    key: 'clearUploaderState',
+    value: function clearUploaderState() {
+      this.setState(initialState);
     }
   }, {
     key: 'showComponent',
@@ -1031,6 +1038,7 @@ var Uploader = function (_React$Component) {
         this.state.showComponent === DROPZONE && _react2.default.createElement(_dropzone2.default, { stageFileAndShowDetails: this.stageFileAndShowDetails }),
         this.state.showComponent === DETAILS && _react2.default.createElement(_publishDetails2.default, {
           updateUploaderState: this.updateUploaderState,
+          clearUploaderState: this.clearUploaderState,
           file: this.state.file,
           title: this.state.title,
           channel: this.state.channel,
@@ -18398,6 +18406,7 @@ var Dropzone = function (_React$Component) {
     _this.handleDragEnter = _this.handleDragEnter.bind(_this);
     _this.handleDragLeave = _this.handleDragLeave.bind(_this);
     _this.handleClick = _this.handleClick.bind(_this);
+    _this.handleFileInput = _this.handleFileInput.bind(_this);
     return _this;
   }
 
@@ -18503,6 +18512,22 @@ var Dropzone = function (_React$Component) {
       document.getElementById('file_input').click();
     }
   }, {
+    key: 'handleFileInput',
+    value: function handleFileInput(event) {
+      event.preventDefault();
+      var fileList = event.target.files;
+      var chosenFile = fileList[0];
+      if (chosenFile) {
+        try {
+          this.validateFile(chosenFile); // validate the file's name, type, and size
+        } catch (error) {
+          return this.setState('fileError', error.message);
+        }
+        // stage it so it will be ready when the publish button is clicked
+        this.props.stageFileAndShowDetails(chosenFile);
+      }
+    }
+  }, {
     key: 'render',
     value: function render() {
       return _react2.default.createElement(
@@ -18511,7 +18536,7 @@ var Dropzone = function (_React$Component) {
         _react2.default.createElement(
           'form',
           null,
-          _react2.default.createElement('input', { className: 'input-file', type: 'file', id: 'file_input', name: 'file_input', accept: 'video/*,image/*', onChange: this.handleDrop, encType: 'multipart/form-data' })
+          _react2.default.createElement('input', { className: 'input-file', type: 'file', id: 'file_input', name: 'file_input', accept: 'video/*,image/*', onChange: this.handleFileInput, encType: 'multipart/form-data' })
         ),
         _react2.default.createElement(
           'div',
@@ -18739,7 +18764,7 @@ var PublishDetails = function (_React$Component6) {
     _this6.showThumbnailTool = _this6.showThumbnailTool.bind(_this6);
     _this6.hideThumbnailTool = _this6.hideThumbnailTool.bind(_this6);
     _this6.publish = _this6.publish.bind(_this6);
-    _this6.cancelPublish = _this6.cancelPublish.bind(_this6);
+    _this6.clearUploaderState = _this6.clearUploaderState.bind(_this6);
     return _this6;
   }
 
@@ -18764,9 +18789,9 @@ var PublishDetails = function (_React$Component6) {
       // publish the asset
     }
   }, {
-    key: 'cancelPublish',
-    value: function cancelPublish() {
-      // cancel this publish
+    key: 'clearUploaderState',
+    value: function clearUploaderState() {
+      this.props.clearUploaderState();
     }
   }, {
     key: 'render',

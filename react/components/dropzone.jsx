@@ -12,6 +12,7 @@ class Dropzone extends React.Component {
     this.handleDragEnter = this.handleDragEnter.bind(this);
     this.handleDragLeave = this.handleDragLeave.bind(this);
     this.handleClick = this.handleClick.bind(this);
+    this.handleFileInput = this.handleFileInput.bind(this);
   }
   validateFile (file) {
     if (!file) {
@@ -100,11 +101,25 @@ class Dropzone extends React.Component {
     // trigger file input
     document.getElementById('file_input').click();
   }
+  handleFileInput (event) {
+    event.preventDefault();
+    const fileList = event.target.files;
+    const chosenFile = fileList[0];
+    if (chosenFile) {
+      try {
+        this.validateFile(chosenFile); // validate the file's name, type, and size
+      } catch (error) {
+        return this.setState('fileError', error.message);
+      }
+      // stage it so it will be ready when the publish button is clicked
+      this.props.stageFileAndShowDetails(chosenFile);
+    }
+  }
   render () {
     return (
       <div>
         <form>
-          <input className="input-file" type="file" id="file_input" name="file_input" accept="video/*,image/*" onChange={this.handleDrop} encType="multipart/form-data"/>
+          <input className="input-file" type="file" id="file_input" name="file_input" accept="video/*,image/*" onChange={this.handleFileInput} encType="multipart/form-data"/>
         </form>
         <div id="primary-dropzone" className="dropzone row row--margined row--padded row--tall flex-container--column flex-container--center-center" onDrop={this.handleDrop} onDragOver={this.handleDragOver} onDragEnd={this.handleDragEnd} onDragEnter={this.handleDragEnter} onDragLeave={this.handleDragLeave} onClick={this.handleClick}>
           <div id="primary-dropzone-instructions">
