@@ -18398,7 +18398,8 @@ var Dropzone = function (_React$Component) {
     var _this = _possibleConstructorReturn(this, (Dropzone.__proto__ || Object.getPrototypeOf(Dropzone)).call(this, props));
 
     _this.state = {
-      fileError: null
+      fileError: null,
+      dragOver: false
     };
     _this.handleDrop = _this.handleDrop.bind(_this);
     _this.handleDragOver = _this.handleDragOver.bind(_this);
@@ -18451,8 +18452,8 @@ var Dropzone = function (_React$Component) {
   }, {
     key: 'handleDrop',
     value: function handleDrop(event) {
-      console.log('handleDrop', event);
       event.preventDefault();
+      this.setState({ dragOver: false });
       // if dropped items aren't files, reject them
       var dt = event.dataTransfer;
       console.log('dt', dt);
@@ -18464,7 +18465,7 @@ var Dropzone = function (_React$Component) {
           try {
             this.validateFile(droppedFile); // validate the file's name, type, and size
           } catch (error) {
-            return this.setState('fileError', error.message);
+            return this.setState({ fileError: error.message });
           }
           // stage it so it will be ready when the publish button is clicked
           this.props.stageFileAndShowDetails(droppedFile);
@@ -18491,18 +18492,12 @@ var Dropzone = function (_React$Component) {
   }, {
     key: 'handleDragEnter',
     value: function handleDragEnter() {
-      var thisDropzone = document.getElementById('primary-dropzone');
-      thisDropzone.setAttribute('class', 'dropzone dropzone--drag-over row row--padded row--tall flex-container--column flex-container--center-center');
-      thisDropzone.firstElementChild.setAttribute('class', 'hidden');
-      thisDropzone.lastElementChild.setAttribute('class', '');
+      this.setState({ dragOver: true });
     }
   }, {
     key: 'handleDragLeave',
     value: function handleDragLeave() {
-      var thisDropzone = document.getElementById('primary-dropzone');
-      thisDropzone.setAttribute('class', 'dropzone row row--tall row--padded flex-container--column flex-container--center-center');
-      thisDropzone.firstElementChild.setAttribute('class', '');
-      thisDropzone.lastElementChild.setAttribute('class', 'hidden');
+      this.setState({ dragOver: false });
     }
   }, {
     key: 'handleClick',
@@ -18521,7 +18516,7 @@ var Dropzone = function (_React$Component) {
         try {
           this.validateFile(chosenFile); // validate the file's name, type, and size
         } catch (error) {
-          return this.setState('fileError', error.message);
+          return this.setState({ fileError: error.message });
         }
         // stage it so it will be ready when the publish button is clicked
         this.props.stageFileAndShowDetails(chosenFile);
@@ -18540,13 +18535,21 @@ var Dropzone = function (_React$Component) {
         ),
         _react2.default.createElement(
           'div',
-          { id: 'primary-dropzone', className: 'dropzone row row--padded row--tall flex-container--column flex-container--center-center', onDrop: this.handleDrop, onDragOver: this.handleDragOver, onDragEnd: this.handleDragEnd, onDragEnter: this.handleDragEnter, onDragLeave: this.handleDragLeave, onClick: this.handleClick },
-          _react2.default.createElement(
+          { id: 'primary-dropzone', className: 'dropzone row row--padded row--tall flex-container--column flex-container--center-center' + (this.state.dragOver && ' dropzone--drag-over'), onDrop: this.handleDrop, onDragOver: this.handleDragOver, onDragEnd: this.handleDragEnd, onDragEnter: this.handleDragEnter, onDragLeave: this.handleDragLeave, onClick: this.handleClick },
+          this.state.dragOver ? _react2.default.createElement(
+            'div',
+            { id: 'dropbzone-dragover' },
+            _react2.default.createElement(
+              'p',
+              { className: 'blue' },
+              'Drop it.'
+            )
+          ) : _react2.default.createElement(
             'div',
             { id: 'primary-dropzone-instructions' },
             _react2.default.createElement(
               'p',
-              { className: 'info-message-placeholder info-message--failure', id: 'input-error-file-selection', hidden: 'true' },
+              { className: 'info-message-placeholder info-message--failure', id: 'input-error-file-selection' },
               this.state.fileError
             ),
             _react2.default.createElement(
@@ -18563,15 +18566,6 @@ var Dropzone = function (_React$Component) {
               'p',
               { className: 'blue--underlined' },
               'CHOOSE FILE'
-            )
-          ),
-          _react2.default.createElement(
-            'div',
-            { id: 'dropbzone-dragover', className: 'hidden' },
-            _react2.default.createElement(
-              'p',
-              { className: 'blue' },
-              'Drop it.'
             )
           )
         )

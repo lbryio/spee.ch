@@ -5,6 +5,7 @@ class Dropzone extends React.Component {
     super(props);
     this.state = {
       fileError: null,
+      dragOver : false,
     }
     this.handleDrop = this.handleDrop.bind(this);
     this.handleDragOver = this.handleDragOver.bind(this);
@@ -51,8 +52,8 @@ class Dropzone extends React.Component {
     }
   }
   handleDrop (event) {
-    console.log('handleDrop', event);
     event.preventDefault();
+    this.setState({dragOver: false});
     // if dropped items aren't files, reject them
     const dt = event.dataTransfer;
     console.log('dt', dt);
@@ -64,7 +65,7 @@ class Dropzone extends React.Component {
         try {
           this.validateFile(droppedFile); // validate the file's name, type, and size
         } catch (error) {
-          return this.setState('fileError', error.message);
+          return this.setState({fileError: error.message});
         }
         // stage it so it will be ready when the publish button is clicked
         this.props.stageFileAndShowDetails(droppedFile);
@@ -85,16 +86,10 @@ class Dropzone extends React.Component {
     }
   }
   handleDragEnter () {
-    const thisDropzone = document.getElementById('primary-dropzone');
-    thisDropzone.setAttribute('class', 'dropzone dropzone--drag-over row row--padded row--tall flex-container--column flex-container--center-center');
-    thisDropzone.firstElementChild.setAttribute('class', 'hidden');
-    thisDropzone.lastElementChild.setAttribute('class', '');
+    this.setState({dragOver: true});
   }
   handleDragLeave () {
-    const thisDropzone = document.getElementById('primary-dropzone');
-    thisDropzone.setAttribute('class', 'dropzone row row--tall row--padded flex-container--column flex-container--center-center');
-    thisDropzone.firstElementChild.setAttribute('class', '');
-    thisDropzone.lastElementChild.setAttribute('class', 'hidden');
+    this.setState({dragOver: false});
   }
   handleClick (event) {
     event.preventDefault();
@@ -109,7 +104,7 @@ class Dropzone extends React.Component {
       try {
         this.validateFile(chosenFile); // validate the file's name, type, and size
       } catch (error) {
-        return this.setState('fileError', error.message);
+        return this.setState({fileError: error.message});
       }
       // stage it so it will be ready when the publish button is clicked
       this.props.stageFileAndShowDetails(chosenFile);
@@ -121,16 +116,19 @@ class Dropzone extends React.Component {
         <form>
           <input className="input-file" type="file" id="file_input" name="file_input" accept="video/*,image/*" onChange={this.handleFileInput} encType="multipart/form-data"/>
         </form>
-        <div id="primary-dropzone" className="dropzone row row--padded row--tall flex-container--column flex-container--center-center" onDrop={this.handleDrop} onDragOver={this.handleDragOver} onDragEnd={this.handleDragEnd} onDragEnter={this.handleDragEnter} onDragLeave={this.handleDragLeave} onClick={this.handleClick}>
-          <div id="primary-dropzone-instructions">
-            <p className="info-message-placeholder info-message--failure" id="input-error-file-selection" hidden="true">{this.state.fileError}</p>
+        <div id="primary-dropzone" className={'dropzone row row--padded row--tall flex-container--column flex-container--center-center' + (this.state.dragOver && ' dropzone--drag-over')} onDrop={this.handleDrop} onDragOver={this.handleDragOver} onDragEnd={this.handleDragEnd} onDragEnter={this.handleDragEnter} onDragLeave={this.handleDragLeave} onClick={this.handleClick}>
+          { this.state.dragOver ? (
+            <div id="dropbzone-dragover">
+              <p className="blue">Drop it.</p>
+            </div>
+          ) : (
+            <div id="primary-dropzone-instructions">
+            <p className="info-message-placeholder info-message--failure" id="input-error-file-selection">{this.state.fileError}</p>
             <p>Drag & drop image or video here to publish</p>
             <p className="fine-print">OR</p>
             <p className="blue--underlined">CHOOSE FILE</p>
-          </div>
-          <div id="dropbzone-dragover" className="hidden">
-            <p className="blue">Drop it.</p>
-          </div>
+            </div>
+          )}
         </div>
       </div>
     );
