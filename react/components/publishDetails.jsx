@@ -89,7 +89,7 @@ class PublishDetails extends React.Component {
   }
   render () {
     return (
-      <div className="row row--padded row--no-bottom">
+      <div className="row row--no-bottom">
         <div className="column column--10">
           <Title title={this.props.title} updateUploaderState={this.updateUploaderState}/>
         </div>
@@ -115,7 +115,7 @@ class PublishDetails extends React.Component {
             </div>
 
             <div className="row row--short align-content-center">
-              <button className="button--cancel" onClick={this.cancelPublish}>Cancel</button>
+              <button className="button--cancel" onClick={this.clearUploaderState}>Cancel</button>
             </div>
 
             <div className="row row--short align-content-center">

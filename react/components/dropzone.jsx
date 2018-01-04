@@ -86,13 +86,13 @@ class Dropzone extends React.Component {
   }
   handleDragEnter () {
     const thisDropzone = document.getElementById('primary-dropzone');
-    thisDropzone.setAttribute('class', 'dropzone dropzone--drag-over row row--margined row--padded row--tall flex-container--column flex-container--center-center');
+    thisDropzone.setAttribute('class', 'dropzone dropzone--drag-over row row--padded row--tall flex-container--column flex-container--center-center');
     thisDropzone.firstElementChild.setAttribute('class', 'hidden');
     thisDropzone.lastElementChild.setAttribute('class', '');
   }
   handleDragLeave () {
     const thisDropzone = document.getElementById('primary-dropzone');
-    thisDropzone.setAttribute('class', 'dropzone row row--tall row--margined row--padded flex-container--column flex-container--center-center');
+    thisDropzone.setAttribute('class', 'dropzone row row--tall row--padded flex-container--column flex-container--center-center');
     thisDropzone.firstElementChild.setAttribute('class', '');
     thisDropzone.lastElementChild.setAttribute('class', 'hidden');
   }
@@ -117,11 +117,11 @@ class Dropzone extends React.Component {
   }
   render () {
     return (
-      <div>
+      <div className="row row--tall">
         <form>
           <input className="input-file" type="file" id="file_input" name="file_input" accept="video/*,image/*" onChange={this.handleFileInput} encType="multipart/form-data"/>
         </form>
-        <div id="primary-dropzone" className="dropzone row row--margined row--padded row--tall flex-container--column flex-container--center-center" onDrop={this.handleDrop} onDragOver={this.handleDragOver} onDragEnd={this.handleDragEnd} onDragEnter={this.handleDragEnter} onDragLeave={this.handleDragLeave} onClick={this.handleClick}>
+        <div id="primary-dropzone" className="dropzone row row--padded row--tall flex-container--column flex-container--center-center" onDrop={this.handleDrop} onDragOver={this.handleDragOver} onDragEnd={this.handleDragEnd} onDragEnter={this.handleDragEnter} onDragLeave={this.handleDragLeave} onClick={this.handleClick}>
           <div id="primary-dropzone-instructions">
             <p className="info-message-placeholder info-message--failure" id="input-error-file-selection" hidden="true">{this.state.fileError}</p>
             <p>Drag & drop image or video here to publish</p>

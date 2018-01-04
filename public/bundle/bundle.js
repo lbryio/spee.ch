@@ -1034,7 +1034,7 @@ var Uploader = function (_React$Component) {
     value: function render() {
       return _react2.default.createElement(
         'div',
-        null,
+        { className: 'row row--tall' },
         this.state.showComponent === DROPZONE && _react2.default.createElement(_dropzone2.default, { stageFileAndShowDetails: this.stageFileAndShowDetails }),
         this.state.showComponent === DETAILS && _react2.default.createElement(_publishDetails2.default, {
           updateUploaderState: this.updateUploaderState,
@@ -18492,7 +18492,7 @@ var Dropzone = function (_React$Component) {
     key: 'handleDragEnter',
     value: function handleDragEnter() {
       var thisDropzone = document.getElementById('primary-dropzone');
-      thisDropzone.setAttribute('class', 'dropzone dropzone--drag-over row row--margined row--padded row--tall flex-container--column flex-container--center-center');
+      thisDropzone.setAttribute('class', 'dropzone dropzone--drag-over row row--padded row--tall flex-container--column flex-container--center-center');
       thisDropzone.firstElementChild.setAttribute('class', 'hidden');
       thisDropzone.lastElementChild.setAttribute('class', '');
     }
@@ -18500,7 +18500,7 @@ var Dropzone = function (_React$Component) {
     key: 'handleDragLeave',
     value: function handleDragLeave() {
       var thisDropzone = document.getElementById('primary-dropzone');
-      thisDropzone.setAttribute('class', 'dropzone row row--tall row--margined row--padded flex-container--column flex-container--center-center');
+      thisDropzone.setAttribute('class', 'dropzone row row--tall row--padded flex-container--column flex-container--center-center');
       thisDropzone.firstElementChild.setAttribute('class', '');
       thisDropzone.lastElementChild.setAttribute('class', 'hidden');
     }
@@ -18532,7 +18532,7 @@ var Dropzone = function (_React$Component) {
     value: function render() {
       return _react2.default.createElement(
         'div',
-        null,
+        { className: 'row row--tall' },
         _react2.default.createElement(
           'form',
           null,
@@ -18540,7 +18540,7 @@ var Dropzone = function (_React$Component) {
         ),
         _react2.default.createElement(
           'div',
-          { id: 'primary-dropzone', className: 'dropzone row row--margined row--padded row--tall flex-container--column flex-container--center-center', onDrop: this.handleDrop, onDragOver: this.handleDragOver, onDragEnd: this.handleDragEnd, onDragEnter: this.handleDragEnter, onDragLeave: this.handleDragLeave, onClick: this.handleClick },
+          { id: 'primary-dropzone', className: 'dropzone row row--padded row--tall flex-container--column flex-container--center-center', onDrop: this.handleDrop, onDragOver: this.handleDragOver, onDragEnd: this.handleDragEnd, onDragEnter: this.handleDragEnter, onDragLeave: this.handleDragLeave, onClick: this.handleClick },
           _react2.default.createElement(
             'div',
             { id: 'primary-dropzone-instructions' },
@@ -18798,7 +18798,7 @@ var PublishDetails = function (_React$Component6) {
     value: function render() {
       return _react2.default.createElement(
         'div',
-        { className: 'row row--padded row--no-bottom' },
+        { className: 'row row--no-bottom' },
         _react2.default.createElement(
           'div',
           { className: 'column column--10' },
@@ -18846,7 +18846,7 @@ var PublishDetails = function (_React$Component6) {
               { className: 'row row--short align-content-center' },
               _react2.default.createElement(
                 'button',
-                { className: 'button--cancel', onClick: this.cancelPublish },
+                { className: 'button--cancel', onClick: this.clearUploaderState },
                 'Cancel'
               )
             ),
