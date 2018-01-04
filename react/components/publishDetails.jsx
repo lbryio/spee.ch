@@ -14,7 +14,7 @@ class Title extends React.Component {
   }
   render () {
     return (
-      <input type="text" id="publish-title" className="input-text text--large input-text--full-width" placeholder="Give your post a title..." onChange={this.handleInput} value={this.props.title}/>
+      <input type="text" id="publish-title" className="input-text text--large input-text--full-width" name="title" placeholder="Give your post a title..." onChange={this.handleInput} value={this.props.title}/>
     );
   }
 }
