@@ -91,12 +91,13 @@ class PublishForm extends React.Component {
               updateUploaderState={this.props.updateUploaderState}
             />
             <ChannelSelector
-              channel={this.props.channel}
               loggedInChannelName={this.props.loggedInChannelName}
               publishToChannel={this.props.publishToChannel}
               cleanseInput={this.props.cleanseInput}
               updateUploaderState={this.updateUploaderState}
               makeGetRequest={this.props.makeGetRequest}
+              makePostRequest={this.props.makePostRequest}
+              updateUploaderState={this.props.updateUploaderState}
             />
 
             <MetadataInputs />

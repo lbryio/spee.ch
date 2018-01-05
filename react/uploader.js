@@ -14,7 +14,6 @@ const initialState = {
   publishToChannel      : false,
   file                  : null,
   title                 : '',
-  channel               : null,
   claim                 : '',
   thumbnail             : '',
   description           : '',
@@ -122,13 +121,13 @@ class Uploader extends React.Component {
             updateUploaderState={this.updateUploaderState}
             clearUploaderState={this.clearUploaderState}
             makeGetRequest={this.makeGetRequest}
+            makePostRequest={this.makePostRequest}
             cleanseInput={this.cleanseInput}
             loggedInChannelName={this.state.loggedInChannelName}
             loggedInChannelShortId={this.state.loggedInChannelShortId}
             publishToChannel={this.state.publishToChannel}
             file={this.state.file}
             title={this.state.title}
-            channel={this.state.channel}
             claim={this.state.claim}
             thumbnail={this.state.thumbnail}
             description={this.state.description}

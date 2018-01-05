@@ -19,6 +19,24 @@ class ChannelLoginForm extends React.Component {
   }
   loginToChannel (event) {
     event.preventDefault();
+    const params = `username=${this.state.name}&password=${this.state.password}`;
+    const url = '/login';
+    const that = this;
+    this.props.makePostRequest(url, params)
+      .then(result => {
+        that.props.updateLoggedInChannelOutsideReact(result.channelName, result.channelClaimId, result.shortChannelId);
+        that.props.updateUploaderState('loggedInChannelName', result.channelName);
+        that.props.updateUploaderState('loggedInChannelShortId', result.shortChannelId);
+        that.props.selectOption(result.channelName);
+      })
+      .catch(error => {
+        console.log('login error', error);
+        if (error.message) {
+          that.setState({'error': error.message});
+        } else {
+          that.setState({'error': 'There was an error logging into your channel'});
+        }
+      });
   }
   render () {
     return (

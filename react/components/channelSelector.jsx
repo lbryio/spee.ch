@@ -9,24 +9,28 @@ class ChannelSelector extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
-      displayCreateOrLogin: LOGIN,
+      optionState: LOGIN,
     };
-    this.toggleCreateOrLogin = this.toggleCreateOrLogin.bind(this);
+    this.handleSelection = this.handleSelection.bind(this);
+    this.selectOption = this.selectOption.bind(this);
+    this.updateLoggedInChannelOutsideReact = this.updateLoggedInChannelOutsideReact.bind(this);
   }
   componentWillMount () {
     if (this.props.loggedInChannelName) {
-      this.setState({ displayCreateOrLogin: null });
+      this.setState({ optionState: null });
     }
   }
-  toggleCreateOrLogin (event) {
+  handleSelection (event) {
     const selectedOption = event.target.selectedOptions[0].value;
-    if (selectedOption === 'login') {
-      this.setState({ displayCreateOrLogin: LOGIN });
-    } else if (selectedOption === 'create') {
-      this.setState({ displayCreateOrLogin: CREATE });
-    } else {
-      this.setState({ displayCreateOrLogin: null });
-    }
+    this.selectOption(selectedOption);
+  }
+  selectOption (option) {
+    this.setState({optionState: option});
+  }
+  updateLoggedInChannelOutsideReact (channelName, channelClaimId, shortChannelId) {
+    // update anywhere on page that needs to be updated outside of this component
+    setUserCookies(channelName, channelClaimId, shortChannelId);
+    replaceChannelOptionInNavBarChannelSelect(channelName);
   }
   render () {
     return (
@@ -39,19 +43,28 @@ class ChannelSelector extends React.Component {
             <div className="column column--3">
               <label className="label" htmlFor="channel-name-select">Channel:</label>
             </div><div className="column column--7">
-              <select type="text" id="channel-name-select" className="select select--arrow" onChange={this.toggleCreateOrLogin}>
+              <select type="text" id="channel-name-select" className="select select--arrow" value={this.state.optionState} onChange={this.handleSelection}>
                 { this.props.loggedInChannelName && <option value={this.props.loggedInChannelName} id="publish-channel-select-channel-option">{this.props.loggedInChannelName}</option> }
                 <option value="login">Existing</option>
                 <option value="create">New</option>
               </select>
             </div>
 
-            { (this.state.displayCreateOrLogin === LOGIN) && <ChannelLoginForm /> }
-            { (this.state.displayCreateOrLogin === CREATE) &&
-                <ChannelCreateForm
-                  makeGetRequest={this.props.makeGetRequest}
-                  cleanseInput={this.props.cleanseInput}
-                /> }
+            { (this.state.optionState === LOGIN) &&
+              <ChannelLoginForm
+                makePostRequest={this.props.makePostRequest}
+                updateLoggedInChannelOutsideReact={this.updateLoggedInChannelOutsideReact}
+                updateUploaderState={this.props.updateUploaderState}
+                selectOption={this.selectOption}
+              /> }
+            { (this.state.optionState === CREATE) &&
+              <ChannelCreateForm
+                cleanseInput={this.props.cleanseInput}
+                makeGetRequest={this.props.makeGetRequest}
+                updateLoggedInChannelOutsideReact={this.updateLoggedInChannelOutsideReact}
+                updateUploaderState={this.props.updateUploaderState}
+                selectOption={this.selectOption}
+              /> }
 
           </div>
         )}
