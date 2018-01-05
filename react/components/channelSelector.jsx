@@ -33,7 +33,7 @@ class ChannelSelector extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
-      displayCreateOrLogin: LOGIN,
+      displayCreateOrLogin: null,
     };
     this.toggleCreateOrLogin = this.toggleCreateOrLogin.bind(this);
   }
@@ -41,8 +41,10 @@ class ChannelSelector extends React.Component {
     const selectedOption = event.target.selectedOptions[0].value;
     if (selectedOption === 'login') {
       this.setState({ displayCreateOrLogin: LOGIN });
-    } else {
+    } else if (selectedOption === 'create') {
       this.setState({ displayCreateOrLogin: CREATE });
+    } else {
+      this.setState({ displayCreateOrLogin: null });
     }
   }
   render () {
@@ -57,13 +59,14 @@ class ChannelSelector extends React.Component {
               <label className="label" htmlFor="channel-name-select">Channel:</label>
             </div><div className="column column--7">
               <select type="text" id="channel-name-select" className="select select--arrow" onChange={this.toggleCreateOrLogin}>
-                { this.props.loggedInChannel && <option value={this.props.loggedInChannel} id="publish-channel-select-channel-option">{this.props.loggedInChannel}</option> }
+                { this.props.loggedInChannelName && <option value={this.props.loggedInChannelName} id="publish-channel-select-channel-option">{this.props.loggedInChannelName}</option> }
                 <option value="login">Existing</option>
                 <option value="create">New</option>
               </select>
             </div>
 
-            { (this.state.displayCreateOrLogin === LOGIN) ? <ChannelLoginForm /> : <ChannelCreateForm /> }
+            { (this.state.displayCreateOrLogin === LOGIN) && <ChannelLoginForm /> }
+            { (this.state.displayCreateOrLogin === CREATE) && <ChannelCreateForm /> }
 
           </div>
         )}

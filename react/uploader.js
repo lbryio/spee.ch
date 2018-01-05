@@ -32,14 +32,15 @@ class Uploader extends React.Component {
     this.makeGetRequest = this.makeGetRequest.bind(this);
     this.makePostRequest = this.makePostRequest.bind(this);
     this.cleanseClaimName = this.cleanseClaimName.bind(this);
+    this.getCookie = this.getCookie.bind(this);
   }
   componentDidMount () {
     // check for whether a channel is logged in
     // if so, setState loggedInChannel to the channel name
-    // const loggedInChannel = getCookie('channel_name');
-    // this.setState({loggedInChannel})
-    // const loggedInChannelShortId = getCookie('short_channel_id');
-    // this.setState({loggedInChannelShortId})
+    const loggedInChannelName = this.getCookie('channel_name');
+    this.setState({loggedInChannelName})
+    const loggedInChannelShortId = this.getCookie('short_channel_id');
+    this.setState({loggedInChannelShortId});
   }
   updateUploaderState (name, value) {
     console.log(`updateUploaderState ${name} ${value}`);
@@ -74,10 +75,10 @@ class Uploader extends React.Component {
       xhttp.responseType = 'json';
       xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
       xhttp.onreadystatechange = () => {
-        if (xhttp.readyState == 4 ) {
-          if ( xhttp.status == 200) {
+        if (xhttp.readyState === 4) {
+          if (xhttp.status === 200) {
             resolve(xhttp.response);
-          } else if (xhttp.status == 403) {
+          } else if (xhttp.status === 403) {
             reject('Wrong channel name or password');
           } else {
             reject('request failed with status:' + xhttp.status);
@@ -91,6 +92,21 @@ class Uploader extends React.Component {
     name = name.replace(/\s+/g, '-'); // replace spaces with dashes
     name = name.replace(/[^A-Za-z0-9-]/g, '');  // remove all characters that are not A-Z, a-z, 0-9, or '-'
     return name;
+  }
+  getCookie (cname) {
+    const name = cname + '=';
+    const decodedCookie = decodeURIComponent(document.cookie);
+    const ca = decodedCookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+      let c = ca[i];
+      while (c.charAt(0) === ' ') {
+        c = c.substring(1);
+      }
+      if (c.indexOf(name) === 0) {
+        return c.substring(name.length, c.length);
+      }
+    }
+    return '';
   }
   render () {
     return (

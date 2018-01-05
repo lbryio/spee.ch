@@ -97,7 +97,7 @@ class PublishForm extends React.Component {
 
             <ChannelSelector
               channel={this.props.channel}
-              loggedInChannel={this.props.loggedInChannel}
+              loggedInChannelName={this.props.loggedInChannelName}
               publishToChannel={this.props.publishToChannel}
               updateUploaderState={this.updateUploaderState}
               channelError={this.state.channelError}
