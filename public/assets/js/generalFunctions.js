@@ -7,7 +7,7 @@ function getRequest (url) {
             if (xhttp.readyState == 4 ) {
                 if ( xhttp.status == 200) {
                     resolve(xhttp.response);
-                } else if (xhttp.status == 401) {
+                } else if (xhttp.status == 403) {
                     reject('Wrong channel name or password');
                 } else {
                     reject('request failed with status:' + xhttp.status);
@@ -48,7 +48,7 @@ function toggleSection(event){
 	var slaveElement = document.getElementById(dataSet.slaveelementid);
 	var closedLabel = dataSet.closedlabel;
 	var openLabel = dataSet.openlabel;
-	
+
 	if (status === "false") {
 		slaveElement.hidden = false;
 		masterElement.innerText = openLabel;

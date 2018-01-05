@@ -2,7 +2,7 @@ import React from 'react';
 import PreviewDropzone from './previewDropzone.jsx';
 import TitleInput from './titleInput.jsx';
 import ChannelSelector from './channelSelector.jsx';
-import UrlInput from './urlInput.jsx';
+import UrlChooser from './urlChooser.jsx';
 import ThumbnailInput from './thumbnailInput.jsx';
 import MetadataInputs from './metadataInputs.jsx';
 
@@ -79,6 +79,16 @@ class PublishForm extends React.Component {
         <div className="column column--5 column--sml-10 align-content-top">
           <div id="publish-active-area" className="row row--padded">
 
+            <UrlChooser
+              fileName={this.props.file.name}
+              claim={this.props.claim}
+              publishToChannel={this.props.publishToChannel}
+              loggedInChannelName={this.props.loggedInChannelName}
+              loggedInChannelShortId={this.props.loggedInChannelShortId}
+              updateUploaderState={this.updateUploaderState}
+              makeGetRequest={this.props.makeGetRequest}
+            />
+
             <AnonymousOrChannelSelect publishToChannel={this.props.publishToChannel} updateUploaderState={this.props.updateUploaderState}/>
 
             <ChannelSelector
@@ -88,8 +98,6 @@ class PublishForm extends React.Component {
               updateUploaderState={this.updateUploaderState}
               channelError={this.state.channelError}
             />
-
-            <UrlInput file={this.props.file}/>
 
             { (this.props.file.type === 'video/mp4') && <ThumbnailInput thumbnail={this.props.thumbnail}/> }
 

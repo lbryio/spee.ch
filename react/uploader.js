@@ -8,17 +8,18 @@ const DROPZONE = 'DROPZONE';
 const DETAILS = 'DETAILS';
 const STATUS = 'STATUS';
 const initialState = {
-  showComponent   : DROPZONE,  // DROPZONE, DETAILS, or PUBLISHING
-  loggedInChannel : null,
-  publishToChannel: false,
-  file            : null,
-  title           : '',
-  channel         : null,
-  url             : '',
-  thumbnail       : '',
-  description     : '',
-  license         : '',
-  nsfw            : '',
+  showComponent         : DROPZONE,  // DROPZONE, DETAILS, or PUBLISHING
+  loggedInChannelName   : null,
+  loggedInChannelShortId: null,
+  publishToChannel      : false,
+  file                  : null,
+  title                 : '',
+  channel               : null,
+  claim                 : '',
+  thumbnail             : '',
+  description           : '',
+  license               : '',
+  nsfw                  : '',
 };
 
 class Uploader extends React.Component {
@@ -30,10 +31,16 @@ class Uploader extends React.Component {
     this.clearUploaderState = this.clearUploaderState.bind(this);
     this.showComponent = this.showComponent.bind(this);
     this.stageFileAndShowDetails = this.stageFileAndShowDetails.bind(this);
+    this.makeGetRequest = this.makeGetRequest.bind(this);
+    this.makePostRequest = this.makePostRequest.bind(this);
   }
   componentDidMount () {
     // check for whether a channel is logged in
     // if so, setState loggedInChannel to the channel name
+    // const loggedInChannel = getCookie('channel_name');
+    // this.setState({loggedInChannel})
+    // const loggedInChannelShortId = getCookie('short_channel_id');
+    // this.setState({loggedInChannelShortId})
   }
   updateUploaderState (name, value) {
     console.log(`updateUploaderState ${name} ${value}`);
@@ -52,6 +59,45 @@ class Uploader extends React.Component {
     // hide the dropzone and show the details
     this.showComponent(DETAILS);
   }
+  makeGetRequest (url) {
+    return new Promise((resolve, reject) => {
+      let xhttp = new XMLHttpRequest();
+      xhttp.open('GET', url, true);
+      xhttp.responseType = 'json';
+      xhttp.onreadystatechange = () => {
+        if (xhttp.readyState == 4 ) {
+          if ( xhttp.status == 200) {
+            resolve(xhttp.response);
+          } else if (xhttp.status == 403) {
+            reject('Wrong channel name or password');
+          } else {
+            reject('request failed with status:' + xhttp.status);
+          };
+        }
+      };
+      xhttp.send();
+    });
+  }
+  makePostRequest (url, params) {
+    return new Promise((resolve, reject) => {
+      let xhttp = new XMLHttpRequest();
+      xhttp.open('POST', url, true);
+      xhttp.responseType = 'json';
+      xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+      xhttp.onreadystatechange = () => {
+        if (xhttp.readyState == 4 ) {
+          if ( xhttp.status == 200) {
+            resolve(xhttp.response);
+          } else if (xhttp.status == 403) {
+            reject('Wrong channel name or password');
+          } else {
+            reject('request failed with status:' + xhttp.status);
+          };
+        }
+      };
+      xhttp.send(params);
+    });
+  }
   render () {
     return (
       <div className="row row--tall flex-container--column">
@@ -62,12 +108,14 @@ class Uploader extends React.Component {
           <PublishForm
             updateUploaderState={this.updateUploaderState}
             clearUploaderState={this.clearUploaderState}
-            loggedInChannel={this.state.loggedInChannel}
+            makeGetRequest={this.makeGetRequest}
+            loggedInChannelName={this.state.loggedInChannelName}
+            loggedInChannelShortId={this.state.loggedInChannelShortId}
             publishToChannel={this.state.publishToChannel}
             file={this.state.file}
             title={this.state.title}
             channel={this.state.channel}
-            url={this.state.url}
+            claim={this.state.claim}
             thumbnail={this.state.thumbnail}
             description={this.state.description}
             license={this.state.license}
