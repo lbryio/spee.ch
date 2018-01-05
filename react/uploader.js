@@ -1,23 +1,25 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Dropzone from './components/dropzone.jsx';
-import PublishDetails from './components/publishDetails.jsx';
+import PublishForm from './components/publishForm.jsx';
 import PublishStatus from './components/publishStatus.jsx';
 
 const DROPZONE = 'DROPZONE';
 const DETAILS = 'DETAILS';
 const STATUS = 'STATUS';
 const initialState = {
-  showComponent: DROPZONE,  // DROPZONE, DETAILS, or PUBLISHING
-  file         : null,
-  title        : '',
-  channel      : '',
-  url          : '',
-  thumbnail    : '',
-  description  : '',
-  license      : '',
-  nsfw         : '',
-}
+  showComponent   : DROPZONE,  // DROPZONE, DETAILS, or PUBLISHING
+  loggedInChannel : null,
+  publishToChannel: false,
+  file            : null,
+  title           : '',
+  channel         : null,
+  url             : '',
+  thumbnail       : '',
+  description     : '',
+  license         : '',
+  nsfw            : '',
+};
 
 class Uploader extends React.Component {
   constructor (props) {
@@ -28,6 +30,10 @@ class Uploader extends React.Component {
     this.clearUploaderState = this.clearUploaderState.bind(this);
     this.showComponent = this.showComponent.bind(this);
     this.stageFileAndShowDetails = this.stageFileAndShowDetails.bind(this);
+  }
+  componentDidMount () {
+    // check for whether a channel is logged in
+    // if so, setState loggedInChannel to the channel name
   }
   updateUploaderState (name, value) {
     console.log(`updateUploaderState ${name} ${value}`);
@@ -53,9 +59,11 @@ class Uploader extends React.Component {
           <Dropzone stageFileAndShowDetails={this.stageFileAndShowDetails}/>
         }
         { this.state.showComponent === DETAILS &&
-          <PublishDetails
+          <PublishForm
             updateUploaderState={this.updateUploaderState}
             clearUploaderState={this.clearUploaderState}
+            loggedInChannel={this.state.loggedInChannel}
+            publishToChannel={this.state.publishToChannel}
             file={this.state.file}
             title={this.state.title}
             channel={this.state.channel}
