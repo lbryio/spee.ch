@@ -126,7 +126,7 @@ class Dropzone extends React.Component {
   setClaimNameFromFileName (fileName) {
     console.log('setClaimNameFromFileName', fileName);
     const fileNameWithoutEnding = fileName.substring(0, fileName.lastIndexOf('.'));
-    const cleanClaimName = this.props.cleanseClaimName(fileNameWithoutEnding);
+    const cleanClaimName = this.props.cleanseInput(fileNameWithoutEnding);
     this.props.updateUploaderState('claim', cleanClaimName);
   }
   render () {

@@ -42,9 +42,6 @@ class AnonymousOrChannelSelect extends React.Component {
 class PublishForm extends React.Component {
   constructor (props) {
     super(props);
-    this.state = {
-      channelError: null,
-    }
     // set defaults
     this.updateUploaderState = this.updateUploaderState.bind(this);
     this.clearUploaderState = this.clearUploaderState.bind(this);
@@ -73,7 +70,7 @@ class PublishForm extends React.Component {
             <PreviewDropzone
               file={this.props.file}
             />
-
+            { (this.props.file.type === 'video/mp4') && <ThumbnailInput thumbnail={this.props.thumbnail}/> }
           </div>
         </div>
         <div className="column column--5 column--sml-10 align-content-top">
@@ -85,25 +82,22 @@ class PublishForm extends React.Component {
               publishToChannel={this.props.publishToChannel}
               loggedInChannelName={this.props.loggedInChannelName}
               loggedInChannelShortId={this.props.loggedInChannelShortId}
-              cleanseClaimName={this.props.cleanseClaimName}
+              cleanseInput={this.props.cleanseInput}
               updateUploaderState={this.updateUploaderState}
               makeGetRequest={this.props.makeGetRequest}
             />
-
             <AnonymousOrChannelSelect
               publishToChannel={this.props.publishToChannel}
               updateUploaderState={this.props.updateUploaderState}
             />
-
             <ChannelSelector
               channel={this.props.channel}
               loggedInChannelName={this.props.loggedInChannelName}
               publishToChannel={this.props.publishToChannel}
+              cleanseInput={this.props.cleanseInput}
               updateUploaderState={this.updateUploaderState}
-              channelError={this.state.channelError}
+              makeGetRequest={this.props.makeGetRequest}
             />
-
-            { (this.props.file.type === 'video/mp4') && <ThumbnailInput thumbnail={this.props.thumbnail}/> }
 
             <MetadataInputs />
 

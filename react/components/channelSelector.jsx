@@ -1,41 +1,22 @@
 import React from 'react';
+import ChannelLoginForm from './channelLoginForm.jsx';
+import ChannelCreateForm from './channelCreateForm.jsx';
 
 const LOGIN = 'login';
 const CREATE = 'create';
-
-class ChannelLoginForm extends React.Component {
-  constructor (props) {
-    super(props);
-  }
-  render () {
-    return (
-      <div>
-        <h4>Channel Login Form</h4>
-      </div>
-    );
-  }
-}
-
-class ChannelCreateForm extends React.Component {
-  constructor (props) {
-    super(props);
-  }
-  render () {
-    return (
-      <div>
-        <h4>Create Channel Form</h4>
-      </div>
-    );
-  }
-}
 
 class ChannelSelector extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
-      displayCreateOrLogin: null,
+      displayCreateOrLogin: LOGIN,
     };
     this.toggleCreateOrLogin = this.toggleCreateOrLogin.bind(this);
+  }
+  componentWillMount () {
+    if (this.props.loggedInChannelName) {
+      this.setState({ displayCreateOrLogin: null });
+    }
   }
   toggleCreateOrLogin (event) {
     const selectedOption = event.target.selectedOptions[0].value;
@@ -66,7 +47,11 @@ class ChannelSelector extends React.Component {
             </div>
 
             { (this.state.displayCreateOrLogin === LOGIN) && <ChannelLoginForm /> }
-            { (this.state.displayCreateOrLogin === CREATE) && <ChannelCreateForm /> }
+            { (this.state.displayCreateOrLogin === CREATE) &&
+                <ChannelCreateForm
+                  makeGetRequest={this.props.makeGetRequest}
+                  cleanseInput={this.props.cleanseInput}
+                /> }
 
           </div>
         )}

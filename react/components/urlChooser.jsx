@@ -17,9 +17,9 @@ class UrlChooser extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
-      urlError    : null,
-      urlBeginning: 'spee.ch',
-      urlMiddle   : null,
+      error    : null,
+      host     : 'spee.ch',
+      urlMiddle: null,
     };
     this.handleInput = this.handleInput.bind(this);
     this.checkClaimIsAvailable = this.checkClaimIsAvailable.bind(this);
@@ -28,7 +28,7 @@ class UrlChooser extends React.Component {
     event.preventDefault();
     let value = event.target.value;
     const name = event.target.name;
-    value = this.props.cleanseClaimName(value);
+    value = this.props.cleanseInput(value);
     this.props.updateUploaderState(name, value);
     this.checkClaimIsAvailable(value);
   }
@@ -36,10 +36,10 @@ class UrlChooser extends React.Component {
     const that = this;
     this.props.makeGetRequest(`/api/claim-is-available/${claim}`)
       .then(() => {
-        that.setState({urlError: null});
+        that.setState({'error': null});
       })
       .catch((error) => {
-        that.setState({urlError: error.message});
+        that.setState({'error': error.message});
       });
   }
   render () {
@@ -47,18 +47,18 @@ class UrlChooser extends React.Component {
       <div>
         <div className="row row--padded row--no-top row--wide">
 
-          <p id="input-error-claim-name" className="info-message-placeholder info-message--failure">{this.state.urlError}</p>
+          <p id="input-error-claim-name" className="info-message-placeholder info-message--failure">{this.state.error}</p>
 
           <div className="column column--3 column--sml-10">
             <label className="label">URL:</label>
           </div><div className="column column--7 column--sml-10 input-text--primary span--relative">
 
-            <span className="url-text--secondary">{this.state.urlBeginning} / </span>
+            <span className="url-text--secondary">{this.state.host} / </span>
 
             <UrlMiddle publishToChannel={this.props.publishToChannel} loggedInChannelName={this.props.loggedInChannelName} loggedInChannelShortId={this.props.loggedInChannelShortId}/>
 
             <input type="text" id="claim-name-input" className="input-text" name='claim' placeholder="your-url-here" onChange={this.handleInput} value={this.props.claim}/>
-            { (this.props.claim && !this.state.urlError) && (
+            { (this.props.claim && !this.state.error) && (
               <span id="input-success-claim-name" className="info-message--success span--absolute">{'\u2713'}</span>
             )}
 

@@ -31,7 +31,7 @@ class Uploader extends React.Component {
     this.clearUploaderState = this.clearUploaderState.bind(this);
     this.makeGetRequest = this.makeGetRequest.bind(this);
     this.makePostRequest = this.makePostRequest.bind(this);
-    this.cleanseClaimName = this.cleanseClaimName.bind(this);
+    this.cleanseInput = this.cleanseInput.bind(this);
     this.getCookie = this.getCookie.bind(this);
   }
   componentDidMount () {
@@ -88,10 +88,10 @@ class Uploader extends React.Component {
       xhttp.send(params);
     });
   }
-  cleanseClaimName (name) {
-    name = name.replace(/\s+/g, '-'); // replace spaces with dashes
-    name = name.replace(/[^A-Za-z0-9-]/g, '');  // remove all characters that are not A-Z, a-z, 0-9, or '-'
-    return name;
+  cleanseInput (input) {
+    input = input.replace(/\s+/g, '-'); // replace spaces with dashes
+    input = input.replace(/[^A-Za-z0-9-]/g, '');  // remove all characters that are not A-Z, a-z, 0-9, or '-'
+    return input;
   }
   getCookie (cname) {
     const name = cname + '=';
@@ -114,7 +114,7 @@ class Uploader extends React.Component {
         { this.state.showComponent === DROPZONE &&
           <Dropzone
             updateUploaderState={this.updateUploaderState}
-            cleanseClaimName={this.cleanseClaimName}
+            cleanseInput={this.cleanseInput}
           />
         }
         { this.state.showComponent === DETAILS &&
@@ -122,7 +122,7 @@ class Uploader extends React.Component {
             updateUploaderState={this.updateUploaderState}
             clearUploaderState={this.clearUploaderState}
             makeGetRequest={this.makeGetRequest}
-            cleanseClaimName={this.cleanseClaimName}
+            cleanseInput={this.cleanseInput}
             loggedInChannelName={this.state.loggedInChannelName}
             loggedInChannelShortId={this.state.loggedInChannelShortId}
             publishToChannel={this.state.publishToChannel}
