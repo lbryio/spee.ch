@@ -29,10 +29,9 @@ class Uploader extends React.Component {
     // bind class methods with `this`
     this.updateUploaderState = this.updateUploaderState.bind(this);
     this.clearUploaderState = this.clearUploaderState.bind(this);
-    this.showComponent = this.showComponent.bind(this);
-    this.stageFileAndShowDetails = this.stageFileAndShowDetails.bind(this);
     this.makeGetRequest = this.makeGetRequest.bind(this);
     this.makePostRequest = this.makePostRequest.bind(this);
+    this.cleanseClaimName = this.cleanseClaimName.bind(this);
   }
   componentDidMount () {
     // check for whether a channel is logged in
@@ -48,16 +47,6 @@ class Uploader extends React.Component {
   }
   clearUploaderState () {
     this.setState(initialState);
-  }
-  showComponent (component) {
-    this.setState({showComponent: component});
-  }
-  stageFileAndShowDetails (selectedFile) {
-    console.log('stageFileAndShowDetails', selectedFile);
-    // store the selected file for upload
-    this.setState({'file': selectedFile});
-    // hide the dropzone and show the details
-    this.showComponent(DETAILS);
   }
   makeGetRequest (url) {
     return new Promise((resolve, reject) => {
@@ -98,17 +87,26 @@ class Uploader extends React.Component {
       xhttp.send(params);
     });
   }
+  cleanseClaimName (name) {
+    name = name.replace(/\s+/g, '-'); // replace spaces with dashes
+    name = name.replace(/[^A-Za-z0-9-]/g, '');  // remove all characters that are not A-Z, a-z, 0-9, or '-'
+    return name;
+  }
   render () {
     return (
       <div className="row row--tall flex-container--column">
         { this.state.showComponent === DROPZONE &&
-          <Dropzone stageFileAndShowDetails={this.stageFileAndShowDetails}/>
+          <Dropzone
+            updateUploaderState={this.updateUploaderState}
+            cleanseClaimName={this.cleanseClaimName}
+          />
         }
         { this.state.showComponent === DETAILS &&
           <PublishForm
             updateUploaderState={this.updateUploaderState}
             clearUploaderState={this.clearUploaderState}
             makeGetRequest={this.makeGetRequest}
+            cleanseClaimName={this.cleanseClaimName}
             loggedInChannelName={this.state.loggedInChannelName}
             loggedInChannelShortId={this.state.loggedInChannelShortId}
             publishToChannel={this.state.publishToChannel}

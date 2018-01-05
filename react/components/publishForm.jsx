@@ -85,11 +85,15 @@ class PublishForm extends React.Component {
               publishToChannel={this.props.publishToChannel}
               loggedInChannelName={this.props.loggedInChannelName}
               loggedInChannelShortId={this.props.loggedInChannelShortId}
+              cleanseClaimName={this.props.cleanseClaimName}
               updateUploaderState={this.updateUploaderState}
               makeGetRequest={this.props.makeGetRequest}
             />
 
-            <AnonymousOrChannelSelect publishToChannel={this.props.publishToChannel} updateUploaderState={this.props.updateUploaderState}/>
+            <AnonymousOrChannelSelect
+              publishToChannel={this.props.publishToChannel}
+              updateUploaderState={this.props.updateUploaderState}
+            />
 
             <ChannelSelector
               channel={this.props.channel}
