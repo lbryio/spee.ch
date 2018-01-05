@@ -1,11 +1,12 @@
 const logger = require('winston');
 const multipart = require('connect-multiparty');
+const multipartMiddleware = multipart();
 const { files, site } = require('../config/speechConfig.js');
-const multipartMiddleware = multipart({uploadDir: files.uploadDirectory});
+const { uploadDirectory } = files;
 const db = require('../models');
 const { checkClaimNameAvailability, checkChannelAvailability, publish } = require('../controllers/publishController.js');
 const { getClaimList, resolveUri, getClaim } = require('../helpers/lbryApi.js');
-const { createPublishParams, parsePublishApiRequestBody, parsePublishApiRequestFiles, parsePublishApiChannel } = require('../helpers/publishHelpers.js');
+const { createPublishParams, parsePublishApiRequestBody, parsePublishApiRequestFiles, parsePublishApiChannel, renameAndMoveTempFileToUploadDirectory } = require('../helpers/publishHelpers.js');
 const errorHandlers = require('../helpers/errorHandlers.js');
 const { authenticateIfNoUserToken } = require('../auth/authentication.js');
 
@@ -130,7 +131,6 @@ module.exports = (app) => {
     let  name, fileName, filePath, fileType, nsfw, license, title, description, thumbnail, channelName, channelPassword;
     // validate the body and files of the request
     try {
-      // validateApiPublishRequest(body, files);
       ({name, nsfw, license, title, description, thumbnail} = parsePublishApiRequestBody(body));
       ({fileName, filePath, fileType} = parsePublishApiRequestFiles(files));
       ({channelName, channelPassword} = parsePublishApiChannel(body, user));
@@ -151,6 +151,14 @@ module.exports = (app) => {
       if (!result) {
         throw new Error('That name is already claimed by another user.');
       }
+      // move the temporary file
+      logger.debug(`fileName: ${fileName}`);
+      logger.debug(`filePath: ${filePath}`);
+      return renameAndMoveTempFileToUploadDirectory(uploadDirectory, name, filePath);
+    })
+    .then(({fileName, filePath}) => {
+      logger.debug(`new fileName: ${fileName}`);
+      logger.debug(`new filePath: ${filePath}`);
       // create publish parameters object
       return createPublishParams(filePath, name, title, description, license, nsfw, thumbnail, channelName);
     })

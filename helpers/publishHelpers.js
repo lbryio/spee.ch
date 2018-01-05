@@ -1,6 +1,7 @@
 const logger = require('winston');
 const fs = require('fs');
 const { site, wallet } = require('../config/speechConfig.js');
+const mv = require('mv');
 
 module.exports = {
   parsePublishApiRequestBody ({name, nsfw, license, title, description, thumbnail}) {
@@ -29,7 +30,6 @@ module.exports = {
     };
   },
   parsePublishApiRequestFiles ({file}) {
-    logger.debug('file', file);
     // make sure a file was provided
     if (!file) {
       throw new Error('no file with key of [file] found in request');
@@ -41,7 +41,7 @@ module.exports = {
       throw new Error('no file type found');
     }
     if (!file.size) {
-      throw new Error('no file type found');
+      throw new Error('no file size found');
     }
     // validate the file name
     if (/'/.test(file.name)) {
@@ -149,6 +149,20 @@ module.exports = {
     }
     return publishParams;
   },
+  renameAndMoveTempFileToUploadDirectory (uploadDirectory, name, filePath) {
+    const oldFilePath = filePath;
+    const fileExtension = filePath.substring(filePath.lastIndexOf('.') + 1);
+    const newFileName = `${name}-${Date.now()}.${fileExtension}`;
+    const newFilePath = `${uploadDirectory}${newFileName}`;
+    return new Promise((resolve, reject) => {
+      mv(oldFilePath, newFilePath, (err) => {
+        if (err) {
+          reject(err);
+        }
+        resolve({fileName: newFileName, filePath: newFilePath});
+      });
+    });
+  },
   deleteTemporaryFile (filePath) {
     fs.unlink(filePath, err => {
       if (err) {
@@ -158,5 +172,4 @@ module.exports = {
       logger.debug(`successfully deleted ${filePath}`);
     });
   },
-
 };
