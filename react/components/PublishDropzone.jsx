@@ -2,7 +2,7 @@ import React from 'react';
 
 const DETAILS = 'DETAILS';
 
-class Dropzone extends React.Component {
+class PublishDropzone extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
@@ -154,4 +154,4 @@ class Dropzone extends React.Component {
   }
 };
 
-module.exports = Dropzone;
+module.exports = PublishDropzone;

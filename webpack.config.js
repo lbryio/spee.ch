@@ -1,7 +1,7 @@
 const path = require('path');
 
 module.exports = {
-  entry : './react/uploader.js',
+  entry : './react/PublishTool.js',
   output: {
     path    : path.join(__dirname, '/public/bundle/'),
     filename: 'bundle.js',

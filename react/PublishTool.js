@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Dropzone from './components/dropzone.jsx';
-import PublishForm from './components/publishForm.jsx';
-import PublishStatus from './components/publishStatus.jsx';
+import PublishDropzone from './components/PublishDropzone.jsx';
+import PublishForm from './components/PublishForm.jsx';
+import PublishStatus from './components/PublishStatus.jsx';
 
 const DROPZONE = 'DROPZONE';
 const DETAILS = 'DETAILS';
@@ -12,6 +12,7 @@ const initialState = {
   loggedInChannelName   : null,
   loggedInChannelShortId: null,
   publishToChannel      : false,
+  error                 : null,
   file                  : null,
   title                 : '',
   claim                 : '',
@@ -21,7 +22,7 @@ const initialState = {
   nsfw                  : '',
 };
 
-class Uploader extends React.Component {
+class PublishTool extends React.Component {
   constructor (props) {
     super(props);
     this.state = initialState;
@@ -54,10 +55,10 @@ class Uploader extends React.Component {
       xhttp.open('GET', url, true);
       xhttp.responseType = 'json';
       xhttp.onreadystatechange = () => {
-        if (xhttp.readyState == 4 ) {
-          if ( xhttp.status == 200) {
+        if (xhttp.readyState === 4) {
+          if (xhttp.status === 200) {
             resolve(xhttp.response);
-          } else if (xhttp.status == 403) {
+          } else if (xhttp.status === 401) {
             reject('Wrong channel name or password');
           } else {
             reject('request failed with status:' + xhttp.status);
@@ -77,7 +78,7 @@ class Uploader extends React.Component {
         if (xhttp.readyState === 4) {
           if (xhttp.status === 200) {
             resolve(xhttp.response);
-          } else if (xhttp.status === 403) {
+          } else if (xhttp.status === 401) {
             reject('Wrong channel name or password');
           } else {
             reject('request failed with status:' + xhttp.status);
@@ -111,7 +112,7 @@ class Uploader extends React.Component {
     return (
       <div className="row row--tall flex-container--column">
         { this.state.showComponent === DROPZONE &&
-          <Dropzone
+          <PublishDropzone
             updateUploaderState={this.updateUploaderState}
             cleanseInput={this.cleanseInput}
           />
@@ -126,6 +127,7 @@ class Uploader extends React.Component {
             loggedInChannelName={this.state.loggedInChannelName}
             loggedInChannelShortId={this.state.loggedInChannelShortId}
             publishToChannel={this.state.publishToChannel}
+            error={this.state.error}
             file={this.state.file}
             title={this.state.title}
             claim={this.state.claim}
@@ -144,6 +146,6 @@ class Uploader extends React.Component {
 };
 
 ReactDOM.render(
-  <Uploader />,
+  <PublishTool />,
   document.getElementById('react-uploader')
 );

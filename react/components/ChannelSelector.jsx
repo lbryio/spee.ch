@@ -1,6 +1,6 @@
 import React from 'react';
-import ChannelLoginForm from './channelLoginForm.jsx';
-import ChannelCreateForm from './channelCreateForm.jsx';
+import ChannelLoginForm from './ChannelLoginForm.jsx';
+import ChannelCreateForm from './ChannelCreateForm.jsx';
 
 const LOGIN = 'login';
 const CREATE = 'create';
