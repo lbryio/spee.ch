@@ -104,7 +104,7 @@ class PublishForm extends React.Component {
 
             <div className="row row--padded row--wide">
               <div className="input-error" id="input-error-publish-submit" hidden="true">{this.props.inputError}</div>
-              <button id="publish-submit" className="button--primary button--large" onClick={this.publish}>Upload</button>
+              <button id="publish-submit" className="button--primary button--large" onClick={this.publish}>Publish</button>
             </div>
 
             <div className="row row--short align-content-center">

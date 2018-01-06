@@ -8,7 +8,7 @@ function showChannelCreateInProgressDisplay () {
     createProgressBar(channelProgressBar, 12);
 }
 
-// display the content that shows channle creation is done
+// display the content that shows channel creation is done
 function showChannelCreateDoneDisplay() {
     const inProgress = document.getElementById('channel-publish-in-progress');
     inProgress.hidden=true;
@@ -35,14 +35,7 @@ function publishNewChannel (event) {
         .then(result => {
             setUserCookies(result.channelName, result.channelClaimId, result.shortChannelId);
             showChannelCreateDoneDisplay();
-            // if user is on the home page, update the needed elements without reloading
-            if (window.location.pathname === '/') {
-                replaceChannelOptionInPublishChannelSelect(result.channelName);
-                replaceChannelOptionInNavBarChannelSelect(result.channelName);
-            // if user is not on home page, redirect to home page
-            } else {
-                window.location = '/';
-            }
+            window.location = '/';
         })
         .catch(error => {
             if (error.name === 'ChannelNameError' || error.name === 'ChannelPasswordError'){

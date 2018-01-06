@@ -13,11 +13,12 @@ class ChannelSelector extends React.Component {
     };
     this.handleSelection = this.handleSelection.bind(this);
     this.selectOption = this.selectOption.bind(this);
+    this.replaceChannelSelectionInNavBar = this.replaceChannelSelectionInNavBar.bind(this);
     this.updateLoggedInChannelOutsideReact = this.updateLoggedInChannelOutsideReact.bind(this);
   }
   componentWillMount () {
     if (this.props.loggedInChannelName) {
-      this.setState({ optionState: null });
+      this.setState({ optionState: this.props.loggedInChannelName });
     }
   }
   handleSelection (event) {
@@ -27,10 +28,30 @@ class ChannelSelector extends React.Component {
   selectOption (option) {
     this.setState({optionState: option});
   }
+  replaceChannelSelectionInNavBar (loggedInChannel) {
+    // remove the old channel option
+    const oldChannel = document.getElementById('nav-bar-channel-select-channel-option');
+    if (oldChannel) {
+      oldChannel.parentNode.removeChild(oldChannel);
+    }
+    // create new channel option & select it
+    const newChannelOption = document.createElement('option');
+    newChannelOption.setAttribute('value', loggedInChannel);
+    newChannelOption.setAttribute('id', 'nav-bar-channel-select-channel-option');
+    newChannelOption.setAttribute('selected', '');
+    newChannelOption.innerText = loggedInChannel;
+    // add the new option
+    const channelSelect = document.getElementById('nav-bar-channel-select');
+    channelSelect.style.display = 'inline-block';
+    channelSelect.insertBefore(newChannelOption, channelSelect.firstChild);
+    // hide login
+    const navBarLoginLink = document.getElementById('nav-bar-login-link');
+    navBarLoginLink.style.display = 'none';
+  }
   updateLoggedInChannelOutsideReact (channelName, channelClaimId, shortChannelId) {
     // update anywhere on page that needs to be updated outside of this component
     setUserCookies(channelName, channelClaimId, shortChannelId);
-    replaceChannelOptionInNavBarChannelSelect(channelName);
+    this.replaceChannelSelectionInNavBar(channelName);
   }
   render () {
     return (
@@ -61,6 +82,7 @@ class ChannelSelector extends React.Component {
               <ChannelCreateForm
                 cleanseInput={this.props.cleanseInput}
                 makeGetRequest={this.props.makeGetRequest}
+                makePostRequest={this.props.makePostRequest}
                 updateLoggedInChannelOutsideReact={this.updateLoggedInChannelOutsideReact}
                 updateUploaderState={this.props.updateUploaderState}
                 selectOption={this.selectOption}

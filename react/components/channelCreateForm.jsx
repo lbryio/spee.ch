@@ -1,24 +1,5 @@
 import React from 'react';
 
-function ChannelSuccess (message) {
-  return (
-    <div>
-      <p>{this.props.message}</p>
-    </div>
-  );
-}
-
-function ChannelInProgress () {
-  return (
-    <div id="channel-publish-in-progress">
-      <p>Creating your new channel.  This may take a few seconds...</p>
-      <div id="create-channel-progress-bar"></div>
-    </div>
-  );
-}
-
-
-
 class ChannelCreateForm extends React.Component {
   constructor (props) {
     super(props);
@@ -57,39 +38,75 @@ class ChannelCreateForm extends React.Component {
         that.setState({error: error.message});
       });
   }
+  validatePassword (password) {
+    if (!password || password.length < 1) {
+      throw new Error('Please provide a password');
+    }
+  }
   createChannel (event) {
     event.preventDefault();
-    // publishNewChannel(event)
+    const params = `username=${this.state.channel}&password=${this.state.password}`;
+    const url = '/signup';
+    // validate submission data
+    try {
+      this.validatePassword(this.state.password);
+    } catch (error) {
+      return this.setState({error: error.message});
+    }
+    // publish the channel
+    const that = this;
+    this.setState({status: 'We are publishing your new channel.  Sit tight...'});
+    this.props.makePostRequest(url, params)
+      .then(result => {
+        that.props.updateLoggedInChannelOutsideReact(result.channelName, result.channelClaimId, result.shortChannelId);
+        that.props.updateUploaderState('loggedInChannelName', result.channelName);
+        that.props.updateUploaderState('loggedInChannelShortId', result.shortChannelId);
+        that.props.selectOption(result.channelName);
+      })
+      .catch(error => {
+        console.log('create channel failure:', error);
+        if (error.message) {
+          this.setState({'error': error.message});
+        } else {
+          this.setState({'error': 'Unfortunately, we encountered an error while creating your channel.  Please let us know in Discord!'});
+        }
+      });
   }
   render () {
     return (
-      <form id="publish-channel-form">
-        <p id="input-error-channel-name" className="info-message-placeholder info-message--failure">{this.state.error}</p>
-        <div className="row row--wide row--short">
-          <div className="column column--3 column--sml-10">
-            <label className="label" htmlFor="new-channel-name">Name:</label>
-          </div><div className="column column--6 column--sml-10">
-            <div className="input-text--primary flex-container--row flex-container--left-bottom">
-              <span>@</span>
-              <input type="text" name="new-channel-name" id="new-channel-name" className="input-text" placeholder="exampleChannelName" value={this.channel} onChange={this.handleChannelInput} />
+      <div>
+        { !this.state.status ? (
+          <form id="publish-channel-form">
+            <p id="input-error-channel-name" className="info-message-placeholder info-message--failure">{this.state.error}</p>
+            <div className="row row--wide row--short">
+              <div className="column column--3 column--sml-10">
+                <label className="label" htmlFor="new-channel-name">Name:</label>
+              </div><div className="column column--6 column--sml-10">
+              <div className="input-text--primary flex-container--row flex-container--left-bottom">
+                <span>@</span>
+                <input type="text" name="channel" id="new-channel-name" className="input-text" placeholder="exampleChannelName" value={this.channel} onChange={this.handleChannelInput} />
                 <span id="input-success-channel-name" className="info-message--success">{'\u2713'}</span>
+              </div>
             </div>
-          </div>
-        </div>
-        <div className="row row--wide row--short">
-          <div className="column column--3 column--sml-10">
-            <label className="label" htmlFor="new-channel-password">Password:</label>
-          </div><div className="column column--6 column--sml-10">
-            <div className="input-text--primary">
-              <input type="password" name="new-channel-password" id="new-channel-password" className="input-text"  placeholder="" value={this.password} onChange={this.handleInput} />
             </div>
-          </div>
-        </div>
+            <div className="row row--wide row--short">
+              <div className="column column--3 column--sml-10">
+                <label className="label" htmlFor="new-channel-password">Password:</label>
+              </div><div className="column column--6 column--sml-10">
+              <div className="input-text--primary">
+                <input type="password" name="password" id="new-channel-password" className="input-text"  placeholder="" value={this.password} onChange={this.handleInput} />
+              </div>
+            </div>
+            </div>
 
-        <div className="row row--wide">
-          <button className="button--primary" onClick={this.createChannel}>Create</button>
-        </div>
-      </form>
+            <div className="row row--wide">
+              <button className="button--primary" onClick={this.createChannel}>Create</button>
+            </div>
+          </form>
+        ) : (
+            <p>{this.state.status}</p>
+        )}
+      </div>
     );
   }
 }

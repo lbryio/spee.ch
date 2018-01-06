@@ -65,11 +65,6 @@ const validationFunctions = {
             throw new ChannelPasswordError("You must enter a password for you channel");
         }
     },
-    cleanseClaimName: function (name) {
-        name = name.replace(/\s+/g, '-'); // replace spaces with dashes
-        name = name.replace(/[^A-Za-z0-9-]/g, '');  // remove all characters that are not A-Z, a-z, 0-9, or '-'
-        return name;
-    },
     // validation functions to check claim & channel name eligibility as the inputs change
     isNameAvailable: function (name, apiUrl) {
         const url = apiUrl + name;
@@ -115,11 +110,6 @@ const validationFunctions = {
             that.hideSuccess(successDisplayElement);
             that.showError(errorDisplayElement, error.message);
         }
-    },
-    checkClaimName: function (name) {
-        const successDisplayElement = document.getElementById('input-success-claim-name');
-        const errorDisplayElement = document.getElementById('input-error-claim-name');
-        this.checkAvailability(name, successDisplayElement, errorDisplayElement, this.validateClaimName, 'Sorry, that ending is already taken', '/api/claim-is-available/');
     },
     checkChannelName: function (name) {
         const successDisplayElement = document.getElementById('input-success-channel-name');

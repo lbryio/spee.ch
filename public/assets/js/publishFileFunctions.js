@@ -1,16 +1,6 @@
 var stagedFiles = null;
 
 const publishFileFunctions = {
-    cancelPublish: function () {
-        window.location.href = '/';
-    },
-
-    hidePrimaryDropzone: function () {
-        const primaryDropzone = document.getElementById('primary-dropzone');
-        const publishForm = document.getElementById('publish-form');
-        primaryDropzone.setAttribute('class', 'hidden');
-        publishForm.setAttribute('class', 'row')
-    },
     returnNullOrChannel: function () {
         const channelRadio = document.getElementById('channel-radio');
         if (channelRadio.checked) {
@@ -145,37 +135,6 @@ const publishFileFunctions = {
         this.updateUploadPercent('<p><a class="link--primary" target="_blank" href="' + showUrl + '">If you do not get redirected, click here.</a></p>')
         // redirect the user
         window.location.href = showUrl;
-    },
-    hidePublishTools: function () {
-        const publishFormWrapper = document.getElementById('publish-form');
-        publishFormWrapper.setAttribute('class', 'hidden');
-    },
-    // publish status functions
-    showPublishStatus: function () {
-        const publishStatus = document.getElementById('publish-status');
-        publishStatus.setAttribute('class', 'row row--tall flex-container--column flex-container--center-center');
-    },
-    updatePublishStatus: function (msg){
-        const publishUpdate = document.getElementById('publish-update');
-        publishUpdate.innerHTML = msg;
-    },
-    // progress bar functions
-    showPublishProgressBar: function (){
-        const publishProgressBar = document.getElementById('publish-progress-bar');
-        createProgressBar(publishProgressBar, 12);
-    },
-    hidePublishProgressBar: function (){
-        const publishProgressBar = document.getElementById('publish-progress-bar');
-        publishProgressBar.hidden = true;
-    },
-    // upload percent functions
-    updateUploadPercent: function (msg){
-        const uploadPercent = document.getElementById('upload-percent');
-        uploadPercent.innerHTML = msg;
-    },
-    hideUploadPercent: function (){
-        const uploadPercent = document.getElementById('upload-percent');
-        uploadPercent.hidden = true;
     },
 }
 
