@@ -1,8 +1,8 @@
 import React from 'react';
 import PreviewDropzone from './PreviewDropzone.jsx';
-import TitleInput from './PublishTitleInput.jsx';
+import PublishTitleInput from './PublishTitleInput.jsx';
 import ChannelSelector from './ChannelSelector.jsx';
-import UrlChooser from './PublishUrlInput.jsx';
+import PublishUrlInput from './PublishUrlInput.jsx';
 import PublishThumbnailInput from './PublishThumbnailInput.jsx';
 import PublishMetadataInputs from './PublishMetadataInputs.jsx';
 import AnonymousOrChannelSelect from './AnonymousOrChannelSelect.jsx';
@@ -25,9 +25,9 @@ class PublishForm extends React.Component {
       <div className="row row--no-bottom">
         <div className="column column--10">
 
-          <TitleInput
+          <PublishTitleInput
             title={this.props.title}
-            updateUploaderState={this.updateUploaderState}
+            updateUploaderState={this.props.updateUploaderState}
           />
 
         </div>
@@ -47,7 +47,7 @@ class PublishForm extends React.Component {
         <div className="column column--5 column--sml-10 align-content-top">
           <div id="publish-active-area" className="row row--padded">
 
-            <UrlChooser
+            <PublishUrlInput
               fileName={this.props.file.name}
               claim={this.props.claim}
               publishToChannel={this.props.publishToChannel}
