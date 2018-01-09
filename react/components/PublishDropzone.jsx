@@ -1,6 +1,8 @@
 import React from 'react';
+// import PropTypes from 'prop-types';
 
-const DETAILS = 'DETAILS';
+import { selectFile } from '../actions';
+import { connect } from 'react-redux';
 
 class PublishDropzone extends React.Component {
   constructor (props) {
@@ -16,7 +18,6 @@ class PublishDropzone extends React.Component {
     this.handleDragLeave = this.handleDragLeave.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.handleFileInput = this.handleFileInput.bind(this);
-    this.stageFile = this.stageFile.bind(this);
     this.setClaimNameFromFileName = this.setClaimNameFromFileName.bind(this);
   }
   validateFile (file) {
@@ -73,7 +74,7 @@ class PublishDropzone extends React.Component {
         }
         // stage it so it will be ready when the publish button is clicked
         this.setClaimNameFromFileName(droppedFile.name);
-        this.stageFile(droppedFile);
+        this.props.onFileSelect(droppedFile);
       }
     }
   }
@@ -113,15 +114,8 @@ class PublishDropzone extends React.Component {
       }
       // stage it so it will be ready when the publish button is clicked
       this.setClaimNameFromFileName(chosenFile.name);
-      this.stageFile(chosenFile);
+      this.props.onFileSelect(chosenFile);
     }
-  }
-  stageFile (selectedFile) {
-    console.log('stageFileAndShowDetails', selectedFile);
-    // store the selected file for upload
-    this.props.updateUploaderState('file', selectedFile);
-    // show the publish form
-    this.props.updateUploaderState('showComponent', DETAILS);
   }
   setClaimNameFromFileName (fileName) {
     console.log('setClaimNameFromFileName', fileName);
@@ -154,4 +148,18 @@ class PublishDropzone extends React.Component {
   }
 };
 
-module.exports = PublishDropzone;
+const mapStateToProps = state => {
+  return {
+    file: state.file,
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onFileSelect: (file) => {
+      dispatch(selectFile(file));
+    },
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(PublishDropzone);

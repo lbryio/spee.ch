@@ -1,34 +1,14 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import PublishDropzone from './components/PublishDropzone.jsx';
-import PublishForm from './components/PublishForm.jsx';
-import PublishStatus from './components/PublishStatus.jsx';
-
-const DROPZONE = 'DROPZONE';
-const DETAILS = 'DETAILS';
-const STATUS = 'STATUS';
-const initialState = {
-  showComponent         : DROPZONE,  // DROPZONE, DETAILS, or PUBLISHING
-  loggedInChannelName   : null,
-  loggedInChannelShortId: null,
-  publishToChannel      : false,
-  error                 : null,
-  file                  : null,
-  title                 : '',
-  claim                 : '',
-  thumbnail             : '',
-  description           : '',
-  license               : '',
-  nsfw                  : '',
-};
+import PublishDropzone from './PublishDropzone.jsx';
+import PublishForm from './PublishForm.jsx';
+import PublishStatus from './PublishStatus.jsx';
+import {connect} from 'react-redux';
 
 class PublishTool extends React.Component {
   constructor (props) {
     super(props);
-    this.state = initialState;
     // bind class methods with `this`
     this.updateUploaderState = this.updateUploaderState.bind(this);
-    this.clearUploaderState = this.clearUploaderState.bind(this);
     this.makeGetRequest = this.makeGetRequest.bind(this);
     this.makePostRequest = this.makePostRequest.bind(this);
     this.cleanseInput = this.cleanseInput.bind(this);
@@ -45,9 +25,6 @@ class PublishTool extends React.Component {
   updateUploaderState (name, value) {
     console.log(`updateUploaderState ${name} ${value}`);
     this.setState({[name]: value});
-  }
-  clearUploaderState () {
-    this.setState(initialState);
   }
   makeGetRequest (url) {
     return new Promise((resolve, reject) => {
@@ -111,33 +88,22 @@ class PublishTool extends React.Component {
   render () {
     return (
       <div className="row row--tall flex-container--column">
-        { this.state.showComponent === DROPZONE &&
+        { !this.props.file &&
           <PublishDropzone
             updateUploaderState={this.updateUploaderState}
             cleanseInput={this.cleanseInput}
           />
         }
-        { this.state.showComponent === DETAILS &&
+        { this.props.file &&
           <PublishForm
             updateUploaderState={this.updateUploaderState}
             clearUploaderState={this.clearUploaderState}
             makeGetRequest={this.makeGetRequest}
             makePostRequest={this.makePostRequest}
             cleanseInput={this.cleanseInput}
-            loggedInChannelName={this.state.loggedInChannelName}
-            loggedInChannelShortId={this.state.loggedInChannelShortId}
-            publishToChannel={this.state.publishToChannel}
-            error={this.state.error}
-            file={this.state.file}
-            title={this.state.title}
-            claim={this.state.claim}
-            thumbnail={this.state.thumbnail}
-            description={this.state.description}
-            license={this.state.license}
-            nsfw={this.state.nsfw}
           />
         }
-        { this.state.showComponent === STATUS &&
+        { this.props.publishStatus &&
           <PublishStatus />
         }
       </div>
@@ -145,7 +111,10 @@ class PublishTool extends React.Component {
   }
 };
 
-ReactDOM.render(
-  <PublishTool />,
-  document.getElementById('react-uploader')
-);
+const mapStateToProps = state => {
+  return {
+    file: state.file,
+  };
+};
+
+export default connect(mapStateToProps, null)(PublishTool);

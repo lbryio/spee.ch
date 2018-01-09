@@ -7,6 +7,9 @@ import PublishThumbnailInput from './PublishThumbnailInput.jsx';
 import PublishMetadataInputs from './PublishMetadataInputs.jsx';
 import AnonymousOrChannelSelect from './AnonymousOrChannelSelect.jsx';
 
+import { selectFile, clearFile } from '../actions';
+import { connect } from 'react-redux';
+
 class PublishForm extends React.Component {
   constructor (props) {
     super(props);
@@ -14,7 +17,7 @@ class PublishForm extends React.Component {
     this.state = {
       error             : null,
       showMetadataInputs: false,
-    }
+    };
     this.publish = this.publish.bind(this);
   }
   publish () {
@@ -80,7 +83,7 @@ class PublishForm extends React.Component {
             </div>
 
             <div className="row row--short align-content-center">
-              <button className="button--cancel" onClick={this.props.clearUploaderState}>Cancel</button>
+              <button className="button--cancel" onClick={this.props.onFileClear}>Cancel</button>
             </div>
 
             <div className="row row--short align-content-center">
@@ -94,4 +97,30 @@ class PublishForm extends React.Component {
   }
 };
 
-module.exports = PublishForm;
+const mapStateToProps = state => {
+  return {
+    loggedInChannelName   : state.loggedInChannelName,
+    loggedInChannelShortId: state.loggedInChannelShortId,
+    publishToChannel      : state.publishToChannel,
+    file                  : state.file,
+    title                 : state.title,
+    claim                 : state.claim,
+    thumbnail             : state.thumbnail,
+    description           : state.description,
+    license               : state.license,
+    nsfw                  : state.nsfw,
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onFileSelect: (file) => {
+      dispatch(selectFile(file));
+    },
+    onFileClear: () => {
+      dispatch(clearFile());
+    },
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(PublishForm);
