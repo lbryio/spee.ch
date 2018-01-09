@@ -256,7 +256,7 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
             case 1:
               return resolve(result[0].claimId);
             default:
-              logger.error(`${result.length} records found for ${claimName} from channel ${claimName}`);
+              logger.error(`${result.length} records found for "${claimName}" in channel "${channelClaimId}"`);
               return resolve(result[0].claimId);
           }
         })
