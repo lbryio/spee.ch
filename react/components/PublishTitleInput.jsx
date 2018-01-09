@@ -1,4 +1,6 @@
 import React from 'react';
+import {updateMetadata} from '../actions';
+import {connect} from 'react-redux';
 
 class TitleInput extends React.Component {
   constructor (props) {
@@ -9,7 +11,7 @@ class TitleInput extends React.Component {
     e.preventDefault();
     const name = e.target.name;
     const value = e.target.value;
-    this.props.updateUploaderState(name, value);
+    this.props.onMetadataChange(name, value);
   }
   render () {
     return (
@@ -18,4 +20,18 @@ class TitleInput extends React.Component {
   }
 }
 
-module.exports = TitleInput;
+const mapStateToProps = state => {
+  return {
+    title: state.metadata.title,
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onMetadataChange: (name, value) => {
+      dispatch(updateMetadata(name, value));
+    },
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(TitleInput);

@@ -97,7 +97,6 @@ class PublishTool extends React.Component {
         { this.props.file &&
           <PublishForm
             updateUploaderState={this.updateUploaderState}
-            clearUploaderState={this.clearUploaderState}
             makeGetRequest={this.makeGetRequest}
             makePostRequest={this.makePostRequest}
             cleanseInput={this.cleanseInput}

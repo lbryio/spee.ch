@@ -28,10 +28,7 @@ class PublishForm extends React.Component {
       <div className="row row--no-bottom">
         <div className="column column--10">
 
-          <PublishTitleInput
-            title={this.props.title}
-            updateUploaderState={this.props.updateUploaderState}
-          />
+          <PublishTitleInput />
 
         </div>
         <div className="column column--5 column--sml-10" >
@@ -103,7 +100,6 @@ const mapStateToProps = state => {
     loggedInChannelShortId: state.loggedInChannelShortId,
     publishToChannel      : state.publishToChannel,
     file                  : state.file,
-    title                 : state.title,
     claim                 : state.claim,
     thumbnail             : state.thumbnail,
     description           : state.description,
