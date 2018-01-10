@@ -17,6 +17,61 @@ class PublishDropzone extends React.Component {
     this.handleDragLeave = this.handleDragLeave.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.handleFileInput = this.handleFileInput.bind(this);
+    this.selectFile = this.selectFile.bind(this);
+    this.validateFile = this.validateFile.bind(this);
+  }
+  handleDrop (event) {
+    event.preventDefault();
+    this.setState({dragOver: false});
+    // if dropped items aren't files, reject them
+    const dt = event.dataTransfer;
+    console.log('dt', dt);
+    if (dt.items) {
+      if (dt.items[0].kind == 'file') {
+        const droppedFile = dt.items[0].getAsFile();
+        this.selectFile(droppedFile);
+      }
+    }
+  }
+  handleDragOver (event) {
+    event.preventDefault();
+  }
+  handleDragEnd (event) {
+    var dt = event.dataTransfer;
+    if (dt.items) {
+      for (var i = 0; i < dt.items.length; i++) {
+        dt.items.remove(i);
+      }
+    } else {
+      event.dataTransfer.clearData();
+    }
+  }
+  handleDragEnter () {
+    this.setState({dragOver: true});
+  }
+  handleDragLeave () {
+    this.setState({dragOver: false});
+  }
+  handleClick (event) {
+    event.preventDefault();
+    // trigger file input
+    document.getElementById('file_input').click();
+  }
+  handleFileInput (event) {
+    event.preventDefault();
+    const fileList = event.target.files;
+    this.selectFile(fileList[0]);
+  }
+  selectFile (file) {
+    if (file) {
+      try {
+        this.validateFile(file); // validate the file's name, type, and size
+      } catch (error) {
+        return this.setState({fileError: error.message});
+      }
+      // stage it so it will be ready when the publish button is clicked
+      this.props.onFileSelect(file);
+    }
   }
   validateFile (file) {
     if (!file) {
@@ -52,66 +107,6 @@ class PublishDropzone extends React.Component {
       default:
         console.log('file type is not supported');
         throw new Error(file.type + ' is not a supported file type. Only, .jpeg, .png, .gif, and .mp4 files are currently supported.');
-    }
-  }
-  handleDrop (event) {
-    event.preventDefault();
-    this.setState({dragOver: false});
-    // if dropped items aren't files, reject them
-    const dt = event.dataTransfer;
-    console.log('dt', dt);
-    if (dt.items) {
-      if (dt.items[0].kind == 'file') {
-        const droppedFile = dt.items[0].getAsFile();
-        console.log('droppedFile', droppedFile);
-        // When a file is selected for publish, validate that file and
-        try {
-          this.validateFile(droppedFile); // validate the file's name, type, and size
-        } catch (error) {
-          return this.setState({fileError: error.message});
-        }
-        // stage it so it will be ready when the publish button is clicked
-        this.setClaimNameFromFileName(droppedFile.name);
-        this.props.onFileSelect(droppedFile);
-      }
-    }
-  }
-  handleDragOver (event) {
-    event.preventDefault();
-  }
-  handleDragEnd (event) {
-    var dt = event.dataTransfer;
-    if (dt.items) {
-      for (var i = 0; i < dt.items.length; i++) {
-        dt.items.remove(i);
-      }
-    } else {
-      event.dataTransfer.clearData();
-    }
-  }
-  handleDragEnter () {
-    this.setState({dragOver: true});
-  }
-  handleDragLeave () {
-    this.setState({dragOver: false});
-  }
-  handleClick (event) {
-    event.preventDefault();
-    // trigger file input
-    document.getElementById('file_input').click();
-  }
-  handleFileInput (event) {
-    event.preventDefault();
-    const fileList = event.target.files;
-    const chosenFile = fileList[0];
-    if (chosenFile) {
-      try {
-        this.validateFile(chosenFile); // validate the file's name, type, and size
-      } catch (error) {
-        return this.setState({fileError: error.message});
-      }
-      // stage it so it will be ready when the publish button is clicked
-      this.props.onFileSelect(chosenFile);
     }
   }
   render () {
