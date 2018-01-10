@@ -131,7 +131,7 @@ function clearCookie(name) {
     document.cookie = `${name}=; expires=Thu, 01-Jan-1970 00:00:01 GMT;`;
 }
 
-function setUserCookies(channelName, channelClaimId, shortChannelId) {
+function setUserCookies(channelName, shortChannelId, channelClaimId) {
     setCookie('channel_name', channelName)
     setCookie('channel_claim_id', channelClaimId);
     setCookie('short_channel_id', shortChannelId);

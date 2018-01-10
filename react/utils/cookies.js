@@ -17,7 +17,7 @@ module.exports = {
   setCookie (key, value) {
     document.cookie = `${key}=${value}`;
   },
-  setUserCookies (channelName, channelClaimId, shortChannelId) {
+  setUserCookies (channelName, shortChannelId, channelClaimId) {
     module.exports.setCookie('channel_name', channelName)
     module.exports.setCookie('channel_claim_id', channelClaimId);
     module.exports.setCookie('short_channel_id', shortChannelId);

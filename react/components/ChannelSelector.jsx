@@ -2,7 +2,6 @@ import React from 'react';
 import ChannelLoginForm from './ChannelLoginForm.jsx';
 import ChannelCreateForm from './ChannelCreateForm.jsx';
 import { connect } from 'react-redux';
-import { setUserCookies } from '../utils/cookies.js';
 
 const LOGIN = 'login';
 const CREATE = 'create';
@@ -15,12 +14,17 @@ class ChannelSelector extends React.Component {
     };
     this.handleSelection = this.handleSelection.bind(this);
     this.selectOption = this.selectOption.bind(this);
-    this.replaceChannelSelectionInNavBar = this.replaceChannelSelectionInNavBar.bind(this);
-    this.updateLoggedInChannelOutsideReact = this.updateLoggedInChannelOutsideReact.bind(this);
   }
   componentWillMount () {
+    console.log('ChannelSelector will mount.');
     if (this.props.loggedInChannelName) {
-      this.setState({ optionState: this.props.loggedInChannelName });
+      this.selectOption(this.props.loggedInChannelName);
+    }
+  }
+  componentWillReceiveProps ({ loggedInChannelName }) {
+    console.log('ChannelSelector will receive props');
+    if (loggedInChannelName) {
+      this.selectOption(loggedInChannelName);
     }
   }
   handleSelection (event) {
@@ -30,39 +34,12 @@ class ChannelSelector extends React.Component {
   selectOption (option) {
     this.setState({optionState: option});
   }
-  updateLoggedInChannelOutsideReact (channelName, channelClaimId, shortChannelId) {
-    // update anywhere on page that needs to be updated outside of this component
-    setUserCookies(channelName, channelClaimId, shortChannelId);
-    this.replaceChannelSelectionInNavBar(channelName);
-  }
-  replaceChannelSelectionInNavBar (loggedInChannel) {
-    // remove the old channel option
-    const oldChannel = document.getElementById('nav-bar-channel-select-channel-option');
-    if (oldChannel) {
-      oldChannel.parentNode.removeChild(oldChannel);
-    }
-    // create new channel option & select it
-    const newChannelOption = document.createElement('option');
-    newChannelOption.setAttribute('value', loggedInChannel);
-    newChannelOption.setAttribute('id', 'nav-bar-channel-select-channel-option');
-    newChannelOption.setAttribute('selected', '');
-    newChannelOption.innerText = loggedInChannel;
-    // add the new option
-    const channelSelect = document.getElementById('nav-bar-channel-select');
-    channelSelect.style.display = 'inline-block';
-    channelSelect.insertBefore(newChannelOption, channelSelect.firstChild);
-    // hide login
-    const navBarLoginLink = document.getElementById('nav-bar-login-link');
-    navBarLoginLink.style.display = 'none';
-  }
   render () {
     return (
       <div>
         { this.props.publishInChannel && (
-          <div className="row row--padded row--no-top row--no-bottom row--wide">
-
+          <div>
             <p id="input-error-channel-select" className="info-message-placeholder info-message--failure">{this.props.channelError}</p>
-
             <div className="column column--3">
               <label className="label" htmlFor="channel-name-select">Channel:</label>
             </div><div className="column column--7">
@@ -73,18 +50,9 @@ class ChannelSelector extends React.Component {
               </select>
             </div>
 
-            { (this.state.optionState === LOGIN) &&
-              <ChannelLoginForm
-                updateLoggedInChannelOutsideReact={this.updateLoggedInChannelOutsideReact}
-                updateUploaderState={this.props.updateUploaderState}
-                selectOption={this.selectOption}
-              /> }
-            { (this.state.optionState === CREATE) &&
-              <ChannelCreateForm
-                updateLoggedInChannelOutsideReact={this.updateLoggedInChannelOutsideReact}
-                updateUploaderState={this.props.updateUploaderState}
-                selectOption={this.selectOption}
-              /> }
+            { (this.state.optionState === LOGIN) && <ChannelLoginForm /> }
+
+            { (this.state.optionState === CREATE) && <ChannelCreateForm /> }
 
           </div>
         )}

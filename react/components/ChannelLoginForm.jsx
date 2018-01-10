@@ -1,5 +1,9 @@
 import React from 'react';
 import { makePostRequest } from '../utils/xhr.js';
+import { connect } from 'react-redux';
+import { updateLoggedInChannel } from '../actions';
+import { setUserCookies } from '../utils/cookies.js';
+import { replaceChannelSelectionInNavBar } from '../utils/pageUpdate.js';
 
 class ChannelLoginForm extends React.Component {
   constructor (props) {
@@ -25,17 +29,16 @@ class ChannelLoginForm extends React.Component {
     const that = this;
     makePostRequest(url, params)
       .then(result => {
-        that.props.updateLoggedInChannelOutsideReact(result.channelName, result.channelClaimId, result.shortChannelId);
-        that.props.updateUploaderState('loggedInChannelName', result.channelName);
-        that.props.updateUploaderState('loggedInChannelShortId', result.shortChannelId);
-        that.props.selectOption(result.channelName);
+        that.props.onChannelLogin(result.channelName, result.shortChannelId, result.channelClaimId);
+        setUserCookies(result.channelName, result.shortChannelId, result.channelClaimId);
+        replaceChannelSelectionInNavBar(result.channelName);
       })
       .catch(error => {
         console.log('login error', error);
         if (error.message) {
           that.setState({'error': error.message});
         } else {
-          that.setState({'error': 'There was an error logging into your channel'});
+          that.setState({'error': error});
         }
       });
   }
@@ -71,4 +74,12 @@ class ChannelLoginForm extends React.Component {
   }
 }
 
-module.exports = ChannelLoginForm;
+const mapDispatchToProps = dispatch => {
+  return {
+    onChannelLogin: (name, shortId, longId) => {
+      dispatch(updateLoggedInChannel(name, shortId, longId));
+    },
+  };
+};
+
+export default connect(null, mapDispatchToProps)(ChannelLoginForm);

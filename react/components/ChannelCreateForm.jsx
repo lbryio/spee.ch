@@ -1,5 +1,9 @@
 import React from 'react';
+import {connect} from 'react-redux';
+import {updateLoggedInChannel} from '../actions';
 import { makeGetRequest, makePostRequest } from '../utils/xhr.js';
+import { setUserCookies } from '../utils/cookies.js';
+import { replaceChannelSelectionInNavBar } from '../utils/pageUpdate.js';
 
 class ChannelCreateForm extends React.Component {
   constructor (props) {
@@ -10,24 +14,23 @@ class ChannelCreateForm extends React.Component {
       password: null,
       status  : null,
     };
+    this.cleanseChannelInput = this.cleanseChannelInput.bind(this);
     this.handleChannelInput = this.handleChannelInput.bind(this);
     this.handleInput = this.handleInput.bind(this);
-    this.cleanseInput = this.cleanseInput.bind(this);
     this.checkChannelIsAvailable = this.checkChannelIsAvailable.bind(this);
     this.createChannel = this.createChannel.bind(this);
   }
-  handleChannelInput (event) {
-    event.preventDefault();
-    const name = event.target.name;
-    let value = event.target.value;
-    value = this.cleanseInput(value);
-    this.setState({[name]: value});
-    this.checkChannelIsAvailable(value);
-  }
-  cleanseInput (input) {
+  cleanseChannelInput (input) {
     input = input.replace(/\s+/g, '-'); // replace spaces with dashes
     input = input.replace(/[^A-Za-z0-9-]/g, '');  // remove all characters that are not A-Z, a-z, 0-9, or '-'
     return input;
+  }
+  handleChannelInput (event) {
+    event.preventDefault();
+    let value = event.target.value;
+    value = this.cleanseChannelInput(value);
+    this.setState({channel: value});
+    this.checkChannelIsAvailable(value);
   }
   handleInput (event) {
     event.preventDefault();
@@ -65,10 +68,9 @@ class ChannelCreateForm extends React.Component {
     this.setState({status: 'We are publishing your new channel.  Sit tight...'});
     makePostRequest(url, params)
       .then(result => {
-        that.props.updateLoggedInChannelOutsideReact(result.channelName, result.channelClaimId, result.shortChannelId);
-        that.props.updateUploaderState('loggedInChannelName', result.channelName);
-        that.props.updateUploaderState('loggedInChannelShortId', result.shortChannelId);
-        that.props.selectOption(result.channelName);
+        that.props.onChannelLogin(result.channelName, result.shortChannelId, result.channelClaimId);
+        setUserCookies(result.channelName, result.shortChannelId, result.channelClaimId);
+        replaceChannelSelectionInNavBar(result.channelName);
       })
       .catch(error => {
         console.log('create channel failure:', error);
@@ -91,7 +93,7 @@ class ChannelCreateForm extends React.Component {
               </div><div className="column column--6 column--sml-10">
               <div className="input-text--primary flex-container--row flex-container--left-bottom">
                 <span>@</span>
-                <input type="text" name="channel" id="new-channel-name" className="input-text" placeholder="exampleChannelName" value={this.channel} onChange={this.handleChannelInput} />
+                <input type="text" name="channel" id="new-channel-name" className="input-text" placeholder="exampleChannelName" value={this.state.channel} onChange={this.handleChannelInput} />
                 <span id="input-success-channel-name" className="info-message--success">{'\u2713'}</span>
               </div>
             </div>
@@ -101,13 +103,13 @@ class ChannelCreateForm extends React.Component {
                 <label className="label" htmlFor="new-channel-password">Password:</label>
               </div><div className="column column--6 column--sml-10">
               <div className="input-text--primary">
-                <input type="password" name="password" id="new-channel-password" className="input-text"  placeholder="" value={this.password} onChange={this.handleInput} />
+                <input type="password" name="password" id="new-channel-password" className="input-text"  placeholder="" value={this.state.password} onChange={this.handleInput} />
               </div>
             </div>
             </div>
 
             <div className="row row--wide">
-              <button className="button--primary" onClick={this.createChannel}>Create</button>
+              <button className="button--primary" onClick={this.createChannel}>Create Channel</button>
             </div>
           </form>
         ) : (
@@ -118,4 +120,12 @@ class ChannelCreateForm extends React.Component {
   }
 }
 
-module.exports = ChannelCreateForm;
+const mapDispatchToProps = dispatch => {
+  return {
+    onChannelLogin: (name, shortId, longId) => {
+      dispatch(updateLoggedInChannel(name, shortId, longId));
+    },
+  };
+};
+
+export default connect(null, mapDispatchToProps)(ChannelCreateForm);

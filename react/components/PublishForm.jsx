@@ -22,12 +22,12 @@ class PublishForm extends React.Component {
     this.publish = this.publish.bind(this);
   }
   componentWillMount () {
-    // check for whether a channel is logged in
-    // if so, set the loggedInChannel to the channel name
+    // check for whether a channel is already logged in
     const loggedInChannelName = getCookie('channel_name');
     const loggedInChannelShortId = getCookie('short_channel_id');
     const loggedInChannelLongId = getCookie('long_channel_id');
-    this.props.onChannelUpdate(loggedInChannelName, loggedInChannelShortId, loggedInChannelLongId);
+    console.log(`channel cookies found: ${loggedInChannelName} ${loggedInChannelShortId} ${loggedInChannelLongId}`);
+    this.props.onChannelLogin(loggedInChannelName, loggedInChannelShortId, loggedInChannelLongId);
   }
   publish () {
     // publish the asset
@@ -51,9 +51,17 @@ class PublishForm extends React.Component {
         <div className="column column--5 column--sml-10 align-content-top">
           <div id="publish-active-area" className="row row--padded">
 
-            <PublishUrlInput />
-            <AnonymousOrChannelSelect />
-            <ChannelSelector />
+            <div className="row row--padded row--no-top row--wide">
+              <PublishUrlInput />
+            </div>
+
+            <div className="row row--padded row--no-top row--no-bottom row--wide">
+              <AnonymousOrChannelSelect />
+            </div>
+
+            <div className="row row--padded row--no-top row--wide">
+              <ChannelSelector />
+            </div>
 
             <PublishMetadataInputs
               updateUploaderState={this.props.updateUploaderState}
@@ -98,7 +106,7 @@ const mapDispatchToProps = dispatch => {
     onFileClear: () => {
       dispatch(clearFile());
     },
-    onChannelUpdate: (name, shortId, longId) => {
+    onChannelLogin: (name, shortId, longId) => {
       dispatch(updateLoggedInChannel(name, shortId, longId));
     },
   };

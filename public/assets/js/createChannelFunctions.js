@@ -33,7 +33,7 @@ function publishNewChannel (event) {
             return sendAuthRequest(userName, password, '/signup') // post the request
         })
         .then(result => {
-            setUserCookies(result.channelName, result.channelClaimId, result.shortChannelId);
+            setUserCookies(result.channelName, result.shortChannelId, result.channelClaimId);
             showChannelCreateDoneDisplay();
             window.location = '/';
         })

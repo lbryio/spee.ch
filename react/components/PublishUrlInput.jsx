@@ -56,23 +56,17 @@ class UrlChooser extends React.Component {
   render () {
     return (
       <div>
-        <div className="row row--padded row--no-top row--wide">
+        <p id="input-error-claim-name" className="info-message-placeholder info-message--failure">{this.state.error}</p>
+        <div className="column column--3 column--sml-10">
+          <label className="label">URL:</label>
+        </div><div className="column column--7 column--sml-10 input-text--primary span--relative">
 
-          <p id="input-error-claim-name" className="info-message-placeholder info-message--failure">{this.state.error}</p>
+          <span className="url-text--secondary">{this.state.host} / </span>
 
-          <div className="column column--3 column--sml-10">
-            <label className="label">URL:</label>
-          </div><div className="column column--7 column--sml-10 input-text--primary span--relative">
+          <UrlMiddle publishInChannel={this.props.publishInChannel} loggedInChannelName={this.props.loggedInChannelName} loggedInChannelShortId={this.props.loggedInChannelShortId}/>
 
-            <span className="url-text--secondary">{this.state.host} / </span>
-
-            <UrlMiddle publishInChannel={this.props.publishInChannel} loggedInChannelName={this.props.loggedInChannelName} loggedInChannelShortId={this.props.loggedInChannelShortId}/>
-
-            <input type="text" id="claim-name-input" className="input-text" name='claim' placeholder="your-url-here" onChange={this.handleInput} value={this.props.claim}/>
-            { (this.props.claim && !this.state.error) && <span id="input-success-claim-name" className="info-message--success span--absolute">{'\u2713'}</span> }
-
-          </div>
-
+          <input type="text" id="claim-name-input" className="input-text" name='claim' placeholder="your-url-here" onChange={this.handleInput} value={this.props.claim}/>
+          { (this.props.claim && !this.state.error) && <span id="input-success-claim-name" className="info-message--success span--absolute">{'\u2713'}</span> }
         </div>
       </div>
     );
