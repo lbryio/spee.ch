@@ -10,9 +10,9 @@ class AnonymousOrChannelSelect extends React.Component {
   toggleAnonymousPublish (event) {
     const value = event.target.value;
     if (value === 'anonymous') {
-      this.props.onPublishToChannelChange(false);
+      this.props.onPublishInChannelChange(false);
     } else {
-      this.props.onPublishToChannelChange(true);
+      this.props.onPublishInChannelChange(true);
     }
   }
   render () {
@@ -43,7 +43,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onPublishToChannelChange: (value) => {
+    onPublishInChannelChange: (value) => {
       dispatch(setPublishInChannel(value));
     },
   };

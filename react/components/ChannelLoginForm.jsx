@@ -1,4 +1,5 @@
 import React from 'react';
+import { makePostRequest } from '../utils/xhr.js';
 
 class ChannelLoginForm extends React.Component {
   constructor (props) {
@@ -22,7 +23,7 @@ class ChannelLoginForm extends React.Component {
     const params = `username=${this.state.name}&password=${this.state.password}`;
     const url = '/login';
     const that = this;
-    this.props.makePostRequest(url, params)
+    makePostRequest(url, params)
       .then(result => {
         that.props.updateLoggedInChannelOutsideReact(result.channelName, result.channelClaimId, result.shortChannelId);
         that.props.updateUploaderState('loggedInChannelName', result.channelName);

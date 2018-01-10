@@ -1,4 +1,5 @@
 import React from 'react';
+import { makeGetRequest, makePostRequest } from '../utils/xhr.js';
 
 class ChannelCreateForm extends React.Component {
   constructor (props) {
@@ -11,6 +12,7 @@ class ChannelCreateForm extends React.Component {
     };
     this.handleChannelInput = this.handleChannelInput.bind(this);
     this.handleInput = this.handleInput.bind(this);
+    this.cleanseInput = this.cleanseInput.bind(this);
     this.checkChannelIsAvailable = this.checkChannelIsAvailable.bind(this);
     this.createChannel = this.createChannel.bind(this);
   }
@@ -18,9 +20,14 @@ class ChannelCreateForm extends React.Component {
     event.preventDefault();
     const name = event.target.name;
     let value = event.target.value;
-    value = this.props.cleanseInput(value);
+    value = this.cleanseInput(value);
     this.setState({[name]: value});
     this.checkChannelIsAvailable(value);
+  }
+  cleanseInput (input) {
+    input = input.replace(/\s+/g, '-'); // replace spaces with dashes
+    input = input.replace(/[^A-Za-z0-9-]/g, '');  // remove all characters that are not A-Z, a-z, 0-9, or '-'
+    return input;
   }
   handleInput (event) {
     event.preventDefault();
@@ -30,7 +37,7 @@ class ChannelCreateForm extends React.Component {
   }
   checkChannelIsAvailable (channel) {
     const that = this;
-    this.props.makeGetRequest(`/api/channel-is-available/${channel}`)
+    makeGetRequest(`/api/channel-is-available/${channel}`)
       .then(() => {
         that.setState({urlError: null});
       })
@@ -56,7 +63,7 @@ class ChannelCreateForm extends React.Component {
     // publish the channel
     const that = this;
     this.setState({status: 'We are publishing your new channel.  Sit tight...'});
-    this.props.makePostRequest(url, params)
+    makePostRequest(url, params)
       .then(result => {
         that.props.updateLoggedInChannelOutsideReact(result.channelName, result.channelClaimId, result.shortChannelId);
         that.props.updateUploaderState('loggedInChannelName', result.channelName);

@@ -1,7 +1,7 @@
 import React from 'react';
 
-function UrlMiddle ({publishToChannel, loggedInChannelName, loggedInChannelShortId}) {
-  if (publishToChannel) {
+function UrlMiddle ({publishInChannel, loggedInChannelName, loggedInChannelShortId}) {
+  if (publishInChannel) {
     if (loggedInChannelName) {
       return <span id="url-channel" className="url-text--secondary">{loggedInChannelName}:{loggedInChannelShortId} /</span>;
     }

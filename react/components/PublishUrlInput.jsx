@@ -66,7 +66,7 @@ class UrlChooser extends React.Component {
 
             <span className="url-text--secondary">{this.state.host} / </span>
 
-            <UrlMiddle publishToChannel={this.props.publishToChannel} loggedInChannelName={this.props.loggedInChannelName} loggedInChannelShortId={this.props.loggedInChannelShortId}/>
+            <UrlMiddle publishInChannel={this.props.publishInChannel} loggedInChannelName={this.props.loggedInChannelName} loggedInChannelShortId={this.props.loggedInChannelShortId}/>
 
             <input type="text" id="claim-name-input" className="input-text" name='claim' placeholder="your-url-here" onChange={this.handleInput} value={this.props.claim}/>
             { (this.props.claim && !this.state.error) && <span id="input-success-claim-name" className="info-message--success span--absolute">{'\u2713'}</span> }
@@ -84,7 +84,7 @@ const mapStateToProps = state => {
     fileName              : state.file.name,
     loggedInChannelName   : state.loggedInChannel.name,
     loggedInChannelShortId: state.loggedInChannel.shortId,
-    publishToChannel      : state.publishToChannel,
+    publishInChannel      : state.publishInChannel,
     claim                 : state.claim,
   };
 };

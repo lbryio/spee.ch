@@ -1,6 +1,8 @@
 import React from 'react';
 import ChannelLoginForm from './ChannelLoginForm.jsx';
 import ChannelCreateForm from './ChannelCreateForm.jsx';
+import { connect } from 'react-redux';
+import { setUserCookies } from '../utils/cookies.js';
 
 const LOGIN = 'login';
 const CREATE = 'create';
@@ -56,7 +58,7 @@ class ChannelSelector extends React.Component {
   render () {
     return (
       <div>
-        { this.props.publishToChannel && (
+        { this.props.publishInChannel && (
           <div className="row row--padded row--no-top row--no-bottom row--wide">
 
             <p id="input-error-channel-select" className="info-message-placeholder info-message--failure">{this.props.channelError}</p>
@@ -73,16 +75,12 @@ class ChannelSelector extends React.Component {
 
             { (this.state.optionState === LOGIN) &&
               <ChannelLoginForm
-                makePostRequest={this.props.makePostRequest}
                 updateLoggedInChannelOutsideReact={this.updateLoggedInChannelOutsideReact}
                 updateUploaderState={this.props.updateUploaderState}
                 selectOption={this.selectOption}
               /> }
             { (this.state.optionState === CREATE) &&
               <ChannelCreateForm
-                cleanseInput={this.props.cleanseInput}
-                makeGetRequest={this.props.makeGetRequest}
-                makePostRequest={this.props.makePostRequest}
                 updateLoggedInChannelOutsideReact={this.updateLoggedInChannelOutsideReact}
                 updateUploaderState={this.props.updateUploaderState}
                 selectOption={this.selectOption}
@@ -95,4 +93,11 @@ class ChannelSelector extends React.Component {
   }
 }
 
-module.exports = ChannelSelector;
+const mapStateToProps = state => {
+  return {
+    loggedInChannelName: state.loggedInChannel.name,
+    publishInChannel   : state.publishInChannel,
+  };
+};
+
+export default connect(mapStateToProps, null)(ChannelSelector);

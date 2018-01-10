@@ -7,7 +7,7 @@ import PublishThumbnailInput from './PublishThumbnailInput.jsx';
 import PublishMetadataInputs from './PublishMetadataInputs.jsx';
 import AnonymousOrChannelSelect from './AnonymousOrChannelSelect.jsx';
 
-import {selectFile, clearFile, updateLoggedInChannel} from '../actions';
+import { selectFile, clearFile, updateLoggedInChannel } from '../actions';
 import { connect } from 'react-redux';
 import { getCookie } from '../utils/cookies.js';
 
@@ -53,14 +53,7 @@ class PublishForm extends React.Component {
 
             <PublishUrlInput />
             <AnonymousOrChannelSelect />
-            <ChannelSelector
-              loggedInChannelName={this.props.loggedInChannelName}
-              publishToChannel={this.props.publishToChannel}
-              cleanseInput={this.props.cleanseInput}
-              updateUploaderState={this.props.updateUploaderState}
-              makeGetRequest={this.props.makeGetRequest}
-              makePostRequest={this.props.makePostRequest}
-            />
+            <ChannelSelector />
 
             <PublishMetadataInputs
               updateUploaderState={this.props.updateUploaderState}
