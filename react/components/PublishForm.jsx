@@ -63,9 +63,9 @@ class PublishForm extends React.Component {
               <ChannelSelector />
             </div>
 
-            <PublishMetadataInputs
-              updateUploaderState={this.props.updateUploaderState}
-            />
+            <div className="row row--padded row--no-top row--no-bottom row--wide">
+              <PublishMetadataInputs />
+            </div>
 
             <div className="row row--padded row--wide">
               <div className="input-error" id="input-error-publish-submit" hidden="true">{this.state.error}</div>
@@ -89,12 +89,9 @@ class PublishForm extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    fileType   : state.file.type,
-    claim      : state.claim,
-    thumbnail  : state.thumbnail,
-    description: state.description,
-    license    : state.license,
-    nsfw       : state.nsfw,
+    fileType : state.file.type,
+    claim    : state.claim,
+    thumbnail: state.thumbnail,
   };
 };
 

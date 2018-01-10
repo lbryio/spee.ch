@@ -1,41 +1,45 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { updateMetadata } from '../actions';
 
 class MetadataInputs extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
-      showInputs : false,
+      showInputs: false,
     };
     this.toggleShowInputs = this.toggleShowInputs.bind(this);
     this.handleInput = this.handleInput.bind(this);
+    this.handleCheck = this.handleCheck.bind(this);
     this.handleSelection = this.handleSelection.bind(this);
   }
   toggleShowInputs () {
-    if (this.state.showInputs) {
-      this.setState({'showInputs': false});
-    } else {
-      this.setState({'showInputs': true});
-    }
+    this.setState({'showInputs': !this.state.showInputs});
   }
   handleInput (event) {
     event.preventDefault();
-    const target = event.target;
-    const name = target.name;
-    const value = target.type === 'checkbox' ? target.checked : target.value;
-    this.props.updateUploaderState(name, value);
+    const name = event.target.name;
+    const value = event.target.value;
+    this.props.onMetadataChange(name, value);
+  }
+  handleCheck (event) {
+    console.log('handle input', event);
+    event.preventDefault();
+    const name = event.target.name;
+    const value = event.target.checked;
+    this.props.onMetadataChange(name, value);
   }
   handleSelection (event) {
+    const name = event.target.name;
     const selectedOption = event.target.selectedOptions[0].value;
-    this.props.updateUploaderState('', value);
+    this.props.onMetadataChange(name, selectedOption);
   }
-
   render () {
     return (
       <div>
-        <div className="row row--padded row--no-top row--no-bottom row--wide">
-          <div className="column column--10">
-            <a className="label link--primary" id="publish-details-toggle" href="#" onClick={this.toggleShowInputs}>{this.state.showInputs ? '[less]' : '[more]'}</a>
-          </div>
+        <div className="column column--10">
+          <a className="label link--primary" id="publish-details-toggle" href="#" onClick={this.toggleShowInputs}>{this.state.showInputs ? '[less]' : '[more]'}</a>
+        </div>
         {this.state.showInputs && (
           <div id="publish-details" className="row row--padded row--wide">
 
@@ -51,7 +55,7 @@ class MetadataInputs extends React.Component {
               <div className="column column--3 column--med-10">
                 <label htmlFor="publish-license" className="label">License:</label>
               </div><div className="column column--7 column--sml-10">
-                <select type="text" name="license" id="publish-license" className="select select--primary" onSelect={this.handleSelection}>
+                <select type="text" name="license" id="publish-license" className="select select--primary" onChange={this.handleSelection}>
                   <option value=" ">Unspecified</option>
                   <option value="Public Domain">Public Domain</option>
                   <option value="Creative Commons">Creative Commons</option>
@@ -63,16 +67,30 @@ class MetadataInputs extends React.Component {
               <div className="column column--3">
                 <label htmlFor="publish-nsfw" className="label">Mature:</label>
               </div><div className="column column--7">
-                <input className="input-checkbox" type="checkbox" id="publish-nsfw" name="nsfw" checked={this.props.nsfw} onChange={this.handleInput} />
+                <input className="input-checkbox" type="checkbox" id="publish-nsfw" name="nsfw" checked={this.props.nsfw} onChange={this.handleCheck} />
               </div>
             </div>
-
           </div>
         )}
-        </div>
       </div>
     );
   }
 }
 
-module.exports = MetadataInputs;
+const mapStateToProps = state => {
+  return {
+    description: state.metadata.description,
+    license    : state.metadata.license,
+    nsfw       : state.metadata.nsfw,
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onMetadataChange: (name, value) => {
+      dispatch(updateMetadata(name, value));
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(MetadataInputs);

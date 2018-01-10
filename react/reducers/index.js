@@ -19,7 +19,7 @@ const initialState = {
     thumbnail  : '',
     description: '',
     license    : '',
-    nsfw       : '',
+    nsfw       : false,
   },
 };
 
@@ -38,9 +38,9 @@ export default function (state = initialState, action) {
     case METADATA_UPDATE:
       console.log(`reducer for ${action.name} ${action.value}`);
       return Object.assign({}, state, {
-        metadata: {
+        metadata: Object.assign({}, state.metadata, {
           [action.name]: action.value,
-        },
+        }),
       });
     case CLAIM_UPDATE:
       return Object.assign({}, state, {
