@@ -1,6 +1,5 @@
 import React from 'react';
 // import PropTypes from 'prop-types';
-
 import { selectFile } from '../actions';
 import { connect } from 'react-redux';
 
@@ -18,7 +17,6 @@ class PublishDropzone extends React.Component {
     this.handleDragLeave = this.handleDragLeave.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.handleFileInput = this.handleFileInput.bind(this);
-    this.setClaimNameFromFileName = this.setClaimNameFromFileName.bind(this);
   }
   validateFile (file) {
     if (!file) {
@@ -113,15 +111,8 @@ class PublishDropzone extends React.Component {
         return this.setState({fileError: error.message});
       }
       // stage it so it will be ready when the publish button is clicked
-      this.setClaimNameFromFileName(chosenFile.name);
       this.props.onFileSelect(chosenFile);
     }
-  }
-  setClaimNameFromFileName (fileName) {
-    console.log('setClaimNameFromFileName', fileName);
-    const fileNameWithoutEnding = fileName.substring(0, fileName.lastIndexOf('.'));
-    const cleanClaimName = this.props.cleanseInput(fileNameWithoutEnding);
-    this.props.updateUploaderState('claim', cleanClaimName);
   }
   render () {
     return (

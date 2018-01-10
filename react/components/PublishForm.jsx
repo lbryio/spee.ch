@@ -7,8 +7,9 @@ import PublishThumbnailInput from './PublishThumbnailInput.jsx';
 import PublishMetadataInputs from './PublishMetadataInputs.jsx';
 import AnonymousOrChannelSelect from './AnonymousOrChannelSelect.jsx';
 
-import { selectFile, clearFile } from '../actions';
+import {selectFile, clearFile, updateLoggedInChannel} from '../actions';
 import { connect } from 'react-redux';
+import { getCookie } from '../utils/cookies.js';
 
 class PublishForm extends React.Component {
   constructor (props) {
@@ -19,6 +20,14 @@ class PublishForm extends React.Component {
       showMetadataInputs: false,
     };
     this.publish = this.publish.bind(this);
+  }
+  componentWillMount () {
+    // check for whether a channel is logged in
+    // if so, set the loggedInChannel to the channel name
+    const loggedInChannelName = getCookie('channel_name');
+    const loggedInChannelShortId = getCookie('short_channel_id');
+    const loggedInChannelLongId = getCookie('long_channel_id');
+    this.props.onChannelUpdate(loggedInChannelName, loggedInChannelShortId, loggedInChannelLongId);
   }
   publish () {
     // publish the asset
@@ -34,33 +43,16 @@ class PublishForm extends React.Component {
         <div className="column column--5 column--sml-10" >
           <div className="row row--padded">
 
-            <PreviewDropzone
-              file={this.props.file}
-            />
-            { (this.props.file.type === 'video/mp4') &&
-              <PublishThumbnailInput
-                thumbnail={this.props.thumbnail}
-              />
-            }
+            <PreviewDropzone />
+            { (this.props.fileType === 'video/mp4') && <PublishThumbnailInput /> }
+
           </div>
         </div>
         <div className="column column--5 column--sml-10 align-content-top">
           <div id="publish-active-area" className="row row--padded">
 
-            <PublishUrlInput
-              fileName={this.props.file.name}
-              claim={this.props.claim}
-              publishToChannel={this.props.publishToChannel}
-              loggedInChannelName={this.props.loggedInChannelName}
-              loggedInChannelShortId={this.props.loggedInChannelShortId}
-              cleanseInput={this.props.cleanseInput}
-              updateUploaderState={this.props.updateUploaderState}
-              makeGetRequest={this.props.makeGetRequest}
-            />
-            <AnonymousOrChannelSelect
-              publishToChannel={this.props.publishToChannel}
-              updateUploaderState={this.props.updateUploaderState}
-            />
+            <PublishUrlInput />
+            <AnonymousOrChannelSelect />
             <ChannelSelector
               loggedInChannelName={this.props.loggedInChannelName}
               publishToChannel={this.props.publishToChannel}
@@ -96,15 +88,12 @@ class PublishForm extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    loggedInChannelName   : state.loggedInChannelName,
-    loggedInChannelShortId: state.loggedInChannelShortId,
-    publishToChannel      : state.publishToChannel,
-    file                  : state.file,
-    claim                 : state.claim,
-    thumbnail             : state.thumbnail,
-    description           : state.description,
-    license               : state.license,
-    nsfw                  : state.nsfw,
+    fileType   : state.file.type,
+    claim      : state.claim,
+    thumbnail  : state.thumbnail,
+    description: state.description,
+    license    : state.license,
+    nsfw       : state.nsfw,
   };
 };
 
@@ -116,7 +105,10 @@ const mapDispatchToProps = dispatch => {
     onFileClear: () => {
       dispatch(clearFile());
     },
+    onChannelUpdate: (name, shortId, longId) => {
+      dispatch(updateLoggedInChannel(name, shortId, longId));
+    },
   };
-}
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(PublishForm);

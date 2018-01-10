@@ -1,17 +1,8 @@
 import React from 'react';
-
-function UrlMiddle ({publishToChannel, loggedInChannelName, loggedInChannelShortId}) {
-  if (publishToChannel) {
-    if (loggedInChannelName) {
-      return <span id="url-channel" className="url-text--secondary">{loggedInChannelName}:{loggedInChannelShortId} /</span>;
-    }
-    return <span id="url-channel-placeholder" className="url-text--secondary tooltip">@channel<span
-          className="tooltip-text">Select a channel below</span> /</span>;
-  }
-  return (
-    <span id="url-no-channel-placeholder" className="url-text--secondary tooltip">xyz<span className="tooltip-text">This will be a random id</span> /</span>
-  );
-}
+import { updateClaim } from '../actions';
+import { connect } from 'react-redux';
+import { makeGetRequest } from '../utils/xhr.js';
+import UrlMiddle from './UrlMiddle.jsx';
 
 class UrlChooser extends React.Component {
   constructor (props) {
@@ -22,19 +13,39 @@ class UrlChooser extends React.Component {
       urlMiddle: null,
     };
     this.handleInput = this.handleInput.bind(this);
+    this.cleanseInput = this.cleanseInput.bind(this);
+    this.setClaimNameFromFileName = this.setClaimNameFromFileName.bind(this);
     this.checkClaimIsAvailable = this.checkClaimIsAvailable.bind(this);
+  }
+  componentWillMount () {
+    if (!this.props.claim || this.props.claim === '') {
+      this.setClaimNameFromFileName();
+    }
   }
   handleInput (event) {
     event.preventDefault();
     let value = event.target.value;
-    const name = event.target.name;
-    value = this.props.cleanseInput(value);
-    this.props.updateUploaderState(name, value);
+    value = this.cleanseInput(value);
+    // update the state
+    this.props.onClaimChange(value);
+    // check to make sure claim name is available
     this.checkClaimIsAvailable(value);
+  }
+  cleanseInput (input) {
+    input = input.replace(/\s+/g, '-'); // replace spaces with dashes
+    input = input.replace(/[^A-Za-z0-9-]/g, '');  // remove all characters that are not A-Z, a-z, 0-9, or '-'
+    return input;
+  }
+  setClaimNameFromFileName () {
+    const fileName = this.props.fileName;
+    console.log('setClaimNameFromFileName', fileName);
+    const fileNameWithoutEnding = fileName.substring(0, fileName.lastIndexOf('.'));
+    const cleanClaimName = this.cleanseInput(fileNameWithoutEnding);
+    this.props.onClaimChange(cleanClaimName);
   }
   checkClaimIsAvailable (claim) {
     const that = this;
-    this.props.makeGetRequest(`/api/claim-is-available/${claim}`)
+    makeGetRequest(`/api/claim-is-available/${claim}`)
       .then(() => {
         that.setState({'error': null});
       })
@@ -58,9 +69,7 @@ class UrlChooser extends React.Component {
             <UrlMiddle publishToChannel={this.props.publishToChannel} loggedInChannelName={this.props.loggedInChannelName} loggedInChannelShortId={this.props.loggedInChannelShortId}/>
 
             <input type="text" id="claim-name-input" className="input-text" name='claim' placeholder="your-url-here" onChange={this.handleInput} value={this.props.claim}/>
-            { (this.props.claim && !this.state.error) && (
-              <span id="input-success-claim-name" className="info-message--success span--absolute">{'\u2713'}</span>
-            )}
+            { (this.props.claim && !this.state.error) && <span id="input-success-claim-name" className="info-message--success span--absolute">{'\u2713'}</span> }
 
           </div>
 
@@ -70,4 +79,22 @@ class UrlChooser extends React.Component {
   }
 }
 
-module.exports = UrlChooser;
+const mapStateToProps = state => {
+  return {
+    fileName              : state.file.name,
+    loggedInChannelName   : state.loggedInChannel.name,
+    loggedInChannelShortId: state.loggedInChannel.shortId,
+    publishToChannel      : state.publishToChannel,
+    claim                 : state.claim,
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onClaimChange: (value) => {
+      dispatch(updateClaim(value));
+    },
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(UrlChooser);

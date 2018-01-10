@@ -28,6 +28,11 @@ class ChannelSelector extends React.Component {
   selectOption (option) {
     this.setState({optionState: option});
   }
+  updateLoggedInChannelOutsideReact (channelName, channelClaimId, shortChannelId) {
+    // update anywhere on page that needs to be updated outside of this component
+    setUserCookies(channelName, channelClaimId, shortChannelId);
+    this.replaceChannelSelectionInNavBar(channelName);
+  }
   replaceChannelSelectionInNavBar (loggedInChannel) {
     // remove the old channel option
     const oldChannel = document.getElementById('nav-bar-channel-select-channel-option');
@@ -47,11 +52,6 @@ class ChannelSelector extends React.Component {
     // hide login
     const navBarLoginLink = document.getElementById('nav-bar-login-link');
     navBarLoginLink.style.display = 'none';
-  }
-  updateLoggedInChannelOutsideReact (channelName, channelClaimId, shortChannelId) {
-    // update anywhere on page that needs to be updated outside of this component
-    setUserCookies(channelName, channelClaimId, shortChannelId);
-    this.replaceChannelSelectionInNavBar(channelName);
   }
   render () {
     return (

@@ -1,4 +1,5 @@
 import React from 'react';
+import {connect} from 'react-redux';
 
 class PreviewDropzone extends React.Component {
   constructor (props) {
@@ -39,4 +40,10 @@ class PreviewDropzone extends React.Component {
   }
 };
 
-module.exports = PreviewDropzone;
+const mapStateToProps = state => {
+  return {
+    file: state.file,
+  };
+};
+
+export default connect(mapStateToProps, null)(PreviewDropzone);

@@ -1,15 +1,22 @@
-import {FILE_CLEAR, FILE_SELECTED, METADATA_UPDATE} from '../actions';
+import {
+  CHANNEL_UPDATE, CLAIM_UPDATE, FILE_CLEAR, FILE_SELECTED, METADATA_UPDATE,
+  SET_PUBLISH_IN_CHANNEL,
+} from '../actions';
 
 const initialState = {
-  loggedInChannelName   : null,
+  loggedInChannel: {
+    name   : null,
+    shortId: null,
+    longId : null,
+  },
   loggedInChannelShortId: null,
-  publishToChannel      : false,
+  publishInChannel      : false,
   publishStatus         : null,
   error                 : null,
   file                  : null,
+  claim                 : '',
   metadata              : {
     title      : '',
-    claim      : '',
     thumbnail  : '',
     description: '',
     license    : '',
@@ -35,7 +42,23 @@ export default function (state = initialState, action) {
         metadata: {
           [action.name]: action.value,
         },
-      })
+      });
+    case CLAIM_UPDATE:
+      return Object.assign({}, state, {
+        claim: action.value,
+      });
+    case CHANNEL_UPDATE:
+      return Object.assign({}, state, {
+        loggedInChannel: {
+          name   : action.name,
+          shortId: action.shortId,
+          longId : action.longId,
+        },
+      });
+    case SET_PUBLISH_IN_CHANNEL:
+      return Object.assign({}, state, {
+        publishInChannel: action.value,
+      });
     default:
       return state;
   }
