@@ -11,9 +11,7 @@ class Preview extends React.Component {
   }
   componentWillMount () {
     console.log('Preview will mount');
-    if (this.props.file) {
-      this.previewFile(this.props.file);
-    }
+    this.previewFile(this.props.file);
   }
   componentWillReceiveProps (newProps) {
     console.log('Preview will receive props', newProps);
@@ -44,11 +42,4 @@ class Preview extends React.Component {
   }
 };
 
-const mapStateToProps = state => {
-  return {
-    file     : state.file,
-    thumbnail: state.metadata.thumbnail,
-  };
-};
-
-export default connect(mapStateToProps, null)(Preview);
+export default Preview;

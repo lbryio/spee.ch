@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { updateMetadata } from '../actions';
+import { updateMetadata } from '../actions/index';
 
 class ThumbnailInput extends React.Component {
   constructor (props) {

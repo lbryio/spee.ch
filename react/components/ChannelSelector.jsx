@@ -1,6 +1,6 @@
 import React from 'react';
-import ChannelLoginForm from './ChannelLoginForm.jsx';
-import ChannelCreateForm from './ChannelCreateForm.jsx';
+import ChannelLoginForm from '../containers/ChannelLoginForm.jsx';
+import ChannelCreateForm from '../containers/ChannelCreateForm.jsx';
 import { connect } from 'react-redux';
 
 const LOGIN = 'login';
@@ -16,7 +16,7 @@ class ChannelSelector extends React.Component {
     this.selectOption = this.selectOption.bind(this);
   }
   componentWillMount () {
-    console.log('ChannelSelector will mount.');
+    console.log('ChannelSelector will mount');
     if (this.props.loggedInChannelName) {
       this.selectOption(this.props.loggedInChannelName);
     }

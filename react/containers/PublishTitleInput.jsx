@@ -1,5 +1,5 @@
 import React from 'react';
-import {updateMetadata} from '../actions';
+import {updateMetadata} from '../actions/index';
 import {connect} from 'react-redux';
 
 class TitleInput extends React.Component {

@@ -1,13 +1,13 @@
 import React from 'react';
-import PreviewDropzone from './PreviewDropzone.jsx';
+import PreviewDropzone from './Dropzone.jsx';
 import PublishTitleInput from './PublishTitleInput.jsx';
-import ChannelSelector from './ChannelSelector.jsx';
+import ChannelSelector from '../components/ChannelSelector.jsx';
 import PublishUrlInput from './PublishUrlInput.jsx';
 import PublishThumbnailInput from './PublishThumbnailInput.jsx';
 import PublishMetadataInputs from './PublishMetadataInputs.jsx';
 import AnonymousOrChannelSelect from './AnonymousOrChannelSelect.jsx';
 
-import { selectFile, clearFile, updateLoggedInChannel } from '../actions';
+import { selectFile, clearFile, updateLoggedInChannel } from '../actions/index';
 import { connect } from 'react-redux';
 import { getCookie } from '../utils/cookies.js';
 
@@ -16,8 +16,7 @@ class PublishForm extends React.Component {
     super(props);
     // set defaults
     this.state = {
-      error             : null,
-      showMetadataInputs: false,
+      error: null,
     };
     this.publish = this.publish.bind(this);
   }

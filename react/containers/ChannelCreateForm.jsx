@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {updateLoggedInChannel} from '../actions';
+import {updateLoggedInChannel} from '../actions/index';
 import { makeGetRequest, makePostRequest } from '../utils/xhr.js';
 import { setUserCookies } from '../utils/cookies.js';
 import { replaceChannelSelectionInNavBar } from '../utils/pageUpdate.js';
@@ -10,8 +10,8 @@ class ChannelCreateForm extends React.Component {
     super(props);
     this.state = {
       error   : null,
-      channel : null,
-      password: null,
+      channel : '',
+      password: '',
       status  : null,
     };
     this.cleanseChannelInput = this.cleanseChannelInput.bind(this);

@@ -1,12 +1,12 @@
 import React from 'react';
 // import PropTypes from 'prop-types';
-import { selectFile } from '../actions';
+import { selectFile } from '../actions/index';
 import { connect } from 'react-redux';
-import Preview from './Preview.jsx';
+import Preview from '../components/Preview.jsx';
 
 import { validateFile } from '../utils/file.js';
 
-class PreviewDropzone extends React.Component {
+class Dropzone extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
@@ -95,7 +95,11 @@ class PreviewDropzone extends React.Component {
         <div id="preview-dropzone" className={'row row--padded row--tall dropzone' + (this.state.dragOver ? ' dropzone--drag-over' : '')} onDrop={this.handleDrop} onDragOver={this.handleDragOver} onDragEnd={this.handleDragEnd} onDragEnter={this.handleDragEnter} onDragLeave={this.handleDragLeave} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} onClick={this.handleClick}>
           {this.props.file ? (
             <div>
-              <Preview dimPreview={this.state.dimPreview}/>
+              <Preview
+                dimPreview={this.state.dimPreview}
+                file={this.props.file}
+                thumbnail={this.props.thumbnail}
+              />
               <div id="dropzone-text-holder" className={'flex-container--column flex-container--center-center'}>
               { this.state.dragOver ? (
                 <div id="dropzone-dragover">
@@ -140,7 +144,8 @@ class PreviewDropzone extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    file: state.file,
+    file     : state.file,
+    thumbnail: state.metadata.thumbnail,
   };
 };
 
@@ -152,4 +157,4 @@ const mapDispatchToProps = dispatch => {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(PreviewDropzone);
+export default connect(mapStateToProps, mapDispatchToProps)(Dropzone);

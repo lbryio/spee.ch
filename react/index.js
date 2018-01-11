@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import Reducers from './reducers/index.js';
-import PublishTool from './components/PublishTool.jsx';
+import PublishTool from './containers/PublishTool.jsx';
 
 let store = createStore(
   Reducers,

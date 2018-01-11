@@ -1,7 +1,7 @@
 import React from 'react';
 import { makePostRequest } from '../utils/xhr.js';
 import { connect } from 'react-redux';
-import { updateLoggedInChannel } from '../actions';
+import { updateLoggedInChannel } from '../actions/index';
 import { setUserCookies } from '../utils/cookies.js';
 import { replaceChannelSelectionInNavBar } from '../utils/pageUpdate.js';
 
@@ -10,8 +10,8 @@ class ChannelLoginForm extends React.Component {
     super(props);
     this.state = {
       error   : null,
-      name    : null,
-      password: null,
+      name    : '',
+      password: '',
     };
     this.handleInput = this.handleInput.bind(this);
     this.loginToChannel = this.loginToChannel.bind(this);

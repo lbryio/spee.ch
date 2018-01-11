@@ -36,7 +36,6 @@ export default function (state = initialState, action) {
     case FILE_CLEAR:
       return initialState;
     case METADATA_UPDATE:
-      console.log(`reducer for ${action.name} ${action.value}`);
       return Object.assign({}, state, {
         metadata: Object.assign({}, state.metadata, {
           [action.name]: action.value,

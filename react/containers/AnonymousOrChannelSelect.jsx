@@ -1,5 +1,5 @@
 import React from 'react';
-import { setPublishInChannel } from '../actions';
+import { setPublishInChannel } from '../actions/index';
 import { connect } from 'react-redux';
 
 class AnonymousOrChannelSelect extends React.Component {
