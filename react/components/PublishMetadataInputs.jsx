@@ -2,6 +2,14 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { updateMetadata } from '../actions';
 
+/*
+  const textarea = document.getElementById('publish-description');
+  const limit = 200;
+  textarea.oninput = () => {
+  textarea.style.height = '';
+  textarea.style.height = Math.min(textarea.scrollHeight, limit) + 'px';
+*/
+
 class MetadataInputs extends React.Component {
   constructor (props) {
     super(props);

@@ -41,12 +41,11 @@ class PublishForm extends React.Component {
 
         </div>
         <div className="column column--5 column--sml-10" >
+
           <div className="row row--padded">
-
             <PreviewDropzone />
-            { (this.props.fileType === 'video/mp4') && <PublishThumbnailInput /> }
-
           </div>
+
         </div>
         <div className="column column--5 column--sml-10 align-content-top">
           <div id="publish-active-area" className="row row--padded">
@@ -62,6 +61,8 @@ class PublishForm extends React.Component {
             <div className="row row--padded row--no-top row--wide">
               <ChannelSelector />
             </div>
+
+            { (this.props.fileType === 'video/mp4') && <PublishThumbnailInput /> }
 
             <div className="row row--padded row--no-top row--no-bottom row--wide">
               <PublishMetadataInputs />
@@ -89,9 +90,8 @@ class PublishForm extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    fileType : state.file.type,
-    claim    : state.claim,
-    thumbnail: state.thumbnail,
+    fileType: state.file.type,
+    claim   : state.claim,
   };
 };
 

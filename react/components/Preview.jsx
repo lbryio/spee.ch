@@ -15,9 +15,9 @@ class Preview extends React.Component {
       this.previewFile(this.props.file);
     }
   }
-  componentWillReceiveProps ({ file }) {
-    console.log('Preview will receive props');
-    this.previewFile(file);
+  componentWillReceiveProps (newProps) {
+    console.log('Preview will receive props', newProps);
+    this.previewFile(newProps.file);
   }
   previewFile (file) {
     console.log('previewFile', file)
@@ -29,7 +29,7 @@ class Preview extends React.Component {
         that.setState({previewSource: previewReader.result});
       };
     } else {
-      that.setState({previewSource: '/assets/img/video_thumb_default.png'});
+      that.setState({previewSource: (this.props.thumbnail || '/assets/img/video_thumb_default.png')});
     }
   }
   render () {
@@ -46,7 +46,8 @@ class Preview extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    file: state.file,
+    file     : state.file,
+    thumbnail: state.metadata.thumbnail,
   };
 };
 

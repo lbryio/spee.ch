@@ -1,56 +1,5 @@
-<div class="row row--padded row--wide row--no-top" id="publish-thumbnail" hidden="true">
-    <div class="column column--3 column--sml-10">
-        <label class="label">Thumbnail:</label>
-    </div><div class="column column--6 column--sml-10">
-        <div class="input-text--primary">
-            <input type="text" id="claim-thumbnail-input" class="input-text input-text--full-width" placeholder="https://spee.ch/xyz/example.jpg" value="" oninput="updateVideoThumb(event)">
-        </div>
-    </div>
 
-</div>
 
 <script type="text/javascript">
-    function urlIsAnImage(url) {
-        return(url.match(/\.(jpeg|jpg|gif|png)$/) != null);
-    }
 
-    function testImage(url, timeoutT) {
-        return new Promise(function (resolve, reject) {
-            var timeout = timeoutT || 5000;
-            var timer, img = new Image();
-            img.onerror = img.onabort = function () {
-                clearTimeout(timer);
-                reject("error");
-            };
-            img.onload = function () {
-                clearTimeout(timer);
-                resolve("success");
-            };
-            timer = setTimeout(function () {
-                // reset .src to invalid URL so it stops previous
-                // loading, but doesn't trigger new load
-                img.src = "//!!!!/test.jpg";
-                reject("timeout");
-            }, timeout);
-            img.src = url;
-        });
-    }
-
-    function updateVideoThumb(event){
-        var videoPreview = document.getElementById('asset-preview');
-        var imageUrl = event.target.value;
-        if (urlIsAnImage(imageUrl)){
-            testImage(imageUrl, 3000)
-                .then(function(result) {
-                    if (result === 'success'){
-                        videoPreview.src = imageUrl;
-                    } else if (result === 'timeout') {
-                        console.log('could not resolve the provided thumbnail image url');
-                    }
-                })
-                .catch(function(error) {
-                    console.log('encountered an error loading thumbnail image url.')
-                })
-        }
-    }
 </script>
