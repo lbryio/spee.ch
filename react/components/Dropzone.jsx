@@ -3,12 +3,13 @@ import React from 'react';
 import { selectFile } from '../actions';
 import { connect } from 'react-redux';
 
-class PublishDropzone extends React.Component {
+class Dropzone extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
       fileError: null,
       dragOver : false,
+
     }
     this.handleDrop = this.handleDrop.bind(this);
     this.handleDragOver = this.handleDragOver.bind(this);
@@ -115,19 +116,21 @@ class PublishDropzone extends React.Component {
         <form>
           <input className="input-file" type="file" id="file_input" name="file_input" accept="video/*,image/*" onChange={this.handleFileInput} encType="multipart/form-data"/>
         </form>
-        <div id="primary-dropzone" className={'dropzone row row--padded row--tall flex-container--column flex-container--center-center' + (this.state.dragOver ? ' dropzone--drag-over' : '')} onDrop={this.handleDrop} onDragOver={this.handleDragOver} onDragEnd={this.handleDragEnd} onDragEnter={this.handleDragEnter} onDragLeave={this.handleDragLeave} onClick={this.handleClick}>
-          { this.state.dragOver ? (
-            <div id="dropbzone-dragover">
-              <p className="blue">Drop it.</p>
-            </div>
-          ) : (
-            <div id="primary-dropzone-instructions">
-            <p className="info-message-placeholder info-message--failure" id="input-error-file-selection">{this.state.fileError}</p>
-            <p>Drag & drop image or video here to publish</p>
-            <p className="fine-print">OR</p>
-            <p className="blue--underlined">CHOOSE FILE</p>
-            </div>
-          )}
+        <div id="primary-dropzone" className={'row row--padded row--tall dropzone' + (this.state.dragOver ? ' dropzone--drag-over' : '')} onDrop={this.handleDrop} onDragOver={this.handleDragOver} onDragEnd={this.handleDragEnd} onDragEnter={this.handleDragEnter} onDragLeave={this.handleDragLeave} onClick={this.handleClick}>
+          <div id="dropzone-text-holder" className={'flex-container--column flex-container--center-center'}>
+            { this.state.dragOver ? (
+              <div id="dropzone-dragover">
+                <p className="blue">Drop it.</p>
+              </div>
+            ) : (
+              <div id="dropzone-instructions">
+                <p className="info-message-placeholder info-message--failure" id="input-error-file-selection">{this.state.fileError}</p>
+                <p>Drag & drop image or video here to publish</p>
+                <p className="fine-print">OR</p>
+                <p className="blue--underlined">CHOOSE FILE</p>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     );
@@ -148,4 +151,4 @@ const mapDispatchToProps = dispatch => {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(PublishDropzone);
+export default connect(mapStateToProps, mapDispatchToProps)(Dropzone);

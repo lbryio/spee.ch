@@ -1,5 +1,5 @@
 import React from 'react';
-import PublishDropzone from './PublishDropzone.jsx';
+import PreviewDropzone from './PreviewDropzone.jsx';
 import PublishForm from './PublishForm.jsx';
 import PublishStatus from './PublishStatus.jsx';
 import {connect} from 'react-redux';
@@ -11,7 +11,7 @@ class PublishTool extends React.Component {
   render () {
     return (
       <div className="row row--tall flex-container--column">
-        { !this.props.file && <PublishDropzone /> }
+        { !this.props.file && <PreviewDropzone /> }
         { this.props.file && <PublishForm /> }
         { this.props.publishStatus && <PublishStatus /> }
       </div>

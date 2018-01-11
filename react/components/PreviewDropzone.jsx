@@ -1,40 +1,138 @@
 import React from 'react';
-import {connect} from 'react-redux';
+// import PropTypes from 'prop-types';
+import { selectFile } from '../actions';
+import { connect } from 'react-redux';
+import Preview from './Preview.jsx';
+
+import { validateFile } from '../utils/file.js';
 
 class PreviewDropzone extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
-      previewSource: '',
+      fileError : null,
+      dragOver  : false,
+      mouseOver : false,
+      dimPreview: false,
     }
-    this.previewFile = this.previewFile.bind(this);
+    this.handleDrop = this.handleDrop.bind(this);
+    this.handleDragOver = this.handleDragOver.bind(this);
+    this.handleDragEnd = this.handleDragEnd.bind(this);
+    this.handleDragEnter = this.handleDragEnter.bind(this);
+    this.handleDragLeave = this.handleDragLeave.bind(this);
+    this.handleMouseEnter = this.handleMouseEnter.bind(this);
+    this.handleMouseLeave = this.handleMouseLeave.bind(this);
+    this.handleClick = this.handleClick.bind(this);
+    this.handleFileInput = this.handleFileInput.bind(this);
+    this.selectFile = this.selectFile.bind(this);
   }
-  componentDidMount () {
-    console.log('props after mount', this.props);
-    this.previewFile(this.props.file);
+  handleDrop (event) {
+    event.preventDefault();
+    this.setState({dragOver: false});
+    // if dropped items aren't files, reject them
+    const dt = event.dataTransfer;
+    console.log('dt', dt);
+    if (dt.items) {
+      if (dt.items[0].kind == 'file') {
+        const droppedFile = dt.items[0].getAsFile();
+        this.selectFile(droppedFile);
+      }
+    }
   }
-  previewFile (file) {
-    console.log('previewFile', file)
-    const that = this;
-    if (file.type !== 'video/mp4') {
-      const previewReader = new FileReader();
-      previewReader.readAsDataURL(file);
-      previewReader.onloadend = function () {
-        that.setState({previewSource: previewReader.result});
-      };
+  handleDragOver (event) {
+    event.preventDefault();
+  }
+  handleDragEnd (event) {
+    var dt = event.dataTransfer;
+    if (dt.items) {
+      for (var i = 0; i < dt.items.length; i++) {
+        dt.items.remove(i);
+      }
     } else {
-      that.setState({previewSource: '/assets/img/video_thumb_default.png'});
+      event.dataTransfer.clearData();
+    }
+  }
+  handleDragEnter () {
+    this.setState({dragOver: true, dimPreview: true});
+  }
+  handleDragLeave () {
+    this.setState({dragOver: false, dimPreview: false});
+  }
+  handleMouseEnter () {
+    this.setState({mouseOver: true, dimPreview: true});
+  }
+  handleMouseLeave () {
+    this.setState({mouseOver: false, dimPreview: false});
+  }
+  handleClick (event) {
+    event.preventDefault();
+    // trigger file input
+    document.getElementById('file_input').click();
+  }
+  handleFileInput (event) {
+    event.preventDefault();
+    const fileList = event.target.files;
+    this.selectFile(fileList[0]);
+  }
+  selectFile (file) {
+    if (file) {
+      try {
+        validateFile(file); // validate the file's name, type, and size
+      } catch (error) {
+        return this.setState({fileError: error.message});
+      }
+      // stage it so it will be ready when the publish button is clicked
+      this.setState({fileError: null});
+      this.props.onFileSelect(file);
     }
   }
   render () {
     return (
-      <div id="asset-preview-holder" className="dropzone">
-        <div id="asset-preview-dropzone-instructions" className="hidden">
-          <p>Drag & drop image or video here</p>
-          <p className="fine-print">OR</p>
-          <p className="blue--underlined">CHOOSE FILE</p>
+      <div className="row row--tall flex-container--column">
+        <form>
+          <input className="input-file" type="file" id="file_input" name="file_input" accept="video/*,image/*" onChange={this.handleFileInput} encType="multipart/form-data"/>
+        </form>
+        <div id="preview-dropzone" className={'row row--padded row--tall dropzone' + (this.state.dragOver ? ' dropzone--drag-over' : '')} onDrop={this.handleDrop} onDragOver={this.handleDragOver} onDragEnd={this.handleDragEnd} onDragEnter={this.handleDragEnter} onDragLeave={this.handleDragLeave} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} onClick={this.handleClick}>
+          {this.props.file ? (
+            <div>
+              <Preview dimPreview={this.state.dimPreview}/>
+              <div id="dropzone-text-holder" className={'flex-container--column flex-container--center-center'}>
+              { this.state.dragOver ? (
+                <div id="dropzone-dragover">
+                  <p className="blue">Drop it.</p>
+                </div>
+              ) : (
+                null
+              )}
+              { this.state.mouseOver ? (
+                <div id="dropzone-instructions">
+                  <p className="info-message-placeholder info-message--failure" id="input-error-file-selection">{this.state.fileError}</p>
+                  <p>Drag & drop image or video here to publish</p>
+                  <p className="fine-print">OR</p>
+                  <p className="blue--underlined">CHOOSE FILE</p>
+                </div>
+              ) : (
+                null
+              )}
+              </div>
+            </div>
+          ) : (
+            <div id="dropzone-text-holder" className={'flex-container--column flex-container--center-center'}>
+              { this.state.dragOver ? (
+                <div id="dropzone-dragover">
+                  <p className="blue">Drop it.</p>
+                </div>
+              ) : (
+                <div id="dropzone-instructions">
+                  <p className="info-message-placeholder info-message--failure" id="input-error-file-selection">{this.state.fileError}</p>
+                  <p>Drag & drop image or video here to publish</p>
+                  <p className="fine-print">OR</p>
+                  <p className="blue--underlined">CHOOSE FILE</p>
+                </div>
+              )}
+            </div>
+          )}
         </div>
-        <img id="asset-preview" src={this.state.previewSource} alt="publish preview"/>
       </div>
     );
   }
@@ -46,4 +144,12 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, null)(PreviewDropzone);
+const mapDispatchToProps = dispatch => {
+  return {
+    onFileSelect: (file) => {
+      dispatch(selectFile(file));
+    },
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(PreviewDropzone);
