@@ -10,11 +10,14 @@ const initialState = {
     longId : null,
   },
   publishInChannel: false,
-  publishStatus   : null,
-  error           : null,
-  file            : null,
-  claim           : '',
-  metadata        : {
+  status          : {
+    status : null,
+    message: null,
+  },
+  error   : null,
+  file    : null,
+  claim   : '',
+  metadata: {
     title      : '',
     thumbnail  : '',
     description: '',
@@ -59,8 +62,11 @@ export default function (state = initialState, action) {
       });
     case PUBLISH_STATUS_UPDATE:
       return Object.assign({}, state, {
-        publishStatus: action.status,
-      })
+        status: Object.assign({}, state.metadata, {
+          status : action.status,
+          message: action.message,
+        }),
+      });
     default:
       return state;
   }

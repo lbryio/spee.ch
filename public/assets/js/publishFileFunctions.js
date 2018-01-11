@@ -1,14 +1,6 @@
 var stagedFiles = null;
 
 const publishFileFunctions = {
-    returnNullOrChannel: function () {
-        const channelRadio = document.getElementById('channel-radio');
-        if (channelRadio.checked) {
-            const channelInput = document.getElementById('channel-name-select');
-            return channelInput.value.trim();
-        }
-        return null;
-    },
     // Validate the publish submission and then trigger upload
     showUploadStartedMessage: function (){
         console.log('starting upload');

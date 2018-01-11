@@ -5,24 +5,29 @@ import PublishStatus from '../components/PublishStatus.jsx';
 import {connect} from 'react-redux';
 
 class PublishTool extends React.Component {
-  constructor (props) {
-    super(props);
-  }
   render () {
-    return (
-      <div className="row row--tall flex-container--column">
-        { !this.props.file && <PreviewDropzone /> }
-        { this.props.file && <PublishForm /> }
-        { this.props.publishStatus && <PublishStatus /> }
-      </div>
-    );
+    if (this.props.file) {
+      if (this.props.status) {
+        return (
+          <PublishStatus
+            status={this.props.status}
+            message={this.props.message}
+          />
+        );
+      } else {
+        return <PublishForm />;
+      }
+    } else {
+      return <PreviewDropzone />;
+    }
   }
 };
 
 const mapStateToProps = state => {
   return {
-    file         : state.file,
-    publishStatus: state.publishStatus,
+    file   : state.file,
+    status : state.status.status,
+    message: state.status.message,
   };
 };
 

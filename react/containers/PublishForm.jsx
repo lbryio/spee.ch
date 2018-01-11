@@ -10,6 +10,12 @@ import { connect } from 'react-redux';
 import { getCookie } from '../utils/cookies.js';
 import { selectFile, clearFile, updateLoggedInChannel, updatePublishStatus } from '../actions';
 
+const LOAD_START = 'LOAD_START';
+const LOADING = 'LOADING';
+const PUBLISHING = 'PUBLISHING';
+const SUCCESS = 'SUCCESS';
+const FAILED = 'FAILED';
+
 class PublishForm extends React.Component {
   constructor (props) {
     super(props);
@@ -54,18 +60,18 @@ class PublishForm extends React.Component {
     const fd = this.appendDataToFormData(file, metadata);
     const that = this;
     xhr.upload.addEventListener('loadstart', function () {
-      that.props.onPublishStatusChange('upload started');
+      that.props.onPublishStatusChange(LOAD_START, 'upload started');
     });
     xhr.upload.addEventListener('progress', function (e) {
       if (e.lengthComputable) {
         const percentage = Math.round((e.loaded * 100) / e.total);
-        that.props.onPublishStatusChange(`upload progress: ${percentage}%`);
         console.log('progress:', percentage);
+        that.props.onPublishStatusChange(LOADING, `${percentage}%`);
       }
     }, false);
     xhr.upload.addEventListener('load', function () {
       console.log('loaded 100%');
-      that.props.onPublishStatusChange(`Upload complete.  Your file is now being published on the blockchain...`);
+      that.props.onPublishStatusChange(PUBLISHING, null);
     }, false);
     xhr.open('POST', uri, true);
     xhr.onreadystatechange = function () {
@@ -73,11 +79,11 @@ class PublishForm extends React.Component {
         console.log('publish response:', xhr.response);
         if (xhr.status === 200) {
           console.log('publish complete!');
-          that.props.onPublishStatusChange(JSON.parse(xhr.response).message);
+          that.props.onPublishStatusChange(SUCCESS, JSON.parse(xhr.response).message);
         } else if (xhr.status === 502) {
-          that.props.onPublishStatusChange('Spee.ch was not able to get a response from the LBRY network.');
+          that.props.onPublishStatusChange(FAILED, 'Spee.ch was not able to get a response from the LBRY network.');
         } else {
-          that.props.onPublishStatusChange(JSON.parse(xhr.response).message);
+          that.props.onPublishStatusChange(FAILED, JSON.parse(xhr.response).message);
         }
       }
     };
@@ -211,8 +217,8 @@ const mapDispatchToProps = dispatch => {
     onChannelLogin: (name, shortId, longId) => {
       dispatch(updateLoggedInChannel(name, shortId, longId));
     },
-    onPublishStatusChange: (status) => {
-      dispatch(updatePublishStatus(status));
+    onPublishStatusChange: (status, message) => {
+      dispatch(updatePublishStatus(status, message));
     },
   };
 };

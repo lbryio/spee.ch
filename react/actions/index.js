@@ -52,9 +52,10 @@ export function setPublishInChannel (channel) {
   };
 };
 
-export function updatePublishStatus (status) {
+export function updatePublishStatus (status, message) {
   return {
     type: PUBLISH_STATUS_UPDATE,
     status,
+    message,
   };
 };
