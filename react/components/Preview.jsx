@@ -18,7 +18,6 @@ class Preview extends React.Component {
     this.previewFile(newProps.file);
   }
   previewFile (file) {
-    console.log('previewFile', file)
     const that = this;
     if (file.type !== 'video/mp4') {
       const previewReader = new FileReader();

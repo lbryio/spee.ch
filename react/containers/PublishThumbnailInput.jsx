@@ -56,7 +56,7 @@ class ThumbnailInput extends React.Component {
   }
   render () {
     return (
-      <div className="row row--padded row--wide row--no-top" id="publish-thumbnail">
+      <div>
         <div className="column column--3 column--sml-10">
           <label className="label">Thumbnail:</label>
         </div><div className="column column--6 column--sml-10">

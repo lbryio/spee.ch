@@ -1,5 +1,5 @@
 import {
-  CHANNEL_UPDATE, CLAIM_UPDATE, FILE_CLEAR, FILE_SELECTED, METADATA_UPDATE,
+  CHANNEL_UPDATE, CLAIM_UPDATE, FILE_CLEAR, FILE_SELECTED, METADATA_UPDATE, PUBLISH_STATUS_UPDATE,
   SET_PUBLISH_IN_CHANNEL,
 } from '../actions';
 
@@ -55,8 +55,12 @@ export default function (state = initialState, action) {
       });
     case SET_PUBLISH_IN_CHANNEL:
       return Object.assign({}, state, {
-        publishInChannel: action.value,
+        publishInChannel: action.channel,
       });
+    case PUBLISH_STATUS_UPDATE:
+      return Object.assign({}, state, {
+        publishStatus: action.status,
+      })
     default:
       return state;
   }

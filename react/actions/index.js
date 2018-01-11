@@ -5,6 +5,7 @@ export const METADATA_UPDATE = 'METADATA_UPDATE';
 export const CLAIM_UPDATE = 'CLAIM_UPDATE';
 export const CHANNEL_UPDATE = 'CHANNEL_UPDATE';
 export const SET_PUBLISH_IN_CHANNEL = 'SET_PUBLISH_IN_CHANNEL';
+export const PUBLISH_STATUS_UPDATE = 'PUBLISH_STATUS_UPDATE';
 
 // export action creators
 export function selectFile (file) {
@@ -44,9 +45,16 @@ export function updateLoggedInChannel (name, shortId, longId) {
   };
 };
 
-export function setPublishInChannel (value) {
+export function setPublishInChannel (channel) {
   return {
     type: SET_PUBLISH_IN_CHANNEL,
-    value,
+    channel,
   };
-}
+};
+
+export function updatePublishStatus (status) {
+  return {
+    type: PUBLISH_STATUS_UPDATE,
+    status,
+  };
+};

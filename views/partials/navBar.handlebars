@@ -24,8 +24,8 @@
             <span class="nav-bar-tagline">Open-source, decentralized image and video sharing.</span>
         </div>
         <div class="nav-bar--right">
-            <a class="nav-bar-link link--nav" href="/">Upload</a>
-            <a class="nav-bar-link link--nav" href="/popular">Popular</a>
+            <a class="nav-bar-link link--nav" href="/">Publish</a>
+            <!--<a class="nav-bar-link link--nav" href="/popular">Popular</a>-->
             <a class="nav-bar-link link--nav" href="/about">About</a>
             <select type="text" id="nav-bar-channel-select" class="select select--arrow link--nav" onchange="toggleNavBarSelection(event.target.selectedOptions[0].value)" {{#unless user}}style="display:none"{{/unless}}>
                 <option id="nav-bar-channel-select-channel-option">@{{user.userName}}</option>

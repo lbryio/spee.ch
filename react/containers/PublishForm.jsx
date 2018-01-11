@@ -6,18 +6,19 @@ import PublishUrlInput from './PublishUrlInput.jsx';
 import PublishThumbnailInput from './PublishThumbnailInput.jsx';
 import PublishMetadataInputs from './PublishMetadataInputs.jsx';
 import AnonymousOrChannelSelect from './AnonymousOrChannelSelect.jsx';
-
-import { selectFile, clearFile, updateLoggedInChannel } from '../actions/index';
 import { connect } from 'react-redux';
 import { getCookie } from '../utils/cookies.js';
+import { selectFile, clearFile, updateLoggedInChannel, updatePublishStatus } from '../actions';
 
 class PublishForm extends React.Component {
   constructor (props) {
     super(props);
     // set defaults
     this.state = {
-      error: null,
+      publishRequestError: null,
     };
+    this.validatePublishRequest = this.validatePublishRequest.bind(this);
+    this.makePublishRequest = this.makePublishRequest.bind(this);
     this.publish = this.publish.bind(this);
   }
   componentWillMount () {
@@ -28,8 +29,102 @@ class PublishForm extends React.Component {
     console.log(`channel cookies found: ${loggedInChannelName} ${loggedInChannelShortId} ${loggedInChannelLongId}`);
     this.props.onChannelLogin(loggedInChannelName, loggedInChannelShortId, loggedInChannelLongId);
   }
+  validatePublishRequest () {
+    // make sure all required data is provided
+    return new Promise((resolve, reject) => {
+      // is there a file?
+      if (!this.props.file) {
+        return reject(new Error('Please choose a file'));
+      }
+      // is there a claim chosen?
+      if (!this.props.claim) {
+        return reject(new Error('Please enter a claim name'));
+      }
+      // if publishInChannel is true, is a channel logged in (or selected)
+      if (this.props.publishInChannel && !this.props.loggedInChannel.name) {
+        return reject(new Error('Select Anonymous or log in to a channel'));
+      }
+      // tbd: is the claim available?
+      resolve();
+    });
+  }
+  makePublishRequest (file, metadata) {
+    const uri = '/api/claim-publish';
+    const xhr = new XMLHttpRequest();
+    const fd = this.appendDataToFormData(file, metadata);
+    const that = this;
+    xhr.upload.addEventListener('loadstart', function () {
+      that.props.onPublishStatusChange('upload started');
+    });
+    xhr.upload.addEventListener('progress', function (e) {
+      if (e.lengthComputable) {
+        const percentage = Math.round((e.loaded * 100) / e.total);
+        that.props.onPublishStatusChange(`upload progress: ${percentage}%`);
+        console.log('progress:', percentage);
+      }
+    }, false);
+    xhr.upload.addEventListener('load', function () {
+      console.log('loaded 100%');
+      that.props.onPublishStatusChange(`Upload complete.  Your file is now being published on the blockchain...`);
+    }, false);
+    xhr.open('POST', uri, true);
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4) {
+        console.log('publish response:', xhr.response);
+        if (xhr.status === 200) {
+          console.log('publish complete!');
+          that.props.onPublishStatusChange(JSON.parse(xhr.response).message);
+        } else if (xhr.status === 502) {
+          that.props.onPublishStatusChange('Spee.ch was not able to get a response from the LBRY network.');
+        } else {
+          that.props.onPublishStatusChange(JSON.parse(xhr.response).message);
+        }
+      }
+    };
+    // Initiate a multipart/form-data upload
+    xhr.send(fd);
+  }
+  createMetadata () {
+    let metadata = {
+      name       : this.props.claim,
+      title      : this.props.title,
+      description: this.props.description,
+      license    : this.props.license,
+      nsfw       : this.props.nsfw,
+      type       : this.props.file.type,
+      thumbnail  : this.props.thumbnail,
+    };
+    if (this.props.publishInChannel) {
+      metadata['channelName'] = this.props.loggedInChannel.name;
+    }
+    return metadata;
+  }
+  appendDataToFormData (file, metadata) {
+    var fd = new FormData();
+    fd.append('file', file);
+    for (var key in metadata) {
+      if (metadata.hasOwnProperty(key)) {
+        console.log(key, metadata[key]);
+        fd.append(key, metadata[key]);
+      }
+    }
+    return fd;
+  }
   publish () {
     // publish the asset
+    const that = this;
+    this.validatePublishRequest()
+      .then(() => {
+        const metadata = that.createMetadata();
+        // publish the claim
+        return that.makePublishRequest(this.props.file, metadata);
+      })
+      .then(() => {
+        that.props.onPublishStatusChange('publish request made');
+      })
+      .catch((error) => {
+        that.setState({publishRequestError: error.message});
+      });
   }
   render () {
     return (
@@ -61,14 +156,18 @@ class PublishForm extends React.Component {
               <ChannelSelector />
             </div>
 
-            { (this.props.fileType === 'video/mp4') && <PublishThumbnailInput /> }
+            { (this.props.file.type === 'video/mp4') && (
+              <div className="row row--padded row--wide row--no-top">
+                <PublishThumbnailInput />
+              </div>
+            )}
 
             <div className="row row--padded row--no-top row--no-bottom row--wide">
               <PublishMetadataInputs />
             </div>
 
             <div className="row row--padded row--wide">
-              <div className="input-error" id="input-error-publish-submit" hidden="true">{this.state.error}</div>
+              <div className="input-error" id="input-error-publish-submit" hidden="true">{this.state.publishRequestError}</div>
               <button id="publish-submit" className="button--primary button--large" onClick={this.publish}>Publish</button>
             </div>
 
@@ -89,8 +188,15 @@ class PublishForm extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    fileType: state.file.type,
-    claim   : state.claim,
+    file            : state.file,
+    claim           : state.claim,
+    title           : state.metadata.title,
+    thumbnail       : state.metadata.thumbnail,
+    description     : state.metadata.description,
+    license         : state.metadata.license,
+    nsfw            : state.metadata.nsfw,
+    loggedInChannel : state.loggedInChannel,
+    publishInChannel: state.publishInChannel,
   };
 };
 
@@ -104,6 +210,9 @@ const mapDispatchToProps = dispatch => {
     },
     onChannelLogin: (name, shortId, longId) => {
       dispatch(updateLoggedInChannel(name, shortId, longId));
+    },
+    onPublishStatusChange: (status) => {
+      dispatch(updatePublishStatus(status));
     },
   };
 };
