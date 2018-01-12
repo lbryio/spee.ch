@@ -79,7 +79,7 @@ class PublishForm extends React.Component {
         console.log('publish response:', xhr.response);
         if (xhr.status === 200) {
           console.log('publish complete!');
-          that.props.onPublishStatusChange(SUCCESS, JSON.parse(xhr.response).message);
+          that.props.onPublishStatusChange(SUCCESS, JSON.parse(xhr.response).message.lbryTx.claim_id);
         } else if (xhr.status === 502) {
           that.props.onPublishStatusChange(FAILED, 'Spee.ch was not able to get a response from the LBRY network.');
         } else {
