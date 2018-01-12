@@ -33,7 +33,8 @@ function PublishStatus ({ status, message }) {
       }
       {(status === SUCCESS) &&
       <div className="row align-content-center">
-        {message}
+        <p>Your publish is complete! You are being redirected to it now.</p>
+        <p>If you are not automatically redirected, <a class="link--primary" target="_blank" href={message}>click here.</a></p>
       </div>
       }
       {(status === FAILED) &&

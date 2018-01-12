@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import {updateLoggedInChannel} from '../actions/index';
 import { makeGetRequest, makePostRequest } from '../utils/xhr.js';
 import { setUserCookies } from '../utils/cookies.js';
-import { replaceChannelSelectionInNavBar } from '../utils/pageUpdate.js';
+import { replaceChannelSelectionInNavBar } from '../utils/page.js';
 
 class ChannelCreateForm extends React.Component {
   constructor (props) {

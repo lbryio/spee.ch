@@ -507,7 +507,7 @@ table {
 /* Assets */
 
 .asset {
-	max-width: 100%;
+	width: 100%;
 }
 
 #show-body #asset-boilerpate {

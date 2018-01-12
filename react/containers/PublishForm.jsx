@@ -44,11 +44,11 @@ class PublishForm extends React.Component {
       }
       // is there a claim chosen?
       if (!this.props.claim) {
-        return reject(new Error('Please enter a claim name'));
+        return reject(new Error('Please enter a URL'));
       }
       // if publishInChannel is true, is a channel logged in (or selected)
       if (this.props.publishInChannel && !this.props.loggedInChannel.name) {
-        return reject(new Error('Select Anonymous or log in to a channel'));
+        return reject(new Error('Select "Anonymous" or log in to a channel'));
       }
       // tbd: is the claim available?
       resolve();
@@ -79,7 +79,9 @@ class PublishForm extends React.Component {
         console.log('publish response:', xhr.response);
         if (xhr.status === 200) {
           console.log('publish complete!');
-          that.props.onPublishStatusChange(SUCCESS, JSON.parse(xhr.response).message.lbryTx.claim_id);
+          const url = JSON.parse(xhr.response).message.url;
+          that.props.onPublishStatusChange(SUCCESS, url);
+          window.location = url;
         } else if (xhr.status === 502) {
           that.props.onPublishStatusChange(FAILED, 'Spee.ch was not able to get a response from the LBRY network.');
         } else {
@@ -172,8 +174,8 @@ class PublishForm extends React.Component {
               <PublishMetadataInputs />
             </div>
 
-            <div className="row row--padded row--wide">
-              <div className="input-error" id="input-error-publish-submit" hidden="true">{this.state.publishRequestError}</div>
+            <div className="row row--padded row--wide align-content-center">
+              <p className="info-message-placeholder info-message--failure">{this.state.publishRequestError}</p>
               <button id="publish-submit" className="button--primary button--large" onClick={this.publish}>Publish</button>
             </div>
 

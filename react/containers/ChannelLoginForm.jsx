@@ -3,7 +3,7 @@ import { makePostRequest } from '../utils/xhr.js';
 import { connect } from 'react-redux';
 import { updateLoggedInChannel } from '../actions/index';
 import { setUserCookies } from '../utils/cookies.js';
-import { replaceChannelSelectionInNavBar } from '../utils/pageUpdate.js';
+import { replaceChannelSelectionInNavBar } from '../utils/page.js';
 
 class ChannelLoginForm extends React.Component {
   constructor (props) {
