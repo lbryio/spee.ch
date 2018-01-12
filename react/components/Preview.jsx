@@ -14,7 +14,6 @@ class Preview extends React.Component {
     this.previewFile(this.props.file);
   }
   componentWillReceiveProps (newProps) {
-    console.log('Preview will receive props', newProps);
     this.previewFile(newProps.file);
   }
   previewFile (file) {

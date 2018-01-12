@@ -23,7 +23,6 @@ class UrlChooser extends React.Component {
     }
   }
   componentWillReceiveProps ({claim: newClaim}) {
-    console.log('PublishUrlInput will receive new props (claim)', newClaim);
     if (newClaim) {
       this.checkClaimIsAvailable(newClaim);
     } else {

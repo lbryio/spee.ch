@@ -22,7 +22,6 @@ class ChannelSelector extends React.Component {
     }
   }
   componentWillReceiveProps ({ loggedInChannelName }) {
-    console.log('ChannelSelector will receive props');
     if (loggedInChannelName) {
       this.selectOption(loggedInChannelName);
     }
