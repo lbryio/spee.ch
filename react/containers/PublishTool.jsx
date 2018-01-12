@@ -1,5 +1,5 @@
 import React from 'react';
-import PreviewDropzone from './Dropzone.jsx';
+import Dropzone from './Dropzone.jsx';
 import PublishForm from './PublishForm.jsx';
 import PublishStatus from '../components/PublishStatus.jsx';
 import {connect} from 'react-redux';
@@ -18,7 +18,7 @@ class PublishTool extends React.Component {
         return <PublishForm />;
       }
     } else {
-      return <PreviewDropzone />;
+      return <Dropzone />;
     }
   }
 };

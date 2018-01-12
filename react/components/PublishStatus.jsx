@@ -1,4 +1,5 @@
 import React from 'react';
+import ProgressBar from '../components/ProgressBar.jsx';
 
 const LOAD_START = 'LOAD_START';
 const LOADING = 'LOADING';
@@ -26,7 +27,7 @@ function PublishStatus ({ status, message }) {
       {(status === PUBLISHING) &&
       <div className="row align-content-center">
         <p>Upload complete.  Your file is now being published on the blockchain...</p>
-        <p>PROGRESS BAR HERE</p>
+        <ProgressBar/>
         <p>Curious what magic is happening here? <a className="link--primary" target="blank" href="https://lbry.io/faq/what-is-lbry">Learn more.</a></p>
       </div>
       }
