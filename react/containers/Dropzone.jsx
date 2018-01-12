@@ -1,16 +1,14 @@
 import React from 'react';
 // import PropTypes from 'prop-types';
-import { selectFile } from '../actions/index';
+import { selectFile, updateError } from '../actions';
 import { connect } from 'react-redux';
 import Preview from '../components/Preview.jsx';
-
 import { validateFile } from '../utils/file.js';
 
 class Dropzone extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
-      fileError : null,
       dragOver  : false,
       mouseOver : false,
       dimPreview: false,
@@ -79,10 +77,10 @@ class Dropzone extends React.Component {
       try {
         validateFile(file); // validate the file's name, type, and size
       } catch (error) {
-        return this.setState({fileError: error.message});
+        return this.props.onFileError(error.message);
       }
       // stage it so it will be ready when the publish button is clicked
-      this.setState({fileError: null});
+      this.props.onFileError(null);
       this.props.onFileSelect(file);
     }
   }
@@ -110,7 +108,7 @@ class Dropzone extends React.Component {
               )}
               { this.state.mouseOver ? (
                 <div id="dropzone-instructions">
-                  <p className="info-message-placeholder info-message--failure" id="input-error-file-selection">{this.state.fileError}</p>
+                  <p className="info-message-placeholder info-message--failure" id="input-error-file-selection">{this.props.fileError}</p>
                   <p>Drag & drop image or video here to publish</p>
                   <p className="fine-print">OR</p>
                   <p className="blue--underlined">CHOOSE FILE</p>
@@ -128,7 +126,7 @@ class Dropzone extends React.Component {
                 </div>
               ) : (
                 <div id="dropzone-instructions">
-                  <p className="info-message-placeholder info-message--failure" id="input-error-file-selection">{this.state.fileError}</p>
+                  <p className="info-message-placeholder info-message--failure" id="input-error-file-selection">{this.props.fileError}</p>
                   <p>Drag & drop image or video here to publish</p>
                   <p className="fine-print">OR</p>
                   <p className="blue--underlined">CHOOSE FILE</p>
@@ -146,6 +144,7 @@ const mapStateToProps = state => {
   return {
     file     : state.file,
     thumbnail: state.metadata.thumbnail,
+    fileError: state.error.file,
   };
 };
 
@@ -153,6 +152,9 @@ const mapDispatchToProps = dispatch => {
   return {
     onFileSelect: (file) => {
       dispatch(selectFile(file));
+    },
+    onFileError: (value) => {
+      dispatch(updateError('file', value));
     },
   };
 }

@@ -3,12 +3,12 @@ import { updateClaim } from '../actions/index';
 import { connect } from 'react-redux';
 import { makeGetRequest } from '../utils/xhr.js';
 import UrlMiddle from '../components/PublishUrlMiddle.jsx';
+import {updateError} from '../actions';
 
 class UrlChooser extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
-      error    : null,
       host     : 'spee.ch',
       urlMiddle: null,
     };
@@ -27,7 +27,7 @@ class UrlChooser extends React.Component {
     if (newClaim) {
       this.checkClaimIsAvailable(newClaim);
     } else {
-      this.setState({error: 'Please enter a URL'});
+      this.props.onUrlError('Please enter a URL');
     }
   }
   handleInput (event) {
@@ -53,19 +53,19 @@ class UrlChooser extends React.Component {
     makeGetRequest(`/api/claim-is-available/${claim}`)
       .then(response => {
         if (response) {
-          that.setState({'error': null});
+          this.props.onUrlError(null);
         } else {
-          that.setState({'error': 'That url has already been claimed'});
+          this.props.onUrlError('That url has already been claimed');
         }
       })
       .catch((error) => {
-        that.setState({'error': error.message});
+        this.props.onUrlError(error.message);
       });
   }
   render () {
     return (
       <div>
-        <p id="input-error-claim-name" className="info-message-placeholder info-message--failure">{this.state.error}</p>
+        <p id="input-error-claim-name" className="info-message-placeholder info-message--failure">{this.props.urlError}</p>
         <div className="column column--3 column--sml-10">
           <label className="label">URL:</label>
         </div><div className="column column--7 column--sml-10 input-text--primary span--relative">
@@ -75,7 +75,7 @@ class UrlChooser extends React.Component {
           <UrlMiddle publishInChannel={this.props.publishInChannel} loggedInChannelName={this.props.loggedInChannelName} loggedInChannelShortId={this.props.loggedInChannelShortId}/>
 
           <input type="text" id="claim-name-input" className="input-text" name='claim' placeholder="your-url-here" onChange={this.handleInput} value={this.props.claim}/>
-          { (this.props.claim && !this.state.error) && <span id="input-success-claim-name" className="info-message--success span--absolute">{'\u2713'}</span> }
+          { (this.props.claim && !this.props.urlError) && <span id="input-success-claim-name" className="info-message--success span--absolute">{'\u2713'}</span> }
         </div>
       </div>
     );
@@ -89,6 +89,7 @@ const mapStateToProps = state => {
     loggedInChannelShortId: state.loggedInChannel.shortId,
     publishInChannel      : state.publishInChannel,
     claim                 : state.claim,
+    urlError              : state.error.url,
   };
 };
 
@@ -96,6 +97,9 @@ const mapDispatchToProps = dispatch => {
   return {
     onClaimChange: (value) => {
       dispatch(updateClaim(value));
+    },
+    onUrlError: (value) => {
+      dispatch(updateError('url', value));
     },
   };
 }

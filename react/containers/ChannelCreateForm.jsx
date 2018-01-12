@@ -20,6 +20,7 @@ class ChannelCreateForm extends React.Component {
     this.updateIsChannelAvailable = this.updateIsChannelAvailable.bind(this);
     this.checkIsChannelAvailable = this.checkIsChannelAvailable.bind(this);
     this.checkIsPasswordProvided = this.checkIsPasswordProvided.bind(this);
+    this.makePublishChannelRequest = this.makePublishChannelRequest.bind(this);
     this.createChannel = this.createChannel.bind(this);
   }
   cleanseChannelInput (input) {
@@ -88,12 +89,12 @@ class ChannelCreateForm extends React.Component {
       resolve();
     });
   }
-  makeCreateChannelRequest (channel, password) {
+  makePublishChannelRequest (channel, password) {
     const params = `username=${channel}&password=${password}`;
     return new Promise((resolve, reject) => {
       makePostRequest('/signup', params)
         .then(result => {
-          resolve(result);
+          return resolve(result);
         })
         .catch(error => {
           console.log('create channel request failed:', error);
@@ -110,7 +111,7 @@ class ChannelCreateForm extends React.Component {
       })
       .then(() => {
         that.setState({status: 'We are publishing your new channel.  Sit tight...'});
-        return that.makeCreateChannelRequest();
+        return that.makePublishChannelRequest(that.state.channel, that.state.password);
       })
       .then(result => {
         that.setState({status: null});

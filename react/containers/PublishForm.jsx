@@ -8,7 +8,7 @@ import PublishMetadataInputs from './PublishMetadataInputs.jsx';
 import AnonymousOrChannelSelect from './AnonymousOrChannelSelect.jsx';
 import { connect } from 'react-redux';
 import { getCookie } from '../utils/cookies.js';
-import { selectFile, clearFile, updateLoggedInChannel, updatePublishStatus } from '../actions';
+import {selectFile, clearFile, updateLoggedInChannel, updatePublishStatus, updateError} from '../actions';
 
 const LOAD_START = 'LOAD_START';
 const LOADING = 'LOADING';
@@ -19,10 +19,6 @@ const FAILED = 'FAILED';
 class PublishForm extends React.Component {
   constructor (props) {
     super(props);
-    // set defaults
-    this.state = {
-      publishRequestError: null,
-    };
     this.validatePublishRequest = this.validatePublishRequest.bind(this);
     this.makePublishRequest = this.makePublishRequest.bind(this);
     this.publish = this.publish.bind(this);
@@ -46,11 +42,14 @@ class PublishForm extends React.Component {
       if (!this.props.claim) {
         return reject(new Error('Please enter a URL'));
       }
+      if (this.props.urlError) {
+        return reject(new Error('Fix the url'));
+      }
       // if publishInChannel is true, is a channel logged in (or selected)
       if (this.props.publishInChannel && !this.props.loggedInChannel.name) {
         return reject(new Error('Select "Anonymous" or log in to a channel'));
       }
-      // tbd: is the claim available?
+      // is the claim available?
       resolve();
     });
   }
@@ -131,7 +130,7 @@ class PublishForm extends React.Component {
         that.props.onPublishStatusChange('publish request made');
       })
       .catch((error) => {
-        that.setState({publishRequestError: error.message});
+        that.props.onPublishRequestError(error.message);
       });
   }
   render () {
@@ -175,7 +174,7 @@ class PublishForm extends React.Component {
             </div>
 
             <div className="row row--padded row--wide align-content-center">
-              <p className="info-message-placeholder info-message--failure">{this.state.publishRequestError}</p>
+              <p className="info-message-placeholder info-message--failure">{this.props.publishRequestError}</p>
               <button id="publish-submit" className="button--primary button--large" onClick={this.publish}>Publish</button>
             </div>
 
@@ -196,15 +195,18 @@ class PublishForm extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    file            : state.file,
-    claim           : state.claim,
-    title           : state.metadata.title,
-    thumbnail       : state.metadata.thumbnail,
-    description     : state.metadata.description,
-    license         : state.metadata.license,
-    nsfw            : state.metadata.nsfw,
-    loggedInChannel : state.loggedInChannel,
-    publishInChannel: state.publishInChannel,
+    file               : state.file,
+    claim              : state.claim,
+    title              : state.metadata.title,
+    thumbnail          : state.metadata.thumbnail,
+    description        : state.metadata.description,
+    license            : state.metadata.license,
+    nsfw               : state.metadata.nsfw,
+    loggedInChannel    : state.loggedInChannel,
+    publishInChannel   : state.publishInChannel,
+    fileError          : state.error.file,
+    urlError           : state.error.url,
+    publishRequestError: state.error.publishRequest,
   };
 };
 
@@ -221,6 +223,9 @@ const mapDispatchToProps = dispatch => {
     },
     onPublishStatusChange: (status, message) => {
       dispatch(updatePublishStatus(status, message));
+    },
+    onPublishRequestError: (value) => {
+      dispatch(updateError('publishRequest', value));
     },
   };
 };

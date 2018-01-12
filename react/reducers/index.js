@@ -1,5 +1,5 @@
 import {
-  CHANNEL_UPDATE, CLAIM_UPDATE, FILE_CLEAR, FILE_SELECTED, METADATA_UPDATE, PUBLISH_STATUS_UPDATE,
+  CHANNEL_UPDATE, CLAIM_UPDATE, ERROR_UPDATE, FILE_CLEAR, FILE_SELECTED, METADATA_UPDATE, PUBLISH_STATUS_UPDATE,
   SET_PUBLISH_IN_CHANNEL,
 } from '../actions';
 
@@ -14,7 +14,11 @@ const initialState = {
     status : null,
     message: null,
   },
-  error   : null,
+  error: {
+    file          : null,
+    url           : null,
+    publishRequest: null,
+  },
   file    : null,
   claim   : '',
   metadata: {
@@ -62,9 +66,15 @@ export default function (state = initialState, action) {
       });
     case PUBLISH_STATUS_UPDATE:
       return Object.assign({}, state, {
-        status: Object.assign({}, state.metadata, {
+        status: Object.assign({}, state.status, {
           status : action.status,
           message: action.message,
+        }),
+      });
+    case ERROR_UPDATE:
+      return Object.assign({}, state, {
+        error: Object.assign({}, state.error, {
+          [action.name]: action.value,
         }),
       });
     default:

@@ -6,6 +6,7 @@ export const CLAIM_UPDATE = 'CLAIM_UPDATE';
 export const CHANNEL_UPDATE = 'CHANNEL_UPDATE';
 export const SET_PUBLISH_IN_CHANNEL = 'SET_PUBLISH_IN_CHANNEL';
 export const PUBLISH_STATUS_UPDATE = 'PUBLISH_STATUS_UPDATE';
+export const ERROR_UPDATE = 'ERROR_UPDATE';
 
 // export action creators
 export function selectFile (file) {
@@ -57,5 +58,13 @@ export function updatePublishStatus (status, message) {
     type: PUBLISH_STATUS_UPDATE,
     status,
     message,
+  };
+};
+
+export function updateError (name, value) {
+  return {
+    type: ERROR_UPDATE,
+    name,
+    value,
   };
 };
