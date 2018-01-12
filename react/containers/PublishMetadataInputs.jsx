@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { updateMetadata } from '../actions/index';
+import PropTypes from 'prop-types';
 
 /*
   const textarea = document.getElementById('publish-description');
@@ -99,6 +100,13 @@ const mapDispatchToProps = dispatch => {
       dispatch(updateMetadata(name, value));
     },
   };
+};
+
+MetadataInputs.propTypes = {
+  description     : PropTypes.string.isRequired,
+  license         : PropTypes.string.isRequired,
+  nsfw            : PropTypes.bool.isRequired,
+  onMetadataChange: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MetadataInputs);

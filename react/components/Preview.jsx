@@ -1,5 +1,5 @@
 import React from 'react';
-import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
 
 class Preview extends React.Component {
   constructor (props) {
@@ -38,6 +38,12 @@ class Preview extends React.Component {
       />
     );
   }
+};
+
+Preview.propTypes = {
+  file      : PropTypes.object.isRequired,
+  thumbnail : PropTypes.string.isRequired,
+  dimPreview: PropTypes.bool.isRequired,
 };
 
 export default Preview;

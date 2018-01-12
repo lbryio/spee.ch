@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { updateMetadata } from '../actions/index';
+import PropTypes from 'prop-types';
 
 class ThumbnailInput extends React.Component {
   constructor (props) {
@@ -81,6 +82,11 @@ const mapDispatchToProps = dispatch => {
       dispatch(updateMetadata(name, value));
     },
   };
+};
+
+ThumbnailInput.propTypes = {
+  thumbnail        : PropTypes.string.isRequired,
+  onThumbnailChange: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ThumbnailInput);

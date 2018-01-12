@@ -9,6 +9,7 @@ import AnonymousOrChannelSelect from './AnonymousOrChannelSelect.jsx';
 import { connect } from 'react-redux';
 import { getCookie } from '../utils/cookies.js';
 import {selectFile, clearFile, updateLoggedInChannel, updatePublishStatus, updateError} from '../actions';
+import PropTypes from 'prop-types';
 
 const LOAD_START = 'LOAD_START';
 const LOADING = 'LOADING';
@@ -228,6 +229,26 @@ const mapDispatchToProps = dispatch => {
       dispatch(updateError('publishRequest', value));
     },
   };
+};
+
+PublishForm.propTypes = {
+  file                 : PropTypes.object.isRequired,
+  claim                : PropTypes.string.isRequired,
+  title                : PropTypes.string.isRequired,
+  thumbnail            : PropTypes.string.isRequired,
+  description          : PropTypes.string.isRequired,
+  license              : PropTypes.string.isRequired,
+  nsfw                 : PropTypes.bool.isRequired,
+  loggedInChannel      : PropTypes.object.isRequired,
+  publishInChannel     : PropTypes.bool.isRequired,
+  fileError            : PropTypes.string,
+  urlError             : PropTypes.string,
+  publishRequestError  : PropTypes.string,
+  onFileSelect         : PropTypes.func.isRequired,
+  onFileClear          : PropTypes.func.isRequired,
+  onChannelLogin       : PropTypes.func.isRequired,
+  onPublishStatusChange: PropTypes.func.isRequired,
+  onPublishRequestError: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(PublishForm);

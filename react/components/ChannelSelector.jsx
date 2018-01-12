@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import ChannelLoginForm from '../containers/ChannelLoginForm.jsx';
 import ChannelCreateForm from '../containers/ChannelCreateForm.jsx';
 import { connect } from 'react-redux';
@@ -65,6 +66,11 @@ const mapStateToProps = state => {
     loggedInChannelName: state.loggedInChannel.name,
     publishInChannel   : state.publishInChannel,
   };
+};
+
+ChannelSelector.propTypes = {
+  loggedInChannelName: PropTypes.string,
+  publishInChannel   : PropTypes.bool,
 };
 
 export default connect(mapStateToProps, null)(ChannelSelector);

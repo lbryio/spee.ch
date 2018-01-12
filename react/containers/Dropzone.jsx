@@ -1,9 +1,9 @@
 import React from 'react';
-// import PropTypes from 'prop-types';
 import { selectFile, updateError } from '../actions';
 import { connect } from 'react-redux';
 import Preview from '../components/Preview.jsx';
 import { validateFile } from '../utils/file.js';
+import PropTypes from 'prop-types';
 
 class Dropzone extends React.Component {
   constructor (props) {
@@ -12,7 +12,7 @@ class Dropzone extends React.Component {
       dragOver  : false,
       mouseOver : false,
       dimPreview: false,
-    }
+    };
     this.handleDrop = this.handleDrop.bind(this);
     this.handleDragOver = this.handleDragOver.bind(this);
     this.handleDragEnd = this.handleDragEnd.bind(this);
@@ -157,6 +157,13 @@ const mapDispatchToProps = dispatch => {
       dispatch(updateError('file', value));
     },
   };
-}
+};
+
+Dropzone.propTypes = {
+  file       : PropTypes.object,
+  thumbnail  : PropTypes.string.isRequired,
+  fileError  : PropTypes.string,
+  onFileError: PropTypes.func.isRequired,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dropzone);

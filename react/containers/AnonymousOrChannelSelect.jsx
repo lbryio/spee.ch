@@ -1,6 +1,7 @@
 import React from 'react';
 import { setPublishInChannel } from '../actions/index';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 class AnonymousOrChannelSelect extends React.Component {
   constructor (props) {
@@ -44,5 +45,10 @@ const mapDispatchToProps = dispatch => {
     },
   };
 }
+
+AnonymousOrChannelSelect.propTypes = {
+  publishInChannel        : PropTypes.bool.isRequired,
+  onPublishInChannelChange: PropTypes.func.isRequired,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(AnonymousOrChannelSelect);

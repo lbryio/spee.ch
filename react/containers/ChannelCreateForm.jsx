@@ -4,6 +4,7 @@ import {updateLoggedInChannel} from '../actions/index';
 import { makeGetRequest, makePostRequest } from '../utils/xhr.js';
 import { setUserCookies } from '../utils/cookies.js';
 import { replaceChannelSelectionInNavBar } from '../utils/page.js';
+import PropTypes from 'prop-types';
 
 class ChannelCreateForm extends React.Component {
   constructor (props) {
@@ -168,6 +169,10 @@ const mapDispatchToProps = dispatch => {
       dispatch(updateLoggedInChannel(name, shortId, longId));
     },
   };
+};
+
+ChannelCreateForm.propTypes = {
+  onChannelLogin: PropTypes.func.isRequired,
 };
 
 export default connect(null, mapDispatchToProps)(ChannelCreateForm);

@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { updateLoggedInChannel } from '../actions/index';
 import { setUserCookies } from '../utils/cookies.js';
 import { replaceChannelSelectionInNavBar } from '../utils/page.js';
+import PropTypes from 'prop-types';
 
 class ChannelLoginForm extends React.Component {
   constructor (props) {
@@ -80,6 +81,10 @@ const mapDispatchToProps = dispatch => {
       dispatch(updateLoggedInChannel(name, shortId, longId));
     },
   };
+};
+
+ChannelLoginForm.propTypes = {
+  onChannelLogin: PropTypes.func.isRequired,
 };
 
 export default connect(null, mapDispatchToProps)(ChannelLoginForm);

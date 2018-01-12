@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { makeGetRequest } from '../utils/xhr.js';
 import UrlMiddle from '../components/PublishUrlMiddle.jsx';
 import {updateError} from '../actions';
+import PropTypes from 'prop-types';
 
 class UrlChooser extends React.Component {
   constructor (props) {
@@ -101,6 +102,15 @@ const mapDispatchToProps = dispatch => {
       dispatch(updateError('url', value));
     },
   };
-}
+};
+
+UrlChooser.propTypes = {
+  fileName              : PropTypes.string.isRequired,
+  loggedInChannelName   : PropTypes.string.isRequired,
+  loggedInChannelShortId: PropTypes.string.isRequired,
+  publishInChannel      : PropTypes.bool.isRequired,
+  claim                 : PropTypes.string.isRequired,
+  urlError              : PropTypes.string,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(UrlChooser);

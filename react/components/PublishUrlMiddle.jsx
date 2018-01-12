@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 function UrlMiddle ({publishInChannel, loggedInChannelName, loggedInChannelShortId}) {
   if (publishInChannel) {
@@ -12,5 +13,11 @@ function UrlMiddle ({publishInChannel, loggedInChannelName, loggedInChannelShort
     <span id="url-no-channel-placeholder" className="url-text--secondary tooltip">xyz<span className="tooltip-text">This will be a random id</span> /</span>
   );
 }
+
+UrlMiddle.propTypes = {
+  publishInChannel      : PropTypes.bool.isRequired,
+  loggedInChannelName   : PropTypes.string.isRequired,
+  loggedInChannelShortId: PropTypes.string.isRequired,
+};
 
 export default UrlMiddle;

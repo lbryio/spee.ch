@@ -3,6 +3,7 @@ import Dropzone from './Dropzone.jsx';
 import PublishForm from './PublishForm.jsx';
 import PublishStatus from '../components/PublishStatus.jsx';
 import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
 
 class PublishTool extends React.Component {
   render () {
@@ -29,6 +30,12 @@ const mapStateToProps = state => {
     status : state.status.status,
     message: state.status.message,
   };
+};
+
+PublishTool.propTypes = {
+  file   : PropTypes.object,
+  status : PropTypes.string,
+  message: PropTypes.string,
 };
 
 export default connect(mapStateToProps, null)(PublishTool);
