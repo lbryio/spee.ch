@@ -8,11 +8,11 @@ module.exports = {
         if (xhttp.readyState === 4) {
           if (xhttp.status === 200) {
             resolve(xhttp.response);
-          } else if (xhttp.status === 401) {
-            reject('Wrong channel name or password');
+          } if (xhttp.status === 401) {
+            reject(new Error('Wrong username or password'));
           } else {
-            reject('request failed with status:' + xhttp.status);
-          };
+            reject(new Error(xhttp.response));
+          }
         }
       };
       xhttp.send();
@@ -28,11 +28,11 @@ module.exports = {
         if (xhttp.readyState === 4) {
           if (xhttp.status === 200) {
             resolve(xhttp.response);
-          } else if (xhttp.status === 401) {
-            reject('Wrong channel name or password');
+          } if (xhttp.status === 401) {
+            reject(new Error('Wrong username or password'));
           } else {
-            reject('request failed with status:' + xhttp.status);
-          };
+            reject(new Error(xhttp.response));
+          }
         }
       };
       xhttp.send(params);

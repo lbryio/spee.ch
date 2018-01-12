@@ -22,14 +22,20 @@ class UrlChooser extends React.Component {
       this.setClaimNameFromFileName();
     }
   }
+  componentWillReceiveProps ({claim: newClaim}) {
+    console.log('PublishUrlInput will receive new props (claim)', newClaim);
+    if (newClaim) {
+      this.checkClaimIsAvailable(newClaim);
+    } else {
+      this.setState({error: 'Please enter a URL'});
+    }
+  }
   handleInput (event) {
     event.preventDefault();
     let value = event.target.value;
     value = this.cleanseInput(value);
     // update the state
     this.props.onClaimChange(value);
-    // check to make sure claim name is available
-    this.checkClaimIsAvailable(value);
   }
   cleanseInput (input) {
     input = input.replace(/\s+/g, '-'); // replace spaces with dashes
@@ -38,7 +44,6 @@ class UrlChooser extends React.Component {
   }
   setClaimNameFromFileName () {
     const fileName = this.props.fileName;
-    console.log('setClaimNameFromFileName', fileName);
     const fileNameWithoutEnding = fileName.substring(0, fileName.lastIndexOf('.'));
     const cleanClaimName = this.cleanseInput(fileNameWithoutEnding);
     this.props.onClaimChange(cleanClaimName);
@@ -46,8 +51,12 @@ class UrlChooser extends React.Component {
   checkClaimIsAvailable (claim) {
     const that = this;
     makeGetRequest(`/api/claim-is-available/${claim}`)
-      .then(() => {
-        that.setState({'error': null});
+      .then(response => {
+        if (response) {
+          that.setState({'error': null});
+        } else {
+          that.setState({'error': 'That url has already been claimed'});
+        }
       })
       .catch((error) => {
         that.setState({'error': error.message});

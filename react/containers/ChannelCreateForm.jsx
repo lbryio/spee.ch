@@ -17,7 +17,9 @@ class ChannelCreateForm extends React.Component {
     this.cleanseChannelInput = this.cleanseChannelInput.bind(this);
     this.handleChannelInput = this.handleChannelInput.bind(this);
     this.handleInput = this.handleInput.bind(this);
-    this.checkChannelIsAvailable = this.checkChannelIsAvailable.bind(this);
+    this.updateIsChannelAvailable = this.updateIsChannelAvailable.bind(this);
+    this.checkIsChannelAvailable = this.checkIsChannelAvailable.bind(this);
+    this.checkIsPasswordProvided = this.checkIsPasswordProvided.bind(this);
     this.createChannel = this.createChannel.bind(this);
   }
   cleanseChannelInput (input) {
@@ -30,7 +32,12 @@ class ChannelCreateForm extends React.Component {
     let value = event.target.value;
     value = this.cleanseChannelInput(value);
     this.setState({channel: value});
-    this.checkChannelIsAvailable(value);
+    if (value) {
+      this.updateIsChannelAvailable(value);
+    } else {
+      this.setState({error: 'Please enter a channel name'});
+    }
+    console.log('end of handlechannelinput');
   }
   handleInput (event) {
     event.preventDefault();
@@ -38,47 +45,81 @@ class ChannelCreateForm extends React.Component {
     const value = event.target.value;
     this.setState({[name]: value});
   }
-  checkChannelIsAvailable (channel) {
+  updateIsChannelAvailable (channel) {
     const that = this;
-    makeGetRequest(`/api/channel-is-available/${channel}`)
-      .then(() => {
-        that.setState({urlError: null});
+    const channelWithAtSymbol = `@${channel}`
+    makeGetRequest(`/api/channel-is-available/${channelWithAtSymbol}`)
+      .then(isAvailable => {
+        if (isAvailable) {
+          that.setState({'error': null});
+        } else {
+          that.setState({'error': 'That channel has already been claimed'});
+        }
       })
       .catch((error) => {
-        that.setState({error: error.message});
+        that.setState({'error': error.message});
       });
   }
-  validatePassword (password) {
-    if (!password || password.length < 1) {
-      throw new Error('Please provide a password');
-    }
+  checkIsChannelAvailable (channel) {
+    const channelWithAtSymbol = `@${channel}`;
+    return new Promise((resolve, reject) => {
+      makeGetRequest(`/api/channel-is-available/${channelWithAtSymbol}`)
+        .then(isAvailable => {
+          if (!isAvailable) {
+            console.log('channel is not available');
+            return reject(new Error('That channel has already been claimed'));
+          }
+          console.log('channel is available');
+          resolve();
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  }
+  checkIsPasswordProvided () {
+    const password = this.state.password;
+    return new Promise((resolve, reject) => {
+      if (!password || password.length < 1) {
+        console.log('password not provided');
+        return reject(new Error('Please provide a password'));
+      }
+      console.log('password provided');
+      resolve();
+    });
+  }
+  makeCreateChannelRequest (channel, password) {
+    const params = `username=${channel}&password=${password}`;
+    return new Promise((resolve, reject) => {
+      makePostRequest('/signup', params)
+        .then(result => {
+          resolve(result);
+        })
+        .catch(error => {
+          console.log('create channel request failed:', error);
+          reject(new Error('Unfortunately, we encountered an error while creating your channel.  Please let us know in Discord!'));
+        });
+    });
   }
   createChannel (event) {
     event.preventDefault();
-    const params = `username=${this.state.channel}&password=${this.state.password}`;
-    const url = '/signup';
-    // validate submission data
-    try {
-      this.validatePassword(this.state.password);
-    } catch (error) {
-      return this.setState({error: error.message});
-    }
-    // publish the channel
     const that = this;
-    this.setState({status: 'We are publishing your new channel.  Sit tight...'});
-    makePostRequest(url, params)
+    this.checkIsPasswordProvided()
+      .then(() => {
+        return that.checkIsChannelAvailable(that.state.channel, that.state.password);
+      })
+      .then(() => {
+        that.setState({status: 'We are publishing your new channel.  Sit tight...'});
+        return that.makeCreateChannelRequest();
+      })
       .then(result => {
-        that.props.onChannelLogin(result.channelName, result.shortChannelId, result.channelClaimId);
+        that.setState({status: null});
         setUserCookies(result.channelName, result.shortChannelId, result.channelClaimId);
         replaceChannelSelectionInNavBar(result.channelName);
+        that.props.onChannelLogin(result.channelName, result.shortChannelId, result.channelClaimId);
       })
-      .catch(error => {
-        console.log('create channel failure:', error);
-        if (error.message) {
-          this.setState({'error': error.message});
-        } else {
-          this.setState({'error': 'Unfortunately, we encountered an error while creating your channel.  Please let us know in Discord!'});
-        }
+      .catch((error) => {
+        that.setState({'error': error.message, status: null});
       });
   }
   render () {
@@ -91,21 +132,21 @@ class ChannelCreateForm extends React.Component {
               <div className="column column--3 column--sml-10">
                 <label className="label" htmlFor="new-channel-name">Name:</label>
               </div><div className="column column--6 column--sml-10">
-              <div className="input-text--primary flex-container--row flex-container--left-bottom">
-                <span>@</span>
-                <input type="text" name="channel" id="new-channel-name" className="input-text" placeholder="exampleChannelName" value={this.state.channel} onChange={this.handleChannelInput} />
-                <span id="input-success-channel-name" className="info-message--success">{'\u2713'}</span>
+                <div className="input-text--primary flex-container--row flex-container--left-bottom">
+                  <span>@</span>
+                  <input type="text" name="channel" id="new-channel-name" className="input-text" placeholder="exampleChannelName" value={this.state.channel} onChange={this.handleChannelInput} />
+                  <span id="input-success-channel-name" className="info-message--success">{'\u2713'}</span>
+                </div>
               </div>
-            </div>
             </div>
             <div className="row row--wide row--short">
               <div className="column column--3 column--sml-10">
                 <label className="label" htmlFor="new-channel-password">Password:</label>
               </div><div className="column column--6 column--sml-10">
-              <div className="input-text--primary">
-                <input type="password" name="password" id="new-channel-password" className="input-text"  placeholder="" value={this.state.password} onChange={this.handleInput} />
+                <div className="input-text--primary">
+                  <input type="password" name="password" id="new-channel-password" className="input-text"  placeholder="" value={this.state.password} onChange={this.handleInput} />
+                </div>
               </div>
-            </div>
             </div>
 
             <div className="row row--wide">
@@ -113,7 +154,7 @@ class ChannelCreateForm extends React.Component {
             </div>
           </form>
         ) : (
-            <p>{this.state.status}</p>
+            <p className="label">{this.state.status}</p>
         )}
       </div>
     );
