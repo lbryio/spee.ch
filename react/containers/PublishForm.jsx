@@ -125,13 +125,13 @@ class PublishForm extends React.Component {
       .then(() => {
         const metadata = that.createMetadata();
         // publish the claim
-        return that.makePublishRequest(this.props.file, metadata);
+        return that.makePublishRequest(that.props.file, metadata);
       })
       .then(() => {
         that.props.onPublishStatusChange('publish request made');
       })
       .catch((error) => {
-        that.props.onPublishRequestError(error.message);
+        that.props.onPublishSubmitError(error.message);
       });
   }
   render () {
@@ -174,8 +174,8 @@ class PublishForm extends React.Component {
               <PublishMetadataInputs />
             </div>
 
-            <div className="row row--padded row--wide align-content-center">
-              <p className="info-message-placeholder info-message--failure">{this.props.publishRequestError}</p>
+            <div className="row row--padded row--no-top row--wide align-content-center">
+              <p className="info-message-placeholder info-message--failure">{this.props.publishSubmitError}</p>
               <button id="publish-submit" className="button--primary button--large" onClick={this.publish}>Publish</button>
             </div>
 
@@ -196,18 +196,18 @@ class PublishForm extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    file               : state.file,
-    claim              : state.claim,
-    title              : state.metadata.title,
-    thumbnail          : state.metadata.thumbnail,
-    description        : state.metadata.description,
-    license            : state.metadata.license,
-    nsfw               : state.metadata.nsfw,
-    loggedInChannel    : state.loggedInChannel,
-    publishInChannel   : state.publishInChannel,
-    fileError          : state.error.file,
-    urlError           : state.error.url,
-    publishRequestError: state.error.publishRequest,
+    file              : state.file,
+    claim             : state.claim,
+    title             : state.metadata.title,
+    thumbnail         : state.metadata.thumbnail,
+    description       : state.metadata.description,
+    license           : state.metadata.license,
+    nsfw              : state.metadata.nsfw,
+    loggedInChannel   : state.loggedInChannel,
+    publishInChannel  : state.publishInChannel,
+    fileError         : state.error.file,
+    urlError          : state.error.url,
+    publishSubmitError: state.error.publishSubmit,
   };
 };
 
@@ -225,8 +225,8 @@ const mapDispatchToProps = dispatch => {
     onPublishStatusChange: (status, message) => {
       dispatch(updatePublishStatus(status, message));
     },
-    onPublishRequestError: (value) => {
-      dispatch(updateError('publishRequest', value));
+    onPublishSubmitError: (value) => {
+      dispatch(updateError('publishSubmit', value));
     },
   };
 };
@@ -243,12 +243,12 @@ PublishForm.propTypes = {
   publishInChannel     : PropTypes.bool.isRequired,
   fileError            : PropTypes.string,
   urlError             : PropTypes.string,
-  publishRequestError  : PropTypes.string,
+  publishSubmitError   : PropTypes.string,
   onFileSelect         : PropTypes.func.isRequired,
   onFileClear          : PropTypes.func.isRequired,
   onChannelLogin       : PropTypes.func.isRequired,
   onPublishStatusChange: PropTypes.func.isRequired,
-  onPublishRequestError: PropTypes.func.isRequired,
+  onPublishSubmitError: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(PublishForm);

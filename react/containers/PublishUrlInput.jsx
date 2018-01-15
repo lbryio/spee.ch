@@ -53,13 +53,13 @@ class UrlChooser extends React.Component {
     makeGetRequest(`/api/claim-is-available/${claim}`)
       .then(response => {
         if (response) {
-          this.props.onUrlError(null);
+          that.props.onUrlError(null);
         } else {
-          this.props.onUrlError('That url has already been claimed');
+          that.props.onUrlError('That url has already been claimed');
         }
       })
       .catch((error) => {
-        this.props.onUrlError(error.message);
+        that.props.onUrlError(error.message);
       });
   }
   render () {
@@ -97,6 +97,7 @@ const mapDispatchToProps = dispatch => {
   return {
     onClaimChange: (value) => {
       dispatch(updateClaim(value));
+      dispatch(updateError('publishSubmit', null));
     },
     onUrlError: (value) => {
       dispatch(updateError('url', value));

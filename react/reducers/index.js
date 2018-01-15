@@ -15,9 +15,9 @@ const initialState = {
     message: null,
   },
   error: {
-    file          : null,
-    url           : null,
-    publishRequest: null,
+    file         : null,
+    url          : null,
+    publishSubmit: null,
   },
   file    : null,
   claim   : '',

@@ -152,6 +152,7 @@ const mapDispatchToProps = dispatch => {
   return {
     onFileSelect: (file) => {
       dispatch(selectFile(file));
+      dispatch(updateError('publishSubmit', null));
     },
     onFileError: (value) => {
       dispatch(updateError('file', value));
