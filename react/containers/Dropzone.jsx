@@ -1,9 +1,8 @@
 import React from 'react';
-import { selectFile, updateError } from '../actions';
 import { connect } from 'react-redux';
-import Preview from '../components/Preview.jsx';
+import { selectFile, updateError } from '../actions';
 import { validateFile } from '../utils/file.js';
-import PropTypes from 'prop-types';
+import Preview from '../components/Preview.jsx';
 
 class Dropzone extends React.Component {
   constructor (props) {
@@ -158,13 +157,6 @@ const mapDispatchToProps = dispatch => {
       dispatch(updateError('file', value));
     },
   };
-};
-
-Dropzone.propTypes = {
-  file       : PropTypes.object,
-  thumbnail  : PropTypes.string.isRequired,
-  fileError  : PropTypes.string,
-  onFileError: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dropzone);

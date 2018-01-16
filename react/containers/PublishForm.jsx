@@ -1,4 +1,6 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { getCookie } from '../utils/cookies.js';
 import PreviewDropzone from './Dropzone.jsx';
 import PublishTitleInput from './PublishTitleInput.jsx';
 import ChannelSelector from '../components/ChannelSelector.jsx';
@@ -6,11 +8,8 @@ import PublishUrlInput from './PublishUrlInput.jsx';
 import PublishThumbnailInput from './PublishThumbnailInput.jsx';
 import PublishMetadataInputs from './PublishMetadataInputs.jsx';
 import AnonymousOrChannelSelect from './ChannelSelect.jsx';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
-import { getCookie } from '../utils/cookies.js';
 import {selectFile, clearFile, updateLoggedInChannel, updatePublishStatus, updateError} from '../actions';
-import * as states from '../constants/publishing_states';
+import * as publishStates from '../constants/publishing_states';
 
 class PublishForm extends React.Component {
   constructor (props) {
@@ -55,18 +54,18 @@ class PublishForm extends React.Component {
     const fd = this.appendDataToFormData(file, metadata);
     const that = this;
     xhr.upload.addEventListener('loadstart', function () {
-      that.props.onPublishStatusChange(states.LOAD_START, 'upload started');
+      that.props.onPublishStatusChange(publishStates.LOAD_START, 'upload started');
     });
     xhr.upload.addEventListener('progress', function (e) {
       if (e.lengthComputable) {
         const percentage = Math.round((e.loaded * 100) / e.total);
         console.log('progress:', percentage);
-        that.props.onPublishStatusChange(states.LOADING, `${percentage}%`);
+        that.props.onPublishStatusChange(publishStates.LOADING, `${percentage}%`);
       }
     }, false);
     xhr.upload.addEventListener('load', function () {
       console.log('loaded 100%');
-      that.props.onPublishStatusChange(states.PUBLISHING, null);
+      that.props.onPublishStatusChange(publishStates.PUBLISHING, null);
     }, false);
     xhr.open('POST', uri, true);
     xhr.onreadystatechange = function () {
@@ -75,12 +74,12 @@ class PublishForm extends React.Component {
         if (xhr.status === 200) {
           console.log('publish complete!');
           const url = JSON.parse(xhr.response).message.url;
-          that.props.onPublishStatusChange(states.SUCCESS, url);
+          that.props.onPublishStatusChange(publishStates.SUCCESS, url);
           window.location = url;
         } else if (xhr.status === 502) {
-          that.props.onPublishStatusChange(states.FAILED, 'Spee.ch was not able to get a response from the LBRY network.');
+          that.props.onPublishStatusChange(publishStates.FAILED, 'Spee.ch was not able to get a response from the LBRY network.');
         } else {
-          that.props.onPublishStatusChange(states.FAILED, JSON.parse(xhr.response).message);
+          that.props.onPublishStatusChange(publishStates.FAILED, JSON.parse(xhr.response).message);
         }
       }
     };
@@ -224,26 +223,6 @@ const mapDispatchToProps = dispatch => {
       dispatch(updateError('publishSubmit', value));
     },
   };
-};
-
-PublishForm.propTypes = {
-  file                 : PropTypes.object.isRequired,
-  claim                : PropTypes.string.isRequired,
-  title                : PropTypes.string.isRequired,
-  thumbnail            : PropTypes.string.isRequired,
-  description          : PropTypes.string.isRequired,
-  license              : PropTypes.string.isRequired,
-  nsfw                 : PropTypes.bool.isRequired,
-  loggedInChannel      : PropTypes.object.isRequired,
-  publishInChannel     : PropTypes.bool.isRequired,
-  fileError            : PropTypes.string,
-  urlError             : PropTypes.string,
-  publishSubmitError   : PropTypes.string,
-  onFileSelect         : PropTypes.func.isRequired,
-  onFileClear          : PropTypes.func.isRequired,
-  onChannelLogin       : PropTypes.func.isRequired,
-  onPublishStatusChange: PropTypes.func.isRequired,
-  onPublishSubmitError : PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(PublishForm);

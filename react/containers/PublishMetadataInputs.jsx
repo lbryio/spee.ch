@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { updateMetadata } from '../actions/index';
-import PropTypes from 'prop-types';
 
 /*
   const textarea = document.getElementById('publish-description');
@@ -15,12 +14,15 @@ class MetadataInputs extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
-      showInputs: false,
+      showInputs             : false,
+      descriptionLimit       : 200,
+      descriptionScrollHeight: null,
     };
     this.toggleShowInputs = this.toggleShowInputs.bind(this);
     this.handleInput = this.handleInput.bind(this);
     this.handleCheck = this.handleCheck.bind(this);
     this.handleSelection = this.handleSelection.bind(this);
+    this.setDescriptionScrollHeight = this.setDescriptionScrollHeight.bind(this);
   }
   toggleShowInputs () {
     this.setState({'showInputs': !this.state.showInputs});
@@ -43,6 +45,10 @@ class MetadataInputs extends React.Component {
     const selectedOption = event.target.selectedOptions[0].value;
     this.props.onMetadataChange(name, selectedOption);
   }
+  setDescriptionScrollHeight (event) {
+    const scrollHeight = event.target.scrollHeight;
+    this.setState({descriptionScrollHeight: scrollHeight});
+  }
   render () {
     return (
       <div id="publish-details" className="row row--padded row--no-top row--wide">
@@ -53,7 +59,16 @@ class MetadataInputs extends React.Component {
             <div className="column column--3 column--med-10 align-content-top">
               <label htmlFor="publish-license" className="label">Description:</label>
             </div><div className="column column--7 column--sml-10">
-              <textarea rows="1" id="publish-description" className="textarea textarea--primary textarea--full-width" name="description" placeholder="Optional description" value={this.props.description} onChange={this.handleInput} />
+              <textarea
+                rows="1"
+                id="publish-description"
+                className="textarea textarea--primary textarea--full-width"
+                name="description"
+                placeholder="Optional description"
+                value={this.props.description}
+                onInput={this.setDescriptionScrollHeight}
+                height={Math.min(this.state.descriptionScrollHeight, this.state.descriptionLimit) + 'px'}
+                onChange={this.handleInput} />
             </div>
           </div>
 
@@ -97,13 +112,6 @@ const mapDispatchToProps = dispatch => {
       dispatch(updateMetadata(name, value));
     },
   };
-};
-
-MetadataInputs.propTypes = {
-  description     : PropTypes.string.isRequired,
-  license         : PropTypes.string.isRequired,
-  nsfw            : PropTypes.bool.isRequired,
-  onMetadataChange: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MetadataInputs);

@@ -1,7 +1,6 @@
 import React from 'react';
 import {updateMetadata} from '../actions/index';
 import {connect} from 'react-redux';
-import PropTypes from 'prop-types';
 
 class TitleInput extends React.Component {
   constructor (props) {
@@ -34,10 +33,5 @@ const mapDispatchToProps = dispatch => {
     },
   };
 }
-
-TitleInput.propTypes = {
-  title           : PropTypes.string.isRequired,
-  onMetadataChange: PropTypes.func.isRequired,
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(TitleInput);

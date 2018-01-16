@@ -1,22 +1,17 @@
 import React from 'react';
 import ProgressBar from '../components/ProgressBar.jsx';
-
-const LOAD_START = 'LOAD_START';
-const LOADING = 'LOADING';
-const PUBLISHING = 'PUBLISHING';
-const SUCCESS = 'SUCCESS';
-const FAILED = 'FAILED';
+import * as publishStates from '../constants/publishing_states';
 
 function PublishStatus ({ status, message }) {
   return (
     <div className="row row--tall flex-container--column flex-container--center-center">
-      {(status === LOAD_START) &&
+      {(status === publishStates.LOAD_START) &&
         <div className="row align-content-center">
           <p>File is loading to server</p>
           <p className="blue">{message}</p>
         </div>
       }
-      {(status === LOADING) &&
+      {(status === publishStates.LOADING) &&
       <div>
         <div className="row align-content-center">
           <p>File is loading to server</p>
@@ -24,20 +19,20 @@ function PublishStatus ({ status, message }) {
         </div>
       </div>
       }
-      {(status === PUBLISHING) &&
+      {(status === publishStates.PUBLISHING) &&
       <div className="row align-content-center">
         <p>Upload complete.  Your file is now being published on the blockchain...</p>
         <ProgressBar/>
         <p>Curious what magic is happening here? <a className="link--primary" target="blank" href="https://lbry.io/faq/what-is-lbry">Learn more.</a></p>
       </div>
       }
-      {(status === SUCCESS) &&
+      {(status === publishStates.SUCCESS) &&
       <div className="row align-content-center">
         <p>Your publish is complete! You are being redirected to it now.</p>
         <p>If you are not automatically redirected, <a class="link--primary" target="_blank" href={message}>click here.</a></p>
       </div>
       }
-      {(status === FAILED) &&
+      {(status === publishStates.FAILED) &&
       <div className="row align-content-center">
         <p>Something went wrong...</p>
         <p><strong>{message}</strong></p>
