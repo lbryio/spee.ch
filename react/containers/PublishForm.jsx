@@ -5,7 +5,7 @@ import ChannelSelector from '../components/ChannelSelector.jsx';
 import PublishUrlInput from './PublishUrlInput.jsx';
 import PublishThumbnailInput from './PublishThumbnailInput.jsx';
 import PublishMetadataInputs from './PublishMetadataInputs.jsx';
-import AnonymousOrChannelSelect from './AnonymousOrChannelSelect.jsx';
+import AnonymousOrChannelSelect from './ChannelSelect.jsx';
 import { connect } from 'react-redux';
 import { getCookie } from '../utils/cookies.js';
 import {selectFile, clearFile, updateLoggedInChannel, updatePublishStatus, updateError} from '../actions';
