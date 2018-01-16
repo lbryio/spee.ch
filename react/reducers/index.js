@@ -1,7 +1,4 @@
-import {
-  CHANNEL_UPDATE, CLAIM_UPDATE, ERROR_UPDATE, FILE_CLEAR, FILE_SELECTED, METADATA_UPDATE, PUBLISH_STATUS_UPDATE,
-  SET_PUBLISH_IN_CHANNEL,
-} from '../actions';
+import * as actions from '../constants/action_types';
 
 const initialState = {
   loggedInChannel: {
@@ -36,23 +33,23 @@ Reducers describe how the application's state changes in response to actions
 
 export default function (state = initialState, action) {
   switch (action.type) {
-    case FILE_SELECTED:
+    case actions.FILE_SELECTED:
       return Object.assign({}, state, {
         file: action.file,
       });
-    case FILE_CLEAR:
+    case actions.FILE_CLEAR:
       return initialState;
-    case METADATA_UPDATE:
+    case actions.METADATA_UPDATE:
       return Object.assign({}, state, {
         metadata: Object.assign({}, state.metadata, {
           [action.name]: action.value,
         }),
       });
-    case CLAIM_UPDATE:
+    case actions.CLAIM_UPDATE:
       return Object.assign({}, state, {
         claim: action.value,
       });
-    case CHANNEL_UPDATE:
+    case actions.CHANNEL_UPDATE:
       return Object.assign({}, state, {
         loggedInChannel: {
           name   : action.name,
@@ -60,18 +57,18 @@ export default function (state = initialState, action) {
           longId : action.longId,
         },
       });
-    case SET_PUBLISH_IN_CHANNEL:
+    case actions.SET_PUBLISH_IN_CHANNEL:
       return Object.assign({}, state, {
         publishInChannel: action.channel,
       });
-    case PUBLISH_STATUS_UPDATE:
+    case actions.PUBLISH_STATUS_UPDATE:
       return Object.assign({}, state, {
         status: Object.assign({}, state.status, {
           status : action.status,
           message: action.message,
         }),
       });
-    case ERROR_UPDATE:
+    case actions.ERROR_UPDATE:
       return Object.assign({}, state, {
         error: Object.assign({}, state.error, {
           [action.name]: action.value,

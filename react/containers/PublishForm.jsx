@@ -7,15 +7,10 @@ import PublishThumbnailInput from './PublishThumbnailInput.jsx';
 import PublishMetadataInputs from './PublishMetadataInputs.jsx';
 import AnonymousOrChannelSelect from './ChannelSelect.jsx';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { getCookie } from '../utils/cookies.js';
 import {selectFile, clearFile, updateLoggedInChannel, updatePublishStatus, updateError} from '../actions';
-import PropTypes from 'prop-types';
-
-const LOAD_START = 'LOAD_START';
-const LOADING = 'LOADING';
-const PUBLISHING = 'PUBLISHING';
-const SUCCESS = 'SUCCESS';
-const FAILED = 'FAILED';
+import * as states from '../constants/publishing_states';
 
 class PublishForm extends React.Component {
   constructor (props) {
@@ -60,18 +55,18 @@ class PublishForm extends React.Component {
     const fd = this.appendDataToFormData(file, metadata);
     const that = this;
     xhr.upload.addEventListener('loadstart', function () {
-      that.props.onPublishStatusChange(LOAD_START, 'upload started');
+      that.props.onPublishStatusChange(states.LOAD_START, 'upload started');
     });
     xhr.upload.addEventListener('progress', function (e) {
       if (e.lengthComputable) {
         const percentage = Math.round((e.loaded * 100) / e.total);
         console.log('progress:', percentage);
-        that.props.onPublishStatusChange(LOADING, `${percentage}%`);
+        that.props.onPublishStatusChange(states.LOADING, `${percentage}%`);
       }
     }, false);
     xhr.upload.addEventListener('load', function () {
       console.log('loaded 100%');
-      that.props.onPublishStatusChange(PUBLISHING, null);
+      that.props.onPublishStatusChange(states.PUBLISHING, null);
     }, false);
     xhr.open('POST', uri, true);
     xhr.onreadystatechange = function () {
@@ -80,12 +75,12 @@ class PublishForm extends React.Component {
         if (xhr.status === 200) {
           console.log('publish complete!');
           const url = JSON.parse(xhr.response).message.url;
-          that.props.onPublishStatusChange(SUCCESS, url);
+          that.props.onPublishStatusChange(states.SUCCESS, url);
           window.location = url;
         } else if (xhr.status === 502) {
-          that.props.onPublishStatusChange(FAILED, 'Spee.ch was not able to get a response from the LBRY network.');
+          that.props.onPublishStatusChange(states.FAILED, 'Spee.ch was not able to get a response from the LBRY network.');
         } else {
-          that.props.onPublishStatusChange(FAILED, JSON.parse(xhr.response).message);
+          that.props.onPublishStatusChange(states.FAILED, JSON.parse(xhr.response).message);
         }
       }
     };
@@ -248,7 +243,7 @@ PublishForm.propTypes = {
   onFileClear          : PropTypes.func.isRequired,
   onChannelLogin       : PropTypes.func.isRequired,
   onPublishStatusChange: PropTypes.func.isRequired,
-  onPublishSubmitError: PropTypes.func.isRequired,
+  onPublishSubmitError : PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(PublishForm);
