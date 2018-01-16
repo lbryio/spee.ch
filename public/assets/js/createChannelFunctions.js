@@ -2,10 +2,8 @@
 function showChannelCreateInProgressDisplay () {
     const publishChannelForm = document.getElementById('publish-channel-form');
     const inProgress = document.getElementById('channel-publish-in-progress');
-    const channelProgressBar = document.getElementById('create-channel-progress-bar');
     publishChannelForm.hidden = true;
     inProgress.hidden = false;
-    createProgressBar(channelProgressBar, 12);
 }
 
 // display the content that shows channel creation is done
