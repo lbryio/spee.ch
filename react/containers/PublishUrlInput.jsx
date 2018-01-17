@@ -1,9 +1,8 @@
 import React from 'react';
-import { updateClaim } from '../actions/index';
 import { connect } from 'react-redux';
 import { makeGetRequest } from '../utils/xhr.js';
 import UrlMiddle from '../components/PublishUrlMiddle.jsx';
-import {updateError} from '../actions';
+import {updateError, updateClaim} from '../actions';
 
 class UrlChooser extends React.Component {
   constructor (props) {

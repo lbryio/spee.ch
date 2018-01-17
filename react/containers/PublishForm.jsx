@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { getCookie } from '../utils/cookies.js';
-import PreviewDropzone from './Dropzone.jsx';
+import Dropzone from './Dropzone.jsx';
 import PublishTitleInput from './PublishTitleInput.jsx';
 import ChannelSelector from '../components/ChannelSelector.jsx';
 import PublishUrlInput from './PublishUrlInput.jsx';
@@ -139,7 +139,7 @@ class PublishForm extends React.Component {
         <div className="column column--5 column--sml-10" >
 
           <div className="row row--padded">
-            <PreviewDropzone />
+            <Dropzone />
           </div>
 
         </div>

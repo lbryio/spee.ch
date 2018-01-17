@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 class Preview extends React.Component {
   constructor (props) {
@@ -37,6 +38,12 @@ class Preview extends React.Component {
       />
     );
   }
+};
+
+Preview.propTypes = {
+  dimPreview: PropTypes.bool.isRequired,
+  file      : PropTypes.object.isRequired,
+  thumbnail : PropTypes.string,
 };
 
 export default Preview;
