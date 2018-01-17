@@ -1,14 +1,13 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { getCookie } from '../utils/cookies.js';
+import {connect} from 'react-redux';
+import {selectFile, clearFile, updateLoggedInChannel, updatePublishStatus, updateError} from '../actions';
+import {getCookie} from '../utils/cookies.js';
 import Dropzone from './Dropzone.jsx';
 import PublishTitleInput from './PublishTitleInput.jsx';
-import ChannelSelector from '../components/ChannelSelector.jsx';
 import PublishUrlInput from './PublishUrlInput.jsx';
 import PublishThumbnailInput from './PublishThumbnailInput.jsx';
 import PublishMetadataInputs from './PublishMetadataInputs.jsx';
-import AnonymousOrChannelSelect from './ChannelSelect.jsx';
-import {selectFile, clearFile, updateLoggedInChannel, updatePublishStatus, updateError} from '../actions';
+import ChannelSelect from './ChannelSelect.jsx';
 import * as publishStates from '../constants/publishing_states';
 
 class PublishForm extends React.Component {
@@ -132,55 +131,43 @@ class PublishForm extends React.Component {
     return (
       <div className="row row--no-bottom">
         <div className="column column--10">
-
           <PublishTitleInput />
-
         </div>
         <div className="column column--5 column--sml-10" >
-
           <div className="row row--padded">
             <Dropzone />
           </div>
-
         </div>
         <div className="column column--5 column--sml-10 align-content-top">
           <div id="publish-active-area" className="row row--padded">
-
             <div className="row row--padded row--no-top row--wide">
               <PublishUrlInput />
             </div>
-
-            <div className="row row--padded row--no-top row--no-bottom row--wide">
-              <AnonymousOrChannelSelect />
-            </div>
-
             <div className="row row--padded row--no-top row--wide">
-              <ChannelSelector />
+              <ChannelSelect />
             </div>
-
             { (this.props.file.type === 'video/mp4') && (
-              <div className="row row--padded row--wide row--no-top">
+              <div className="row row--padded row--no-top row--wide ">
                 <PublishThumbnailInput />
               </div>
             )}
-
             <div className="row row--padded row--no-top row--no-bottom row--wide">
               <PublishMetadataInputs />
             </div>
-
-            <div className="row row--padded row--no-top row--wide align-content-center">
-              <p className="info-message-placeholder info-message--failure">{this.props.publishSubmitError}</p>
+            { this.props.publishSubmitError && (
+              <div className="row align-content-center">
+                <p className="info-message-placeholder info-message--failure">{this.props.publishSubmitError}</p>
+              </div>
+            )}
+            <div className="row row--wide align-content-center">
               <button id="publish-submit" className="button--primary button--large" onClick={this.publish}>Publish</button>
             </div>
-
-            <div className="row row--short align-content-center">
+            <div className="row row--padded row--no-bottom align-content-center">
               <button className="button--cancel" onClick={this.props.onFileClear}>Cancel</button>
             </div>
-
             <div className="row row--short align-content-center">
               <p className="fine-print">By clicking 'Upload', you affirm that you have the rights to publish this content to the LBRY network, and that you understand the properties of publishing it to a decentralized, user-controlled network. <a className="link--primary" target="_blank" href="https://lbry.io/learn">Read more.</a></p>
             </div>
-
           </div>
         </div>
       </div>
