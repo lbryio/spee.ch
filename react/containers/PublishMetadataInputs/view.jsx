@@ -1,6 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { updateMetadata } from '../actions/index';
 
 /*
   const textarea = document.getElementById('publish-description');
@@ -11,7 +9,7 @@ import { updateMetadata } from '../actions/index';
   }
 */
 
-class MetadataInputs extends React.Component {
+class PublishMetadataInputs extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
@@ -101,20 +99,4 @@ class MetadataInputs extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    description: state.metadata.description,
-    license    : state.metadata.license,
-    nsfw       : state.metadata.nsfw,
-  };
-};
-
-const mapDispatchToProps = dispatch => {
-  return {
-    onMetadataChange: (name, value) => {
-      dispatch(updateMetadata(name, value));
-    },
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(MetadataInputs);
+export default PublishMetadataInputs;

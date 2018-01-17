@@ -1,8 +1,7 @@
 import React from 'react';
-import Dropzone from './Dropzone.jsx';
-import PublishForm from './PublishForm.jsx';
-import PublishStatus from '../components/PublishStatus.jsx';
-import {connect} from 'react-redux';
+import Dropzone from '../Dropzone';
+import PublishForm from '../PublishForm';
+import PublishStatus from '../../components/PublishStatus.jsx';
 
 class PublishTool extends React.Component {
   render () {
@@ -23,12 +22,4 @@ class PublishTool extends React.Component {
   }
 };
 
-const mapStateToProps = state => {
-  return {
-    file   : state.file,
-    status : state.status.status,
-    message: state.status.message,
-  };
-};
-
-export default connect(mapStateToProps, null)(PublishTool);
+export default PublishTool;

@@ -1,10 +1,8 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { makeGetRequest } from '../utils/xhr.js';
-import UrlMiddle from '../components/PublishUrlMiddle.jsx';
-import {updateError, updateClaim} from '../actions';
+import { makeGetRequest } from '../../utils/xhr.js';
+import UrlMiddle from '../../components/PublishUrlMiddle.jsx';
 
-class UrlChooser extends React.Component {
+class PublishUrlInput extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
@@ -80,27 +78,4 @@ class UrlChooser extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    fileName              : state.file.name,
-    loggedInChannelName   : state.loggedInChannel.name,
-    loggedInChannelShortId: state.loggedInChannel.shortId,
-    publishInChannel      : state.publishInChannel,
-    claim                 : state.claim,
-    urlError              : state.error.url,
-  };
-};
-
-const mapDispatchToProps = dispatch => {
-  return {
-    onClaimChange: (value) => {
-      dispatch(updateClaim(value));
-      dispatch(updateError('publishSubmit', null));
-    },
-    onUrlError: (value) => {
-      dispatch(updateError('url', value));
-    },
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(UrlChooser);
+export default PublishUrlInput;

@@ -1,9 +1,7 @@
 import React from 'react';
-import {connect} from 'react-redux';
-import {updateLoggedInChannel} from '../actions/index';
-import { makeGetRequest, makePostRequest } from '../utils/xhr.js';
-import { setUserCookies } from '../utils/cookies.js';
-import { replaceChannelSelectionInNavBar } from '../utils/page.js';
+import { makeGetRequest, makePostRequest } from '../../utils/xhr.js';
+import { setUserCookies } from '../../utils/cookies.js';
+import { replaceChannelSelectionInNavBar } from '../../utils/page.js';
 
 class ChannelCreateForm extends React.Component {
   constructor (props) {
@@ -162,12 +160,4 @@ class ChannelCreateForm extends React.Component {
   }
 }
 
-const mapDispatchToProps = dispatch => {
-  return {
-    onChannelLogin: (name, shortId, longId) => {
-      dispatch(updateLoggedInChannel(name, shortId, longId));
-    },
-  };
-};
-
-export default connect(null, mapDispatchToProps)(ChannelCreateForm);
+export default ChannelCreateForm;

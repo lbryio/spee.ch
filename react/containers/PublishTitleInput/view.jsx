@@ -1,8 +1,6 @@
 import React from 'react';
-import {updateMetadata} from '../actions/index';
-import {connect} from 'react-redux';
 
-class TitleInput extends React.Component {
+class PublishTitleInput extends React.Component {
   constructor (props) {
     super(props);
     this.handleInput = this.handleInput.bind(this);
@@ -20,18 +18,4 @@ class TitleInput extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    title: state.metadata.title,
-  };
-};
-
-const mapDispatchToProps = dispatch => {
-  return {
-    onMetadataChange: (name, value) => {
-      dispatch(updateMetadata(name, value));
-    },
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(TitleInput);
+export default PublishTitleInput;

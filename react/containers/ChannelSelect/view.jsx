@@ -1,12 +1,10 @@
 import React from 'react';
-import {setPublishInChannel} from '../actions';
-import {connect} from 'react-redux';
-import ChannelLoginForm from '../containers/ChannelLoginForm.jsx';
-import ChannelCreateForm from '../containers/ChannelCreateForm.jsx';
+import ChannelLoginForm from '../ChannelLoginForm';
+import ChannelCreateForm from '../ChannelCreateForm';
 const LOGIN = 'Existing';
 const CREATE = 'New';
 
-class channelSelect extends React.Component {
+class ChannelSelect extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
@@ -76,19 +74,4 @@ class channelSelect extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    loggedInChannelName: state.loggedInChannel.name,
-    publishInChannel   : state.publishInChannel,
-  };
-};
-
-const mapDispatchToProps = dispatch => {
-  return {
-    onPublishInChannelChange: (value) => {
-      dispatch(setPublishInChannel(value));
-    },
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(channelSelect);
+export default ChannelSelect;

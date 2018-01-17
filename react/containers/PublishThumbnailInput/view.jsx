@@ -1,8 +1,6 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { updateMetadata } from '../actions/index';
 
-class ThumbnailInput extends React.Component {
+class PublishThumbnailInput extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
@@ -69,18 +67,4 @@ class ThumbnailInput extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    thumbnail: state.metadata.thumbnail,
-  };
-};
-
-const mapDispatchToProps = dispatch => {
-  return {
-    onThumbnailChange: (name, value) => {
-      dispatch(updateMetadata(name, value));
-    },
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(ThumbnailInput);
+export default PublishThumbnailInput;

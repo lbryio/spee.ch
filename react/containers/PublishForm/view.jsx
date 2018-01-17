@@ -1,14 +1,12 @@
 import React from 'react';
-import {connect} from 'react-redux';
-import {selectFile, clearFile, updateLoggedInChannel, updatePublishStatus, updateError} from '../actions';
-import {getCookie} from '../utils/cookies.js';
-import Dropzone from './Dropzone.jsx';
-import PublishTitleInput from './PublishTitleInput.jsx';
-import PublishUrlInput from './PublishUrlInput.jsx';
-import PublishThumbnailInput from './PublishThumbnailInput.jsx';
-import PublishMetadataInputs from './PublishMetadataInputs.jsx';
-import ChannelSelect from './ChannelSelect.jsx';
-import * as publishStates from '../constants/publishing_states';
+import {getCookie} from '../../utils/cookies.js';
+import Dropzone from '../Dropzone';
+import PublishTitleInput from '../PublishTitleInput';
+import PublishUrlInput from '../PublishUrlInput';
+import PublishThumbnailInput from '../PublishThumbnailInput';
+import PublishMetadataInputs from '../PublishMetadataInputs';
+import ChannelSelect from '../ChannelSelect';
+import * as publishStates from '../../constants/publishing_states';
 
 class PublishForm extends React.Component {
   constructor (props) {
@@ -175,41 +173,4 @@ class PublishForm extends React.Component {
   }
 };
 
-const mapStateToProps = state => {
-  return {
-    file              : state.file,
-    claim             : state.claim,
-    title             : state.metadata.title,
-    thumbnail         : state.metadata.thumbnail,
-    description       : state.metadata.description,
-    license           : state.metadata.license,
-    nsfw              : state.metadata.nsfw,
-    loggedInChannel   : state.loggedInChannel,
-    publishInChannel  : state.publishInChannel,
-    fileError         : state.error.file,
-    urlError          : state.error.url,
-    publishSubmitError: state.error.publishSubmit,
-  };
-};
-
-const mapDispatchToProps = dispatch => {
-  return {
-    onFileSelect: (file) => {
-      dispatch(selectFile(file));
-    },
-    onFileClear: () => {
-      dispatch(clearFile());
-    },
-    onChannelLogin: (name, shortId, longId) => {
-      dispatch(updateLoggedInChannel(name, shortId, longId));
-    },
-    onPublishStatusChange: (status, message) => {
-      dispatch(updatePublishStatus(status, message));
-    },
-    onPublishSubmitError: (value) => {
-      dispatch(updateError('publishSubmit', value));
-    },
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(PublishForm);
+export default PublishForm;
