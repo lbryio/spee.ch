@@ -1,7 +1,7 @@
 import React from 'react';
-import { makeGetRequest, makePostRequest } from '../../utils/xhr.js';
-import { setUserCookies } from '../../utils/cookies.js';
-import { replaceChannelSelectionInNavBar } from '../../utils/page.js';
+import { makeGetRequest, makePostRequest } from 'utils/xhr';
+import { setUserCookies } from 'utils/cookies';
+import { replaceChannelSelectionInNavBar } from 'utils/page';
 
 class ChannelCreateForm extends React.Component {
   constructor (props) {

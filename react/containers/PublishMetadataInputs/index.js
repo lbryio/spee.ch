@@ -1,6 +1,6 @@
 import {connect} from 'react-redux';
-import {updateMetadata} from '../../actions';
-import View from './view.jsx';
+import {updateMetadata} from 'actions';
+import View from './view';
 
 const mapStateToProps = state => {
   return {

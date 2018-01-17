@@ -1,4 +1,4 @@
-import * as actions from '../constants/action_types';
+import * as actions from 'constants/action_types';
 
 const initialState = {
   loggedInChannel: {

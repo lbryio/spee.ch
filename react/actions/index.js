@@ -1,4 +1,4 @@
-import * as actions from '../constants/action_types.js';
+import * as actions from 'constants/action_types';
 
 // export action creators
 export function selectFile (file) {

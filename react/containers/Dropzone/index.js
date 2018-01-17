@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
-import { selectFile, updateError } from '../../actions';
-import View from './view.jsx';
+import { selectFile, updateError } from 'actions';
+import View from './view';
 
 const mapStateToProps = state => {
   return {

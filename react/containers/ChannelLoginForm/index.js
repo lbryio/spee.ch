@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
-import { updateLoggedInChannel } from '../../actions';
-import View from './view.jsx';
+import { updateLoggedInChannel } from 'actions';
+import View from './view';
 
 const mapDispatchToProps = dispatch => {
   return {

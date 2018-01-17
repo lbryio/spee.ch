@@ -1,9 +1,11 @@
-const path = require('path');
+const Path = require('path');
+
+const REACT_ROOT = Path.resolve(__dirname, 'react/');
 
 module.exports = {
   entry : './react/index.js',
   output: {
-    path    : path.join(__dirname, '/public/bundle/'),
+    path    : Path.join(__dirname, '/public/bundle/'),
     filename: 'bundle.js',
   },
   watch : true,
@@ -18,5 +20,13 @@ module.exports = {
         },
       },
     ],
+  },
+  resolve: {
+    modules: [
+      REACT_ROOT,
+      'node_modules',
+      __dirname,
+    ],
+    extensions: ['.js', '.jsx', '.scss'],
   },
 };

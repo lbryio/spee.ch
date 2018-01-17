@@ -1,12 +1,12 @@
 import React from 'react';
-import {getCookie} from '../../utils/cookies.js';
-import Dropzone from '../Dropzone';
-import PublishTitleInput from '../PublishTitleInput';
-import PublishUrlInput from '../PublishUrlInput';
-import PublishThumbnailInput from '../PublishThumbnailInput';
-import PublishMetadataInputs from '../PublishMetadataInputs';
-import ChannelSelect from '../ChannelSelect';
-import * as publishStates from '../../constants/publishing_states';
+import {getCookie} from 'utils/cookies';
+import Dropzone from 'containers/Dropzone';
+import PublishTitleInput from 'containers/PublishTitleInput';
+import PublishUrlInput from 'containers/PublishUrlInput';
+import PublishThumbnailInput from 'containers/PublishThumbnailInput';
+import PublishMetadataInputs from 'containers/PublishMetadataInputs';
+import ChannelSelect from 'containers/ChannelSelect';
+import * as publishStates from 'constants/publishing_states';
 
 class PublishForm extends React.Component {
   constructor (props) {

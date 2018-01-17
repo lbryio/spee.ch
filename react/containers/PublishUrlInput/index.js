@@ -1,6 +1,6 @@
-import {updateClaim, updateError} from '../../actions';
+import {updateClaim, updateError} from 'actions';
 import {connect} from 'react-redux';
-import View from './view.jsx';
+import View from './view';
 
 const mapStateToProps = state => {
   return {

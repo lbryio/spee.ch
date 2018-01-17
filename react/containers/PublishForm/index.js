@@ -1,6 +1,6 @@
-import {clearFile, selectFile, updateError, updateLoggedInChannel, updatePublishStatus} from '../../actions';
 import {connect} from 'react-redux';
-import View from './view.jsx';
+import {clearFile, selectFile, updateError, updateLoggedInChannel, updatePublishStatus} from 'actions';
+import View from './view';
 
 const mapStateToProps = state => {
   return {

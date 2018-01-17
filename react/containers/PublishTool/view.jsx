@@ -1,7 +1,7 @@
 import React from 'react';
-import Dropzone from '../Dropzone';
-import PublishForm from '../PublishForm';
-import PublishStatus from '../../components/PublishStatus.jsx';
+import Dropzone from 'containers/Dropzone';
+import PublishForm from 'containers/PublishForm';
+import PublishStatus from 'components/PublishStatus';
 
 class PublishTool extends React.Component {
   render () {

@@ -1,5 +1,5 @@
 import {connect} from 'react-redux';
-import {setPublishInChannel} from '../../actions';
+import {setPublishInChannel} from 'actions';
 import View from './view.jsx';
 
 const mapStateToProps = state => {

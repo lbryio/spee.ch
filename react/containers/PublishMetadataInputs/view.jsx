@@ -1,14 +1,5 @@
 import React from 'react';
 
-/*
-  const textarea = document.getElementById('publish-description');
-  const limit = 200;
-  textarea.oninput = () => {
-    textarea.style.height = '';
-    textarea.style.height = Math.min(textarea.scrollHeight, limit) + 'px';
-  }
-*/
-
 class PublishMetadataInputs extends React.Component {
   constructor (props) {
     super(props);

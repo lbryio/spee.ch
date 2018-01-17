@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ProgressBar from '../components/ProgressBar.jsx';
-import * as publishStates from '../constants/publishing_states';
+import ProgressBar from 'components/ProgressBar';
+import * as publishStates from 'constants/publishing_states';
 
 function PublishStatus ({ status, message }) {
   return (
