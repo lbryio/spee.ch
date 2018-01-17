@@ -4,10 +4,10 @@ function getRequest (url) {
         xhttp.open('GET', url, true);
         xhttp.responseType = 'json';
         xhttp.onreadystatechange = () => {
-            if (xhttp.readyState == 4 ) {
-                if ( xhttp.status == 200) {
+            if (xhttp.readyState === 4 ) {
+                if ( xhttp.status === 200) {
                     resolve(xhttp.response);
-                } else if (xhttp.status == 403) {
+                } else if (xhttp.status === 403) {
                     reject('Wrong channel name or password');
                 } else {
                     reject('request failed with status:' + xhttp.status);
@@ -25,10 +25,10 @@ function postRequest (url, params) {
         xhttp.responseType = 'json';
         xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         xhttp.onreadystatechange = () => {
-            if (xhttp.readyState == 4 ) {
-                if ( xhttp.status == 200) {
+            if (xhttp.readyState === 4 ) {
+                if ( xhttp.status === 200) {
                     resolve(xhttp.response);
-                } else if (xhttp.status == 401) {
+                } else if (xhttp.status === 401) {
                     reject( new AuthenticationError('Wrong channel name or password'));
                 } else {
                     reject('request failed with status:' + xhttp.status);

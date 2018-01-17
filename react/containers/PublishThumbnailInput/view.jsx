@@ -5,51 +5,56 @@ class PublishThumbnailInput extends React.Component {
     super(props);
     this.state = {
       videoPreviewSrc: null,
+      thumbnailError : null,
+      thumbnailInput : '',
     }
+    this.handleInput = this.handleInput.bind(this);
     this.urlIsAnImage = this.urlIsAnImage.bind(this);
     this.testImage = this.testImage.bind(this);
     this.updateVideoThumb = this.updateVideoThumb.bind(this);
   }
+  handleInput (event) {
+    event.preventDefault();
+    const value = event.target.value;
+    this.setState({thumbnailInput: value});
+  }
   urlIsAnImage (url) {
     return (url.match(/\.(jpeg|jpg|gif|png)$/) != null);
   }
-  testImage (url, timeoutT) {
-    return new Promise(function (resolve, reject) {
-      const timeout = timeoutT || 5000;
-      let timer;
-      let img = new Image();
-      img.onerror = img.onabort = function () {
-        clearTimeout(timer);
-        reject('error');
+  testImage (url) {
+    return new Promise((resolve, reject) => {
+      const xhttp = new XMLHttpRequest();
+      xhttp.open('HEAD', url, true);
+      xhttp.onreadystatechange = () => {
+        if (xhttp.readyState === 4) {
+          if (xhttp.status === 200) {
+            resolve();
+          } else {
+            reject();
+          }
+        }
       };
-      img.onload = function () {
-        clearTimeout(timer);
-        resolve('success');
-      };
-      timer = setTimeout(function () {
-        // reset .src to invalid URL so it stops previous
-        // loading, but doesn't trigger new load
-        img.src = '//!!!!/test.jpg';
-        reject('timeout');
-      }, timeout);
-      img.src = url;
+      xhttp.send();
     });
   }
   updateVideoThumb (event) {
-    var imageUrl = event.target.value;
+    const imageUrl = event.target.value;
     const that = this;
     if (this.urlIsAnImage(imageUrl)) {
       this.testImage(imageUrl, 3000)
-        .then(function (result) {
-          if (result === 'success') {
-            that.props.onThumbnailChange('thumbnail', imageUrl);
-          } else if (result === 'timeout') {
-            console.log('could not resolve the provided thumbnail image url');
-          }
+        .then(() => {
+          console.log('thumbnail is a valid image');
+          that.props.onThumbnailChange('thumbnail', imageUrl);
+          that.setState({thumbnailError: null});
         })
         .catch(error => {
           console.log('encountered an error loading thumbnail image url:', error);
+          that.props.onThumbnailChange('thumbnail', null);
+          that.setState({thumbnailError: 'That is an invalid image url'});
         });
+    } else {
+      that.props.onThumbnailChange('thumbnail', null);
+      that.setState({thumbnailError: null});
     }
   }
   render () {
@@ -59,7 +64,16 @@ class PublishThumbnailInput extends React.Component {
           <label className="label">Thumbnail:</label>
         </div><div className="column column--6 column--sml-10">
           <div className="input-text--primary">
-            <input type="text" id="claim-thumbnail-input" className="input-text input-text--full-width" placeholder="https://spee.ch/xyz/example.jpg" value={this.props.thumbnail} onInput={this.updateVideoThumb} />
+            <p className="info-message-placeholder info-message--failure">{this.state.thumbnailError}</p>
+            <input
+              type="text" id="claim-thumbnail-input"
+              className="input-text input-text--full-width"
+              placeholder="https://spee.ch/xyz/example.jpg"
+              value={this.state.thumbnailInput}
+              onChange={ (event) => {
+                this.handleInput(event);
+                this.updateVideoThumb(event);
+              }} />
           </div>
         </div>
       </div>

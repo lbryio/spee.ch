@@ -5,8 +5,9 @@ class Preview extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
-      previewSource: '',
-    }
+      imgSource       : '',
+      defaultThumbnail: '/assets/img/video_thumb_default.png',
+    };
     this.previewFile = this.previewFile.bind(this);
   }
   componentWillMount () {
@@ -14,7 +15,14 @@ class Preview extends React.Component {
     this.previewFile(this.props.file);
   }
   componentWillReceiveProps (newProps) {
-    this.previewFile(newProps.file);
+    console.log('Preview will receive props', newProps);
+    if (newProps.file !== this.props.file) {
+      this.previewFile(newProps.file);
+    }
+    if (newProps.thumbnail !== this.props.thumbnail) {
+      console.log('updating thumbnail', this.props.thumbnail);
+      this.setState({imgSource: (newProps.thumbnail || this.state.defaultThumbnail)});
+    }
   }
   previewFile (file) {
     const that = this;
@@ -22,17 +30,17 @@ class Preview extends React.Component {
       const previewReader = new FileReader();
       previewReader.readAsDataURL(file);
       previewReader.onloadend = function () {
-        that.setState({previewSource: previewReader.result});
+        that.setState({imgSource: previewReader.result});
       };
     } else {
-      that.setState({previewSource: (this.props.thumbnail || '/assets/img/video_thumb_default.png')});
+      that.setState({imgSource: (this.props.thumbnail || this.state.defaultThumbnail)});
     }
   }
   render () {
     return (
       <img
         id="asset-preview"
-        src={this.state.previewSource}
+        src={this.state.imgSource}
         className={this.props.dimPreview ? 'dim' : ''}
         alt="publish preview"
       />
