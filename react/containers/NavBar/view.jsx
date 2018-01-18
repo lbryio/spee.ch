@@ -42,7 +42,6 @@ class NavBar extends React.Component {
     // check for whether a channel is already logged in
     let channelName, channelShortId, channelLongId;
     ({ channelName, channelShortId, channelLongId } = getUserCookies());
-    console.log(`userCookies`, getUserCookies());
     console.log(`cookies found for channel: ${channelName} ${channelShortId} ${channelLongId}`);
     this.props.onChannelLogin(channelName, channelShortId, channelLongId);
   }
