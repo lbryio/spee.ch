@@ -35,4 +35,8 @@ module.exports = {
     testChannel        : '@testpublishchannel', // a channel to make test publishes in
     testChannelPassword: 'password',  // password for the test channel
   },
+  api: {
+    apiUri: 'localhost',
+    apiPort: '5279',
+  },
 };
