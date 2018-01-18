@@ -23,7 +23,7 @@ function PublishStatus ({ status, message }) {
       {(status === publishStates.PUBLISHING) &&
       <div className="row align-content-center">
         <p>Upload complete.  Your file is now being published on the blockchain...</p>
-        <ProgressBar/>
+        <ProgressBar size={12}/>
         <p>Curious what magic is happening here? <a className="link--primary" target="blank" href="https://lbry.io/faq/what-is-lbry">Learn more.</a></p>
       </div>
       }

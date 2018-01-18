@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 function ActiveBar () {
   return <span className="progress-bar progress-bar--active">| </span>;
@@ -17,22 +18,24 @@ class ProgressBar extends React.Component {
       index      : 0,
       incrementer: 1,
     };
+    this.createBars = this.createBars.bind(this);
     this.startProgressBar = this.startProgressBar.bind(this);
     this.updateProgressBar = this.updateProgressBar.bind(this);
     this.stopProgressBar = this.stopProgressBar.bind(this);
   }
   componentDidMount () {
-    const bars = [];
-    for (let i = 0; i <= this.state.size; i++) {
-      bars.push(<InactiveBar key={i} />);
-    }
-    this.setState({ bars });
+    this.createBars();
+    this.startProgressBar();
   }
   componentWillUnmount () {
     this.stopProgressBar();
   }
-  componentDidMount () {
-    this.startProgressBar();
+  createBars () {
+    const bars = [];
+    for (let i = 0; i <= this.props.size; i++) {
+      bars.push({isActive: false});
+    }
+    this.setState({ bars });
   }
   startProgressBar () {
     this.updateInterval = setInterval(this.updateProgressBar.bind(this), 300);
@@ -42,15 +45,15 @@ class ProgressBar extends React.Component {
     let incrementer = this.state.incrementer;
     let bars = this.state.bars;
     // flip incrementer if necessary, to stay in bounds
-    if ((index < 0) || (index > this.state.size)) {
+    if ((index < 0) || (index > this.props.size)) {
       incrementer = incrementer * -1;
       index += incrementer;
     }
-    // update the indexed value
+    // update the indexed bar
     if (incrementer > 0) {
-      bars[index] = <ActiveBar key={index} />;
+      bars[index].isActive = true;
     } else {
-      bars[index] = <InactiveBar key={index} />;
+      bars[index].isActive = false;
     };
     // increment index
     index += incrementer;
@@ -67,10 +70,14 @@ class ProgressBar extends React.Component {
   render () {
     return (
       <div>
-        {this.state.bars}
+        {this.state.bars.map((bar, index) => bar.isActive ? <ActiveBar key={index} /> : <InactiveBar key={index}/> )}
       </div>
     );
   }
+};
+
+ProgressBar.propTypes = {
+  size: PropTypes.number.isRequired,
 };
 
 export default ProgressBar;
