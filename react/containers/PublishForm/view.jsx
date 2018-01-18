@@ -15,7 +15,7 @@ class PublishForm extends React.Component {
     this.makePublishRequest = this.makePublishRequest.bind(this);
     this.publish = this.publish.bind(this);
   }
-  componentWillMount () {
+  componentDidMount () {
     // check for whether a channel is already logged in
     const loggedInChannelName = getCookie('channel_name');
     const loggedInChannelShortId = getCookie('short_channel_id');

@@ -21,7 +21,7 @@ class ProgressBar extends React.Component {
     this.updateProgressBar = this.updateProgressBar.bind(this);
     this.stopProgressBar = this.stopProgressBar.bind(this);
   }
-  componentWillMount () {
+  componentDidMount () {
     const bars = [];
     for (let i = 0; i <= this.state.size; i++) {
       bars.push(<InactiveBar key={i} />);

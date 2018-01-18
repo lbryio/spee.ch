@@ -10,12 +10,10 @@ class Preview extends React.Component {
     };
     this.previewFile = this.previewFile.bind(this);
   }
-  componentWillMount () {
-    console.log('Preview will mount');
+  componentDidMount () {
     this.previewFile(this.props.file);
   }
   componentWillReceiveProps (newProps) {
-    console.log('Preview will receive props', newProps);
     if (newProps.file !== this.props.file) {
       this.previewFile(newProps.file);
     }

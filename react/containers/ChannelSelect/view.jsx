@@ -15,8 +15,7 @@ class ChannelSelect extends React.Component {
     this.handleSelection = this.handleSelection.bind(this);
     this.selectOption = this.selectOption.bind(this);
   }
-  componentWillMount () {
-    console.log('ChannelSelector will mount');
+  componentDidMount () {
     if (this.props.loggedInChannelName) {
       this.selectOption(this.props.loggedInChannelName);
     }

@@ -16,8 +16,8 @@ function UrlMiddle ({publishInChannel, loggedInChannelName, loggedInChannelShort
 
 UrlMiddle.propTypes = {
   publishInChannel      : PropTypes.bool.isRequired,
-  loggedInChannelName   : PropTypes.string.isRequired,
-  loggedInChannelShortId: PropTypes.string.isRequired,
+  loggedInChannelName   : PropTypes.string,
+  loggedInChannelShortId: PropTypes.string,
 };
 
 export default UrlMiddle;

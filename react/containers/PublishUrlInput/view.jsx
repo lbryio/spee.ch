@@ -14,7 +14,7 @@ class PublishUrlInput extends React.Component {
     this.setClaimNameFromFileName = this.setClaimNameFromFileName.bind(this);
     this.checkClaimIsAvailable = this.checkClaimIsAvailable.bind(this);
   }
-  componentWillMount () {
+  componentDidMount () {
     if (!this.props.claim || this.props.claim === '') {
       this.setClaimNameFromFileName();
     }
