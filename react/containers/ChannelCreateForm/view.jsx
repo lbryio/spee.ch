@@ -1,7 +1,6 @@
 import React from 'react';
 import { makeGetRequest, makePostRequest } from 'utils/xhr';
 import { setUserCookies } from 'utils/cookies';
-import { replaceChannelSelectionInNavBar } from 'utils/page';
 
 class ChannelCreateForm extends React.Component {
   constructor (props) {
@@ -114,7 +113,6 @@ class ChannelCreateForm extends React.Component {
       .then(result => {
         that.setState({status: null});
         setUserCookies(result.channelName, result.shortChannelId, result.channelClaimId);
-        replaceChannelSelectionInNavBar(result.channelName);
         that.props.onChannelLogin(result.channelName, result.shortChannelId, result.channelClaimId);
       })
       .catch((error) => {

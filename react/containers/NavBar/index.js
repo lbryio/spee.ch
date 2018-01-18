@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import { updateLoggedInChannel } from 'actions/channel';
 import View from './view';
 
 const mapStateToProps = ({ channel }) => {
@@ -9,4 +10,12 @@ const mapStateToProps = ({ channel }) => {
   };
 };
 
-export default connect(mapStateToProps, null)(View);
+const mapDispatchToProps = dispatch => {
+  return {
+    onChannelLogin: (name, shortId, longId) => {
+      dispatch(updateLoggedInChannel(name, shortId, longId));
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(View);

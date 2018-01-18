@@ -1,5 +1,4 @@
 import React from 'react';
-import {getCookie} from 'utils/cookies';
 import Dropzone from 'containers/Dropzone';
 import PublishTitleInput from 'containers/PublishTitleInput';
 import PublishUrlInput from 'containers/PublishUrlInput';
@@ -14,14 +13,6 @@ class PublishForm extends React.Component {
     this.validatePublishRequest = this.validatePublishRequest.bind(this);
     this.makePublishRequest = this.makePublishRequest.bind(this);
     this.publish = this.publish.bind(this);
-  }
-  componentDidMount () {
-    // check for whether a channel is already logged in
-    const loggedInChannelName = getCookie('channel_name');
-    const loggedInChannelShortId = getCookie('short_channel_id');
-    const loggedInChannelLongId = getCookie('long_channel_id');
-    console.log(`channel cookies found: ${loggedInChannelName} ${loggedInChannelShortId} ${loggedInChannelLongId}`);
-    this.props.onChannelLogin(loggedInChannelName, loggedInChannelShortId, loggedInChannelLongId);
   }
   validatePublishRequest () {
     // make sure all required data is provided

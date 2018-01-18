@@ -1,7 +1,6 @@
 import React from 'react';
 import { makePostRequest } from 'utils/xhr';
 import { setUserCookies } from 'utils/cookies';
-import { replaceChannelSelectionInNavBar } from 'utils/page';
 
 class ChannelLoginForm extends React.Component {
   constructor (props) {
@@ -27,9 +26,8 @@ class ChannelLoginForm extends React.Component {
     const that = this;
     makePostRequest(url, params)
       .then(result => {
-        that.props.onChannelLogin(result.channelName, result.shortChannelId, result.channelClaimId);
         setUserCookies(result.channelName, result.shortChannelId, result.channelClaimId);
-        replaceChannelSelectionInNavBar(result.channelName);
+        that.props.onChannelLogin(result.channelName, result.shortChannelId, result.channelClaimId);
       })
       .catch(error => {
         console.log('login error', error);

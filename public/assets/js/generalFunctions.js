@@ -130,15 +130,15 @@ function clearCookie(name) {
 }
 
 function setUserCookies(channelName, shortChannelId, channelClaimId) {
-    setCookie('channel_name', channelName)
-    setCookie('channel_claim_id', channelClaimId);
-    setCookie('short_channel_id', shortChannelId);
+    setCookie('CHANNEL_NAME', channelName)
+    setCookie('CHANNEL_SHORT_ID', shortChannelId);
+    setCookie('CHANNEL_LONG_ID', channelClaimId);
 }
 
 function clearUserCookies() {
-    clearCookie('channel_name')
-    clearCookie('channel_claim_id');
-    clearCookie('short_channel_id');
+    clearCookie('CHANNEL_NAME')
+    clearCookie('CHANNEL_SHORT_ID');
+    clearCookie('CHANNEL_LONG_ID');
 }
 
 function copyToClipboard(event){
