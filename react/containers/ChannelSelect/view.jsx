@@ -21,7 +21,7 @@ class ChannelSelect extends React.Component {
     }
   }
   componentWillReceiveProps ({ loggedInChannelName }) {
-    if (loggedInChannelName) {
+    if (loggedInChannelName && (loggedInChannelName !== this.props.loggedInChannelName)) {
       this.selectOption(loggedInChannelName);
     }
   }
