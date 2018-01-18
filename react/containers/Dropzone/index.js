@@ -1,12 +1,12 @@
 import { connect } from 'react-redux';
-import { selectFile, updateError } from 'actions';
+import { selectFile, updateError } from 'actions/publish';
 import View from './view';
 
-const mapStateToProps = state => {
+const mapStateToProps = ({ publish }) => {
   return {
-    file     : state.file,
-    thumbnail: state.metadata.thumbnail,
-    fileError: state.error.file,
+    file     : publish.file,
+    thumbnail: publish.metadata.thumbnail,
+    fileError: publish.error.file,
   };
 };
 

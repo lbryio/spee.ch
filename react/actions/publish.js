@@ -29,15 +29,6 @@ export function updateClaim (value) {
   };
 };
 
-export function updateLoggedInChannel (name, shortId, longId) {
-  return {
-    type: actions.CHANNEL_UPDATE,
-    name,
-    shortId,
-    longId,
-  };
-};
-
 export function setPublishInChannel (channel) {
   return {
     type: actions.SET_PUBLISH_IN_CHANNEL,

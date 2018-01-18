@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { updateLoggedInChannel } from 'actions';
+import { updateLoggedInChannel } from 'actions/channel';
 import View from './view';
 
 const mapDispatchToProps = dispatch => {

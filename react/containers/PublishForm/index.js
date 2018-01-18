@@ -1,21 +1,22 @@
 import {connect} from 'react-redux';
-import {clearFile, selectFile, updateError, updateLoggedInChannel, updatePublishStatus} from 'actions';
+import {clearFile, selectFile, updateError, updatePublishStatus} from 'actions/publish';
+import {updateLoggedInChannel} from 'actions/channel';
 import View from './view';
 
-const mapStateToProps = state => {
+const mapStateToProps = ({ channel, publish }) => {
   return {
-    file              : state.file,
-    claim             : state.claim,
-    title             : state.metadata.title,
-    thumbnail         : state.metadata.thumbnail,
-    description       : state.metadata.description,
-    license           : state.metadata.license,
-    nsfw              : state.metadata.nsfw,
-    loggedInChannel   : state.loggedInChannel,
-    publishInChannel  : state.publishInChannel,
-    fileError         : state.error.file,
-    urlError          : state.error.url,
-    publishSubmitError: state.error.publishSubmit,
+    loggedInChannel   : channel.loggedInChannel,
+    file              : publish.file,
+    claim             : publish.claim,
+    title             : publish.metadata.title,
+    thumbnail         : publish.metadata.thumbnail,
+    description       : publish.metadata.description,
+    license           : publish.metadata.license,
+    nsfw              : publish.metadata.nsfw,
+    publishInChannel  : publish.publishInChannel,
+    fileError         : publish.error.file,
+    urlError          : publish.error.url,
+    publishSubmitError: publish.error.publishSubmit,
   };
 };
 

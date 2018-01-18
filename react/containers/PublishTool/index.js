@@ -1,11 +1,11 @@
 import {connect} from 'react-redux';
 import View from './view';
 
-const mapStateToProps = state => {
+const mapStateToProps = ({ publish }) => {
   return {
-    file   : state.file,
-    status : state.status.status,
-    message: state.status.message,
+    file   : publish.file,
+    status : publish.status.status,
+    message: publish.status.message,
   };
 };
 

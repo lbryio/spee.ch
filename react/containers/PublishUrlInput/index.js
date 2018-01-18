@@ -1,15 +1,15 @@
-import {updateClaim, updateError} from 'actions';
+import {updateClaim, updateError} from 'actions/publish';
 import {connect} from 'react-redux';
 import View from './view';
 
-const mapStateToProps = state => {
+const mapStateToProps = ({ channel, publish }) => {
   return {
-    fileName              : state.file.name,
-    loggedInChannelName   : state.loggedInChannel.name,
-    loggedInChannelShortId: state.loggedInChannel.shortId,
-    publishInChannel      : state.publishInChannel,
-    claim                 : state.claim,
-    urlError              : state.error.url,
+    loggedInChannelName   : channel.loggedInChannel.name,
+    loggedInChannelShortId: channel.loggedInChannel.shortId,
+    fileName              : publish.file.name,
+    publishInChannel      : publish.publishInChannel,
+    claim                 : publish.claim,
+    urlError              : publish.error.url,
   };
 };
 

@@ -1,10 +1,10 @@
 import {connect} from 'react-redux';
-import {updateMetadata} from 'actions';
+import {updateMetadata} from 'actions/publish';
 import View from './view';
 
-const mapStateToProps = state => {
+const mapStateToProps = ({ publish }) => {
   return {
-    title: state.metadata.title,
+    title: publish.metadata.title,
   };
 };
 
