@@ -129,10 +129,11 @@ class ChannelCreateForm extends React.Component {
               <div className="column column--3 column--sml-10">
                 <label className="label" htmlFor="new-channel-name">Name:</label>
               </div><div className="column column--6 column--sml-10">
-                <div className="input-text--primary flex-container--row flex-container--left-bottom">
+                <div className="input-text--primary flex-container--row flex-container--left-bottom span--relative">
                   <span>@</span>
                   <input type="text" name="channel" id="new-channel-name" className="input-text" placeholder="exampleChannelName" value={this.state.channel} onChange={this.handleChannelInput} />
-                  <span id="input-success-channel-name" className="info-message--success">{'\u2713'}</span>
+                  { (this.state.channel && !this.state.error) && <span id="input-success-channel-name" className="info-message--success span--absolute">{'\u2713'}</span> }
+                  { this.state.error && <span id="input-success-channel-name" className="info-message--failure span--absolute">{'\u2716'}</span> }
                 </div>
               </div>
             </div>

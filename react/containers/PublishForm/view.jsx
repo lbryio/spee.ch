@@ -143,11 +143,6 @@ class PublishForm extends React.Component {
             <div className="row row--padded row--no-top row--no-bottom row--wide">
               <PublishMetadataInputs />
             </div>
-            { this.props.publishSubmitError && (
-              <div className="row align-content-center">
-                <p className="info-message-placeholder info-message--failure">{this.props.publishSubmitError}</p>
-              </div>
-            )}
             <div className="row row--wide align-content-center">
               <button id="publish-submit" className="button--primary button--large" onClick={this.publish}>Publish</button>
             </div>
@@ -155,7 +150,7 @@ class PublishForm extends React.Component {
               <button className="button--cancel" onClick={this.props.onFileClear}>Cancel</button>
             </div>
             <div className="row row--short align-content-center">
-              <p className="fine-print">By clicking 'Upload', you affirm that you have the rights to publish this content to the LBRY network, and that you understand the properties of publishing it to a decentralized, user-controlled network. <a className="link--primary" target="_blank" href="https://lbry.io/learn">Read more.</a></p>
+              <p className="fine-print">By clicking 'Publish', you affirm that you have the rights to publish this content to the LBRY network, and that you understand the properties of publishing it to a decentralized, user-controlled network. <a className="link--primary" target="_blank" href="https://lbry.io/learn">Read more.</a></p>
             </div>
           </div>
         </div>

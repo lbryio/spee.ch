@@ -72,6 +72,7 @@ class PublishUrlInput extends React.Component {
 
           <input type="text" id="claim-name-input" className="input-text" name='claim' placeholder="your-url-here" onChange={this.handleInput} value={this.props.claim}/>
           { (this.props.claim && !this.props.urlError) && <span id="input-success-claim-name" className="info-message--success span--absolute">{'\u2713'}</span> }
+          { this.props.urlError && <span id="input-success-channel-name" className="info-message--failure span--absolute">{'\u2716'}</span> }
         </div>
       </div>
     );

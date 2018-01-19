@@ -5,7 +5,7 @@ class PublishMetadataInputs extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
-      showInputs       : false,
+      showInputs: false,
     };
     this.toggleShowInputs = this.toggleShowInputs.bind(this);
     this.handleDescriptionInput = this.handleDescriptionInput.bind(this);
