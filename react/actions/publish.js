@@ -51,3 +51,10 @@ export function updateError (name, value) {
     value,
   };
 };
+
+export function updateSelectedChannel (value) {
+  return {
+    type: actions.SELECTED_CHANNEL_UPDATE,
+    value,
+  };
+};

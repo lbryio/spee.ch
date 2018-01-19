@@ -1,29 +1,13 @@
 import React from 'react';
 import ChannelLoginForm from 'containers/ChannelLoginForm';
 import ChannelCreateForm from 'containers/ChannelCreateForm';
-
-const LOGIN = 'Existing';
-const CREATE = 'New';
+import * as states from 'constants/channel_select_states';
 
 class ChannelSelect extends React.Component {
   constructor (props) {
     super(props);
-    this.state = {
-      selectedOption: LOGIN,
-    };
     this.toggleAnonymousPublish = this.toggleAnonymousPublish.bind(this);
     this.handleSelection = this.handleSelection.bind(this);
-    this.selectOption = this.selectOption.bind(this);
-  }
-  componentDidMount () {
-    if (this.props.loggedInChannelName) {
-      this.selectOption(this.props.loggedInChannelName);
-    }
-  }
-  componentWillReceiveProps ({ loggedInChannelName }) {
-    if (loggedInChannelName && (loggedInChannelName !== this.props.loggedInChannelName)) {
-      this.selectOption(loggedInChannelName);
-    }
   }
   toggleAnonymousPublish (event) {
     const value = event.target.value;
@@ -35,10 +19,7 @@ class ChannelSelect extends React.Component {
   }
   handleSelection (event) {
     const selectedOption = event.target.selectedOptions[0].value;
-    this.selectOption(selectedOption);
-  }
-  selectOption (option) {
-    this.setState({selectedOption: option});
+    this.props.onChannelSelect(selectedOption);
   }
   render () {
     return (
@@ -59,14 +40,14 @@ class ChannelSelect extends React.Component {
             <div className="column column--3">
               <label className="label" htmlFor="channel-name-select">Channel:</label>
             </div><div className="column column--7">
-            <select type="text" id="channel-name-select" className="select select--arrow" value={this.state.selectedOption} onChange={this.handleSelection}>
+            <select type="text" id="channel-name-select" className="select select--arrow" value={this.props.selectedChannel} onChange={this.handleSelection}>
               { this.props.loggedInChannelName && <option value={this.props.loggedInChannelName} id="publish-channel-select-channel-option">{this.props.loggedInChannelName}</option> }
-              <option value={LOGIN}>Existing</option>
-              <option value={CREATE}>New</option>
+              <option value={states.LOGIN}>Existing</option>
+              <option value={states.CREATE}>New</option>
             </select>
           </div>
-            { (this.state.selectedOption === LOGIN) && <ChannelLoginForm /> }
-            { (this.state.selectedOption === CREATE) && <ChannelCreateForm /> }
+            { (this.props.selectedChannel === states.LOGIN) && <ChannelLoginForm /> }
+            { (this.props.selectedChannel === states.CREATE) && <ChannelCreateForm /> }
           </div>
         )}
       </div>

@@ -43,7 +43,9 @@ class NavBar extends React.Component {
     let channelName, channelShortId, channelLongId;
     ({ channelName, channelShortId, channelLongId } = getUserCookies());
     console.log(`cookies found for channel: ${channelName} ${channelShortId} ${channelLongId}`);
-    this.props.onChannelLogin(channelName, channelShortId, channelLongId);
+    if (channelName) {
+      this.props.onChannelLogin(channelName, channelShortId, channelLongId);
+    }
   }
   handleSelection (event) {
     const value = event.target.selectedOptions[0].value;
