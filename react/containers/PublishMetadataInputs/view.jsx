@@ -1,18 +1,16 @@
 import React from 'react';
+import ExpandingTextArea from 'components/ExpandingTextArea';
 
 class PublishMetadataInputs extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
       showInputs       : false,
-      descriptionLimit : 100,
-      descriptionHeight: '',
     };
     this.toggleShowInputs = this.toggleShowInputs.bind(this);
     this.handleDescriptionInput = this.handleDescriptionInput.bind(this);
     this.handleNsfwCheck = this.handleNsfwCheck.bind(this);
     this.handleLicenseSelection = this.handleLicenseSelection.bind(this);
-    this.setDescriptionTextBoxHeight = this.setDescriptionTextBoxHeight.bind(this);
   }
   toggleShowInputs () {
     this.setState({'showInputs': !this.state.showInputs});
@@ -22,13 +20,6 @@ class PublishMetadataInputs extends React.Component {
     const name = event.target.name;
     const value = event.target.value;
     this.props.onMetadataChange(name, value);
-    this.setDescriptionTextBoxHeight(event);
-  }
-  setDescriptionTextBoxHeight (event) {
-    const scrollHeight = event.target.scrollHeight;
-    // console.log('scrollHeight:', scrollHeight);
-    const height = Math.min(scrollHeight, this.state.descriptionLimit) + 'px';
-    this.setState({descriptionHeight: height});
   }
   handleNsfwCheck (event) {
     console.log('handle input', event);
@@ -52,10 +43,12 @@ class PublishMetadataInputs extends React.Component {
             <div className="column column--3 column--med-10 align-content-top">
               <label htmlFor="publish-license" className="label">Description:</label>
             </div><div className="column column--7 column--sml-10">
-              <textarea
-                rows="1"
+              <ExpandingTextArea
                 id="publish-description"
                 className="textarea textarea--primary textarea--full-width"
+                rows={1}
+                maxLength={2000}
+                maxHeight={150}
                 name="description"
                 placeholder="Optional description"
                 value={this.props.description}
