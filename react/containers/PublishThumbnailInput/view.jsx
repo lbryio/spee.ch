@@ -14,7 +14,6 @@ class PublishThumbnailInput extends React.Component {
     this.updateVideoThumb = this.updateVideoThumb.bind(this);
   }
   handleInput (event) {
-    event.preventDefault();
     const value = event.target.value;
     this.setState({thumbnailInput: value});
   }

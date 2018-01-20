@@ -27,7 +27,6 @@ class PublishUrlInput extends React.Component {
     }
   }
   handleInput (event) {
-    event.preventDefault();
     let value = event.target.value;
     value = this.cleanseInput(value);
     // update the state

@@ -26,7 +26,6 @@ class ChannelCreateForm extends React.Component {
     return input;
   }
   handleChannelInput (event) {
-    event.preventDefault();
     let value = event.target.value;
     value = this.cleanseChannelInput(value);
     this.setState({channel: value});
@@ -38,7 +37,6 @@ class ChannelCreateForm extends React.Component {
     console.log('end of handlechannelinput');
   }
   handleInput (event) {
-    event.preventDefault();
     const name = event.target.name;
     const value = event.target.value;
     this.setState({[name]: value});

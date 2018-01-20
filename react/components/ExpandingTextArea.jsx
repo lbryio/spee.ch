@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 
 class ExpandingTextarea extends Component {
   componentDidMount () {
-    this._adjustTextarea({});
+    this.adjustTextarea({});
   }
 
   render () {
-    const { onChange, maxHeight, ...rest } = this.props;
+    const { onChange, ...rest } = this.props;
     return (
       <textarea
         { ...rest }
@@ -17,25 +17,20 @@ class ExpandingTextarea extends Component {
     );
   }
 
-  _handleChange (e) {
+  _handleChange (event) {
     const { onChange } = this.props;
-    if (onChange) onChange(e);
-    this._adjustTextarea(e);
+    if (onChange) onChange(event);
+    this.adjustTextarea(event);
   }
 
-  _adjustTextarea ({ target = this.el }) {
+  adjustTextarea ({ target = this.el }) {
     target.style.height = 0;
-    if (this.props.maxHeight) {
-      target.style.height = `${Math.min(target.scrollHeight, this.props.maxHeight)}px`;
-    } else {
-      target.style.height = `${target.scrollHeight}px`;
-    }
+    target.style.height = `${target.scrollHeight}px`;
   }
 }
 
 ExpandingTextarea.propTypes = {
-  onChange : PropTypes.func,
-  maxHeight: PropTypes.number,
+  onChange: PropTypes.func,
 };
 
 export default ExpandingTextarea;

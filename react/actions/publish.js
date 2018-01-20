@@ -58,3 +58,10 @@ export function updateSelectedChannel (value) {
     value,
   };
 };
+
+export function toggleMetadataInputs (value) {
+  return {
+    type: actions.TOGGLE_METADATA_INPUTS,
+    value,
+  };
+};

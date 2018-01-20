@@ -2,9 +2,10 @@ import * as actions from 'constants/action_types';
 import * as channelSelectStates from 'constants/channel_select_states';
 
 const initialState = {
-  publishInChannel: false,
-  selectedChannel : channelSelectStates.LOGIN,
-  status          : {
+  publishInChannel  : false,
+  selectedChannel   : channelSelectStates.LOGIN,
+  showMetadataInputs: false,
+  status            : {
     status : null,
     message: null,
   },
@@ -66,6 +67,10 @@ export default function (state = initialState, action) {
     case actions.SELECTED_CHANNEL_UPDATE:
       return Object.assign({}, state, {
         selectedChannel: action.value,
+      });
+    case actions.TOGGLE_METADATA_INPUTS:
+      return Object.assign({}, state, {
+        showMetadataInputs: action.value,
       });
     default:
       return state;

@@ -6,7 +6,6 @@ class PublishTitleInput extends React.Component {
     this.handleInput = this.handleInput.bind(this);
   }
   handleInput (e) {
-    e.preventDefault();
     const name = e.target.name;
     const value = e.target.value;
     this.props.onMetadataChange(name, value);
