@@ -7,8 +7,8 @@ function toggleNavBarSelection (value) {
         window.location.href = '/logout';
     } else if (selectedOption === 'VIEW') {
         // get channel info
-        const channelName = getCookie('channel_name');
-        const channelClaimId = getCookie('channel_claim_id');
+        const channelName = getCookie('CHANNEL_NAME');
+        const channelClaimId = getCookie('CHANNEL_LONG_ID');
         // redirect to channel page
         window.location.href = `/${channelName}:${channelClaimId}`;
     }

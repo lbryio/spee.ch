@@ -1,13 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
-function ActiveBar () {
-  return <span className="progress-bar progress-bar--active">| </span>;
-}
-
-function InactiveBar () {
-  return <span className="progress-bar progress-bar--inactive">| </span>;
-}
+import ActiveStatusBar from 'components/ActiveStatusBar';
+import InactiveStatusBar from 'components/InactiveStatusBar';
 
 class ProgressBar extends React.Component {
   constructor (props) {
@@ -70,7 +64,7 @@ class ProgressBar extends React.Component {
   render () {
     return (
       <div>
-        {this.state.bars.map((bar, index) => bar.isActive ? <ActiveBar key={index} /> : <InactiveBar key={index}/> )}
+        {this.state.bars.map((bar, index) => bar.isActive ? <ActiveStatusBar key={index} /> : <InactiveStatusBar key={index}/>)}
       </div>
     );
   }
