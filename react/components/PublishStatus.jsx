@@ -46,7 +46,7 @@ function PublishStatus ({ status, message }) {
 
 PublishStatus.propTypes = {
   status : PropTypes.string.isRequired,
-  message: PropTypes.string.isRequired,
+  message: PropTypes.string,
 };
 
 export default PublishStatus;

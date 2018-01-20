@@ -1,4 +1,5 @@
 import React from 'react';
+import ProgressBar from 'components/ProgressBar';
 import { makeGetRequest, makePostRequest } from 'utils/xhr';
 import { setUserCookies } from 'utils/cookies';
 
@@ -150,7 +151,10 @@ class ChannelCreateForm extends React.Component {
             </div>
           </form>
         ) : (
-            <p className="label">{this.state.status}</p>
+          <div>
+            <p className="fine-print">{this.state.status}</p>
+            <ProgressBar size={12}/>
+          </div>
         )}
       </div>
     );

@@ -25,7 +25,6 @@ class PublishMetadataInputs extends React.Component {
   render () {
     return (
       <div id="publish-details" className="row row--padded row--no-top row--wide">
-        <a className="label link--primary" id="publish-details-toggle" href="#" onClick={this.toggleShowInputs}>{this.props.showMetadataInputs ? '[less]' : '[more]'}</a>
       {this.props.showMetadataInputs && (
         <div>
           <div className="row row--no-top">
@@ -66,6 +65,7 @@ class PublishMetadataInputs extends React.Component {
           </div>
         </div>
       )}
+      <a className="label link--primary" id="publish-details-toggle" href="#" onClick={this.toggleShowInputs}>{this.props.showMetadataInputs ? '[less]' : '[more]'}</a>
       </div>
     );
   }
