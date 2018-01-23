@@ -1,7 +1,7 @@
 const logger = require('winston');
 const ua = require('universal-analytics');
 const config = require('../config/speechConfig.js');
-const db = require('../models/index');
+const db = require('../models');
 const googleApiKey = config.analytics.googleId;
 
 module.exports = {
