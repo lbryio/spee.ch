@@ -1,4 +1,4 @@
-import * as constants from '../constants';
+const constants = require('../constants');
 const logger = require('winston');
 const fs = require('fs');
 const { site, wallet } = require('../config/speechConfig.js');

@@ -1,4 +1,4 @@
-import * as constants from '../constants';
+const constants = require('../constants');
 const logger = require('winston');
 const ua = require('universal-analytics');
 const config = require('../config/speechConfig.js');
