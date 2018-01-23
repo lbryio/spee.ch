@@ -7,6 +7,7 @@ const { checkClaimNameAvailability, checkChannelAvailability, publish } = requir
 const { getClaimList, resolveUri, getClaim } = require('../helpers/lbryApi.js');
 const { createPublishParams, parsePublishApiRequestBody, parsePublishApiRequestFiles, parsePublishApiChannel } = require('../helpers/publishHelpers.js');
 const errorHandlers = require('../helpers/errorHandlers.js');
+const { sendGoogleAnalyticsTiming } = require('../helpers/statsHelpers.js');
 const { authenticateIfNoUserToken } = require('../auth/authentication.js');
 
 function addGetResultsToFileData (fileInfo, getResult) {
@@ -124,9 +125,10 @@ module.exports = (app) => {
     });
   });
   // route to run a publish request on the daemon
-  app.post('/api/claim-publish', multipartMiddleware, ({ body, files, ip, originalUrl, user }, res) => {
+  app.post('/api/claim-publish', multipartMiddleware, ({ body, files, headers, ip, originalUrl, user }, res) => {
     logger.debug('api/claim-publish body:', body);
     logger.debug('api/claim-publish files:', files);
+    const startTime = Date.now();
     let  name, fileName, filePath, fileType, nsfw, license, title, description, thumbnail, channelName, channelPassword;
     // validate the body and files of the request
     try {
@@ -168,6 +170,9 @@ module.exports = (app) => {
           lbryTx: result,
         },
       });
+      const endTime = Date.now();
+      console.log('publish end time', endTime);
+      sendGoogleAnalyticsTiming('PUBLISH', headers, ip, originalUrl, startTime, endTime);
     })
     .catch(error => {
       errorHandlers.handleApiError(originalUrl, ip, error, res);
