@@ -40,13 +40,11 @@ module.exports = new PassportLocalStrategy(
       })
       .then(([newUser, newChannel, newCertificate]) => {
         logger.verbose('user and certificate successfully created');
-        logger.debug('user result >', newUser.dataValues);
+        // store the relevant newUser info to be passed back for req.User
         userInfo['id'] = newUser.id;
         userInfo['userName'] = newUser.userName;
-        logger.verbose('channel result >', newChannel.dataValues);
         userInfo['channelName'] = newChannel.channelName;
         userInfo['channelClaimId'] = newChannel.channelClaimId;
-        logger.verbose('certificate result >', newCertificate.dataValues);
         // associate the instances
         return Promise.all([newCertificate.setChannel(newChannel), newChannel.setUser(newUser)]);
       })

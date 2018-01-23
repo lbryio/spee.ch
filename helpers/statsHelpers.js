@@ -1,10 +1,22 @@
+const constants = require('../constants');
 const logger = require('winston');
 const ua = require('universal-analytics');
 const config = require('../config/speechConfig.js');
-const db = require('../models');
 const googleApiKey = config.analytics.googleId;
+const db = require('../models');
 
 module.exports = {
+  createPublishTimingEventParams (publishDurration, ip, headers, label) {
+    return {
+      userTimingCategory    : 'lbrynet',
+      userTimingVariableName: 'publish',
+      userTimingTime        : publishDurration,
+      userTimingLabel       : label,
+      uip                   : ip,
+      ua                    : headers['user-agent'],
+      ul                    : headers['accept-language'],
+    };
+  },
   postToStats (action, url, ipAddress, name, claimId, result) {
     logger.debug('action:', action);
     // make sure the result is a string
@@ -63,18 +75,13 @@ module.exports = {
   sendGoogleAnalyticsTiming (action, headers, ip, originalUrl, startTime, endTime) {
     const visitorId = ip.replace(/\./g, '-');
     const visitor = ua(googleApiKey, visitorId, { strictCidFormat: false, https: true });
-    const publishDurration = endTime - startTime;
+    const durration = endTime - startTime;
     let params;
     switch (action) {
-      case 'PUBLISH':
-        params = {
-          userTimingCategory    : 'lbrynet',
-          userTimingVariableName: 'publish',
-          userTimingTime        : publishDurration,
-          uip                   : ip,
-          ua                    : headers['user-agent'],
-          ul                    : headers['accept-language'],
-        };
+      case constants.PUBLISH_ANONYMOUS_CLAIM:
+      case constants.PUBLISH_IN_CHANNEL_CLAIM:
+        logger.verbose(`${action} completed successfully in ${durration}ms`);
+        params = module.exports.createPublishTimingEventParams(durration, ip, headers, action);
         break;
       default: break;
     }
@@ -82,7 +89,7 @@ module.exports = {
       if (err) {
         logger.error('Google Analytics Event Error >>', err);
       }
-      logger.info(`publish completed successfully in ${publishDurration}ms`);
+      logger.debug(`${action} timing event successfully sent to google analytics`);
     });
   },
 };
