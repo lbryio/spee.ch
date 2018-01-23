@@ -142,7 +142,7 @@ module.exports = (app) => {
     })
     .then(publishParams => {
       // set the timing event type for reporting
-      timingActionType = returnPublishTimingActionType(publishParams.channelName);
+      timingActionType = returnPublishTimingActionType(publishParams.channel_name);
       // publish the asset
       return publish(publishParams, fileName, fileType);
     })
