@@ -36,7 +36,7 @@ module.exports = {
     testChannelPassword: 'password',  // password for the test channel
   },
   api: {
-    apiUri: 'localhost',
+    apiHost: 'localhost',
     apiPort: '5279',
   },
 };
