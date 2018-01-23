@@ -128,7 +128,8 @@ module.exports = (app) => {
   app.post('/api/claim-publish', multipartMiddleware, ({ body, files, headers, ip, originalUrl, user }, res) => {
     logger.debug('api/claim-publish body:', body);
     logger.debug('api/claim-publish files:', files);
-    const startTime = Date.now();
+    const publishStartTime = Date.now();
+    logger.debug('publish request started @', publishStartTime);
     let  name, fileName, filePath, fileType, nsfw, license, title, description, thumbnail, channelName, channelPassword;
     // validate the body and files of the request
     try {
@@ -170,9 +171,9 @@ module.exports = (app) => {
           lbryTx: result,
         },
       });
-      const endTime = Date.now();
-      console.log('publish end time', endTime);
-      sendGoogleAnalyticsTiming('PUBLISH', headers, ip, originalUrl, startTime, endTime);
+      const publishEndTime = Date.now();
+      logger.debug('publish request completed @', publishEndTime);
+      sendGoogleAnalyticsTiming('PUBLISH', headers, ip, originalUrl, publishStartTime, publishEndTime);
     })
     .catch(error => {
       errorHandlers.handleApiError(originalUrl, ip, error, res);

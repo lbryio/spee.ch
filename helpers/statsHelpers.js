@@ -63,14 +63,14 @@ module.exports = {
   sendGoogleAnalyticsTiming (action, headers, ip, originalUrl, startTime, endTime) {
     const visitorId = ip.replace(/\./g, '-');
     const visitor = ua(googleApiKey, visitorId, { strictCidFormat: false, https: true });
-    const time = endTime - startTime;
+    const publishDurration = endTime - startTime;
     let params;
     switch (action) {
       case 'PUBLISH':
         params = {
           userTimingCategory    : 'lbrynet',
           userTimingVariableName: 'publish',
-          userTimingTime        : time,
+          userTimingTime        : publishDurration,
           uip                   : ip,
           ua                    : headers['user-agent'],
           ul                    : headers['accept-language'],
@@ -82,6 +82,7 @@ module.exports = {
       if (err) {
         logger.error('Google Analytics Event Error >>', err);
       }
+      logger.info(`publish completed successfully in ${publishDurration}ms`);
     });
   },
 };
