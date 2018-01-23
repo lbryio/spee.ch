@@ -38,7 +38,7 @@ module.exports = {
         logger.error('Sequelize error >>', error);
       });
   },
-  sendGoogleAnalytics (action, headers, ip, originalUrl) {
+  sendGoogleAnalyticsEvent (action, headers, ip, originalUrl) {
     const visitorId = ip.replace(/\./g, '-');
     const visitor = ua(googleApiKey, visitorId, { strictCidFormat: false, https: true });
     let params;
@@ -46,15 +46,6 @@ module.exports = {
       case 'SERVE':
         params = {
           ec : 'serve',
-          ea : originalUrl,
-          uip: ip,
-          ua : headers['user-agent'],
-          ul : headers['accept-language'],
-        };
-        break;
-      case 'PUBLISH':
-        params = {
-          ec : 'publish',
           ea : originalUrl,
           uip: ip,
           ua : headers['user-agent'],
@@ -69,40 +60,29 @@ module.exports = {
       }
     });
   },
-  getTrendingClaims (startDate) {
-    logger.debug('retrieving trending');
-    return new Promise((resolve, reject) => {
-      // get the raw requests data
-      db.getTrendingFiles(startDate)
-      .then(fileArray => {
-        let claimsPromiseArray = [];
-        if (fileArray) {
-          fileArray.forEach(file => {
-            claimsPromiseArray.push(db.Claim.resolveClaim(file.name, file.claimId));
-          });
-          return Promise.all(claimsPromiseArray);
-        }
-      })
-      .then(claimsArray => {
-        resolve(claimsArray);
-      })
-      .catch(error => {
-        reject(error);
-      });
-    });
-  },
-  getRecentClaims () {
-    logger.debug('retrieving most recent claims');
-    return new Promise((resolve, reject) => {
-      // get the raw requests data
-      db.File.getRecentClaims()
-      .then(results => {
-        resolve(results);
-      })
-      .catch(error => {
-        logger.error('sequelize error', error);
-        reject(error);
-      });
+  sendGoogleAnalyticsTiming (action, headers, ip, originalUrl, startTime, endTime) {
+    const visitorId = ip.replace(/\./g, '-');
+    const visitor = ua(googleApiKey, visitorId, { strictCidFormat: false, https: true });
+    const publishDurration = endTime - startTime;
+    let params;
+    switch (action) {
+      case 'PUBLISH':
+        params = {
+          userTimingCategory    : 'lbrynet',
+          userTimingVariableName: 'publish',
+          userTimingTime        : publishDurration,
+          uip                   : ip,
+          ua                    : headers['user-agent'],
+          ul                    : headers['accept-language'],
+        };
+        break;
+      default: break;
+    }
+    visitor.timing(params, (err) => {
+      if (err) {
+        logger.error('Google Analytics Event Error >>', err);
+      }
+      logger.info(`publish completed successfully in ${publishDurration}ms`);
     });
   },
 };
