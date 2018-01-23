@@ -1,3 +1,4 @@
+import * as constants from '../constants';
 const logger = require('winston');
 const fs = require('fs');
 const { site, wallet } = require('../config/speechConfig.js');
@@ -158,5 +159,29 @@ module.exports = {
       logger.debug(`successfully deleted ${filePath}`);
     });
   },
-
+  addGetResultsToFileData (fileInfo, getResult) {
+    fileInfo.fileName = getResult.file_name;
+    fileInfo.filePath = getResult.download_path;
+    return fileInfo;
+  },
+  createFileData ({ name, claimId, outpoint, height, address, nsfw, contentType }) {
+    return {
+      name,
+      claimId,
+      outpoint,
+      height,
+      address,
+      fileName: '',
+      filePath: '',
+      fileType: contentType,
+      nsfw,
+    };
+  },
+  returnPublishTimingActionType (channelName) {
+    if (channelName) {
+      return constants.PUBLISH_IN_CHANNEL_CLAIM;
+    } else {
+      return constants.PUBLISH_ANONYMOUS_CLAIM;
+    }
+  },
 };

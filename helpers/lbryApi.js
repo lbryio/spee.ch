@@ -112,6 +112,7 @@ module.exports = {
   },
   createChannel (name) {
     return new Promise((resolve, reject) => {
+      // make the request
       axios
         .post(lbryApiUrl, {
           method: 'channel_new',
