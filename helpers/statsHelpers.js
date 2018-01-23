@@ -5,19 +5,18 @@ const config = require('../config/speechConfig.js');
 const googleApiKey = config.analytics.googleId;
 const db = require('../models');
 
-function createPublishTimingEventParams (publishDurration, ip, headers, label) {
-  return {
-    userTimingCategory    : 'lbrynet',
-    userTimingVariableName: 'publish',
-    userTimingTime        : publishDurration,
-    userTimingLabel       : label,
-    uip                   : ip,
-    ua                    : headers['user-agent'],
-    ul                    : headers['accept-language'],
-  };
-};
-
 module.exports = {
+  createPublishTimingEventParams (publishDurration, ip, headers, label) {
+    return {
+      userTimingCategory    : 'lbrynet',
+      userTimingVariableName: 'publish',
+      userTimingTime        : publishDurration,
+      userTimingLabel       : label,
+      uip                   : ip,
+      ua                    : headers['user-agent'],
+      ul                    : headers['accept-language'],
+    };
+  },
   postToStats (action, url, ipAddress, name, claimId, result) {
     logger.debug('action:', action);
     // make sure the result is a string
@@ -82,7 +81,7 @@ module.exports = {
       case constants.PUBLISH_ANONYMOUS_CLAIM:
       case constants.PUBLISH_IN_CHANNEL_CLAIM:
         logger.verbose(`${action} completed successfully in ${durration}ms`);
-        params = createPublishTimingEventParams(durration, ip, headers, action);
+        params = module.exports.createPublishTimingEventParams(durration, ip, headers, action);
         break;
       default: break;
     }
