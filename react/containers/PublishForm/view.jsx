@@ -21,7 +21,7 @@ class PublishForm extends React.Component {
       // if publishInChannel is true, is a channel selected & logged in?
       if (this.props.publishInChannel && (this.props.selectedChannel !== this.props.loggedInChannel.name)) {
         // update state with error
-        this.props.onChannelSelectionError('Select "Anonymous" or log in to a channel');
+        this.props.onChannelSelectionError('Select a channel or Anonymous');
         // reject this promise
         return reject(new Error('Fix the channel'));
       }

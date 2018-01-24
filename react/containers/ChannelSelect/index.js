@@ -1,5 +1,5 @@
 import {connect} from 'react-redux';
-import {setPublishInChannel, updateSelectedChannel} from 'actions/publish';
+import {setPublishInChannel, updateSelectedChannel, updateError} from 'actions/publish';
 import View from './view.jsx';
 
 const mapStateToProps = ({ channel, publish }) => {
@@ -14,9 +14,11 @@ const mapStateToProps = ({ channel, publish }) => {
 const mapDispatchToProps = dispatch => {
   return {
     onPublishInChannelChange: (value) => {
+      dispatch(updateError('channel', null));
       dispatch(setPublishInChannel(value));
     },
     onChannelSelect: (value) => {
+      dispatch(updateError('channel', null));
       dispatch(updateSelectedChannel(value));
     },
   };
