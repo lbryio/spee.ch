@@ -1,8 +1,7 @@
 const logger = require('winston');
 const { returnShortId } = require('../helpers/sequelizeHelpers.js');
 const { claim, site } = require('../config/speechConfig.js');
-const { defaultTitle, defaultThumbnail, defaultDescription } = claim;
-const { host } = site;
+const { defaultThumbnail } = claim;
 
 function determineFileExtensionFromContentType (contentType) {
   switch (contentType) {
@@ -21,68 +20,18 @@ function determineFileExtensionFromContentType (contentType) {
   }
 };
 
-function determineContentTypeFromFileExtension (fileExtension) {
-  switch (fileExtension) {
-    case 'jpeg':
-    case 'jpg':
-      return 'image/jpeg';
-    case 'png':
-      return 'image/png';
-    case 'gif':
-      return 'image/gif';
-    case 'mp4':
-      return 'video/mp4';
-    default:
-      logger.debug('setting unknown file type as type image/jpeg');
-      return 'image/jpeg';
-  }
-};
-
-function ifEmptyReturnOther (value, replacement) {
-  if (value === '') {
-    return replacement;
-  }
-  return value;
-}
-
 function determineThumbnail (storedThumbnail, defaultThumbnail) {
-  return ifEmptyReturnOther(storedThumbnail, defaultThumbnail);
-};
-
-function determineOgTitle (storedTitle, defaultTitle) {
-  return ifEmptyReturnOther(storedTitle, defaultTitle);
-};
-
-function determineOgDescription (storedDescription, defaultDescription) {
-  return ifEmptyReturnOther(storedDescription, defaultDescription);
-};
-
-function determineOgThumbnailContentType (thumbnail) {
-  if (thumbnail) {
-    if (thumbnail.lastIndexOf('.') !== -1) {
-      return determineContentTypeFromFileExtension(thumbnail.substring(thumbnail.lastIndexOf('.')));
-    }
+  if (storedThumbnail === '') {
+    return defaultThumbnail;
   }
-  return '';
-}
-
-function addOpengraphDataToClaim (claim) {
-  claim['host'] = host;
-  claim['embedUrl'] = `${host}/${claim.claimId}/${claim.name}`;
-  claim['showUrl'] = `${host}/${claim.claimId}/${claim.name}`;
-  claim['source'] = `${host}/${claim.claimId}/${claim.name}.${claim.fileExt}`;
-  claim['directFileUrl'] = `${host}/${claim.claimId}/${claim.name}.${claim.fileExt}`;
-  claim['ogTitle'] = determineOgTitle(claim.title, defaultTitle);
-  claim['ogDescription'] = determineOgDescription(claim.description, defaultDescription);
-  claim['ogThumbnailContentType'] = determineOgThumbnailContentType(claim.thumbnail);
-  return claim;
+  return storedThumbnail;
 };
 
 function prepareClaimData (claim) {
   // logger.debug('preparing claim data based on resolved data:', claim);
   claim['thumbnail'] = determineThumbnail(claim.thumbnail, defaultThumbnail);
   claim['fileExt'] = determineFileExtensionFromContentType(claim.contentType);
-  claim = addOpengraphDataToClaim(claim);
+  claim['host'] = site.host;
   return claim;
 };
 
@@ -307,7 +256,7 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
             case 1:
               return resolve(result[0].claimId);
             default:
-              logger.error(`${result.length} records found for ${claimName} from channel ${claimName}`);
+              logger.error(`${result.length} records found for "${claimName}" in channel "${channelClaimId}"`);
               return resolve(result[0].claimId);
           }
         })

@@ -7,7 +7,7 @@ module.exports = {
     if (error.code === 'ECONNREFUSED') {
       status = 503;
       message = 'Connection refused.  The daemon may not be running.';
-    // check for errors from the deamon
+    // check for errors from the daemon
     } else if (error.response) {
       status = error.response.status || 500;
       if (error.response.data) {

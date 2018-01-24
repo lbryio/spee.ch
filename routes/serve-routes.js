@@ -2,7 +2,7 @@ const logger = require('winston');
 const { getClaimId, getChannelViewData, getLocalFileRecord } = require('../controllers/serveController.js');
 const serveHelpers = require('../helpers/serveHelpers.js');
 const { handleRequestError } = require('../helpers/errorHandlers.js');
-const { postToStats } = require('../controllers/statsController.js');
+const { postToStats } = require('../helpers/statsHelpers.js');
 const db = require('../models');
 const lbryUri = require('../helpers/lbryUri.js');
 

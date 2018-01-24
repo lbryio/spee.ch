@@ -1,5 +1,8 @@
 const axios = require('axios');
 const logger = require('winston');
+const config = require('../config/speechConfig.js');
+const { apiHost, apiPort } = config.api;
+const lbryApiUri = 'http://' + apiHost + ':' + apiPort;
 
 function handleLbrynetResponse ({ data }, resolve, reject) {
   logger.debug('lbry api data:', data);
@@ -22,7 +25,7 @@ module.exports = {
     logger.debug(`lbryApi >> Publishing claim to "${publishParams.name}"`);
     return new Promise((resolve, reject) => {
       axios
-        .post('http://localhost:5279/lbryapi', {
+        .post(lbryApiUri, {
           method: 'publish',
           params: publishParams,
         })
@@ -38,7 +41,7 @@ module.exports = {
     logger.debug(`lbryApi >> Getting Claim for "${uri}"`);
     return new Promise((resolve, reject) => {
       axios
-        .post('http://localhost:5279/lbryapi', {
+        .post(lbryApiUri, {
           method: 'get',
           params: { uri, timeout: 20 },
         })
@@ -54,7 +57,7 @@ module.exports = {
     logger.debug(`lbryApi >> Getting claim_list for "${claimName}"`);
     return new Promise((resolve, reject) => {
       axios
-        .post('http://localhost:5279/lbryapi', {
+        .post(lbryApiUri, {
           method: 'claim_list',
           params: { name: claimName },
         })
@@ -71,7 +74,7 @@ module.exports = {
     // console.log('resolving uri', uri);
     return new Promise((resolve, reject) => {
       axios
-        .post('http://localhost:5279/lbryapi', {
+        .post(lbryApiUri, {
           method: 'resolve',
           params: { uri },
         })
@@ -91,7 +94,7 @@ module.exports = {
     logger.debug('lbryApi >> Retrieving the download directory path from lbry daemon...');
     return new Promise((resolve, reject) => {
       axios
-        .post('http://localhost:5279/lbryapi', {
+        .post(lbryApiUri, {
           method: 'settings_get',
         })
         .then(({ data }) => {
@@ -110,7 +113,7 @@ module.exports = {
   createChannel (name) {
     return new Promise((resolve, reject) => {
       axios
-        .post('http://localhost:5279/lbryapi', {
+        .post(lbryApiUri, {
           method: 'channel_new',
           params: {
             channel_name: name,

@@ -1,5 +1,62 @@
 const Handlebars = require('handlebars');
-const { site, analytics } = require('../config/speechConfig.js');
+const { site, analytics, claim: claimDefaults } = require('../config/speechConfig.js');
+
+function determineOgTitle (storedTitle, defaultTitle) {
+  return ifEmptyReturnOther(storedTitle, defaultTitle);
+};
+
+function determineOgDescription (storedDescription, defaultDescription) {
+  const length = 200;
+  let description = ifEmptyReturnOther(storedDescription, defaultDescription);
+  if (description.length >= length) {
+    description = `${description.substring(0, length)}...`;
+  };
+  return description;
+};
+
+function ifEmptyReturnOther (value, replacement) {
+  if (value === '') {
+    return replacement;
+  }
+  return value;
+}
+
+function determineContentTypeFromFileExtension (fileExtension) {
+  switch (fileExtension) {
+    case 'jpeg':
+    case 'jpg':
+      return 'image/jpeg';
+    case 'png':
+      return 'image/png';
+    case 'gif':
+      return 'image/gif';
+    case 'mp4':
+      return 'video/mp4';
+    default:
+      return 'image/jpeg';
+  }
+};
+
+function determineOgThumbnailContentType (thumbnail) {
+  if (thumbnail) {
+    if (thumbnail.lastIndexOf('.') !== -1) {
+      return determineContentTypeFromFileExtension(thumbnail.substring(thumbnail.lastIndexOf('.')));
+    }
+  }
+  return '';
+}
+
+function createOpenGraphDataFromClaim (claim, defaultTitle, defaultDescription) {
+  let openGraphData = {};
+  openGraphData['embedUrl'] = `${site.host}/${claim.claimId}/${claim.name}`;
+  openGraphData['showUrl'] = `${site.host}/${claim.claimId}/${claim.name}`;
+  openGraphData['source'] = `${site.host}/${claim.claimId}/${claim.name}.${claim.fileExt}`;
+  openGraphData['directFileUrl'] = `${site.host}/${claim.claimId}/${claim.name}.${claim.fileExt}`;
+  openGraphData['ogTitle'] = determineOgTitle(claim.title, defaultTitle);
+  openGraphData['ogDescription'] = determineOgDescription(claim.description, defaultDescription);
+  openGraphData['ogThumbnailContentType'] = determineOgThumbnailContentType(claim.thumbnail);
+  return openGraphData;
+};
 
 module.exports = {
   placeCommonHeaderTags () {
@@ -16,7 +73,10 @@ module.exports = {
         ga('send', 'pageview');</script>`;
     return new Handlebars.SafeString(gaCode);
   },
-  addOpenGraph ({ ogTitle, contentType, ogDescription, thumbnail, showUrl, source, ogThumbnailContentType }) {
+  addOpenGraph (claim) {
+    const { ogTitle, ogDescription, showUrl, source, ogThumbnailContentType } = createOpenGraphDataFromClaim(claim, claimDefaults.defaultTitle, claimDefaults.defaultDescription);
+    const thumbnail = claim.thumbnail;
+    const contentType = claim.contentType;
     const ogTitleTag = `<meta property="og:title" content="${ogTitle}" />`;
     const ogUrlTag = `<meta property="og:url" content="${showUrl}" />`;
     const ogSiteNameTag = `<meta property="og:site_name" content="${site.title}" />`;
@@ -42,8 +102,10 @@ module.exports = {
       return new Handlebars.SafeString(`${basicTags} ${ogImageTag} ${ogImageTypeTag} ${ogTypeTag}`);
     }
   },
-  addTwitterCard ({ contentType, source, embedUrl, directFileUrl }) {
+  addTwitterCard (claim) {
+    const { embedUrl, directFileUrl } = createOpenGraphDataFromClaim(claim, claimDefaults.defaultTitle, claimDefaults.defaultDescription);
     const basicTwitterTags = `<meta name="twitter:site" content="@spee_ch" >`;
+    const contentType = claim.contentType;
     if (contentType === 'video/mp4') {
       const twitterName = '<meta name="twitter:card" content="player" >';
       const twitterPlayer = `<meta name="twitter:player" content="${embedUrl}" >`;

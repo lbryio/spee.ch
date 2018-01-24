@@ -31,4 +31,12 @@ module.exports = {
     defaultThumbnail  : 'https://spee.ch/assets/img/video_thumb_default.png',
     defaultDescription: 'Open-source, decentralized image and video sharing.',
   },
+  testing: {
+    testChannel        : '@testpublishchannel', // a channel to make test publishes in
+    testChannelPassword: 'password',  // password for the test channel
+  },
+  api: {
+    apiHost: 'localhost',
+    apiPort: '5279',
+  },
 };

@@ -55,4 +55,4 @@ spee.ch is a single-serving site that reads and publishes images and videos to a
     * `channelPassword` (optional,; required if `channelName` is provided)
 
 ## bugs
-If you find a bug or experience a problem, please report your issue here on github and find us in the lbry slack!
+If you find a bug or experience a problem, please report your issue here on github and find us in the lbry discord!
