@@ -1,5 +1,6 @@
 import React from 'react';
-import { getUserCookies, clearUserCookies } from 'utils/cookies';
+import { clearUserCookies } from 'utils/cookies';
+import { authenticateUser } from 'utils/auth';
 import Logo from 'components/Logo';
 import NavBarChannelDropdown from 'components/NavBarChannelDropdown';
 
@@ -10,6 +11,7 @@ class NavBar extends React.Component {
   constructor (props) {
     super(props);
     this.checkForLoggedInUser = this.checkForLoggedInUser.bind(this);
+    this.logoutUser = this.logoutUser.bind(this);
     this.handleSelection = this.handleSelection.bind(this);
   }
   componentDidMount () {
@@ -18,23 +20,29 @@ class NavBar extends React.Component {
   }
   checkForLoggedInUser () {
     // check for whether a channel is already logged in
-    let channelName, channelShortId, channelLongId;
-    ({ channelName, channelShortId, channelLongId } = getUserCookies());
-    console.log(`cookies found for channel: ${channelName} ${channelShortId} ${channelLongId}`);
-    if (channelName) {
-      this.props.onChannelLogin(channelName, channelShortId, channelLongId);
-    }
+    authenticateUser()
+      .then(({success, message}) => {
+        if (success) {
+          this.props.onChannelLogin(message.channelName, message.shortChannelId, message.channelClaimId);
+        } else {
+          console.log('user was not logged in');
+        }
+      })
+      .catch(error => {
+        console.log('authenticate user errored:', error);
+      });
+  }
+  logoutUser () {
+    // send logout request to server
+    window.location.href = '/logout'; // NOTE: replace with a call to the server
   }
   handleSelection (event) {
-    console.log('handling selection', event)
+    console.log('handling selection', event);
     const value = event.target.selectedOptions[0].value;
     console.log('value', value);
     switch (value) {
       case LOGOUT:
-        // remove session cookies
-        clearUserCookies();
-        // send logout request to server
-        window.location.href = '/logout';
+        this.logoutUser();
         break;
       case VIEW:
         // redirect to channel page
