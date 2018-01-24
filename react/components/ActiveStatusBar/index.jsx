@@ -1,6 +1,6 @@
 import React from 'react';
 
-function ActiveStatusBar () {
+const ActiveStatusBar = () => {
   return <span className="progress-bar progress-bar--active">| </span>;
 }
 

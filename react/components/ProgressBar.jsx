@@ -7,7 +7,6 @@ class ProgressBar extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
-      size       : 12,
       bars       : [],
       index      : 0,
       incrementer: 1,

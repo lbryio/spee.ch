@@ -1,7 +1,7 @@
 import React from 'react';
 
-function InactiveStatusBar () {
+const InactiveStatusBar = () => {
   return <span className="progress-bar progress-bar--inactive">| </span>;
 }
 
-export default InactiveStatusBar();
+export default InactiveStatusBar;
