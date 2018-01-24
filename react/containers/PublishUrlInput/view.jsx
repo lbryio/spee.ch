@@ -1,6 +1,6 @@
 import React from 'react';
 import {makeGetRequest} from 'utils/xhr';
-import UrlMiddle from 'components/PublishUrlMiddle';
+import UrlMiddle from 'components/PublishUrlMiddleDisplay';
 
 class PublishUrlInput extends React.Component {
   constructor (props) {
