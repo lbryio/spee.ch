@@ -96,51 +96,6 @@ function createProgressBar(element, size){
 	setInterval(updateOneBar, 300);
 }
 
-function setCookie(key, value) {
-    document.cookie = `${key}=${value}`;
-}
-
-function getCookie(cname) {
-    const name = cname + "=";
-    const decodedCookie = decodeURIComponent(document.cookie);
-    const ca = decodedCookie.split(';');
-    for(let i = 0; i <ca.length; i++) {
-        let c = ca[i];
-        while (c.charAt(0) == ' ') {
-            c = c.substring(1);
-        }
-        if (c.indexOf(name) == 0) {
-            return c.substring(name.length, c.length);
-        }
-    }
-    return "";
-}
-
-function checkCookie() {
-    const channelName = getCookie("channel_name");
-    if (channelName != "") {
-        console.log(`cookie found for ${channelName}`);
-    } else {
-        console.log('no channel_name cookie found');
-    }
-}
-
-function clearCookie(name) {
-    document.cookie = `${name}=; expires=Thu, 01-Jan-1970 00:00:01 GMT;`;
-}
-
-function setUserCookies(channelName, shortChannelId, channelClaimId) {
-    setCookie('CHANNEL_NAME', channelName)
-    setCookie('CHANNEL_SHORT_ID', shortChannelId);
-    setCookie('CHANNEL_LONG_ID', channelClaimId);
-}
-
-function clearUserCookies() {
-    clearCookie('CHANNEL_NAME')
-    clearCookie('CHANNEL_SHORT_ID');
-    clearCookie('CHANNEL_LONG_ID');
-}
-
 function copyToClipboard(event){
     var elementToCopy = event.target.dataset.elementtocopy;
     var element = document.getElementById(elementToCopy);

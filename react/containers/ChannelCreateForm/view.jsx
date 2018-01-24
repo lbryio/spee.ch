@@ -1,7 +1,6 @@
 import React from 'react';
 import ProgressBar from 'components/ProgressBar';
 import { makeGetRequest, makePostRequest } from 'utils/xhr';
-import { setUserCookies } from 'utils/cookies';
 
 class ChannelCreateForm extends React.Component {
   constructor (props) {
@@ -44,7 +43,7 @@ class ChannelCreateForm extends React.Component {
   }
   updateIsChannelAvailable (channel) {
     const that = this;
-    const channelWithAtSymbol = `@${channel}`
+    const channelWithAtSymbol = `@${channel}`;
     makeGetRequest(`/api/channel-is-available/${channelWithAtSymbol}`)
       .then(isAvailable => {
         if (isAvailable) {
@@ -111,7 +110,6 @@ class ChannelCreateForm extends React.Component {
       })
       .then(result => {
         that.setState({status: null});
-        setUserCookies(result.channelName, result.shortChannelId, result.channelClaimId);
         that.props.onChannelLogin(result.channelName, result.shortChannelId, result.channelClaimId);
       })
       .catch((error) => {

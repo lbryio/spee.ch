@@ -27,12 +27,15 @@
             <a class="nav-bar-link link--nav" href="/">Publish</a>
             <!--<a class="nav-bar-link link--nav" href="/popular">Popular</a>-->
             <a class="nav-bar-link link--nav" href="/about">About</a>
-            <select type="text" id="nav-bar-channel-select" class="select select--arrow link--nav" onchange="toggleNavBarSelection(event.target.selectedOptions[0].value)" {{#unless user}}style="display:none"{{/unless}}>
-                <option id="nav-bar-channel-select-channel-option">@{{user.userName}}</option>
-                <option value="VIEW">View</option>
-                <option value="LOGOUT">Logout</option>
-            </select>
-            <a id="nav-bar-login-link" class="nav-bar-link link--nav" href="/login" {{#if user}}style="display:none"{{/if}}>Channel</a>
+            {{#if user }}
+                <select type="text" id="nav-bar-channel-select" class="select select--arrow link--nav" onchange="toggleNavBarSelection(event)">
+                    <option id="nav-bar-channel-select-channel-option" >{{user.channelName}}</option>
+                    <option value="VIEW" data-channelUrl="/{{user.channelName}}:{{user.channelClaimId}}">View</option>
+                    <option value="LOGOUT">Logout</option>
+                </select>
+            {{else}}
+                <a id="nav-bar-login-link" class="nav-bar-link link--nav" href="/login">Channel</a>
+            {{/if}}
         </div>
     </div>
 </div>
@@ -46,6 +49,18 @@
            link.setAttribute('class', 'nav-bar-link link--nav-active');
        } else if (`/${link.value}` === window.location.pathname) {
            link.setAttribute('class', 'select select--arrow link--nav-active');
+       }
+   }
+   // function to send user to their channel if selected
+   function toggleNavBarSelection (event) {
+     console.log('toggleNavBarSelection event', event);
+     const selectedOption = event.target.selectedOptions[0].value;
+       if (selectedOption === 'LOGOUT') {
+           // send logout request to server
+           window.location.href = '/logout';
+       } else if (selectedOption === 'VIEW') {
+           // redirect to channel page
+           window.location.href = event.target.selectedOptions[0].dataset.channelUrl;
        }
    }
 </script>

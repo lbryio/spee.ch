@@ -1,6 +1,5 @@
 import React from 'react';
 import { makePostRequest } from 'utils/xhr';
-import { setUserCookies } from 'utils/cookies';
 
 class ChannelLoginForm extends React.Component {
   constructor (props) {
@@ -25,7 +24,6 @@ class ChannelLoginForm extends React.Component {
     const that = this;
     makePostRequest(url, params)
       .then(result => {
-        setUserCookies(result.channelName, result.shortChannelId, result.channelClaimId);
         that.props.onChannelLogin(result.channelName, result.shortChannelId, result.channelClaimId);
       })
       .catch(error => {

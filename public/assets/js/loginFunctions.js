@@ -8,8 +8,6 @@ function loginToChannel (event) {
             return sendAuthRequest(userName, password, '/login')
         })
         .then(result => {
-            setUserCookies(result.channelName, result.shortChannelId, result.channelClaimId);
-            // if user is on the home page, update the needed elements without reloading
             window.location = '/';
         })
         .catch(error => {

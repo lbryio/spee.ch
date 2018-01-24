@@ -1,5 +1,4 @@
 import React from 'react';
-import { clearUserCookies } from 'utils/cookies';
 import { authenticateUser } from 'utils/auth';
 import Logo from 'components/Logo';
 import NavBarChannelDropdown from 'components/NavBarChannelDropdown';
