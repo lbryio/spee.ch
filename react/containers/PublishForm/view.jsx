@@ -5,7 +5,7 @@ import PublishUrlInput from 'containers/PublishUrlInput';
 import PublishThumbnailInput from 'containers/PublishThumbnailInput';
 import PublishMetadataInputs from 'containers/PublishMetadataInputs';
 import ChannelSelect from 'containers/ChannelSelect';
-import * as publishStates from 'constants/publishing_states';
+import * as publishStates from 'constants/publish_claim_states';
 
 class PublishForm extends React.Component {
   constructor (props) {

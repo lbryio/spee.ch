@@ -1,9 +1,8 @@
-import * as actions from 'constants/action_types';
-import * as channelSelectStates from 'constants/channel_select_states';
+import * as actions from 'constants/publish_action_types';
 
 const initialState = {
   publishInChannel  : false,
-  selectedChannel   : channelSelectStates.LOGIN,
+  selectedChannel   : null,
   showMetadataInputs: false,
   status            : {
     status : null,

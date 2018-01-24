@@ -1,4 +1,4 @@
-import * as actions from 'constants/action_types';
+import * as actions from 'constants/publish_action_types';
 
 // export action creators
 export function selectFile (file) {

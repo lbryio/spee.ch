@@ -1,7 +1,3 @@
-// channel actions
-export const CHANNEL_UPDATE = 'CHANNEL_UPDATE';
-
-// publish actions
 export const FILE_SELECTED = 'FILE_SELECTED';
 export const FILE_CLEAR = 'FILE_CLEAR';
 export const METADATA_UPDATE = 'METADATA_UPDATE';
