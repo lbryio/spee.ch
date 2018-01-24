@@ -1,7 +1,7 @@
 import React from 'react';
 import { authenticateUser } from 'utils/auth';
 import Logo from 'components/Logo';
-import NavBarChannelDropdown from 'components/NavBarChannelDropdown';
+import NavBarChannelDropdown from 'components/NavBarChannelOptionsDropdown';
 
 const VIEW = 'VIEW';
 const LOGOUT = 'LOGOUT';
