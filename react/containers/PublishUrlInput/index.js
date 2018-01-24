@@ -8,6 +8,7 @@ const mapStateToProps = ({ channel, publish }) => {
     loggedInChannelShortId: channel.loggedInChannel.shortId,
     fileName              : publish.file.name,
     publishInChannel      : publish.publishInChannel,
+    selectedChannel       : publish.selectedChannel,
     claim                 : publish.claim,
     urlError              : publish.error.url,
   };

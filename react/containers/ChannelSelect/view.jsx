@@ -1,7 +1,7 @@
 import React from 'react';
 import ChannelLoginForm from 'containers/ChannelLoginForm';
 import ChannelCreateForm from 'containers/ChannelCreateForm';
-import * as states from 'constants/channel_select_states';
+import * as states from 'constants/publish_channel_select_states';
 
 class ChannelSelect extends React.Component {
   constructor (props) {

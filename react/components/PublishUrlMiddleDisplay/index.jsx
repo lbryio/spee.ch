@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-function UrlMiddle ({publishInChannel, loggedInChannelName, loggedInChannelShortId}) {
+function UrlMiddle ({publishInChannel, selectedChannel, loggedInChannelName, loggedInChannelShortId}) {
   if (publishInChannel) {
-    if (loggedInChannelName) {
+    if (selectedChannel === loggedInChannelName) {
       return <span id="url-channel" className="url-text--secondary">{loggedInChannelName}:{loggedInChannelShortId} /</span>;
     }
     return <span id="url-channel-placeholder" className="url-text--secondary tooltip">@channel<span
