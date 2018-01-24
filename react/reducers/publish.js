@@ -12,6 +12,7 @@ const initialState = {
   error: {
     file         : null,
     url          : null,
+    channel      : null,
     publishSubmit: null,
   },
   file    : null,

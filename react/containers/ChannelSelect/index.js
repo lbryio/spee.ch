@@ -7,6 +7,7 @@ const mapStateToProps = ({ channel, publish }) => {
     loggedInChannelName: channel.loggedInChannel.name,
     publishInChannel   : publish.publishInChannel,
     selectedChannel    : publish.selectedChannel,
+    channelError       : publish.error.channel,
   };
 };
 

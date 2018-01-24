@@ -10,11 +10,24 @@ import * as publishStates from 'constants/publish_claim_states';
 class PublishForm extends React.Component {
   constructor (props) {
     super(props);
-    this.validatePublishRequest = this.validatePublishRequest.bind(this);
+    this.validateChannelSelection = this.validateChannelSelection.bind(this);
+    this.validatePublishParams = this.validatePublishParams.bind(this);
     this.makePublishRequest = this.makePublishRequest.bind(this);
     this.publish = this.publish.bind(this);
   }
-  validatePublishRequest () {
+  validateChannelSelection () {
+    // make sure all required data is provided
+    return new Promise((resolve, reject) => {
+      // if publishInChannel is true, is a channel selected & logged in?
+      if (this.props.publishInChannel && (this.props.selectedChannel !== this.props.loggedInChannel.name)) {
+        // update state with error
+        this.props.onChannelSelectionError('Select "Anonymous" or log in to a channel');
+        // reject this promise
+        return reject(new Error('Fix the channel'));
+      }
+    });
+  }
+  validatePublishParams () {
     // make sure all required data is provided
     return new Promise((resolve, reject) => {
       // is there a file?
@@ -27,10 +40,6 @@ class PublishForm extends React.Component {
       }
       if (this.props.urlError) {
         return reject(new Error('Fix the url'));
-      }
-      // if publishInChannel is true, is a channel logged in (or selected)
-      if (this.props.publishInChannel && !this.props.loggedInChannel.name) {
-        return reject(new Error('Select "Anonymous" or log in to a channel'));
       }
       // is the claim available?
       resolve();
@@ -85,7 +94,7 @@ class PublishForm extends React.Component {
       thumbnail  : this.props.thumbnail,
     };
     if (this.props.publishInChannel) {
-      metadata['channelName'] = this.props.loggedInChannel.name;
+      metadata['channelName'] = this.props.selectedChannel;
     }
     return metadata;
   }
@@ -103,7 +112,10 @@ class PublishForm extends React.Component {
   publish () {
     // publish the asset
     const that = this;
-    this.validatePublishRequest()
+    this.validateChannelSelection()
+      .then(() => {
+        return that.validatePublishRequest();
+      })
       .then(() => {
         const metadata = that.createMetadata();
         // publish the claim

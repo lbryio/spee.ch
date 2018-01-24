@@ -24,6 +24,7 @@ class ChannelSelect extends React.Component {
   render () {
     return (
       <div>
+        <p id="input-error-channel-select" className="info-message-placeholder info-message--failure">{this.props.channelError}</p>
         <form>
           <div className="column column--3 column--med-10">
             <input type="radio" name="anonymous-or-channel" id="anonymous-radio" className="input-radio" value="anonymous" checked={!this.props.publishInChannel} onChange={this.toggleAnonymousPublish}/>
@@ -36,7 +37,6 @@ class ChannelSelect extends React.Component {
         </form>
         { this.props.publishInChannel && (
           <div>
-            <p id="input-error-channel-select" className="info-message-placeholder info-message--failure">{this.props.channelError}</p>
             <div className="column column--3">
               <label className="label" htmlFor="channel-name-select">Channel:</label>
             </div><div className="column column--7">

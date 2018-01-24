@@ -14,6 +14,7 @@ const mapStateToProps = ({ channel, publish }) => {
     license           : publish.metadata.license,
     nsfw              : publish.metadata.nsfw,
     publishInChannel  : publish.publishInChannel,
+    selectedChannel   : publish.selectedChannel,
     fileError         : publish.error.file,
     urlError          : publish.error.url,
     publishSubmitError: publish.error.publishSubmit,
@@ -33,6 +34,9 @@ const mapDispatchToProps = dispatch => {
     },
     onPublishStatusChange: (status, message) => {
       dispatch(updatePublishStatus(status, message));
+    },
+    onChannelSelectionError: (value) => {
+      dispatch(updateError('channel', value));
     },
     onPublishSubmitError: (value) => {
       dispatch(updateError('publishSubmit', value));
