@@ -483,32 +483,31 @@ table {
 	cursor: pointer;
 }
 
-#primary-dropzone-instructions, #dropbzone-dragover {
-	z-index: -1;
-}
-
-.position-absolute {
+#dropzone-text-holder {
 	position: absolute;
-	top: 0px;
-	left: 0px;
-	height: 100%;
+	left: 0;
+	top: 0;
 	width: 100%;
+	height: 100%;
 }
 
-#asset-preview-holder {
-	position: relative;
+#dropzone-dragover, #dropzone-instructions {
+	padding: 1em;
 }
 
 #asset-preview {
 	display: block;
-	padding: 0.5rem;
-	width: calc(100% - 1rem);
+	width: 100%;
+}
+
+.dim {
+	opacity: 0.2;
 }
 
 /* Assets */
 
 .asset {
-	max-width: 100%;
+	width: 100%;
 }
 
 #show-body #asset-boilerpate {

@@ -71,7 +71,6 @@ module.exports = (app) => {
       if (result === true) {
         res.status(200).json(true);
       } else {
-        // logger.debug(`Rejecting '${params.name}' because that name has already been claimed by this site`);
         res.status(200).json(false);
       }
     })
@@ -86,7 +85,6 @@ module.exports = (app) => {
         if (result === true) {
           res.status(200).json(true);
         } else {
-          // logger.debug(`Rejecting '${params.name}' because that channel has already been claimed`);
           res.status(200).json(false);
         }
       })

@@ -29,9 +29,11 @@
 
 <div id="channel-publish-in-progress" hidden="true">
     <p>Creating your new channel.  This may take a few seconds...</p>
-    <div id="create-channel-progress-bar"></div>
+    {{> progressBar}}
 </div>
 
 <div id="channel-publish-done" hidden="true">
     <p>Your channel has been successfully created!</p>
 </div>
+
+<script src="/assets/js/createChannelFunctions.js"></script>

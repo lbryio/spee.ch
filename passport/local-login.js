@@ -37,7 +37,7 @@ module.exports = new PassportLocalStrategy(
         .then(user => {
           if (!user) {
             // logger.debug('no user found');
-            return done(null, false, {message: 'Incorrect username or password.'});
+            return done(null, false, {message: 'Incorrect username or password'});
           }
           user.comparePassword(password, (passwordErr, isMatch) => {
             if (passwordErr) {
@@ -46,7 +46,7 @@ module.exports = new PassportLocalStrategy(
             }
             if (!isMatch) {
               // logger.debug('incorrect password');
-              return done(null, false, {message: 'Incorrect username or password.'});
+              return done(null, false, {message: 'Incorrect username or password'});
             }
             logger.debug('Password was a match, returning User');
             return returnUserAndChannelInfo(user)

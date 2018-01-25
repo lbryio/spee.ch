@@ -9,7 +9,9 @@
     "start": "node speech.js",
     "lint": "eslint .",
     "fix": "eslint . --fix",
-    "precommit": "eslint ."
+    "precommit": "eslint .",
+    "babel": "babel",
+    "webpack": "webpack"
   },
   "repository": {
     "type": "git",
@@ -41,16 +43,27 @@
     "nodemon": "^1.11.0",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
+    "prop-types": "^15.6.0",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "react-redux": "^5.0.6",
+    "redux": "^3.7.2",
     "request": "^2.83.0",
     "request-promise": "^4.2.2",
     "sequelize": "^4.1.0",
     "sequelize-cli": "^3.0.0-3",
     "sleep": "^5.1.1",
     "universal-analytics": "^0.4.13",
+    "whatwg-fetch": "^2.0.3",
     "winston": "^2.3.1",
     "winston-slack-webhook": "billbitt/winston-slack-webhook"
   },
   "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
     "chai": "^4.1.2",
     "chai-http": "^3.0.0",
     "eslint": "3.19.0",
@@ -61,6 +74,8 @@
     "eslint-plugin-react": "6.10.3",
     "eslint-plugin-standard": "3.0.1",
     "husky": "^0.13.4",
-    "mocha": "^4.0.1"
+    "mocha": "^4.0.1",
+    "redux-devtools": "^3.4.1",
+    "webpack": "^3.10.0"
   }
 }
