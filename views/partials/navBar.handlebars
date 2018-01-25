@@ -60,7 +60,9 @@
            window.location.href = '/logout';
        } else if (selectedOption === 'VIEW') {
            // redirect to channel page
-           window.location.href = event.target.selectedOptions[0].dataset.channelUrl;
+           const channelUrl = event.target.selectedOptions[0].dataset.channelurl;
+           console.log('url:', channelUrl);
+           window.location.href = channelUrl;
        }
    }
 </script>
