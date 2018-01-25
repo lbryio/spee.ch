@@ -14,6 +14,7 @@ function loginToChannel (event) {
                 credentials: 'include',
               })
               .then(function(response) {
+                  console.log(response);
                   if (response.ok){
                     return response.json();
                   } else {
@@ -24,12 +25,17 @@ function loginToChannel (event) {
                   throw error;
               })
         })
-        .then(result => {
-            window.location = '/';
+        .then(function({success, message}) {
+            if (success) {
+                window.location = '/';
+            } else {
+                throw new Error(message);
+            }
+
         })
         .catch(error => {
             const loginErrorDisplayElement = document.getElementById('login-error-display-element');
-            if (error.name){
+            if (error.message){
                 validationFunctions.showError(loginErrorDisplayElement, error.message);
             } else {
                 validationFunctions.showError(loginErrorDisplayElement, 'There was an error logging into your channel');
