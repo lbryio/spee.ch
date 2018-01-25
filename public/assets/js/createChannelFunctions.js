@@ -20,17 +20,36 @@ function showChannelCreationError(msg) {
 }
 
 function publishNewChannel (event) {
-    const userName = document.getElementById('new-channel-name').value;
+    const username = document.getElementById('new-channel-name').value;
     const password = document.getElementById('new-channel-password').value;
     // prevent default so this script can handle submission
     event.preventDefault();
     // validate submission
-    validationFunctions.validateNewChannelSubmission(userName, password)
+    validationFunctions.validateNewChannelSubmission(username, password)
         .then(() => {
             showChannelCreateInProgressDisplay();
-            return sendAuthRequest(userName, password, '/signup') // post the request
+            // return sendAuthRequest(userName, password, '/signup') // post the request
+            return fetch('/signup', {
+                  method: 'POST',
+                  body: JSON.stringify({username, password}),
+                  headers: new Headers({
+                    'Content-Type': 'application/json'
+                  }),
+                  credentials: 'include',
+              })
+              .then(function(response) {
+                  if (response.ok){
+                      return response.json();
+                  } else {
+                      throw response;
+                  }
+              })
+              .catch(function(error) {
+                  throw error;
+              })
         })
-        .then(result => {
+        .then(signupResult => {
+            console.log('signup success:', signupResult);
             showChannelCreateDoneDisplay();
             window.location = '/';
         })
@@ -40,7 +59,7 @@ function publishNewChannel (event) {
                 validationFunctions.showError(channelNameErrorDisplayElement, error.message);
             } else {
                 console.log('signup failure:', error);
-                showChannelCreationError('Unfortunately, we encountered an error while creating your channel.  Please let us know in slack!');
+                showChannelCreationError('Unfortunately, we encountered an error while creating your channel.  Please let us know in slack!', error);
             }
         })
 }
