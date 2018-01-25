@@ -16,18 +16,21 @@ class PublishForm extends React.Component {
     this.publish = this.publish.bind(this);
   }
   validateChannelSelection () {
+    console.log('validating channel selection');
     // make sure all required data is provided
     return new Promise((resolve, reject) => {
       // if publishInChannel is true, is a channel selected & logged in?
       if (this.props.publishInChannel && (this.props.selectedChannel !== this.props.loggedInChannel.name)) {
         // update state with error
-        this.props.onChannelSelectionError('Select a channel or Anonymous');
+        this.props.onChannelSelectionError('Log in to a channel or select Anonymous"');
         // reject this promise
         return reject(new Error('Fix the channel'));
       }
+      resolve();
     });
   }
   validatePublishParams () {
+    console.log('validating publish params');
     // make sure all required data is provided
     return new Promise((resolve, reject) => {
       // is there a file?
@@ -41,11 +44,11 @@ class PublishForm extends React.Component {
       if (this.props.urlError) {
         return reject(new Error('Fix the url'));
       }
-      // is the claim available?
       resolve();
     });
   }
   makePublishRequest (file, metadata) {
+    console.log('making publish request');
     const uri = '/api/claim-publish';
     const xhr = new XMLHttpRequest();
     const fd = this.appendDataToFormData(file, metadata);
@@ -84,6 +87,7 @@ class PublishForm extends React.Component {
     xhr.send(fd);
   }
   createMetadata () {
+    console.log('creating metadata');
     let metadata = {
       name       : this.props.claim,
       title      : this.props.title,
@@ -103,18 +107,19 @@ class PublishForm extends React.Component {
     fd.append('file', file);
     for (var key in metadata) {
       if (metadata.hasOwnProperty(key)) {
-        console.log(key, metadata[key]);
+        console.log('adding form data', key, metadata[key]);
         fd.append(key, metadata[key]);
       }
     }
     return fd;
   }
   publish () {
+    console.log('publishing file');
     // publish the asset
     const that = this;
     this.validateChannelSelection()
       .then(() => {
-        return that.validatePublishRequest();
+        return that.validatePublishParams();
       })
       .then(() => {
         const metadata = that.createMetadata();

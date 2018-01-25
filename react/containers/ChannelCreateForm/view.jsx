@@ -1,6 +1,6 @@
 import React from 'react';
 import ProgressBar from 'components/ProgressBar';
-import { makeGetRequest, makePostRequest } from 'utils/xhr';
+import request from 'utils/request';
 
 class ChannelCreateForm extends React.Component {
   constructor (props) {
@@ -43,7 +43,7 @@ class ChannelCreateForm extends React.Component {
   updateIsChannelAvailable (channel) {
     const that = this;
     const channelWithAtSymbol = `@${channel}`;
-    makeGetRequest(`/api/channel-is-available/${channelWithAtSymbol}`)
+    request(`/api/channel-is-available/${channelWithAtSymbol}`)
       .then(isAvailable => {
         if (isAvailable) {
           that.setState({'error': null});
@@ -58,7 +58,7 @@ class ChannelCreateForm extends React.Component {
   checkIsChannelAvailable (channel) {
     const channelWithAtSymbol = `@${channel}`;
     return new Promise((resolve, reject) => {
-      makeGetRequest(`/api/channel-is-available/${channelWithAtSymbol}`)
+      request(`/api/channel-is-available/${channelWithAtSymbol}`)
         .then(isAvailable => {
           console.log('checkIsChannelAvailable result:', isAvailable);
           if (!isAvailable) {
@@ -82,10 +82,17 @@ class ChannelCreateForm extends React.Component {
       resolve();
     });
   }
-  makePublishChannelRequest (channel, password) {
-    const params = `username=${channel}&password=${password}`;
+  makePublishChannelRequest (username, password) {
+    const params = {
+      method : 'POST',
+      body   : JSON.stringify({username, password}),
+      headers: new Headers({
+        'Content-Type': 'application/json',
+      }),
+      credentials: 'include',
+    };
     return new Promise((resolve, reject) => {
-      makePostRequest('/signup', params)
+      request('/signup', params)
         .then(result => {
           console.log('makePublishChannelRequest result:', result);
           return resolve(result);

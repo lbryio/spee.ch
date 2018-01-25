@@ -1,5 +1,5 @@
 import React from 'react';
-import { makePostRequest } from 'utils/xhr';
+import request from 'utils/request';
 
 class ChannelLoginForm extends React.Component {
   constructor (props) {
@@ -19,15 +19,22 @@ class ChannelLoginForm extends React.Component {
   }
   loginToChannel (event) {
     event.preventDefault();
-    const params = `username=${this.state.name}&password=${this.state.password}`;
+    const params = {
+      method : 'POST',
+      body   : JSON.stringify({username: this.state.name, password: this.state.password}),
+      headers: new Headers({
+        'Content-Type': 'application/json',
+      }),
+      credentials: 'include',
+    }
     const that = this;
-    makePostRequest('login', params)
-      .then(result => {
-        console.log('loginToChannel result:', result);
-        if (result.success) {
-          that.props.onChannelLogin(result.channelName, result.shortChannelId, result.channelClaimId);
+    request('login', params)
+      .then(({success, channelName, shortChannelId, channelClaimId, message}) => {
+        console.log('loginToChannel success:', success);
+        if (success) {
+          that.props.onChannelLogin(channelName, shortChannelId, channelClaimId);
         } else {
-          that.setState({'error': result.message});
+          that.setState({'error': message});
         };
       })
       .catch(error => {

@@ -21,9 +21,6 @@ const validationFunctions = {
     isChannelNameAvailable: function (name) {
         return this.isNameAvailable(name, '/api/channel-is-available/');
     },
-    isClaimNameAvailable: function (name) {
-        return this.isNameAvailable(name, '/api/claim-is-available/')
-      },
     isNameAvailable: function (name, apiUrl) {
         console.log('isNameAvailable?', name);
         const url = apiUrl + name;

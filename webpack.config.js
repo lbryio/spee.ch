@@ -3,7 +3,7 @@ const Path = require('path');
 const REACT_ROOT = Path.resolve(__dirname, 'react/');
 
 module.exports = {
-  entry : './react/app.js',
+  entry : ['whatwg-fetch', './react/app.js'],
   output: {
     path    : Path.join(__dirname, '/public/bundle/'),
     filename: 'bundle.js',

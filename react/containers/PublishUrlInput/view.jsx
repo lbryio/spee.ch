@@ -1,5 +1,5 @@
 import React from 'react';
-import {makeGetRequest} from 'utils/xhr';
+import request from 'utils/request';
 import UrlMiddle from 'components/PublishUrlMiddleDisplay';
 
 class PublishUrlInput extends React.Component {
@@ -41,10 +41,10 @@ class PublishUrlInput extends React.Component {
   }
   checkClaimIsAvailable (claim) {
     const that = this;
-    makeGetRequest(`/api/claim-is-available/${claim}`)
-      .then(response => {
-        console.log('makeGetRequest response:', response);
-        if (response) {
+    request(`/api/claim-is-available/${claim}`)
+      .then(isAvailable => {
+        // console.log('checkClaimIsAvailable request response:', isAvailable);
+        if (isAvailable) {
           that.props.onUrlError(null);
         } else {
           that.props.onUrlError('That url has already been claimed');

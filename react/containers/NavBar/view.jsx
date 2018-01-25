@@ -1,5 +1,5 @@
 import React from 'react';
-import { authenticateUser } from 'utils/auth';
+import request from 'utils/request';
 import Logo from 'components/Logo';
 import NavBarChannelDropdown from 'components/NavBarChannelOptionsDropdown';
 
@@ -19,7 +19,10 @@ class NavBar extends React.Component {
   }
   checkForLoggedInUser () {
     // check for whether a channel is already logged in
-    authenticateUser()
+    const params = {
+      credentials: 'include',
+    }
+    request('/user', params)
       .then(({success, message}) => {
         if (success) {
           this.props.onChannelLogin(message.channelName, message.shortChannelId, message.channelClaimId);
