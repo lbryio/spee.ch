@@ -39,25 +39,6 @@ function postRequest (url, params) {
     })
 }
 
-function toggleSection(event){
-    event.preventDefault();
-    var dataSet = event.target.dataset;
-    var status = dataSet.open;
-    var masterElement = document.getElementById(event.target.id||event.srcElement.id);
-    var slaveElement = document.getElementById(dataSet.slaveelementid);
-    var closedLabel = dataSet.closedlabel;
-    var openLabel = dataSet.openlabel;
-    if (status === "false") {
-        slaveElement.hidden = false;
-        masterElement.innerText = openLabel;
-    masterElement.dataset.open = "true";
-    } else {
-        slaveElement.hidden = true;
-        masterElement.innerText = closedLabel;
-        masterElement.dataset.open = "false";
-    }
-  }
-
 function createProgressBar(element, size){
 	var x = 0;
 	var adder = 1;

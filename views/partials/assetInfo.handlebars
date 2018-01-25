@@ -50,7 +50,7 @@
 </div>
 
 <div id="show-share-buttons">
-    <div class="row row--padded row--wide">
+    <div class="row row--padded row--no-bottom row--wide">
         <div class="column column--2 column--med-10">
             <span class="text">Share:</span>
         </div><div class="column column--7 column--med-10">
@@ -64,14 +64,10 @@
     </div>
 </div>
 
-<div class="row row--wide">
-    <a class="text link--primary" id="show-details-toggle" href="#" onclick="toggleSection(event)" data-open="false" data-openlabel="[less]" data-closedlabel="[more]" data-slaveelementid="show-details">[more]</a>
-</div>
-
-<div id="show-details" class="row row--padded row--wide" hidden="true">
+<div id="show-details" class="row row--padded row--no-bottom row--wide" hidden="true">
     <div id="show-claim-name">
         <div class="column column--2 column--med-10">
-            <span class="text">Name:</span>
+            <span class="text">Claim Name:</span>
         </div><div class="column column--8 column--med-10">
         {{claimInfo.name}}
         </div>
@@ -95,3 +91,26 @@
         </div>
     </div>
 </div>
+
+<div class="row row--padded row--no-bottom row--wide">
+    <a class="text link--primary" id="show-details-toggle" href="#" onclick="toggleSection(event)" data-status="closed">[more]</a>
+</div>
+
+<script>
+    function toggleSection(event){
+        event.preventDefault();
+        var dataSet = event.target.dataset;
+        var status = dataSet.status;
+        var toggle = document.getElementById("show-details-toggle");
+        var details = document.getElementById("show-details");
+        if (status === "closed") {
+            details.hidden = false;
+            toggle.innerText = "[less]";
+            toggle.dataset.status = "open";
+        } else {
+            details.hidden = true;
+            toggle.innerText = "[more]";
+            toggle.dataset.status = "closed";
+        }
+    }
+</script>
