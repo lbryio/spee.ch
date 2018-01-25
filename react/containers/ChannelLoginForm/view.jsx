@@ -20,11 +20,15 @@ class ChannelLoginForm extends React.Component {
   loginToChannel (event) {
     event.preventDefault();
     const params = `username=${this.state.name}&password=${this.state.password}`;
-    const url = '/login';
     const that = this;
-    makePostRequest(url, params)
+    makePostRequest('login', params)
       .then(result => {
-        that.props.onChannelLogin(result.channelName, result.shortChannelId, result.channelClaimId);
+        console.log('loginToChannel result:', result);
+        if (result.success) {
+          that.props.onChannelLogin(result.channelName, result.shortChannelId, result.channelClaimId);
+        } else {
+          that.setState({'error': result.message});
+        };
       })
       .catch(error => {
         console.log('login error', error);

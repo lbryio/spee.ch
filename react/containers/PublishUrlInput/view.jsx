@@ -43,6 +43,7 @@ class PublishUrlInput extends React.Component {
     const that = this;
     makeGetRequest(`/api/claim-is-available/${claim}`)
       .then(response => {
+        console.log('makeGetRequest response:', response);
         if (response) {
           that.props.onUrlError(null);
         } else {

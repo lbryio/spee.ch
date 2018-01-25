@@ -34,7 +34,6 @@ class ChannelCreateForm extends React.Component {
     } else {
       this.setState({error: 'Please enter a channel name'});
     }
-    console.log('end of handlechannelinput');
   }
   handleInput (event) {
     const name = event.target.name;
@@ -61,11 +60,10 @@ class ChannelCreateForm extends React.Component {
     return new Promise((resolve, reject) => {
       makeGetRequest(`/api/channel-is-available/${channelWithAtSymbol}`)
         .then(isAvailable => {
+          console.log('checkIsChannelAvailable result:', isAvailable);
           if (!isAvailable) {
-            console.log('channel is not available');
             return reject(new Error('That channel has already been claimed'));
           }
-          console.log('channel is available');
           resolve();
         })
         .catch((error) => {
@@ -89,6 +87,7 @@ class ChannelCreateForm extends React.Component {
     return new Promise((resolve, reject) => {
       makePostRequest('/signup', params)
         .then(result => {
+          console.log('makePublishChannelRequest result:', result);
           return resolve(result);
         })
         .catch(error => {

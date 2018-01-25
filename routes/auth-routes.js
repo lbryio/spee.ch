@@ -13,15 +13,31 @@ module.exports = (app) => {
     });
   });
   // route for log in
-  app.post('/login', passport.authenticate('local-login'), (req, res) => {
-    // logger.debug('req.user:', req.user);  // req.user contains the authenticated user's info
-    logger.debug('successful login');
-    res.status(200).json({
-      success       : true,
-      channelName   : req.user.channelName,
-      channelClaimId: req.user.channelClaimId,
-      shortChannelId: req.user.shortChannelId,
-    });
+  app.post('/login', (req, res, next) => {
+    passport.authenticate('local-login', (err, user, info) => {
+      logger.debug('info:', info);
+      if (err) {
+        return next(err);
+      }
+      if (!user) {
+        return res.status(200).json({
+          success: false,
+          message: info.message,
+        });
+      }
+      logger.debug('successful login');
+      req.logIn(user, (err) => {
+        if (err) {
+          return next(err);
+        }
+        return res.status(200).json({
+          success       : true,
+          channelName   : req.user.channelName,
+          channelClaimId: req.user.channelClaimId,
+          shortChannelId: req.user.shortChannelId,
+        });
+      });
+    })(req, res, next);
   });
   // see if user is authenticated, and return credentials if so
   app.get('/user', (req, res) => {
