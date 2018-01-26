@@ -14,7 +14,7 @@
 </div>
 {{/if}}
 
-<div class="row row--wide">
+<div class="row row--padded row--wide row--no-top">
     <div id="show-short-link">
         <div class="column column--2 column--med-10">
             <a class="link--primary" href="/{{shortId}}/{{claimInfo.name}}.{{claimInfo.fileExt}}"><span class="text">Link:</span></a>
@@ -50,7 +50,7 @@
 </div>
 
 <div id="show-share-buttons">
-    <div class="row row--padded row--no-bottom row--wide">
+    <div class="row row--padded row--wide row--no-top">
         <div class="column column--2 column--med-10">
             <span class="text">Share:</span>
         </div><div class="column column--7 column--med-10">
@@ -64,7 +64,9 @@
     </div>
 </div>
 
-<div id="show-details" class="row row--padded row--no-bottom row--wide" hidden="true">
+
+
+<div id="show-details" class="row--padded row--wide row--no-top" hidden="true">
     <div id="show-claim-name">
         <div class="column column--2 column--med-10">
             <span class="text">Claim Name:</span>
@@ -90,9 +92,14 @@
         {{/if}}
         </div>
     </div>
+    <div id="show-claim-id">
+        <div class="column column--10">
+            <a target="_blank" href="https://lbry.io/dmca">Report</a>
+        </div>
+    </div>
 </div>
 
-<div class="row row--padded row--no-bottom row--wide">
+<div class="row row--wide">
     <a class="text link--primary" id="show-details-toggle" href="#" onclick="toggleSection(event)" data-status="closed">[more]</a>
 </div>
 
