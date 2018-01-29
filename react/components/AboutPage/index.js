@@ -6,7 +6,7 @@ class AboutPage extends React.Component {
     return (
       <div>
         <NavBar/>
-        <h1>About page</h1>;
+        <h1>About page</h1>
       </div>
     );
   }

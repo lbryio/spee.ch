@@ -1,7 +1,8 @@
 import React from 'react';
-import request from 'utils/request';
+import { Link, withRouter } from 'react-router-dom';
 import Logo from 'components/Logo';
 import NavBarChannelDropdown from 'components/NavBarChannelOptionsDropdown';
+import request from 'utils/request';
 
 const VIEW = 'VIEW';
 const LOGOUT = 'LOGOUT';
@@ -48,7 +49,7 @@ class NavBar extends React.Component {
         break;
       case VIEW:
         // redirect to channel page
-        window.location.href = `/${this.props.channelName}:${this.props.channelLongId}`;
+        this.props.history.push(`/${this.props.channelName}:${this.props.channelLongId}`);
         break;
       default:
         break;
@@ -63,8 +64,8 @@ class NavBar extends React.Component {
             <span className="nav-bar-tagline">Open-source, decentralized image and video sharing.</span>
           </div>
           <div className="nav-bar--right">
-            <a className="nav-bar-link link--nav-active" href="/">Publish</a>
-            <a className="nav-bar-link link--nav" href="/about">About</a>
+            <Link className="nav-bar-link link--nav-active" to="/">Publish</Link>
+            <Link className="nav-bar-link link--nav" to="/about">About</Link>
             { this.props.channelName ? (
               <NavBarChannelDropdown
                 channelName={this.props.channelName}
@@ -73,7 +74,7 @@ class NavBar extends React.Component {
                 LOGOUT={LOGOUT}
               />
             ) : (
-              <a id="nav-bar-login-link" className="nav-bar-link link--nav" href="/login">Channel</a>
+              <Link id="nav-bar-login-link" className="nav-bar-link link--nav" to="/login">Channel</Link>
             )}
           </div>
         </div>
@@ -82,4 +83,4 @@ class NavBar extends React.Component {
   }
 }
 
-export default NavBar;
+export default withRouter(NavBar);

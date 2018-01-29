@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Provider } from 'react-redux';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import PublishPage from 'components/PublishPage';
 import AboutPage from 'components/AboutPage';
@@ -9,9 +9,13 @@ import LoginPage from 'components/LoginPage';
 
 const Root = ({ store }) => (
   <Provider store={store}>
-    <Router>
-      <Route exact path="/" component={PublishPage} />
-    </Router>
+    <BrowserRouter>
+      <Switch>
+        <Route exact path="/" component={PublishPage} />
+        <Route exact path="/about" component={AboutPage} />
+        <Route exact path="/login" component={LoginPage} />
+      </Switch>
+    </BrowserRouter>
   </Provider>
 )
 
