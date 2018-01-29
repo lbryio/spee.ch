@@ -13,13 +13,13 @@ module.exports = (app) => {
     if (req.user) {
       res.status(200).redirect(`/${req.user.channelName}`);
     } else {
-      res.status(200).render('login');
+      res.status(200).render('index');
     }
   });
   // route to show 'about' page
   app.get('/about', (req, res) => {
     // get and render the content
-    res.status(200).render('about');
+    res.status(200).render('index');
   });
   // route to display a list of the trending images
   app.get('/trending', (req, res) => {
