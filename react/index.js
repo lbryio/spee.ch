@@ -12,4 +12,4 @@ let store = createStore(
 render(
   <Root store={store} />,
   document.getElementById('react-app')
-)
+);

@@ -17,10 +17,10 @@ const Root = ({ store }) => (
       </Switch>
     </BrowserRouter>
   </Provider>
-)
+);
 
 Root.propTypes = {
   store: PropTypes.object.isRequired,
-}
+};
 
 export default Root;
