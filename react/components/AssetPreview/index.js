@@ -1,10 +1,9 @@
 import React from 'react';
 
-const AssetPreview = ({asset}) => {
-  console.log('asset display info:', asset);
+const AssetPreview = ({ name, claimId, contentType }) => {
   return (
     <div>
-      <p>Preview Asset here</p>
+      <p>name: {name}, claimId: {claimId}, contentType: {contentType}</p>
     </div>
   );
 };

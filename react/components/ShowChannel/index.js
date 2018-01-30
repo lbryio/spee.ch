@@ -72,7 +72,12 @@ class ShowChannel extends React.Component {
             <div className="column column--10">
               <div>
                 {/* claims here */}
-                {this.state.claims && this.state.claims.map((claim, index) => <AssetPreview claim={claim} key={index} />)}
+                {this.state.claims && this.state.claims.map((claim, index) => <AssetPreview
+                  name={claim.name}
+                  claimId={claim.claimId}
+                  contentType={claim.contentType}
+                  key={index}
+                />)}
               </div>
             </div>
           </div>
