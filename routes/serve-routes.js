@@ -155,12 +155,12 @@ module.exports = (app) => {
     let isChannel, channelName, channelClaimId;
     try {
       ({ isChannel, channelName, channelClaimId } = lbryUri.parseIdentifier(params.identifier));
+      // log the result
+      logger.debug(`isChannel: ${isChannel}, channelName: ${channelName}, channelClaimId: ${channelClaimId}`);
     } catch (error) {
       return handleRequestError(originalUrl, ip, error, res);
     }
     if (isChannel) {
-      // log the request data for debugging
-      logRequestData(null, null, channelName, null);
       // handle showing the channel page
       return res.status(200).render('index');
     } else {

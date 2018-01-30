@@ -14,6 +14,7 @@ class ShowPage extends React.Component {
       claimId       : null,
       claimName     : null,
       isServeRequest: null,
+      longClaimId   : null,
     };
   }
   componentDidMount () {
@@ -77,15 +78,19 @@ class ShowPage extends React.Component {
     if (this.state.isServeRequest) {
       return (
         <ShowLite
-          claimId={this.state.claimId}
           claimName={this.state.claimName}
+          claimId={this.state.claimId}
+          channelName={this.state.channelName}
+          channelClaimId={this.state.channelClaimId}
         />
       );
     }
     return (
       <ShowDetails
-        claimId={this.state.claimId}
         claimName={this.state.claimName}
+        claimId={this.state.claimId}
+        channelName={this.state.channelName}
+        channelClaimId={this.state.channelClaimId}
       />
     );
   }

@@ -96,8 +96,8 @@ module.exports = (app) => {
       });
   });
   // route to run a resolve request on the daemon
-  app.get('/api/claim-resolve/:uri', ({ headers, ip, originalUrl, params }, res) => {
-    resolveUri(params.uri)
+  app.get('/api/claim-resolve/:name/:claimId', ({ headers, ip, originalUrl, params }, res) => {
+    resolveUri(`${params.name}#${params.claimId}`)
     .then(resolvedUri => {
       res.status(200).json(resolvedUri);
     })
@@ -202,6 +202,38 @@ module.exports = (app) => {
       })
       .catch(error => {
         logger.error('api error getting channel contents', error);
+        errorHandlers.handleApiError(originalUrl, ip, error, res);
+      });
+  });
+  app.get('/api/claim-get-long-id/:claimName/:claimId', ({ ip, originalUrl, body, params }, res) => {
+    const claimName = params.claimName;
+    let claimId = params.claimId;
+    if (claimId === 'none') claimId = null;
+    db.Claim.getLongClaimId(claimName, claimId)
+      .then(longId => {
+        if (!longId) {
+          return res.status(200).json({success: false, message: 'No matching claim id could be found'});
+        }
+        res.status(200).json({success: true, message: longId});
+      })
+      .catch(error => {
+        logger.error('api error getting long claim id', error);
+        errorHandlers.handleApiError(originalUrl, ip, error, res);
+      });
+  });
+  app.get('/api/claim-get-data/:claimName/:claimId', ({ ip, originalUrl, body, params }, res) => {
+    const claimName = params.claimName;
+    let claimId = params.claimId;
+    if (claimId === 'none') claimId = null;
+    db.Claim.resolveClaim(claimName, claimId)
+      .then(claimInfo => {
+        if (!claimInfo) {
+          return res.status(200).json({success: false, message: 'No claim could be found'});
+        }
+        res.status(200).json({success: true, message: claimInfo});
+      })
+      .catch(error => {
+        logger.error('api error getting long claim id', error);
         errorHandlers.handleApiError(originalUrl, ip, error, res);
       });
   });
