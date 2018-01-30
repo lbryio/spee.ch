@@ -16,10 +16,10 @@ module.exports = {
   },
   showFile (claimInfo, shortId, res) {
     logger.verbose(`showing claim: ${claimInfo.name}#${claimInfo.claimId}`);
-    res.status(200).render('show', { layout: 'show', claimInfo, shortId });
+    res.status(200).render('index');
   },
   showFileLite (claimInfo, shortId, res) {
     logger.verbose(`showlite claim: ${claimInfo.name}#${claimInfo.claimId}`);
-    res.status(200).render('showLite', { layout: 'showlite', claimInfo, shortId });
+    res.status(200).render('index');
   },
 };

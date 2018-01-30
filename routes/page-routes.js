@@ -10,15 +10,10 @@ module.exports = (app) => {
   });
   // route to display login page
   app.get('/login', (req, res) => {
-    if (req.user) {
-      res.status(200).redirect(`/${req.user.channelName}`);
-    } else {
-      res.status(200).render('index');
-    }
+    res.status(200).render('index');
   });
   // route to show 'about' page
   app.get('/about', (req, res) => {
-    // get and render the content
     res.status(200).render('index');
   });
   // route to display a list of the trending images

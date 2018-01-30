@@ -188,7 +188,8 @@ module.exports = (app) => {
       // log the request data for debugging
       logRequestData(null, null, channelName, null);
       // handle showing the channel page
-      showChannelPageToClient(channelName, channelClaimId, originalUrl, ip, query, res);
+      // showChannelPageToClient(channelName, channelClaimId, originalUrl, ip, query, res);
+      return res.status(200).render('index');
     } else {
       let claimName, isServeRequest;
       try {
@@ -203,7 +204,7 @@ module.exports = (app) => {
       getClaimId(null, null, claimName, null)
         .then(fullClaimId => {
           if (fullClaimId === NO_CLAIM) {
-            return res.status(200).render('noClaim');
+            return res.status(200).render('index');
           }
           showOrServeAsset(responseType, fullClaimId, claimName, res);
           postToStats(responseType, originalUrl, ip, claimName, fullClaimId, 'success');
