@@ -100,7 +100,7 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
   };
 
   Certificate.getShortChannelIdFromLongChannelId = function (longChannelId, channelName) {
-    logger.debug(`finding short channel id for ${channelName}:${longChannelId}`);
+    logger.debug(`getShortChannelIdFromLongChannelId ${channelName}:${longChannelId}`);
     return new Promise((resolve, reject) => {
       this
         .findAll({
@@ -122,6 +122,7 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
   };
 
   Certificate.getLongChannelIdFromShortChannelId = function (channelName, channelClaimId) {
+    logger.debug(`getLongChannelIdFromShortChannelId(${channelName}, ${channelClaimId})`);
     return new Promise((resolve, reject) => {
       this
         .findAll({
@@ -170,6 +171,7 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
   };
 
   Certificate.validateLongChannelId = function (name, claimId) {
+    logger.debug(`validateLongChannelId(${name}, ${claimId})`);
     return new Promise((resolve, reject) => {
       this.findOne({
         where: {name, claimId},

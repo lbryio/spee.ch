@@ -5,7 +5,10 @@ class ShowLitePage extends React.Component {
   render () {
     return (
       <div className="row row--tall flex-container--column flex-container--center-center">
-        <AssetDisplay />
+        <AssetDisplay
+          claimName={this.props.claimName}
+          claimId={this.props.claimId}
+        />
       </div>
     );
   }

@@ -53,7 +53,7 @@ module.exports = {
         });
     });
   },
-  getChannelViewData (channelName, channelClaimId, query) {
+  getChannelViewData (channelName, channelClaimId, page) {
     return new Promise((resolve, reject) => {
       // 1. get the long channel Id (make sure channel exists)
       db.Certificate.getLongChannelId(channelName, channelClaimId)
@@ -69,7 +69,7 @@ module.exports = {
             return resolve(NO_CHANNEL);
           }
           // 3. format the data for the view, including pagination
-          let paginatedChannelViewData = returnPaginatedChannelViewData(channelName, longChannelClaimId, shortChannelClaimId, channelClaimsArray, query);
+          let paginatedChannelViewData = returnPaginatedChannelViewData(channelName, longChannelClaimId, shortChannelClaimId, channelClaimsArray, page);
           // 4. return all the channel information and contents
           resolve(paginatedChannelViewData);
         })

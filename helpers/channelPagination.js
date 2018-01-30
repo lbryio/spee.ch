@@ -1,9 +1,9 @@
 const CLAIMS_PER_PAGE = 10;
 
 module.exports = {
-  returnPaginatedChannelViewData (channelName, longChannelClaimId, shortChannelClaimId, claims, query) {
+  returnPaginatedChannelViewData (channelName, longChannelClaimId, shortChannelClaimId, claims, page) {
     const totalPages = module.exports.determineTotalPages(claims);
-    const paginationPage = module.exports.getPageFromQuery(query);
+    const paginationPage = module.exports.getPageFromQuery(page);
     const viewData = {
       channelName        : channelName,
       longChannelClaimId : longChannelClaimId,
@@ -17,9 +17,9 @@ module.exports = {
     };
     return viewData;
   },
-  getPageFromQuery (query) {
-    if (query.p) {
-      return parseInt(query.p);
+  getPageFromQuery (page) {
+    if (page) {
+      return parseInt(page);
     }
     return 1;
   },

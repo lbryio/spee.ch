@@ -14,15 +14,18 @@ class ShowDetailsPage extends React.Component {
         <NavBar/>
         <div className="row row--tall row--padded">
           <div className="column column--10">
-            <AssetTitle title={'test title'}/>
+            <AssetTitle title={this.props.claimName}/>
           </div>
           <div className="column column--5 column--sml-10 align-content-top">
             <div className="row row--padded">
-              <AssetDisplay/>
+              <AssetDisplay
+                claimName={this.props.claimName}
+                claimId={this.props.claimId}
+              />
             </div>
           </div><div className="column column--5 column--sml-10 align-content-top">
           <div className="row row--padded">
-            <AssetInfo />
+            <AssetInfo claimId={this.props.claimId}/>
           </div>
         </div>
         </div>
@@ -30,5 +33,12 @@ class ShowDetailsPage extends React.Component {
     );
   }
 };
+
+// required props
+// isChannel
+// channelName
+// channelClaimId
+// claimId
+// claimName
 
 export default ShowDetailsPage;

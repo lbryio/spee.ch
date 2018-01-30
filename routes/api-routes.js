@@ -9,6 +9,9 @@ const { createPublishParams, parsePublishApiRequestBody, parsePublishApiRequestF
 const errorHandlers = require('../helpers/errorHandlers.js');
 const { sendGoogleAnalyticsTiming } = require('../helpers/statsHelpers.js');
 const { authenticateIfNoUserToken } = require('../auth/authentication.js');
+const { getChannelViewData } = require('../controllers/serveController.js');
+
+const NO_CHANNEL = 'NO_CHANNEL';
 
 module.exports = (app) => {
   // route to run a claim_list request on the daemon
@@ -182,6 +185,23 @@ module.exports = (app) => {
       })
       .catch(error => {
         logger.error('api error getting short channel id', error);
+        errorHandlers.handleApiError(originalUrl, ip, error, res);
+      });
+  });
+  app.get('/api/channel-get-content/:name/:longId/:page', ({ ip, originalUrl, body, params }, res) => {
+    const channelName = params.name;
+    let channelClaimId = params.longId;
+    if (channelClaimId === 'none') channelClaimId = null;
+    const page = params.page;
+    getChannelViewData(channelName, channelClaimId, page)
+      .then(data => {
+        if (data === NO_CHANNEL) {
+          return res.status(200).json({success: false, message: 'No matching channel was found'});
+        }
+        res.status(200).json({success: true, data});
+      })
+      .catch(error => {
+        logger.error('api error getting channel contents', error);
         errorHandlers.handleApiError(originalUrl, ip, error, res);
       });
   });

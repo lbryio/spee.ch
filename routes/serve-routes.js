@@ -1,5 +1,5 @@
 const logger = require('winston');
-const { getClaimId, getChannelViewData, getLocalFileRecord } = require('../controllers/serveController.js');
+const { getClaimId, getLocalFileRecord } = require('../controllers/serveController.js');
 const serveHelpers = require('../helpers/serveHelpers.js');
 const { handleRequestError } = require('../helpers/errorHandlers.js');
 const { postToStats } = require('../helpers/statsHelpers.js');
@@ -23,25 +23,6 @@ function isValidShortId (claimId) {
 
 function isValidShortIdOrClaimId (input) {
   return (isValidClaimId(input) || isValidShortId(input));
-}
-
-function sendChannelInfoAndContentToClient (channelPageData, res) {
-  if (channelPageData === NO_CHANNEL) {
-    res.status(200).render('noChannel');
-  } else {
-    res.status(200).render('channel', channelPageData);
-  }
-}
-
-function showChannelPageToClient (channelName, channelClaimId, originalUrl, ip, query, res) {
-  // 1. retrieve the channel contents
-  getChannelViewData(channelName, channelClaimId, query)
-    .then(channelViewData => {
-      sendChannelInfoAndContentToClient(channelViewData, res);
-    })
-    .catch(error => {
-      handleRequestError(originalUrl, ip, error, res);
-    });
 }
 
 function clientAcceptsHtml ({accept}) {
@@ -75,31 +56,31 @@ function determineResponseType (isServeRequest, headers) {
   return responseType;
 }
 
-function showAssetToClient (claimId, name, res) {
-  return Promise
-      .all([db.Claim.resolveClaim(name, claimId), db.Claim.getShortClaimIdFromLongClaimId(claimId, name)])
-      .then(([claimInfo, shortClaimId]) => {
-        // logger.debug('claimInfo:', claimInfo);
-        // logger.debug('shortClaimId:', shortClaimId);
-        return serveHelpers.showFile(claimInfo, shortClaimId, res);
-      })
-      .catch(error => {
-        throw error;
-      });
-}
-
-function showLiteAssetToClient (claimId, name, res) {
-  return Promise
-      .all([db.Claim.resolveClaim(name, claimId), db.Claim.getShortClaimIdFromLongClaimId(claimId, name)])
-      .then(([claimInfo, shortClaimId]) => {
-        // logger.debug('claimInfo:', claimInfo);
-        // logger.debug('shortClaimId:', shortClaimId);
-        return serveHelpers.showFileLite(claimInfo, shortClaimId, res);
-      })
-      .catch(error => {
-        throw error;
-      });
-}
+// function showAssetToClient (claimId, name, res) {
+//   return Promise
+//       .all([db.Claim.resolveClaim(name, claimId), db.Claim.getShortClaimIdFromLongClaimId(claimId, name)])
+//       .then(([claimInfo, shortClaimId]) => {
+//         // logger.debug('claimInfo:', claimInfo);
+//         // logger.debug('shortClaimId:', shortClaimId);
+//         return serveHelpers.showFile(claimInfo, shortClaimId, res);
+//       })
+//       .catch(error => {
+//         throw error;
+//       });
+// }
+//
+// function showLiteAssetToClient (claimId, name, res) {
+//   return Promise
+//       .all([db.Claim.resolveClaim(name, claimId), db.Claim.getShortClaimIdFromLongClaimId(claimId, name)])
+//       .then(([claimInfo, shortClaimId]) => {
+//         // logger.debug('claimInfo:', claimInfo);
+//         // logger.debug('shortClaimId:', shortClaimId);
+//         return serveHelpers.showFileLite(claimInfo, shortClaimId, res);
+//       })
+//       .catch(error => {
+//         throw error;
+//       });
+// }
 
 function serveAssetToClient (claimId, name, res) {
   return getLocalFileRecord(claimId, name)
@@ -113,19 +94,6 @@ function serveAssetToClient (claimId, name, res) {
       .catch(error => {
         throw error;
       });
-}
-
-function showOrServeAsset (responseType, claimId, claimName, res) {
-  switch (responseType) {
-    case SHOW:
-      return showAssetToClient(claimId, claimName, res);
-    case SHOWLITE:
-      return showLiteAssetToClient(claimId, claimName, res);
-    case SERVE:
-      return serveAssetToClient(claimId, claimName, res);
-    default:
-      break;
-  }
 }
 
 function flipClaimNameAndIdForBackwardsCompatibility (identifier, name) {
@@ -161,20 +129,26 @@ module.exports = (app) => {
     let responseType = determineResponseType(isServeRequest, headers);
     // log the request data for debugging
     logRequestData(responseType, claimName, channelName, claimId);
-    // get the claim Id and then serve/show the asset
-    getClaimId(channelName, channelClaimId, claimName, claimId)
-    .then(fullClaimId => {
-      if (fullClaimId === NO_CLAIM) {
-        return res.status(200).render('noClaim');
-      } else if (fullClaimId === NO_CHANNEL) {
-        return res.status(200).render('noChannel');
-      }
-      showOrServeAsset(responseType, fullClaimId, claimName, res);
-      postToStats(responseType, originalUrl, ip, claimName, fullClaimId, 'success');
-    })
-    .catch(error => {
-      handleRequestError(originalUrl, ip, error, res);
-    });
+    // if a serve request, serve, otherwise send the react app
+    if (responseType === SERVE) {
+      // get the claim Id and then serve/show the asset
+      getClaimId(channelName, channelClaimId, claimName, claimId)
+        .then(fullClaimId => {
+          if (fullClaimId === NO_CLAIM) {
+            return res.status(200).json({success: false, message: 'no claim id could be found'});
+          } else if (fullClaimId === NO_CHANNEL) {
+            return res.status(200).json({success: false, message: 'no channel id could be found'});
+          }
+          serveAssetToClient(fullClaimId, claimName, res);
+          // postToStats(responseType, originalUrl, ip, claimName, fullClaimId, 'success');
+        })
+        .catch(error => {
+          handleRequestError(originalUrl, ip, error, res);
+          // postToStats(responseType, originalUrl, ip, claimName, fullClaimId, 'fail');
+        });
+    } else {
+      res.status(200).render('index');
+    }
   });
   // route to serve the winning asset at a claim or a channel page
   app.get('/:identifier', ({ headers, ip, originalUrl, params, query }, res) => {
@@ -188,7 +162,6 @@ module.exports = (app) => {
       // log the request data for debugging
       logRequestData(null, null, channelName, null);
       // handle showing the channel page
-      // showChannelPageToClient(channelName, channelClaimId, originalUrl, ip, query, res);
       return res.status(200).render('index');
     } else {
       let claimName, isServeRequest;
@@ -200,18 +173,24 @@ module.exports = (app) => {
       let responseType = determineResponseType(isServeRequest, headers);
       // log the request data for debugging
       logRequestData(responseType, claimName, null, null);
-      // get the claim Id and then serve/show the asset
-      getClaimId(null, null, claimName, null)
-        .then(fullClaimId => {
-          if (fullClaimId === NO_CLAIM) {
-            return res.status(200).render('index');
-          }
-          showOrServeAsset(responseType, fullClaimId, claimName, res);
-          postToStats(responseType, originalUrl, ip, claimName, fullClaimId, 'success');
-        })
-        .catch(error => {
-          handleRequestError(originalUrl, ip, error, res);
-        });
+      // if a serve request, serve, otherwise send the react app
+      if (responseType === SERVE) {
+        // get the claim Id and then serve/show the asset
+        getClaimId(null, null, claimName, null)
+          .then(fullClaimId => {
+            if (fullClaimId === NO_CLAIM) {
+              return res.status(200).render('index');
+            }
+            serveAssetToClient(fullClaimId, claimName, res);
+            // postToStats(responseType, originalUrl, ip, claimName, fullClaimId, 'success');
+          })
+          .catch(error => {
+            handleRequestError(originalUrl, ip, error, res);
+            // postToStats(responseType, originalUrl, ip, claimName, fullClaimId, 'fail');
+          });
+      } else {
+        res.status(200).render('index');
+      }
     }
   });
 };
