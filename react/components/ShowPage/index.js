@@ -20,17 +20,25 @@ class ShowPage extends React.Component {
   }
   componentDidMount () {
     console.log('ShowPage did mount');
-    this.parseUrlAndUpdateState();
-  }
-  parseUrlAndUpdateState () {
     const identifier = this.props.match.params.identifier;
     const claim = this.props.match.params.claim;
+    this.parseUrlAndUpdateState(identifier, claim);
+  }
+  componentWillReceiveProps (nextProps) {
+    if (this.props.match.params !== nextProps.match.params) {
+      console.log('received new params props');
+      const identifier = nextProps.match.params.identifier;
+      const claim = nextProps.match.params.claim;
+      this.parseUrlAndUpdateState(identifier, claim);
+    }
+  }
+  parseUrlAndUpdateState (identifier, claim) {
     if (identifier) {
       return this.parseAndUpdateIdentifierAndClaim(identifier, claim);
     }
     this.parseAndUpdateClaimOnly(claim);
   }
-  parseAndUpdateIdentifierAndClaim(identifier, claim) {
+  parseAndUpdateIdentifierAndClaim (identifier, claim) {
     // handle case of identifier and claim
     // this is a request for an asset
     // claim will be an asset claim

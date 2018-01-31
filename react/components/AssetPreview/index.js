@@ -1,7 +1,9 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const AssetPreview = ({ name, claimId, fileExt, contentType }) => {
   const directSourceLink = `${claimId}/${name}.${fileExt}`;
+  const showUrlLink = `${claimId}/${name}`;
   const previewHolderStyle = {
     clear: 'both',
     display: 'inline-block',
@@ -21,7 +23,9 @@ const AssetPreview = ({ name, claimId, fileExt, contentType }) => {
     case 'image/png':
       return (
         <div style={previewHolderStyle}>
-          <img style={assetStyle} className={'asset-preview--image'} src={directSourceLink} alt={name} />
+          <Link to={showUrlLink} >
+            <img style={assetStyle} className={'asset-preview--image'} src={directSourceLink} alt={name} />
+          </Link>
         </div>
       );
     case 'image/gif':
