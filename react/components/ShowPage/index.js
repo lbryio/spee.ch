@@ -1,6 +1,5 @@
 import React from 'react';
-import ShowLite from 'components/ShowLite';
-import ShowDetails from 'components/ShowDetails';
+import ShowAsset from 'components/ShowAsset';
 import ShowChannel from 'components/ShowChannel';
 import lbryUri from 'utils/lbryUri';
 
@@ -8,16 +7,13 @@ class ShowPage extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
-      isChannel     : null,
-      channelName   : null,
-      channelClaimId: null,
-      claimId       : null,
-      claimName     : null,
+      identifier    : null,
+      claim         : null,
       isServeRequest: null,
-      longClaimId   : null,
     };
   }
   componentDidMount () {
+    console.log('ShowPage did mount');
     const identifier = this.props.match.params.identifier;
     const claim = this.props.match.params.claim;
     // handle case of identifier and claim
@@ -31,11 +27,15 @@ class ShowPage extends React.Component {
       }
       // set state
       return this.setState({
-        isChannel,
-        channelName,
-        channelClaimId,
-        claimId,
-        claimName,
+        identifier: {
+          isChannel,
+          channelName,
+          channelClaimId,
+          claimId,
+        },
+        claim: {
+          claimName,
+        },
         isServeRequest,
       });
     }
@@ -44,54 +44,51 @@ class ShowPage extends React.Component {
     try {
       ({ isChannel, channelName, channelClaimId } = lbryUri.parseIdentifier(claim));
     } catch (error) {
-      console.log('error:', error);
+      return console.log('error:', error);
     }
     if (isChannel) {
       return this.setState({
-        isChannel,
-        channelName,
-        channelClaimId,
+        claim: {
+          isChannel,
+          channelName,
+          channelClaimId,
+        },
       });
     }
     let claimName, isServeRequest;
     try {
       ({claimName, isServeRequest} = lbryUri.parseName(claim));
     } catch (error) {
-      console.log('error:', error);
+      return console.log('error:', error);
     }
     this.setState({
-      claimName,
+      claim: {
+        claimName,
+      },
       isServeRequest,
     });
   }
   render () {
-    const identifier = this.props.match.params.identifier;
-    console.log('rendering component');
-    if (!identifier && this.state.isChannel) {
+    console.log('rendering ShowPage');
+    if (this.state.claim) {
+      if (this.state.claim.isChannel) {
+        return (
+          <ShowChannel
+            channelName={this.state.claim.channelName}
+            channelClaimId={this.state.claim.channelClaimId}
+          />
+        );
+      }
       return (
-        <ShowChannel
-          channelName={this.state.channelName}
-          channelClaimId={this.state.channelClaimId}
-        />
-      );
-    }
-    if (this.state.isServeRequest) {
-      return (
-        <ShowLite
-          claimName={this.state.claimName}
-          claimId={this.state.claimId}
-          channelName={this.state.channelName}
-          channelClaimId={this.state.channelClaimId}
+        <ShowAsset
+          identifier={this.state.identifier} // this.state.url.identifier
+          claim={this.state.claim} // this.state.url.claim
+          isServeRequest={this.state.isServeRequest} // this.state.url.ending
         />
       );
     }
     return (
-      <ShowDetails
-        claimName={this.state.claimName}
-        claimId={this.state.claimId}
-        channelName={this.state.channelName}
-        channelClaimId={this.state.channelClaimId}
-      />
+      <p>Loading...</p>
     );
   }
 };

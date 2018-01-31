@@ -4,7 +4,7 @@ import AssetTitle from 'components/AssetTitle';
 import AssetDisplay from 'components/AssetDisplay';
 import AssetInfo from 'components/AssetInfo';
 
-class ShowDetailsPage extends React.Component {
+class ShowDetails extends React.Component {
   componentDidMount () {
     console.log(this.props);
   }
@@ -12,24 +12,29 @@ class ShowDetailsPage extends React.Component {
     return (
       <div>
         <NavBar/>
-        <div className="row row--tall row--padded">
-          <div className="column column--10">
-            <AssetTitle title={this.props.claimName}/>
-          </div>
-          <div className="column column--5 column--sml-10 align-content-top">
-            <div className="row row--padded">
-              <AssetDisplay
-                claimName={this.props.claimName}
-                claimId={this.props.claimId}
-              />
+          {this.props.error &&
+          <p>{this.props.error}</p>
+          }
+          {this.props.claimData &&
+          <div className="row row--tall row--padded">
+            <div className="column column--10">
+              <AssetTitle title={this.props.claimData.title}/>
             </div>
-          </div><div className="column column--5 column--sml-10 align-content-top">
-          <div className="row row--padded">
-            <AssetInfo claimId={this.props.claimId}/>
+            <div className="column column--5 column--sml-10 align-content-top">
+              <div className="row row--padded">
+                <AssetDisplay
+                claimName={this.props.claimData.name}
+                claimId={this.props.claimData.claimId}
+                />
+              </div>
+            </div><div className="column column--5 column--sml-10 align-content-top">
+              <div className="row row--padded">
+              <AssetInfo claimId={this.props.claimData.claimId}/>
+              </div>
+            </div>
           </div>
+          }
         </div>
-        </div>
-      </div>
     );
   }
 };
@@ -41,4 +46,4 @@ class ShowDetailsPage extends React.Component {
 // claimId
 // claimName
 
-export default ShowDetailsPage;
+export default ShowDetails;

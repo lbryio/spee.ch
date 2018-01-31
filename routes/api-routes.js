@@ -9,9 +9,10 @@ const { createPublishParams, parsePublishApiRequestBody, parsePublishApiRequestF
 const errorHandlers = require('../helpers/errorHandlers.js');
 const { sendGoogleAnalyticsTiming } = require('../helpers/statsHelpers.js');
 const { authenticateIfNoUserToken } = require('../auth/authentication.js');
-const { getChannelViewData } = require('../controllers/serveController.js');
+const { getChannelViewData, getClaimId } = require('../controllers/serveController.js');
 
 const NO_CHANNEL = 'NO_CHANNEL';
+const NO_CLAIM = 'NO_CLAIM';
 
 module.exports = (app) => {
   // route to run a claim_list request on the daemon
@@ -205,16 +206,21 @@ module.exports = (app) => {
         errorHandlers.handleApiError(originalUrl, ip, error, res);
       });
   });
-  app.get('/api/claim-get-long-id/:claimName/:claimId', ({ ip, originalUrl, body, params }, res) => {
-    const claimName = params.claimName;
-    let claimId = params.claimId;
-    if (claimId === 'none') claimId = null;
-    db.Claim.getLongClaimId(claimName, claimId)
-      .then(longId => {
-        if (!longId) {
+  app.post('/api/claim-get-long-id', ({ ip, originalUrl, body, params }, res) => {
+    logger.debug('body:', body);
+    const channelName = body.channelName;
+    const channelClaimId = body.channelClaimId;
+    const claimName = body.claimName;
+    const claimId = body.claimId;
+    getClaimId(channelName, channelClaimId, claimName, claimId)
+      .then(result => {
+        if (result === NO_CHANNEL) {
+          return res.status(200).json({success: false, message: 'No matching channel could be found'});
+        }
+        if (result === NO_CLAIM) {
           return res.status(200).json({success: false, message: 'No matching claim id could be found'});
         }
-        res.status(200).json({success: true, message: longId});
+        res.status(200).json({success: true, message: result});
       })
       .catch(error => {
         logger.error('api error getting long claim id', error);
