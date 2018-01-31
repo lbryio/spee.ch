@@ -1,6 +1,6 @@
 import React from 'react';
-import ShowLite from 'components/ShowLite';
-import ShowDetails from 'components/ShowDetails';
+import ShowLite from 'components/ShowAssetLite';
+import ShowDetails from 'components/ShowAssetDetails';
 import request from 'utils/request';
 
 class ShowAsset extends React.Component {

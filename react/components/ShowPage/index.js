@@ -3,6 +3,9 @@ import ShowAsset from 'components/ShowAsset';
 import ShowChannel from 'components/ShowChannel';
 import lbryUri from 'utils/lbryUri';
 
+const CHANNEL = 'CHANNEL';
+const ASSET = 'ASSET';
+
 class ShowPage extends React.Component {
   constructor (props) {
     super(props);
@@ -11,35 +14,52 @@ class ShowPage extends React.Component {
       claim         : null,
       isServeRequest: null,
     };
+    this.parseUrlAndUpdateState = this.parseUrlAndUpdateState.bind(this);
+    this.parseAndUpdateIdentifierAndClaim = this.parseAndUpdateIdentifierAndClaim.bind(this);
+    this.parseAndUpdateClaimOnly = this.parseAndUpdateClaimOnly.bind(this);
   }
   componentDidMount () {
     console.log('ShowPage did mount');
+    this.parseUrlAndUpdateState();
+  }
+  parseUrlAndUpdateState () {
     const identifier = this.props.match.params.identifier;
     const claim = this.props.match.params.claim;
-    // handle case of identifier and claim
     if (identifier) {
-      let isChannel, channelName, channelClaimId, claimId, claimName, isServeRequest;
-      try {
-        ({ isChannel, channelName, channelClaimId, claimId } = lbryUri.parseIdentifier(identifier));
-        ({ claimName, isServeRequest } = lbryUri.parseName(claim));
-      } catch (error) {
-        return console.log('error:', error);
-      }
-      // set state
-      return this.setState({
-        identifier: {
-          isChannel,
-          channelName,
-          channelClaimId,
-          claimId,
-        },
-        claim: {
-          claimName,
-        },
-        isServeRequest,
-      });
+      return this.parseAndUpdateIdentifierAndClaim(identifier, claim);
     }
-    // handle case of just claim (asset or channel)
+    this.parseAndUpdateClaimOnly(claim);
+  }
+  parseAndUpdateIdentifierAndClaim(identifier, claim) {
+    // handle case of identifier and claim
+    // this is a request for an asset
+    // claim will be an asset claim
+    // the identifier could be a channel or a claim id
+    let isChannel, channelName, channelClaimId, claimId, claimName, isServeRequest;
+    try {
+      ({ isChannel, channelName, channelClaimId, claimId } = lbryUri.parseIdentifier(identifier));
+      ({ claimName, isServeRequest } = lbryUri.parseName(claim));
+    } catch (error) {
+      return console.log('error:', error);
+    }
+    // set state
+    return this.setState({
+      identifier: {
+        isChannel,
+        channelName,
+        channelClaimId,
+        claimId,
+      },
+      claim: {
+        claimName,
+      },
+      isServeRequest,
+    });
+  }
+  parseAndUpdateClaimOnly (claim) {
+    // handle case of just claim
+    // this could be a request for an asset or a channel page
+    // claim could be an asset claim or a channel claim
     let isChannel, channelName, channelClaimId;
     try {
       ({ isChannel, channelName, channelClaimId } = lbryUri.parseIdentifier(claim));
