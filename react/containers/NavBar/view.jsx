@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { NavLink, withRouter } from 'react-router-dom';
 import Logo from 'components/Logo';
 import NavBarChannelDropdown from 'components/NavBarChannelOptionsDropdown';
 import request from 'utils/request';
@@ -64,8 +64,8 @@ class NavBar extends React.Component {
             <span className="nav-bar-tagline">Open-source, decentralized image and video sharing.</span>
           </div>
           <div className="nav-bar--right">
-            <Link className="nav-bar-link link--nav-active" to="/">Publish</Link>
-            <Link className="nav-bar-link link--nav" to="/about">About</Link>
+            <NavLink className="nav-bar-link link--nav" activeClassName="link--nav-active" to="/" exact={true}>Publish</NavLink>
+            <NavLink className="nav-bar-link link--nav"  activeClassName="link--nav-active" to="/about">About</NavLink>
             { this.props.channelName ? (
               <NavBarChannelDropdown
                 channelName={this.props.channelName}
@@ -74,7 +74,7 @@ class NavBar extends React.Component {
                 LOGOUT={LOGOUT}
               />
             ) : (
-              <Link id="nav-bar-login-link" className="nav-bar-link link--nav" to="/login">Channel</Link>
+              <NavLink id="nav-bar-login-link" className="nav-bar-link link--nav" activeClassName="link--nav-active" to="/login">Channel</NavLink>
             )}
           </div>
         </div>
