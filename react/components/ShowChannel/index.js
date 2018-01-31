@@ -21,19 +21,18 @@ class ShowChannel extends React.Component {
     this.updateChannelData = this.updateChannelData.bind(this);
   }
   componentDidMount () {
-    console.log(this.props);
     this.updateChannelData(1);
   }
   updateChannelData (page) {
-    const that = this;
     const channelName = this.props.channelName;
     const channelClaimId = this.props.channelClaimId || 'none';
     const url = `/api/channel-get-content/${channelName}/${channelClaimId}/${page}`;
+    const that = this;
     return request(url)
       .then(({ success, message, data }) => {
         console.log('get channel data response:', data);
         if (!success) {
-          return this.setState({error: message});
+          return that.setState({error: message});
         }
         that.setState({
           channelName        : data.channelName,
@@ -67,7 +66,7 @@ class ShowChannel extends React.Component {
               <h2>channel name: {this.props.channelName}</h2>
               <p>full channel id: {this.state.longChannelClaimId ? this.state.longChannelClaimId : 'loading...'}</p>
               <p>short channel id: {this.state.shortChannelClaimId ? this.state.shortChannelClaimId : 'loading...'}</p>
-              <p># of claims in channel: {this.state.totalResults ? this.state.totalResults : 'loading...' }</p>
+              <p># of claims in channel: {this.state.totalResults >= 0 ? this.state.totalResults : 'loading...' }</p>
             </div>
             <div className="column column--10">
               <div>
