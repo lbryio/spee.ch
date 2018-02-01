@@ -1,6 +1,6 @@
 import React from 'react';
-import ShowLite from 'components/ShowAssetLite';
-import ShowDetails from 'components/ShowAssetDetails';
+import ShowAssetLite from 'components/ShowAssetLite';
+import ShowAssetDetails from 'components/ShowAssetDetails';
 import request from 'utils/request';
 
 class ShowAsset extends React.Component {
@@ -83,14 +83,14 @@ class ShowAsset extends React.Component {
   render () {
     if (this.props.isServeRequest) {
       return (
-        <ShowLite
+        <ShowAssetLite
           error={this.state.error}
           claimData={this.state.claimData}
         />
       );
     }
     return (
-      <ShowDetails
+      <ShowAssetDetails
         error={this.state.error}
         claimData={this.state.claimData}
       />

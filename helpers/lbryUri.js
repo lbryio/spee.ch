@@ -55,14 +55,14 @@ module.exports = {
       claimId,
     };
   },
-  parseName: function (name) {
-    logger.debug('parsing name:', name);
+  parseClaim: function (claim) {
+    logger.debug('parsing name:', claim);
     const componentsRegex = new RegExp(
       '([^:$#/.]*)' + // name (stops at the first modifier)
       '([:$#.]?)([^/]*)' // modifier separator, modifier (stops at the first path separator or end)
     );
     const [proto, claimName, modifierSeperator, modifier] = componentsRegex
-      .exec(name)
+      .exec(claim)
       .map(match => match || null);
     logger.debug(`${proto}, ${claimName}, ${modifierSeperator}, ${modifier}`);
 
@@ -75,7 +75,6 @@ module.exports = {
       throw new Error(`Invalid characters in claim name: ${nameBadChars.join(', ')}.`);
     }
     // Validate and process modifier
-    let isServeRequest = false;
     if (modifierSeperator) {
       if (!modifier) {
         throw new Error(`No file extension provided after separator ${modifierSeperator}.`);
@@ -83,11 +82,29 @@ module.exports = {
       if (modifierSeperator !== '.') {
         throw new Error(`The ${modifierSeperator} modifier is not supported in the claim name`);
       }
-      isServeRequest = true;
     }
+    // return results
     return {
       claimName,
-      isServeRequest,
+    };
+  },
+  parseModifier: function (claim) {
+    logger.debug('parsing modifier:', claim);
+    const componentsRegex = new RegExp(
+      '([^:$#/.]*)' + // name (stops at the first modifier)
+      '([:$#.]?)([^/]*)' // modifier separator, modifier (stops at the first path separator or end)
+    );
+    const [proto, claimName, modifierSeperator, modifier] = componentsRegex
+      .exec(claim)
+      .map(match => match || null);
+    logger.debug(`${proto}, ${claimName}, ${modifierSeperator}, ${modifier}`);
+    // Validate and process modifier
+    let hasFileExtension = false;
+    if (modifierSeperator) {
+      hasFileExtension = true;
+    }
+    return {
+      hasFileExtension,
     };
   },
 };

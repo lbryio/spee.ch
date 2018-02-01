@@ -1,4 +1,5 @@
 import React from 'react';
+import ErrorPage from 'components/ErrorPage';
 import ShowAsset from 'components/ShowAsset';
 import ShowChannel from 'components/ShowChannel';
 import lbryUri from 'utils/lbryUri';
@@ -10,6 +11,7 @@ class ShowPage extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
+      error         : null,
       identifier    : null,
       claim         : null,
       isServeRequest: null,
@@ -46,9 +48,9 @@ class ShowPage extends React.Component {
     let isChannel, channelName, channelClaimId, claimId, claimName, isServeRequest;
     try {
       ({ isChannel, channelName, channelClaimId, claimId } = lbryUri.parseIdentifier(identifier));
-      ({ claimName, isServeRequest } = lbryUri.parseName(claim));
+      ({ claimName, isServeRequest } = lbryUri.parseClaim(claim));
     } catch (error) {
-      return console.log('error:', error);
+      return this.setState({error: error.message});
     }
     // set state
     return this.setState({
@@ -72,7 +74,7 @@ class ShowPage extends React.Component {
     try {
       ({ isChannel, channelName, channelClaimId } = lbryUri.parseIdentifier(claim));
     } catch (error) {
-      return console.log('error:', error);
+      return this.setState({error: error.message});
     }
     if (isChannel) {
       return this.setState({
@@ -85,9 +87,9 @@ class ShowPage extends React.Component {
     }
     let claimName, isServeRequest;
     try {
-      ({claimName, isServeRequest} = lbryUri.parseName(claim));
+      ({claimName, isServeRequest} = lbryUri.parseClaim(claim));
     } catch (error) {
-      return console.log('error:', error);
+      return this.setState({error: error.message});
     }
     this.setState({
       claim: {
@@ -98,6 +100,11 @@ class ShowPage extends React.Component {
   }
   render () {
     console.log('rendering ShowPage');
+    if (this.state.error) {
+      return (
+        <ErrorPage error={this.state.error}/>
+      );
+    }
     if (this.state.claim) {
       if (this.state.claim.isChannel) {
         return (

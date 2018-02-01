@@ -16,18 +16,18 @@ module.exports = {
 
     // Validate and process name
     if (!value) {
-      throw new Error(`Check your url.  No channel name provided before "${modifierSeperator}"`);
+      throw new Error(`Check your URL.  No channel name provided before "${modifierSeperator}"`);
     }
     const isChannel = value.startsWith(module.exports.CHANNEL_CHAR);
     const channelName = isChannel ? value : null;
     let claimId;
     if (isChannel) {
       if (!channelName) {
-        throw new Error('No channel name after @.');
+        throw new Error('Check your URL.  No channel name after "@".');
       }
       const nameBadChars = (channelName).match(module.exports.REGEXP_INVALID_CHANNEL);
       if (nameBadChars) {
-        throw new Error(`Invalid characters in channel name: ${nameBadChars.join(', ')}.`);
+        throw new Error(`Check your URL.  Invalid characters in channel name: "${nameBadChars.join(', ')}".`);
       }
     } else {
       claimId = value;
@@ -37,13 +37,13 @@ module.exports = {
     let channelClaimId;
     if (modifierSeperator) {
       if (!modifier) {
-        throw new Error(`No modifier provided after separator "${modifierSeperator}"`);
+        throw new Error(`Check your URL.  No modifier provided after separator "${modifierSeperator}"`);
       }
 
       if (modifierSeperator === ':') {
         channelClaimId = modifier;
       } else {
-        throw new Error(`The "${modifierSeperator}" modifier is not currently supported`);
+        throw new Error(`Check your URL.  The "${modifierSeperator}" modifier is not currently supported`);
       }
     }
     return {
@@ -53,7 +53,7 @@ module.exports = {
       claimId,
     };
   },
-  parseName: function (name) {
+  parseClaim: function (name) {
     console.log('parsing name:', name);
     const componentsRegex = new RegExp(
       '([^:$#/.]*)' + // name (stops at the first modifier)
@@ -66,20 +66,20 @@ module.exports = {
 
     // Validate and process name
     if (!claimName) {
-      throw new Error('No claim name provided before .');
+      throw new Error('Check your URL.  No claim name provided before "."');
     }
     const nameBadChars = (claimName).match(module.exports.REGEXP_INVALID_CLAIM);
     if (nameBadChars) {
-      throw new Error(`Invalid characters in claim name: ${nameBadChars.join(', ')}.`);
+      throw new Error(`Check your URL.  Invalid characters in claim name: "${nameBadChars.join(', ')}".`);
     }
     // Validate and process modifier
     let isServeRequest = false;
     if (modifierSeperator) {
       if (!modifier) {
-        throw new Error(`No file extension provided after separator ${modifierSeperator}.`);
+        throw new Error(`Check your URL.  No file extension provided after separator "${modifierSeperator}".`);
       }
       if (modifierSeperator !== '.') {
-        throw new Error(`The ${modifierSeperator} modifier is not supported in the claim name`);
+        throw new Error(`Check your URL.  The "${modifierSeperator}" modifier is not supported in the claim name.`);
       }
       isServeRequest = true;
     }

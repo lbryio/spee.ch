@@ -1,9 +1,9 @@
 import React from 'react';
 
-const AssetDisplay = ({ claimName, claimId }) => {
+const AssetDisplay = ({ name, claimId }) => {
   return (
     <div>
-      <p>display {claimName}#{claimId} here</p>
+      <p>display {name}#{claimId} here</p>
     </div>
   );
 };

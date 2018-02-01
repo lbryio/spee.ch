@@ -2,13 +2,10 @@ const logger = require('winston');
 const { getClaimId, getLocalFileRecord } = require('../controllers/serveController.js');
 const serveHelpers = require('../helpers/serveHelpers.js');
 const { handleRequestError } = require('../helpers/errorHandlers.js');
-const { postToStats } = require('../helpers/statsHelpers.js');
-const db = require('../models');
 const lbryUri = require('../helpers/lbryUri.js');
 
 const SERVE = 'SERVE';
 const SHOW = 'SHOW';
-const SHOWLITE = 'SHOWLITE';
 const NO_CHANNEL = 'NO_CHANNEL';
 const NO_CLAIM = 'NO_CLAIM';
 const NO_FILE = 'NO_FILE';
@@ -39,48 +36,22 @@ function clientWantsAsset ({accept, range}) {
   return imageIsWanted || videoIsWanted;
 }
 
-function determineResponseType (isServeRequest, headers) {
+function determineResponseType (hasFileExtension, headers) {
   let responseType;
-  if (isServeRequest) {
-    responseType = SERVE;
-    if (clientAcceptsHtml(headers)) {  // this is in case a serve request comes from a browser
-      responseType = SHOWLITE;
+  if (hasFileExtension) {
+    responseType = SERVE;  // assume a serve request if file extension is present
+    if (clientAcceptsHtml(headers)) {  // if the request comes from a browser, change it to a show request
+      responseType = SHOW;
     }
   } else {
     responseType = SHOW;
     if (clientWantsAsset(headers) && requestIsFromBrowser(headers)) {  // this is in case someone embeds a show url
-      logger.debug('Show request came from browser and wants an image/video; changing response to serve.');
+      logger.debug('Show request came from browser but wants an image/video. Changing response to serve...');
       responseType = SERVE;
     }
   }
   return responseType;
 }
-
-// function showAssetToClient (claimId, name, res) {
-//   return Promise
-//       .all([db.Claim.resolveClaim(name, claimId), db.Claim.getShortClaimIdFromLongClaimId(claimId, name)])
-//       .then(([claimInfo, shortClaimId]) => {
-//         // logger.debug('claimInfo:', claimInfo);
-//         // logger.debug('shortClaimId:', shortClaimId);
-//         return serveHelpers.showFile(claimInfo, shortClaimId, res);
-//       })
-//       .catch(error => {
-//         throw error;
-//       });
-// }
-//
-// function showLiteAssetToClient (claimId, name, res) {
-//   return Promise
-//       .all([db.Claim.resolveClaim(name, claimId), db.Claim.getShortClaimIdFromLongClaimId(claimId, name)])
-//       .then(([claimInfo, shortClaimId]) => {
-//         // logger.debug('claimInfo:', claimInfo);
-//         // logger.debug('shortClaimId:', shortClaimId);
-//         return serveHelpers.showFileLite(claimInfo, shortClaimId, res);
-//       })
-//       .catch(error => {
-//         throw error;
-//       });
-// }
 
 function serveAssetToClient (claimId, name, res) {
   return getLocalFileRecord(claimId, name)
@@ -115,82 +86,87 @@ function logRequestData (responseType, claimName, channelName, claimId) {
 
 module.exports = (app) => {
   // route to serve a specific asset using the channel or claim id
-  app.get('/:identifier/:name', ({ headers, ip, originalUrl, params }, res) => {
-    let isChannel, channelName, channelClaimId, claimId, claimName, isServeRequest;
+  app.get('/:identifier/:claim', ({ headers, ip, originalUrl, params }, res) => {
+    // decide if this is a show request
+    let hasFileExtension;
+    try {
+      ({ hasFileExtension } = lbryUri.parseModifier(params.claim));
+    } catch (error) {
+      return res.status(200).json({success: false, message: error.message});
+    }
+    let responseType = determineResponseType(hasFileExtension, headers);
+    if (responseType !== SERVE) {
+      return res.status(200).render('index');
+    }
+    // parse the claim
+    let claimName;
+    try {
+      ({ claimName } = lbryUri.parseClaim(params.claim));
+    } catch (error) {
+      return res.status(200).json({success: false, message: error.message});
+    }
+    // parse the identifier
+    let isChannel, channelName, channelClaimId, claimId;
     try {
       ({ isChannel, channelName, channelClaimId, claimId } = lbryUri.parseIdentifier(params.identifier));
-      ({ claimName, isServeRequest } = lbryUri.parseName(params.name));
     } catch (error) {
       return handleRequestError(originalUrl, ip, error, res);
     }
     if (!isChannel) {
       [claimId, claimName] = flipClaimNameAndIdForBackwardsCompatibility(claimId, claimName);
     }
-    let responseType = determineResponseType(isServeRequest, headers);
     // log the request data for debugging
     logRequestData(responseType, claimName, channelName, claimId);
-    // if a serve request, serve, otherwise send the react app
-    if (responseType === SERVE) {
-      // get the claim Id and then serve/show the asset
-      getClaimId(channelName, channelClaimId, claimName, claimId)
-        .then(fullClaimId => {
-          if (fullClaimId === NO_CLAIM) {
-            return res.status(200).json({success: false, message: 'no claim id could be found'});
-          } else if (fullClaimId === NO_CHANNEL) {
-            return res.status(200).json({success: false, message: 'no channel id could be found'});
-          }
-          serveAssetToClient(fullClaimId, claimName, res);
-          // postToStats(responseType, originalUrl, ip, claimName, fullClaimId, 'success');
-        })
-        .catch(error => {
-          handleRequestError(originalUrl, ip, error, res);
-          // postToStats(responseType, originalUrl, ip, claimName, fullClaimId, 'fail');
-        });
-    } else {
-      res.status(200).render('index');
-    }
+    // get the claim Id and then serve the asset
+    getClaimId(channelName, channelClaimId, claimName, claimId)
+      .then(fullClaimId => {
+        if (fullClaimId === NO_CLAIM) {
+          return res.status(200).json({success: false, message: 'no claim id could be found'});
+        } else if (fullClaimId === NO_CHANNEL) {
+          return res.status(200).json({success: false, message: 'no channel id could be found'});
+        }
+        serveAssetToClient(fullClaimId, claimName, res);
+        // postToStats(responseType, originalUrl, ip, claimName, fullClaimId, 'success');
+      })
+      .catch(error => {
+        handleRequestError(originalUrl, ip, error, res);
+        // postToStats(responseType, originalUrl, ip, claimName, fullClaimId, 'fail');
+      });
   });
   // route to serve the winning asset at a claim or a channel page
-  app.get('/:identifier', ({ headers, ip, originalUrl, params, query }, res) => {
-    let isChannel, channelName, channelClaimId;
+  app.get('/:claim', ({ headers, ip, originalUrl, params, query }, res) => {
+    // decide if this is a show request
+    let hasFileExtension;
     try {
-      ({ isChannel, channelName, channelClaimId } = lbryUri.parseIdentifier(params.identifier));
-      // log the result
-      logger.debug(`isChannel: ${isChannel}, channelName: ${channelName}, channelClaimId: ${channelClaimId}`);
+      ({ hasFileExtension } = lbryUri.parseModifier(params.claim));
     } catch (error) {
-      return handleRequestError(originalUrl, ip, error, res);
+      return res.status(200).json({success: false, message: error.message});
     }
-    if (isChannel) {
-      // handle showing the channel page
+    let responseType = determineResponseType(hasFileExtension, headers);
+    if (responseType !== SERVE) {
       return res.status(200).render('index');
-    } else {
-      let claimName, isServeRequest;
-      try {
-        ({claimName, isServeRequest} = lbryUri.parseName(params.identifier));
-      } catch (error) {
-        return handleRequestError(originalUrl, ip, error, res);
-      }
-      let responseType = determineResponseType(isServeRequest, headers);
-      // log the request data for debugging
-      logRequestData(responseType, claimName, null, null);
-      // if a serve request, serve, otherwise send the react app
-      if (responseType === SERVE) {
-        // get the claim Id and then serve/show the asset
-        getClaimId(null, null, claimName, null)
-          .then(fullClaimId => {
-            if (fullClaimId === NO_CLAIM) {
-              return res.status(200).render('index');
-            }
-            serveAssetToClient(fullClaimId, claimName, res);
-            // postToStats(responseType, originalUrl, ip, claimName, fullClaimId, 'success');
-          })
-          .catch(error => {
-            handleRequestError(originalUrl, ip, error, res);
-            // postToStats(responseType, originalUrl, ip, claimName, fullClaimId, 'fail');
-          });
-      } else {
-        res.status(200).render('index');
-      }
     }
+    // parse the claim
+    let claimName;
+    try {
+      ({claimName} = lbryUri.parseClaim(params.claim));
+    } catch (error) {
+      return res.status(200).json({success: false, message: error.message});
+    }
+    // log the request data for debugging
+    logRequestData(responseType, claimName, null, null);
+    // get the claim Id and then serve the asset
+    getClaimId(null, null, claimName, null)
+      .then(fullClaimId => {
+        if (fullClaimId === NO_CLAIM) {
+          return res.status(200).render('index');
+        }
+        serveAssetToClient(fullClaimId, claimName, res);
+        // postToStats(responseType, originalUrl, ip, claimName, fullClaimId, 'success');
+      })
+      .catch(error => {
+        handleRequestError(originalUrl, ip, error, res);
+        // postToStats(responseType, originalUrl, ip, claimName, fullClaimId, 'fail');
+      });
   });
 };
