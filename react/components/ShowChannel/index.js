@@ -1,49 +1,34 @@
 import React from 'react';
 import NavBar from 'containers/NavBar';
-import AssetPreview from 'components/AssetPreview';
+import ChannelClaimsDisplay from 'components/ChannelClaimsDisplay';
 import request from 'utils/request';
 
 class ShowChannel extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
-      error              : null,
-      channelName        : null,
-      claims             : null,
-      currentPage        : null,
-      longChannelClaimId : null,
-      nextPage           : null,
-      previousPage       : null,
-      shortChannelClaimId: null,
-      totalPages         : null,
-      totalResults       : null,
+      error: null,
     };
-    this.updateChannelData = this.updateChannelData.bind(this);
+    this.getAndStoreChannelData = this.getAndStoreChannelData.bind(this);
   }
   componentDidMount () {
-    this.updateChannelData(1);
-  }
-  updateChannelData (page) {
     const channelName = this.props.channelName;
     const channelClaimId = this.props.channelClaimId || 'none';
-    const url = `/api/channel-get-content/${channelName}/${channelClaimId}/${page}`;
+    this.getAndStoreChannelData(channelName, channelClaimId);
+  }
+  getAndStoreChannelData (channelName, channelClaimId) {
+    const url = `/api/channel-data/${channelName}/${channelClaimId}`;
     const that = this;
     return request(url)
       .then(({ success, message, data }) => {
-        console.log('get channel data response:', data);
+        console.log('api/channel-data response:', data);
         if (!success) {
           return that.setState({error: message});
         }
         that.setState({
           channelName        : data.channelName,
-          claims             : data.claims,
-          currentPage        : data.currentPage,
           longChannelClaimId : data.longChannelClaimId,
-          nextPage           : data.nextPage,
-          previousPage       : data.previousPage,
           shortChannelClaimId: data.shortChannelClaimId,
-          totalPages         : data.totalPages,
-          totalResults       : data.totalResults,
         });
       })
       .catch((error) => {
@@ -66,18 +51,14 @@ class ShowChannel extends React.Component {
               <h2>channel name: {this.props.channelName}</h2>
               <p>full channel id: {this.state.longChannelClaimId ? this.state.longChannelClaimId : 'loading...'}</p>
               <p>short channel id: {this.state.shortChannelClaimId ? this.state.shortChannelClaimId : 'loading...'}</p>
-              <p># of claims in channel: {this.state.totalResults >= 0 ? this.state.totalResults : 'loading...' }</p>
             </div>
             <div className="column column--10">
-              <div>
-                {/* claims here */}
-                {this.state.claims && this.state.claims.map((claim, index) => <AssetPreview
-                  name={claim.name}
-                  claimId={claim.claimId}
-                  contentType={claim.contentType}
-                  key={index}
-                />)}
-              </div>
+              { (this.state.channelName && this.state.longChannelClaimId) &&
+                <ChannelClaimsDisplay
+                  channelName={this.state.channelName}
+                  channelClaimId={this.state.longChannelClaimId}
+                />
+              }
             </div>
           </div>
         )}

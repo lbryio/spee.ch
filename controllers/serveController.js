@@ -1,6 +1,6 @@
 const db = require('../models');
 const logger = require('winston');
-const { returnPaginatedChannelViewData } = require('../helpers/channelPagination.js');
+const { returnPaginatedChannelClaims } = require('../helpers/channelPagination.js');
 
 const NO_CHANNEL = 'NO_CHANNEL';
 const NO_CLAIM = 'NO_CLAIM';
@@ -53,7 +53,7 @@ module.exports = {
         });
     });
   },
-  getChannelViewData (channelName, channelClaimId, page) {
+  getChannelData (channelName, channelClaimId, page) {
     return new Promise((resolve, reject) => {
       // 1. get the long channel Id (make sure channel exists)
       db.Certificate.getLongChannelId(channelName, channelClaimId)
@@ -62,14 +62,41 @@ module.exports = {
             return [null, null, null];
           }
           // 2. get the short ID and all claims for that channel
-          return Promise.all([longChannelClaimId, db.Certificate.getShortChannelIdFromLongChannelId(longChannelClaimId, channelName), db.Claim.getAllChannelClaims(longChannelClaimId)]);
+          return Promise.all([longChannelClaimId, db.Certificate.getShortChannelIdFromLongChannelId(longChannelClaimId, channelName)]);
         })
-        .then(([longChannelClaimId, shortChannelClaimId, channelClaimsArray]) => {
+        .then(([longChannelClaimId, shortChannelClaimId]) => {
+          if (!longChannelClaimId) {
+            return resolve(NO_CHANNEL);
+          }
+          // 3. return all the channel information
+          resolve({
+            channelName,
+            longChannelClaimId,
+            shortChannelClaimId,
+          });
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  },
+  getChannelClaims (channelName, channelClaimId, page) {
+    return new Promise((resolve, reject) => {
+      // 1. get the long channel Id (make sure channel exists)
+      db.Certificate.getLongChannelId(channelName, channelClaimId)
+        .then(longChannelClaimId => {
+          if (!longChannelClaimId) {
+            return [null, null, null];
+          }
+          // 2. get the short ID and all claims for that channel
+          return Promise.all([longChannelClaimId, db.Claim.getAllChannelClaims(longChannelClaimId)]);
+        })
+        .then(([longChannelClaimId, channelClaimsArray]) => {
           if (!longChannelClaimId) {
             return resolve(NO_CHANNEL);
           }
           // 3. format the data for the view, including pagination
-          let paginatedChannelViewData = returnPaginatedChannelViewData(channelName, longChannelClaimId, shortChannelClaimId, channelClaimsArray, page);
+          let paginatedChannelViewData = returnPaginatedChannelClaims(channelName, longChannelClaimId, channelClaimsArray, page);
           // 4. return all the channel information and contents
           resolve(paginatedChannelViewData);
         })

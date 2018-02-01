@@ -9,7 +9,7 @@ const { createPublishParams, parsePublishApiRequestBody, parsePublishApiRequestF
 const errorHandlers = require('../helpers/errorHandlers.js');
 const { sendGoogleAnalyticsTiming } = require('../helpers/statsHelpers.js');
 const { authenticateIfNoUserToken } = require('../auth/authentication.js');
-const { getChannelViewData, getClaimId } = require('../controllers/serveController.js');
+const { getChannelData, getChannelClaims, getClaimId } = require('../controllers/serveController.js');
 
 const NO_CHANNEL = 'NO_CHANNEL';
 const NO_CLAIM = 'NO_CLAIM';
@@ -189,12 +189,28 @@ module.exports = (app) => {
         errorHandlers.handleApiError(originalUrl, ip, error, res);
       });
   });
-  app.get('/api/channel-get-content/:name/:longId/:page', ({ ip, originalUrl, body, params }, res) => {
-    const channelName = params.name;
-    let channelClaimId = params.longId;
+  app.get('/api/channel-data/:channelName/:channelClaimId', ({ ip, originalUrl, body, params }, res) => {
+    const channelName = params.channelName;
+    let channelClaimId = params.channelClaimId;
+    if (channelClaimId === 'none') channelClaimId = null;
+    getChannelData(channelName, channelClaimId, 0) // getChannelViewData(channelName, channelId, 0)
+      .then(data => {
+        if (data === NO_CHANNEL) {
+          return res.status(200).json({success: false, message: 'No matching channel was found'});
+        }
+        res.status(200).json({success: true, data});
+      })
+      .catch(error => {
+        logger.error('api error getting channel contents', error);
+        errorHandlers.handleApiError(originalUrl, ip, error, res);
+      });
+  });
+  app.get('/api/channel-claims/:channelName/:channelClaimId/:page', ({ ip, originalUrl, body, params }, res) => {
+    const channelName = params.channelName;
+    let channelClaimId = params.channelClaimId;
     if (channelClaimId === 'none') channelClaimId = null;
     const page = params.page;
-    getChannelViewData(channelName, channelClaimId, page)
+    getChannelClaims(channelName, channelClaimId, page)// getChannelViewData(channelName, channelClaimId, page)
       .then(data => {
         if (data === NO_CHANNEL) {
           return res.status(200).json({success: false, message: 'No matching channel was found'});
