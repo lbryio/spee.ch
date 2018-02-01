@@ -4,17 +4,11 @@ import ShowAsset from 'components/ShowAsset';
 import ShowChannel from 'components/ShowChannel';
 import lbryUri from 'utils/lbryUri';
 
-const CHANNEL = 'CHANNEL';
-const ASSET = 'ASSET';
-
 class ShowPage extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
-      error         : null,
-      identifier    : null,
-      claim         : null,
-      isServeRequest: null,
+      error: null,
     };
     this.parseUrlAndUpdateState = this.parseUrlAndUpdateState.bind(this);
     this.parseAndUpdateIdentifierAndClaim = this.parseAndUpdateIdentifierAndClaim.bind(this);
@@ -40,31 +34,36 @@ class ShowPage extends React.Component {
     }
     this.parseAndUpdateClaimOnly(claim);
   }
-  parseAndUpdateIdentifierAndClaim (identifier, claim) {
+  parseAndUpdateIdentifierAndClaim (modifier, claim) {
     // handle case of identifier and claim
     // this is a request for an asset
     // claim will be an asset claim
     // the identifier could be a channel or a claim id
-    let isChannel, channelName, channelClaimId, claimId, claimName, isServeRequest;
+    let isChannel, channelName, channelClaimId, claimId, claimName, extension;
     try {
-      ({ isChannel, channelName, channelClaimId, claimId } = lbryUri.parseIdentifier(identifier));
-      ({ claimName, isServeRequest } = lbryUri.parseClaim(claim));
+      ({ isChannel, channelName, channelClaimId, claimId } = lbryUri.parseIdentifier(modifier));
+      ({ claimName, extension } = lbryUri.parseClaim(claim));
     } catch (error) {
       return this.setState({error: error.message});
     }
-    // set state
-    return this.setState({
-      identifier: {
-        isChannel,
-        channelName,
-        channelClaimId,
-        claimId,
+    // update the store
+    let requestedClaim = {
+      name    : claimName,
+      modifier: {
+        id     : null,
+        channel: null,
       },
-      claim: {
-        claimName,
-      },
-      isServeRequest,
-    });
+      extension,
+    };
+    if (isChannel) {
+      requestedClaim['modifier']['channel'] = {
+        name: channelName,
+        id  : channelClaimId,
+      };
+    } else {
+      requestedClaim['modifier']['id'] = claimId;
+    }
+    return this.props.onClaimRequest(requestedClaim);
   }
   parseAndUpdateClaimOnly (claim) {
     // handle case of just claim
@@ -76,27 +75,27 @@ class ShowPage extends React.Component {
     } catch (error) {
       return this.setState({error: error.message});
     }
+    // return early if this request is for a channel
     if (isChannel) {
-      return this.setState({
-        claim: {
-          isChannel,
-          channelName,
-          channelClaimId,
-        },
-      });
+      const requestedChannel = {
+        name: channelName,
+        id  : channelClaimId,
+      }
+      return this.props.onChannelRequest(requestedChannel);
     }
-    let claimName, isServeRequest;
+    // if not for a channel, parse the claim request
+    let claimName, extension;  // if I am destructuring below, do I still need to declare these here?
     try {
-      ({claimName, isServeRequest} = lbryUri.parseClaim(claim));
+      ({claimName, extension} = lbryUri.parseClaim(claim));
     } catch (error) {
       return this.setState({error: error.message});
     }
-    this.setState({
-      claim: {
-        claimName,
-      },
-      isServeRequest,
-    });
+    const requestedClaim = {
+      name    : claimName,
+      modifier: null,
+      extension,
+    }
+    this.props.onClaimRequest(requestedClaim);
   }
   render () {
     console.log('rendering ShowPage');
@@ -127,5 +126,9 @@ class ShowPage extends React.Component {
     );
   }
 };
+
+// props
+// channel
+// show
 
 export default ShowPage;

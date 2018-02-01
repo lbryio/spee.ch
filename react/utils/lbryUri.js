@@ -49,20 +49,20 @@ module.exports = {
     return {
       isChannel,
       channelName,
-      channelClaimId,
-      claimId,
+      channelClaimId: channelClaimId || null,
+      claimId       : claimId || null,
     };
   },
   parseClaim: function (name) {
     console.log('parsing name:', name);
     const componentsRegex = new RegExp(
-      '([^:$#/.]*)' + // name (stops at the first modifier)
-      '([:$#.]?)([^/]*)' // modifier separator, modifier (stops at the first path separator or end)
+      '([^:$#/.]*)' + // name (stops at the first extension)
+      '([:$#.]?)([^/]*)' // extension separator, extension (stops at the first path separator or end)
     );
-    const [proto, claimName, modifierSeperator, modifier] = componentsRegex
+    const [proto, claimName, extensionSeperator, extension] = componentsRegex
       .exec(name)
       .map(match => match || null);
-    console.log(`${proto}, ${claimName}, ${modifierSeperator}, ${modifier}`);
+    console.log(`${proto}, ${claimName}, ${extensionSeperator}, ${extension}`);
 
     // Validate and process name
     if (!claimName) {
@@ -72,20 +72,18 @@ module.exports = {
     if (nameBadChars) {
       throw new Error(`Check your URL.  Invalid characters in claim name: "${nameBadChars.join(', ')}".`);
     }
-    // Validate and process modifier
-    let isServeRequest = false;
-    if (modifierSeperator) {
-      if (!modifier) {
-        throw new Error(`Check your URL.  No file extension provided after separator "${modifierSeperator}".`);
+    // Validate and process extension
+    if (extensionSeperator) {
+      if (!extension) {
+        throw new Error(`Check your URL.  No file extension provided after separator "${extensionSeperator}".`);
       }
-      if (modifierSeperator !== '.') {
-        throw new Error(`Check your URL.  The "${modifierSeperator}" modifier is not supported in the claim name.`);
+      if (extensionSeperator !== '.') {
+        throw new Error(`Check your URL.  The "${extensionSeperator}" separator is not supported in the claim name.`);
       }
-      isServeRequest = true;
     }
     return {
       claimName,
-      isServeRequest,
+      extension: extension || null,
     };
   },
 };

@@ -1,41 +1,31 @@
 import React from 'react';
 import ProgressBar from 'components/ProgressBar';
 import Request from 'utils/request';
-
-const LOCAL_CHECK = 'LOCAL_CHECK';
-const SEARCHING = 'SEARCHING';
-const UNAVAILABLE = 'UNAVAILABLE';
-const AVAILABLE = 'AVAILABLE';
+import { LOCAL_CHECK, SEARCHING, UNAVAILABLE, AVAILABLE } from 'constants/asset_display_states';
+import PropTypes from 'prop-types';
 
 class AssetDisplay extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
-      error      : null,
-      status     : LOCAL_CHECK,
-      thumbnail  : this.props.thumbnail,
-      src        : `/${this.props.claimId}}/${this.props.name}.${this.props.fileExt}`,
-      name       : this.props.name,
-      claimId    : this.props.claimId,
-      fileExt    : this.props.fileExt,
-      contentType: this.props.contentType,
+      error : null,
+      status: LOCAL_CHECK,
     };
-    this.checkIfLocalFileAvailable = this.checkIfLocalFileAvailable.bind(this);
-    this.triggerGetAssetOnSpeech = this.triggerGetAssetOnSpeech.bind(this);
+    this.isLocalFileAvailableOnServer = this.isLocalFileAvailableOnServer.bind(this);
+    this.triggerGetAssetOnServer = this.triggerGetAssetOnServer.bind(this);
   }
   componentDidMount () {
     const that = this;
-    this.checkIfLocalFileAvailable()
+    this.isLocalFileAvailableOnServer()
       .then(isAvailable => {
         if (!isAvailable) {
           console.log('file is not yet available');
           that.setState({status: SEARCHING});
-          return that.triggerGetAssetOnSpeech();
+          return that.triggerGetAssetOnServer();
         }
       })
       .then(() => {
         that.setState({status: AVAILABLE});
-        that.addPlayPauseToVideoToBody();
       })
       .catch(error => {
         that.setState({
@@ -44,7 +34,7 @@ class AssetDisplay extends React.Component {
         });
       });
   }
-  checkIfLocalFileAvailable () {
+  isLocalFileAvailableOnServer () {
     console.log(`checking if file is available for ${this.props.name}#${this.props.claimId}`);
     const url = `/api/file-is-available/${this.props.name}/${this.props.claimId}`;
     return new Promise((resolve, reject) => {
@@ -58,8 +48,8 @@ class AssetDisplay extends React.Component {
         });
     });
   }
-  triggerGetAssetOnSpeech () {
-    console.log(`getting claim for ${this.props.name}#${this.props.claimId}`)
+  triggerGetAssetOnServer () {
+    console.log(`getting claim for ${this.props.name}#${this.props.claimId}`);
     const url = `/api/claim-get/${this.props.name}/${this.props.claimId}`;
     return new Promise((resolve, reject) => {
       Request(url)
@@ -71,29 +61,6 @@ class AssetDisplay extends React.Component {
           reject(error);
         });
     });
-  }
-  addPlayPauseToVideoToBody () {
-    const that = this;
-    const video = document.getElementById('video');
-    if (video) {
-      // add event listener for click
-      video.addEventListener('click', () => {
-        that.playOrPause(video);
-      });
-      // add event listener for space bar
-      document.body.onkeyup = (event) => {
-        if (event.keyCode === 32) {
-          that.playOrPause(video);
-        }
-      };
-    }
-  }
-  playOrPause (video) {
-    if (video.paused === true) {
-      video.play();
-    } else {
-      video.pause();
-    }
   }
   render () {
     return (
@@ -113,27 +80,27 @@ class AssetDisplay extends React.Component {
         }
         {(this.state.status === AVAILABLE) &&
           (() => {
-            switch (this.state.contentType) {
+            switch (this.props.contentType) {
               case 'image/jpeg':
               case 'image/jpg':
               case 'image/png':
                 return (
-                  <img className="asset" src={this.state.src} alt={this.state.name}/>
+                  <img className="asset" src={this.props.src} alt={this.props.name}/>
                 );
               case 'image/gif':
                 return (
-                  <img className="asset" src={this.state.src} alt={this.state.name}/>
+                  <img className="asset" src={this.props.src} alt={this.props.name}/>
                 );
               case 'video/mp4':
                 return (
-                  <video id="video" className="asset" controls poster={this.state.thumbnail}>
-                    <source src={this.state.src}/>
+                  <video id="video" className="asset" controls poster={this.props.thumbnail}>
+                    <source src={this.props.src}/>
                     <p>Your browser does not support the <code>video</code> element.</p>
                   </video>
                 );
               default:
                 return (
-                  <p>unsupported file type</p>
+                  <p>Unsupported file type</p>
                 );
             }
           })()
@@ -143,11 +110,13 @@ class AssetDisplay extends React.Component {
   }
 };
 
-// required props
-// name
-// claimId
-// thumbnail
-// contentType
-// file extension
+AssetDisplay.propTypes = {
+  name       : PropTypes.string.isRequired,
+  claimId    : PropTypes.string.isRequired,
+  src        : PropTypes.string.isRequired,
+  contentType: PropTypes.string.isRequired,
+  fileExt    : PropTypes.string.isRequired,
+  thumbnail  : PropTypes.string.isRequired,
+};
 
 export default AssetDisplay;

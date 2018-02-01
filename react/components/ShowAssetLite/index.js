@@ -12,8 +12,12 @@ class ShowLite extends React.Component {
         {this.props.claimData &&
         <div>
           <AssetDisplay
-              claimName={this.props.claimData.name}
-              claimId={this.props.claimData.claimId}
+            name={this.props.claimData.name}
+            claimId={this.props.claimData.claimId}
+            src={`/${this.props.claimId}/${this.props.name}.${this.props.fileExt}`}
+            contentType={this.props.claimData.contentType}
+            fileExt={this.props.claimData.fileExt}
+            thumbnail={this.props.claimData.thumbnail}
             />
           <Link id="asset-boilerpate" className="link--primary fine-print" to={`/${this.props.claimData.claimId}/${this.props.claimData.name}`}>hosted via Spee.ch</Link>
         </div>
