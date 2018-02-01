@@ -1,5 +1,4 @@
 import React from 'react';
-import NavBar from 'containers/NavBar';
 import AssetPreview from 'components/AssetPreview';
 import request from 'utils/request';
 
