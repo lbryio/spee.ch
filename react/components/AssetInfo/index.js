@@ -3,23 +3,17 @@ import React from 'react';
 class AssetInfo extends React.Component {
   constructor (props) {
     super(props);
-    this.toggleSection = this.toggleSection.bind(this);
+    this.state = {
+      showDetails: false,
+    }
+    this.toggleDetails = this.toggleDetails.bind(this);
     this.copyToClipboard = this.copyToClipboard.bind(this);
   }
-  toggleSection (event) {
-    var dataSet = event.target.dataset;
-    var status = dataSet.status;
-    var toggle = document.getElementById('show-details-toggle');
-    var details = document.getElementById('show-details');
-    if (status === 'closed') {
-      details.hidden = false;
-      toggle.innerText = '[less]';
-      toggle.dataset.status = 'open';
-    } else {
-      details.hidden = true;
-      toggle.innerText = '[more]';
-      toggle.dataset.status = 'closed';
+  toggleDetails () {
+    if (this.state.showDetails) {
+      return this.setState({showDetails: false});
     }
+    this.setState({showDetails: true});
   }
   copyToClipboard (event) {
     var elementToCopy = event.target.dataset.elementtocopy;
@@ -126,41 +120,40 @@ class AssetInfo extends React.Component {
           </div>
         </div>
 
-        <div id="show-details" className="row--padded row--wide row--no-top" hidden="true">
-          <div id="show-claim-name">
-            <div className="column column--2 column--med-10">
-              <span className="text">Claim Name:</span>
+        { this.state.showDetails &&
+          <div>
+            <div className="row--padded row--wide row--no-top">
+              <div>
+                <div className="column column--2 column--med-10">
+                  <span className="text">Claim Name:</span>
+                </div><div className="column column--8 column--med-10">
+                  {this.props.name}
+                </div>
+              </div>
+              <div>
+                <div className="column column--2 column--med-10">
+                  <span className="text">Claim Id:</span>
+                </div><div className="column column--8 column--med-10">
+                  {this.props.claimId}
+                </div>
+              </div>
+              <div>
+                <div className="column column--2 column--med-10">
+                  <span className="text">File Type:</span>
+                </div><div className="column column--8 column--med-10">
+                  {this.props.contentType ? `${this.props.contentType}` : 'unknown'}
+                </div>
+              </div>
             </div>
-            <div className="column column--8 column--med-10">
-              {this.props.name}
+            <div className="row--padded row--wide row--no-top">
+              <div className="column column--10">
+                <a target="_blank" href="https://lbry.io/dmca">Report</a>
+              </div>
             </div>
           </div>
-          <div id="show-claim-id">
-            <div className="column column--2 column--med-10">
-              <span className="text">Claim Id:</span>
-            </div>
-            <div className="column column--8 column--med-10">
-              {this.props.claimId}
-            </div>
-          </div>
-          <div id="show-claim-id">
-            <div className="column column--2 column--med-10">
-              <span className="text">File Type:</span>
-            </div>
-            <div className="column column--8 column--med-10">
-              {this.props.contentType ? `${this.props.contentType}` : 'unknown'}
-            </div>
-          </div>
-          <div id="show-claim-id">
-            <div className="column column--10">
-              <a target="_blank" href="https://lbry.io/dmca">Report</a>
-            </div>
-          </div>
-        </div>
-
+        }
         <div className="row row--wide">
-          <a className="text link--primary" id="show-details-toggle" href="#" onClick={this.toggleSection}
-             data-status="closed">[more]</a>
+          <a className="text link--primary" id="show-details-toggle" href="#" onClick={this.toggleDetails}>{this.state.showDetails ? '[less]' : '[more]'}</a>
         </div>
       </div>
     );

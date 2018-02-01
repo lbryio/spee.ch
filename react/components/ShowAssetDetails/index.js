@@ -27,6 +27,9 @@ class ShowDetails extends React.Component {
                 <AssetDisplay
                 name={this.props.claimData.name}
                 claimId={this.props.claimData.claimId}
+                thumbnail={this.props.claimData.thumbnail}
+                contentType={this.props.claimData.contentType}
+                fileExt={this.props.claimData.fileExt}
                 />
               </div>
             </div><div className="column column--5 column--sml-10 align-content-top">

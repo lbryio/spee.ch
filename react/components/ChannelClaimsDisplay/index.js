@@ -50,7 +50,6 @@ class ChannelClaimsDisplay extends React.Component {
           </div>
         ) : (
           <div className="row row--tall">
-            <p># of claims in channel: {this.state.totalResults >= 0 ? this.state.totalResults : 'loading...' }</p>
             {this.state.claims && this.state.claims.map((claim, index) => <AssetPreview
               name={claim.name}
               claimId={claim.claimId}
