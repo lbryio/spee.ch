@@ -1,18 +1,21 @@
 import React from 'react';
 import NavBar from 'containers/NavBar';
-import ChannelClaimsDisplay from 'containers/ChannelClaimsDisplay';
+import ChannelClaimsDisplay from 'components/ChannelClaimsDisplay';
 import request from 'utils/request';
 
 class ShowChannel extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
-      error: null,
+      error  : null,
+      name   : null,
+      shortId: null,
+      longId : null,
     };
     this.getAndStoreChannelData = this.getAndStoreChannelData.bind(this);
   }
   componentDidMount () {
-    this.getAndStoreChannelData(this.props.request.name, this.props.request.id);
+    this.getAndStoreChannelData(this.props.requestName, this.props.requestId);
   }
   getAndStoreChannelData (name, id) {
     if (!id) id = 'none';
@@ -24,7 +27,11 @@ class ShowChannel extends React.Component {
         if (!success) {
           return that.setState({error: message});
         }
-        this.props.onChannelDataChange(data.channelName, data.longChannelClaimId, data.shortChannelClaimId);
+        this.setState({
+          name   : data.channelName,
+          longId : data.longChannelClaimId,
+          shortId: data.shortChannelClaimId,
+        });
       })
       .catch((error) => {
         that.setState({error: error.message});
@@ -43,12 +50,17 @@ class ShowChannel extends React.Component {
         ) : (
           <div className="row row--tall row--padded">
             <div className="column column--10">
-              <h2>channel name: {this.props.channel.name}</h2>
-              <p>full channel id: {this.props.channel.longId ? this.props.channel.longId : 'loading...'}</p>
-              <p>short channel id: {this.props.channel.shortId ? this.props.channel.shortId : 'loading...'}</p>
+              <h2>channel name: {this.state.name ? this.state.name : 'loading...'}</h2>
+              <p>full channel id: {this.state.longId ? this.state.longId : 'loading...'}</p>
+              <p>short channel id: {this.state.shortId ? this.state.shortId : 'loading...'}</p>
             </div>
             <div className="column column--10">
-              {this.props.channel.name && <ChannelClaimsDisplay/>}
+              {(this.state.name && this.state.longId) &&
+              <ChannelClaimsDisplay
+                name={this.state.name}
+                longId={this.state.longId}
+              />
+              }
             </div>
           </div>
         )}

@@ -18,18 +18,6 @@ const initialState = {
     },
     extension: null,
   },
-  channelData: {
-    name   : null,
-    shortId: null,
-    longId : null,
-  },
-  channelClaimsData: {
-    claims     : null,
-    currentPage: 1,
-    totalPages : null,
-    totalClaims: null,
-  },
-  assetData: null,
 };
 
 /*
@@ -60,27 +48,6 @@ export default function (state = initialState, action) {
           },
           extension: action.extension,
         },
-      });
-    case actions.CHANNEL_DATA_UPDATE:
-      return Object.assign({}, state, {
-        channelData: Object.assign({}, state.channel, {
-          name   : action.name,
-          shortId: action.shortId,
-          longId : action.longId,
-        }),
-      });
-    case actions.CHANNEL_CLAIMS_DATA_UPDATE:
-      return Object.assign({}, state, {
-        channelClaimsData: {
-          claims     : action.claims,
-          currentPage: action.currentPage,
-          totalPages : action.totalPages,
-          totalClaims: action.totalClaims,
-        },
-      });
-    case actions.ASSET_DATA_UPDATE:
-      return Object.assign({}, state, {
-        assetData: action.data,
       });
     default:
       return state;

@@ -39,9 +39,12 @@ class AssetDisplay extends React.Component {
     const url = `/api/file-is-available/${this.props.name}/${this.props.claimId}`;
     return new Promise((resolve, reject) => {
       Request(url)
-        .then(isAvailable => {
-          console.log('/api/file-is-available response:', isAvailable);
-          resolve(isAvailable);
+        .then(({success, message, data: isAvailable}) => {
+          if (success) {
+            console.log('/api/file-is-available response:', isAvailable);
+            return resolve(isAvailable);
+          }
+          reject(new Error(message));
         })
         .catch(error => {
           reject(error);
@@ -53,9 +56,12 @@ class AssetDisplay extends React.Component {
     const url = `/api/claim-get/${this.props.name}/${this.props.claimId}`;
     return new Promise((resolve, reject) => {
       Request(url)
-        .then(response => {
-          console.log('/api/claim-get response:', response);
-          resolve(true);
+        .then(({success, message}) => {
+          console.log('/api/claim-get response:', success, message);
+          if (success) {
+            return resolve(true);
+          }
+          reject(new Error(message));
         })
         .catch(error => {
           reject(error);
@@ -65,6 +71,11 @@ class AssetDisplay extends React.Component {
   render () {
     return (
       <div id="asset-display-component">
+        {(this.state.status === LOCAL_CHECK) &&
+        <div>
+          <p>Checking to see if Spee.ch has your asset locally...</p>
+        </div>
+        }
         {(this.state.status === SEARCHING) &&
           <div>
             <p>Sit tight, we're searching the LBRY blockchain for your asset!</p>

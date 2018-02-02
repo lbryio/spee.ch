@@ -7,7 +7,8 @@ class ShowAsset extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
-      error: null,
+      error    : null,
+      claimData: null,
     };
     this.getLongClaimId = this.getLongClaimId.bind(this);
     this.getClaimData = this.getClaimData.bind(this);
@@ -42,7 +43,7 @@ class ShowAsset extends React.Component {
         return that.getClaimData(name, claimLongId);
       })
       .then(claimData => {
-        this.props.onAssetDataUpdate(claimData);
+        this.setState({claimData});
       })
       .catch(error => {
         this.setState({error});
@@ -86,14 +87,14 @@ class ShowAsset extends React.Component {
       return (
         <ShowAssetLite
           error={this.state.error}
-          claimData={this.props.claimData}
+          claimData={this.state.claimData}
         />
       );
     }
     return (
       <ShowAssetDetails
         error={this.state.error}
-        claimData={this.props.claimData}
+        claimData={this.state.claimData}
       />
     );
   }

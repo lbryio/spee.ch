@@ -5,25 +5,25 @@ module.exports = {
     let status, message;
     // check for daemon being turned off
     if (error.code === 'ECONNREFUSED') {
-      status = 503;
+      status = 200;
       message = 'Connection refused.  The daemon may not be running.';
-    // check for errors from the daemon
-    } else if (error.response) {
-      status = error.response.status || 500;
-      if (error.response.data) {
-        if (error.response.data.message) {
-          message = error.response.data.message;
-        } else if (error.response.data.error) {
-          message = error.response.data.error.message;
-        } else {
-          message = error.response.data;
-        }
-      } else {
-        message = error.response;
-      }
+    // // check for errors from the daemon
+    // } else if (error.response) {
+    //   status = error.response.status || 500;
+    //   if (error.response.data) {
+    //     if (error.response.data.message) {
+    //       message = error.response.data.message;
+    //     } else if (error.response.data.error) {
+    //       message = error.response.data.error.message;
+    //     } else {
+    //       message = error.response.data;
+    //     }
+    //   } else {
+    //     message = error.response;
+    //   }
     // check for thrown errors
     } else if (error.message) {
-      status = 400;
+      status = 200;
       message = error.message;
     // fallback for everything else
     } else {

@@ -29,13 +29,13 @@ module.exports = (app) => {
   app.get('/api/file-is-available/:name/:claimId', ({ ip, originalUrl, params }, res) => {
     const name = params.name;
     const claimId = params.claimId;
-    let isLocalFileAvailable = false;
+    let isAvailable = false;
     db.File.findOne({where: {name, claimId}})
       .then(result => {
         if (result) {
-          isLocalFileAvailable = true;
+          isAvailable = true;
         }
-        res.status(200).json({status: 'success', message: isLocalFileAvailable});
+        res.status(200).json({success: true, data: isAvailable});
       })
       .catch(error => {
         errorHandlers.handleApiError(originalUrl, ip, error, res);
@@ -61,7 +61,7 @@ module.exports = (app) => {
         return Promise.all([db.upsert(db.File, fileData, {name, claimId}, 'File'), getResult]);
       })
       .then(([ fileRecord, {message, completed} ]) => {
-        res.status(200).json({ status: 'success', message, completed });
+        res.status(200).json({ success: true, message, completed });
       })
       .catch(error => {
         errorHandlers.handleApiError(originalUrl, ip, error, res);
