@@ -1,7 +1,7 @@
 import React from 'react';
 import ErrorPage from 'components/ErrorPage';
 import ShowAsset from 'components/ShowAsset';
-import ShowChannel from 'components/ShowChannel';
+import ShowChannel from 'containers/ShowChannel';
 import lbryUri from 'utils/lbryUri';
 
 class ShowPage extends React.Component {
@@ -35,7 +35,6 @@ class ShowPage extends React.Component {
     this.parseAndUpdateClaimOnly(claim);
   }
   parseAndUpdateIdentifierAndClaim (modifier, claim) {
-    // handle case of identifier and claim
     // this is a request for an asset
     // claim will be an asset claim
     // the identifier could be a channel or a claim id
@@ -66,7 +65,6 @@ class ShowPage extends React.Component {
     return this.props.onClaimRequest(requestedClaim);
   }
   parseAndUpdateClaimOnly (claim) {
-    // handle case of just claim
     // this could be a request for an asset or a channel page
     // claim could be an asset claim or a channel claim
     let isChannel, channelName, channelClaimId;
@@ -104,25 +102,23 @@ class ShowPage extends React.Component {
         <ErrorPage error={this.state.error}/>
       );
     }
-    if (this.state.claim) {
-      if (this.state.claim.isChannel) {
+    if (this.props.request) {
+      if (this.props.request.channel) {
         return (
-          <ShowChannel
-            channelName={this.state.claim.channelName}
-            channelClaimId={this.state.claim.channelClaimId}
+          <ShowChannel />
+        );
+      } else if (this.props.request.claim) {
+        return (
+          <ShowAsset
+            modifier={this.props.request.claim.identifier}
+            claim={this.props.request.claim.name}
+            extension={this.props.request.claim.extension}
           />
         );
       }
-      return (
-        <ShowAsset
-          identifier={this.state.identifier} // this.state.url.identifier
-          claim={this.state.claim} // this.state.url.claim
-          isServeRequest={this.state.isServeRequest} // this.state.url.ending
-        />
-      );
     }
     return (
-      <p>Loading...</p>
+      <p>loading...</p>
     );
   }
 };

@@ -2,71 +2,24 @@ import * as actions from 'constants/show_action_types';
 
 const initialState = {
   request: {
-    channel: {
-      name: null,
-      id  : null,
-    },
-    claim: {
-      name    : null,
-      modifier: {
-        id     : null,
-        channel: {
-          name: null,
-          id  : null,
-        },
-      },
-      extension: null,
+    channel: null,
+    claim  : null,
+  },
+  channel: {
+    name      : null,
+    shortId   : null,
+    longId    : null,
+    claimsData: {
+      claims     : null,
+      currentPage: null,
+      totalPages : null,
+      totalClaims: null,
     },
   },
-  channelData: {
-    channelName : null,
-    claims      : null,
-    currentPage : null,
-    previousPage: null,
-    totalPages  : null,
-    totalResults: null,
-  },
-  claimData: {
-    FileId         : null,
-    address        : null,
-    amount         : null,
-    author         : null,
-    certificateId  : null,
-    channelName    : null,
-    claimId        : null,
-    claimSequence  : null,
-    claimType      : null,
-    contentType    : null,
-    createdAt      : null,
-    decodedClaim   : null,
-    depth          : null,
-    description    : null,
-    effectiveAmount: null,
-    fileExt        : null,
-    hasSignature   : null,
-    height         : null,
-    hex            : null,
-    host           : null,
-    id             : null,
-    language       : null,
-    license        : null,
-    licenseUrl     : null,
-    metadataVersion: null,
-    name           : null,
-    nout           : null,
-    nsfw           : null,
-    outpoint       : null,
-    preview        : null,
-    source         : null,
-    sourceType     : null,
-    sourceVersion  : null,
-    streamVersion  : null,
-    thumbnail      : null,
-    title          : null,
-    txid           : null,
-    updatedAt      : null,
-    validAtHeight  : null,
-    valueVersion   : null,
+  claim: {
+    name: null,
+    id  : null,
+    data: null,
   },
 };
 
@@ -92,11 +45,26 @@ export default function (state = initialState, action) {
       });
     case actions.CHANNEL_DATA_UPDATE:
       return Object.assign({}, state, {
-        channelData: action.channelData,
+        channel: Object.assign({}, state.channel, {
+          name   : action.name,
+          shortId: action.shortId,
+          longId : action.longId,
+        }),
+      });
+    case actions.CHANNEL_CLAIMS_UPDATE:
+      return Object.assign({}, state, {
+        channel: Object.assign({}, state.channel, {
+          claimsData: {
+            claims     : action.claims,
+            currentPage: action.currentPage,
+            totalPages : action.totalPages,
+            totalClaims: action.totalClaims,
+          },
+        }),
       });
     case actions.CLAIM_DATA_UPDATE:
       return Object.assign({}, state, {
-        claimData: action.claimData,
+        displayClaim: action.claimData,
       });
     default:
       return state;

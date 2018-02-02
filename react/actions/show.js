@@ -16,10 +16,22 @@ export function updateChannelRequest (channel) {
   };
 };
 
-export function updateChannelData (channelData) {
+export function updateChannelData (name, longId, shortId) {
   return {
     type: actions.CHANNEL_DATA_UPDATE,
-    channelData,
+    name,
+    longId,
+    shortId,
+  };
+};
+
+export function updateChannelClaimsData (claims, currentPage, totalPages, totalClaims) {
+  return {
+    type: actions.CHANNEL_CLAIMS_UPDATE,
+    claims,
+    currentPage,
+    totalPages,
+    totalClaims,
   };
 };
 

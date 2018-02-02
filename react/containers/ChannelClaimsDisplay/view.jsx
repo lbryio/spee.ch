@@ -1,5 +1,5 @@
 import React from 'react';
-import AssetPreview from 'components/AssetPreview';
+import AssetPreview from 'components/AssetPreview/index';
 import request from 'utils/request';
 
 class ChannelClaimsDisplay extends React.Component {
@@ -12,13 +12,11 @@ class ChannelClaimsDisplay extends React.Component {
     this.getAndStoreChannelClaims = this.getAndStoreChannelClaims.bind(this);
   }
   componentDidMount () {
-    const channelName = this.props.channelName;
-    const channelClaimId = this.props.channelClaimId || 'none';
-    const page = this.state.page;
-    this.getAndStoreChannelClaims(channelName, channelClaimId, page);
+    this.getAndStoreChannelClaims(this.props.name, this.props.id, this.state.page);
   }
-  getAndStoreChannelClaims (channelName, channelClaimId, page) {
-    const url = `/api/channel-claims/${channelName}/${channelClaimId}/${page}`;
+  getAndStoreChannelClaims (name, id, page) {
+    if (!id) id = 'none';
+    const url = `/api/channel-claims/${name}/${id}/${page}`;
     const that = this;
     return request(url)
       .then(({ success, message, data }) => {
@@ -26,14 +24,7 @@ class ChannelClaimsDisplay extends React.Component {
         if (!success) {
           return that.setState({error: message});
         }
-        that.setState({
-          claims      : data.claims,
-          currentPage : data.currentPage,
-          nextPage    : data.nextPage,
-          previousPage: data.previousPage,
-          totalPages  : data.totalPages,
-          totalResults: data.totalResults,
-        });
+        this.props.onClaimsDataChange(data.claims, data.currentPage, data.totalPages, data.totalResults);
       })
       .catch((error) => {
         that.setState({error: error.message});
@@ -50,21 +41,24 @@ class ChannelClaimsDisplay extends React.Component {
           </div>
         ) : (
           <div className="row row--tall">
-            {this.state.claims && this.state.claims.map((claim, index) => <AssetPreview
-              name={claim.name}
-              claimId={claim.claimId}
-              contentType={claim.contentType}
-              key={index}
-            />)}
+            {this.props.claims &&
+            <div>
+              {this.props.claims.map((claim, index) => <AssetPreview
+                name={claim.name}
+                claimId={claim.claimId}
+                contentType={claim.contentType}
+                key={index}
+              />)}
+              <p>current page: {this.props.currentPage}</p>
+              <p>total pages: {this.props.totalPages}</p>
+              <p>total claims: {this.props.totalClaims}</p>
+            </div>
+            }
           </div>
         )}
       </div>
     );
   }
 };
-
-// required props
-// channelName
-// channelClaimId
 
 export default ChannelClaimsDisplay;

@@ -1,6 +1,6 @@
 import React from 'react';
 import NavBar from 'containers/NavBar';
-import ChannelClaimsDisplay from 'components/ChannelClaimsDisplay';
+import ChannelClaimsDisplay from 'containers/ChannelClaimsDisplay';
 import request from 'utils/request';
 
 class ShowChannel extends React.Component {
@@ -12,12 +12,11 @@ class ShowChannel extends React.Component {
     this.getAndStoreChannelData = this.getAndStoreChannelData.bind(this);
   }
   componentDidMount () {
-    const channelName = this.props.channelName;
-    const channelClaimId = this.props.channelClaimId || 'none';
-    this.getAndStoreChannelData(channelName, channelClaimId);
+    this.getAndStoreChannelData(this.props.request.name, this.props.request.id);
   }
-  getAndStoreChannelData (channelName, channelClaimId) {
-    const url = `/api/channel-data/${channelName}/${channelClaimId}`;
+  getAndStoreChannelData (name, id) {
+    if (!id) id = 'none';
+    const url = `/api/channel-data/${name}/${id}`;
     const that = this;
     return request(url)
       .then(({ success, message, data }) => {
@@ -25,11 +24,7 @@ class ShowChannel extends React.Component {
         if (!success) {
           return that.setState({error: message});
         }
-        that.setState({
-          channelName        : data.channelName,
-          longChannelClaimId : data.longChannelClaimId,
-          shortChannelClaimId: data.shortChannelClaimId,
-        });
+        this.props.onChannelDataChange(data.channelName, data.longChannelClaimId, data.shortChannelClaimId);
       })
       .catch((error) => {
         that.setState({error: error.message});
@@ -48,17 +43,12 @@ class ShowChannel extends React.Component {
         ) : (
           <div className="row row--tall row--padded">
             <div className="column column--10">
-              <h2>channel name: {this.props.channelName}</h2>
-              <p>full channel id: {this.state.longChannelClaimId ? this.state.longChannelClaimId : 'loading...'}</p>
-              <p>short channel id: {this.state.shortChannelClaimId ? this.state.shortChannelClaimId : 'loading...'}</p>
+              <h2>channel name: {this.props.channel.name}</h2>
+              <p>full channel id: {this.props.channel.longId ? this.props.channel.longId : 'loading...'}</p>
+              <p>short channel id: {this.props.channel.shortId ? this.props.channel.shortId : 'loading...'}</p>
             </div>
             <div className="column column--10">
-              { (this.state.channelName && this.state.longChannelClaimId) &&
-                <ChannelClaimsDisplay
-                  channelName={this.state.channelName}
-                  channelClaimId={this.state.longChannelClaimId}
-                />
-              }
+              {this.props.channel.name && <ChannelClaimsDisplay/>}
             </div>
           </div>
         )}
@@ -66,10 +56,5 @@ class ShowChannel extends React.Component {
     );
   }
 };
-
-// required props
-// channelName
-// channelClaimId
-
 
 export default ShowChannel;

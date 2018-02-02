@@ -4,8 +4,7 @@ import View from './view';
 
 const mapStateToProps = ({ show }) => {
   return {
-    channel: show.request.channel,
-    claim  : show.request.claim,
+    request: show.request,
   };
 };
 
