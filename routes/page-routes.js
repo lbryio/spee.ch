@@ -1,11 +1,6 @@
 const { site } = require('../config/speechConfig.js');
 
 module.exports = (app) => {
-  // route to log out
-  app.get('/logout', (req, res) => {
-    req.logout();
-    res.redirect('/');
-  });
   // route to display login page
   app.get('/login', (req, res) => {
     res.status(200).render('index');

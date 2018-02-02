@@ -19,25 +19,32 @@ class NavBar extends React.Component {
     this.checkForLoggedInUser();
   }
   checkForLoggedInUser () {
-    const params = {
-      credentials: 'include',
-    }
+    const params = {credentials: 'include'};
     request('/user', params)
-      .then(({success, message}) => {
+      .then(({success, message, data}) => {
         if (success) {
-          this.props.onChannelLogin(message.channelName, message.shortChannelId, message.channelClaimId);
+          this.props.onChannelLogin(data.channelName, data.shortChannelId, data.channelClaimId);
         } else {
-          console.log('user was not logged in');
+          console.log(message);
         }
       })
       .catch(error => {
-        console.log('authenticate user errored:', error);
+        console.log('request encountered an error', error);
       });
   }
   logoutUser () {
-    // send logout request to server
-    window.location.href = '/logout';  // NOTE: replace with a call to the server that does not redirect
-    // this.props.onChannelLogout()
+    const params = {credentials: 'include'};
+    request('/logout', params)
+      .then(({success, message}) => {
+        if (success) {
+          this.props.onChannelLogout();
+        } else {
+          console.log(message);
+        }
+      })
+      .catch(error => {
+        console.log('request encountered an error', error);
+      });
   }
   handleSelection (event) {
     console.log('handling selection', event);
