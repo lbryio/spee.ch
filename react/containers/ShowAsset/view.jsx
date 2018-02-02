@@ -21,11 +21,11 @@ class ShowAsset extends React.Component {
     // create request params
     let body = {};
     if (modifier) {
-      if (modifier.channel) {
+      if (modifier.id) {
+        body['claimId'] = modifier.id;
+      } else {
         body['channelName'] = modifier.channel.name;
         body['channelClaimId'] = modifier.channel.id;
-      } else {
-        body['claimId'] = modifier.id;
       }
     }
     body['claimName'] = name;
