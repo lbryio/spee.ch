@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 
 const AssetPreview = ({ name, claimId, fileExt, contentType }) => {
   const directSourceLink = `${claimId}/${name}.${fileExt}`;
