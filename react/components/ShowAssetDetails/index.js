@@ -27,7 +27,7 @@ class ShowDetails extends React.Component {
                 <AssetDisplay
                 name={this.props.claimData.name}
                 claimId={this.props.claimData.claimId}
-                src={`/${this.props.claimId}/${this.props.name}.${this.props.fileExt}`}
+                src={`/${this.props.claimData.claimId}/${this.props.claimData.name}.${this.props.claimData.fileExt}`}
                 contentType={this.props.claimData.contentType}
                 fileExt={this.props.claimData.fileExt}
                 thumbnail={this.props.claimData.thumbnail}

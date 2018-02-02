@@ -1,14 +1,13 @@
 import React from 'react';
-import ShowAssetLite from 'components/ShowAssetLite';
-import ShowAssetDetails from 'components/ShowAssetDetails';
+import ShowAssetLite from 'components/ShowAssetLite/index';
+import ShowAssetDetails from 'components/ShowAssetDetails/index';
 import request from 'utils/request';
 
 class ShowAsset extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
-      claimData: null,
-      error    : null,
+      error: null,
     };
     this.getLongClaimId = this.getLongClaimId.bind(this);
     this.getClaimData = this.getClaimData.bind(this);
@@ -16,18 +15,19 @@ class ShowAsset extends React.Component {
   componentDidMount () {
     console.log('ShowAsset did mount');
     console.log('ShowAsset props', this.props);
+    const modifier = this.props.request.modifier;
+    const name = this.props.request.claim;
+    // create request params
     let body = {};
-    if (this.props.identifier) {
-      if (this.props.identifier.isChannel) {
-        body['channelName'] = this.props.identifier.channelName;
-        body['channelClaimId'] = this.props.identifier.channelClaimId;
+    if (modifier) {
+      if (modifier.channel) {
+        body['channelName'] = modifier.channel.name;
+        body['channelClaimId'] = modifier.channel.id;
       } else {
-        body['claimId'] = this.props.identifier.claimId;
+        body['claimId'] = modifier.id;
       }
     }
-    if (this.props.claim) {
-      body['claimName'] = this.props.claim.claimName;
-    }
+    body['claimName'] = name;
     const params = {
       method : 'POST',
       headers: new Headers({
@@ -35,13 +35,14 @@ class ShowAsset extends React.Component {
       }),
       body: JSON.stringify(body),
     }
+    // make request
     const that = this;
     this.getLongClaimId(params)
       .then(claimLongId => {
-        return that.getClaimData(this.props.claim.claimName, claimLongId);
+        return that.getClaimData(name, claimLongId);
       })
       .then(claimData => {
-        this.setState({ claimData });
+        this.props.onClaimDataChange(claimData);
       })
       .catch(error => {
         this.setState({error});
@@ -81,26 +82,21 @@ class ShowAsset extends React.Component {
     });
   }
   render () {
-    if (this.props.isServeRequest) {
+    if (this.props.request.extension) {
       return (
         <ShowAssetLite
           error={this.state.error}
-          claimData={this.state.claimData}
+          claimData={this.props.claim}
         />
       );
     }
     return (
       <ShowAssetDetails
         error={this.state.error}
-        claimData={this.state.claimData}
+        claimData={this.props.claim}
       />
     );
   }
 };
-
-// required props
-// identifier
-// claim
-// isServeRequest
 
 export default ShowAsset;

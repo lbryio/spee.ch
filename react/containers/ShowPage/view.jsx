@@ -1,6 +1,6 @@
 import React from 'react';
 import ErrorPage from 'components/ErrorPage';
-import ShowAsset from 'components/ShowAsset';
+import ShowAsset from 'containers/ShowAsset';
 import ShowChannel from 'containers/ShowChannel';
 import lbryUri from 'utils/lbryUri';
 
@@ -109,11 +109,7 @@ class ShowPage extends React.Component {
         );
       } else if (this.props.request.claim) {
         return (
-          <ShowAsset
-            modifier={this.props.request.claim.identifier}
-            claim={this.props.request.claim.name}
-            extension={this.props.request.claim.extension}
-          />
+          <ShowAsset />
         );
       }
     }

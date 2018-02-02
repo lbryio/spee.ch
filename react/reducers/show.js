@@ -16,11 +16,7 @@ const initialState = {
       totalClaims: null,
     },
   },
-  claim: {
-    name: null,
-    id  : null,
-    data: null,
-  },
+  claim: null,
 };
 
 /*
@@ -64,7 +60,7 @@ export default function (state = initialState, action) {
       });
     case actions.CLAIM_DATA_UPDATE:
       return Object.assign({}, state, {
-        displayClaim: action.claimData,
+        claim: action.data,
       });
     default:
       return state;

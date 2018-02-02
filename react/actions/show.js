@@ -35,8 +35,9 @@ export function updateChannelClaimsData (claims, currentPage, totalPages, totalC
   };
 };
 
-export function updateClaimData (claimData) {
+export function updateClaimData (data) {
   return {
-    type: actions.CHANNEL_DATA_UPDATE,
+    type: actions.CLAIM_DATA_UPDATE,
+    data,
   };
 };
