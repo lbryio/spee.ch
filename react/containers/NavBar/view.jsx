@@ -19,7 +19,6 @@ class NavBar extends React.Component {
     this.checkForLoggedInUser();
   }
   checkForLoggedInUser () {
-    // check for whether a channel is already logged in
     const params = {
       credentials: 'include',
     }
@@ -37,7 +36,8 @@ class NavBar extends React.Component {
   }
   logoutUser () {
     // send logout request to server
-    window.location.href = '/logout'; // NOTE: replace with a call to the server
+    window.location.href = '/logout';  // NOTE: replace with a call to the server that does not redirect
+    // this.props.onChannelLogout()
   }
   handleSelection (event) {
     console.log('handling selection', event);
@@ -70,6 +70,7 @@ class NavBar extends React.Component {
               <NavBarChannelDropdown
                 channelName={this.props.channelName}
                 handleSelection={this.handleSelection}
+                defaultSelection={this.props.channelName}
                 VIEW={VIEW}
                 LOGOUT={LOGOUT}
               />

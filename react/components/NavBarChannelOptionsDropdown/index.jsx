@@ -1,8 +1,8 @@
 import React from 'react';
 
-function NavBarChannelOptionsDropdown ({ channelName, handleSelection, VIEW, LOGOUT }) {
+function NavBarChannelDropdown ({ channelName, handleSelection, defaultSelection, VIEW, LOGOUT }) {
   return (
-    <select type="text" id="nav-bar-channel-select" className="select select--arrow link--nav" onChange={handleSelection}>
+    <select type="text" id="nav-bar-channel-select" className="select select--arrow link--nav" onChange={handleSelection} value={defaultSelection}>
       <option id="nav-bar-channel-select-channel-option">{channelName}</option>
       <option value={VIEW}>View</option>
       <option value={LOGOUT}>Logout</option>
@@ -10,4 +10,4 @@ function NavBarChannelOptionsDropdown ({ channelName, handleSelection, VIEW, LOG
   );
 };
 
-export default NavBarChannelOptionsDropdown;
+export default NavBarChannelDropdown;

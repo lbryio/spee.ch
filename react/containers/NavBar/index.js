@@ -17,6 +17,9 @@ const mapDispatchToProps = dispatch => {
       dispatch(updateLoggedInChannel(name, shortId, longId));
       dispatch(updateSelectedChannel(name));
     },
+    onChannelLogout: () => {
+      dispatch(updateLoggedInChannel(null, null, null));
+    },
   };
 };
 
