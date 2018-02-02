@@ -1,4 +1,4 @@
-import React from 'react/index';
+import React from 'react';
 import AssetPreview from 'components/AssetPreview';
 import request from 'utils/request';
 

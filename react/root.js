@@ -5,7 +5,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import PublishPage from 'components/PublishPage';
 import AboutPage from 'components/AboutPage';
-import LoginPage from 'components/LoginPage';
+import LoginPage from 'containers/LoginPage';
 import ShowPage from 'containers/ShowPage';
 
 const Root = ({ store }) => (

@@ -1,6 +1,6 @@
 // load dependencies
 const logger = require('winston');
-const db = require('../models/index'); // require our models for syncing
+const db = require('../models'); // require our models for syncing
 // configure logging
 const config = require('../config/speechConfig.js');
 const { logLevel } = config.logging;
