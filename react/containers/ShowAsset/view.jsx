@@ -1,6 +1,6 @@
 import React from 'react';
-import ShowAssetLite from 'components/ShowAssetLite/index';
-import ShowAssetDetails from 'components/ShowAssetDetails/index';
+import ShowAssetLite from 'components/ShowAssetLite';
+import ShowAssetDetails from 'components/ShowAssetDetails';
 import request from 'utils/request';
 
 class ShowAsset extends React.Component {
@@ -15,8 +15,8 @@ class ShowAsset extends React.Component {
   componentDidMount () {
     console.log('ShowAsset did mount');
     console.log('ShowAsset props', this.props);
-    const modifier = this.props.request.modifier;
-    const name = this.props.request.claim;
+    const modifier = this.props.modifier;
+    const name = this.props.claim;
     // create request params
     let body = {};
     if (modifier) {
@@ -42,7 +42,7 @@ class ShowAsset extends React.Component {
         return that.getClaimData(name, claimLongId);
       })
       .then(claimData => {
-        this.props.onClaimDataChange(claimData);
+        this.props.onAssetDataUpdate(claimData);
       })
       .catch(error => {
         this.setState({error});
@@ -82,18 +82,18 @@ class ShowAsset extends React.Component {
     });
   }
   render () {
-    if (this.props.request.extension) {
+    if (this.props.extension) {
       return (
         <ShowAssetLite
           error={this.state.error}
-          claimData={this.props.claim}
+          claimData={this.props.claimData}
         />
       );
     }
     return (
       <ShowAssetDetails
         error={this.state.error}
-        claimData={this.props.claim}
+        claimData={this.props.claimData}
       />
     );
   }

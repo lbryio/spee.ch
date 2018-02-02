@@ -1,20 +1,20 @@
-import { updateChannelRequest, updateClaimRequest } from 'actions/show';
 import { connect } from 'react-redux';
+import { updateRequestWithChannelRequest, updateRequestWithAssetRequest } from 'actions/show';
 import View from './view';
 
 const mapStateToProps = ({ show }) => {
   return {
-    request: show.request,
+    requestType: show.requestType,
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    onChannelRequest: (channel) => {
-      dispatch(updateChannelRequest(channel));
+    onChannelRequest: (name, id) => {
+      dispatch(updateRequestWithChannelRequest(name, id));
     },
-    onClaimRequest: (claim) => {
-      dispatch(updateClaimRequest(claim));
+    onAssetRequest: (name, id, channelName, channelId, extension) => {
+      dispatch(updateRequestWithAssetRequest(name, id, channelName, channelId, extension));
     },
   };
 };

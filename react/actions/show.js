@@ -1,18 +1,22 @@
 import * as actions from 'constants/show_action_types';
-
 // export action creators
 
-export function updateClaimRequest (claim) {
+export function updateRequestWithChannelRequest (name, id) {
   return {
-    type: actions.CLAIM_REQUEST_UPDATE,
-    claim,
+    type: actions.REQUEST_UPDATE_CHANNEL,
+    name,
+    id,
   };
 };
 
-export function updateChannelRequest (channel) {
+export function updateRequestWithAssetRequest (name, id, channelName, channelId, extension) {
   return {
-    type: actions.CHANNEL_REQUEST_UPDATE,
-    channel,
+    type       : actions.REQUEST_UPDATE_CLAIM,
+    name,
+    id,
+    channelName: null,
+    channelId  : null,
+    extension,
   };
 };
 
@@ -27,7 +31,7 @@ export function updateChannelData (name, longId, shortId) {
 
 export function updateChannelClaimsData (claims, currentPage, totalPages, totalClaims) {
   return {
-    type: actions.CHANNEL_CLAIMS_UPDATE,
+    type: actions.CHANNEL_CLAIMS_DATA_UPDATE,
     claims,
     currentPage,
     totalPages,
@@ -35,9 +39,9 @@ export function updateChannelClaimsData (claims, currentPage, totalPages, totalC
   };
 };
 
-export function updateClaimData (data) {
+export function updateAssetData (data) {
   return {
-    type: actions.CLAIM_DATA_UPDATE,
+    type: actions.ASSET_DATA_UPDATE,
     data,
   };
 };

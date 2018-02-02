@@ -4,6 +4,8 @@ import ShowAsset from 'containers/ShowAsset';
 import ShowChannel from 'containers/ShowChannel';
 import lbryUri from 'utils/lbryUri';
 
+import { CHANNEL, ASSET } from 'constants/show_request_types';
+
 class ShowPage extends React.Component {
   constructor (props) {
     super(props);
@@ -46,23 +48,11 @@ class ShowPage extends React.Component {
       return this.setState({error: error.message});
     }
     // update the store
-    let requestedClaim = {
-      name    : claimName,
-      modifier: {
-        id     : null,
-        channel: null,
-      },
-      extension,
-    };
     if (isChannel) {
-      requestedClaim['modifier']['channel'] = {
-        name: channelName,
-        id  : channelClaimId,
-      };
+      return this.props.onAssetRequest(claimName, null, channelName, channelClaimId, extension);
     } else {
-      requestedClaim['modifier']['id'] = claimId;
+      return this.props.onAssetRequest(claimName, claimId, null, null, extension);
     }
-    return this.props.onClaimRequest(requestedClaim);
   }
   parseAndUpdateClaimOnly (claim) {
     // this could be a request for an asset or a channel page
@@ -75,11 +65,7 @@ class ShowPage extends React.Component {
     }
     // return early if this request is for a channel
     if (isChannel) {
-      const requestedChannel = {
-        name: channelName,
-        id  : channelClaimId,
-      }
-      return this.props.onChannelRequest(requestedChannel);
+      return this.props.onChannelRequest(channelName, channelClaimId);
     }
     // if not for a channel, parse the claim request
     let claimName, extension;  // if I am destructuring below, do I still need to declare these here?
@@ -88,39 +74,25 @@ class ShowPage extends React.Component {
     } catch (error) {
       return this.setState({error: error.message});
     }
-    const requestedClaim = {
-      name    : claimName,
-      modifier: null,
-      extension,
-    }
-    this.props.onClaimRequest(requestedClaim);
+    this.props.onAssetRequest(claimName, null, null, null, extension);
   }
   render () {
     console.log('rendering ShowPage');
+    console.log('ShowPage props', this.props);
     if (this.state.error) {
       return (
         <ErrorPage error={this.state.error}/>
       );
     }
-    if (this.props.request) {
-      if (this.props.request.channel) {
-        return (
-          <ShowChannel />
-        );
-      } else if (this.props.request.claim) {
-        return (
-          <ShowAsset />
-        );
-      }
+    switch (this.props.requestType) {
+      case CHANNEL:
+        return <ShowChannel/>;
+      case ASSET:
+        return <ShowAsset/>;
+      default:
+        return <p>loading...</p>;
     }
-    return (
-      <p>loading...</p>
-    );
   }
 };
-
-// props
-// channel
-// show
 
 export default ShowPage;

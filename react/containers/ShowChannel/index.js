@@ -1,17 +1,17 @@
 import { connect } from 'react-redux';
+import { updateChannelData } from 'actions/show';
 import View from './view';
-import {updateChannelData} from 'actions/show';
 
 const mapStateToProps = ({ show }) => {
   return {
     request: {
-      name: show.request.channel.name,
-      id  : show.request.channel.id,
+      name: show.channelRequest.name,
+      id  : show.channelRequest.id,
     },
     channel: {
-      name   : show.channel.name,
-      shortId: show.channel.shortId,
-      longId : show.channel.longId,
+      name   : show.channelData.name,
+      shortId: show.channelData.shortId,
+      longId : show.channelData.longId,
     },
   };
 };

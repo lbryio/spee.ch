@@ -7,12 +7,11 @@ class ChannelClaimsDisplay extends React.Component {
     super(props);
     this.state = {
       error: null,
-      page : 1,
     };
     this.getAndStoreChannelClaims = this.getAndStoreChannelClaims.bind(this);
   }
   componentDidMount () {
-    this.getAndStoreChannelClaims(this.props.name, this.props.id, this.state.page);
+    this.getAndStoreChannelClaims(this.props.name, this.props.longId, this.props.currentPage);
   }
   getAndStoreChannelClaims (name, id, page) {
     if (!id) id = 'none';

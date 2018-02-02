@@ -4,9 +4,9 @@ import AssetTitle from 'components/AssetTitle';
 import AssetDisplay from 'components/AssetDisplay';
 import AssetInfo from 'components/AssetInfo';
 
-class ShowDetails extends React.Component {
+class ShowAssetDetails extends React.Component {
   componentDidMount () {
-    console.log(this.props);
+    console.log('ShowAssetDetails props', this.props);
   }
   render () {
     return (
@@ -63,4 +63,4 @@ class ShowDetails extends React.Component {
 // claimId
 // claimName
 
-export default ShowDetails;
+export default ShowAssetDetails;

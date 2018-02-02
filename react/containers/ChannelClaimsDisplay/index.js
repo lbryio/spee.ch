@@ -4,12 +4,12 @@ import {updateChannelClaimsData} from 'actions/show';
 
 const mapStateToProps = ({ show }) => {
   return {
-    name       : show.channel.name,
-    id         : show.channel.id,
-    claims     : show.channel.claimsData.claims,
-    currentPage: show.channel.claimsData.currentPage,
-    totalPages : show.channel.claimsData.totalPages,
-    totalClaims: show.channel.claimsData.totalClaims,
+    name       : show.channelData.name,
+    longId     : show.channelData.longId,
+    claims     : show.channelClaimsData.claims,
+    currentPage: show.channelClaimsData.currentPage,
+    totalPages : show.channelClaimsData.totalPages,
+    totalClaims: show.channelClaimsData.totalClaims,
   };
 };
 

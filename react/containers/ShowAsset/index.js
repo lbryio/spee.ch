@@ -1,22 +1,20 @@
-import { updateClaimData } from 'actions/show';
 import { connect } from 'react-redux';
+import { updateAssetData } from 'actions/show';
 import View from './view';
 
 const mapStateToProps = ({ show }) => {
   return {
-    request: {
-      modifier : show.request.claim.modifier,
-      claim    : show.request.claim.name,
-      extension: show.request.claim.extension,
-    },
-    claim: show.claim,
+    modifier : show.assetRequest.modifier,
+    claim    : show.assetRequest.name,
+    extension: show.assetRequest.extension,
+    claimData: show.assetData,
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    onClaimDataChange: (data) => {
-      dispatch(updateClaimData(data));
+    onAssetDataUpdate: (data) => {
+      dispatch(updateAssetData(data));
     },
   };
 };

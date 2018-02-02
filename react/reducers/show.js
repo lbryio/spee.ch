@@ -1,22 +1,35 @@
 import * as actions from 'constants/show_action_types';
+import { CHANNEL, ASSET } from 'constants/show_request_types';
 
 const initialState = {
-  request: {
-    channel: null,
-    claim  : null,
+  requestType   : null,
+  channelRequest: {
+    name: null,
+    id  : null,
   },
-  channel: {
-    name      : null,
-    shortId   : null,
-    longId    : null,
-    claimsData: {
-      claims     : null,
-      currentPage: null,
-      totalPages : null,
-      totalClaims: null,
+  assetRequest: {
+    name    : null,
+    modifier: {
+      id     : null,
+      channel: {
+        name: null,
+        id  : null,
+      },
     },
+    extension: null,
   },
-  claim: null,
+  channelData: {
+    name   : null,
+    shortId: null,
+    longId : null,
+  },
+  channelClaimsData: {
+    claims     : null,
+    currentPage: 1,
+    totalPages : null,
+    totalClaims: null,
+  },
+  assetData: null,
 };
 
 /*
@@ -25,42 +38,49 @@ Reducers describe how the application's state changes in response to actions
 
 export default function (state = initialState, action) {
   switch (action.type) {
-    case actions.CLAIM_REQUEST_UPDATE:
+    case actions.REQUEST_UPDATE_CHANNEL:
       return Object.assign({}, state, {
-        request: {
-          channel: null,
-          claim  : action.claim,
+        requestType   : CHANNEL,
+        channelRequest: {
+          name: action.name,
+          id  : action.id,
         },
       });
-    case actions.CHANNEL_REQUEST_UPDATE:
+    case actions.REQUEST_UPDATE_CLAIM:
       return Object.assign({}, state, {
-        request: {
-          channel: action.channel,
-          claim  : null,
+        requestType : ASSET,
+        assetRequest: {
+          name    : action.name,
+          modifier: {
+            id     : action.id,
+            channel: {
+              name: action.channelName,
+              id  : action.channelId,
+            },
+          },
+          extension: action.extension,
         },
       });
     case actions.CHANNEL_DATA_UPDATE:
       return Object.assign({}, state, {
-        channel: Object.assign({}, state.channel, {
+        channelData: Object.assign({}, state.channel, {
           name   : action.name,
           shortId: action.shortId,
           longId : action.longId,
         }),
       });
-    case actions.CHANNEL_CLAIMS_UPDATE:
+    case actions.CHANNEL_CLAIMS_DATA_UPDATE:
       return Object.assign({}, state, {
-        channel: Object.assign({}, state.channel, {
-          claimsData: {
-            claims     : action.claims,
-            currentPage: action.currentPage,
-            totalPages : action.totalPages,
-            totalClaims: action.totalClaims,
-          },
-        }),
+        channelClaimsData: {
+          claims     : action.claims,
+          currentPage: action.currentPage,
+          totalPages : action.totalPages,
+          totalClaims: action.totalClaims,
+        },
       });
-    case actions.CLAIM_DATA_UPDATE:
+    case actions.ASSET_DATA_UPDATE:
       return Object.assign({}, state, {
-        claim: action.data,
+        assetData: action.data,
       });
     default:
       return state;
