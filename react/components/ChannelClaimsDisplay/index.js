@@ -48,11 +48,11 @@ class ChannelClaimsDisplay extends React.Component {
   }
   showPreviousResultsPage () {
     const previousPage = parseInt(this.state.currentPage) - 1;
-    this.updateClaimsData(previousPage);
+    this.updateClaimsData(this.props.name, this.props.longId, previousPage);
   }
   showNextResultsPage () {
     const nextPage = parseInt(this.state.currentPage) + 1;
-    this.updateClaimsData(nextPage);
+    this.updateClaimsData(this.props.name, this.props.longId, nextPage);
   }
   render () {
     return (
