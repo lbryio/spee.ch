@@ -17,11 +17,16 @@ class ChannelClaimsDisplay extends React.Component {
     this.showNextResultsPage = this.showNextResultsPage.bind(this);
   }
   componentDidMount () {
-    this.updateClaimsData(1);
-  }
-  updateClaimsData (page) {
     const name = this.props.name;
     const longId = this.props.longId;
+    this.updateClaimsData(name, longId, 1);
+  }
+  componentWillReceiveProps (nextProps) {
+    if (nextProps.name !== this.props.name || nextProps.longId !== this.props.longId) {
+      this.updateClaimsData(nextProps.name, nextProps.longId, 1);
+    }
+  }
+  updateClaimsData (name, longId, page) {
     const url = `/api/channel-claims/${name}/${longId}/${page}`;
     const that = this;
     return request(url)

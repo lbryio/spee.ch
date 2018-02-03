@@ -17,6 +17,11 @@ class ShowChannel extends React.Component {
   componentDidMount () {
     this.getAndStoreChannelData(this.props.requestName, this.props.requestId);
   }
+  componentWillReceiveProps (nextProps) {
+    if (nextProps.requestName !== this.props.requestName || nextProps.requestId !== this.props.requestId) {
+      this.getAndStoreChannelData(nextProps.requestName, nextProps.requestId);
+    }
+  }
   getAndStoreChannelData (name, id) {
     if (!id) id = 'none';
     const url = `/api/channel-data/${name}/${id}`;
@@ -28,6 +33,7 @@ class ShowChannel extends React.Component {
           return that.setState({error: message});
         }
         this.setState({
+          error  : null,
           name   : data.channelName,
           longId : data.longChannelClaimId,
           shortId: data.shortChannelClaimId,

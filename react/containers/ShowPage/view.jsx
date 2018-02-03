@@ -23,8 +23,8 @@ class ShowPage extends React.Component {
     this.parseUrlAndUpdateState(identifier, claim);
   }
   componentWillReceiveProps (nextProps) {
-    if (this.props.match.params !== nextProps.match.params) {
-      console.log('received new params props');
+    if (nextProps.match.params !== this.props.match.params) {
+      console.log('ShowPage received new params props');
       const identifier = nextProps.match.params.identifier;
       const claim = nextProps.match.params.claim;
       this.parseUrlAndUpdateState(identifier, claim);
