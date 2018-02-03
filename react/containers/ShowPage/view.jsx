@@ -86,9 +86,9 @@ class ShowPage extends React.Component {
     }
     switch (this.props.requestType) {
       case CHANNEL:
-        return <ShowChannel/>;
+        return <ShowChannel />;
       case ASSET:
-        return <ShowAsset/>;
+        return <ShowAsset />;
       default:
         return <p>loading...</p>;
     }

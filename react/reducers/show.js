@@ -18,6 +18,22 @@ const initialState = {
     },
     extension: null,
   },
+  showChannel: {
+    channelData: {
+      name   : null,
+      shortId: null,
+      longId : null,
+    },
+    channelClaimsData: {
+      claims     : null,
+      currentPage: null,
+      totalPages : null,
+      totalClaims: null,
+    },
+  },
+  showAsset: {
+    claimData: null,
+  },
 };
 
 /*
@@ -47,6 +63,33 @@ export default function (state = initialState, action) {
             },
           },
           extension: action.extension,
+        },
+      });
+    case actions.CHANNEL_DATA_UPDATE:
+      return Object.assign({}, state, {
+        showChannel: Object.assign({}, state.showChannel, {
+          channelData: Object.assign({}, state.channel, {
+            name   : action.name,
+            shortId: action.shortId,
+            longId : action.longId,
+          }),
+        }),
+      });
+    case actions.CHANNEL_CLAIMS_DATA_UPDATE:
+      return Object.assign({}, state, {
+        showChannel: Object.assign({}, state.showChannel, {
+          channelClaimsData: {
+            claims     : action.claims,
+            currentPage: action.currentPage,
+            totalPages : action.totalPages,
+            totalClaims: action.totalClaims,
+          },
+        }),
+      });
+    case actions.ASSET_CLAIM_DATA_UPDATE:
+      return Object.assign({}, state, {
+        showAsset: {
+          claimData: action.data,
         },
       });
     default:

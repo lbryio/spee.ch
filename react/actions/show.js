@@ -19,3 +19,29 @@ export function updateRequestWithAssetRequest (name, id, channelName, channelId,
     extension,
   };
 };
+
+export function updateChannelData (name, longId, shortId) {
+  return {
+    type: actions.CHANNEL_DATA_UPDATE,
+    name,
+    longId,
+    shortId,
+  };
+};
+
+export function updateChannelClaimsData (claims, currentPage, totalPages, totalClaims) {
+  return {
+    type: actions.CHANNEL_CLAIMS_DATA_UPDATE,
+    claims,
+    currentPage,
+    totalPages,
+    totalClaims,
+  };
+};
+
+export function updateAssetClaimData (data) {
+  return {
+    type: actions.ASSET_CLAIM_DATA_UPDATE,
+    data,
+  };
+};

@@ -1,16 +1,12 @@
-import React from 'react';
-import AssetPreview from 'components/AssetPreview';
+import React from 'react/index';
+import AssetPreview from 'components/AssetPreview/index';
 import request from 'utils/request';
 
 class ChannelClaimsDisplay extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
-      error      : null,
-      claims     : null,
-      currentPage: null,
-      totalPages : null,
-      totalClaims: null,
+      error: null,
     };
     this.updateClaimsData = this.updateClaimsData.bind(this);
     this.showPreviousResultsPage = this.showPreviousResultsPage.bind(this);
@@ -35,23 +31,22 @@ class ChannelClaimsDisplay extends React.Component {
         if (!success) {
           return that.setState({error: message});
         }
-        this.setState({
-          claims     : data.claims,
-          currentPage: data.currentPage,
-          totalPages : data.totalPages,
-          totalClaims: data.totalResults,
-        });
+        that.setState({error: null}); // move this error to redux state
+        that.props.onChannelClaimsDataUpdate(data.claims, data.currentPage, data.totalPages, data.totalResults);
       })
       .catch((error) => {
         that.setState({error: error.message});
       });
   }
+  componentWillUnmount () {
+    this.props.onChannelClaimsDataClear();
+  }
   showPreviousResultsPage () {
-    const previousPage = parseInt(this.state.currentPage) - 1;
+    const previousPage = parseInt(this.props.currentPage) - 1;
     this.updateClaimsData(this.props.name, this.props.longId, previousPage);
   }
   showNextResultsPage () {
-    const nextPage = parseInt(this.state.currentPage) + 1;
+    const nextPage = parseInt(this.props.currentPage) + 1;
     this.updateClaimsData(this.props.name, this.props.longId, nextPage);
   }
   render () {
@@ -65,9 +60,9 @@ class ChannelClaimsDisplay extends React.Component {
           </div>
         ) : (
           <div className="row row--tall">
-            {this.state.claims &&
+            {this.props.claims &&
             <div>
-              {this.state.claims.map((claim, index) => <AssetPreview
+              {this.props.claims.map((claim, index) => <AssetPreview
                 name={claim.name}
                 claimId={claim.claimId}
                 fileExt={claim.fileExt}
@@ -75,8 +70,8 @@ class ChannelClaimsDisplay extends React.Component {
                 key={`${claim.name}-${index}`}
               />)}
               <div>
-                {(this.state.currentPage > 1) && <button onClick={this.showPreviousResultsPage}>Previous Page</button>}
-                {(this.state.currentPage < this.state.totalPages) && <button onClick={this.showNextResultsPage}>Next Page</button>}
+                {(this.props.currentPage > 1) && <button onClick={this.showPreviousResultsPage}>Previous Page</button>}
+                {(this.props.currentPage < this.props.totalPages) && <button onClick={this.showNextResultsPage}>Next Page</button>}
               </div>
             </div>
             }
