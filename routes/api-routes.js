@@ -151,10 +151,12 @@ module.exports = (app) => {
     .then(result => {
       res.status(200).json({
         success: true,
-        message: {
+        message: 'publish completed successfully',
+        data   : {
           name,
-          url   : `${site.host}/${result.claim_id}/${name}`,
-          lbryTx: result,
+          claimId: result.claim_id,
+          url    : `${site.host}/${result.claim_id}/${name}`,
+          lbryTx : result,
         },
       });
       // log the publish end time

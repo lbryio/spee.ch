@@ -13,6 +13,8 @@ class ChannelClaimsDisplay extends React.Component {
       totalClaims: null,
     };
     this.updateClaimsData = this.updateClaimsData.bind(this);
+    this.showPreviousResultsPage = this.showPreviousResultsPage.bind(this);
+    this.showNextResultsPage = this.showNextResultsPage.bind(this);
   }
   componentDidMount () {
     this.updateClaimsData(1);
@@ -39,6 +41,14 @@ class ChannelClaimsDisplay extends React.Component {
         that.setState({error: error.message});
       });
   }
+  showPreviousResultsPage () {
+    const previousPage = parseInt(this.state.currentPage) - 1;
+    this.updateClaimsData(previousPage);
+  }
+  showNextResultsPage () {
+    const nextPage = parseInt(this.state.currentPage) + 1;
+    this.updateClaimsData(nextPage);
+  }
   render () {
     return (
       <div>
@@ -50,8 +60,6 @@ class ChannelClaimsDisplay extends React.Component {
           </div>
         ) : (
           <div className="row row--tall">
-            <p>total pages: {this.state.totalPages}</p>
-            <p>total claims: {this.state.totalClaims}</p>
             {this.state.claims &&
             <div>
               {this.state.claims.map((claim, index) => <AssetPreview
@@ -59,11 +67,12 @@ class ChannelClaimsDisplay extends React.Component {
                 claimId={claim.claimId}
                 fileExt={claim.fileExt}
                 contentType={claim.contentType}
-                key={index}
+                key={`${claim.name}-${index}`}
               />)}
-              {(this.state.currentPage > 1) && <button onClick={this.updateClaimsData(this.state.currentPage - 1)}>Previous Page</button>}
-              <p>current page: {this.state.currentPage}</p>
-              {(this.state.currentPage < this.state.totalPages) && <button onClick={this.updateClaimsData(this.state.currentPage + 1)}>Next Page</button>}
+              <div>
+                {(this.state.currentPage > 1) && <button onClick={this.showPreviousResultsPage}>Previous Page</button>}
+                {(this.state.currentPage < this.state.totalPages) && <button onClick={this.showNextResultsPage}>Next Page</button>}
+              </div>
             </div>
             }
           </div>

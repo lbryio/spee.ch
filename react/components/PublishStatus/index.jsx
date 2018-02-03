@@ -30,7 +30,7 @@ function PublishStatus ({ status, message }) {
       {(status === publishStates.SUCCESS) &&
       <div className="row align-content-center">
         <p>Your publish is complete! You are being redirected to it now.</p>
-        <p>If you are not automatically redirected, <a class="link--primary" target="_blank" href={message}>click here.</a></p>
+        <p>If you are not automatically redirected, <a className="link--primary" target="_blank" href={message}>click here.</a></p>
       </div>
       }
       {(status === publishStates.FAILED) &&

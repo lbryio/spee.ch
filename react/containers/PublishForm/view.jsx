@@ -1,4 +1,5 @@
 import React from 'react';
+import { withRouter } from 'react-router-dom';
 import Dropzone from 'containers/Dropzone';
 import PublishTitleInput from 'containers/PublishTitleInput';
 import PublishUrlInput from 'containers/PublishUrlInput';
@@ -70,16 +71,14 @@ class PublishForm extends React.Component {
     xhr.open('POST', uri, true);
     xhr.onreadystatechange = function () {
       if (xhr.readyState === 4) {
-        console.log('publish response:', xhr.response);
-        if (xhr.status === 200) {
-          console.log('publish complete!');
-          const url = JSON.parse(xhr.response).message.url;
-          that.props.onPublishStatusChange(publishStates.SUCCESS, url);
-          window.location = url;
-        } else if (xhr.status === 502) {
-          that.props.onPublishStatusChange(publishStates.FAILED, 'Spee.ch was not able to get a response from the LBRY network.');
+        const response = JSON.parse(xhr.response);
+        console.log('publish response:', response);
+        if ((xhr.status === 200) && response.success) {
+          that.props.onPublishStatusChange(publishStates.SUCCESS, response.data.url);
+          // redirect to the published asset's show page
+          that.props.history.push(`/${response.data.claimId}/${response.data.name}`);
         } else {
-          that.props.onPublishStatusChange(publishStates.FAILED, JSON.parse(xhr.response).message);
+          that.props.onPublishStatusChange(publishStates.FAILED, response.message);
         }
       }
     };
@@ -176,4 +175,4 @@ class PublishForm extends React.Component {
   }
 };
 
-export default PublishForm;
+export default withRouter(PublishForm);

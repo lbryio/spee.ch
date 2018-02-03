@@ -127,7 +127,7 @@ AssetDisplay.propTypes = {
   src        : PropTypes.string.isRequired,
   contentType: PropTypes.string.isRequired,
   fileExt    : PropTypes.string.isRequired,
-  thumbnail  : PropTypes.string.isRequired,
+  thumbnail  : PropTypes.string,
 };
 
 export default AssetDisplay;
