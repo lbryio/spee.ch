@@ -82,8 +82,4 @@ class ChannelClaimsDisplay extends React.Component {
   }
 };
 
-// PropTypes
-// name
-// id
-
 export default ChannelClaimsDisplay;

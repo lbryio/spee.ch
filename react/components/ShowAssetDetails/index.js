@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import NavBar from 'containers/NavBar';
 import AssetTitle from 'components/AssetTitle';
 import AssetDisplay from 'components/AssetDisplay';
@@ -39,10 +40,10 @@ class ShowAssetDetails extends React.Component {
                 channelName={this.props.claimData.channelName}
                 certificateId={this.props.claimData.certificateId}
                 description={this.props.claimData.description}
-                shortClaimId={this.props.claimData.shortClaimId}
                 name={this.props.claimData.name}
-                fileExt={this.props.claimData.fileExt}
                 claimId={this.props.claimData.claimId}
+                shortClaimId={this.props.claimData.shortClaimId}
+                fileExt={this.props.claimData.fileExt}
                 contentType={this.props.claimData.contentType}
                 thumbnail={this.props.claimData.thumbnail}
                 host={this.props.claimData.host}
@@ -56,11 +57,10 @@ class ShowAssetDetails extends React.Component {
   }
 };
 
-// required props
-// isChannel
-// channelName
-// channelClaimId
-// claimId
-// claimName
+ShowAssetDetails.propTypes = {
+  error    : PropTypes.string,
+  claimData: PropTypes.object.isRequired,
+  // shortUrl: PropTypes.string.isRequired,
+};
 
 export default ShowAssetDetails;

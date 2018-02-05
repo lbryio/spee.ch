@@ -82,21 +82,30 @@ class ShowAsset extends React.Component {
         });
     });
   }
+  componentWillUnmount () {
+    this.props.onAssetClaimDataClear();
+  }
   render () {
-    if (this.props.extension) {
+    if (this.props.claimData) {
       return (
-        <ShowAssetLite
-          error={this.state.error}
-          claimData={this.props.claimData}
-        />
+        <div>
+          { this.props.extension ? (
+            <ShowAssetLite
+              error={this.state.error}
+              claimData={this.props.claimData}
+            />
+          ) : (
+            <ShowAssetDetails
+              error={this.state.error}
+              claimData={this.props.claimData}
+              // shortUrl={this.props.shortUrl}
+            />
+          )}
+        </div>
       );
     }
     return (
-      <ShowAssetDetails
-        error={this.state.error}
-        claimData={this.props.claimData}
-        // shortUrl={this.props.shortUrl}
-      />
+      <div></div>
     );
   }
 };

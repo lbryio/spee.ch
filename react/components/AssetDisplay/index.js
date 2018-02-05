@@ -1,8 +1,8 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import ProgressBar from 'components/ProgressBar';
 import Request from 'utils/request';
 import { LOCAL_CHECK, SEARCHING, UNAVAILABLE, AVAILABLE } from 'constants/asset_display_states';
-import PropTypes from 'prop-types';
 
 class AssetDisplay extends React.Component {
   constructor (props) {
@@ -128,7 +128,6 @@ AssetDisplay.propTypes = {
   contentType: PropTypes.string.isRequired,
   fileExt    : PropTypes.string.isRequired,
   thumbnail  : PropTypes.string,
-  // shortId    : PropTypes.string.isRequired,
 };
 
 export default AssetDisplay;

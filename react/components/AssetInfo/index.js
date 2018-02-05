@@ -1,11 +1,12 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 class AssetInfo extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
       showDetails: false,
-    }
+    };
     this.toggleDetails = this.toggleDetails.bind(this);
     this.copyToClipboard = this.copyToClipboard.bind(this);
   }
@@ -80,7 +81,7 @@ class AssetInfo extends React.Component {
                   {(this.props.contentType === 'video/mp4') ? (
                     <input type="text" id="embed-text" className="input-disabled input-text--full-width" readOnly
                            onClick={this.select} spellCheck="false"
-                           value={`<video width="100%" controls poster="${this.props.thumbnail}" src="${this.props.host}/{claimInfo.claimId}/${this.props.name}.${this.props.fileExt}"/></video>`}/>
+                           value={`<video width="100%" controls poster="${this.props.thumbnail}" src="${this.props.host}/${this.props.claimId}/${this.props.name}.${this.props.fileExt}"/></video>`}/>
                   ) : (
                     <input type="text" id="embed-text" className="input-disabled input-text--full-width" readOnly
                            onClick={this.select} spellCheck="false"
@@ -162,5 +163,17 @@ class AssetInfo extends React.Component {
 
 // required props
 // {channelName, certificateId, description, shortClaimId, name, fileExt, claimId, contentType, thumbnail, host}
+AssetInfo.propTypes = {
+  channelName  : PropTypes.string,
+  certificateId: PropTypes.string,
+  description  : PropTypes.string,
+  // shortClaimId : PropsTypes.string.isRequired,
+  name         : PropTypes.string.isRequired,
+  claimId      : PropTypes.string.isRequired,
+  contentType  : PropTypes.string.isRequired,
+  fileExt      : PropTypes.string.isRequired,
+  thumbnail    : PropTypes.string,
+  host         : PropTypes.string.isRequired,
+};
 
 export default AssetInfo;
