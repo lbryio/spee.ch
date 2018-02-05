@@ -103,23 +103,23 @@ class ShowAsset extends React.Component {
   }
   render () {
     if (this.props.claimData) {
-      return (
-        <div>
-          { this.props.extension ? (
-            <ShowAssetLite
-              error={this.state.error}
-              claimData={this.props.claimData}
-            />
-          ) : (
-            <ShowAssetDetails
-              error={this.state.error}
-              claimData={this.props.claimData}
-              shortId={this.props.shortId}
-            />
-          )}
-        </div>
-      );
-    }
+      if (this.props.extension) {
+        return (
+          <ShowAssetLite
+            error={this.state.error}
+            claimData={this.props.claimData}
+          />
+        );
+      } else {
+        return (
+          <ShowAssetDetails
+            error={this.state.error}
+            claimData={this.props.claimData}
+            shortId={this.props.shortId}
+          />
+        );
+      }
+    };
     return (
       <div></div>
     );
