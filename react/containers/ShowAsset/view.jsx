@@ -39,11 +39,11 @@ class ShowAsset extends React.Component {
     const that = this;
     this.getLongClaimId(params)
       .then(claimLongId => {
-        return that.getClaimData(name, claimLongId);
+        return Promise.all([that.getShortClaimId(claimLongId, name), that.getClaimData(claimLongId, name)]);
       })
-      .then(claimData => {
+      .then(([shortId, claimData]) => {
         this.setState({error: null}); // note: move this to redux level
-        this.props.onAssetClaimDataUpdate(claimData);
+        this.props.onAssetClaimDataUpdate(claimData, shortId);
       })
       .catch(error => {
         this.setState({error});
@@ -54,19 +54,35 @@ class ShowAsset extends React.Component {
     console.log('params:', params);
     return new Promise((resolve, reject) => {
       request(url, params)
-        .then(({ success, message }) => {
+        .then(({ success, message, data }) => {
           console.log('get long claim id response:', message);
           if (!success) {
             reject(message);
           }
-          resolve(message);
+          resolve(data);
         })
         .catch((error) => {
           reject(error.message);
         });
     });
   }
-  getClaimData (claimName, claimId) {
+  getShortClaimId (longId, name) {
+    const url = `/api/claim-shorten-id/${longId}/${name}`;
+    return new Promise((resolve, reject) => {
+      request(url)
+        .then(({ success, message, data }) => {
+          console.log('get short claim id response:', data);
+          if (!success) {
+            reject(message);
+          }
+          resolve(data);
+        })
+        .catch((error) => {
+          reject(error.message);
+        });
+    });
+  }
+  getClaimData (claimId, claimName) {
     return new Promise((resolve, reject) => {
       const url = `/api/claim-get-data/${claimName}/${claimId}`;
       return request(url)
@@ -98,7 +114,7 @@ class ShowAsset extends React.Component {
             <ShowAssetDetails
               error={this.state.error}
               claimData={this.props.claimData}
-              // shortUrl={this.props.shortUrl}
+              shortId={this.props.shortId}
             />
           )}
         </div>

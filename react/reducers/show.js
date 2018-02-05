@@ -32,7 +32,10 @@ const initialState = {
     },
   },
   showAsset: {
-    claimData: null,
+    claimData: {
+      data   : null,
+      shortId: null,
+    },
   },
 };
 
@@ -68,7 +71,7 @@ export default function (state = initialState, action) {
     case actions.CHANNEL_DATA_UPDATE:
       return Object.assign({}, state, {
         showChannel: Object.assign({}, state.showChannel, {
-          channelData: Object.assign({}, state.channel, {
+          channelData: Object.assign({}, state.channelData, {
             name   : action.name,
             shortId: action.shortId,
             longId : action.longId,
@@ -89,7 +92,10 @@ export default function (state = initialState, action) {
     case actions.ASSET_CLAIM_DATA_UPDATE:
       return Object.assign({}, state, {
         showAsset: {
-          claimData: action.data,
+          claimData: {
+            data   : action.data,
+            shortId: action.shortId,
+          },
         },
       });
     default:

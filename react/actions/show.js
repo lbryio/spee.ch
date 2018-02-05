@@ -39,9 +39,10 @@ export function updateChannelClaimsData (claims, currentPage, totalPages, totalC
   };
 };
 
-export function updateAssetClaimData (data) {
+export function updateAssetClaimData (data, shortId) {
   return {
     type: actions.ASSET_CLAIM_DATA_UPDATE,
     data,
+    shortId,
   };
 };

@@ -7,17 +7,18 @@ const mapStateToProps = ({ show }) => {
     modifier : show.assetRequest.modifier,
     claim    : show.assetRequest.name,
     extension: show.assetRequest.extension,
-    claimData: show.showAsset.claimData,
+    claimData: show.showAsset.claimData.data,
+    shortId  : show.showAsset.claimData.shortId,
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    onAssetClaimDataUpdate: (claimData) => {
-      dispatch(updateAssetClaimData(claimData));
+    onAssetClaimDataUpdate: (claimData, shortId) => {
+      dispatch(updateAssetClaimData(claimData, shortId));
     },
     onAssetClaimDataClear: () => {
-      dispatch(updateAssetClaimData(null));
+      dispatch(updateAssetClaimData(null, null));
     },
   };
 };

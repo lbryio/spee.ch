@@ -172,11 +172,11 @@ module.exports = (app) => {
   app.get('/api/claim-shorten-id/:longId/:name', ({ params }, res) => {
     db.Claim.getShortClaimIdFromLongClaimId(params.longId, params.name)
       .then(shortId => {
-        res.status(200).json(shortId);
+        res.status(200).json({success: true, data: shortId});
       })
       .catch(error => {
         logger.error('api error getting short channel id', error);
-        res.status(400).json(error.message);
+        res.status(200).json({success: false, message: error.message});
       });
   });
   // route to get a short channel id from long channel Id
@@ -238,7 +238,7 @@ module.exports = (app) => {
         if (result === NO_CLAIM) {
           return res.status(200).json({success: false, message: 'No matching claim id could be found'});
         }
-        res.status(200).json({success: true, message: result});
+        res.status(200).json({success: true, data: result});
       })
       .catch(error => {
         logger.error('api error getting long claim id', error);

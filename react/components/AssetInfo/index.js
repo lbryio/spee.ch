@@ -161,13 +161,11 @@ class AssetInfo extends React.Component {
   }
 };
 
-// required props
-// {channelName, certificateId, description, shortClaimId, name, fileExt, claimId, contentType, thumbnail, host}
 AssetInfo.propTypes = {
   channelName  : PropTypes.string,
   certificateId: PropTypes.string,
   description  : PropTypes.string,
-  // shortClaimId : PropsTypes.string.isRequired,
+  shortId      : PropTypes.string.isRequired,
   name         : PropTypes.string.isRequired,
   claimId      : PropTypes.string.isRequired,
   contentType  : PropTypes.string.isRequired,

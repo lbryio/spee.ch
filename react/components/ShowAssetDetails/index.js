@@ -42,11 +42,11 @@ class ShowAssetDetails extends React.Component {
                 description={this.props.claimData.description}
                 name={this.props.claimData.name}
                 claimId={this.props.claimData.claimId}
-                shortClaimId={this.props.claimData.shortClaimId}
                 fileExt={this.props.claimData.fileExt}
                 contentType={this.props.claimData.contentType}
                 thumbnail={this.props.claimData.thumbnail}
                 host={this.props.claimData.host}
+                shortClaimId={this.props.shortId}
               />
               </div>
             </div>
@@ -60,7 +60,7 @@ class ShowAssetDetails extends React.Component {
 ShowAssetDetails.propTypes = {
   error    : PropTypes.string,
   claimData: PropTypes.object.isRequired,
-  // shortUrl: PropTypes.string.isRequired,
+  shortId  : PropTypes.string.isRequired,
 };
 
 export default ShowAssetDetails;
