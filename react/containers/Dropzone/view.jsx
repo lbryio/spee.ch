@@ -28,7 +28,7 @@ class Dropzone extends React.Component {
     const dt = event.dataTransfer;
     console.log('dt', dt);
     if (dt.items) {
-      if (dt.items[0].kind == 'file') {
+      if (dt.items[0].kind === 'file') {
         const droppedFile = dt.items[0].getAsFile();
         this.selectFile(droppedFile);
       }

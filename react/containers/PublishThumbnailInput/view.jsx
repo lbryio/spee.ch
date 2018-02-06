@@ -1,79 +1,122 @@
 import React from 'react';
 
+const ThumbnailPreview = ({dataUrl}) => {
+  const thumbnailPreviewStyle = {
+    width  : '30%',
+    padding: '1%',
+    display: 'inline-block',
+  }
+  return (
+    <div style={thumbnailPreviewStyle}>
+      { dataUrl ? (
+        <img style={{width: '100%'}} src={dataUrl} alt='image preview here' />
+      ) : (
+        <p>loading...</p>
+        )
+      }
+    </div>
+  );
+}
+
 class PublishThumbnailInput extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
-      videoPreviewSrc: null,
-      thumbnailError : null,
-      thumbnailInput : '',
+      error: null,
+    };
+  }
+  componentDidMount () {
+    this.setClaimAndThumbnail(this.props.publishClaim);
+    this.createThreePotentialThumbnails();
+  }
+  componentWillReceiveProps (nextProps) {
+    if (nextProps.publishFile !== this.publishFile) {
+      // this.createThreePotentialThumbnails();
     }
-    this.handleInput = this.handleInput.bind(this);
-    this.urlIsAnImage = this.urlIsAnImage.bind(this);
-    this.testImage = this.testImage.bind(this);
-    this.updateVideoThumb = this.updateVideoThumb.bind(this);
+    if (nextProps.publishClaim !== this.props.publishClaim) {
+      console.log(nextProps.publishClaim, this.props.publishClaim);
+      this.setClaimAndThumbnail(nextProps.publishClaim);
+    }
   }
-  handleInput (event) {
-    const value = event.target.value;
-    this.setState({thumbnailInput: value});
+  createThreePotentialThumbnails () {
+    const videoFile = this.props.publishFile;
+    console.log('video file', videoFile);
+    Promise.all([this.createThumbnail(videoFile), this.createThumbnail(videoFile), this.createThumbnail(videoFile)])
+      .then(([thumbOne, thumbTwo, thumbThree]) => {
+        // set the potential thumbnails
+        console.log([thumbOne, thumbTwo, thumbThree]);
+        this.selectVideoThumb(thumbOne);
+        this.setPossibleThumbnailFiles(thumbOne, thumbTwo, thumbThree);
+      })
+      .catch(error => {
+        this.setState({error: error.message});
+      });
   }
-  urlIsAnImage (url) {
-    return (url.match(/\.(jpeg|jpg|gif|png)$/) != null);
-  }
-  testImage (url) {
+  createThumbnail (file) {
     return new Promise((resolve, reject) => {
-      const xhttp = new XMLHttpRequest();
-      xhttp.open('HEAD', url, true);
-      xhttp.onreadystatechange = () => {
-        if (xhttp.readyState === 4) {
-          if (xhttp.status === 200) {
-            resolve();
-          } else {
-            reject();
+      console.log('creating a thumbnail');
+      var fileReader = new FileReader();
+      fileReader.onload = () => {
+        console.log('thumbnail loaded');
+        const blob = new Blob([fileReader.result], {type: file.type});
+        const url = URL.createObjectURL(blob);
+        let video = document.createElement('video');
+        const timeupdate = () => {
+          if (snapImage()) {
+            video.removeEventListener('timeupdate', timeupdate);
+            video.pause();
           }
-        }
+        };
+        const snapImage = () => {
+          let canvas = document.createElement('canvas');
+          canvas.width = video.videoWidth;
+          canvas.height = video.videoHeight;
+          canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+          const imageDataUrl = canvas.toDataURL();
+          // console.log('imageDataUrl', imageDataUrl);
+          const success = imageDataUrl.length > 1000;
+          if (success) { // do something with the image
+            return resolve(imageDataUrl);
+            // URL.revokeObjectURL(url);
+          }
+          reject(success);
+        };
+        video.addEventListener('loadeddata', () => {
+          if (snapImage()) {
+            video.removeEventListener('timeupdate', timeupdate);
+          }
+        });
+        video.addEventListener('timeupdate', timeupdate);
+        video.preload = 'metadata';
+        video.src = url;
+        // Load video in Safari / IE11
+        video.muted = true;
+        video.playsInline = true;
+        video.play();
       };
-      xhttp.send();
+      fileReader.readAsArrayBuffer(file);
     });
   }
-  updateVideoThumb (event) {
-    const imageUrl = event.target.value;
-    const that = this;
-    if (this.urlIsAnImage(imageUrl)) {
-      this.testImage(imageUrl, 3000)
-        .then(() => {
-          console.log('thumbnail is a valid image');
-          that.props.onThumbnailChange('thumbnail', imageUrl);
-          that.setState({thumbnailError: null});
-        })
-        .catch(error => {
-          console.log('encountered an error loading thumbnail image url:', error);
-          that.props.onThumbnailChange('thumbnail', null);
-          that.setState({thumbnailError: 'That is an invalid image url'});
-        });
-    } else {
-      that.props.onThumbnailChange('thumbnail', null);
-      that.setState({thumbnailError: null});
-    }
+  selectVideoThumb (dataUrl) {
+    // update this.props.selectedFile
+    this.props.onThumbnailFileSelect(dataUrl);
+  }
+  setPossibleThumbnailFiles (fileOne, fileTwo, fileThree) {
+    console.log('updating thumbnail file options');
+    this.props.onThumbnailFileOptionsChange(fileOne, fileTwo, fileThree);
+  }
+  setClaimAndThumbnail (claim) {
+    // set thumbnail claim based on publish claim name
+    const url = `${this.props.host}/${this.props.channel}/${claim}.jpeg`;
+    this.props.onThumbnailClaimChange(claim, url);
   }
   render () {
     return (
       <div>
-        <div className="column column--3 column--sml-10">
-          <label className="label">Thumbnail:</label>
-        </div><div className="column column--6 column--sml-10">
-          <div className="input-text--primary">
-            <p className="info-message-placeholder info-message--failure">{this.state.thumbnailError}</p>
-            <input
-              type="text" id="claim-thumbnail-input"
-              className="input-text input-text--full-width"
-              placeholder="https://spee.ch/xyz/example.jpg"
-              value={this.state.thumbnailInput}
-              onChange={ (event) => {
-                this.handleInput(event);
-                this.updateVideoThumb(event);
-              }} />
-          </div>
+        <label className="label">Thumbnail:</label>
+        <div>
+            <p className="info-message-placeholder info-message--failure">{this.state.error}</p>
+            {this.props.potentialFiles.map((file, index) => <ThumbnailPreview dataUrl={file} key={index}/>)}
         </div>
       </div>
     );

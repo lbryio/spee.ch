@@ -5,7 +5,7 @@ import View from './view';
 const mapStateToProps = ({ publish }) => {
   return {
     file     : publish.file,
-    thumbnail: publish.metadata.thumbnail,
+    thumbnail: publish.thumbnail.selectedFile,
     fileError: publish.error.file,
   };
 };

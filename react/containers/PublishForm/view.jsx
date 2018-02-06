@@ -138,11 +138,13 @@ class PublishForm extends React.Component {
         <div className="column column--10">
           <PublishTitleInput />
         </div>
+        {/* left column */}
         <div className="column column--5 column--sml-10" >
           <div className="row row--padded">
             <Dropzone />
           </div>
         </div>
+        {/* right column */}
         <div className="column column--5 column--sml-10 align-content-top">
           <div id="publish-active-area" className="row row--padded">
             <div className="row row--padded row--no-top row--wide">

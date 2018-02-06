@@ -23,8 +23,11 @@ module.exports = {
     uploadDirectory: null,  // enter file path to where uploads/publishes should be stored
   },
   site: {
-    name: 'Spee.ch',
-    host: 'https://spee.ch',
+    title: 'Spee.ch',
+    host : 'https://spee.ch',
+  },
+  publish: {
+    thumbnailChannel: '@channelName:channelId',  // create a channel to use for thumbnail images
   },
   claim: {
     defaultTitle      : 'Spee.ch',
@@ -32,7 +35,7 @@ module.exports = {
     defaultDescription: 'Open-source, decentralized image and video sharing.',
   },
   testing: {
-    testChannel        : '@testpublishchannel', // a channel to make test publishes in
+    testChannel        : '@testpublishchannel',  // a channel to make test publishes in
     testChannelPassword: 'password',  // password for the test channel
   },
   api: {
