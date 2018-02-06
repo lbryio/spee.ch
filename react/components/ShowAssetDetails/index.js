@@ -46,7 +46,7 @@ class ShowAssetDetails extends React.Component {
                 contentType={this.props.claimData.contentType}
                 thumbnail={this.props.claimData.thumbnail}
                 host={this.props.claimData.host}
-                shortClaimId={this.props.shortId}
+                shortId={this.props.shortId}
               />
               </div>
             </div>

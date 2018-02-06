@@ -50,7 +50,7 @@ class AssetInfo extends React.Component {
         <div className="row row--padded row--wide row--no-top">
           <div id="show-short-link">
             <div className="column column--2 column--med-10">
-              <Link className="link--primary" to={`/${this.props.shortClaimId}/${this.props.name}.${this.props.fileExt}`}><span
+              <Link className="link--primary" to={`/${this.props.shortId}/${this.props.name}.${this.props.fileExt}`}><span
                 className="text">Link:</span></Link>
             </div>
             <div className="column column--8 column--med-10">
@@ -59,7 +59,7 @@ class AssetInfo extends React.Component {
                   <div className="input-error" id="input-error-copy-short-link" hidden="true">error here</div>
                   <input type="text" id="short-link" className="input-disabled input-text--full-width" readOnly
                          spellCheck="false"
-                         value={`${this.props.host}/${this.props.shortClaimId}/${this.props.name}.${this.props.fileExt}`}
+                         value={`${this.props.host}/${this.props.shortId}/${this.props.name}.${this.props.fileExt}`}
                          onClick={this.select}/>
                 </div>
                 <div className="column column--1"> </div>
@@ -110,13 +110,13 @@ class AssetInfo extends React.Component {
               <div
                 className="row row--short row--wide flex-container--row flex-container--space-between-bottom flex-container--wrap">
                 <a className="link--primary" target="_blank"
-                   href={`https://twitter.com/intent/tweet?text=${this.props.host}/${this.props.shortClaimId}/${this.props.name}`}>twitter</a>
+                   href={`https://twitter.com/intent/tweet?text=${this.props.host}/${this.props.shortId}/${this.props.name}`}>twitter</a>
                 <a className="link--primary" target="_blank"
-                   href={`https://www.facebook.com/sharer/sharer.php?u=${this.props.host}/${this.props.shortClaimId}/${this.props.name}`}>facebook</a>
+                   href={`https://www.facebook.com/sharer/sharer.php?u=${this.props.host}/${this.props.shortId}/${this.props.name}`}>facebook</a>
                 <a className="link--primary" target="_blank"
-                   href={`http://tumblr.com/widgets/share/tool?canonicalUrl=${this.props.host}/${this.props.shortClaimId}/${this.props.name}`}>tumblr</a>
+                   href={`http://tumblr.com/widgets/share/tool?canonicalUrl=${this.props.host}/${this.props.shortId}/${this.props.name}`}>tumblr</a>
                 <a className="link--primary" target="_blank"
-                   href={`https://www.reddit.com/submit?url=${this.props.host}/${this.props.shortClaimId}/${this.props.name}&title=${this.props.name}`}>reddit</a>
+                   href={`https://www.reddit.com/submit?url=${this.props.host}/${this.props.shortId}/${this.props.name}&title=${this.props.name}`}>reddit</a>
               </div>
             </div>
           </div>
