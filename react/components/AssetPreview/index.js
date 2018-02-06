@@ -5,16 +5,18 @@ const AssetPreview = ({ name, claimId, fileExt, contentType }) => {
   const directSourceLink = `${claimId}/${name}.${fileExt}`;
   const showUrlLink = `${claimId}/${name}`;
   const previewHolderStyle = {
-    clear  : 'both',
-    display: 'inline-block',
-    width  : '31%',
-    padding: '0px',
-    margin : '1%',
+    clear          : 'both',
+    display        : 'inline-block',
+    width          : '31%',
+    padding        : '0px',
+    margin         : '1%',
+    backgroundColor: 'black',
   };
   const assetStyle = {
     width  : '100%',
     padding: '0px',
     margin : '0px',
+    display: 'block',
   };
   return (
     <div style={previewHolderStyle}>
