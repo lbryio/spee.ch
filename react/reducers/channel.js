@@ -16,11 +16,7 @@ export default function (state = initialState, action) {
   switch (action.type) {
     case actions.CHANNEL_UPDATE:
       return Object.assign({}, state, {
-        loggedInChannel: {
-          name   : action.name,
-          shortId: action.shortId,
-          longId : action.longId,
-        },
+        loggedInChannel: action.data,
       });
     default:
       return state;
