@@ -48,54 +48,29 @@ export default function (state = initialState, action) {
     case actions.REQUEST_UPDATE_CHANNEL:
       return Object.assign({}, state, {
         requestType   : CHANNEL,
-        channelRequest: {
-          name: action.name,
-          id  : action.id,
-        },
+        channelRequest: action.data,
       });
     case actions.REQUEST_UPDATE_CLAIM:
       return Object.assign({}, state, {
         requestType : ASSET,
-        assetRequest: {
-          name    : action.name,
-          modifier: {
-            id     : action.id,
-            channel: {
-              name: action.channelName,
-              id  : action.channelId,
-            },
-          },
-          extension: action.extension,
-        },
+        assetRequest: action.data,
       });
     case actions.CHANNEL_DATA_UPDATE:
       return Object.assign({}, state, {
         showChannel: Object.assign({}, state.showChannel, {
-          channelData: Object.assign({}, state.channelData, {
-            name   : action.name,
-            shortId: action.shortId,
-            longId : action.longId,
-          }),
+          channelData: action.data,
         }),
       });
     case actions.CHANNEL_CLAIMS_DATA_UPDATE:
       return Object.assign({}, state, {
         showChannel: Object.assign({}, state.showChannel, {
-          channelClaimsData: {
-            claims     : action.claims,
-            currentPage: action.currentPage,
-            totalPages : action.totalPages,
-            totalClaims: action.totalClaims,
-          },
+          channelClaimsData: action.data,
         }),
       });
     case actions.ASSET_CLAIM_DATA_UPDATE:
       return Object.assign({}, state, {
         showAsset: {
-          claimData: {
-            data   : action.data,
-            shortId: action.shortId,
-          },
+          claimData: action.data,
         },
       });
     default:
