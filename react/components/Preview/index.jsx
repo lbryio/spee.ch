@@ -8,7 +8,6 @@ class Preview extends React.Component {
       imgSource       : '',
       defaultThumbnail: '/assets/img/video_thumb_default.png',
     };
-    this.previewFile = this.previewFile.bind(this);
   }
   componentDidMount () {
     this.previewFile(this.props.file);
@@ -22,15 +21,14 @@ class Preview extends React.Component {
     }
   }
   previewFile (file) {
-    const that = this;
     if (file.type !== 'video/mp4') {
       const previewReader = new FileReader();
       previewReader.readAsDataURL(file);
-      previewReader.onloadend = function () {
-        that.setState({imgSource: previewReader.result});
+      previewReader.onloadend = () => {
+        this.setState({imgSource: previewReader.result});
       };
     } else {
-      that.setState({imgSource: (this.props.thumbnail || this.state.defaultThumbnail)});
+      this.setState({imgSource: (this.props.thumbnail || this.state.defaultThumbnail)});
     }
   }
   render () {

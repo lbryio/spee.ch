@@ -9,8 +9,6 @@ class PublishThumbnailInput extends React.Component {
       thumbnailInput : '',
     }
     this.handleInput = this.handleInput.bind(this);
-    this.urlIsAnImage = this.urlIsAnImage.bind(this);
-    this.testImage = this.testImage.bind(this);
     this.updateVideoThumb = this.updateVideoThumb.bind(this);
   }
   handleInput (event) {
@@ -38,22 +36,21 @@ class PublishThumbnailInput extends React.Component {
   }
   updateVideoThumb (event) {
     const imageUrl = event.target.value;
-    const that = this;
     if (this.urlIsAnImage(imageUrl)) {
       this.testImage(imageUrl, 3000)
         .then(() => {
           console.log('thumbnail is a valid image');
-          that.props.onThumbnailChange('thumbnail', imageUrl);
-          that.setState({thumbnailError: null});
+          this.props.onThumbnailChange('thumbnail', imageUrl);
+          this.setState({thumbnailError: null});
         })
         .catch(error => {
           console.log('encountered an error loading thumbnail image url:', error);
-          that.props.onThumbnailChange('thumbnail', null);
-          that.setState({thumbnailError: 'That is an invalid image url'});
+          this.props.onThumbnailChange('thumbnail', null);
+          this.setState({thumbnailError: 'That is an invalid image url'});
         });
     } else {
-      that.props.onThumbnailChange('thumbnail', null);
-      that.setState({thumbnailError: null});
+      this.props.onThumbnailChange('thumbnail', null);
+      this.setState({thumbnailError: null});
     }
   }
   render () {

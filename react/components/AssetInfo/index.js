@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 class AssetInfo extends React.Component {
   constructor (props) {
@@ -49,8 +50,8 @@ class AssetInfo extends React.Component {
         <div className="row row--padded row--wide row--no-top">
           <div id="show-short-link">
             <div className="column column--2 column--med-10">
-              <a className="link--primary" href={`/${this.props.shortClaimId}/${this.props.name}.${this.props.fileExt}`}><span
-                className="text">Link:</span></a>
+              <Link className="link--primary" to={`/${this.props.shortClaimId}/${this.props.name}.${this.props.fileExt}`}><span
+                className="text">Link:</span></Link>
             </div>
             <div className="column column--8 column--med-10">
               <div className="row row--short row--wide">

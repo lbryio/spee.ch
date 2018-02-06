@@ -6,9 +6,6 @@ class PublishUrlInput extends React.Component {
   constructor (props) {
     super(props);
     this.handleInput = this.handleInput.bind(this);
-    this.cleanseInput = this.cleanseInput.bind(this);
-    this.setClaimNameFromFileName = this.setClaimNameFromFileName.bind(this);
-    this.checkClaimIsAvailable = this.checkClaimIsAvailable.bind(this);
   }
   componentDidMount () {
     if (!this.props.claim || this.props.claim === '') {
@@ -40,18 +37,17 @@ class PublishUrlInput extends React.Component {
     this.props.onClaimChange(cleanClaimName);
   }
   checkClaimIsAvailable (claim) {
-    const that = this;
     request(`/api/claim-is-available/${claim}`)
       .then(isAvailable => {
         // console.log('checkClaimIsAvailable request response:', isAvailable);
         if (isAvailable) {
-          that.props.onUrlError(null);
+          this.props.onUrlError(null);
         } else {
-          that.props.onUrlError('That url has already been claimed');
+          this.props.onUrlError('That url has already been claimed');
         }
       })
       .catch((error) => {
-        that.props.onUrlError(error.message);
+        this.props.onUrlError(error.message);
       });
   }
   render () {

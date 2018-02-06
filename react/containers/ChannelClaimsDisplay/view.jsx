@@ -8,9 +8,6 @@ class ChannelClaimsDisplay extends React.Component {
     this.state = {
       error: null,
     };
-    this.updateClaimsData = this.updateClaimsData.bind(this);
-    this.showPreviousResultsPage = this.showPreviousResultsPage.bind(this);
-    this.showNextResultsPage = this.showNextResultsPage.bind(this);
   }
   componentDidMount () {
     const name = this.props.name;
@@ -24,18 +21,17 @@ class ChannelClaimsDisplay extends React.Component {
   }
   updateClaimsData (name, longId, page) {
     const url = `/api/channel-claims/${name}/${longId}/${page}`;
-    const that = this;
     return request(url)
       .then(({ success, message, data }) => {
         console.log('api/channel-claims response:', data);
         if (!success) {
-          return that.setState({error: message});
+          return this.setState({error: message});
         }
-        that.setState({error: null}); // move this error to redux state
-        that.props.onChannelClaimsDataUpdate(data.claims, data.currentPage, data.totalPages, data.totalResults);
+        this.setState({error: null}); // move this error to redux state
+        this.props.onChannelClaimsDataUpdate(data.claims, data.currentPage, data.totalPages, data.totalResults);
       })
       .catch((error) => {
-        that.setState({error: error.message});
+        this.setState({error: error.message});
       });
   }
   componentWillUnmount () {

@@ -11,24 +11,20 @@ class AssetDisplay extends React.Component {
       error : null,
       status: LOCAL_CHECK,
     };
-    this.isLocalFileAvailableOnServer = this.isLocalFileAvailableOnServer.bind(this);
-    this.triggerGetAssetOnServer = this.triggerGetAssetOnServer.bind(this);
   }
   componentDidMount () {
-    const that = this;
     this.isLocalFileAvailableOnServer()
       .then(isAvailable => {
         if (!isAvailable) {
-          console.log('file is not yet available');
-          that.setState({status: SEARCHING});
-          return that.triggerGetAssetOnServer();
+          this.setState({status: SEARCHING});
+          return this.triggerGetAssetOnServer();
         }
       })
       .then(() => {
-        that.setState({status: AVAILABLE});
+        this.setState({status: AVAILABLE});
       })
       .catch(error => {
-        that.setState({
+        this.setState({
           status: UNAVAILABLE,
           error : error.message,
         });

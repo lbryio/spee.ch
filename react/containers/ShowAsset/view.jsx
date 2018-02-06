@@ -36,10 +36,9 @@ class ShowAsset extends React.Component {
       body: JSON.stringify(body),
     }
     // make request
-    const that = this;
     this.getLongClaimId(params)
       .then(claimLongId => {
-        return Promise.all([that.getShortClaimId(claimLongId, name), that.getClaimData(claimLongId, name)]);
+        return Promise.all([this.getShortClaimId(claimLongId, name), this.getClaimData(claimLongId, name)]);
       })
       .then(([shortId, claimData]) => {
         this.setState({error: null}); // note: move this to redux level

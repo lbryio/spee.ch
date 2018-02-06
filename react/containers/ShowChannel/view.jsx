@@ -9,7 +9,6 @@ class ShowChannel extends React.Component {
     this.state = {
       error: null,
     };
-    this.getAndStoreChannelData = this.getAndStoreChannelData.bind(this);
   }
   componentDidMount () {
     this.getAndStoreChannelData(this.props.requestName, this.props.requestId);
@@ -22,18 +21,17 @@ class ShowChannel extends React.Component {
   getAndStoreChannelData (name, id) {
     if (!id) id = 'none';
     const url = `/api/channel-data/${name}/${id}`;
-    const that = this;
     return request(url)
       .then(({ success, message, data }) => {
         console.log('api/channel-data response:', data);
         if (!success) {
-          return that.setState({error: message});
+          return this.setState({error: message});
         }
-        that.setState({error: null}); // note: store this error at app level also
-        that.props.onChannelDataUpdate(data.channelName, data.longChannelClaimId, data.shortChannelClaimId);
+        this.setState({error: null}); // note: store this error at app level also
+        this.props.onChannelDataUpdate(data.channelName, data.longChannelClaimId, data.shortChannelClaimId);
       })
       .catch((error) => {
-        that.setState({error: error.message});
+        this.setState({error: error.message});
       });
   }
   componentWillUnmount () {
