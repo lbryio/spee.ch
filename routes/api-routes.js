@@ -207,7 +207,7 @@ module.exports = (app) => {
         res.status(200).json({success: false, message: error.message});
       });
   });
-  app.post('/api/claim/long-id', ({ ip, originalUrl, body, params }, res) => {
+  app.get('/api/claim/long-id', ({ ip, originalUrl, body, params }, res) => {
     logger.debug('body:', body);
     const channelName = body.channelName;
     const channelClaimId = body.channelClaimId;

@@ -1,5 +1,5 @@
 import React from 'react';
-import ProgressBar from 'components/ProgressBar/index';
+import ProgressBar from 'components/ProgressBar';
 import { LOCAL_CHECK, UNAVAILABLE, ERROR, AVAILABLE } from 'constants/asset_display_states';
 
 class AssetDisplay extends React.Component {
@@ -7,9 +7,7 @@ class AssetDisplay extends React.Component {
     this.props.onFileRequest(this.props.claimData.name, this.props.claimData.claimId);
   }
   render () {
-    const status = this.props.status;
-    const error = this.props.error;
-    const { name, claimId, contentType, fileExt, thumbnail } = this.props.claimData;
+    const { status, error, claimData: { name, claimId, contentType, fileExt, thumbnail } } = this.props;
     return (
       <div id="asset-display-component">
         {(status === LOCAL_CHECK) &&

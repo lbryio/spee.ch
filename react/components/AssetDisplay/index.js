@@ -4,8 +4,8 @@ import { fileRequested } from 'actions/show';
 
 const mapStateToProps = ({ show }) => {
   return {
-    error    : show.showAsset.error,
-    status   : show.showAsset.status,
+    error    : show.displayAsset.error,
+    status   : show.displayAsset.status,
     claimData: show.showAsset.claimData,
   };
 };

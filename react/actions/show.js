@@ -2,7 +2,7 @@ import * as actions from 'constants/show_action_types';
 
 export function updateRequestWithChannelRequest (name, id) {
   return {
-    type: actions.REQUEST_UPDATE_CHANNEL,
+    type: actions.REQUEST_CHANNEL_UPDATE,
     data: {
       name,
       id,
@@ -12,7 +12,7 @@ export function updateRequestWithChannelRequest (name, id) {
 
 export function updateRequestWithAssetRequest (name, id, channelName, channelId, extension) {
   return {
-    type: actions.REQUEST_UPDATE_CLAIM,
+    type: actions.REQUEST_CLAIM_UPDATE,
     data: {
       name,
       modifier: {
@@ -26,6 +26,13 @@ export function updateRequestWithAssetRequest (name, id, channelName, channelId,
     },
   };
 };
+
+export function updateRequestError (error) {
+  return {
+    type: actions.REQUEST_ERROR_UPDATE,
+    data: error,
+  };
+}
 
 export function updateChannelData (name, longId, shortId) {
   return {
@@ -70,9 +77,9 @@ export function fileRequested (name, claimId) {
   };
 };
 
-export function updateFileIsAvailable (status) {
+export function updateFileAvailability (status) {
   return {
-    type: actions.FILE_IS_AVAILABLE_UPDATE,
+    type: actions.FILE_AVAILABILITY_UPDATE,
     data: status,
   };
 };
@@ -80,6 +87,13 @@ export function updateFileIsAvailable (status) {
 export function updateShowAssetError (error) {
   return {
     type: actions.SHOW_ASSET_ERROR,
+    data: error,
+  };
+};
+
+export function updateDisplayAssetError (error) {
+  return {
+    type: actions.DISPLAY_ASSET_ERROR,
     data: error,
   };
 };

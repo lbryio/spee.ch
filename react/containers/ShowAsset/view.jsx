@@ -6,17 +6,11 @@ import request from 'utils/request';
 class ShowAsset extends React.Component {
   constructor (props) {
     super(props);
-    this.state = {
-      error: null,
-    };
     this.getLongClaimId = this.getLongClaimId.bind(this);
     this.getClaimData = this.getClaimData.bind(this);
   }
   componentDidMount () {
-    console.log('ShowAsset did mount');
-    console.log('ShowAsset props', this.props);
-    const modifier = this.props.modifier;
-    const name = this.props.claim;
+    const { name, modifier } = this.props;
     // create request params
     let body = {};
     if (modifier) {
@@ -41,11 +35,10 @@ class ShowAsset extends React.Component {
         return Promise.all([this.getShortClaimId(claimLongId, name), this.getClaimData(claimLongId, name)]);
       })
       .then(([shortId, claimData]) => {
-        this.setState({error: null}); // note: move this to redux level
         this.props.onAssetClaimDataUpdate(claimData, shortId);
       })
       .catch(error => {
-        this.setState({error});
+        this.props.onShowAssetError(error);
       });
   }
   getLongClaimId (params) {
@@ -101,26 +94,25 @@ class ShowAsset extends React.Component {
     this.props.onAssetClaimDataClear();
   }
   render () {
-    if (this.props.claimData) {
-      if (this.props.extension) {
+    const { error, claimData, extension } = this.props;
+    if (error) {
+      return (
+        <p>{error}</p>
+      );
+    }
+    if (claimData) {
+      if (extension) {
         return (
-          <ShowAssetLite
-            error={this.state.error}
-            claimData={this.props.claimData}
-          />
+          <ShowAssetLite />
         );
       } else {
         return (
-          <ShowAssetDetails
-            error={this.state.error}
-            claimData={this.props.claimData}
-            shortId={this.props.shortId}
-          />
+          <ShowAssetDetails />
         );
       }
     };
     return (
-      <div></div>
+      <div> </div>
     );
   }
 };

@@ -1,11 +1,10 @@
-import React from 'react';
+import { connect } from 'react-redux';
+import View from './view';
 
-const AssetTitle = ({title}) => {
-  return (
-    <div>
-      <span className="text--large">{title}</span>
-    </div>
-  );
+const mapStateToProps = ({ show }) => {
+  return {
+    title: show.showAsset.claimData.title,
+  };
 };
 
-export default AssetTitle;
+export default connect(mapStateToProps, null)(View);

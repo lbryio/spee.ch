@@ -4,7 +4,7 @@ import View from './view';
 
 const mapStateToProps = ({ show }) => {
   return {
-    requestType: show.requestType,
+    requestType: show.request.type,
   };
 };
 
