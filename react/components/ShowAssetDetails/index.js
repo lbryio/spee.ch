@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import NavBar from 'containers/NavBar';
 import AssetTitle from 'components/AssetTitle';
-import AssetDisplay from 'components/AssetDisplay';
+import AssetDisplay from 'containers/AssetDisplay';
 import AssetInfo from 'components/AssetInfo';
 
 class ShowAssetDetails extends React.Component {
@@ -25,14 +25,7 @@ class ShowAssetDetails extends React.Component {
             </div>
             <div className="column column--5 column--sml-10 align-content-top">
               <div className="row row--padded">
-                <AssetDisplay
-                name={this.props.claimData.name}
-                claimId={this.props.claimData.claimId}
-                src={`/${this.props.claimData.claimId}/${this.props.claimData.name}.${this.props.claimData.fileExt}`}
-                contentType={this.props.claimData.contentType}
-                fileExt={this.props.claimData.fileExt}
-                thumbnail={this.props.claimData.thumbnail}
-                />
+                <AssetDisplay />
               </div>
             </div><div className="column column--5 column--sml-10 align-content-top">
               <div className="row row--padded">

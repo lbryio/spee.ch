@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import AssetDisplay from 'components/AssetDisplay';
+import AssetDisplay from 'containers/AssetDisplay';
 
 class ShowLite extends React.Component {
   render () {

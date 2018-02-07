@@ -7,8 +7,8 @@ const mapStateToProps = ({ show }) => {
     modifier : show.assetRequest.modifier,
     claim    : show.assetRequest.name,
     extension: show.assetRequest.extension,
-    claimData: show.showAsset.claimData.data,
-    shortId  : show.showAsset.claimData.shortId,
+    claimData: show.showAsset.claimData,
+    shortId  : show.showAsset.shortId,
   };
 };
 

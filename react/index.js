@@ -1,13 +1,20 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 import Reducer from 'reducers';
+import createSagaMiddleware from 'redux-saga';
+import rootSaga  from 'sagas';
 import Root from './root';
+
+const sagaMiddleware = createSagaMiddleware();
+const middleware = applyMiddleware(sagaMiddleware);
 
 let store = createStore(
   Reducer,
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+  compose(middleware, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()),
 );
+
+sagaMiddleware.run(rootSaga);
 
 render(
   <Root store={store} />,

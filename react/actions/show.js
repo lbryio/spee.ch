@@ -59,3 +59,27 @@ export function updateAssetClaimData (data, shortId) {
     },
   };
 };
+
+export function fileRequested (name, claimId) {
+  return {
+    type: actions.FILE_REQUESTED,
+    data: {
+      name,
+      claimId,
+    },
+  };
+};
+
+export function updateFileIsAvailable (status) {
+  return {
+    type: actions.FILE_IS_AVAILABLE_UPDATE,
+    data: status,
+  };
+};
+
+export function updateShowAssetError (error) {
+  return {
+    type: actions.SHOW_ASSET_ERROR,
+    data: error,
+  };
+};

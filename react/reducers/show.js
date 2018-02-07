@@ -1,5 +1,6 @@
 import * as actions from 'constants/show_action_types';
 import { CHANNEL, ASSET } from 'constants/show_request_types';
+import { LOCAL_CHECK, ERROR } from 'constants/asset_display_states';
 
 const initialState = {
   requestType   : null,
@@ -32,10 +33,10 @@ const initialState = {
     },
   },
   showAsset: {
-    claimData: {
-      data   : null,
-      shortId: null,
-    },
+    error    : null,
+    status   : LOCAL_CHECK,
+    claimData: null,
+    shortId  : null,
   },
 };
 
@@ -69,9 +70,23 @@ export default function (state = initialState, action) {
       });
     case actions.ASSET_CLAIM_DATA_UPDATE:
       return Object.assign({}, state, {
-        showAsset: {
-          claimData: action.data,
-        },
+        showAsset: Object.assign({}, state.showAsset, {
+          claimData: action.data.data,
+          shortId  : action.data.shortId,
+        }),
+      });
+    case actions.FILE_IS_AVAILABLE_UPDATE:
+      return Object.assign({}, state, {
+        showAsset: Object.assign({}, state.showAsset, {
+          status: action.data,
+        }),
+      });
+    case actions.SHOW_ASSET_ERROR:
+      return Object.assign({}, state, {
+        showAsset: Object.assign({}, state.showAsset, {
+          error : action.data,
+          status: ERROR,
+        }),
       });
     default:
       return state;
