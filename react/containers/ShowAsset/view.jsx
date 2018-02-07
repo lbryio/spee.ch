@@ -1,4 +1,5 @@
 import React from 'react';
+import ErrorPage from 'components/ErrorPage';
 import ShowAssetLite from 'components/ShowAssetLite';
 import ShowAssetDetails from 'components/ShowAssetDetails';
 import request from 'utils/request';
@@ -43,7 +44,6 @@ class ShowAsset extends React.Component {
   }
   getLongClaimId (params) {
     const url = `/api/claim/long-id`;
-    console.log('params:', params);
     return new Promise((resolve, reject) => {
       request(url, params)
         .then(({ success, message, data }) => {
@@ -97,7 +97,7 @@ class ShowAsset extends React.Component {
     const { error, claimData, extension } = this.props;
     if (error) {
       return (
-        <p>{error}</p>
+        <ErrorPage error={error}/>
       );
     }
     if (claimData) {

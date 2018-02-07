@@ -9,24 +9,17 @@ import { CHANNEL, ASSET } from 'constants/show_request_types';
 class ShowPage extends React.Component {
   constructor (props) {
     super(props);
-    this.state = {
-      error: null,
-    };
     this.parseUrlAndUpdateState = this.parseUrlAndUpdateState.bind(this);
     this.parseAndUpdateIdentifierAndClaim = this.parseAndUpdateIdentifierAndClaim.bind(this);
     this.parseAndUpdateClaimOnly = this.parseAndUpdateClaimOnly.bind(this);
   }
   componentDidMount () {
-    console.log('ShowPage did mount');
-    const identifier = this.props.match.params.identifier;
-    const claim = this.props.match.params.claim;
+    const { identifier, claim } = this.props.match.params;
     this.parseUrlAndUpdateState(identifier, claim);
   }
   componentWillReceiveProps (nextProps) {
     if (nextProps.match.params !== this.props.match.params) {
-      console.log('ShowPage received new params props');
-      const identifier = nextProps.match.params.identifier;
-      const claim = nextProps.match.params.claim;
+      const { identifier, claim } = nextProps.match.params;
       this.parseUrlAndUpdateState(identifier, claim);
     }
   }
@@ -45,7 +38,7 @@ class ShowPage extends React.Component {
       ({ isChannel, channelName, channelClaimId, claimId } = lbryUri.parseIdentifier(modifier));
       ({ claimName, extension } = lbryUri.parseClaim(claim));
     } catch (error) {
-      return this.setState({error: error.message});
+      return this.props.onRequestError(error.message);
     }
     // update the store
     if (isChannel) {
@@ -61,7 +54,7 @@ class ShowPage extends React.Component {
     try {
       ({ isChannel, channelName, channelClaimId } = lbryUri.parseIdentifier(claim));
     } catch (error) {
-      return this.setState({error: error.message});
+      return this.props.onRequestError(error.message);
     }
     // return early if this request is for a channel
     if (isChannel) {
@@ -72,19 +65,18 @@ class ShowPage extends React.Component {
     try {
       ({claimName, extension} = lbryUri.parseClaim(claim));
     } catch (error) {
-      return this.setState({error: error.message});
+      return this.props.onRequestError(error.message);
     }
     this.props.onAssetRequest(claimName, null, null, null, extension);
   }
   render () {
-    console.log('rendering ShowPage');
-    console.log('ShowPage props', this.props);
-    if (this.state.error) {
+    const { error, requestType } = this.props;
+    if (error) {
       return (
-        <ErrorPage error={this.state.error}/>
+        <ErrorPage error={error}/>
       );
     }
-    switch (this.props.requestType) {
+    switch (requestType) {
       case CHANNEL:
         return <ShowChannel />;
       case ASSET:

@@ -23,6 +23,7 @@ const initialState = {
     extension: null,
   },
   showChannel: {
+    error      : null,
     channelData: {
       name   : null,
       shortId: null,
@@ -52,23 +53,33 @@ Reducers describe how the application's state changes in response to actions
 
 export default function (state = initialState, action) {
   switch (action.type) {
-    case actions.REQUEST_CHANNEL_UPDATE:
+    // request cases
+    case actions.REQUEST_ERROR_UPDATE:
       return Object.assign({}, state, {
         request: Object.assign({}, state.request, {
-          type: CHANNEL,
+          error: action.data,
         }),
+      });
+    case actions.REQUEST_CHANNEL_UPDATE:
+      return Object.assign({}, state, {
+        request: {
+          type : CHANNEL,
+          error: null,
+        },
         channelRequest: action.data,
       });
     case actions.REQUEST_CLAIM_UPDATE:
       return Object.assign({}, state, {
-        request: Object.assign({}, state.request, {
-          type: ASSET,
-        }),
+        request: {
+          type : ASSET,
+          error: null,
+        },
         assetRequest: action.data,
       });
-    case actions.REQUEST_ERROR_UPDATE:
+    // show channel cases
+    case actions.SHOW_CHANNEL_ERROR:
       return Object.assign({}, state, {
-        request: Object.assign({}, state.request, {
+        showChannel: Object.assign({}, state.showAsset, {
           error: action.data,
         }),
       });
@@ -84,6 +95,13 @@ export default function (state = initialState, action) {
           channelClaimsData: action.data,
         }),
       });
+    // show asset cases
+    case actions.SHOW_ASSET_ERROR:
+      return Object.assign({}, state, {
+        showAsset: Object.assign({}, state.showAsset, {
+          error: action.data,
+        }),
+      });
     case actions.ASSET_CLAIM_DATA_UPDATE:
       return Object.assign({}, state, {
         showAsset: Object.assign({}, state.showAsset, {
@@ -91,12 +109,7 @@ export default function (state = initialState, action) {
           shortId  : action.data.shortId,
         }),
       });
-    case actions.SHOW_ASSET_ERROR:
-      return Object.assign({}, state, {
-        showAsset: Object.assign({}, state.showAsset, {
-          error: action.data,
-        }),
-      });
+    // display asset cases
     case actions.FILE_AVAILABILITY_UPDATE:
       return Object.assign({}, state, {
         displayAsset: Object.assign({}, state.displayAsset, {

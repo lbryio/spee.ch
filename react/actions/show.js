@@ -1,5 +1,12 @@
 import * as actions from 'constants/show_action_types';
 
+export function updateRequestError (error) {
+  return {
+    type: actions.REQUEST_ERROR_UPDATE,
+    data: error,
+  };
+}
+
 export function updateRequestWithChannelRequest (name, id) {
   return {
     type: actions.REQUEST_CHANNEL_UPDATE,
@@ -27,12 +34,12 @@ export function updateRequestWithAssetRequest (name, id, channelName, channelId,
   };
 };
 
-export function updateRequestError (error) {
+export function updateShowChannelError (error) {
   return {
-    type: actions.REQUEST_ERROR_UPDATE,
+    type: actions.SHOW_CHANNEL_ERROR,
     data: error,
   };
-}
+};
 
 export function updateChannelData (name, longId, shortId) {
   return {
@@ -54,6 +61,13 @@ export function updateChannelClaimsData (claims, currentPage, totalPages, totalC
       totalPages,
       totalClaims,
     },
+  };
+};
+
+export function updateShowAssetError (error) {
+  return {
+    type: actions.SHOW_ASSET_ERROR,
+    data: error,
   };
 };
 
@@ -81,13 +95,6 @@ export function updateFileAvailability (status) {
   return {
     type: actions.FILE_AVAILABILITY_UPDATE,
     data: status,
-  };
-};
-
-export function updateShowAssetError (error) {
-  return {
-    type: actions.SHOW_ASSET_ERROR,
-    data: error,
   };
 };
 
