@@ -104,3 +104,26 @@ export function updateDisplayAssetError (error) {
     data: error,
   };
 };
+
+// new
+
+export function newAssetRequest (id, name, modifier) {
+  return {
+    type: actions.NEW_ASSET_REQUEST,
+    data: { id, name, modifier },
+  };
+};
+
+export function addAssetRequest (id, error, claimId) {
+  return {
+    type: actions.ASSET_REQUEST_ADD,
+    data: { id, error, claimId },
+  };
+};
+
+// export function addAsset (error, name, claimId, claimData, shortId, display) {
+//   return {
+//     type: actions.ASSET_ADD,
+//     data: { error, name, claimId, claimData, shortId, display },
+//   };
+// };

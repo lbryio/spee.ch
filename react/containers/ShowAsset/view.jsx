@@ -4,6 +4,16 @@ import ShowAssetLite from 'components/ShowAssetLite';
 import ShowAssetDetails from 'components/ShowAssetDetails';
 import request from 'utils/request';
 
+function buildIdFromModifierObject (modifier) {
+  if (modifier) {
+    if (modifier.channel.name) {
+      return `${modifier.channel.name}#${modifier.channel.id}`;
+    }
+    return modifier.id;
+  }
+  return '';
+}
+
 class ShowAsset extends React.Component {
   constructor (props) {
     super(props);
@@ -11,84 +21,21 @@ class ShowAsset extends React.Component {
     this.getClaimData = this.getClaimData.bind(this);
   }
   componentDidMount () {
-    const { name, modifier } = this.props;
-    // create request params
-    let body = {};
-    if (modifier) {
-      if (modifier.id) {
-        body['claimId'] = modifier.id;
-      } else {
-        body['channelName'] = modifier.channel.name;
-        body['channelClaimId'] = modifier.channel.id;
-      }
+    const { request: { name, modifier }, assetRequests } = this.props;
+    const id = buildIdFromModifierObject(modifier);
+    // check to see if we have this asset
+    if (assetRequests[id]) {
+      // case: the assetRequest exists
+      this.props.onNewAssetRequest(id, name, modifier);  // request the long id and update the store with a new asset request record.
+    } else {
+      // case: the asset request does not exist
+      this.onRepeatAssetRequest(name, modifier); // get the asset request record...?
     }
-    body['claimName'] = name;
-    const params = {
-      method : 'POST',
-      headers: new Headers({
-        'Content-Type': 'application/json',
-      }),
-      body: JSON.stringify(body),
-    }
-    // make request
-    this.getLongClaimId(params)
-      .then(claimLongId => {
-        return Promise.all([this.getShortClaimId(claimLongId, name), this.getClaimData(claimLongId, name)]);
-      })
-      .then(([shortId, claimData]) => {
-        this.props.onAssetClaimDataUpdate(claimData, shortId);
-      })
-      .catch(error => {
-        this.props.onShowAssetError(error);
-      });
   }
-  getLongClaimId (params) {
-    const url = `/api/claim/long-id`;
-    return new Promise((resolve, reject) => {
-      request(url, params)
-        .then(({ success, message, data }) => {
-          console.log('get long claim id response:', message);
-          if (!success) {
-            reject(message);
-          }
-          resolve(data);
-        })
-        .catch((error) => {
-          reject(error.message);
-        });
-    });
-  }
-  getShortClaimId (longId, name) {
-    const url = `/api/claim/short-id/${longId}/${name}`;
-    return new Promise((resolve, reject) => {
-      request(url)
-        .then(({ success, message, data }) => {
-          console.log('get short claim id response:', data);
-          if (!success) {
-            reject(message);
-          }
-          resolve(data);
-        })
-        .catch((error) => {
-          reject(error.message);
-        });
-    });
-  }
-  getClaimData (claimId, claimName) {
-    return new Promise((resolve, reject) => {
-      const url = `/api/claim/data/${claimName}/${claimId}`;
-      return request(url)
-        .then(({ success, message }) => {
-          console.log('get claim data response:', message);
-          if (!success) {
-            reject(message);
-          }
-          resolve(message);
-        })
-        .catch((error) => {
-          reject(error.message);
-        });
-    });
+  onRepeatAssetRequest (id, modifier, assetRequests) {
+    // get the results of the existing asset request
+    const {error, claimId} = assetRequests[id];
+    console.log(`results form past request ${id}:`, error, claimId);
   }
   componentWillUnmount () {
     this.props.onAssetClaimDataClear();

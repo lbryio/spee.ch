@@ -45,9 +45,30 @@ const initialState = {
     error : null,
     status: LOCAL_CHECK,
   },
-  viewedChannels: [],
-  viewedClaims  : [],
+  channelRequests: {},
+  assetRequests  : {},
+  channels       : {},
+  assets         : {},
 };
+
+/* asset request schema:
+name#someidfrommodifier: {
+  error  : null
+  claimId: null,
+} */
+
+/* asset schema:
+name#claimId: {
+  error    : null,
+  name     : null,
+  claimId   : null,
+  claimData: null,
+  shortId  : null,
+  display  : {
+    error : null,
+    status: null,
+  }
+} */
 
 /*
 Reducers describe how the application's state changes in response to actions
@@ -125,6 +146,23 @@ export default function (state = initialState, action) {
           status: ERROR,
         }),
       });
+    // new actions
+    case actions.ASSET_REQUEST_ADD:
+      return Object.assign({}, state, {
+        assetRequests: Object.assign({}, state.assets, {
+          [action.data.id]: {
+            error  : action.data.error,
+            claimId: action.data.claimId,
+          },
+        }),
+      });
+
+    // case actions.ASSET_ADD:
+    //   return Object.assign({}, state, {
+    //     assets: Object.assign({}, state.assets, {
+    //       [`${action.data.name}#${action.data.claimId}`]: action.data,
+    //     }),
+    //   });
     default:
       return state;
   }

@@ -1,12 +1,14 @@
 import { connect } from 'react-redux';
 import View from './view';
-import { updateAssetClaimData, updateShowAssetError } from 'actions/show';
+import { newAssetRequest, updateAssetClaimData, updateShowAssetError } from 'actions/show';
 
 const mapStateToProps = ({ show }) => {
   return {
-    modifier : show.assetRequest.modifier,
-    name     : show.assetRequest.name,
-    extension: show.assetRequest.extension,
+    // new
+    request      : show.assetRequest,
+    assetRequests: show.assetRequests,
+    extension    : show.assetRequest.extension,
+    // old
     error    : show.showAsset.error,
     claimData: show.showAsset.claimData,
   };
@@ -14,6 +16,11 @@ const mapStateToProps = ({ show }) => {
 
 const mapDispatchToProps = dispatch => {
   return {
+    // new
+    onNewAssetRequest (name, modifier) {
+      dispatch(newAssetRequest(name, modifier));
+    },
+    // old
     onShowAssetError: (error) => {
       dispatch(updateShowAssetError(error));
     },
