@@ -51,8 +51,8 @@ class ShowChannel extends React.Component {
           <div className="row row--tall row--padded">
             <div className="column column--10">
               <h2>channel name: {this.props.name ? this.props.name : 'loading...'}</h2>
-              <p>full channel id: {this.props.longId ? this.props.longId : 'loading...'}</p>
-              <p>short channel id: {this.props.shortId ? this.props.shortId : 'loading...'}</p>
+              <p className={'fine-print'}>full channel id: {this.props.longId ? this.props.longId : 'loading...'}</p>
+              <p className={'fine-print'}>short channel id: {this.props.shortId ? this.props.shortId : 'loading...'}</p>
             </div>
             <div className="column column--10">
               {(this.props.name && this.props.longId) && <ChannelClaimsDisplay />}

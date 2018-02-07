@@ -276,7 +276,7 @@ a, a:visited {
 	vertical-align: top;
 }
 
-.align-content-right {
+.align-content-bottom {
 	vertical-align: bottom;
 }
 
@@ -495,7 +495,7 @@ table {
 	padding: 1em;
 }
 
-#asset-preview {
+#dropzone-preview {
 	display: block;
 	width: 100%;
 }
@@ -505,6 +505,20 @@ table {
 }
 
 /* Assets */
+
+.asset-holder {
+	clear  : both;
+	display: inline-block;
+	width  : 31%;
+	padding: 0px;
+	margin : 1%;
+}
+
+.asset-preview {
+	width  : 100%;
+	padding: 0px;
+	margin : 0px
+}
 
 .asset {
 	width: 100%;

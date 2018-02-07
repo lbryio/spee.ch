@@ -8,6 +8,8 @@ class ChannelClaimsDisplay extends React.Component {
     this.state = {
       error: null,
     };
+    this.showNextResultsPage = this.showNextResultsPage.bind(this);
+    this.showPreviousResultsPage = this.showPreviousResultsPage.bind(this);
   }
   componentDidMount () {
     const name = this.props.name;
@@ -66,8 +68,12 @@ class ChannelClaimsDisplay extends React.Component {
                 key={`${claim.name}-${index}`}
               />)}
               <div>
-                {(this.props.currentPage > 1) && <button onClick={this.showPreviousResultsPage}>Previous Page</button>}
-                {(this.props.currentPage < this.props.totalPages) && <button onClick={this.showNextResultsPage}>Next Page</button>}
+                {(this.props.currentPage > 1) &&
+                <button className={'button--primary'} onClick={this.showPreviousResultsPage}>Previous Page</button>
+                }
+                {(this.props.currentPage < this.props.totalPages) &&
+                <button className={'button--primary'} onClick={this.showNextResultsPage}>Next Page</button>
+                }
               </div>
             </div>
             }

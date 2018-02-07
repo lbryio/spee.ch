@@ -34,7 +34,7 @@ class Preview extends React.Component {
   render () {
     return (
       <img
-        id="asset-preview"
+        id="dropzone-preview"
         src={this.state.imgSource}
         className={this.props.dimPreview ? 'dim' : ''}
         alt="publish preview"

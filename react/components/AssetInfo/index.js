@@ -155,7 +155,7 @@ class AssetInfo extends React.Component {
           </div>
         }
         <div className="row row--wide">
-          <a className="text link--primary" id="show-details-toggle" href="#" onClick={this.toggleDetails}>{this.state.showDetails ? '[less]' : '[more]'}</a>
+          <button className="button--primary" onClick={this.toggleDetails}>{this.state.showDetails ? '[less]' : '[more]'}</button>
         </div>
       </div>
     );
