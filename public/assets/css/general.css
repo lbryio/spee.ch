@@ -427,6 +427,20 @@ button {
 	background-color: white;
 }
 
+.button--secondary {
+	border: 0px;
+	border-bottom: 1px solid black;
+	padding: 0.5em;
+	margin: 0.5em 0.3em 0.5em 0.3em;
+	color: black;
+	background-color: white;
+}
+
+.button--secondary:hover {
+	border-bottom: 1px solid #9b9b9b;
+	color: #4156C5;
+}
+
 .button--large{
 	margin: 0px;
 	width: calc(100% - 2px);

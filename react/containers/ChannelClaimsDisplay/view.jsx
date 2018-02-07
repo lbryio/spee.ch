@@ -69,10 +69,10 @@ class ChannelClaimsDisplay extends React.Component {
               />)}
               <div>
                 {(this.props.currentPage > 1) &&
-                <button className={'button--primary'} onClick={this.showPreviousResultsPage}>Previous Page</button>
+                <button className={'button--secondary'} onClick={this.showPreviousResultsPage}>Previous Page</button>
                 }
                 {(this.props.currentPage < this.props.totalPages) &&
-                <button className={'button--primary'} onClick={this.showNextResultsPage}>Next Page</button>
+                <button className={'button--secondary'} onClick={this.showNextResultsPage}>Next Page</button>
                 }
               </div>
             </div>

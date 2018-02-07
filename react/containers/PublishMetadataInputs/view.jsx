@@ -65,7 +65,7 @@ class PublishMetadataInputs extends React.Component {
           </div>
         </div>
       )}
-      <a className="label link--primary" id="publish-details-toggle" href="#" onClick={this.toggleShowInputs}>{this.props.showMetadataInputs ? '[less]' : '[more]'}</a>
+        <button className="button--secondary" onClick={this.toggleShowInputs}>{this.props.showMetadataInputs ? 'less' : 'more'}</button>
       </div>
     );
   }

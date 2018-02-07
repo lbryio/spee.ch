@@ -6,22 +6,20 @@ import AssetDisplay from 'containers/AssetDisplay';
 import AssetInfo from 'components/AssetInfo';
 
 class ShowAssetDetails extends React.Component {
-  componentDidMount () {
-    console.log('ShowAssetDetails props', this.props);
-  }
   render () {
+    const { error, claimData: { title, channelName, certificateId, description, name, claimId, fileExt, contentType, thumbnail, host }, shortId } = this.props;
     return (
       <div>
         <NavBar/>
-          {this.props.error &&
+          {error &&
           <div className="row row--padded">
-            <p>{this.props.error}</p>
+            <p>{error}</p>
           </div>
           }
           {this.props.claimData &&
           <div className="row row--tall row--padded">
             <div className="column column--10">
-              <AssetTitle title={this.props.claimData.title}/>
+              <AssetTitle title={title}/>
             </div>
             <div className="column column--5 column--sml-10 align-content-top">
               <div className="row row--padded">
@@ -30,16 +28,16 @@ class ShowAssetDetails extends React.Component {
             </div><div className="column column--5 column--sml-10 align-content-top">
               <div className="row row--padded">
               <AssetInfo
-                channelName={this.props.claimData.channelName}
-                certificateId={this.props.claimData.certificateId}
-                description={this.props.claimData.description}
-                name={this.props.claimData.name}
-                claimId={this.props.claimData.claimId}
-                fileExt={this.props.claimData.fileExt}
-                contentType={this.props.claimData.contentType}
-                thumbnail={this.props.claimData.thumbnail}
-                host={this.props.claimData.host}
-                shortId={this.props.shortId}
+                channelName={channelName}
+                certificateId={certificateId}
+                description={description}
+                name={name}
+                claimId={claimId}
+                fileExt={fileExt}
+                contentType={contentType}
+                thumbnail={thumbnail}
+                host={host}
+                shortId={shortId}
               />
               </div>
             </div>

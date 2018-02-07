@@ -3,11 +3,12 @@ import NavBar from 'containers/NavBar';
 
 class ErrorPage extends React.Component {
   render () {
+    const { error } = this.props;
     return (
       <div>
         <NavBar/>
         <div className="row row--padded">
-            <p>{this.props.error}</p>
+            <p>{error}</p>
         </div>
       </div>
     );

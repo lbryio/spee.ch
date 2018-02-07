@@ -28,29 +28,30 @@ class AssetInfo extends React.Component {
     }
   }
   render () {
+    const { channelName, certificateId, description, name, claimId, fileExt, contentType, thumbnail, host, shortId } = this.props;
     return (
       <div>
-        {this.props.channelName &&
+        {channelName &&
         <div className="row row--padded row--wide row--no-top">
           <div className="column column--2 column--med-10">
             <span className="text">Channel:</span>
           </div>
           <div className="column column--8 column--med-10">
-            <span className="text"><a href={`/${this.props.channelName}:${this.props.certificateId}`}>{this.props.channelName}</a></span>
+            <span className="text"><a href={`/${channelName}:${certificateId}`}>{channelName}</a></span>
           </div>
         </div>
         }
 
-        {this.props.description &&
+        {description &&
         <div className="row row--padded row--wide row--no-top">
-          <span className="text">{this.props.description}</span>
+          <span className="text">{description}</span>
         </div>
         }
 
         <div className="row row--padded row--wide row--no-top">
           <div id="show-short-link">
             <div className="column column--2 column--med-10">
-              <Link className="link--primary" to={`/${this.props.shortId}/${this.props.name}.${this.props.fileExt}`}><span
+              <Link className="link--primary" to={`/${shortId}/${name}.${fileExt}`}><span
                 className="text">Link:</span></Link>
             </div>
             <div className="column column--8 column--med-10">
@@ -59,7 +60,7 @@ class AssetInfo extends React.Component {
                   <div className="input-error" id="input-error-copy-short-link" hidden="true">error here</div>
                   <input type="text" id="short-link" className="input-disabled input-text--full-width" readOnly
                          spellCheck="false"
-                         value={`${this.props.host}/${this.props.shortId}/${this.props.name}.${this.props.fileExt}`}
+                         value={`${host}/${shortId}/${name}.${fileExt}`}
                          onClick={this.select}/>
                 </div>
                 <div className="column column--1"> </div>
@@ -79,14 +80,14 @@ class AssetInfo extends React.Component {
               <div className="row row--short row--wide">
                 <div className="column column--7">
                   <div className="input-error" id="input-error-copy-embed-text" hidden="true">error here</div>
-                  {(this.props.contentType === 'video/mp4') ? (
+                  {(contentType === 'video/mp4') ? (
                     <input type="text" id="embed-text" className="input-disabled input-text--full-width" readOnly
                            onClick={this.select} spellCheck="false"
-                           value={`<video width="100%" controls poster="${this.props.thumbnail}" src="${this.props.host}/${this.props.claimId}/${this.props.name}.${this.props.fileExt}"/></video>`}/>
+                           value={`<video width="100%" controls poster="${thumbnail}" src="${host}/${claimId}/${name}.${fileExt}"/></video>`}/>
                   ) : (
                     <input type="text" id="embed-text" className="input-disabled input-text--full-width" readOnly
                            onClick={this.select} spellCheck="false"
-                           value={`<img src="${this.props.host}/${this.props.claimId}/${this.props.name}.${this.props.fileExt}"/>`}
+                           value={`<img src="${host}/${claimId}/${name}.${fileExt}"/>`}
                     />
                   )}
                 </div>
@@ -110,13 +111,13 @@ class AssetInfo extends React.Component {
               <div
                 className="row row--short row--wide flex-container--row flex-container--space-between-bottom flex-container--wrap">
                 <a className="link--primary" target="_blank"
-                   href={`https://twitter.com/intent/tweet?text=${this.props.host}/${this.props.shortId}/${this.props.name}`}>twitter</a>
+                   href={`https://twitter.com/intent/tweet?text=${host}/${shortId}/${name}`}>twitter</a>
                 <a className="link--primary" target="_blank"
-                   href={`https://www.facebook.com/sharer/sharer.php?u=${this.props.host}/${this.props.shortId}/${this.props.name}`}>facebook</a>
+                   href={`https://www.facebook.com/sharer/sharer.php?u=${host}/${shortId}/${name}`}>facebook</a>
                 <a className="link--primary" target="_blank"
-                   href={`http://tumblr.com/widgets/share/tool?canonicalUrl=${this.props.host}/${this.props.shortId}/${this.props.name}`}>tumblr</a>
+                   href={`http://tumblr.com/widgets/share/tool?canonicalUrl=${host}/${shortId}/${name}`}>tumblr</a>
                 <a className="link--primary" target="_blank"
-                   href={`https://www.reddit.com/submit?url=${this.props.host}/${this.props.shortId}/${this.props.name}&title=${this.props.name}`}>reddit</a>
+                   href={`https://www.reddit.com/submit?url=${host}/${shortId}/${name}&title=${name}`}>reddit</a>
               </div>
             </div>
           </div>
@@ -129,21 +130,21 @@ class AssetInfo extends React.Component {
                 <div className="column column--2 column--med-10">
                   <span className="text">Claim Name:</span>
                 </div><div className="column column--8 column--med-10">
-                  {this.props.name}
+                  {name}
                 </div>
               </div>
               <div>
                 <div className="column column--2 column--med-10">
                   <span className="text">Claim Id:</span>
                 </div><div className="column column--8 column--med-10">
-                  {this.props.claimId}
+                  {claimId}
                 </div>
               </div>
               <div>
                 <div className="column column--2 column--med-10">
                   <span className="text">File Type:</span>
                 </div><div className="column column--8 column--med-10">
-                  {this.props.contentType ? `${this.props.contentType}` : 'unknown'}
+                  {contentType ? `${contentType}` : 'unknown'}
                 </div>
               </div>
             </div>
@@ -155,7 +156,7 @@ class AssetInfo extends React.Component {
           </div>
         }
         <div className="row row--wide">
-          <button className="button--primary" onClick={this.toggleDetails}>{this.state.showDetails ? '[less]' : '[more]'}</button>
+          <button className="button--secondary" onClick={this.toggleDetails}>{this.state.showDetails ? 'less' : 'more'}</button>
         </div>
       </div>
     );

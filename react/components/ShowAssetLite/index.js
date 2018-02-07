@@ -5,22 +5,16 @@ import AssetDisplay from 'containers/AssetDisplay';
 
 class ShowLite extends React.Component {
   render () {
+    const { error, claimData: { name, claimId } } = this.props;
     return (
       <div className="row row--tall flex-container--column flex-container--center-center">
-        {this.props.error &&
-          <p>{this.props.error}</p>
+        {error &&
+          <p>{error}</p>
         }
         {this.props.claimData &&
         <div>
-          <AssetDisplay
-            name={this.props.claimData.name}
-            claimId={this.props.claimData.claimId}
-            src={`/${this.props.claimData.claimId}/${this.props.claimData.name}.${this.props.claimData.fileExt}`}
-            contentType={this.props.claimData.contentType}
-            fileExt={this.props.claimData.fileExt}
-            thumbnail={this.props.claimData.thumbnail}
-            />
-          <Link id="asset-boilerpate" className="link--primary fine-print" to={`/${this.props.claimData.claimId}/${this.props.claimData.name}`}>hosted via Spee.ch</Link>
+          <AssetDisplay />
+          <Link id="asset-boilerpate" className="link--primary fine-print" to={`/${claimId}/${name}`}>hosted via Spee.ch</Link>
         </div>
         }
       </div>
