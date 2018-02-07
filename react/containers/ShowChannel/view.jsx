@@ -20,7 +20,7 @@ class ShowChannel extends React.Component {
   }
   getAndStoreChannelData (name, id) {
     if (!id) id = 'none';
-    const url = `/api/channel-data/${name}/${id}`;
+    const url = `/api/channel/data/${name}/${id}`;
     return request(url)
       .then(({ success, message, data }) => {
         console.log('api/channel-data response:', data);

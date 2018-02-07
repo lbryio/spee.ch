@@ -37,7 +37,7 @@ class PublishUrlInput extends React.Component {
     this.props.onClaimChange(cleanClaimName);
   }
   checkClaimIsAvailable (claim) {
-    request(`/api/claim-is-available/${claim}`)
+    request(`/api/claim/availability/${claim}`)
       .then(isAvailable => {
         // console.log('checkClaimIsAvailable request response:', isAvailable);
         if (isAvailable) {

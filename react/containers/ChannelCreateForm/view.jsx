@@ -37,7 +37,7 @@ class ChannelCreateForm extends React.Component {
   }
   updateIsChannelAvailable (channel) {
     const channelWithAtSymbol = `@${channel}`;
-    request(`/api/channel-is-available/${channelWithAtSymbol}`)
+    request(`/api/channel/availability/${channelWithAtSymbol}`)
       .then(isAvailable => {
         if (isAvailable) {
           this.setState({'error': null});
@@ -52,7 +52,7 @@ class ChannelCreateForm extends React.Component {
   checkIsChannelAvailable (channel) {
     const channelWithAtSymbol = `@${channel}`;
     return new Promise((resolve, reject) => {
-      request(`/api/channel-is-available/${channelWithAtSymbol}`)
+      request(`/api/channel/availability/${channelWithAtSymbol}`)
         .then(isAvailable => {
           console.log('checkIsChannelAvailable result:', isAvailable);
           if (!isAvailable) {

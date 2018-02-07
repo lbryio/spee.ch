@@ -48,7 +48,7 @@ class PublishForm extends React.Component {
   }
   makePublishRequest (file, metadata) {
     console.log('making publish request');
-    const uri = '/api/claim-publish';
+    const uri = '/api/claim/publish';
     const xhr = new XMLHttpRequest();
     const fd = this.appendDataToFormData(file, metadata);
     xhr.upload.addEventListener('loadstart', () => {

@@ -20,7 +20,7 @@ class ChannelClaimsDisplay extends React.Component {
     }
   }
   updateClaimsData (name, longId, page) {
-    const url = `/api/channel-claims/${name}/${longId}/${page}`;
+    const url = `/api/channel/claims/${name}/${longId}/${page}`;
     return request(url)
       .then(({ success, message, data }) => {
         console.log('api/channel-claims response:', data);

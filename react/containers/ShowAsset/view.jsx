@@ -49,7 +49,7 @@ class ShowAsset extends React.Component {
       });
   }
   getLongClaimId (params) {
-    const url = `/api/claim-get-long-id`;
+    const url = `/api/claim/long-id`;
     console.log('params:', params);
     return new Promise((resolve, reject) => {
       request(url, params)
@@ -66,7 +66,7 @@ class ShowAsset extends React.Component {
     });
   }
   getShortClaimId (longId, name) {
-    const url = `/api/claim-shorten-id/${longId}/${name}`;
+    const url = `/api/claim/short-id/${longId}/${name}`;
     return new Promise((resolve, reject) => {
       request(url)
         .then(({ success, message, data }) => {
@@ -83,7 +83,7 @@ class ShowAsset extends React.Component {
   }
   getClaimData (claimId, claimName) {
     return new Promise((resolve, reject) => {
-      const url = `/api/claim-get-data/${claimName}/${claimId}`;
+      const url = `/api/claim/data/${claimName}/${claimId}`;
       return request(url)
         .then(({ success, message }) => {
           console.log('get claim data response:', message);

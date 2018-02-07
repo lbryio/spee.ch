@@ -29,20 +29,20 @@ spee.ch is a single-serving site that reads and publishes images and videos to a
 ## API
 
 #### GET
-* /api/claim-resolve/:name/:claimId
-	* example: `curl https://spee.ch/api/claim-resolve/doitlive/xyz`
-* /api/claim-list/:name
-	* example: `curl https://spee.ch/api/claim-list/doitlive`
-* /api/claim-is-available/:name (
+* /api/claim/resolve/:name/:claimId
+	* example: `curl https://spee.ch/api/claim/resolve/doitlive/xyz`
+* /api/claim/list/:name
+	* example: `curl https://spee.ch/api/claim/list/doitlive`
+* /api/claim/availability/:name (
   * returns `true`/`false` for whether a name is available through spee.ch
-	* example: `curl https://spee.ch/api/claim-is-available/doitlive`
-* /api/channel-is-available/:name (
+	* example: `curl https://spee.ch/api/claim/availability/doitlive`
+* /api/channel/availability/:name (
     * returns `true`/`false` for whether a channel is available through spee.ch
-  	* example: `curl https://spee.ch/api/channel-is-available/@CoolChannel`
+  	* example: `curl https://spee.ch/api/channel/availability/@CoolChannel`
 
 #### POST
-* /api/claim-publish
-  * example: `curl -X POST -F 'name=MyPictureName' -F 'file=@/path/to/myPicture.jpeg' https://spee.ch/api/claim-publish`
+* /api/claim/publish
+  * example: `curl -X POST -F 'name=MyPictureName' -F 'file=@/path/to/myPicture.jpeg' https://spee.ch/api/claim/publish`
   * Parameters:
     * `name`
     * `file` (must be type .mp4, .jpeg, .jpg, .gif, or .png)
