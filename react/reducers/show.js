@@ -45,6 +45,8 @@ const initialState = {
     error : null,
     status: LOCAL_CHECK,
   },
+  viewedChannels: [],
+  viewedClaims  : [],
 };
 
 /*
@@ -79,7 +81,7 @@ export default function (state = initialState, action) {
     // show channel cases
     case actions.SHOW_CHANNEL_ERROR:
       return Object.assign({}, state, {
-        showChannel: Object.assign({}, state.showAsset, {
+        showChannel: Object.assign({}, state.showChannel, {
           error: action.data,
         }),
       });
