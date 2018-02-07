@@ -6,11 +6,6 @@ class AssetDisplay extends React.Component {
   componentDidMount () {
     this.props.onFileRequest(this.props.claimData.name, this.props.claimData.claimId);
   }
-  componentWillReceiveProps (nextProps) {
-    // if (nextProps.name !== this.props.name && nextProps.claimId !== this.props.claimId) {
-    //   this.props.onCheckServerForFile(nextProps.name, nextProps.claimId);
-    // }
-  }
   render () {
     const status = this.props.status;
     const error = this.props.error;

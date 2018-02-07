@@ -9,9 +9,11 @@ import Root from './root';
 const sagaMiddleware = createSagaMiddleware();
 const middleware = applyMiddleware(sagaMiddleware);
 
+const enhancer = window.__REDUX_DEVTOOLS_EXTENSION__ ? compose(middleware, window.__REDUX_DEVTOOLS_EXTENSION__()) : middleware;
+
 let store = createStore(
   Reducer,
-  compose(middleware, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()),
+  enhancer,
 );
 
 sagaMiddleware.run(rootSaga);

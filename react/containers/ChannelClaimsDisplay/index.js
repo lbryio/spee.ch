@@ -2,14 +2,14 @@ import { connect } from 'react-redux';
 import { updateChannelClaimsData } from 'actions/show';
 import View from './view';
 
-const mapStateToProps = ({ show }) => {
+const mapStateToProps = ({ show : { showChannel: { channelData, channelClaimsData } } }) => {
   return {
-    name       : show.showChannel.channelData.name,
-    longId     : show.showChannel.channelData.longId,
-    claims     : show.showChannel.channelClaimsData.claims,
-    currentPage: show.showChannel.channelClaimsData.currentPage,
-    totalPages : show.showChannel.channelClaimsData.totalPages,
-    totalClaims: show.showChannel.channelClaimsData.totalClaims,
+    name       : channelData.name,
+    longId     : channelData.longId,
+    claims     : channelClaimsData.claims,
+    currentPage: channelClaimsData.currentPage,
+    totalPages : channelClaimsData.totalPages,
+    totalClaims: channelClaimsData.totalClaims,
   };
 };
 
