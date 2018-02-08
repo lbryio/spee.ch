@@ -9,16 +9,19 @@ export function updateRequestError (error) {
 }
 
 export function updateRequestWithChannelRequest (name, id) {
+  const requestId = `cr#${name}#${id}`;
   return {
     type: actions.REQUEST_CHANNEL_UPDATE,
-    data: { name, id },
+    data: { requestId, name, id },
   };
 };
 
 export function updateRequestWithAssetRequest (name, id, channelName, channelId, extension) {
+  const requestId = `ar#${name}#${id}#${channelName}#${channelId}`;
   return {
     type: actions.REQUEST_CLAIM_UPDATE,
     data: {
+      requestId,
       name,
       modifier: {
         id,

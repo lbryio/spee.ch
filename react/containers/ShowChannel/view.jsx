@@ -6,14 +6,18 @@ import request from 'utils/request';
 
 class ShowChannel extends React.Component {
   componentDidMount () {
-    this.getAndStoreChannelData(this.props.requestName, this.props.requestId);
+    console.log('showchannel did mount');
+    const {requestChannelName, requestChannelId} = this.props;
+    this.getAndStoreChannelData(requestChannelName, requestChannelId);
   }
   componentWillReceiveProps (nextProps) {
-    if (nextProps.requestName !== this.props.requestName || nextProps.requestId !== this.props.requestId) {
-      this.getAndStoreChannelData(nextProps.requestName, nextProps.requestId);
+    if (nextProps.channelRequests !== this.props.channelRequests) {
+      const {requestChannelName, requestChannelId} = nextProps;
+      this.getAndStoreChannelData(requestChannelName, requestChannelId);
     }
   }
   getAndStoreChannelData (name, id) {
+    console.log('getting and storing channel data for channel:', name, id);
     if (!id) id = 'none';
     const url = `/api/channel/data/${name}/${id}`;
     return request(url)

@@ -5,15 +5,17 @@ import { newAssetRequest, updateRequestError, showNewAsset, updateShowAsset, cle
 const mapStateToProps = ({ show }) => {
   return {
     // new
-    requestName     : show.assetRequest.name,
-    requestModifier : show.assetRequest.modifier,
-    requestExtension: show.assetRequest.extension,
+    requestId       : show.request.id,
+    requestName     : show.request.data.name,
+    requestModifier : show.request.data.modifier,
+    requestExtension: show.request.data.extension,
     assetRequests   : show.assetRequests,
     assets          : show.assets,
     // old
     error           : show.showAsset.error,
     name            : show.showAsset.name,
     claimData       : show.showAsset.claimData,
+    showAsset       : show.assets[show.request.id],
   };
 };
 

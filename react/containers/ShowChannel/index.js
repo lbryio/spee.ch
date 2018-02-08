@@ -4,12 +4,13 @@ import View from './view';
 
 const mapStateToProps = ({ show }) => {
   return {
-    requestName: show.channelRequest.name,
-    requestId  : show.channelRequest.id,
-    error      : show.showChannel.error,
-    name       : show.showChannel.channelData.name,
-    shortId    : show.showChannel.channelData.shortId,
-    longId     : show.showChannel.channelData.longId,
+    requestId         : show.request.id,
+    requestChannelName: show.request.data.name,
+    requestChannelId  : show.request.data.id,
+    error             : show.showChannel.error,
+    name              : show.showChannel.channelData.name,
+    shortId           : show.showChannel.channelData.shortId,
+    longId            : show.showChannel.channelData.longId,
   };
 };
 

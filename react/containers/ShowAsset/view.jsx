@@ -3,44 +3,31 @@ import ErrorPage from 'components/ErrorPage';
 import ShowAssetLite from 'components/ShowAssetLite';
 import ShowAssetDetails from 'components/ShowAssetDetails';
 
-function buildIdFromModifierObject (name, modifier) {
-  if (modifier) {
-    if (modifier.channel.name) {
-      return `${name}#${modifier.channel.name}#${modifier.channel.id}`;
-    }
-    return `${name}#${modifier.id}`;
-  }
-  return `${name}`;
-}
-
-function buildIdFromNameAndClaimId (name, claimId) {
-  return `${name}#${claimId}`;
-}
-
 class ShowAsset extends React.Component {
   componentDidMount () {
-    const { requestName, requestModifier, assetRequests } = this.props;
-    const id = buildIdFromModifierObject(requestName, requestModifier);
+    const { requestId, requestName, requestModifier, assetRequests } = this.props;
     // check to see if we have this asset
-    if (assetRequests[id]) { // case: the assetRequest exists
-      const request = assetRequests[id];
-      this.onRepeatRequest(id, request);
+    if (assetRequests[requestId]) { // case: the assetRequest exists
+      const request = assetRequests[requestId];
+      this.onRepeatRequest(requestId, request);
     } else { // case: the asset request does not exist
-      this.onNewRequest(id, requestName, requestModifier);
+      this.onNewRequest(requestId, requestName, requestModifier);
     }
   }
   componentWillReceiveProps (nextProps) {
-    if (nextProps.assetRequests !== this.props.assetRequests) {
-      console.log('assetRequests updated:');
-      const { requestName, requestModifier, assetRequests } = nextProps;
-      const id = buildIdFromModifierObject(requestName, requestModifier);
+    // case where componentDidMount triggered new props
+    if (nextProps.assetRequests !== this.props.assetRequests) {  // note: reason for not showing small url requests?
+      console.log('show.assetRequests updated');
+      const { requestId, requestName, requestModifier, assetRequests } = nextProps;
       // if the component received new assetRequests, check again to see if the current request matches one
-      if (assetRequests[id]) { // case: the assetRequest exists
-        const request = assetRequests[id];
-        this.onRepeatRequest(id, request);
+      if (assetRequests[requestId]) { // case: the assetRequest exists
+        const request = assetRequests[requestId];
+        this.onRepeatRequest(requestId, request);
       } else { // case: the asset request does not exist
-        this.onNewRequest(id, requestName, requestModifier);
+        this.onNewRequest(requestId, requestName, requestModifier);
       }
+    } else {
+      console.log('show.assetRequests did not update');
     }
   }
   onNewRequest (id, requestName, requestModifier) {
@@ -51,7 +38,7 @@ class ShowAsset extends React.Component {
     console.log('repeat request');
     const { assets } = this.props;
     const { error: requestError, name, claimId } = request;
-    const assetId = buildIdFromNameAndClaimId(name, claimId);
+    const assetId = `a#${name}#${claimId}`;
     // if error, return and update state with error
     if (requestError) {
       return this.props.onRequestError(requestError);
@@ -74,7 +61,7 @@ class ShowAsset extends React.Component {
         <ErrorPage error={error}/>
       );
     }
-    if (name) {
+    if (name) { // direct requests are passing because name is present so it just goes
       if (requestExtension) {
         return (
           <ShowAssetLite />

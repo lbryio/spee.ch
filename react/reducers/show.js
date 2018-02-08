@@ -4,24 +4,26 @@ import { LOCAL_CHECK, ERROR } from 'constants/asset_display_states';
 
 const initialState = {
   request: {
-    error: null,
-    type : null,
+    error    : null,
+    type     : null,
+    data     : null,
+    requestId: null,
   },
-  channelRequest: {
-    name: null,
-    id  : null,
-  },
-  assetRequest: {
-    name    : null,
-    modifier: {
-      id     : null,
-      channel: {
-        name: null,
-        id  : null,
-      },
-    },
-    extension: null,
-  },
+  // channelRequest: {
+  //   name: null,
+  //   id  : null,
+  // },
+  // assetRequest: {
+  //   name    : null,
+  //   modifier: {
+  //     id     : null,
+  //     channel: {
+  //       name: null,
+  //       id  : null,
+  //     },
+  //   },
+  //   extension: null,
+  // },
   showChannel: {
     error      : null,
     channelData: {
@@ -71,21 +73,30 @@ export default function (state = initialState, action) {
         request: {
           type : CHANNEL,
           error: null,
+          id   : action.data.requestId,
+          data : {
+            name: action.data.name,
+            id  : action.data.id,
+          },
         },
-        channelRequest: action.data,
       });
     case actions.REQUEST_CLAIM_UPDATE:
       return Object.assign({}, state, {
         request: {
           type : ASSET,
           error: null,
+          id   : action.data.requestId,
+          data : {
+            name     : action.data.name,
+            modifier : action.data.modifier,
+            extension: action.data.extension,
+          },
         },
-        assetRequest: action.data,
       });
     // request for an asset
     case actions.ASSET_REQUEST_ADD:
       return Object.assign({}, state, {
-        assetRequests: Object.assign({}, state.assets, {
+        assetRequests: Object.assign({}, state.assetRequests, {
           [action.data.id]: {
             error  : action.data.error,
             name   : action.data.name,
