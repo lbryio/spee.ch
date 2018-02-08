@@ -124,8 +124,12 @@ export default function (state = initialState, action) {
       return Object.assign({}, state, {
         channelRequests: Object.assign({}, state.channelRequests, {
           [action.data.id]: {
-            error: action.data.error,
-            data : action.data.data,
+            error      : action.data.error,
+            channelData: {
+              name   : action.data.name,
+              longId : action.data.longId,
+              shortId: action.data.shortId,
+            },
           },
         }),
       });

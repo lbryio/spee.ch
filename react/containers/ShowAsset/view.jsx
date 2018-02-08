@@ -25,7 +25,7 @@ class ShowAsset extends React.Component {
   }
   componentWillReceiveProps (nextProps) {
     // case where componentDidMount triggered new props
-    if (requestIsAnAssetRequest(nextProps) && requestIsNewRequest(nextProps, this.props)) {
+    if (requestIsNewRequest(nextProps, this.props)) {
       const { requestId, requestName, requestModifier, assetRequests } = nextProps;
       const existingRequest = assetRequests[requestId];
       if (existingRequest) { // case: the assetRequest exists
@@ -34,7 +34,7 @@ class ShowAsset extends React.Component {
         this.onNewRequest(requestId, requestName, requestModifier);
       }
     } else {
-      console.log('show.assetRequests did not update');
+      console.log('show.assetRequestId did not update');
     }
   }
   onNewRequest (id, requestName, requestModifier) {
@@ -52,12 +52,17 @@ class ShowAsset extends React.Component {
     const assetId = `a#${name}#${claimId}`;
     const existingAssetRecord = assets[assetId];
     if (existingAssetRecord) { // case: the asset data already exists
-      let { error: assetError, name, claimId, shortId, claimData } = existingAssetRecord;
-      this.props.onShowExistingAsset(assetId, assetError, name, claimId, shortId, claimData);
+      this.showExistingAsset(assetId, existingAssetRecord);
     } else { // case: the asset data does not exist yet
-      console.log('error: there should be an existing record');
-      // this.props.onShowNewAsset(assetId, name, claimId);
+      this.showNewAsset(assetId, name, claimId);
     }
+  }
+  showNewAsset (assetId, name, claimId) {
+    this.props.onShowNewAsset(assetId, name, claimId);
+  }
+  showExistingAsset (assetId, existingAssetRecord) {
+    let { error, name, claimId, shortId, claimData } = existingAssetRecord;
+    this.props.onShowExistingAsset(assetId, error, name, claimId, shortId, claimData);
   }
   componentWillUnmount () {
     this.props.onLeaveShowAsset();

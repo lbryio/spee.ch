@@ -10,7 +10,7 @@ const mapStateToProps = ({ show }) => {
     requestChannelName: show.request.data.name,
     requestChannelId  : show.request.data.id,
     requestList       : show.channelRequests,
-    channels          : show.channels,
+    channelList       : show.channels,
     // show channel
     error             : show.showChannel.error,
     name              : show.showChannel.channelData.name,

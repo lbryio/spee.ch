@@ -15,20 +15,20 @@ function requestIsNewRequest (nextProps, props) {
 
 class ShowChannel extends React.Component {
   componentDidMount () {
-    const {requestId, requestChannelName, requestChannelId, requestList} = this.props;
+    const {requestId, requestChannelName, requestChannelId, requestList, channelList} = this.props;
     const existingRequest = requestList[requestId];
     if (existingRequest) {
-      this.onRepeatChannelRequest(existingRequest);
+      this.onRepeatChannelRequest(existingRequest, channelList);
     } else {
       this.onNewChannelRequest(requestId, requestChannelName, requestChannelId);
     }
   }
   componentWillReceiveProps (nextProps) {
     if (requestIsAChannelRequest(nextProps) && requestIsNewRequest(nextProps, this.props)) {
-      const {requestId, requestChannelName, requestChannelId, requestList} = nextProps;
+      const {requestId, requestChannelName, requestChannelId, requestList, channelList} = nextProps;
       const existingRequest = requestList[requestId];
       if (existingRequest) {
-        this.onRepeatChannelRequest(existingRequest);
+        this.onRepeatChannelRequest(existingRequest, channelList);
       } else {
         this.onNewChannelRequest(requestId, requestChannelName, requestChannelId);
       }
@@ -38,13 +38,25 @@ class ShowChannel extends React.Component {
     console.log('new request');
     this.props.onNewChannelRequest(requestId, requestName, requestChannelId);
   }
-  onRepeatChannelRequest ({ id, error, data: { channelName, longChannelClaimId} }) {
+  onRepeatChannelRequest ({ id, error, channelData: { channelName, longChannelClaimId} }, channelList) {
     // if error, return and update state with error
     if (error) {
       return this.props.onRequestError(error);
     }
-    // if no error, get the channel's claims data
+    // check if the channel data is present or not
+    const existingChannel = channelList[id];
+    if (existingChannel) {
+      showExistingChannel();
+    } else {
+      showNewChannel();
+    }
   }
+  showNewChannel () {
+
+  };
+  showExistingChannel () {
+
+  };
   componentWillUnmount () {
     this.props.onShowChannelClear();
   }

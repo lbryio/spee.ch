@@ -16,7 +16,8 @@ function* newAssetRequest (action) {
   }
   if (success) {
     yield put(addAssetRequest(id, null, name, longId));
-    return yield put(showNewAsset(id, name, longId));
+    const newAssetId = `a#${name}#${longId}`; // note move to action
+    return yield put(showNewAsset(newAssetId, name, longId));
   }
   yield put(addAssetRequest(id, message, name, null));
 };
@@ -48,7 +49,7 @@ function* getAssetDataAndShowAsset (action) {
   yield put(updateShowAsset(id, null, name, claimId, shortId, claimData));
 }
 
-function* retriveFile (action) {
+function* retrieveFile (action) {
   const name = action.data.name;
   const claimId = action.data.claimId;
   // see if the file is available
@@ -86,14 +87,16 @@ function* newChannelRequest (action) {
   try {
     ({success, message, data} = yield call(getChannelData, name, channelId));
   } catch (error) {
-    yield put(addChannelRequest(id, error.message, null));
+    yield put(addChannelRequest(id, error.message, null, null, null));
   }
   if (success) {
-    console.log('api/channel/data/ response:', data);
-    return yield put(addChannelRequest(id, null, data));
+    const { channelName, longChannelClaimId, shortChannelClaimId } = data;
+    return yield put(addChannelRequest(id, null, channelName, longChannelClaimId, shortChannelClaimId));
   }
-  yield put(addChannelRequest(id, message, null));
+  yield put(addChannelRequest(id, message, null, null, null));
 }
+
+
 
 export function* watchNewAssetRequest () {
   yield takeLatest(actions.ASSET_REQUEST_NEW, newAssetRequest);
@@ -107,6 +110,10 @@ export function* watchShowNewAsset () {
   yield takeLatest(actions.SHOW_ASSET_NEW, getAssetDataAndShowAsset);
 };
 
+export function* watchShowNewChannel () {
+  yield takeLatest(actions.SHOW_ASSET_NEW, getAssetDataAndShowAsset);
+};
+
 export function* watchFileIsRequested () {
-  yield takeLatest(actions.FILE_REQUESTED, retriveFile);
+  yield takeLatest(actions.FILE_REQUESTED, retrieveFile);
 };

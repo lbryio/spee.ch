@@ -15,8 +15,6 @@ const mapStateToProps = ({ show }) => {
     error           : show.showAsset.error,
     name            : show.showAsset.name,
     claimData       : show.showAsset.claimData,
-    // test
-    showAsset       : show.assets[show.request.id],
   };
 };
 

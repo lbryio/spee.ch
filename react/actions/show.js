@@ -82,10 +82,10 @@ export function newChannelRequest (id, name, channelId) {
   };
 };
 
-export function addChannelRequest (id, error, data) {
+export function addChannelRequest (id, error, name, longId, shortId) {
   return {
     type: actions.CHANNEL_REQUEST_ADD,
-    data: { id, error, data },
+    data: { id, error, name, longId, shortId },
   };
 }
 
