@@ -1,6 +1,6 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
 import * as actions from 'constants/show_action_types';
-import { addAssetRequest, showNewAsset, updateShowAsset, addAssetToAssetList, addChannelRequest, showNewChannel, updateShowChannel, addNewChannelToChannelList, updateFileAvailability, updateDisplayAssetError } from 'actions/show';
+import { addAssetRequest, updateRequestError, showNewAsset, updateShowAsset, addAssetToAssetList, addChannelRequest, showNewChannel, updateShowChannel, addNewChannelToChannelList, updateFileAvailability, updateDisplayAssetError } from 'actions/show';
 import { UNAVAILABLE, AVAILABLE } from 'constants/asset_display_states';
 import { checkFileAvailability, triggerClaimGet } from 'api/fileApi';
 import { getLongClaimId, getShortId, getClaimData } from 'api/assetApi';
@@ -12,14 +12,16 @@ function* newAssetRequest (action) {
   try {
     ({success, message, data: longId} = yield call(getLongClaimId, name, modifier));
   } catch (error) {
-    yield put(addAssetRequest(id, error.message, name, null));
+    // yield put(addAssetRequest(id, error.message, name, null));
+    return yield put(updateRequestError(error.message));
   }
-  if (success) {
-    yield put(addAssetRequest(id, null, name, longId));
-    const newAssetId = `a#${name}#${longId}`; // note move to action
-    return yield put(showNewAsset(newAssetId, name, longId));
+  if (!success) {
+    // yield put(addAssetRequest(id, message, name, null));
+    return yield put(updateRequestError(message));
   }
-  yield put(addAssetRequest(id, message, name, null));
+  yield put(addAssetRequest(id, null, name, longId));
+  const newAssetId = `a#${name}#${longId}`; // note: move to action
+  yield put(showNewAsset(newAssetId, name, longId));
 };
 
 function* getAssetDataAndShowAsset (action) {
@@ -29,12 +31,12 @@ function* getAssetDataAndShowAsset (action) {
   try {
     ({success, message, data: shortId} = yield call(getShortId, name, claimId));
   } catch (error) {
+    // yield put(addAssetToAssetList());
     return yield put(updateShowAsset(error.message, name, claimId));
-    // yield put(addAssetToAssetList(arg1, arg2));
   }
   if (!success) {
+    // yield put(addAssetToAssetList());
     return yield put(updateShowAsset(message, name, claimId));
-    // yield put(addAssetToAssetList(arg1, arg2));
   }
   // if no error, get claim data
   success = null;
@@ -42,12 +44,12 @@ function* getAssetDataAndShowAsset (action) {
   try {
     ({success, message, data: claimData} = yield call(getClaimData, name, claimId));
   } catch (error) {
+    // yield put(addAssetToAssetList());
     return yield put(updateShowAsset(error.message, name, claimId));
-    // yield put(addAssetToAssetList(arg1, arg2));
   }
   if (!success) {
+    // yield put(addAssetToAssetList());
     return yield put(updateShowAsset(message, name, claimId));
-    // yield put(addAssetToAssetList(arg1, arg2));
   }
   // if both are successfull, add to asset list and select for showing
   yield put(updateShowAsset(null, name, claimId, shortId, claimData));
@@ -92,10 +94,12 @@ function* newChannelRequest (action) {
   try {
     ({success, message, data} = yield call(getChannelData, name, channelId));
   } catch (error) {
-    return yield put(addChannelRequest(id, error.message, null, null, null));
+    // return yield put(addChannelRequest(id, error.message, null, null, null));
+    return yield put(updateRequestError(message));
   }
   if (!success) {
-    return yield put(addChannelRequest(id, message, null, null, null));
+    // return yield put(addChannelRequest(id, message, null, null, null));
+    return yield put(updateRequestError(message));
   }
   const { longChannelClaimId: longId, shortChannelClaimId: shortId } = data;
   yield put(addChannelRequest(id, null, name, longId, shortId));
@@ -110,12 +114,12 @@ function* getNewChannelDataAndShowChannel (action) {
   try {
     ({ success, message, data: claimsData } = yield call(getChannelClaims, name, longId, 1));
   } catch (error) {
-    return yield put(updateShowChannel(error.message, name, shortId, longId));
     // yield put(addNewChannelToChannelList(id, error.message, null, null));
+    return yield put(updateShowChannel(error.message, name, shortId, longId));
   }
   if (!success) {
-    return yield put(updateShowChannel(message, name, shortId, longId));
     // yield put(addNewChannelToChannelList(id, message, null, null));
+    return yield put(updateShowChannel(message, name, shortId, longId));
   }
   yield put(updateShowChannel(null, name, shortId, longId, claimsData));
   const channelData = {name, shortId, longId};
