@@ -77,7 +77,7 @@ export function clearShowAsset () {
 
 export function newChannelRequest (id, name, channelId) {
   return {
-    type: actions.NEW_CHANNEL_REQUEST,
+    type: actions.CHANNEL_REQUEST_NEW,
     data: {id, name, channelId},
   };
 };
@@ -91,17 +91,39 @@ export function addChannelRequest (id, error, name, longId, shortId) {
 
 // show a channel
 
-export function showNewChannel (name, longId, shortId) {
-
+export function showNewChannel (id, name, longId, channelData) {
+  return {
+    type: actions.SHOW_CHANNEL_NEW,
+    data: { id, name, longId, channelData},
+  };
 };
 
-export function updateShowChannel (name, longId, shortId) {
+// export function showExistingChannel (existingChannel) {
+//   return {
+//     type: actions.SHOW_CHANNEL_EXISTING,
+//     data: { existingChannel },
+//   };
+// };
 
+export function updateShowChannel (error, channelData, claimData) {
+  return {
+    type: actions.SHOW_CHANNEL_UPDATE,
+    data: { error, channelData, claimData },
+  }
 };
 
 export function clearShowChannel () {
   return {
     type: actions.SHOW_CHANNEL_CLEAR,
+  };
+};
+
+// add channels to channel list
+
+export function addNewChannelToChannelList (id, error, channelData, claimsData) {
+  return {
+    type: actions.CHANNEL_LIST_ADD,
+    data: { id, error, channelData, claimsData },
   };
 };
 

@@ -35,7 +35,7 @@ const initialState = {
     status: LOCAL_CHECK,
   },
   channelRequests: {},
-  channels       : {},  // same schema as showChannel
+  channelList    : {},
   assetRequests  : {},
   assets         : {},  // same schema as showAsset
 };
@@ -134,8 +134,14 @@ export default function (state = initialState, action) {
         }),
       });
     // show a channel
-    // case actions.SHOW_CHANNEL_NEW:
-    // case actions.SHOW_CHANNEL_UPDATE:
+    case actions.SHOW_CHANNEL_UPDATE:
+      return Object.assign({}, state, {
+        showChannel: {
+          error      : action.error,
+          channelData: action.channelData,
+          claimData  : action.claimData,
+        },
+      });
     case actions.SHOW_CHANNEL_CLEAR:
       return Object.assign({}, state, {
         showChannel: {
@@ -152,6 +158,17 @@ export default function (state = initialState, action) {
             totalClaims: null,
           },
         },
+      });
+    // add channel to channel list
+    case actions.CHANNEL_LIST_ADD:
+      return Object.assign({}, state, {
+        channelList: Object.assign({}, state.channelList, {
+          [action.data.id]: {
+            error      : action.data.error,
+            channelData: action.data.channelData,
+            claimsData : action.data.claimsData,
+          },
+        }),
       });
     // display an asset
     case actions.FILE_AVAILABILITY_UPDATE:

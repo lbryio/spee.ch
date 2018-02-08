@@ -38,24 +38,25 @@ class ShowChannel extends React.Component {
     console.log('new request');
     this.props.onNewChannelRequest(requestId, requestName, requestChannelId);
   }
-  onRepeatChannelRequest ({ id, error, channelData: { channelName, longChannelClaimId} }, channelList) {
+  onRepeatChannelRequest ({ error, channelData }, channelList) {
     // if error, return and update state with error
     if (error) {
       return this.props.onRequestError(error);
     }
     // check if the channel data is present or not
-    const existingChannel = channelList[id];
+    const channelRecordId = `c#${channelData.name}#${channelData.longId}`;
+    const existingChannel = channelList[channelRecordId];
     if (existingChannel) {
-      showExistingChannel();
+      this.showExistingChannel(channelRecordId, existingChannel);
     } else {
-      showNewChannel();
+      this.showNewChannel(channelRecordId, channelData.name, channelData.longId, channelData);
     }
   }
-  showNewChannel () {
-
+  showNewChannel (channelRecordId, name, longId) {
+    this.props.onShowNewChannel(channelRecordId, name, longId);
   };
-  showExistingChannel () {
-
+  showExistingChannel (existingChannel) {
+    this.props.onShowExistingChannel(existingChannel);
   };
   componentWillUnmount () {
     this.props.onShowChannelClear();

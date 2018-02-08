@@ -22,19 +22,7 @@ class ChannelClaimsDisplay extends React.Component {
     }
   }
   updateClaimsData (name, longId, page) {
-    const url = `/api/channel/claims/${name}/${longId}/${page}`;
-    return request(url)
-      .then(({ success, message, data }) => {
-        console.log('api/channel-claims response:', data);
-        if (!success) {
-          return this.setState({error: message});
-        }
-        this.setState({error: null}); // move this error to redux state
-        this.props.onChannelClaimsDataUpdate(data.claims, data.currentPage, data.totalPages, data.totalResults);
-      })
-      .catch((error) => {
-        this.setState({error: error.message});
-      });
+    console.log('this function has been moved into the redux sagas');
   }
   componentWillUnmount () {
     this.props.onChannelClaimsDataClear();

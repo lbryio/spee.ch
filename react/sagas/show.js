@@ -1,6 +1,6 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
 import * as actions from 'constants/show_action_types';
-import { addAssetRequest, updateShowAsset, showNewAsset, addChannelRequest, updateShowChannel, updateFileAvailability, updateDisplayAssetError } from 'actions/show';
+import { addAssetRequest, updateShowAsset, showNewAsset, addChannelRequest, showNewChannel, updateShowChannel, addNewChannelToChannelList, updateFileAvailability, updateDisplayAssetError } from 'actions/show';
 import { UNAVAILABLE, AVAILABLE } from 'constants/asset_display_states';
 import { checkFileAvailability, triggerClaimGet } from 'api/fileApi';
 import { getLongClaimId, getShortId, getClaimData } from 'api/assetApi';
@@ -47,6 +47,7 @@ function* getAssetDataAndShowAsset (action) {
   }
   // if both are successfull, add to asset list and select for showing
   yield put(updateShowAsset(id, null, name, claimId, shortId, claimData));
+  // yield put(addAssetToAssetList(arg1, arg2));
 }
 
 function* retrieveFile (action) {
@@ -87,23 +88,40 @@ function* newChannelRequest (action) {
   try {
     ({success, message, data} = yield call(getChannelData, name, channelId));
   } catch (error) {
-    yield put(addChannelRequest(id, error.message, null, null, null));
+    return yield put(addChannelRequest(id, error.message, null, null, null));
   }
-  if (success) {
-    const { channelName, longChannelClaimId, shortChannelClaimId } = data;
-    return yield put(addChannelRequest(id, null, channelName, longChannelClaimId, shortChannelClaimId));
+  if (!success) {
+    return yield put(addChannelRequest(id, message, null, null, null));
   }
-  yield put(addChannelRequest(id, message, null, null, null));
+  const { channelName, longChannelClaimId, shortChannelClaimId } = data;
+  yield put(addChannelRequest(id, null, channelName, longChannelClaimId, shortChannelClaimId));
+  const channelRecordId = `c#${channelName}#${longChannelClaimId}`;  // move to the action
+  yield put(showNewChannel(channelRecordId, channelName, longChannelClaimId ));
 }
 
-
+function* getNewChannelDataAndShowChannel (action) {
+  const { id, name, longId, channelData } = action;
+  let success, message, claimsData;
+  try {
+    ({ success, message, data: claimsData } = yield call(getChannelClaims, name, longId, 1));
+  } catch (error) {
+    return yield put(updateShowChannel(error.message, channelData, null));
+    // yield put(addNewChannelToChannelList(id, error.message, null, null));
+  }
+  if (!success) {
+    return yield put(updateShowChannel(message, channelData, null));
+    // yield put(addNewChannelToChannelList(id, message, null, null));
+  }
+  yield put(updateShowChannel(null, channelData, claimsData));
+  yield put(addNewChannelToChannelList(id, null, channelData, claimsData));
+}
 
 export function* watchNewAssetRequest () {
   yield takeLatest(actions.ASSET_REQUEST_NEW, newAssetRequest);
 };
 
 export function* watchNewChannelRequest () {
-  yield takeLatest(actions.NEW_CHANNEL_REQUEST, newChannelRequest);
+  yield takeLatest(actions.CHANNEL_REQUEST_NEW, newChannelRequest);
 };
 
 export function* watchShowNewAsset () {
@@ -111,7 +129,7 @@ export function* watchShowNewAsset () {
 };
 
 export function* watchShowNewChannel () {
-  yield takeLatest(actions.SHOW_ASSET_NEW, getAssetDataAndShowAsset);
+  yield takeLatest(actions.SHOW_CHANNEL_NEW, getNewChannelDataAndShowChannel);
 };
 
 export function* watchFileIsRequested () {
