@@ -3,26 +3,33 @@ import ErrorPage from 'components/ErrorPage';
 import ShowAssetLite from 'components/ShowAssetLite';
 import ShowAssetDetails from 'components/ShowAssetDetails';
 
+import { ASSET } from 'constants/show_request_types';
+
+function requestIsAnAssetRequest ({ requestType }) {
+  return requestType === ASSET;
+}
+
+function requestIsNewRequest (nextProps, props) {
+  return (nextProps.requestId !== props.requestId);
+}
+
 class ShowAsset extends React.Component {
   componentDidMount () {
     const { requestId, requestName, requestModifier, assetRequests } = this.props;
-    // check to see if we have this asset
-    if (assetRequests[requestId]) { // case: the assetRequest exists
-      const request = assetRequests[requestId];
-      this.onRepeatRequest(requestId, request);
+    const existingRequest = assetRequests[requestId];
+    if (existingRequest) { // case: the assetRequest exists
+      this.onRepeatRequest(existingRequest);
     } else { // case: the asset request does not exist
       this.onNewRequest(requestId, requestName, requestModifier);
     }
   }
   componentWillReceiveProps (nextProps) {
     // case where componentDidMount triggered new props
-    if (nextProps.assetRequests !== this.props.assetRequests) {  // note: reason for not showing small url requests?
-      console.log('show.assetRequests updated');
+    if (requestIsAnAssetRequest(nextProps) && requestIsNewRequest(nextProps, this.props)) {
       const { requestId, requestName, requestModifier, assetRequests } = nextProps;
-      // if the component received new assetRequests, check again to see if the current request matches one
-      if (assetRequests[requestId]) { // case: the assetRequest exists
-        const request = assetRequests[requestId];
-        this.onRepeatRequest(request);
+      const existingRequest = assetRequests[requestId];
+      if (existingRequest) { // case: the assetRequest exists
+        this.onRepeatRequest(existingRequest);
       } else { // case: the asset request does not exist
         this.onNewRequest(requestId, requestName, requestModifier);
       }

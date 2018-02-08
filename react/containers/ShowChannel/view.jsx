@@ -9,42 +9,33 @@ function requestIsAChannelRequest ({ requestType }) {
   return requestType === CHANNEL;
 }
 
-function channelNameOrIdChanged (nextProps, props) {
-  return (nextProps.requestChannelName !== props.requestChannelName || nextProps.requestChannelName !== props.requestChannelName);
+function requestIsNewRequest (nextProps, props) {
+  return (nextProps.requestId !== props.requestId);
 }
 
 class ShowChannel extends React.Component {
   componentDidMount () {
-    console.log('showchannel did mount');
     const {requestId, requestChannelName, requestChannelId, requestList} = this.props;
     const existingRequest = requestList[requestId];
     if (existingRequest) {
-      console.log('we got a repeat channel request on an unmounted ShowChannel component');
       this.onRepeatChannelRequest(existingRequest);
     } else {
       this.onNewChannelRequest(requestId, requestChannelName, requestChannelId);
     }
   }
   componentWillReceiveProps (nextProps) {
-    console.log('showchannel will receive new props');
-    if (requestIsAChannelRequest(nextProps) && channelNameOrIdChanged(nextProps, this.props)) {
+    if (requestIsAChannelRequest(nextProps) && requestIsNewRequest(nextProps, this.props)) {
       const {requestId, requestChannelName, requestChannelId, requestList} = nextProps;
       const existingRequest = requestList[requestId];
       if (existingRequest) {
         this.onRepeatChannelRequest(existingRequest);
       } else {
-        console.log('we got a new channel request on a mounted ShowChannel component');
         this.onNewChannelRequest(requestId, requestChannelName, requestChannelId);
       }
     };
   }
   onNewChannelRequest (requestId, requestName, requestChannelId) {
-    // validate the request (i.e. get channel full claim id)
-    // update teh request list
-    // if error, return early (set the request error in the store)
-    // if the request is valid...
-        // add it to the requestList
-        // update showChannel to reflect the channel details
+    console.log('new request');
     this.props.onNewChannelRequest(requestId, requestName, requestChannelId);
   }
   onRepeatChannelRequest ({ id, error, name, claimId }) {
