@@ -1,5 +1,6 @@
 import * as actions from 'constants/show_action_types';
 
+// basic request parsing
 export function updateRequestError (error) {
   return {
     type: actions.REQUEST_ERROR_UPDATE,
@@ -10,10 +11,7 @@ export function updateRequestError (error) {
 export function updateRequestWithChannelRequest (name, id) {
   return {
     type: actions.REQUEST_CHANNEL_UPDATE,
-    data: {
-      name,
-      id,
-    },
+    data: { name, id },
   };
 };
 
@@ -34,61 +32,7 @@ export function updateRequestWithAssetRequest (name, id, channelName, channelId,
   };
 };
 
-export function updateShowChannelError (error) {
-  return {
-    type: actions.SHOW_CHANNEL_ERROR,
-    data: error,
-  };
-};
-
-export function updateChannelData (name, longId, shortId) {
-  return {
-    type: actions.CHANNEL_DATA_UPDATE,
-    data: {
-      name,
-      longId,
-      shortId,
-    },
-  };
-};
-
-export function updateChannelClaimsData (claims, currentPage, totalPages, totalClaims) {
-  return {
-    type: actions.CHANNEL_CLAIMS_DATA_UPDATE,
-    data: {
-      claims,
-      currentPage,
-      totalPages,
-      totalClaims,
-    },
-  };
-};
-
-export function fileRequested (name, claimId) {
-  return {
-    type: actions.FILE_REQUESTED,
-    data: {
-      name,
-      claimId,
-    },
-  };
-};
-
-export function updateFileAvailability (status) {
-  return {
-    type: actions.FILE_AVAILABILITY_UPDATE,
-    data: status,
-  };
-};
-
-export function updateDisplayAssetError (error) {
-  return {
-    type: actions.DISPLAY_ASSET_ERROR,
-    data: error,
-  };
-};
-
-// new: request-related actions
+// request for an asset
 
 export function newAssetRequest (id, name, modifier) {
   return {
@@ -104,10 +48,9 @@ export function addAssetRequest (id, error, name, claimId) {
   };
 };
 
-// new: asset-realted actions
+// show an asset
 
 export function showNewAsset (id, name, claimId) {
-  console.log('show new asset', id, name, claimId);
   return {
     type: actions.SHOW_NEW_ASSET,
     data: { id, name, claimId },
@@ -124,5 +67,54 @@ export function updateShowAsset (id, error, name, claimId, shortId, claimData) {
 export function clearShowAsset () {
   return {
     type: actions.SHOW_ASSET_CLEAR,
+  };
+};
+
+// request for a channel
+
+
+// show a channel
+
+export function updateShowChannelError (error) {
+  return {
+    type: actions.SHOW_CHANNEL_ERROR,
+    data: error,
+  };
+};
+
+export function updateChannelData (name, longId, shortId) {
+  return {
+    type: actions.CHANNEL_DATA_UPDATE,
+    data: { name, longId, shortId },
+  };
+};
+
+export function updateChannelClaimsData (claims, currentPage, totalPages, totalClaims) {
+  return {
+    type: actions.CHANNEL_CLAIMS_DATA_UPDATE,
+    data: { claims, currentPage, totalPages, totalClaims },
+  };
+};
+
+// display a file
+
+export function fileRequested (name, claimId) {
+  return {
+    type: actions.FILE_REQUESTED,
+    data: { name, claimId },
+  };
+};
+
+export function updateFileAvailability (status) {
+  return {
+    type: actions.FILE_AVAILABILITY_UPDATE,
+    data: status,
+  };
+};
+
+export function updateDisplayAssetError (error) {
+  return {
+    type: actions.DISPLAY_ASSET_ERROR,
+    data: error,
   };
 };

@@ -3,7 +3,7 @@ import * as actions from 'constants/show_action_types';
 import { addAssetRequest, updateShowAsset, updateFileAvailability, updateDisplayAssetError } from 'actions/show';
 import { UNAVAILABLE, AVAILABLE } from 'constants/asset_display_states';
 import { checkFileAvailability, triggerClaimGet } from 'api/fileApi';
-import { getLongClaimId, getShortId, getClaimData } from 'api/AssetApi';
+import { getLongClaimId, getShortId, getClaimData } from 'api/assetApi';
 
 function* newAssetRequest (action) {
   const { id, name, modifier } = action.data;
