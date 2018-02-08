@@ -1,9 +1,10 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
 import * as actions from 'constants/show_action_types';
-import { addAssetRequest, updateShowAsset, updateFileAvailability, updateDisplayAssetError } from 'actions/show';
+import { addAssetRequest, updateShowAsset, addChannelRequest, updateShowChannel, updateFileAvailability, updateDisplayAssetError } from 'actions/show';
 import { UNAVAILABLE, AVAILABLE } from 'constants/asset_display_states';
 import { checkFileAvailability, triggerClaimGet } from 'api/fileApi';
 import { getLongClaimId, getShortId, getClaimData } from 'api/assetApi';
+import { getLongChannelClaimId, getShortChannelId, getChannelData } from 'api/channelApi';
 
 function* newAssetRequest (action) {
   const { id, name, modifier } = action.data;
@@ -11,7 +12,6 @@ function* newAssetRequest (action) {
   try {
     ({success, message, data: longId} = yield call(getLongClaimId, name, modifier));
   } catch (error) {
-    console.log('error making getLongClaimId call', error);
     yield put(addAssetRequest(id, error.message, name, null));
   }
   if (success) {
@@ -19,6 +19,20 @@ function* newAssetRequest (action) {
   }
   yield put(addAssetRequest(id, message, name, null));
 };
+
+function* newChannelRequest (action) {
+  const { id, name, channelId } = action.data;
+  let success, message, longChannelId;
+  try {
+    ({success, message, data: longChannelId} = yield call(getLongChannelClaimId, name, channelId));
+  } catch (error) {
+    yield put(addChannelRequest(id, error.message, name, null));
+  }
+  if (success) {
+    return yield put(addChannelRequest(id, null, name, longChannelId));
+  }
+  yield put(addChannelRequest(id, message, name, null));
+}
 
 function* getAssetDataAndShowAsset (action) {
   const {id, name, claimId} = action.data;
@@ -81,6 +95,10 @@ function* retriveFile (action) {
 
 export function* watchNewAssetRequest () {
   yield takeLatest(actions.NEW_ASSET_REQUEST, newAssetRequest);
+};
+
+export function* watchNewChannelRequest () {
+  yield takeLatest(actions.NEW_CHANNEL_REQUEST, newChannelRequest);
 };
 
 export function* watchShowNewAsset () {

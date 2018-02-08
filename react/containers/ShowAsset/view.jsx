@@ -38,12 +38,12 @@ class ShowAsset extends React.Component {
     console.log('repeat request');
     const { assets } = this.props;
     const { error: requestError, name, claimId } = request;
-    const assetId = `a#${name}#${claimId}`;
     // if error, return and update state with error
     if (requestError) {
       return this.props.onRequestError(requestError);
     }
-    // update the show asset data in the store
+    // update the showAsset data in the store
+    const assetId = `a#${name}#${claimId}`;
     if (assets[assetId]) { // case: the asset data already exists
       let { error, name, claimId, shortId, claimData } = assets[assetId];
       this.props.onShowExistingAsset(assetId, error, name, claimId, shortId, claimData);

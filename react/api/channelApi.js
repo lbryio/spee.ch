@@ -1,6 +1,6 @@
 import Request from 'utils/request';
 
-export function getLongClaimId (name, modifier) {
+export function getLongChannelClaimId (name, modifier) {
   let body = {};
   // create request params
   if (modifier) {
@@ -25,12 +25,12 @@ export function getLongClaimId (name, modifier) {
   return Request(url, params);
 };
 
-export function getShortId (name, claimId) {
+export function getShortChannelId (name, claimId) {
   const url = `/api/claim/short-id/${claimId}/${name}`;
   return Request(url);
 };
 
-export function getClaimData (name, claimId) {
+export function getChannelData (name, claimId) {
   const url = `/api/claim/data/${name}/${claimId}`;
   return Request(url);
 };

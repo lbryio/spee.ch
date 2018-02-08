@@ -9,21 +9,6 @@ const initialState = {
     data     : null,
     requestId: null,
   },
-  // channelRequest: {
-  //   name: null,
-  //   id  : null,
-  // },
-  // assetRequest: {
-  //   name    : null,
-  //   modifier: {
-  //     id     : null,
-  //     channel: {
-  //       name: null,
-  //       id  : null,
-  //     },
-  //   },
-  //   extension: null,
-  // },
   showChannel: {
     error      : null,
     channelData: {
@@ -135,26 +120,35 @@ export default function (state = initialState, action) {
         }),
       });
     // request a channel
-
+    case actions.CHANNEL_REQUEST_ADD:
+      return Object.assign({}, state, {
+        channelRequests: Object.assign({}, state.assetRequests, {
+          [action.data.id]: {
+            error  : action.data.error,
+            name   : action.data.name,
+            claimId: action.data.claimId,
+          },
+        }),
+      });
     // show a channel
-    case actions.SHOW_CHANNEL_ERROR:
-      return Object.assign({}, state, {
-        showChannel: Object.assign({}, state.showChannel, {
-          error: action.data,
-        }),
-      });
-    case actions.CHANNEL_DATA_UPDATE:
-      return Object.assign({}, state, {
-        showChannel: Object.assign({}, state.showChannel, {
-          channelData: action.data,
-        }),
-      });
-    case actions.CHANNEL_CLAIMS_DATA_UPDATE:
-      return Object.assign({}, state, {
-        showChannel: Object.assign({}, state.showChannel, {
-          channelClaimsData: action.data,
-        }),
-      });
+    // case actions.SHOW_CHANNEL_ERROR:
+    //   return Object.assign({}, state, {
+    //     showChannel: Object.assign({}, state.showChannel, {
+    //       error: action.data,
+    //     }),
+    //   });
+    // case actions.CHANNEL_DATA_UPDATE:
+    //   return Object.assign({}, state, {
+    //     showChannel: Object.assign({}, state.showChannel, {
+    //       channelData: action.data,
+    //     }),
+    //   });
+    // case actions.CHANNEL_CLAIMS_DATA_UPDATE:
+    //   return Object.assign({}, state, {
+    //     showChannel: Object.assign({}, state.showChannel, {
+    //       channelClaimsData: action.data,
+    //     }),
+    //   });
     // display an asset
     case actions.FILE_AVAILABILITY_UPDATE:
       return Object.assign({}, state, {

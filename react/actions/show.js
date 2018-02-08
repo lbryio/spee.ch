@@ -75,29 +75,42 @@ export function clearShowAsset () {
 
 // request for a channel
 
+export function newChannelRequest (id, name, channelId) {
+  return {
+    type: actions.NEW_CHANNEL_REQUEST,
+    data: {id, name, channelId},
+  };
+};
+
+export function addChannelRequest (id, error, name, claimId) {
+  return {
+    type: actions.CHANNEL_REQUEST_ADD,
+    data: { id, error, name, claimId },
+  };
+}
 
 // show a channel
 
-export function updateShowChannelError (error) {
-  return {
-    type: actions.SHOW_CHANNEL_ERROR,
-    data: error,
-  };
-};
-
-export function updateChannelData (name, longId, shortId) {
-  return {
-    type: actions.CHANNEL_DATA_UPDATE,
-    data: { name, longId, shortId },
-  };
-};
-
-export function updateChannelClaimsData (claims, currentPage, totalPages, totalClaims) {
-  return {
-    type: actions.CHANNEL_CLAIMS_DATA_UPDATE,
-    data: { claims, currentPage, totalPages, totalClaims },
-  };
-};
+// export function updateShowChannelError (error) {
+//   return {
+//     type: actions.SHOW_CHANNEL_ERROR,
+//     data: error,
+//   };
+// };
+//
+// export function updateChannelData (name, longId, shortId) {
+//   return {
+//     type: actions.CHANNEL_DATA_UPDATE,
+//     data: { name, longId, shortId },
+//   };
+// };
+//
+// export function updateChannelClaimsData (claims, currentPage, totalPages, totalClaims) {
+//   return {
+//     type: actions.CHANNEL_CLAIMS_DATA_UPDATE,
+//     data: { claims, currentPage, totalPages, totalClaims },
+//   };
+// };
 
 // display a file
 
