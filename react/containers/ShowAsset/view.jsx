@@ -54,11 +54,11 @@ class ShowAsset extends React.Component {
     if (existingAssetRecord) { // case: the asset data already exists
       this.showExistingAsset(existingAssetRecord);
     } else { // case: the asset data does not exist yet
-      this.showNewAsset(assetId, name, claimId);
+      this.showNewAsset(name, claimId);
     }
   }
-  showNewAsset (assetId, name, claimId) {
-    this.props.onShowNewAsset(assetId, name, claimId);
+  showNewAsset (name, claimId) {
+    this.props.onShowNewAsset(name, claimId);
   }
   showExistingAsset (existingAssetRecord) {
     let { error, name, claimId, shortId, claimData } = existingAssetRecord;

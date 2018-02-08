@@ -27,8 +27,8 @@ const mapDispatchToProps = dispatch => {
     onRequestError: (error) => {
       dispatch(updateRequestError(error, null, null));
     },
-    onShowNewAsset: (id, name, claimId) => {
-      dispatch(showNewAsset(id, name, claimId));
+    onShowNewAsset: (name, claimId) => {
+      dispatch(showNewAsset(name, claimId));
     },
     onShowExistingAsset: (error, name, claimId, shortId, claimData) => {
       dispatch(updateShowAsset(error, name, claimId, shortId, claimData));

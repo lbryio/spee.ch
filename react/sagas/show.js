@@ -12,30 +12,25 @@ function* newAssetRequest (action) {
   try {
     ({success, message, data: longId} = yield call(getLongClaimId, name, modifier));
   } catch (error) {
-    // yield put(addAssetRequest(id, error.message, name, null));
     return yield put(updateRequestError(error.message));
   }
   if (!success) {
-    // yield put(addAssetRequest(id, message, name, null));
     return yield put(updateRequestError(message));
   }
   yield put(addAssetRequest(id, null, name, longId));
-  const newAssetId = `a#${name}#${longId}`; // note: move to action
-  yield put(showNewAsset(newAssetId, name, longId));
+  yield put(showNewAsset(name, longId));
 };
 
 function* getAssetDataAndShowAsset (action) {
   const {id, name, claimId} = action.data;
-  // if no error, get short Id
+  // get short Id
   let success, message, shortId;
   try {
     ({success, message, data: shortId} = yield call(getShortId, name, claimId));
   } catch (error) {
-    // yield put(addAssetToAssetList());
     return yield put(updateShowAsset(error.message, name, claimId));
   }
   if (!success) {
-    // yield put(addAssetToAssetList());
     return yield put(updateShowAsset(message, name, claimId));
   }
   // if no error, get claim data
@@ -44,14 +39,11 @@ function* getAssetDataAndShowAsset (action) {
   try {
     ({success, message, data: claimData} = yield call(getClaimData, name, claimId));
   } catch (error) {
-    // yield put(addAssetToAssetList());
     return yield put(updateShowAsset(error.message, name, claimId));
   }
   if (!success) {
-    // yield put(addAssetToAssetList());
     return yield put(updateShowAsset(message, name, claimId));
   }
-  // if both are successfull, add to asset list and select for showing
   yield put(updateShowAsset(null, name, claimId, shortId, claimData));
   yield put(addAssetToAssetList(id, null, name, claimId, shortId, claimData));
 }
@@ -66,26 +58,23 @@ function* retrieveFile (action) {
   } catch (error) {
     return yield put(updateDisplayAssetError(error.message));
   };
-  if (success) {
-    if (isAvailable) {
-      return yield put(updateFileAvailability(AVAILABLE));
-    }
-    yield put(updateFileAvailability(UNAVAILABLE));
-  } else {
-    yield put(updateDisplayAssetError(message));
+  if (!success) {
+    return yield put(updateDisplayAssetError(message));
   }
+  if (isAvailable) {
+    return yield put(updateFileAvailability(AVAILABLE));
+  }
+  yield put(updateFileAvailability(UNAVAILABLE));
   // initiate get request for the file
   try {
     ({ success, message } = yield call(triggerClaimGet, name, claimId));
   } catch (error) {
     return yield put(updateDisplayAssetError(error.message));
   };
-  if (success) {
-    console.log('/api/glaim-get response:', message);
-    yield put(updateFileAvailability(AVAILABLE));
-  } else {
-    yield put(updateDisplayAssetError(message));
+  if (!success) {
+    return yield put(updateDisplayAssetError(message));
   }
+  yield put(updateFileAvailability(AVAILABLE));
 };
 
 function* newChannelRequest (action) {
@@ -103,9 +92,8 @@ function* newChannelRequest (action) {
   }
   const { longChannelClaimId: longId, shortChannelClaimId: shortId } = data;
   yield put(addChannelRequest(id, null, name, longId, shortId));
-  const channelRecordId = `c#${name}#${longId}`;  // move to the action
   const channelData = {name, longId, shortId};
-  yield put(showNewChannel(channelRecordId, channelData));
+  yield put(showNewChannel(channelData));
 }
 
 function* getNewChannelDataAndShowChannel (action) {
@@ -114,11 +102,9 @@ function* getNewChannelDataAndShowChannel (action) {
   try {
     ({ success, message, data: claimsData } = yield call(getChannelClaims, name, longId, 1));
   } catch (error) {
-    // yield put(addNewChannelToChannelList(id, error.message, null, null));
     return yield put(updateShowChannel(error.message, name, shortId, longId));
   }
   if (!success) {
-    // yield put(addNewChannelToChannelList(id, message, null, null));
     return yield put(updateShowChannel(message, name, shortId, longId));
   }
   yield put(updateShowChannel(null, name, shortId, longId, claimsData));

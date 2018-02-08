@@ -53,7 +53,8 @@ export function addAssetRequest (id, error, name, claimId) {
 
 // show an asset
 
-export function showNewAsset (id, name, claimId) {
+export function showNewAsset (name, claimId) {
+  const id = `a#${name}#${claimId}`;
   return {
     type: actions.SHOW_ASSET_NEW,
     data: { id, name, claimId },
@@ -100,7 +101,8 @@ export function addChannelRequest (id, error, name, longId, shortId) {
 
 // show a channel
 
-export function showNewChannel (id, channelData) {
+export function showNewChannel (channelData) {
+  const id = `c#${channelData.name}#${channelData.longId}`;  // move to the action
   return {
     type: actions.SHOW_CHANNEL_NEW,
     data: { id, channelData },

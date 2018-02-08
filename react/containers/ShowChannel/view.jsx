@@ -51,19 +51,17 @@ class ShowChannel extends React.Component {
     if (existingChannel) {
       this.showExistingChannel(existingChannel);
     } else {
-      this.showNewChannel(channelRecordId, channelData);
+      this.showNewChannel(channelData);
     }
   }
-  showNewChannel (channelRecordId, channelData) {
-    this.props.onShowNewChannel(channelRecordId, channelData);
+  showNewChannel (channelData) {
+    this.props.onShowNewChannel(channelData);
   };
   showExistingChannel (existingChannel) {
-    console.log('showExistingChannel:', existingChannel);
     const { error, channelData: {name, shortId, longId}, claimsData } = existingChannel;
     this.props.onShowExistingChannel(error, name, shortId, longId, claimsData);
   };
   componentWillUnmount () {
-    console.log('ShowChannel will unmount');
     this.props.onShowChannelClear();
   }
   render () {
