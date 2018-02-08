@@ -32,6 +32,8 @@ class ShowChannel extends React.Component {
       } else {
         this.onNewChannelRequest(requestId, requestChannelName, requestChannelId);
       }
+    } else {
+      console.log('ShowChannel receiving new props -> request.id did not update', nextProps);
     };
   }
   onNewChannelRequest (requestId, requestName, requestChannelId) {
@@ -47,7 +49,7 @@ class ShowChannel extends React.Component {
     const channelRecordId = `c#${channelData.name}#${channelData.longId}`;
     const existingChannel = channelList[channelRecordId];
     if (existingChannel) {
-      this.showExistingChannel(channelRecordId, existingChannel);
+      this.showExistingChannel(existingChannel);
     } else {
       this.showNewChannel(channelRecordId, channelData);
     }
@@ -56,8 +58,9 @@ class ShowChannel extends React.Component {
     this.props.onShowNewChannel(channelRecordId, channelData);
   };
   showExistingChannel (existingChannel) {
-    const { error, channelData: {name, shortId, longId}, claimData } = existingChannel;
-    this.props.onShowExistingChannel(error, name, shortId, longId, claimData);
+    console.log('showExistingChannel:', existingChannel);
+    const { error, channelData: {name, shortId, longId}, claimsData } = existingChannel;
+    this.props.onShowExistingChannel(error, name, shortId, longId, claimsData);
   };
   componentWillUnmount () {
     console.log('ShowChannel will unmount');

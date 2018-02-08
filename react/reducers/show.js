@@ -16,7 +16,7 @@ const initialState = {
       shortId: null,
       longId : null,
     },
-    channelClaimsData: {
+    claimsData: {
       claims     : null,
       currentPage: null,
       totalPages : null,
@@ -147,7 +147,7 @@ export default function (state = initialState, action) {
             shortId: action.data.shortId,
             longId : action.data.longId,
           },
-          claimData: action.data.claimData,
+          claimsData: action.data.claimsData,
         },
       });
     case actions.SHOW_CHANNEL_CLEAR:
@@ -159,7 +159,7 @@ export default function (state = initialState, action) {
             shortId: null,
             longId : null,
           },
-          channelClaimsData: {
+          claimsData: {
             claims     : null,
             currentPage: null,
             totalPages : null,

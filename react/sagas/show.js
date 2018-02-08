@@ -118,7 +118,8 @@ function* getNewChannelDataAndShowChannel (action) {
     // yield put(addNewChannelToChannelList(id, message, null, null));
   }
   yield put(updateShowChannel(null, name, shortId, longId, claimsData));
-  yield put(addNewChannelToChannelList(id, null, name, shortId, longId, claimsData));
+  const channelData = {name, shortId, longId};
+  yield put(addNewChannelToChannelList(id, null, channelData, claimsData));
 }
 
 export function* watchNewAssetRequest () {

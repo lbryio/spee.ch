@@ -25,7 +25,7 @@ class ShowAsset extends React.Component {
   }
   componentWillReceiveProps (nextProps) {
     // case where componentDidMount triggered new props
-    if (requestIsNewRequest(nextProps, this.props)) {
+    if (requestIsAnAssetRequest(nextProps) && requestIsNewRequest(nextProps, this.props)) {
       const { requestId, requestName, requestModifier, assetRequests } = nextProps;
       const existingRequest = assetRequests[requestId];
       if (existingRequest) { // case: the assetRequest exists
@@ -34,7 +34,7 @@ class ShowAsset extends React.Component {
         this.onNewRequest(requestId, requestName, requestModifier);
       }
     } else {
-      console.log('show.assetRequestId did not update');
+      console.log('ShowAsset receiving new props -> request.id did not update', nextProps);
     }
   }
   onNewRequest (id, requestName, requestModifier) {
