@@ -100,17 +100,17 @@ export function addChannelRequest (id, error, name, longId, shortId) {
 
 // show a channel
 
-export function showNewChannel (id, name, longId, channelData) {
+export function showNewChannel (id, channelData) {
   return {
     type: actions.SHOW_CHANNEL_NEW,
-    data: { id, name, longId, channelData },
+    data: { id, channelData },
   };
 };
 
-export function updateShowChannel (error, channelData, claimData) {
+export function updateShowChannel (error, name, shortId, longId, claimData) {
   return {
     type: actions.SHOW_CHANNEL_UPDATE,
-    data: { error, channelData, claimData },
+    data: { error, name, shortId, longId, claimData },
   };
 };
 

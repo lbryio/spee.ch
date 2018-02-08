@@ -97,27 +97,28 @@ function* newChannelRequest (action) {
   if (!success) {
     return yield put(addChannelRequest(id, message, null, null, null));
   }
-  const { channelName, longChannelClaimId, shortChannelClaimId } = data;
-  yield put(addChannelRequest(id, null, channelName, longChannelClaimId, shortChannelClaimId));
-  const channelRecordId = `c#${channelName}#${longChannelClaimId}`;  // move to the action
-  yield put(showNewChannel(channelRecordId, channelName, longChannelClaimId ));
+  const { longChannelClaimId: longId, shortChannelClaimId: shortId } = data;
+  yield put(addChannelRequest(id, null, name, longId, shortId));
+  const channelRecordId = `c#${name}#${longId}`;  // move to the action
+  const channelData = {name, longId, shortId};
+  yield put(showNewChannel(channelRecordId, channelData));
 }
 
 function* getNewChannelDataAndShowChannel (action) {
-  const { id, name, longId, channelData } = action;
+  const { id, channelData: {name, shortId, longId} } = action.data;
   let success, message, claimsData;
   try {
     ({ success, message, data: claimsData } = yield call(getChannelClaims, name, longId, 1));
   } catch (error) {
-    return yield put(updateShowChannel(error.message, channelData));
+    return yield put(updateShowChannel(error.message, name, shortId, longId));
     // yield put(addNewChannelToChannelList(id, error.message, null, null));
   }
   if (!success) {
-    return yield put(updateShowChannel(message, channelData));
+    return yield put(updateShowChannel(message, name, shortId, longId));
     // yield put(addNewChannelToChannelList(id, message, null, null));
   }
-  yield put(updateShowChannel(null, channelData, claimsData));
-  yield put(addNewChannelToChannelList(id, null, channelData, claimsData));
+  yield put(updateShowChannel(null, name, shortId, longId, claimsData));
+  yield put(addNewChannelToChannelList(id, null, name, shortId, longId, claimsData));
 }
 
 export function* watchNewAssetRequest () {

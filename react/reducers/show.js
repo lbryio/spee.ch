@@ -37,7 +37,7 @@ const initialState = {
   channelRequests: {},
   channelList    : {},
   assetRequests  : {},
-  assets         : {},  // same schema as showAsset
+  assetList      : {},  // same schema as showAsset
 };
 
 /*
@@ -141,9 +141,13 @@ export default function (state = initialState, action) {
     case actions.SHOW_CHANNEL_UPDATE:
       return Object.assign({}, state, {
         showChannel: {
-          error      : action.error,
-          channelData: action.channelData,
-          claimData  : action.claimData,
+          error      : action.data.error,
+          channelData: {
+            name   : action.data.name,
+            shortId: action.data.shortId,
+            longId : action.data.longId,
+          },
+          claimData: action.data.claimData,
         },
       });
     case actions.SHOW_CHANNEL_CLEAR:

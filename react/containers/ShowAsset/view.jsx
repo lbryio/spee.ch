@@ -48,9 +48,9 @@ class ShowAsset extends React.Component {
       return this.props.onRequestError(error);
     }
     // update the showAsset data in the store
-    const { assets } = this.props;
+    const { assetList } = this.props;
     const assetId = `a#${name}#${claimId}`;
-    const existingAssetRecord = assets[assetId];
+    const existingAssetRecord = assetList[assetId];
     if (existingAssetRecord) { // case: the asset data already exists
       this.showExistingAsset(existingAssetRecord);
     } else { // case: the asset data does not exist yet

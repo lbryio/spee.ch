@@ -27,11 +27,11 @@ const mapDispatchToProps = dispatch => {
     onRequestError: (error) => {
       dispatch(updateRequestError(error, null, null));
     },
-    onShowNewChannel: (id, name, longId) => {
-      dispatch(showNewChannel(id, name, longId));
+    onShowNewChannel: (id, channelData) => {
+      dispatch(showNewChannel(id, channelData));
     },
-    onShowExistingChannel: (error, channelData, claimData) => {
-      dispatch(updateShowChannel(error, channelData, claimData));
+    onShowExistingChannel: (error, name, shortId, longId, claimData) => {
+      dispatch(updateShowChannel(error, name, shortId, longId, claimData));
     },
     onShowChannelClear: () => {
       dispatch(clearShowChannel());

@@ -10,7 +10,7 @@ const mapStateToProps = ({ show }) => {
     requestModifier : show.request.data.modifier,
     requestExtension: show.request.data.extension,
     assetRequests   : show.assetRequests,
-    assets          : show.assets,
+    assetList       : show.assetList,
     // show asset
     error           : show.showAsset.error,
     name            : show.showAsset.name,
