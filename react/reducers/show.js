@@ -124,9 +124,9 @@ export default function (state = initialState, action) {
       return Object.assign({}, state, {
         channelRequests: Object.assign({}, state.assetRequests, {
           [action.data.id]: {
-            error  : action.data.error,
-            name   : action.data.name,
-            claimId: action.data.claimId,
+            error: action.data.error,
+            name : action.data.name,
+            data : action.data.data,
           },
         }),
       });
@@ -143,12 +143,22 @@ export default function (state = initialState, action) {
     //       channelData: action.data,
     //     }),
     //   });
-    // case actions.CHANNEL_CLAIMS_DATA_UPDATE:
-    //   return Object.assign({}, state, {
-    //     showChannel: Object.assign({}, state.showChannel, {
-    //       channelClaimsData: action.data,
-    //     }),
-    //   });
+    case actions.SHOW_CHANNEL_CLEAR:
+      return Object.assign({}, state, {
+        showChannel: {
+          error      : null,
+          channelData: {
+            name   : null,
+            shortId: null,
+            longId : null,
+          },
+          channelClaimsData: {
+            claims     : null,
+            currentPage: null,
+            totalPages : null,
+            totalClaims: null,
+          },
+      });
     // display an asset
     case actions.FILE_AVAILABILITY_UPDATE:
       return Object.assign({}, state, {

@@ -22,7 +22,7 @@ class ShowAsset extends React.Component {
       // if the component received new assetRequests, check again to see if the current request matches one
       if (assetRequests[requestId]) { // case: the assetRequest exists
         const request = assetRequests[requestId];
-        this.onRepeatRequest(requestId, request);
+        this.onRepeatRequest(request);
       } else { // case: the asset request does not exist
         this.onNewRequest(requestId, requestName, requestModifier);
       }
@@ -34,19 +34,18 @@ class ShowAsset extends React.Component {
     console.log('new request');
     this.props.onNewRequest(id, requestName, requestModifier);
   }
-  onRepeatRequest (requestId, request) {
+  onRepeatRequest ({ error, name, claimId }) {
     console.log('repeat request');
-    const { assets } = this.props;
-    const { error: requestError, name, claimId } = request;
     // if error, return and update state with error
-    if (requestError) {
-      return this.props.onRequestError(requestError);
+    if (error) {
+      return this.props.onRequestError(error);
     }
     // update the showAsset data in the store
+    const { assets } = this.props;
     const assetId = `a#${name}#${claimId}`;
     if (assets[assetId]) { // case: the asset data already exists
-      let { error, name, claimId, shortId, claimData } = assets[assetId];
-      this.props.onShowExistingAsset(assetId, error, name, claimId, shortId, claimData);
+      let { error: assetError, name, claimId, shortId, claimData } = assets[assetId];
+      this.props.onShowExistingAsset(assetId, assetError, name, claimId, shortId, claimData);
     } else { // case: the asset data does not exist yet
       this.props.onShowNewAsset(assetId, name, claimId);
     }

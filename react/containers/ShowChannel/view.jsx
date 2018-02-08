@@ -2,7 +2,6 @@ import React from 'react';
 import ErrorPage from 'components/ErrorPage';
 import NavBar from 'containers/NavBar';
 import ChannelClaimsDisplay from 'containers/ChannelClaimsDisplay';
-import request from 'utils/request';
 
 import { CHANNEL } from 'constants/show_request_types';
 
@@ -25,7 +24,7 @@ class ShowChannel extends React.Component {
     if (existingRequest(requestId, requestList)) {
       // const validRequest = existingRequest(requestId, requestList);
       // this.onRepeatChannelRequest(validRequest);
-      console.log('weird, we got a repeat channel request on an unmounted ShowChannel component');
+      console.log('we got a repeat channel request on an unmounted ShowChannel component');
     } else {
       this.onNewChannelRequest(requestId, requestName, requestChannelId);
     }
@@ -38,7 +37,7 @@ class ShowChannel extends React.Component {
         const request = requestList[requestId];
         this.onRepeatChannelRequest(request);
       } else {
-        console.log('weird, we got a new channel request on a mounted ShowChannel component');
+        console.log('we got a new channel request on a mounted ShowChannel component');
       }
     };
   }
@@ -52,30 +51,14 @@ class ShowChannel extends React.Component {
     this.props.onNewChannelRequest(requestId, requestName, requestChannelId);
   }
   onRepeatChannelRequest ({ id, error, name, claimId }) {
-    // if error, return early (set the request error in the store)
-    // if the request is valid...
-        // update showChannel to reflect the channel details
-            // see if they are available
-            // retrieve them if they are not available
-  }
-  getAndStoreChannelData (name, id) {
-    console.log('getting and storing channel data for channel:', name, id);
-    if (!id) id = 'none';
-    const url = `/api/channel/data/${name}/${id}`;
-    return request(url)
-      .then(({ success, message, data }) => {
-        console.log('api/channel/data/ response:', data);
-        if (!success) {
-          return this.props.onShowChannelError(message);
-        }
-        this.props.onChannelDataUpdate(data.channelName, data.longChannelClaimId, data.shortChannelClaimId);
-      })
-      .catch((error) => {
-        return this.props.onShowChannelError(error.message);
-      });
+    // if error, return and update state with error
+    if (error) {
+      return this.props.onRequestError(error);
+    }
+    // if no error, get the channel's claims data
   }
   componentWillUnmount () {
-    this.props.onChannelDataClear();
+    this.props.onShowChannelClear();
   }
   render () {
     const { error, name, longId, shortId } = this.props;

@@ -82,10 +82,10 @@ export function newChannelRequest (id, name, channelId) {
   };
 };
 
-export function addChannelRequest (id, error, name, claimId) {
+export function addChannelRequest (id, error, name, data) {
   return {
     type: actions.CHANNEL_REQUEST_ADD,
-    data: { id, error, name, claimId },
+    data: { id, error, name, data },
   };
 }
 
@@ -105,12 +105,11 @@ export function addChannelRequest (id, error, name, claimId) {
 //   };
 // };
 //
-// export function updateChannelClaimsData (claims, currentPage, totalPages, totalClaims) {
-//   return {
-//     type: actions.CHANNEL_CLAIMS_DATA_UPDATE,
-//     data: { claims, currentPage, totalPages, totalClaims },
-//   };
-// };
+export function clearShowChannel () {
+  return {
+    type: actions.SHOW_CHANNEL_CLEAR,
+  };
+};
 
 // display a file
 

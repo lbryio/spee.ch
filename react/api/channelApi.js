@@ -1,36 +1,14 @@
 import Request from 'utils/request';
+import request from '../utils/request';
 
-export function getLongChannelClaimId (name, modifier) {
-  let body = {};
-  // create request params
-  if (modifier) {
-    if (modifier.id) {
-      body['claimId'] = modifier.id;
-    } else {
-      body['channelName'] = modifier.channel.name;
-      body['channelClaimId'] = modifier.channel.id;
-    }
-  }
-  body['claimName'] = name;
-  const params = {
-    method : 'POST',
-    headers: new Headers({
-      'Content-Type': 'application/json',
-    }),
-    body: JSON.stringify(body),
-  }
-  // crate url
-  const url = `/api/claim/long-id`;
-  // return the request promise
-  return Request(url, params);
+export function getChannelData (name, id) {
+  console.log('getting and storing channel data for channel:', name, id);
+  if (!id) id = 'none';
+  const url = `/api/channel/data/${name}/${id}`;
+  return request(url)
 };
 
-export function getShortChannelId (name, claimId) {
-  const url = `/api/claim/short-id/${claimId}/${name}`;
-  return Request(url);
-};
+export function getChannelClaims (name, claimId) {
 
-export function getChannelData (name, claimId) {
-  const url = `/api/claim/data/${name}/${claimId}`;
   return Request(url);
 };

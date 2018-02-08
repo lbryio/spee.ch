@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import {newChannelRequest, updateRequestError} from 'actions/show';
+import {newChannelRequest, updateRequestError, clearShowChannel} from 'actions/show';
 import View from './view';
 
 const mapStateToProps = ({ show }) => {
@@ -19,6 +19,15 @@ const mapStateToProps = ({ show }) => {
 
 const mapDispatchToProps = dispatch => {
   return {
+    onNewChannelRequest (id, name, channelId) {
+      dispatch(newChannelRequest(id, name, channelId));
+    },
+    onRequestError: (error) => {
+      dispatch(updateRequestError(error, null, null));
+    },
+    onShowChannelClear: () => {
+      dispatch(clearShowChannel());
+    },
     // onShowChannelError: (error) => {
     //   dispatch(updateShowChannelError(error));
     // },
@@ -26,16 +35,6 @@ const mapDispatchToProps = dispatch => {
     //   dispatch(updateChannelData(name, longId, shortId));
     //   dispatch(updateShowChannelError(null));  // clear any errors
     // },
-    // onChannelDataClear: () => {
-    //   dispatch(updateChannelData(null, null, null));
-    // },
-    // new
-    onNewChannelRequest (id, name, channelId) {
-      dispatch(newChannelRequest(id, name, channelId));
-    },
-    onRequestError: (error) => {
-      dispatch(updateRequestError(error, null, null));
-    },
   };
 };
 

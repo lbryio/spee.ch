@@ -4,7 +4,7 @@ import { addAssetRequest, updateShowAsset, addChannelRequest, updateShowChannel,
 import { UNAVAILABLE, AVAILABLE } from 'constants/asset_display_states';
 import { checkFileAvailability, triggerClaimGet } from 'api/fileApi';
 import { getLongClaimId, getShortId, getClaimData } from 'api/assetApi';
-import { getLongChannelClaimId, getShortChannelId, getChannelData } from 'api/channelApi';
+import { getChannelData, getChannelClaims } from 'api/channelApi';
 
 function* newAssetRequest (action) {
   const { id, name, modifier } = action.data;
@@ -22,14 +22,15 @@ function* newAssetRequest (action) {
 
 function* newChannelRequest (action) {
   const { id, name, channelId } = action.data;
-  let success, message, longChannelId;
+  let success, message, data;
   try {
-    ({success, message, data: longChannelId} = yield call(getLongChannelClaimId, name, channelId));
+    ({success, message, data} = yield call(getChannelData, name, channelId));
   } catch (error) {
     yield put(addChannelRequest(id, error.message, name, null));
   }
   if (success) {
-    return yield put(addChannelRequest(id, null, name, longChannelId));
+    console.log('api/channel/data/ response:', data);
+    return yield put(addChannelRequest(id, null, name, data));
   }
   yield put(addChannelRequest(id, message, name, null));
 }
