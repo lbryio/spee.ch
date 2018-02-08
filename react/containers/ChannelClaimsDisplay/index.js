@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { updateChannelClaimsData } from 'actions/show';
+import { } from 'actions/show';
 import View from './view';
 
 const mapStateToProps = ({ show : { showChannel: { error, channelData, claimsData } } }) => {
@@ -16,11 +16,8 @@ const mapStateToProps = ({ show : { showChannel: { error, channelData, claimsDat
 
 // const mapDispatchToProps = dispatch => {
 //   return {
-//     onChannelClaimsDataUpdate: (claims, currentPage, totalPages, totalClaims) => {
-//       dispatch(updateChannelClaimsData(claims, currentPage, totalPages, totalClaims));
-//     },
-//     onChannelClaimsDataClear: () => {
-//       dispatch(updateChannelClaimsData(null, null, null, null));
+//     onChannelPageUpdate: (channelRecordId, name, longId, page) => {
+//       dispatch(updateChannelClaims(channelRecordId, name, longId, page));
 //     },
 //   };
 // };

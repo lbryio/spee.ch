@@ -9,6 +9,7 @@ class ChannelClaimsDisplay extends React.Component {
   }
   showNewPage (page) {
     console.log(`update claims data with new page ${page}`);
+    this.props.onChannelPageUpdate(page);
   }
   showPreviousResultsPage () {
     const previousPage = parseInt(this.props.currentPage) - 1;
