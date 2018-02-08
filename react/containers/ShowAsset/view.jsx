@@ -2,53 +2,80 @@ import React from 'react';
 import ErrorPage from 'components/ErrorPage';
 import ShowAssetLite from 'components/ShowAssetLite';
 import ShowAssetDetails from 'components/ShowAssetDetails';
-import request from 'utils/request';
 
-function buildIdFromModifierObject (modifier) {
+function buildIdFromModifierObject (name, modifier) {
   if (modifier) {
     if (modifier.channel.name) {
-      return `${modifier.channel.name}#${modifier.channel.id}`;
+      return `${name}#${modifier.channel.name}#${modifier.channel.id}`;
     }
-    return modifier.id;
+    return `${name}#${modifier.id}`;
   }
-  return '';
+  return `${name}`;
+}
+
+function buildIdFromNameAndClaimId (name, claimId) {
+  return `${name}#${claimId}`;
 }
 
 class ShowAsset extends React.Component {
-  constructor (props) {
-    super(props);
-    this.getLongClaimId = this.getLongClaimId.bind(this);
-    this.getClaimData = this.getClaimData.bind(this);
-  }
   componentDidMount () {
-    const { request: { name, modifier }, assetRequests } = this.props;
-    const id = buildIdFromModifierObject(modifier);
+    const { requestName, requestModifier, assetRequests } = this.props;
+    const id = buildIdFromModifierObject(requestName, requestModifier);
     // check to see if we have this asset
-    if (assetRequests[id]) {
-      // case: the assetRequest exists
-      this.props.onNewAssetRequest(id, name, modifier);  // request the long id and update the store with a new asset request record.
-    } else {
-      // case: the asset request does not exist
-      this.onRepeatAssetRequest(name, modifier); // get the asset request record...?
+    if (assetRequests[id]) { // case: the assetRequest exists
+      const request = assetRequests[id];
+      this.onRepeatRequest(id, request);
+    } else { // case: the asset request does not exist
+      this.onNewRequest(id, requestName, requestModifier);
     }
   }
-  onRepeatAssetRequest (id, modifier, assetRequests) {
-    // get the results of the existing asset request
-    const {error, claimId} = assetRequests[id];
-    console.log(`results form past request ${id}:`, error, claimId);
+  componentWillReceiveProps (nextProps) {
+    if (nextProps.assetRequests !== this.props.assetRequests) {
+      console.log('assetRequests updated:');
+      const { requestName, requestModifier, assetRequests } = nextProps;
+      const id = buildIdFromModifierObject(requestName, requestModifier);
+      // if the component received new assetRequests, check again to see if the current request matches one
+      if (assetRequests[id]) { // case: the assetRequest exists
+        const request = assetRequests[id];
+        this.onRepeatRequest(id, request);
+      } else { // case: the asset request does not exist
+        this.onNewRequest(id, requestName, requestModifier);
+      }
+    }
+  }
+  onNewRequest (id, requestName, requestModifier) {
+    console.log('new request');
+    this.props.onNewRequest(id, requestName, requestModifier);
+  }
+  onRepeatRequest (requestId, request) {
+    console.log('repeat request');
+    const { assets } = this.props;
+    const { error: requestError, name, claimId } = request;
+    const assetId = buildIdFromNameAndClaimId(name, claimId);
+    // if error, return and update state with error
+    if (requestError) {
+      return this.props.onRequestError(requestError);
+    }
+    // update the show asset data in the store
+    if (assets[assetId]) { // case: the asset data already exists
+      let { error, name, claimId, shortId, claimData } = assets[assetId];
+      this.props.onShowExistingAsset(assetId, error, name, claimId, shortId, claimData);
+    } else { // case: the asset data does not exist yet
+      this.props.onShowNewAsset(assetId, name, claimId);
+    }
   }
   componentWillUnmount () {
-    this.props.onAssetClaimDataClear();
+    this.props.onLeaveShowAsset();
   }
   render () {
-    const { error, claimData, extension } = this.props;
+    const { error, name, requestExtension } = this.props;
     if (error) {
       return (
         <ErrorPage error={error}/>
       );
     }
-    if (claimData) {
-      if (extension) {
+    if (name) {
+      if (requestExtension) {
         return (
           <ShowAssetLite />
         );

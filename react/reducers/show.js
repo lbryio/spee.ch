@@ -38,8 +38,10 @@ const initialState = {
   },
   showAsset: {
     error    : null,
-    claimData: null,
+    name     : null,
+    claimId  : null,
     shortId  : null,
+    claimData: null,
   },
   displayAsset: {
     error : null,
@@ -48,26 +50,14 @@ const initialState = {
   channelRequests: {},
   assetRequests  : {},
   channels       : {},
-  assets         : {},
+  assets         : {},  // same schema as showAsset
 };
 
 /* asset request schema:
 name#someidfrommodifier: {
-  error  : null
+  error  : null,
+  name   : null,
   claimId: null,
-} */
-
-/* asset schema:
-name#claimId: {
-  error    : null,
-  name     : null,
-  claimId   : null,
-  claimData: null,
-  shortId  : null,
-  display  : {
-    error : null,
-    status: null,
-  }
 } */
 
 /*
@@ -119,19 +109,14 @@ export default function (state = initialState, action) {
         }),
       });
     // show asset cases
-    case actions.SHOW_ASSET_ERROR:
-      return Object.assign({}, state, {
-        showAsset: Object.assign({}, state.showAsset, {
-          error: action.data,
-        }),
-      });
-    case actions.ASSET_CLAIM_DATA_UPDATE:
-      return Object.assign({}, state, {
-        showAsset: Object.assign({}, state.showAsset, {
-          claimData: action.data.data,
-          shortId  : action.data.shortId,
-        }),
-      });
+    // case actions.SHOW_ASSET_UPDATE:
+    //   return Object.assign({}, state, {
+    //     showAsset: Object.assign({}, state.showAsset, {
+    //       error    : action.data.error,
+    //       claimData: action.data.claimData,
+    //       shortId  : action.data.shortId,
+    //     }),
+    //   });
     // display asset cases
     case actions.FILE_AVAILABILITY_UPDATE:
       return Object.assign({}, state, {
@@ -152,17 +137,40 @@ export default function (state = initialState, action) {
         assetRequests: Object.assign({}, state.assets, {
           [action.data.id]: {
             error  : action.data.error,
+            name   : action.data.name,
             claimId: action.data.claimId,
           },
         }),
       });
-
-    // case actions.ASSET_ADD:
-    //   return Object.assign({}, state, {
-    //     assets: Object.assign({}, state.assets, {
-    //       [`${action.data.name}#${action.data.claimId}`]: action.data,
-    //     }),
-    //   });
+    case actions.SHOW_ASSET_UPDATE:
+      return Object.assign({}, state, {
+        assets: Object.assign({}, state.assets, {
+          [action.data.id]: {
+            error    : action.data.error,
+            name     : action.data.name,
+            claimId  : action.data.claimId,
+            shortId  : action.data.shortId,
+            claimData: action.data.claimData,
+          },
+        }),
+        showAsset: Object.assign({}, state.showAsset, {
+          error    : action.data.error,
+          name     : action.data.name,
+          claimId  : action.data.claimId,
+          shortId  : action.data.shortId,
+          claimData: action.data.claimData,
+        }),
+      });
+    case actions.SHOW_ASSET_CLEAR:
+      return Object.assign({}, state, {
+        showAsset: Object.assign({}, state.showAsset, {
+          error    : null,
+          name     : null,
+          claimId  : null,
+          shortId  : null,
+          claimData: null,
+        }),
+      });
     default:
       return state;
   }

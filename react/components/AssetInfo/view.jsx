@@ -36,7 +36,7 @@ class AssetInfo extends React.Component {
             <span className="text">Channel:</span>
           </div>
           <div className="column column--8 column--med-10">
-            <span className="text"><a href={`/${channelName}:${certificateId}`}>{channelName}</a></span>
+            <span className="text"><Link to={`/${channelName}:${certificateId}`}>{channelName}</Link></span>
           </div>
         </div>
         }

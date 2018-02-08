@@ -207,7 +207,7 @@ module.exports = (app) => {
         res.status(200).json({success: false, message: error.message});
       });
   });
-  app.get('/api/claim/long-id', ({ ip, originalUrl, body, params }, res) => {
+  app.post('/api/claim/long-id', ({ ip, originalUrl, body, params }, res) => {
     logger.debug('body:', body);
     const channelName = body.channelName;
     const channelClaimId = body.channelClaimId;
@@ -237,7 +237,7 @@ module.exports = (app) => {
         if (!claimInfo) {
           return res.status(200).json({success: false, message: 'No claim could be found'});
         }
-        res.status(200).json({success: true, message: claimInfo});
+        res.status(200).json({success: true, data: claimInfo});
       })
       .catch(error => {
         logger.error('api error getting long claim id', error);

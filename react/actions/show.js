@@ -64,23 +64,6 @@ export function updateChannelClaimsData (claims, currentPage, totalPages, totalC
   };
 };
 
-export function updateShowAssetError (error) {
-  return {
-    type: actions.SHOW_ASSET_ERROR,
-    data: error,
-  };
-};
-
-export function updateAssetClaimData (data, shortId) {
-  return {
-    type: actions.ASSET_CLAIM_DATA_UPDATE,
-    data: {
-      data,
-      shortId,
-    },
-  };
-};
-
 export function fileRequested (name, claimId) {
   return {
     type: actions.FILE_REQUESTED,
@@ -105,7 +88,7 @@ export function updateDisplayAssetError (error) {
   };
 };
 
-// new
+// new: request-related actions
 
 export function newAssetRequest (id, name, modifier) {
   return {
@@ -114,16 +97,32 @@ export function newAssetRequest (id, name, modifier) {
   };
 };
 
-export function addAssetRequest (id, error, claimId) {
+export function addAssetRequest (id, error, name, claimId) {
   return {
     type: actions.ASSET_REQUEST_ADD,
-    data: { id, error, claimId },
+    data: { id, error, name, claimId },
   };
 };
 
-// export function addAsset (error, name, claimId, claimData, shortId, display) {
-//   return {
-//     type: actions.ASSET_ADD,
-//     data: { error, name, claimId, claimData, shortId, display },
-//   };
-// };
+// new: asset-realted actions
+
+export function showNewAsset (id, name, claimId) {
+  console.log('show new asset', id, name, claimId);
+  return {
+    type: actions.SHOW_NEW_ASSET,
+    data: { id, name, claimId },
+  };
+};
+
+export function updateShowAsset (id, error, name, claimId, shortId, claimData) {
+  return {
+    type: actions.SHOW_ASSET_UPDATE,
+    data: { id, error, name, claimId, shortId, claimData },
+  };
+};
+
+export function clearShowAsset () {
+  return {
+    type: actions.SHOW_ASSET_CLEAR,
+  };
+};
