@@ -38,7 +38,7 @@ class ShowChannel extends React.Component {
     console.log('new request');
     this.props.onNewChannelRequest(requestId, requestName, requestChannelId);
   }
-  onRepeatChannelRequest ({ id, error, name, claimId }) {
+  onRepeatChannelRequest ({ id, error, data: { channelName, longChannelClaimId} }) {
     // if error, return and update state with error
     if (error) {
       return this.props.onRequestError(error);

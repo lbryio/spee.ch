@@ -50,11 +50,13 @@ class ShowAsset extends React.Component {
     // update the showAsset data in the store
     const { assets } = this.props;
     const assetId = `a#${name}#${claimId}`;
-    if (assets[assetId]) { // case: the asset data already exists
-      let { error: assetError, name, claimId, shortId, claimData } = assets[assetId];
+    const existingAssetRecord = assets[assetId];
+    if (existingAssetRecord) { // case: the asset data already exists
+      let { error: assetError, name, claimId, shortId, claimData } = existingAssetRecord;
       this.props.onShowExistingAsset(assetId, assetError, name, claimId, shortId, claimData);
     } else { // case: the asset data does not exist yet
-      this.props.onShowNewAsset(assetId, name, claimId);
+      console.log('error: there should be an existing record');
+      // this.props.onShowNewAsset(assetId, name, claimId);
     }
   }
   componentWillUnmount () {

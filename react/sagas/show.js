@@ -1,6 +1,6 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
 import * as actions from 'constants/show_action_types';
-import { addAssetRequest, updateShowAsset, addChannelRequest, updateShowChannel, updateFileAvailability, updateDisplayAssetError } from 'actions/show';
+import { addAssetRequest, updateShowAsset, showNewAsset, addChannelRequest, updateShowChannel, updateFileAvailability, updateDisplayAssetError } from 'actions/show';
 import { UNAVAILABLE, AVAILABLE } from 'constants/asset_display_states';
 import { checkFileAvailability, triggerClaimGet } from 'api/fileApi';
 import { getLongClaimId, getShortId, getClaimData } from 'api/assetApi';
@@ -15,25 +15,11 @@ function* newAssetRequest (action) {
     yield put(addAssetRequest(id, error.message, name, null));
   }
   if (success) {
-    return yield put(addAssetRequest(id, null, name, longId));
+    yield put(addAssetRequest(id, null, name, longId));
+    return yield put(showNewAsset(id, name, longId));
   }
   yield put(addAssetRequest(id, message, name, null));
 };
-
-function* newChannelRequest (action) {
-  const { id, name, channelId } = action.data;
-  let success, message, data;
-  try {
-    ({success, message, data} = yield call(getChannelData, name, channelId));
-  } catch (error) {
-    yield put(addChannelRequest(id, error.message, null));
-  }
-  if (success) {
-    console.log('api/channel/data/ response:', data);
-    return yield put(addChannelRequest(id, null, data));
-  }
-  yield put(addChannelRequest(id, message, null));
-}
 
 function* getAssetDataAndShowAsset (action) {
   const {id, name, claimId} = action.data;
@@ -93,6 +79,21 @@ function* retriveFile (action) {
     yield put(updateDisplayAssetError(message));
   }
 };
+
+function* newChannelRequest (action) {
+  const { id, name, channelId } = action.data;
+  let success, message, data;
+  try {
+    ({success, message, data} = yield call(getChannelData, name, channelId));
+  } catch (error) {
+    yield put(addChannelRequest(id, error.message, null));
+  }
+  if (success) {
+    console.log('api/channel/data/ response:', data);
+    return yield put(addChannelRequest(id, null, data));
+  }
+  yield put(addChannelRequest(id, message, null));
+}
 
 export function* watchNewAssetRequest () {
   yield takeLatest(actions.ASSET_REQUEST_NEW, newAssetRequest);
