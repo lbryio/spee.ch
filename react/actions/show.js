@@ -60,10 +60,10 @@ export function showNewAsset (id, name, claimId) {
   };
 };
 
-export function updateShowAsset (id, error, name, claimId, shortId, claimData) {
+export function updateShowAsset (error, name, claimId, shortId, claimData) {
   return {
     type: actions.SHOW_ASSET_UPDATE,
-    data: { id, error, name, claimId, shortId, claimData },
+    data: { error, name, claimId, shortId, claimData },
   };
 };
 
@@ -72,6 +72,15 @@ export function clearShowAsset () {
     type: actions.SHOW_ASSET_CLEAR,
   };
 };
+
+// add asset to asset list
+
+export function addAssetToAssetList (id, error, name, claimId, shortId, claimData) {
+  return {
+    type: actions.ASSET_LIST_ADD,
+    data: { id, error, name, claimId, shortId, claimData },
+  };
+}
 
 // request for a channel
 
@@ -94,22 +103,15 @@ export function addChannelRequest (id, error, name, longId, shortId) {
 export function showNewChannel (id, name, longId, channelData) {
   return {
     type: actions.SHOW_CHANNEL_NEW,
-    data: { id, name, longId, channelData},
+    data: { id, name, longId, channelData },
   };
 };
-
-// export function showExistingChannel (existingChannel) {
-//   return {
-//     type: actions.SHOW_CHANNEL_EXISTING,
-//     data: { existingChannel },
-//   };
-// };
 
 export function updateShowChannel (error, channelData, claimData) {
   return {
     type: actions.SHOW_CHANNEL_UPDATE,
     data: { error, channelData, claimData },
-  }
+  };
 };
 
 export function clearShowChannel () {

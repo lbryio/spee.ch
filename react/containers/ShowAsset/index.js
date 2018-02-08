@@ -30,8 +30,8 @@ const mapDispatchToProps = dispatch => {
     onShowNewAsset: (id, name, claimId) => {
       dispatch(showNewAsset(id, name, claimId));
     },
-    onShowExistingAsset: (id, error, name, claimId, shortId, claimData) => {
-      dispatch(updateShowAsset(id, error, name, claimId, shortId, claimData));
+    onShowExistingAsset: (error, name, claimId, shortId, claimData) => {
+      dispatch(updateShowAsset(error, name, claimId, shortId, claimData));
     },
     onLeaveShowAsset: () => {
       dispatch(clearShowAsset()); // clear any errors

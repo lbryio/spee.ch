@@ -92,15 +92,6 @@ export default function (state = initialState, action) {
     // show an asset
     case actions.SHOW_ASSET_UPDATE:
       return Object.assign({}, state, {
-        assets: Object.assign({}, state.assets, {
-          [action.data.id]: {
-            error    : action.data.error,
-            name     : action.data.name,
-            claimId  : action.data.claimId,
-            shortId  : action.data.shortId,
-            claimData: action.data.claimData,
-          },
-        }),
         showAsset: Object.assign({}, state.showAsset, {
           error    : action.data.error,
           name     : action.data.name,
@@ -117,6 +108,19 @@ export default function (state = initialState, action) {
           claimId  : null,
           shortId  : null,
           claimData: null,
+        }),
+      });
+    // add asset to asset list
+    case actions.ASSET_LIST_ADD:
+      return Object.assign({}, state, {
+        assetList: Object.assign({}, state.assetList, {
+          [action.data.id]: {
+            error    : action.data.error,
+            name     : action.data.name,
+            claimId  : action.data.claimId,
+            shortId  : action.data.shortId,
+            claimData: action.data.claimData,
+          },
         }),
       });
     // request a channel

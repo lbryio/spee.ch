@@ -1,6 +1,6 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
 import * as actions from 'constants/show_action_types';
-import { addAssetRequest, updateShowAsset, showNewAsset, addChannelRequest, showNewChannel, updateShowChannel, addNewChannelToChannelList, updateFileAvailability, updateDisplayAssetError } from 'actions/show';
+import { addAssetRequest, showNewAsset, updateShowAsset, addAssetToAssetList, addChannelRequest, showNewChannel, updateShowChannel, addNewChannelToChannelList, updateFileAvailability, updateDisplayAssetError } from 'actions/show';
 import { UNAVAILABLE, AVAILABLE } from 'constants/asset_display_states';
 import { checkFileAvailability, triggerClaimGet } from 'api/fileApi';
 import { getLongClaimId, getShortId, getClaimData } from 'api/assetApi';
@@ -29,10 +29,12 @@ function* getAssetDataAndShowAsset (action) {
   try {
     ({success, message, data: shortId} = yield call(getShortId, name, claimId));
   } catch (error) {
-    return yield put(updateShowAsset(id, error.message, null, null, null)); // add with error
+    return yield put(updateShowAsset(error.message, name, claimId));
+    // yield put(addAssetToAssetList(arg1, arg2));
   }
   if (!success) {
-    return yield put(updateShowAsset(id, message, null, null, null)); // add with error
+    return yield put(updateShowAsset(message, name, claimId));
+    // yield put(addAssetToAssetList(arg1, arg2));
   }
   // if no error, get claim data
   success = null;
@@ -40,14 +42,16 @@ function* getAssetDataAndShowAsset (action) {
   try {
     ({success, message, data: claimData} = yield call(getClaimData, name, claimId));
   } catch (error) {
-    return yield put(updateShowAsset(id, error.message, null, null, null)); // add with error
+    return yield put(updateShowAsset(error.message, name, claimId));
+    // yield put(addAssetToAssetList(arg1, arg2));
   }
   if (!success) {
-    return yield put(updateShowAsset(id, message, null, null, null)); // add with error
+    return yield put(updateShowAsset(message, name, claimId));
+    // yield put(addAssetToAssetList(arg1, arg2));
   }
   // if both are successfull, add to asset list and select for showing
-  yield put(updateShowAsset(id, null, name, claimId, shortId, claimData));
-  // yield put(addAssetToAssetList(arg1, arg2));
+  yield put(updateShowAsset(null, name, claimId, shortId, claimData));
+  yield put(addAssetToAssetList(id, null, name, claimId, shortId, claimData));
 }
 
 function* retrieveFile (action) {
@@ -105,11 +109,11 @@ function* getNewChannelDataAndShowChannel (action) {
   try {
     ({ success, message, data: claimsData } = yield call(getChannelClaims, name, longId, 1));
   } catch (error) {
-    return yield put(updateShowChannel(error.message, channelData, null));
+    return yield put(updateShowChannel(error.message, channelData));
     // yield put(addNewChannelToChannelList(id, error.message, null, null));
   }
   if (!success) {
-    return yield put(updateShowChannel(message, channelData, null));
+    return yield put(updateShowChannel(message, channelData));
     // yield put(addNewChannelToChannelList(id, message, null, null));
   }
   yield put(updateShowChannel(null, channelData, claimsData));

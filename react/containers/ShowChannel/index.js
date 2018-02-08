@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import {newChannelRequest, updateRequestError, showNewChannel, clearShowChannel} from 'actions/show';
+import {newChannelRequest, updateRequestError, showNewChannel, updateShowChannel, clearShowChannel} from 'actions/show';
 import View from './view';
 
 const mapStateToProps = ({ show }) => {
@@ -30,8 +30,8 @@ const mapDispatchToProps = dispatch => {
     onShowNewChannel: (id, name, longId) => {
       dispatch(showNewChannel(id, name, longId));
     },
-    onShowExistingChannel: () => {
-      
+    onShowExistingChannel: (error, channelData, claimData) => {
+      dispatch(updateShowChannel(error, channelData, claimData));
     },
     onShowChannelClear: () => {
       dispatch(clearShowChannel());
