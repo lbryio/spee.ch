@@ -122,27 +122,16 @@ export default function (state = initialState, action) {
     // request a channel
     case actions.CHANNEL_REQUEST_ADD:
       return Object.assign({}, state, {
-        channelRequests: Object.assign({}, state.assetRequests, {
+        channelRequests: Object.assign({}, state.channelRequests, {
           [action.data.id]: {
             error: action.data.error,
-            name : action.data.name,
             data : action.data.data,
           },
         }),
       });
     // show a channel
-    // case actions.SHOW_CHANNEL_ERROR:
-    //   return Object.assign({}, state, {
-    //     showChannel: Object.assign({}, state.showChannel, {
-    //       error: action.data,
-    //     }),
-    //   });
-    // case actions.CHANNEL_DATA_UPDATE:
-    //   return Object.assign({}, state, {
-    //     showChannel: Object.assign({}, state.showChannel, {
-    //       channelData: action.data,
-    //     }),
-    //   });
+    // case actions.SHOW_CHANNEL_NEW:
+    // case actions.SHOW_CHANNEL_UPDATE:
     case actions.SHOW_CHANNEL_CLEAR:
       return Object.assign({}, state, {
         showChannel: {
@@ -158,6 +147,7 @@ export default function (state = initialState, action) {
             totalPages : null,
             totalClaims: null,
           },
+        },
       });
     // display an asset
     case actions.FILE_AVAILABILITY_UPDATE:

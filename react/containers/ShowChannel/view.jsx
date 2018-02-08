@@ -13,31 +13,28 @@ function channelNameOrIdChanged (nextProps, props) {
   return (nextProps.requestChannelName !== props.requestChannelName || nextProps.requestChannelName !== props.requestChannelName);
 }
 
-function existingRequest (requestId, requestList) {
-  return requestList[requestId];
-}
-
 class ShowChannel extends React.Component {
   componentDidMount () {
     console.log('showchannel did mount');
-    const {requestId, requestName, requestChannelId, requestList} = this.props;
-    if (existingRequest(requestId, requestList)) {
-      // const validRequest = existingRequest(requestId, requestList);
-      // this.onRepeatChannelRequest(validRequest);
+    const {requestId, requestChannelName, requestChannelId, requestList} = this.props;
+    const existingRequest = requestList[requestId];
+    if (existingRequest) {
       console.log('we got a repeat channel request on an unmounted ShowChannel component');
+      this.onRepeatChannelRequest(existingRequest);
     } else {
-      this.onNewChannelRequest(requestId, requestName, requestChannelId);
+      this.onNewChannelRequest(requestId, requestChannelName, requestChannelId);
     }
   }
   componentWillReceiveProps (nextProps) {
     console.log('showchannel will receive new props');
     if (requestIsAChannelRequest(nextProps) && channelNameOrIdChanged(nextProps, this.props)) {
-      const {requestId, requestList} = nextProps;
-      if (existingRequest(requestId, requestList)) {
-        const request = requestList[requestId];
-        this.onRepeatChannelRequest(request);
+      const {requestId, requestChannelName, requestChannelId, requestList} = nextProps;
+      const existingRequest = requestList[requestId];
+      if (existingRequest) {
+        this.onRepeatChannelRequest(existingRequest);
       } else {
         console.log('we got a new channel request on a mounted ShowChannel component');
+        this.onNewChannelRequest(requestId, requestChannelName, requestChannelId);
       }
     };
   }

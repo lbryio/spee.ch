@@ -26,13 +26,13 @@ function* newChannelRequest (action) {
   try {
     ({success, message, data} = yield call(getChannelData, name, channelId));
   } catch (error) {
-    yield put(addChannelRequest(id, error.message, name, null));
+    yield put(addChannelRequest(id, error.message, null));
   }
   if (success) {
     console.log('api/channel/data/ response:', data);
-    return yield put(addChannelRequest(id, null, name, data));
+    return yield put(addChannelRequest(id, null, data));
   }
-  yield put(addChannelRequest(id, message, name, null));
+  yield put(addChannelRequest(id, message, null));
 }
 
 function* getAssetDataAndShowAsset (action) {
@@ -95,7 +95,7 @@ function* retriveFile (action) {
 };
 
 export function* watchNewAssetRequest () {
-  yield takeLatest(actions.NEW_ASSET_REQUEST, newAssetRequest);
+  yield takeLatest(actions.ASSET_REQUEST_NEW, newAssetRequest);
 };
 
 export function* watchNewChannelRequest () {
@@ -103,7 +103,7 @@ export function* watchNewChannelRequest () {
 };
 
 export function* watchShowNewAsset () {
-  yield takeLatest(actions.SHOW_NEW_ASSET, getAssetDataAndShowAsset);
+  yield takeLatest(actions.SHOW_ASSET_NEW, getAssetDataAndShowAsset);
 };
 
 export function* watchFileIsRequested () {
