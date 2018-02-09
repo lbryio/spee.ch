@@ -27,10 +27,6 @@ const initialState = {
   assetList      : {},  // same schema as showAsset
 };
 
-/*
-Reducers describe how the application's state changes in response to actions
-*/
-
 export default function (state = initialState, action) {
   switch (action.type) {
     // handle request
