@@ -124,17 +124,19 @@ export function clearShowChannel () {
 
 //  update channel data
 
-// export function updateChannelClaims () {
-//   return {
-//     type: actions.CHANNEL_LIST_UPDATE,  // updates claims in channel in channel list
-//   }
-// }
+export function updateChannelClaimsAsync (channelListId, name, longId, page) {
+  return {
+    type: actions.CHANNEL_LIST_CLAIMS_UPDATE_ASYNC,
+    data: {channelListId, name, longId, page},
+  };
+};
 
-// export function updateShowChannelClaims () {
-//   return {
-//     type: actions.SHOW_CHANNEL_CLAIMS_UPDATE,  // update claims in show channel
-//   }
-// }
+export function updateChannelClaims (channelListId, claimsData) {
+  return {
+    type: actions.CHANNEL_LIST_CLAIMS_UPDATE,
+    data: {channelListId, claimsData},
+  };
+};
 
 // add channels to channel list
 

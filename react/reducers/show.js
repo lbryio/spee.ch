@@ -144,6 +144,14 @@ export default function (state = initialState, action) {
           },
         }),
       });
+    case actions.CHANNEL_LIST_CLAIMS_UPDATE:
+      return Object.assign({}, state, {
+        channelList: Object.assign({}, state.channelList, {
+          [action.data.channelListId]: Object.assign({}, state.channelList[action.data.channelListId], {
+            claimsData: action.data.claimsData,
+          }),
+        }),
+      });
     // display an asset
     case actions.FILE_AVAILABILITY_UPDATE:
       return Object.assign({}, state, {

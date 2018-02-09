@@ -7,17 +7,20 @@ class ChannelClaimsDisplay extends React.Component {
     this.showNextResultsPage = this.showNextResultsPage.bind(this);
     this.showPreviousResultsPage = this.showPreviousResultsPage.bind(this);
   }
-  showNewPage (page) {
-    console.log(`update claims data with new page ${page}`);
-    this.props.onChannelPageUpdate(page);
-  }
   showPreviousResultsPage () {
-    const previousPage = parseInt(this.props.currentPage) - 1;
+    const { channel: { claimsData: { currentPage } } } = this.props;
+    const previousPage = parseInt(currentPage) - 1;
     this.showNewPage(previousPage);
   }
   showNextResultsPage () {
-    const nextPage = parseInt(this.props.currentPage) + 1;
+    const { channel: { claimsData: { currentPage } } } = this.props;
+    const nextPage = parseInt(currentPage) + 1;
     this.showNewPage(nextPage);
+  }
+  showNewPage (page) {
+    const { showChannelId, channel: { channelData: { name, longId } } } = this.props;
+    console.log(`update claims data on channel ${showChannelId} with new page ${page}`);
+    this.props.onChannelPageUpdate(showChannelId, name, longId, page);
   }
   render () {
     const { channel: { error, claimsData: { claims, currentPage, totalPages } } } = this.props;

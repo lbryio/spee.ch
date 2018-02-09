@@ -1,19 +1,20 @@
 import { connect } from 'react-redux';
-import { } from 'actions/show';
+import { updateChannelClaimsAsync } from 'actions/show';
 import View from './view';
 
 const mapStateToProps = ({ show }) => {
   return {
-    channel: show.channelList[show.showChannel.id],
+    showChannelId: show.showChannel.id,
+    channel      : show.channelList[show.showChannel.id],
   };
 };
 
-// const mapDispatchToProps = dispatch => {
-//   return {
-//     onChannelPageUpdate: (channelRecordId, name, longId, page) => {
-//       dispatch(updateChannelClaims(channelRecordId, name, longId, page));
-//     },
-//   };
-// };
+const mapDispatchToProps = dispatch => {
+  return {
+    onChannelPageUpdate: (showChannelId, name, longId, page) => {
+      dispatch(updateChannelClaimsAsync(showChannelId, name, longId, page));
+    },
+  };
+};
 
-export default connect(mapStateToProps, null)(View);
+export default connect(mapStateToProps, mapDispatchToProps)(View);
