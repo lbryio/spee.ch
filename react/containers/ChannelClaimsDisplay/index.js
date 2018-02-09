@@ -2,15 +2,9 @@ import { connect } from 'react-redux';
 import { } from 'actions/show';
 import View from './view';
 
-const mapStateToProps = ({ show : { showChannel: { error, channelData, claimsData } } }) => {
+const mapStateToProps = ({ show }) => {
   return {
-    error      : error,
-    name       : channelData.name,
-    longId     : channelData.longId,
-    claims     : claimsData.claims,
-    currentPage: claimsData.currentPage,
-    totalPages : claimsData.totalPages,
-    totalClaims: claimsData.totalClaims,
+    channel: show.channelList[show.showChannel.id],
   };
 };
 

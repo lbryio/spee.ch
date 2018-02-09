@@ -26,8 +26,8 @@ function* getAssetDataAndShowAsset (action) {
   if (!success) {
     return yield put(updateShowAsset(message, null));
   }
-  yield put(updateShowAsset(null, id));
   yield put(upsertAssetToAssetList(id, null, name, claimId, shortId, claimData));
+  yield put(updateShowAsset(null, id));
 }
 
 export function* watchShowNewAsset () {

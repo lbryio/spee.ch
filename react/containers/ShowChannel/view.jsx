@@ -49,7 +49,7 @@ class ShowChannel extends React.Component {
     const channelRecordId = `c#${channelData.name}#${channelData.longId}`;
     const existingChannel = channelList[channelRecordId];
     if (existingChannel) {
-      this.showExistingChannel(existingChannel);
+      this.showExistingChannel(channelRecordId);
     } else {
       this.showNewChannel(channelData);
     }
@@ -57,34 +57,39 @@ class ShowChannel extends React.Component {
   showNewChannel (channelData) {
     this.props.onShowNewChannel(channelData);
   };
-  showExistingChannel (existingChannel) {
-    const { error, channelData: {name, shortId, longId}, claimsData } = existingChannel;
-    this.props.onShowExistingChannel(error, name, shortId, longId, claimsData);
+  showExistingChannel (channelRecordId) {
+    this.props.onShowExistingChannel(channelRecordId);
   };
   componentWillUnmount () {
     this.props.onShowChannelClear();
   }
   render () {
-    const { error, name, longId, shortId } = this.props;
+    const { error, channel } = this.props;
     if (error) {
       return (
         <ErrorPage error={error}/>
       );
     };
-    return (
-      <div>
-        <NavBar/>
-        <div className="row row--tall row--padded">
-          <div className="column column--10">
-            <h2>channel name: {name ? name : 'loading...'}</h2>
-            <p className={'fine-print'}>full channel id: {longId ? longId : 'loading...'}</p>
-            <p className={'fine-print'}>short channel id: {shortId ? shortId : 'loading...'}</p>
-          </div>
-          <div className="column column--10">
-            {(name && longId) && <ChannelClaimsDisplay />}
+    if (channel) {
+      const { channelData: { name, longId, shortId } } = channel;
+      return (
+        <div>
+          <NavBar/>
+          <div className="row row--tall row--padded">
+            <div className="column column--10">
+              <h2>channel name: {name ? name : 'loading...'}</h2>
+              <p className={'fine-print'}>full channel id: {longId ? longId : 'loading...'}</p>
+              <p className={'fine-print'}>short channel id: {shortId ? shortId : 'loading...'}</p>
+            </div>
+            <div className="column column--10">
+              {(name && longId) && <ChannelClaimsDisplay />}
+            </div>
           </div>
         </div>
-      </div>
+      );
+    };
+    return (
+      <ErrorPage error={'loading channel data...'}/>
     );
   }
 };

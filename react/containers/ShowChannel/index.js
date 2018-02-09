@@ -13,25 +13,26 @@ const mapStateToProps = ({ show }) => {
     channelList       : show.channelList,
     // show channel
     error             : show.showChannel.error,
-    name              : show.showChannel.channelData.name,
-    shortId           : show.showChannel.channelData.shortId,
-    longId            : show.showChannel.channelData.longId,
+    id                : show.showChannel.id,
+    channel           : show.channelList[show.showChannel.id],
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
+    // request
     onNewChannelRequest (id, name, channelId) {
       dispatch(newChannelRequest(id, name, channelId));
     },
     onRequestError: (error) => {
       dispatch(updateRequestError(error, null, null));
     },
+    // show channel
     onShowNewChannel: (channelData) => {
       dispatch(showNewChannel(channelData));
     },
-    onShowExistingChannel: (error, name, shortId, longId, claimsData) => {
-      dispatch(updateShowChannel(error, name, shortId, longId, claimsData));
+    onShowExistingChannel: (id) => {
+      dispatch(updateShowChannel(null, id));
     },
     onShowChannelClear: () => {
       dispatch(clearShowChannel());

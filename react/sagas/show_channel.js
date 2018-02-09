@@ -9,14 +9,14 @@ function* getNewChannelDataAndShowChannel (action) {
   try {
     ({ success, message, data: claimsData } = yield call(getChannelClaims, name, longId, 1));
   } catch (error) {
-    return yield put(updateShowChannel(error.message, name, shortId, longId));
+    return yield put(updateShowChannel(error.message, null));
   }
   if (!success) {
-    return yield put(updateShowChannel(message, name, shortId, longId));
+    return yield put(updateShowChannel(message, null));
   }
-  yield put(updateShowChannel(null, name, shortId, longId, claimsData));
   const channelData = {name, shortId, longId};
   yield put(addNewChannelToChannelList(id, null, channelData, claimsData));
+  yield put(updateShowChannel(null, id));
 }
 
 export function* watchShowNewChannel () {

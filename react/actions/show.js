@@ -109,10 +109,10 @@ export function showNewChannel (channelData) {
   };
 };
 
-export function updateShowChannel (error, name, shortId, longId, claimsData) {
+export function updateShowChannel (error, id) {
   return {
     type: actions.SHOW_CHANNEL_UPDATE,
-    data: { error, name, shortId, longId, claimsData },
+    data: { error, id },
   };
 };
 

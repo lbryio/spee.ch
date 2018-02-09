@@ -20,7 +20,7 @@ class ChannelClaimsDisplay extends React.Component {
     this.showNewPage(nextPage);
   }
   render () {
-    const { error, claims, currentPage, totalPages } = this.props;
+    const { channel: { error, claimsData: { claims, currentPage, totalPages } } } = this.props;
     return (
       <div>
         {error ? (

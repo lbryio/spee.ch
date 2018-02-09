@@ -10,18 +10,8 @@ const initialState = {
     requestId: null,
   },
   showChannel: {
-    error      : null,
-    channelData: {
-      name   : null,
-      shortId: null,
-      longId : null,
-    },
-    claimsData: {
-      claims     : null,
-      currentPage: null,
-      totalPages : null,
-      totalClaims: null,
-    },
+    error: null,
+    id   : null,
   },
   showAsset: {
     error: null,
@@ -132,30 +122,15 @@ export default function (state = initialState, action) {
     case actions.SHOW_CHANNEL_UPDATE:
       return Object.assign({}, state, {
         showChannel: {
-          error      : action.data.error,
-          channelData: {
-            name   : action.data.name,
-            shortId: action.data.shortId,
-            longId : action.data.longId,
-          },
-          claimsData: action.data.claimsData,
+          error: action.data.error,
+          id   : action.data.id,
         },
       });
     case actions.SHOW_CHANNEL_CLEAR:
       return Object.assign({}, state, {
         showChannel: {
-          error      : null,
-          channelData: {
-            name   : null,
-            shortId: null,
-            longId : null,
-          },
-          claimsData: {
-            claims     : null,
-            currentPage: null,
-            totalPages : null,
-            totalClaims: null,
-          },
+          error: null,
+          id   : null,
         },
       });
     // add channel to channel list
