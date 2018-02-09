@@ -27,7 +27,7 @@ class AssetInfo extends React.Component {
     }
   }
   render () {
-    const { shortId, channelName, certificateId, description, name, claimId, fileExt, contentType, thumbnail, host } = this.props;
+    const { asset: { shortId, claimData : { channelName, certificateId, description, name, claimId, fileExt, contentType, thumbnail, host } } } = this.props;
     return (
       <div>
         {channelName &&

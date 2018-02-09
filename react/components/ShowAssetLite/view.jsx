@@ -4,7 +4,7 @@ import AssetDisplay from 'components/AssetDisplay';
 
 class ShowLite extends React.Component {
   render () {
-    const { name, claimId } = this.props;
+    const { asset: { name, claimId } } = this.props;
     return (
       <div className="row row--tall flex-container--column flex-container--center-center">
         { (name && claimId) &&

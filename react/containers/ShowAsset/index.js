@@ -13,25 +13,25 @@ const mapStateToProps = ({ show }) => {
     assetList       : show.assetList,
     // show asset
     error           : show.showAsset.error,
-    name            : show.showAsset.name,
-    claimData       : show.showAsset.claimData,
+    id              : show.showAsset.id,
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    // new
+    // request
     onNewRequest: (id, name, modifier) => {
       dispatch(newAssetRequest(id, name, modifier));
     },
     onRequestError: (error) => {
       dispatch(updateRequestError(error, null, null));
     },
+    // show asset
     onShowNewAsset: (name, claimId) => {
       dispatch(showNewAsset(name, claimId));
     },
-    onShowExistingAsset: (error, name, claimId, shortId, claimData) => {
-      dispatch(updateShowAsset(error, name, claimId, shortId, claimData));
+    onShowExistingAsset: (assetId) => {
+      dispatch(updateShowAsset(null, assetId));
     },
     onLeaveShowAsset: () => {
       dispatch(clearShowAsset()); // clear any errors

@@ -3,8 +3,7 @@ import View from './view';
 
 const mapStateToProps = ({ show }) => {
   return {
-    name   : show.showAsset.claimData.name,
-    claimId: show.showAsset.claimData.claimId,
+    asset: show.assetList[show.showAsset.id],
   };
 };
 

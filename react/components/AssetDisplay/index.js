@@ -6,7 +6,7 @@ const mapStateToProps = ({ show }) => {
   return {
     error    : show.displayAsset.error,
     status   : show.displayAsset.status,
-    claimData: show.showAsset.claimData,
+    asset    : show.assetList[show.showAsset.id],
   };
 };
 

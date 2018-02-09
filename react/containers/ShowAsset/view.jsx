@@ -52,7 +52,7 @@ class ShowAsset extends React.Component {
     const assetId = `a#${name}#${claimId}`;
     const existingAssetRecord = assetList[assetId];
     if (existingAssetRecord) { // case: the asset data already exists
-      this.showExistingAsset(existingAssetRecord);
+      this.showExistingAsset(assetId);
     } else { // case: the asset data does not exist yet
       this.showNewAsset(name, claimId);
     }
@@ -60,21 +60,20 @@ class ShowAsset extends React.Component {
   showNewAsset (name, claimId) {
     this.props.onShowNewAsset(name, claimId);
   }
-  showExistingAsset (existingAssetRecord) {
-    let { error, name, claimId, shortId, claimData } = existingAssetRecord;
-    this.props.onShowExistingAsset(error, name, claimId, shortId, claimData);
+  showExistingAsset (assetId) {
+    this.props.onShowExistingAsset(assetId);
   }
   componentWillUnmount () {
     this.props.onLeaveShowAsset();
   }
   render () {
-    const { error, name, requestExtension } = this.props;
+    const { error, id, requestExtension } = this.props;
     if (error) {
       return (
         <ErrorPage error={error}/>
       );
     }
-    if (name) { // direct requests are passing because name is present so it just goes
+    if (id) { // direct requests are passing because name is present so it just goes
       if (requestExtension) {
         return (
           <ShowAssetLite />

@@ -7,11 +7,11 @@ import AssetInfo from 'components/AssetInfo';
 
 class ShowAssetDetails extends React.Component {
   render () {
-    const { claimData } = this.props;
+    const { asset } = this.props;
     return (
       <div>
         <NavBar/>
-        {claimData &&
+        {asset &&
         <div className="row row--tall row--padded">
           <div className="column column--10">
             <AssetTitle />

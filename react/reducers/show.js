@@ -24,11 +24,8 @@ const initialState = {
     },
   },
   showAsset: {
-    error    : null,
-    name     : null,
-    claimId  : null,
-    shortId  : null,
-    claimData: null,
+    error: null,
+    id   : null,
   },
   displayAsset: {
     error : null,
@@ -93,25 +90,19 @@ export default function (state = initialState, action) {
     case actions.SHOW_ASSET_UPDATE:
       return Object.assign({}, state, {
         showAsset: Object.assign({}, state.showAsset, {
-          error    : action.data.error,
-          name     : action.data.name,
-          claimId  : action.data.claimId,
-          shortId  : action.data.shortId,
-          claimData: action.data.claimData,
+          error: action.data.error,
+          id   : action.data.id,
         }),
       });
     case actions.SHOW_ASSET_CLEAR:
       return Object.assign({}, state, {
         showAsset: Object.assign({}, state.showAsset, {
-          error    : null,
-          name     : null,
-          claimId  : null,
-          shortId  : null,
-          claimData: null,
+          error: null,
+          id   : null,
         }),
       });
     // add asset to asset list
-    case actions.ASSET_LIST_ADD:
+    case actions.ASSET_LIST_UPSERT:
       return Object.assign({}, state, {
         assetList: Object.assign({}, state.assetList, {
           [action.data.id]: {

@@ -4,10 +4,12 @@ import { LOCAL_CHECK, UNAVAILABLE, ERROR, AVAILABLE } from 'constants/asset_disp
 
 class AssetDisplay extends React.Component {
   componentDidMount () {
-    this.props.onFileRequest(this.props.claimData.name, this.props.claimData.claimId);
+    const { asset: { claimData: { name, claimId } } } = this.props;
+    this.props.onFileRequest(name, claimId);
   }
   render () {
-    const { status, error, claimData: { name, claimId, contentType, fileExt, thumbnail } } = this.props;
+    console.log('rendering assetdisplay', this.props);
+    const { status, error, asset: { claimData: { name, claimId, contentType, fileExt, thumbnail } } } = this.props;
     return (
       <div id="asset-display-component">
         {(status === LOCAL_CHECK) &&

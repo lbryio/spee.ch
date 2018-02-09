@@ -61,10 +61,10 @@ export function showNewAsset (name, claimId) {
   };
 };
 
-export function updateShowAsset (error, name, claimId, shortId, claimData) {
+export function updateShowAsset (error, id) {
   return {
     type: actions.SHOW_ASSET_UPDATE,
-    data: { error, name, claimId, shortId, claimData },
+    data: { error, id },
   };
 };
 
@@ -76,9 +76,9 @@ export function clearShowAsset () {
 
 // add asset to asset list
 
-export function addAssetToAssetList (id, error, name, claimId, shortId, claimData) {
+export function upsertAssetToAssetList (id, error, name, claimId, shortId, claimData) {
   return {
-    type: actions.ASSET_LIST_ADD,
+    type: actions.ASSET_LIST_UPSERT,
     data: { id, error, name, claimId, shortId, claimData },
   };
 }
