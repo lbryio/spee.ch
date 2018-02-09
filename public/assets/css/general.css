@@ -407,12 +407,13 @@ button {
 	cursor: pointer;
 }
 
-.button--primary {
+.button--primary, .button--primary:focus {
 	border: 1px solid black;
 	padding: 0.5em;
 	margin: 0.5em 0.3em 0.5em 0.3em;
 	color: black;
 	background-color: white;
+	outline: 0px;
 }
 
 .button--primary:hover {
@@ -422,23 +423,28 @@ button {
 }
 
 .button--primary:active{
-	border: 1px solid #4156C5;
-	color: white;
-	background-color: white;
+	border: 1px solid #ffffff;
+	color: #d0d0d0;
+	background-color: #ffffff;
 }
 
-.button--secondary {
+.button--secondary, .button--secondary:focus {
 	border: 0px;
 	border-bottom: 1px solid black;
 	padding: 0.5em;
 	margin: 0.5em 0.3em 0.5em 0.3em;
 	color: black;
 	background-color: white;
+	outline: 0px;
 }
 
 .button--secondary:hover {
 	border-bottom: 1px solid #9b9b9b;
 	color: #4156C5;
+}
+
+.button--secondary:active {
+	color: #ffffff;;
 }
 
 .button--large{
