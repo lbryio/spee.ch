@@ -16,7 +16,7 @@ const NO_CLAIM = 'NO_CLAIM';
 
 module.exports = (app) => {
   // route to check whether site has published to a channel
-  app.get('/api/channel/availability/:name', ({ params }, res) => {
+  app.get('/api/channel/availability/:name', ({ ip, originalUrl, params }, res) => {
     checkChannelAvailability(params.name)
       .then(result => {
         if (result === true) {
@@ -26,35 +26,32 @@ module.exports = (app) => {
         }
       })
       .catch(error => {
-        res.status(500).json(error);
+        errorHandlers.handleErrorResponse(originalUrl, ip, error, res);
       });
   });
   // route to get a short channel id from long channel Id
   app.get('/api/channel/short-id/:longId/:name', ({ ip, originalUrl, params }, res) => {
     db.Certificate.getShortChannelIdFromLongChannelId(params.longId, params.name)
       .then(shortId => {
-        logger.debug('sending back short channel id', shortId);
         res.status(200).json(shortId);
       })
       .catch(error => {
-        logger.error('api error getting short channel id', error);
-        errorHandlers.handleApiError(originalUrl, ip, error, res);
+        errorHandlers.handleErrorResponse(originalUrl, ip, error, res);
       });
   });
   app.get('/api/channel/data/:channelName/:channelClaimId', ({ ip, originalUrl, body, params }, res) => {
     const channelName = params.channelName;
     let channelClaimId = params.channelClaimId;
     if (channelClaimId === 'none') channelClaimId = null;
-    getChannelData(channelName, channelClaimId, 0) // getChannelViewData(channelName, channelId, 0)
+    getChannelData(channelName, channelClaimId, 0)
       .then(data => {
         if (data === NO_CHANNEL) {
-          return res.status(200).json({success: false, message: 'No matching channel was found'});
+          return res.status(404).json({success: false, message: 'No matching channel was found'});
         }
         res.status(200).json({success: true, data});
       })
       .catch(error => {
-        logger.error('api error getting channel contents', error);
-        errorHandlers.handleApiError(originalUrl, ip, error, res);
+        errorHandlers.handleErrorResponse(originalUrl, ip, error, res);
       });
   });
   app.get('/api/channel/claims/:channelName/:channelClaimId/:page', ({ ip, originalUrl, body, params }, res) => {
@@ -62,16 +59,15 @@ module.exports = (app) => {
     let channelClaimId = params.channelClaimId;
     if (channelClaimId === 'none') channelClaimId = null;
     const page = params.page;
-    getChannelClaims(channelName, channelClaimId, page)// getChannelViewData(channelName, channelClaimId, page)
+    getChannelClaims(channelName, channelClaimId, page)
       .then(data => {
         if (data === NO_CHANNEL) {
-          return res.status(200).json({success: false, message: 'No matching channel was found'});
+          return res.status(404).json({success: false, message: 'No matching channel was found'});
         }
         res.status(200).json({success: true, data});
       })
       .catch(error => {
-        logger.error('api error getting channel contents', error);
-        errorHandlers.handleApiError(originalUrl, ip, error, res);
+        errorHandlers.handleErrorResponse(originalUrl, ip, error, res);
       });
   });
   // route to run a claim_list request on the daemon
@@ -81,7 +77,7 @@ module.exports = (app) => {
         res.status(200).json(claimsList);
       })
       .catch(error => {
-        errorHandlers.handleApiError(originalUrl, ip, error, res);
+        errorHandlers.handleErrorResponse(originalUrl, ip, error, res);
       });
   });
   // route to get an asset
@@ -107,11 +103,11 @@ module.exports = (app) => {
         res.status(200).json({ success: true, message, completed });
       })
       .catch(error => {
-        errorHandlers.handleApiError(originalUrl, ip, error, res);
+        errorHandlers.handleErrorResponse(originalUrl, ip, error, res);
       });
   });
   // route to check whether this site published to a claim
-  app.get('/api/claim/availability/:name', ({ params }, res) => {
+  app.get('/api/claim/availability/:name', ({ ip, originalUrl, params }, res) => {
     checkClaimNameAvailability(params.name)
       .then(result => {
         if (result === true) {
@@ -121,7 +117,7 @@ module.exports = (app) => {
         }
       })
       .catch(error => {
-        res.status(500).json(error);
+        errorHandlers.handleErrorResponse(originalUrl, ip, error, res);
       });
   });
   // route to run a resolve request on the daemon
@@ -131,7 +127,7 @@ module.exports = (app) => {
         res.status(200).json(resolvedUri);
       })
       .catch(error => {
-        errorHandlers.handleApiError(originalUrl, ip, error, res);
+        errorHandlers.handleErrorResponse(originalUrl, ip, error, res);
       });
   });
   // route to run a publish request on the daemon
@@ -151,7 +147,6 @@ module.exports = (app) => {
       ({fileName, filePath, fileType} = parsePublishApiRequestFiles(files));
       ({channelName, channelPassword} = parsePublishApiChannel(body, user));
     } catch (error) {
-      logger.debug('publish request rejected, insufficient request parameters', error);
       return res.status(400).json({success: false, message: error.message});
     }
     // check channel authorization
@@ -193,18 +188,17 @@ module.exports = (app) => {
         sendGoogleAnalyticsTiming(timingActionType, headers, ip, originalUrl, publishStartTime, publishEndTime);
       })
       .catch(error => {
-        errorHandlers.handleApiError(originalUrl, ip, error, res);
+        errorHandlers.handleErrorResponse(originalUrl, ip, error, res);
       });
   });
   // route to get a short claim id from long claim Id
-  app.get('/api/claim/short-id/:longId/:name', ({ params }, res) => {
+  app.get('/api/claim/short-id/:longId/:name', ({ ip, originalUrl, body, params }, res) => {
     db.Claim.getShortClaimIdFromLongClaimId(params.longId, params.name)
       .then(shortId => {
         res.status(200).json({success: true, data: shortId});
       })
       .catch(error => {
-        logger.error('api error getting short channel id', error);
-        res.status(200).json({success: false, message: error.message});
+        errorHandlers.handleErrorResponse(originalUrl, ip, error, res);
       });
   });
   app.post('/api/claim/long-id', ({ ip, originalUrl, body, params }, res) => {
@@ -216,16 +210,15 @@ module.exports = (app) => {
     getClaimId(channelName, channelClaimId, claimName, claimId)
       .then(result => {
         if (result === NO_CHANNEL) {
-          return res.status(200).json({success: false, message: 'No matching channel could be found'});
+          return res.status(404).json({success: false, message: 'No matching channel could be found'});
         }
         if (result === NO_CLAIM) {
-          return res.status(200).json({success: false, message: 'No matching claim id could be found'});
+          return res.status(404).json({success: false, message: 'No matching claim id could be found'});
         }
         res.status(200).json({success: true, data: result});
       })
       .catch(error => {
-        logger.error('api error getting long claim id', error);
-        errorHandlers.handleApiError(originalUrl, ip, error, res);
+        errorHandlers.handleErrorResponse(originalUrl, ip, error, res);
       });
   });
   app.get('/api/claim/data/:claimName/:claimId', ({ ip, originalUrl, body, params }, res) => {
@@ -235,29 +228,27 @@ module.exports = (app) => {
     db.Claim.resolveClaim(claimName, claimId)
       .then(claimInfo => {
         if (!claimInfo) {
-          return res.status(200).json({success: false, message: 'No claim could be found'});
+          return res.status(404).json({success: false, message: 'No claim could be found'});
         }
         res.status(200).json({success: true, data: claimInfo});
       })
       .catch(error => {
-        logger.error('api error getting long claim id', error);
-        errorHandlers.handleApiError(originalUrl, ip, error, res);
+        errorHandlers.handleErrorResponse(originalUrl, ip, error, res);
       });
   });
   // route to see if asset is available locally
   app.get('/api/file/availability/:name/:claimId', ({ ip, originalUrl, params }, res) => {
     const name = params.name;
     const claimId = params.claimId;
-    let isAvailable = false;
     db.File.findOne({where: {name, claimId}})
       .then(result => {
         if (result) {
-          isAvailable = true;
+          return res.status(200).json({success: true, data: true});
         }
-        res.status(200).json({success: true, data: isAvailable});
+        res.status(200).json({success: true, data: false});
       })
       .catch(error => {
-        errorHandlers.handleApiError(originalUrl, ip, error, res);
+        errorHandlers.handleErrorResponse(originalUrl, ip, error, res);
       });
   });
 };

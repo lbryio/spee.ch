@@ -1,7 +1,7 @@
 const logger = require('winston');
 const { getClaimId, getLocalFileRecord } = require('../controllers/serveController.js');
 const serveHelpers = require('../helpers/serveHelpers.js');
-const { handleRequestError } = require('../helpers/errorHandlers.js');
+const { handleErrorResponse } = require('../helpers/errorHandlers.js');
 const lbryUri = require('../helpers/lbryUri.js');
 
 const SERVE = 'SERVE';
@@ -92,7 +92,7 @@ module.exports = (app) => {
     try {
       ({ hasFileExtension } = lbryUri.parseModifier(params.claim));
     } catch (error) {
-      return res.status(200).json({success: false, message: error.message});
+      return res.status(400).json({success: false, message: error.message});
     }
     let responseType = determineResponseType(hasFileExtension, headers);
     if (responseType !== SERVE) {
@@ -103,14 +103,14 @@ module.exports = (app) => {
     try {
       ({ claimName } = lbryUri.parseClaim(params.claim));
     } catch (error) {
-      return res.status(200).json({success: false, message: error.message});
+      return res.status(400).json({success: false, message: error.message});
     }
     // parse the identifier
     let isChannel, channelName, channelClaimId, claimId;
     try {
       ({ isChannel, channelName, channelClaimId, claimId } = lbryUri.parseIdentifier(params.identifier));
     } catch (error) {
-      return handleRequestError(originalUrl, ip, error, res);
+      return res.status(400).json({success: false, message: error.message});
     }
     if (!isChannel) {
       [claimId, claimName] = flipClaimNameAndIdForBackwardsCompatibility(claimId, claimName);
@@ -121,15 +121,15 @@ module.exports = (app) => {
     getClaimId(channelName, channelClaimId, claimName, claimId)
       .then(fullClaimId => {
         if (fullClaimId === NO_CLAIM) {
-          return res.status(200).json({success: false, message: 'no claim id could be found'});
+          return res.status(404).json({success: false, message: 'no claim id could be found'});
         } else if (fullClaimId === NO_CHANNEL) {
-          return res.status(200).json({success: false, message: 'no channel id could be found'});
+          return res.status(404).json({success: false, message: 'no channel id could be found'});
         }
         serveAssetToClient(fullClaimId, claimName, res);
         // postToStats(responseType, originalUrl, ip, claimName, fullClaimId, 'success');
       })
       .catch(error => {
-        handleRequestError(originalUrl, ip, error, res);
+        handleErrorResponse(originalUrl, ip, error, res);
         // postToStats(responseType, originalUrl, ip, claimName, fullClaimId, 'fail');
       });
   });
@@ -140,7 +140,7 @@ module.exports = (app) => {
     try {
       ({ hasFileExtension } = lbryUri.parseModifier(params.claim));
     } catch (error) {
-      return res.status(200).json({success: false, message: error.message});
+      return res.status(400).json({success: false, message: error.message});
     }
     let responseType = determineResponseType(hasFileExtension, headers);
     if (responseType !== SERVE) {
@@ -151,7 +151,7 @@ module.exports = (app) => {
     try {
       ({claimName} = lbryUri.parseClaim(params.claim));
     } catch (error) {
-      return res.status(200).json({success: false, message: error.message});
+      return res.status(400).json({success: false, message: error.message});
     }
     // log the request data for debugging
     logRequestData(responseType, claimName, null, null);
@@ -159,13 +159,13 @@ module.exports = (app) => {
     getClaimId(null, null, claimName, null)
       .then(fullClaimId => {
         if (fullClaimId === NO_CLAIM) {
-          return res.status(200).render('index');
+          return res.status(404).json({success: false, message: 'no claim id could be found'});
         }
         serveAssetToClient(fullClaimId, claimName, res);
         // postToStats(responseType, originalUrl, ip, claimName, fullClaimId, 'success');
       })
       .catch(error => {
-        handleRequestError(originalUrl, ip, error, res);
+        handleErrorResponse(originalUrl, ip, error, res);
         // postToStats(responseType, originalUrl, ip, claimName, fullClaimId, 'fail');
       });
   });

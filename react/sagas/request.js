@@ -6,14 +6,13 @@ import { getChannelData } from 'api/channelApi';
 
 function* newAssetRequest (action) {
   const { id, name, modifier } = action.data;
-  let success, message, longId;
+  console.log('getting asset long id');
+  let longId;
   try {
-    ({success, message, data: longId} = yield call(getLongClaimId, name, modifier));
+    ({data: longId} = yield call(getLongClaimId, name, modifier));
   } catch (error) {
+    console.log('error:', error);
     return yield put(updateRequestError(error.message));
-  }
-  if (!success) {
-    return yield put(updateRequestError(message));
   }
   yield put(addAssetRequest(id, null, name, longId));
   yield put(showNewAsset(name, longId));
@@ -21,16 +20,13 @@ function* newAssetRequest (action) {
 
 function* newChannelRequest (action) {
   const { id, name, channelId } = action.data;
-  let success, message, data;
+  console.log('getting channel long id');
+  let data;
   try {
-    ({success, message, data} = yield call(getChannelData, name, channelId));
+    ({data} = yield call(getChannelData, name, channelId));
   } catch (error) {
     // return yield put(addChannelRequest(id, error.message, null, null, null));
     return yield put(updateRequestError(error.message));
-  }
-  if (!success) {
-    // return yield put(addChannelRequest(id, message, null, null, null));
-    return yield put(updateRequestError(message));
   }
   const { longChannelClaimId: longId, shortChannelClaimId: shortId } = data;
   yield put(addChannelRequest(id, null, name, longId, shortId));

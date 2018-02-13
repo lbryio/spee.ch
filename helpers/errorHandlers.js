@@ -1,36 +1,29 @@
 const logger = require('winston');
 
 module.exports = {
-  returnErrorMessageAndStatus: function (error) {
-    let status, message;
-    // check for daemon being turned off
-    if (error.code === 'ECONNREFUSED') {
-      status = 200;
-      message = 'Connection refused.  The daemon may not be running.';
-    // check for thrown errors
-    } else if (error.message) {
-      status = 200;
-      message = error.message;
-    // fallback for everything else
-    } else {
-      status = 400;
-      message = error;
-    }
-    return [status, message];
-  },
-  handleRequestError: function (originalUrl, ip, error, res) {
-    logger.error(`Request Error on ${originalUrl}`, module.exports.useObjectPropertiesIfNoKeys(error));
-    const [status, message] = module.exports.returnErrorMessageAndStatus(error);
-    res
-      .status(status)
-      .render('requestError', module.exports.createErrorResponsePayload(status, message));
-  },
-  handleApiError: function (originalUrl, ip, error, res) {
-    logger.error(`Api Error on ${originalUrl}`, module.exports.useObjectPropertiesIfNoKeys(error));
+  handleErrorResponse: function (originalUrl, ip, error, res) {
+    logger.error(`Error on ${originalUrl}`, module.exports.useObjectPropertiesIfNoKeys(error));
     const [status, message] = module.exports.returnErrorMessageAndStatus(error);
     res
       .status(status)
       .json(module.exports.createErrorResponsePayload(status, message));
+  },
+  returnErrorMessageAndStatus: function (error) {
+    let status, message;
+    // check for daemon being turned off
+    if (error.code === 'ECONNREFUSED') {
+      status = 503;
+      message = 'Connection refused.  The daemon may not be running.';
+      // fallback for everything else
+    } else {
+      status = 400;
+      if (error.message) {
+        message = error.message;
+      } else {
+        message = error;
+      };
+    };
+    return [status, message];
   },
   useObjectPropertiesIfNoKeys: function (err) {
     if (Object.keys(err).length === 0) {

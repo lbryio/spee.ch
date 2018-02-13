@@ -21,29 +21,21 @@ class NavBar extends React.Component {
   checkForLoggedInUser () {
     const params = {credentials: 'include'};
     request('/user', params)
-      .then(({success, message, data}) => {
-        if (success) {
-          this.props.onChannelLogin(data.channelName, data.shortChannelId, data.channelClaimId);
-        } else {
-          console.log(message);
-        }
+      .then(({ data }) => {
+        this.props.onChannelLogin(data.channelName, data.shortChannelId, data.channelClaimId);
       })
       .catch(error => {
-        console.log('request encountered an error', error);
+        console.log('/user error:', error.message);
       });
   }
   logoutUser () {
     const params = {credentials: 'include'};
     request('/logout', params)
-      .then(({success, message}) => {
-        if (success) {
-          this.props.onChannelLogout();
-        } else {
-          console.log(message);
-        }
+      .then(() => {
+        this.props.onChannelLogout();
       })
       .catch(error => {
-        console.log('request encountered an error', error);
+        console.log('/logout error', error.message);
       });
   }
   handleSelection (event) {

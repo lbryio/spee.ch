@@ -8,28 +8,22 @@ function* retrieveFile (action) {
   const name = action.data.name;
   const claimId = action.data.claimId;
   // see if the file is available
-  let success, message, isAvailable;
+  let isAvailable;
   try {
-    ({ success, message, data: isAvailable } = yield call(checkFileAvailability, name, claimId));
+    ({ data: isAvailable } = yield call(checkFileAvailability, name, claimId));
   } catch (error) {
     return yield put(updateDisplayAssetError(error.message));
   };
-  if (!success) {
-    return yield put(updateDisplayAssetError(message));
-  }
   if (isAvailable) {
     return yield put(updateFileAvailability(AVAILABLE));
   }
   yield put(updateFileAvailability(UNAVAILABLE));
   // initiate get request for the file
   try {
-    ({ success, message } = yield call(triggerClaimGet, name, claimId));
+    yield call(triggerClaimGet, name, claimId);
   } catch (error) {
     return yield put(updateDisplayAssetError(error.message));
   };
-  if (!success) {
-    return yield put(updateDisplayAssetError(message));
-  }
   yield put(updateFileAvailability(AVAILABLE));
 };
 
