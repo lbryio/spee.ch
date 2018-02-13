@@ -11,23 +11,23 @@ function requestIsAChannelRequest ({ requestType }) {
 
 class ShowChannel extends React.Component {
   componentDidMount () {
-    const { existingRequest, channel, requestId, requestChannelName, requestChannelId } = this.props;
-    if (!existingRequest) {
+    const { previousRequest, channel, requestId, requestChannelName, requestChannelId } = this.props;
+    if (!previousRequest) {
       return this.props.onNewChannelRequest(requestId, requestChannelName, requestChannelId);
     }
     if (!channel) {
-      const { name, shortId, longId } = existingRequest;
+      const { name, shortId, longId } = previousRequest;
       return this.props.onShowNewChannel(name, shortId, longId);
     }
   }
   componentWillReceiveProps (nextProps) {
     if (requestIsAChannelRequest(nextProps)) {
-      const { existingRequest, channel, requestId, requestChannelName, requestChannelId } = nextProps;
-      if (!existingRequest) {
+      const { previousRequest, channel, requestId, requestChannelName, requestChannelId } = nextProps;
+      if (!previousRequest) {
         return this.props.onNewChannelRequest(requestId, requestChannelName, requestChannelId);
       }
       if (!channel) {
-        const { name, shortId, longId } = existingRequest;
+        const { name, shortId, longId } = previousRequest;
         return this.props.onShowNewChannel(name, shortId, longId);
       }
     }

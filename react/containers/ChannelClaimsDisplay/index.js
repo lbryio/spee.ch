@@ -3,17 +3,16 @@ import { updateChannelClaimsAsync } from 'actions/show';
 import View from './view';
 
 const mapStateToProps = ({ show }) => {
-  let props = {};
   // select channel key
   const request = show.channelRequests[show.request.id];
   const channelKey = `c#${request.name}#${request.longId}`;
-  props['channelKey'] = channelKey;
   // select channel claims
-  const channel = show.channelList[channelKey];
-  if (channel) {
-    props['channel'] = channel;
+  const channel = show.channelList[channelKey] || null;
+  // return props
+  return {
+    channelKey,
+    channel,
   };
-  return props;
 };
 
 const mapDispatchToProps = dispatch => {

@@ -4,24 +4,27 @@ import { newChannelRequest, showNewChannel } from 'actions/show';
 import View from './view';
 
 const mapStateToProps = ({ show }) => {
-  let props = {};
-  props['requestId'] = show.request.id;
-  props['requestType'] = show.request.type;
-  props['requestChannelName'] = show.request.data.name;
-  props['requestChannelId'] = show.request.data.id;
+  // select request info
+  const requestId = show.request.id;
+  const requestType = show.request.type;
+  const requestChannelName = show.request.data.name;
+  const requestChannelId = show.request.data.id;
   // select request
-  const existingRequest = show.channelRequests[show.request.id];
-  if (existingRequest) {
-    props['existingRequest'] = existingRequest;
-    console.log('existing channel request found', existingRequest);
-    // select channel info
-    const channelKey = `c#${existingRequest.name}#${existingRequest.longId}`;
-    const channel = show.channelList[channelKey];
-    if (channel) {
-      props['channel'] = channel;
-    };
+  const previousRequest = show.channelRequests[show.request.id] || null;
+  // select channel info
+  let channel;
+  if (previousRequest) {
+    const channelKey = `c#${previousRequest.name}#${previousRequest.longId}`;
+    channel = show.channelList[channelKey] || null;
   }
-  return props;
+  return {
+    requestId,
+    requestType,
+    requestChannelName,
+    requestChannelId,
+    previousRequest,
+    channel,
+  };
 };
 
 const mapDispatchToProps = dispatch => {

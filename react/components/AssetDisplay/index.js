@@ -8,8 +8,8 @@ const mapStateToProps = ({ show }) => {
     status: show.displayAsset.status,
   };
   // select asset info
-  const existingRequest = show.assetRequests[show.request.id];
-  const assetKey = `a#${existingRequest.name}#${existingRequest.claimId}`;
+  const previousRequest = show.assetRequests[show.request.id];
+  const assetKey = `a#${previousRequest.name}#${previousRequest.claimId}`;
   const asset = show.assetList[assetKey];
   if (asset) {
     props['asset'] = asset;
