@@ -2,15 +2,18 @@ import { connect } from 'react-redux';
 import View from './view';
 
 const mapStateToProps = ({ show }) => {
-  let props = {};
   // select title
-  const previousRequest = show.assetRequests[show.request.id];
-  const assetKey = `a#${previousRequest.name}#${previousRequest.claimId}`;
+  const request = show.assetRequests[show.request.id];
+  const assetKey = `a#${request.name}#${request.claimId}`;
   const asset = show.assetList[assetKey];
+  let title;
   if (asset) {
-    props['title'] = asset.claimData.title;
+    title = asset.claimData.title;
   };
-  return props;
+  //  return props
+  return {
+    title,
+  };
 };
 
 export default connect(mapStateToProps, null)(View);

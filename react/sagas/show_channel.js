@@ -19,7 +19,7 @@ function* getChannelClaimsAndShowChannel (action) {
 }
 
 export function* watchShowNewChannel () {
-  yield takeLatest(actions.SHOW_CHANNEL_NEW, getChannelClaimsAndShowChannel);
+  yield takeLatest(actions.CHANNEL_NEW_ASYNC, getChannelClaimsAndShowChannel);
 };
 
 function* getNewClaimsAndUpdateClaimsList (action) {
@@ -37,5 +37,5 @@ function* getNewClaimsAndUpdateClaimsList (action) {
 }
 
 export function* watchShowNewChannelClaimsRequest () {
-  yield takeLatest(actions.CHANNEL_LIST_CLAIMS_UPDATE_ASYNC, getNewClaimsAndUpdateClaimsList);
+  yield takeLatest(actions.CHANNEL_CLAIMS_UPDATE_ASYNC, getNewClaimsAndUpdateClaimsList);
 }

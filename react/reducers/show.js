@@ -22,13 +22,13 @@ const initialState = {
 export default function (state = initialState, action) {
   switch (action.type) {
     // handle request
-    case actions.REQUEST_ERROR_UPDATE:
+    case actions.REQUEST_ERROR:
       return Object.assign({}, state, {
         request: Object.assign({}, state.request, {
           error: action.data,
         }),
       });
-    case actions.REQUEST_CHANNEL_UPDATE:
+    case actions.REQUEST_UPDATE_CHANNEL:
       return Object.assign({}, state, {
         request: {
           type : CHANNEL,
@@ -40,7 +40,7 @@ export default function (state = initialState, action) {
           },
         },
       });
-    case actions.REQUEST_CLAIM_UPDATE:
+    case actions.REQUEST_UPDATE_CLAIM:
       return Object.assign({}, state, {
         request: {
           type : ASSET,
@@ -53,8 +53,8 @@ export default function (state = initialState, action) {
           },
         },
       });
-    // request for an asset
-    case actions.ASSET_REQUEST_ADD:
+    // successful requests
+    case actions.ASSET_REQUEST_SUCCESS:
       return Object.assign({}, state, {
         assetRequests: Object.assign({}, state.assetRequests, {
           [action.data.id]: {
@@ -64,8 +64,19 @@ export default function (state = initialState, action) {
           },
         }),
       });
-    // add asset to asset list
-    case actions.ASSET_LIST_ADD:
+    case actions.CHANNEL_REQUEST_SUCCESS:
+      return Object.assign({}, state, {
+        channelRequests: Object.assign({}, state.channelRequests, {
+          [action.data.id]: {
+            error  : action.data.error,
+            name   : action.data.name,
+            longId : action.data.longId,
+            shortId: action.data.shortId,
+          },
+        }),
+      });
+    // updates to asset list
+    case actions.ASSET_NEW_SUCCESS:
       return Object.assign({}, state, {
         assetList: Object.assign({}, state.assetList, {
           [action.data.id]: {
@@ -77,35 +88,8 @@ export default function (state = initialState, action) {
           },
         }),
       });
-    // request a channel
-    case actions.CHANNEL_REQUEST_ADD:
-      return Object.assign({}, state, {
-        channelRequests: Object.assign({}, state.channelRequests, {
-          [action.data.id]: {
-            error  : action.data.error,
-            name   : action.data.name,
-            longId : action.data.longId,
-            shortId: action.data.shortId,
-          },
-        }),
-      });
-    // show a channel
-    case actions.SHOW_CHANNEL_UPDATE:
-      return Object.assign({}, state, {
-        showChannel: {
-          error: action.data.error,
-          id   : action.data.id,
-        },
-      });
-    case actions.SHOW_CHANNEL_CLEAR:
-      return Object.assign({}, state, {
-        showChannel: {
-          error: null,
-          id   : null,
-        },
-      });
-    // add channel to channel list
-    case actions.CHANNEL_LIST_ADD:
+    // updates to channel list
+    case actions.CHANNEL_NEW_SUCCESS:
       return Object.assign({}, state, {
         channelList: Object.assign({}, state.channelList, {
           [action.data.id]: {
@@ -116,7 +100,7 @@ export default function (state = initialState, action) {
           },
         }),
       });
-    case actions.CHANNEL_LIST_CLAIMS_UPDATE:
+    case actions.CHANNEL_CLAIMS_UPDATE_SUCCESS:
       return Object.assign({}, state, {
         channelList: Object.assign({}, state.channelList, {
           [action.data.channelListId]: Object.assign({}, state.channelList[action.data.channelListId], {

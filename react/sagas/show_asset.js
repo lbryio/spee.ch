@@ -33,5 +33,5 @@ function* getAssetDataAndShowAsset (action) {
 }
 
 export function* watchShowNewAsset () {
-  yield takeLatest(actions.SHOW_ASSET_NEW, getAssetDataAndShowAsset);
+  yield takeLatest(actions.ASSET_NEW_ASYNC, getAssetDataAndShowAsset);
 };

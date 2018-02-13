@@ -3,18 +3,19 @@ import View from './view';
 import { fileRequested } from 'actions/show';
 
 const mapStateToProps = ({ show }) => {
-  let props = {
-    error : show.displayAsset.error,
-    status: show.displayAsset.status,
-  };
-  // select asset info
-  const previousRequest = show.assetRequests[show.request.id];
-  const assetKey = `a#${previousRequest.name}#${previousRequest.claimId}`;
+  // select error and status
+  const error  = show.displayAsset.error;
+  const status = show.displayAsset.status;
+  // select asset
+  const request = show.assetRequests[show.request.id];
+  const assetKey = `a#${request.name}#${request.claimId}`;
   const asset = show.assetList[assetKey];
-  if (asset) {
-    props['asset'] = asset;
+  //  return props
+  return {
+    error,
+    status,
+    asset,
   };
-  return props;
 };
 
 const mapDispatchToProps = dispatch => {
