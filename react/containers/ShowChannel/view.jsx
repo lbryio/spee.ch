@@ -9,69 +9,33 @@ function requestIsAChannelRequest ({ requestType }) {
   return requestType === CHANNEL;
 }
 
-function requestIsNewRequest (nextProps, props) {
-  return (nextProps.requestId !== props.requestId);
-}
-
 class ShowChannel extends React.Component {
   componentDidMount () {
-    const {requestId, requestChannelName, requestChannelId, requestList, channelList} = this.props;
-    const existingRequest = requestList[requestId];
-    if (existingRequest) {
-      this.onRepeatChannelRequest(existingRequest, channelList);
-    } else {
-      this.onNewChannelRequest(requestId, requestChannelName, requestChannelId);
+    const { existingRequest, channel, requestId, requestChannelName, requestChannelId } = this.props;
+    if (!existingRequest) {
+      return this.props.onNewChannelRequest(requestId, requestChannelName, requestChannelId);
+    }
+    if (!channel) {
+      const { name, shortId, longId } = existingRequest;
+      return this.props.onShowNewChannel(name, shortId, longId);
     }
   }
   componentWillReceiveProps (nextProps) {
-    if (requestIsAChannelRequest(nextProps) && requestIsNewRequest(nextProps, this.props)) {
-      const {requestId, requestChannelName, requestChannelId, requestList, channelList} = nextProps;
-      const existingRequest = requestList[requestId];
-      if (existingRequest) {
-        this.onRepeatChannelRequest(existingRequest, channelList);
-      } else {
-        this.onNewChannelRequest(requestId, requestChannelName, requestChannelId);
+    if (requestIsAChannelRequest(nextProps)) {
+      const { existingRequest, channel, requestId, requestChannelName, requestChannelId } = nextProps;
+      if (!existingRequest) {
+        return this.props.onNewChannelRequest(requestId, requestChannelName, requestChannelId);
       }
-    } else {
-      console.log('ShowChannel receiving new props -> request.id did not update', nextProps);
-    };
-  }
-  onNewChannelRequest (requestId, requestName, requestChannelId) {
-    console.log('new request');
-    this.props.onNewChannelRequest(requestId, requestName, requestChannelId);
-  }
-  onRepeatChannelRequest ({ error, channelData }, channelList) {
-    // if error, return and update state with error
-    if (error) {
-      return this.props.onRequestError(error);
+      if (!channel) {
+        const { name, shortId, longId } = existingRequest;
+        return this.props.onShowNewChannel(name, shortId, longId);
+      }
     }
-    // check if the channel data is present or not
-    const channelRecordId = `c#${channelData.name}#${channelData.longId}`;
-    const existingChannel = channelList[channelRecordId];
-    if (existingChannel) {
-      this.showExistingChannel(channelRecordId);
-    } else {
-      this.showNewChannel(channelData);
-    }
-  }
-  showNewChannel (channelData) {
-    this.props.onShowNewChannel(channelData);
-  };
-  showExistingChannel (channelRecordId) {
-    this.props.onShowExistingChannel(channelRecordId);
-  };
-  componentWillUnmount () {
-    this.props.onShowChannelClear();
   }
   render () {
-    const { error, channel } = this.props;
-    if (error) {
-      return (
-        <ErrorPage error={error}/>
-      );
-    };
+    const { channel } = this.props;
     if (channel) {
-      const { channelData: { name, longId, shortId } } = channel;
+      const { name, longId, shortId } = channel;
       return (
         <div>
           <NavBar/>
@@ -82,7 +46,7 @@ class ShowChannel extends React.Component {
               <p className={'fine-print'}>short channel id: {shortId ? shortId : 'loading...'}</p>
             </div>
             <div className="column column--10">
-              {(name && longId) && <ChannelClaimsDisplay />}
+              <ChannelClaimsDisplay />
             </div>
           </div>
         </div>

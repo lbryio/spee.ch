@@ -61,24 +61,11 @@ export function showNewAsset (name, claimId) {
   };
 };
 
-export function updateShowAsset (error, id) {
-  return {
-    type: actions.SHOW_ASSET_UPDATE,
-    data: { error, id },
-  };
-};
-
-export function clearShowAsset () {
-  return {
-    type: actions.SHOW_ASSET_CLEAR,
-  };
-};
-
 // add asset to asset list
 
-export function upsertAssetToAssetList (id, error, name, claimId, shortId, claimData) {
+export function addAssetToAssetList (id, error, name, claimId, shortId, claimData) {
   return {
-    type: actions.ASSET_LIST_UPSERT,
+    type: actions.ASSET_LIST_ADD,
     data: { id, error, name, claimId, shortId, claimData },
   };
 }
@@ -101,33 +88,29 @@ export function addChannelRequest (id, error, name, longId, shortId) {
 
 // show a channel
 
-export function showNewChannel (channelData) {
-  const id = `c#${channelData.name}#${channelData.longId}`;  // move to the action
+export function showNewChannel (name, shortId, longId) {
+  const id = `c#${name}#${longId}`;  // move to the action
   return {
     type: actions.SHOW_CHANNEL_NEW,
-    data: { id, channelData },
+    data: { id, name, shortId, longId },
   };
 };
 
-export function updateShowChannel (error, id) {
-  return {
-    type: actions.SHOW_CHANNEL_UPDATE,
-    data: { error, id },
-  };
-};
+// add channels to channel list
 
-export function clearShowChannel () {
+export function addNewChannelToChannelList (id, name, shortId, longId, claimsData) {
   return {
-    type: actions.SHOW_CHANNEL_CLEAR,
+    type: actions.CHANNEL_LIST_ADD,
+    data: { id, name, shortId, longId, claimsData },
   };
 };
 
 //  update channel data
 
-export function updateChannelClaimsAsync (channelListId, name, longId, page) {
+export function updateChannelClaimsAsync (channelKey, name, longId, page) {
   return {
     type: actions.CHANNEL_LIST_CLAIMS_UPDATE_ASYNC,
-    data: {channelListId, name, longId, page},
+    data: {channelKey, name, longId, page},
   };
 };
 
@@ -135,15 +118,6 @@ export function updateChannelClaims (channelListId, claimsData) {
   return {
     type: actions.CHANNEL_LIST_CLAIMS_UPDATE,
     data: {channelListId, claimsData},
-  };
-};
-
-// add channels to channel list
-
-export function addNewChannelToChannelList (id, error, channelData, claimsData) {
-  return {
-    type: actions.CHANNEL_LIST_ADD,
-    data: { id, error, channelData, claimsData },
   };
 };
 

@@ -1,41 +1,38 @@
+
 import { connect } from 'react-redux';
-import {newChannelRequest, updateRequestError, showNewChannel, updateShowChannel, clearShowChannel} from 'actions/show';
+import { newChannelRequest, showNewChannel } from 'actions/show';
 import View from './view';
 
 const mapStateToProps = ({ show }) => {
-  return {
-    // request
-    requestId         : show.request.id,
-    requestType       : show.request.type,
-    requestChannelName: show.request.data.name,
-    requestChannelId  : show.request.data.id,
-    requestList       : show.channelRequests,
-    channelList       : show.channelList,
-    // show channel
-    error             : show.showChannel.error,
-    id                : show.showChannel.id,
-    channel           : show.channelList[show.showChannel.id],
-  };
+  let props = {};
+  props['requestId'] = show.request.id;
+  props['requestType'] = show.request.type;
+  props['requestChannelName'] = show.request.data.name;
+  props['requestChannelId'] = show.request.data.id;
+  // select request
+  const existingRequest = show.channelRequests[show.request.id];
+  if (existingRequest) {
+    props['existingRequest'] = existingRequest;
+    console.log('existing channel request found', existingRequest);
+    // select channel info
+    const channelKey = `c#${existingRequest.name}#${existingRequest.longId}`;
+    const channel = show.channelList[channelKey];
+    if (channel) {
+      props['channel'] = channel;
+    };
+  }
+  return props;
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     // request
-    onNewChannelRequest (id, name, channelId) {
-      dispatch(newChannelRequest(id, name, channelId));
-    },
-    onRequestError: (error) => {
-      dispatch(updateRequestError(error, null, null));
+    onNewChannelRequest (requestId, requestChannelName, requestChannelId) {
+      dispatch(newChannelRequest(requestId, requestChannelName, requestChannelId));
     },
     // show channel
-    onShowNewChannel: (channelData) => {
-      dispatch(showNewChannel(channelData));
-    },
-    onShowExistingChannel: (id) => {
-      dispatch(updateShowChannel(null, id));
-    },
-    onShowChannelClear: () => {
-      dispatch(clearShowChannel());
+    onShowNewChannel: (name, shortId, longId) => {
+      dispatch(showNewChannel(name, shortId, longId));
     },
   };
 };

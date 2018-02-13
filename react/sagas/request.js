@@ -26,7 +26,7 @@ function* newChannelRequest (action) {
     ({success, message, data} = yield call(getChannelData, name, channelId));
   } catch (error) {
     // return yield put(addChannelRequest(id, error.message, null, null, null));
-    return yield put(updateRequestError(message));
+    return yield put(updateRequestError(error.message));
   }
   if (!success) {
     // return yield put(addChannelRequest(id, message, null, null, null));
@@ -34,8 +34,7 @@ function* newChannelRequest (action) {
   }
   const { longChannelClaimId: longId, shortChannelClaimId: shortId } = data;
   yield put(addChannelRequest(id, null, name, longId, shortId));
-  const channelData = {name, longId, shortId};
-  yield put(showNewChannel(channelData));
+  yield put(showNewChannel(name, shortId, longId));
 }
 
 export function* watchNewAssetRequest () {

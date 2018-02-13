@@ -9,14 +9,6 @@ const initialState = {
     data     : null,
     requestId: null,
   },
-  showChannel: {
-    error: null,
-    id   : null,
-  },
-  showAsset: {
-    error: null,
-    id   : null,
-  },
   displayAsset: {
     error : null,
     status: LOCAL_CHECK,
@@ -24,7 +16,7 @@ const initialState = {
   channelRequests: {},
   channelList    : {},
   assetRequests  : {},
-  assetList      : {},  // same schema as showAsset
+  assetList      : {},
 };
 
 export default function (state = initialState, action) {
@@ -72,23 +64,8 @@ export default function (state = initialState, action) {
           },
         }),
       });
-    // show an asset
-    case actions.SHOW_ASSET_UPDATE:
-      return Object.assign({}, state, {
-        showAsset: Object.assign({}, state.showAsset, {
-          error: action.data.error,
-          id   : action.data.id,
-        }),
-      });
-    case actions.SHOW_ASSET_CLEAR:
-      return Object.assign({}, state, {
-        showAsset: Object.assign({}, state.showAsset, {
-          error: null,
-          id   : null,
-        }),
-      });
     // add asset to asset list
-    case actions.ASSET_LIST_UPSERT:
+    case actions.ASSET_LIST_ADD:
       return Object.assign({}, state, {
         assetList: Object.assign({}, state.assetList, {
           [action.data.id]: {
@@ -105,12 +82,10 @@ export default function (state = initialState, action) {
       return Object.assign({}, state, {
         channelRequests: Object.assign({}, state.channelRequests, {
           [action.data.id]: {
-            error      : action.data.error,
-            channelData: {
-              name   : action.data.name,
-              longId : action.data.longId,
-              shortId: action.data.shortId,
-            },
+            error  : action.data.error,
+            name   : action.data.name,
+            longId : action.data.longId,
+            shortId: action.data.shortId,
           },
         }),
       });
@@ -134,9 +109,10 @@ export default function (state = initialState, action) {
       return Object.assign({}, state, {
         channelList: Object.assign({}, state.channelList, {
           [action.data.id]: {
-            error      : action.data.error,
-            channelData: action.data.channelData,
-            claimsData : action.data.claimsData,
+            name      : action.data.name,
+            longId    : action.data.longId,
+            shortId   : action.data.shortId,
+            claimsData: action.data.claimsData,
           },
         }),
       });

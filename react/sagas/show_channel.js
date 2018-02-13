@@ -1,22 +1,22 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
 import * as actions from 'constants/show_action_types';
-import { updateShowChannel, addNewChannelToChannelList, updateChannelClaims } from 'actions/show';
+import { updateRequestError, addNewChannelToChannelList, updateChannelClaims } from 'actions/show';
 import { getChannelClaims } from 'api/channelApi';
 
 function* getChannelClaimsAndShowChannel (action) {
-  const { id, channelData: {name, shortId, longId} } = action.data;
+  const { id, name, shortId, longId } = action.data;
+  console.log('getchannelclaimsandshowchannel', id, name, shortId, longId);
   let success, message, claimsData;
   try {
     ({ success, message, data: claimsData } = yield call(getChannelClaims, name, longId, 1));
   } catch (error) {
-    return yield put(updateShowChannel(error.message, null));
+    return yield put(updateRequestError(error.message));
   }
   if (!success) {
-    return yield put(updateShowChannel(message, null));
+    return yield put(updateRequestError(message));
   }
-  const channelData = {name, shortId, longId};
-  yield put(addNewChannelToChannelList(id, null, channelData, claimsData));
-  yield put(updateShowChannel(null, id));
+  yield put(addNewChannelToChannelList(id, name, shortId, longId, claimsData));
+  yield put(updateRequestError(null));
 }
 
 export function* watchShowNewChannel () {
@@ -24,17 +24,17 @@ export function* watchShowNewChannel () {
 };
 
 function* getNewClaimsAndUpdateClaimsList (action) {
-  const { channelListId, name, longId, page } = action.data;
+  const { channelKey, name, longId, page } = action.data;
   let success, message, claimsData;
   try {
     ({ success, message, data: claimsData } = yield call(getChannelClaims, name, longId, page));
   } catch (error) {
-    return yield put(updateShowChannel(error.message, null));
+    return yield put(updateRequestError(error.message));
   }
   if (!success) {
-    return yield put(updateShowChannel(message, null));
+    return yield put(updateRequestError(message));
   }
-  yield put(updateChannelClaims(channelListId, claimsData));
+  yield put(updateChannelClaims(channelKey, claimsData));
 }
 
 export function* watchShowNewChannelClaimsRequest () {

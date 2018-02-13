@@ -8,10 +8,7 @@ export const ASSET_REQUEST_NEW = 'ASSET_REQUEST_NEW';
 export const ASSET_REQUEST_ADD = 'ASSET_REQUEST_ADD';
 
 export const SHOW_ASSET_NEW = 'SHOW_ASSET_NEW';
-export const SHOW_ASSET_UPDATE = 'SHOW_ASSET_UPDATE';
-export const SHOW_ASSET_CLEAR = 'SHOW_ASSET_CLEAR';
-
-export const ASSET_LIST_UPSERT = `ASSET_LIST_UPSERT`;
+export const ASSET_LIST_ADD = `ASSET_LIST_ADD`;
 
 // channel request actions
 export const CHANNEL_REQUEST_NEW = 'CHANNEL_REQUEST_NEW';

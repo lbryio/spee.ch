@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import NavBar from 'containers/NavBar';
 import AssetTitle from 'components/AssetTitle';
 import AssetDisplay from 'components/AssetDisplay';
@@ -7,11 +6,9 @@ import AssetInfo from 'components/AssetInfo';
 
 class ShowAssetDetails extends React.Component {
   render () {
-    const { asset } = this.props;
     return (
       <div>
         <NavBar/>
-        {asset &&
         <div className="row row--tall row--padded">
           <div className="column column--10">
             <AssetTitle />
@@ -30,10 +27,6 @@ class ShowAssetDetails extends React.Component {
       </div>
     );
   }
-};
-
-ShowAssetDetails.propTypes = {
-  error: PropTypes.string,
 };
 
 export default ShowAssetDetails;

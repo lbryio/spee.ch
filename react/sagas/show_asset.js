@@ -1,6 +1,6 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
 import * as actions from 'constants/show_action_types';
-import { updateShowAsset, upsertAssetToAssetList } from 'actions/show';
+import { updateRequestError, addAssetToAssetList } from 'actions/show';
 import { getShortId, getClaimData } from 'api/assetApi';
 
 function* getAssetDataAndShowAsset (action) {
@@ -10,10 +10,10 @@ function* getAssetDataAndShowAsset (action) {
   try {
     ({success, message, data: shortId} = yield call(getShortId, name, claimId));
   } catch (error) {
-    return yield put(updateShowAsset(error.message, null));
+    return yield put(updateRequestError(error.message));
   }
   if (!success) {
-    return yield put(updateShowAsset(message, null));
+    return yield put(updateRequestError(message));
   }
   // if no error, get claim data
   success = null;
@@ -21,13 +21,13 @@ function* getAssetDataAndShowAsset (action) {
   try {
     ({success, message, data: claimData} = yield call(getClaimData, name, claimId));
   } catch (error) {
-    return yield put(updateShowAsset(error.message, null));
+    return yield put(updateRequestError(error.message));
   }
   if (!success) {
-    return yield put(updateShowAsset(message, null));
+    return yield put(updateRequestError(message));
   }
-  yield put(upsertAssetToAssetList(id, null, name, claimId, shortId, claimData));
-  yield put(updateShowAsset(null, id));
+  yield put(addAssetToAssetList(id, null, name, claimId, shortId, claimData));
+  yield put(updateRequestError(null));
 }
 
 export function* watchShowNewAsset () {
