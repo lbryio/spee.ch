@@ -15,10 +15,10 @@ const mapStateToProps = ({ show }) => {
     props['existingRequest'] = existingRequest;
     // select asset info
     const assetKey = `a#${existingRequest.name}#${existingRequest.claimId}`;  // note: just store this in the request
-    const existingAsset = show.assetList[assetKey];
-    if (existingAsset) {
-      console.log('existing asset found', existingAsset);
-      props['asset'] = existingAsset;
+    const asset = show.assetList[assetKey];
+    if (asset) {
+      console.log('existing asset found', asset);
+      props['asset'] = asset;
     };
   };
   return props;

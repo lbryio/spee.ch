@@ -6,9 +6,9 @@ const mapStateToProps = ({ show }) => {
   // select title
   const existingRequest = show.assetRequests[show.request.id];
   const assetKey = `a#${existingRequest.name}#${existingRequest.claimId}`;
-  const existingAsset = show.assetList[assetKey];
-  if (existingAsset) {
-    props['title'] = existingAsset.claimData.title;
+  const asset = show.assetList[assetKey];
+  if (asset) {
+    props['title'] = asset.claimData.title;
   };
   return props;
 };

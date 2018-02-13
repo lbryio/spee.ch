@@ -5,7 +5,6 @@ import { getChannelClaims } from 'api/channelApi';
 
 function* getChannelClaimsAndShowChannel (action) {
   const { id, name, shortId, longId } = action.data;
-  console.log('getchannelclaimsandshowchannel', id, name, shortId, longId);
   let success, message, claimsData;
   try {
     ({ success, message, data: claimsData } = yield call(getChannelClaims, name, longId, 1));

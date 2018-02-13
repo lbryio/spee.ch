@@ -20,7 +20,7 @@ export function getLongClaimId (name, modifier) {
     }),
     body: JSON.stringify(body),
   }
-  // crate url
+  // create url
   const url = `/api/claim/long-id`;
   // return the request promise
   return Request(url, params);
