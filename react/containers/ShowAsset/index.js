@@ -9,14 +9,15 @@ const mapStateToProps = ({ show }) => {
   const requestName = show.request.data.name;
   const requestModifier = show.request.data.modifier;
   const requestExtension = show.request.data.extension;
-  // select request
-  const previousRequest = show.assetRequests[show.request.id] || null;
+  const assetList = show.assetList;
   // select asset info
+  const previousRequest = show.assetRequests[show.request.id] || null;
   let asset;
   if (previousRequest) {
     const assetKey = `a#${previousRequest.name}#${previousRequest.claimId}`;  // note: just store this in the request
-    asset = show.assetList[assetKey] || null;
+    asset = assetList[assetKey] || null;
   };
+  // console.log('previousRequest:', previousRequest, 'asset:', asset, 'asset list', assetList);
   // return props
   return {
     requestType,
@@ -24,7 +25,6 @@ const mapStateToProps = ({ show }) => {
     requestName,
     requestModifier,
     requestExtension,
-    previousRequest,
     asset,
   };
 };
@@ -34,10 +34,6 @@ const mapDispatchToProps = dispatch => {
     // request
     onNewRequest: (id, name, modifier) => {
       dispatch(newAssetRequest(id, name, modifier));
-    },
-    // show asset
-    onShowNewAsset: (name, claimId) => {
-      dispatch(showNewAsset(name, claimId));
     },
   };
 };

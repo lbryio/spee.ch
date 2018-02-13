@@ -11,24 +11,16 @@ function requestIsAnAssetRequest ({ requestType }) {
 
 class ShowAsset extends React.Component {
   componentDidMount () {
-    const { asset, previousRequest, requestId, requestName, requestModifier } = this.props;
-    if (!previousRequest) {  // case: the asset request does not exist
+    const { asset, requestId, requestName, requestModifier } = this.props;
+    if (!asset) {  // case: the asset info does not exist
       return this.props.onNewRequest(requestId, requestName, requestModifier);
-    };
-    if (!asset) {  // case: the asset request does not exist
-      const { name, claimId } = previousRequest;
-      return this.props.onShowNewAsset(name, claimId);
     };
   }
   componentWillReceiveProps (nextProps) {
     if (requestIsAnAssetRequest(nextProps)) {
-      const { asset, previousRequest, requestId, requestName, requestModifier } = nextProps;
-      if (!previousRequest) {
+      const { asset, requestId, requestName, requestModifier } = nextProps;
+      if (!asset) {  // case: the asset info does not exist
         return this.props.onNewRequest(requestId, requestName, requestModifier);
-      };
-      if (!asset) {
-        const { name, claimId } = previousRequest;
-        return this.props.onShowNewAsset(name, claimId);
       };
     }
   }

@@ -39,29 +39,17 @@ export function updateRequestWithAssetRequest (name, id, channelName, channelId,
 
 export function newAssetRequest (id, name, modifier) {
   return {
-    type: actions.ASSET_REQUEST_ASYNC,
+    type: actions.ASSET_REQUEST_NEW,
     data: { id, name, modifier },
   };
 };
 
-export function addAssetRequest (id, error, name, claimId) {
+export function addRequestToAssetRequests (id, error, name, claimId) {
   return {
     type: actions.ASSET_REQUEST_SUCCESS,
     data: { id, error, name, claimId },
   };
 };
-
-// show an asset
-
-export function showNewAsset (name, claimId) {
-  const id = `a#${name}#${claimId}`;
-  return {
-    type: actions.ASSET_NEW_ASYNC,
-    data: { id, name, claimId },
-  };
-};
-
-// add asset to asset list
 
 export function addAssetToAssetList (id, error, name, claimId, shortId, claimData) {
   return {
@@ -79,7 +67,7 @@ export function newChannelRequest (id, name, channelId) {
   };
 };
 
-export function addChannelRequest (id, error, name, longId, shortId) {
+export function addRequestToChannelRequests (id, error, name, longId, shortId) {
   return {
     type: actions.CHANNEL_REQUEST_SUCCESS,
     data: { id, error, name, longId, shortId },
