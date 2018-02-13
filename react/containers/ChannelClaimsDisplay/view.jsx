@@ -25,25 +25,27 @@ class ChannelClaimsDisplay extends React.Component {
     const { channel: { claimsData: { claims, currentPage, totalPages } } } = this.props;
     return (
       <div className="row row--tall">
-        {claims &&
-        <div>
-          {claims.map((claim, index) => <AssetPreview
-            name={claim.name}
-            claimId={claim.claimId}
-            fileExt={claim.fileExt}
-            contentType={claim.contentType}
-            key={`${claim.name}-${index}`}
-          />)}
+        {(claims.length > 0) ? (
           <div>
-            {(currentPage > 1) &&
-            <button className={'button--secondary'} onClick={this.showPreviousResultsPage}>Previous Page</button>
-            }
-            {(currentPage < totalPages) &&
-            <button className={'button--secondary'} onClick={this.showNextResultsPage}>Next Page</button>
-            }
+            {claims.map((claim, index) => <AssetPreview
+              name={claim.name}
+              claimId={claim.claimId}
+              fileExt={claim.fileExt}
+              contentType={claim.contentType}
+              key={`${claim.name}-${index}`}
+            />)}
+            <div>
+              {(currentPage > 1) &&
+              <button className={'button--secondary'} onClick={this.showPreviousResultsPage}>Previous Page</button>
+              }
+              {(currentPage < totalPages) &&
+              <button className={'button--secondary'} onClick={this.showNextResultsPage}>Next Page</button>
+              }
+            </div>
           </div>
-        </div>
-        }
+        ) : (
+          <p>There are no claims in this channel</p>
+        )}
       </div>
     );
   }

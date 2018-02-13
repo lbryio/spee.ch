@@ -11,7 +11,7 @@ const mapStateToProps = ({ show }) => {
   const requestExtension = show.request.data.extension;
   // select request
   const previousRequest = show.assetRequests[show.request.id] || null;
-  // select asset infogit 
+  // select asset info
   let asset;
   if (previousRequest) {
     const assetKey = `a#${previousRequest.name}#${previousRequest.claimId}`;  // note: just store this in the request
