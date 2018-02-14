@@ -1,13 +1,11 @@
 import * as actions from 'constants/show_action_types';
-import { CHANNEL, ASSET } from 'constants/show_request_types';
 import { LOCAL_CHECK, ERROR } from 'constants/asset_display_states';
 
 const initialState = {
   request: {
-    error    : null,
-    type     : null,
-    data     : null,
-    requestId: null,
+    error: null,
+    type : null,
+    id   : null,
   },
   channelRequests: {},
   channelList    : {},
@@ -28,30 +26,13 @@ export default function (state = initialState, action) {
           error: action.data,
         }),
       });
-    case actions.REQUEST_UPDATE_CHANNEL:
+    case actions.CHANNEL_REQUEST_NEW:
+    case actions.ASSET_REQUEST_NEW:
       return Object.assign({}, state, {
-        request: {
-          type : CHANNEL,
-          error: null,
-          id   : action.data.requestId,
-          data : {
-            name: action.data.name,
-            id  : action.data.id,
-          },
-        },
-      });
-    case actions.REQUEST_UPDATE_ASSET:
-      return Object.assign({}, state, {
-        request: {
-          type : ASSET,
-          error: null,
-          id   : action.data.requestId,
-          data : {
-            name     : action.data.name,
-            modifier : action.data.modifier,
-            extension: action.data.extension,
-          },
-        },
+        request: Object.assign({}, state.request, {
+          type: action.data.requestType,
+          id  : action.data.requestId,
+        }),
       });
     // asset actions
     case actions.ASSET_REQUEST_SUCCESS:

@@ -1,10 +1,11 @@
 import React from 'react';
 import ErrorPage from 'components/ErrorPage';
-import ShowAsset from 'containers/ShowAsset';
-import ShowChannel from 'containers/ShowChannel';
+import ShowAssetLite from 'components/ShowAssetLite';
+import ShowAssetDetails from 'components/ShowAssetDetails';
+import ShowChannel from 'components/ShowChannel';
 import lbryUri from 'utils/lbryUri';
 
-import { CHANNEL, ASSET } from 'constants/show_request_types';
+import { CHANNEL, ASSET_LITE, ASSET_DETAILS } from 'constants/show_request_types';
 
 class ShowPage extends React.Component {
   constructor (props) {
@@ -42,9 +43,9 @@ class ShowPage extends React.Component {
     }
     // update the store
     if (isChannel) {
-      return this.props.onParsedAssetRequest(claimName, null, channelName, channelClaimId, extension);
+      return this.props.onNewAssetRequest(claimName, null, channelName, channelClaimId, extension);
     } else {
-      return this.props.onParsedAssetRequest(claimName, claimId, null, null, extension);
+      return this.props.onNewAssetRequest(claimName, claimId, null, null, extension);
     }
   }
   parseAndUpdateClaimOnly (claim) {
@@ -58,7 +59,7 @@ class ShowPage extends React.Component {
     }
     // return early if this request is for a channel
     if (isChannel) {
-      return this.props.onParsedChannelRequest(channelName, channelClaimId);
+      return this.props.onNewChannelRequest(channelName, channelClaimId);
     }
     // if not for a channel, parse the claim request
     let claimName, extension;  // if I am destructuring below, do I still need to declare these here?
@@ -67,7 +68,7 @@ class ShowPage extends React.Component {
     } catch (error) {
       return this.props.onRequestError(error.message);
     }
-    this.props.onParsedAssetRequest(claimName, null, null, null, extension);
+    this.props.onNewAssetRequest(claimName, null, null, null, extension);
   }
   render () {
     const { error, requestType } = this.props;
@@ -79,8 +80,10 @@ class ShowPage extends React.Component {
     switch (requestType) {
       case CHANNEL:
         return <ShowChannel />;
-      case ASSET:
-        return <ShowAsset />;
+      case ASSET_LITE:
+        return <ShowAssetLite />;
+      case ASSET_DETAILS:
+        return <ShowAssetDetails />;
       default:
         return <p>loading...</p>;
     }

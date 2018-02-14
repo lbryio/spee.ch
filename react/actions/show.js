@@ -1,5 +1,7 @@
 import * as actions from 'constants/show_action_types';
 
+import { CHANNEL, ASSET_LITE, ASSET_DETAILS } from 'constants/show_request_types';
+
 // basic request parsing
 export function onRequestError (error) {
   return {
@@ -8,19 +10,22 @@ export function onRequestError (error) {
   };
 }
 
-export function onParsedChannelRequest (name, id) {
-  const requestId = `cr#${name}#${id}`;
+export function onNewChannelRequest (channelName, channelId) {
+  const requestType = CHANNEL;
+  const requestId = `cr#${channelName}#${channelId}`;
   return {
-    type: actions.REQUEST_UPDATE_CHANNEL,
-    data: { requestId, name, id },
+    type: actions.CHANNEL_REQUEST_NEW,
+    data: { requestType, requestId, channelName, channelId },
   };
 };
 
-export function onParsedAssetRequest (name, id, channelName, channelId, extension) {
+export function onNewAssetRequest (name, id, channelName, channelId, extension) {
+  const requestType = extension ? ASSET_LITE : ASSET_DETAILS;
   const requestId = `ar#${name}#${id}#${channelName}#${channelId}`;
   return {
-    type: actions.REQUEST_UPDATE_ASSET,
+    type: actions.ASSET_REQUEST_NEW,
     data: {
+      requestType,
       requestId,
       name,
       modifier: {
@@ -30,19 +35,11 @@ export function onParsedAssetRequest (name, id, channelName, channelId, extensio
           id  : channelId,
         },
       },
-      extension,
     },
   };
 };
 
 // asset actions
-
-export function onNewAssetRequest (id, name, modifier) {
-  return {
-    type: actions.ASSET_REQUEST_NEW,
-    data: { id, name, modifier },
-  };
-};
 
 export function addRequestToAssetRequests (id, error, name, claimId) {
   return {
@@ -59,13 +56,6 @@ export function addAssetToAssetList (id, error, name, claimId, shortId, claimDat
 }
 
 // channel actions
-
-export function onNewChannelRequest (id, name, channelId) {
-  return {
-    type: actions.CHANNEL_REQUEST_NEW,
-    data: {id, name, channelId},
-  };
-};
 
 export function addRequestToChannelRequests (id, error, name, longId, shortId) {
   return {

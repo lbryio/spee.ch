@@ -4,7 +4,7 @@ import { addRequestToAssetRequests, onRequestError, addAssetToAssetList } from '
 import { getLongClaimId, getShortId, getClaimData } from 'api/assetApi';
 
 function* newAssetRequest (action) {
-  const { id, name, modifier } = action.data;
+  const { requestId, name, modifier } = action.data;
   // get long id
   console.log(`getting asset long id ${name}`);
   let longId;
@@ -15,7 +15,7 @@ function* newAssetRequest (action) {
     return yield put(onRequestError(error.message));
   }
   // put action to add request to asset request list
-  yield put(addRequestToAssetRequests(id, null, name, longId));
+  yield put(addRequestToAssetRequests(requestId, null, name, longId));
   // get short Id
   console.log(`getting asset short id ${name} ${longId}`);
   let shortId;

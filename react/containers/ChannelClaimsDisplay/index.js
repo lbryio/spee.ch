@@ -15,10 +15,8 @@ const mapStateToProps = ({ show }) => {
   };
 };
 
-const mapDispatchToProps = () => {
-  return {
-    onUpdateChannelClaims,
-  };
+const mapDispatchToProps = {
+  onUpdateChannelClaims,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(View);

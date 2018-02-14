@@ -4,13 +4,13 @@ import AssetDisplay from 'components/AssetDisplay';
 
 class ShowLite extends React.Component {
   render () {
-    const { name, claimId } = this.props;
+    const { asset } = this.props;
     return (
       <div className="row row--tall flex-container--column flex-container--center-center">
-        { (name && claimId) &&
+        { (asset) &&
         <div>
           <AssetDisplay />
-          <Link id="asset-boilerpate" className="link--primary fine-print" to={`/${claimId}/${name}`}>hosted via Spee.ch</Link>
+          <Link id="asset-boilerpate" className="link--primary fine-print" to={`/${asset.claimId}/${asset.name}`}>hosted via Spee.ch</Link>
         </div>
         }
       </div>

@@ -4,28 +4,28 @@ import { addNewChannelToChannelList, addRequestToChannelRequests, onRequestError
 import { getChannelClaims, getChannelData } from 'api/channelApi';
 
 function* getNewChannelAndUpdateChannelList (action) {
-  const { id, name, channelId } = action.data;
+  const { requestId, channelName, channelId } = action.data;
   // get channel long id
   console.log('getting channel long id and short id');
   let longId, shortId;
   try {
-    ({ data: {longChannelClaimId: longId, shortChannelClaimId: shortId} } = yield call(getChannelData, name, channelId));
+    ({ data: {longChannelClaimId: longId, shortChannelClaimId: shortId} } = yield call(getChannelData, channelName, channelId));
   } catch (error) {
     return yield put(onRequestError(error.message));
   }
   // store the request in the channel requests list
-  yield put(addRequestToChannelRequests(id, null, name, longId, shortId));
+  yield put(addRequestToChannelRequests(requestId, null, channelName, longId, shortId));
   // get channel claims data
   console.log('getting channel claims data');
   let claimsData;
   try {
-    ({ data: claimsData } = yield call(getChannelClaims, name, longId, 1));
+    ({ data: claimsData } = yield call(getChannelClaims, channelName, longId, 1));
   } catch (error) {
     return yield put(onRequestError(error.message));
   }
   // store the channel data in the channel list
-  const channelKey = `c#${name}#${longId}`;
-  yield put(addNewChannelToChannelList(channelKey, name, shortId, longId, claimsData));
+  const channelKey = `c#${channelName}#${longId}`;
+  yield put(addNewChannelToChannelList(channelKey, channelName, shortId, longId, claimsData));
   // clear any request errors
   yield put(onRequestError(null));
 }

@@ -2,19 +2,21 @@ import { connect } from 'react-redux';
 import View from './view';
 
 const mapStateToProps = ({ show }) => {
-  // select name and claim id
-  let name, claimId;
-  const previousRequest = show.assetRequests[show.request.id];
-  const assetKey = `a#${previousRequest.name}#${previousRequest.claimId}`;
-  const asset = show.assetList[assetKey];
-  if (asset) {
-    name = asset.name;
-    claimId = asset.claimId;
+  console.log('mapping state to props', show);
+  // select request info
+  const requestId = show.request.id;
+  // select asset info
+  let asset;
+  const previousRequest = show.assetRequests[requestId] || null;
+  console.log('previous request:', previousRequest);
+  const assetList = show.assetList;
+  if (previousRequest) {
+    const assetKey = `a#${previousRequest.name}#${previousRequest.claimId}`;  // note: just store this in the request
+    asset = assetList[assetKey] || null;
   };
   // return props
   return {
-    name,
-    claimId,
+    asset,
   };
 };
 
