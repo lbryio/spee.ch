@@ -1,6 +1,6 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
 import * as actions from 'constants/show_action_types';
-import { addNewChannelToChannelList, addRequestToChannelRequests, onRequestError, updateChannelClaims } from 'actions/show';
+import { addNewChannelToChannelList, addRequestToPreviousRequests, onRequestError, updateChannelClaims } from 'actions/show';
 import { getChannelClaims, getChannelData } from 'api/channelApi';
 
 function* getNewChannelAndUpdateChannelList (action) {
@@ -14,7 +14,8 @@ function* getNewChannelAndUpdateChannelList (action) {
     return yield put(onRequestError(error.message));
   }
   // store the request in the channel requests list
-  yield put(addRequestToChannelRequests(requestId, null, channelName, longId, shortId));
+  const channelKey = `c#${channelName}#${longId}`;
+  yield put(addRequestToPreviousRequests(requestId, null, channelKey));
   // get channel claims data
   console.log('getting channel claims data');
   let claimsData;
@@ -24,7 +25,6 @@ function* getNewChannelAndUpdateChannelList (action) {
     return yield put(onRequestError(error.message));
   }
   // store the channel data in the channel list
-  const channelKey = `c#${channelName}#${longId}`;
   yield put(addNewChannelToChannelList(channelKey, channelName, shortId, longId, claimsData));
   // clear any request errors
   yield put(onRequestError(null));

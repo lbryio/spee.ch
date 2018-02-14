@@ -4,7 +4,7 @@ export const ASSET_REQUEST_NEW = 'ASSET_REQUEST_NEW';
 export const CHANNEL_REQUEST_NEW = 'CHANNEL_REQUEST_NEW';
 
 // asset actions
-export const ASSET_REQUEST_SUCCESS = 'ASSET_REQUEST_SUCCESS';
+export const PREVIOUS_REQUEST_ADD = 'PREVIOUS_REQUEST_ADD';
 export const ASSET_ADD = `ASSET_ADD`;
 
 // channel actions

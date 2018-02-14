@@ -7,10 +7,10 @@ const mapStateToProps = ({ show }) => {
   const requestId = show.request.id;
   // select asset info
   let asset;
-  const previousRequest = show.assetRequests[requestId] || null;
+  const request = show.previousRequests[requestId] || null;
   const assetList = show.assetList;
-  if (previousRequest) {
-    const assetKey = `a#${previousRequest.name}#${previousRequest.claimId}`;  // note: just store this in the request
+  if (request && assetList) {
+    const assetKey = request.key;  // note: just store this in the request
     asset = assetList[assetKey] || null;
   };
   // return props

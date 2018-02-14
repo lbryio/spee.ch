@@ -4,8 +4,8 @@ import View from './view';
 
 const mapStateToProps = ({ show }) => {
   // select channel key
-  const request = show.channelRequests[show.request.id];
-  const channelKey = `c#${request.name}#${request.longId}`;
+  const request = show.previousRequests[show.request.id];
+  const channelKey = request.key;
   // select channel claims
   const channel = show.channelList[channelKey] || null;
   // return props

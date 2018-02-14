@@ -5,11 +5,11 @@ const mapStateToProps = ({ show }) => {
   // select request info
   const requestId = show.request.id;
   // select request
-  const previousRequest = show.channelRequests[requestId] || null;
+  const previousRequest = show.previousRequests[requestId] || null;
   // select channel
   let channel;
   if (previousRequest) {
-    const channelKey = `c#${previousRequest.name}#${previousRequest.longId}`;
+    const channelKey = previousRequest.key;
     channel = show.channelList[channelKey] || null;
   }
   return {

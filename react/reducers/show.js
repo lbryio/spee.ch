@@ -7,11 +7,10 @@ const initialState = {
     type : null,
     id   : null,
   },
-  channelRequests: {},
-  channelList    : {},
-  assetRequests  : {},
-  assetList      : {},
-  displayAsset   : {
+  previousRequests: {},
+  channelList     : {},
+  assetList       : {},
+  displayAsset    : {
     error : null,
     status: LOCAL_CHECK,
   },
@@ -34,17 +33,17 @@ export default function (state = initialState, action) {
           id  : action.data.requestId,
         }),
       });
-    // asset actions
-    case actions.ASSET_REQUEST_SUCCESS:
+    // store requests
+    case actions.PREVIOUS_REQUEST_ADD:
       return Object.assign({}, state, {
-        assetRequests: Object.assign({}, state.assetRequests, {
+        previousRequests: Object.assign({}, state.previousRequests, {
           [action.data.id]: {
-            error  : action.data.error,
-            name   : action.data.name,
-            claimId: action.data.claimId,
+            error: action.data.error,
+            key  : action.data.key,
           },
         }),
       });
+    // asset data
     case actions.ASSET_ADD:
       return Object.assign({}, state, {
         assetList: Object.assign({}, state.assetList, {
@@ -57,18 +56,7 @@ export default function (state = initialState, action) {
           },
         }),
       });
-    // channel actions
-    case actions.CHANNEL_REQUEST_ADD:
-      return Object.assign({}, state, {
-        channelRequests: Object.assign({}, state.channelRequests, {
-          [action.data.id]: {
-            error  : action.data.error,
-            name   : action.data.name,
-            longId : action.data.longId,
-            shortId: action.data.shortId,
-          },
-        }),
-      });
+    // channel data
     case actions.CHANNEL_ADD:
       return Object.assign({}, state, {
         channelList: Object.assign({}, state.channelList, {

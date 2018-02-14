@@ -39,14 +39,21 @@ export function onNewAssetRequest (name, id, channelName, channelId, extension) 
   };
 };
 
-// asset actions
-
-export function addRequestToAssetRequests (id, error, name, claimId) {
+export function addRequestToPreviousRequests (id, error, key) {
   return {
-    type: actions.ASSET_REQUEST_SUCCESS,
-    data: { id, error, name, claimId },
+    type: actions.PREVIOUS_REQUEST_ADD,
+    data: { id, error, key },
   };
 };
+
+// asset actions
+
+// export function addRequestToAssetRequests (id, error, name, claimId) {
+//   return {
+//     type: actions.ASSET_REQUEST_ADD,
+//     data: { id, error, name, claimId },
+//   };
+// };
 
 export function addAssetToAssetList (id, error, name, claimId, shortId, claimData) {
   return {
@@ -57,12 +64,12 @@ export function addAssetToAssetList (id, error, name, claimId, shortId, claimDat
 
 // channel actions
 
-export function addRequestToChannelRequests (id, error, name, longId, shortId) {
-  return {
-    type: actions.CHANNEL_REQUEST_ADD,
-    data: { id, error, name, longId, shortId },
-  };
-};
+// export function addRequestToChannelRequests (id, error, name, longId, shortId) {
+//   return {
+//     type: actions.CHANNEL_REQUEST_ADD,
+//     data: { id, error, name, longId, shortId },
+//   };
+// };
 
 export function addNewChannelToChannelList (id, name, shortId, longId, claimsData) {
   return {
