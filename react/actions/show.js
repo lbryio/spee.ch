@@ -1,14 +1,14 @@
 import * as actions from 'constants/show_action_types';
 
 // basic request parsing
-export function updateRequestError (error) {
+export function onRequestError (error) {
   return {
     type: actions.REQUEST_UPDATE_ERROR,
     data: error,
   };
 }
 
-export function updateRequestWithChannelRequest (name, id) {
+export function onParsedChannelRequest (name, id) {
   const requestId = `cr#${name}#${id}`;
   return {
     type: actions.REQUEST_UPDATE_CHANNEL,
@@ -16,7 +16,7 @@ export function updateRequestWithChannelRequest (name, id) {
   };
 };
 
-export function updateRequestWithAssetRequest (name, id, channelName, channelId, extension) {
+export function onParsedAssetRequest (name, id, channelName, channelId, extension) {
   const requestId = `ar#${name}#${id}#${channelName}#${channelId}`;
   return {
     type: actions.REQUEST_UPDATE_ASSET,
@@ -37,7 +37,7 @@ export function updateRequestWithAssetRequest (name, id, channelName, channelId,
 
 // asset actions
 
-export function newAssetRequest (id, name, modifier) {
+export function onNewAssetRequest (id, name, modifier) {
   return {
     type: actions.ASSET_REQUEST_NEW,
     data: { id, name, modifier },
@@ -60,7 +60,7 @@ export function addAssetToAssetList (id, error, name, claimId, shortId, claimDat
 
 // channel actions
 
-export function newChannelRequest (id, name, channelId) {
+export function onNewChannelRequest (id, name, channelId) {
   return {
     type: actions.CHANNEL_REQUEST_NEW,
     data: {id, name, channelId},
@@ -83,7 +83,7 @@ export function addNewChannelToChannelList (id, name, shortId, longId, claimsDat
 
 //  update channel data
 
-export function updateChannelClaimsAsync (channelKey, name, longId, page) {
+export function onUpdateChannelClaims (channelKey, name, longId, page) {
   return {
     type: actions.CHANNEL_CLAIMS_UPDATE_ASYNC,
     data: {channelKey, name, longId, page},

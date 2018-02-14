@@ -42,9 +42,9 @@ class ShowPage extends React.Component {
     }
     // update the store
     if (isChannel) {
-      return this.props.onAssetRequest(claimName, null, channelName, channelClaimId, extension);
+      return this.props.onParsedAssetRequest(claimName, null, channelName, channelClaimId, extension);
     } else {
-      return this.props.onAssetRequest(claimName, claimId, null, null, extension);
+      return this.props.onParsedAssetRequest(claimName, claimId, null, null, extension);
     }
   }
   parseAndUpdateClaimOnly (claim) {
@@ -58,7 +58,7 @@ class ShowPage extends React.Component {
     }
     // return early if this request is for a channel
     if (isChannel) {
-      return this.props.onChannelRequest(channelName, channelClaimId);
+      return this.props.onParsedChannelRequest(channelName, channelClaimId);
     }
     // if not for a channel, parse the claim request
     let claimName, extension;  // if I am destructuring below, do I still need to declare these here?
@@ -67,7 +67,7 @@ class ShowPage extends React.Component {
     } catch (error) {
       return this.props.onRequestError(error.message);
     }
-    this.props.onAssetRequest(claimName, null, null, null, extension);
+    this.props.onParsedAssetRequest(claimName, null, null, null, extension);
   }
   render () {
     const { error, requestType } = this.props;

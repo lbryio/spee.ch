@@ -1,6 +1,6 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
 import * as actions from 'constants/show_action_types';
-import { addRequestToAssetRequests, updateRequestError, addAssetToAssetList } from 'actions/show';
+import { addRequestToAssetRequests, onRequestError, addAssetToAssetList } from 'actions/show';
 import { getLongClaimId, getShortId, getClaimData } from 'api/assetApi';
 
 function* newAssetRequest (action) {
@@ -12,7 +12,7 @@ function* newAssetRequest (action) {
     ({data: longId} = yield call(getLongClaimId, name, modifier));
   } catch (error) {
     console.log('error:', error);
-    return yield put(updateRequestError(error.message));
+    return yield put(onRequestError(error.message));
   }
   // put action to add request to asset request list
   yield put(addRequestToAssetRequests(id, null, name, longId));
@@ -22,7 +22,7 @@ function* newAssetRequest (action) {
   try {
     ({data: shortId} = yield call(getShortId, name, longId));
   } catch (error) {
-    return yield put(updateRequestError(error.message));
+    return yield put(onRequestError(error.message));
   }
   // get asset claim data
   console.log(`getting asset claim data ${name} ${longId}`);
@@ -30,13 +30,13 @@ function* newAssetRequest (action) {
   try {
     ({data: claimData} = yield call(getClaimData, name, longId));
   } catch (error) {
-    return yield put(updateRequestError(error.message));
+    return yield put(onRequestError(error.message));
   }
   // put action to add asset to asset list
   const assetKey = `a#${name}#${longId}`;
   yield put(addAssetToAssetList(assetKey, null, name, longId, shortId, claimData));
   // clear any errors in request error
-  yield put(updateRequestError(null));
+  yield put(onRequestError(null));
 };
 
 export function* watchNewAssetRequest () {

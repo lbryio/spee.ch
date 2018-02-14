@@ -1,6 +1,6 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
 import * as actions from 'constants/show_action_types';
-import { addNewChannelToChannelList, addRequestToChannelRequests, updateRequestError, updateChannelClaims } from 'actions/show';
+import { addNewChannelToChannelList, addRequestToChannelRequests, onRequestError, updateChannelClaims } from 'actions/show';
 import { getChannelClaims, getChannelData } from 'api/channelApi';
 
 function* getNewChannelAndUpdateChannelList (action) {
@@ -11,7 +11,7 @@ function* getNewChannelAndUpdateChannelList (action) {
   try {
     ({ data: {longChannelClaimId: longId, shortChannelClaimId: shortId} } = yield call(getChannelData, name, channelId));
   } catch (error) {
-    return yield put(updateRequestError(error.message));
+    return yield put(onRequestError(error.message));
   }
   // store the request in the channel requests list
   yield put(addRequestToChannelRequests(id, null, name, longId, shortId));
@@ -21,13 +21,13 @@ function* getNewChannelAndUpdateChannelList (action) {
   try {
     ({ data: claimsData } = yield call(getChannelClaims, name, longId, 1));
   } catch (error) {
-    return yield put(updateRequestError(error.message));
+    return yield put(onRequestError(error.message));
   }
   // store the channel data in the channel list
   const channelKey = `c#${name}#${longId}`;
   yield put(addNewChannelToChannelList(channelKey, name, shortId, longId, claimsData));
   // clear any request errors
-  yield put(updateRequestError(null));
+  yield put(onRequestError(null));
 }
 
 export function* watchNewChannelRequest () {
@@ -40,7 +40,7 @@ function* getNewClaimsAndUpdateChannel (action) {
   try {
     ({ data: claimsData } = yield call(getChannelClaims, name, longId, page));
   } catch (error) {
-    return yield put(updateRequestError(error.message));
+    return yield put(onRequestError(error.message));
   }
   yield put(updateChannelClaims(channelKey, claimsData));
 }

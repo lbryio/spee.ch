@@ -19,7 +19,7 @@ class ChannelClaimsDisplay extends React.Component {
   }
   showNewPage (page) {
     const { channelKey, channel: { name, longId } } = this.props;
-    this.props.onChannelPageUpdate(channelKey, name, longId, page);
+    this.props.onUpdateChannelClaims(channelKey, name, longId, page);
   }
   render () {
     const { channel: { claimsData: { claims, currentPage, totalPages } } } = this.props;

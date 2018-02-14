@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { updateChannelClaimsAsync } from 'actions/show';
+import { onUpdateChannelClaims } from 'actions/show';
 import View from './view';
 
 const mapStateToProps = ({ show }) => {
@@ -15,11 +15,9 @@ const mapStateToProps = ({ show }) => {
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = () => {
   return {
-    onChannelPageUpdate: (channelKey, name, longId, page) => {
-      dispatch(updateChannelClaimsAsync(channelKey, name, longId, page));
-    },
+    onUpdateChannelClaims,
   };
 };
 

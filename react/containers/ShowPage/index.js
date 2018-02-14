@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { updateRequestError, updateRequestWithChannelRequest, updateRequestWithAssetRequest } from 'actions/show';
+import { onRequestError, onParsedChannelRequest, onParsedAssetRequest } from 'actions/show';
 import View from './view';
 
 const mapStateToProps = ({ show }) => {
@@ -9,17 +9,11 @@ const mapStateToProps = ({ show }) => {
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = () => {
   return {
-    onRequestError: (error) => {
-      dispatch(updateRequestError(error));
-    },
-    onChannelRequest: (name, id) => {
-      dispatch(updateRequestWithChannelRequest(name, id));
-    },
-    onAssetRequest: (name, id, channelName, channelId, extension) => {
-      dispatch(updateRequestWithAssetRequest(name, id, channelName, channelId, extension));
-    },
+    onRequestError,
+    onParsedChannelRequest,
+    onParsedAssetRequest,
   };
 };
 

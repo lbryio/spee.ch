@@ -1,10 +1,9 @@
 import { connect } from 'react-redux';
 import View from './view';
-import { newAssetRequest, showNewAsset } from 'actions/show';
+import { onNewAssetRequest } from 'actions/show';
 
 const mapStateToProps = ({ show }) => {
   // select request info
-  const requestType = show.request.type;
   const requestId = show.request.id;
   const requestName = show.request.data.name;
   const requestModifier = show.request.data.modifier;
@@ -17,10 +16,8 @@ const mapStateToProps = ({ show }) => {
     const assetKey = `a#${previousRequest.name}#${previousRequest.claimId}`;  // note: just store this in the request
     asset = assetList[assetKey] || null;
   };
-  // console.log('previousRequest:', previousRequest, 'asset:', asset, 'asset list', assetList);
   // return props
   return {
-    requestType,
     requestId,
     requestName,
     requestModifier,
@@ -29,12 +26,9 @@ const mapStateToProps = ({ show }) => {
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = () => {
   return {
-    // request
-    onNewRequest: (id, name, modifier) => {
-      dispatch(newAssetRequest(id, name, modifier));
-    },
+    onNewAssetRequest,
   };
 };
 

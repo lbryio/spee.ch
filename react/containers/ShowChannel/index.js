@@ -1,11 +1,10 @@
 import { connect } from 'react-redux';
-import { newChannelRequest } from 'actions/show';
+import { onNewChannelRequest } from 'actions/show';
 import View from './view';
 
 const mapStateToProps = ({ show }) => {
   // select request info
   const requestId = show.request.id;
-  const requestType = show.request.type;
   const requestChannelName = show.request.data.name;
   const requestChannelId = show.request.data.id;
   // select request
@@ -18,18 +17,15 @@ const mapStateToProps = ({ show }) => {
   }
   return {
     requestId,
-    requestType,
     requestChannelName,
     requestChannelId,
     channel,
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = () => {
   return {
-    onNewChannelRequest (requestId, requestChannelName, requestChannelId) {
-      dispatch(newChannelRequest(requestId, requestChannelName, requestChannelId));
-    },
+    onNewChannelRequest,
   };
 };
 
