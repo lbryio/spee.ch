@@ -7,7 +7,7 @@ const initialState = {
     type : null,
     id   : null,
   },
-  previousRequests: {},
+  requestList: {},
   channelList     : {},
   assetList       : {},
   displayAsset    : {
@@ -36,7 +36,7 @@ export default function (state = initialState, action) {
     // store requests
     case actions.PREVIOUS_REQUEST_ADD:
       return Object.assign({}, state, {
-        previousRequests: Object.assign({}, state.previousRequests, {
+        requestList: Object.assign({}, state.requestList, {
           [action.data.id]: {
             error: action.data.error,
             key  : action.data.key,

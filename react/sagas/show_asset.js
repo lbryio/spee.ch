@@ -1,6 +1,6 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
 import * as actions from 'constants/show_action_types';
-import { addRequestToPreviousRequests, onRequestError, addAssetToAssetList } from 'actions/show';
+import { addRequestToRequestList, onRequestError, addAssetToAssetList } from 'actions/show';
 import { getLongClaimId, getShortId, getClaimData } from 'api/assetApi';
 
 function* newAssetRequest (action) {
@@ -16,7 +16,7 @@ function* newAssetRequest (action) {
   }
   // put action to add request to asset request list
   const assetKey = `a#${name}#${longId}`;
-  yield put(addRequestToPreviousRequests(requestId, null, assetKey));
+  yield put(addRequestToRequestList(requestId, null, assetKey));
   // get short Id
   console.log(`getting asset short id ${name} ${longId}`);
   let shortId;

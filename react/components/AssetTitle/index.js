@@ -3,7 +3,7 @@ import View from './view';
 
 const mapStateToProps = ({ show }) => {
   // select title
-  const request = show.previousRequests[show.request.id];
+  const request = show.requestList[show.request.id];
   const assetKey = request.key;
   const asset = show.assetList[assetKey];
   let title;

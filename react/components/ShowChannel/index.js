@@ -5,7 +5,7 @@ const mapStateToProps = ({ show }) => {
   // select request info
   const requestId = show.request.id;
   // select request
-  const previousRequest = show.previousRequests[requestId] || null;
+  const previousRequest = show.requestList[requestId] || null;
   // select channel
   let channel;
   if (previousRequest) {

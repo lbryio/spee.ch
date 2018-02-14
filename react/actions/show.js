@@ -39,7 +39,7 @@ export function onNewAssetRequest (name, id, channelName, channelId, extension) 
   };
 };
 
-export function addRequestToPreviousRequests (id, error, key) {
+export function addRequestToRequestList (id, error, key) {
   return {
     type: actions.PREVIOUS_REQUEST_ADD,
     data: { id, error, key },

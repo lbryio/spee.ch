@@ -7,7 +7,7 @@ const mapStateToProps = ({ show }) => {
   const error  = show.displayAsset.error;
   const status = show.displayAsset.status;
   // select asset
-  const request = show.previousRequests[show.request.id];
+  const request = show.requestList[show.request.id];
   const assetKey = request.key;
   const asset = show.assetList[assetKey];
   //  return props
