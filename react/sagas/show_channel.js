@@ -3,7 +3,7 @@ import * as actions from 'constants/show_action_types';
 import { addNewChannelToChannelList, addRequestToChannelRequests, updateRequestError, updateChannelClaims } from 'actions/show';
 import { getChannelClaims, getChannelData } from 'api/channelApi';
 
-function* newChannelRequest (action) {
+function* getNewChannelAndUpdateChannelList (action) {
   const { id, name, channelId } = action.data;
   // get channel long id
   console.log('getting channel long id and short id');
@@ -31,7 +31,7 @@ function* newChannelRequest (action) {
 }
 
 export function* watchNewChannelRequest () {
-  yield takeLatest(actions.CHANNEL_REQUEST_NEW, newChannelRequest);
+  yield takeLatest(actions.CHANNEL_REQUEST_NEW, getNewChannelAndUpdateChannelList);
 };
 
 function* getNewClaimsAndUpdateChannel (action) {

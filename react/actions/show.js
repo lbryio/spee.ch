@@ -3,7 +3,7 @@ import * as actions from 'constants/show_action_types';
 // basic request parsing
 export function updateRequestError (error) {
   return {
-    type: actions.REQUEST_ERROR,
+    type: actions.REQUEST_UPDATE_ERROR,
     data: error,
   };
 }
@@ -19,7 +19,7 @@ export function updateRequestWithChannelRequest (name, id) {
 export function updateRequestWithAssetRequest (name, id, channelName, channelId, extension) {
   const requestId = `ar#${name}#${id}#${channelName}#${channelId}`;
   return {
-    type: actions.REQUEST_UPDATE_CLAIM,
+    type: actions.REQUEST_UPDATE_ASSET,
     data: {
       requestId,
       name,
@@ -35,7 +35,7 @@ export function updateRequestWithAssetRequest (name, id, channelName, channelId,
   };
 };
 
-// request for an asset
+// asset actions
 
 export function newAssetRequest (id, name, modifier) {
   return {
@@ -53,12 +53,12 @@ export function addRequestToAssetRequests (id, error, name, claimId) {
 
 export function addAssetToAssetList (id, error, name, claimId, shortId, claimData) {
   return {
-    type: actions.ASSET_NEW_SUCCESS,
+    type: actions.ASSET_ADD,
     data: { id, error, name, claimId, shortId, claimData },
   };
 }
 
-// request for a channel
+// channel actions
 
 export function newChannelRequest (id, name, channelId) {
   return {
@@ -69,14 +69,14 @@ export function newChannelRequest (id, name, channelId) {
 
 export function addRequestToChannelRequests (id, error, name, longId, shortId) {
   return {
-    type: actions.CHANNEL_REQUEST_SUCCESS,
+    type: actions.CHANNEL_REQUEST_ADD,
     data: { id, error, name, longId, shortId },
   };
-}
+};
 
 export function addNewChannelToChannelList (id, name, shortId, longId, claimsData) {
   return {
-    type: actions.CHANNEL_NEW_SUCCESS,
+    type: actions.CHANNEL_ADD,
     data: { id, name, shortId, longId, claimsData },
   };
 };

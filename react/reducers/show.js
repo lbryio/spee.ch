@@ -22,7 +22,7 @@ const initialState = {
 export default function (state = initialState, action) {
   switch (action.type) {
     // handle request
-    case actions.REQUEST_ERROR:
+    case actions.REQUEST_UPDATE_ERROR:
       return Object.assign({}, state, {
         request: Object.assign({}, state.request, {
           error: action.data,
@@ -40,7 +40,7 @@ export default function (state = initialState, action) {
           },
         },
       });
-    case actions.REQUEST_UPDATE_CLAIM:
+    case actions.REQUEST_UPDATE_ASSET:
       return Object.assign({}, state, {
         request: {
           type : ASSET,
@@ -64,7 +64,7 @@ export default function (state = initialState, action) {
           },
         }),
       });
-    case actions.ASSET_NEW_SUCCESS:
+    case actions.ASSET_ADD:
       return Object.assign({}, state, {
         assetList: Object.assign({}, state.assetList, {
           [action.data.id]: {
@@ -77,7 +77,7 @@ export default function (state = initialState, action) {
         }),
       });
     // channel actions
-    case actions.CHANNEL_REQUEST_SUCCESS:
+    case actions.CHANNEL_REQUEST_ADD:
       return Object.assign({}, state, {
         channelRequests: Object.assign({}, state.channelRequests, {
           [action.data.id]: {
@@ -88,7 +88,7 @@ export default function (state = initialState, action) {
           },
         }),
       });
-    case actions.CHANNEL_NEW_SUCCESS:
+    case actions.CHANNEL_ADD:
       return Object.assign({}, state, {
         channelList: Object.assign({}, state.channelList, {
           [action.data.id]: {
