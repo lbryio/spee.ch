@@ -71,8 +71,8 @@ class PublishForm extends React.Component {
         const response = JSON.parse(xhr.response);
         console.log('publish response:', response);
         if ((xhr.status === 200) && response.success) {
-          this.props.onPublishStatusChange(publishStates.SUCCESS, response.data.url);
           this.props.history.push(`/${response.data.claimId}/${response.data.name}`);
+          this.props.onPublishStatusChange(publishStates.SUCCESS, response.data.url);
         } else {
           this.props.onPublishStatusChange(publishStates.FAILED, response.message);
         }
