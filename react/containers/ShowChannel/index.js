@@ -1,6 +1,5 @@
-
 import { connect } from 'react-redux';
-import { newChannelRequest, showNewChannel } from 'actions/show';
+import { newChannelRequest } from 'actions/show';
 import View from './view';
 
 const mapStateToProps = ({ show }) => {
@@ -11,7 +10,7 @@ const mapStateToProps = ({ show }) => {
   const requestChannelId = show.request.data.id;
   // select request
   const previousRequest = show.channelRequests[show.request.id] || null;
-  // select channel info
+  // select channel
   let channel;
   if (previousRequest) {
     const channelKey = `c#${previousRequest.name}#${previousRequest.longId}`;
@@ -22,20 +21,14 @@ const mapStateToProps = ({ show }) => {
     requestType,
     requestChannelName,
     requestChannelId,
-    previousRequest,
     channel,
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    // request
     onNewChannelRequest (requestId, requestChannelName, requestChannelId) {
       dispatch(newChannelRequest(requestId, requestChannelName, requestChannelId));
-    },
-    // show channel
-    onShowNewChannel: (name, shortId, longId) => {
-      dispatch(showNewChannel(name, shortId, longId));
     },
   };
 };

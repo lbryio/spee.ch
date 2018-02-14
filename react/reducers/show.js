@@ -9,14 +9,14 @@ const initialState = {
     data     : null,
     requestId: null,
   },
-  displayAsset: {
-    error : null,
-    status: LOCAL_CHECK,
-  },
   channelRequests: {},
   channelList    : {},
   assetRequests  : {},
   assetList      : {},
+  displayAsset   : {
+    error : null,
+    status: LOCAL_CHECK,
+  },
 };
 
 export default function (state = initialState, action) {
@@ -53,7 +53,7 @@ export default function (state = initialState, action) {
           },
         },
       });
-    // successful requests
+    // asset actions
     case actions.ASSET_REQUEST_SUCCESS:
       return Object.assign({}, state, {
         assetRequests: Object.assign({}, state.assetRequests, {
@@ -64,18 +64,6 @@ export default function (state = initialState, action) {
           },
         }),
       });
-    case actions.CHANNEL_REQUEST_SUCCESS:
-      return Object.assign({}, state, {
-        channelRequests: Object.assign({}, state.channelRequests, {
-          [action.data.id]: {
-            error  : action.data.error,
-            name   : action.data.name,
-            longId : action.data.longId,
-            shortId: action.data.shortId,
-          },
-        }),
-      });
-    // updates to asset list
     case actions.ASSET_NEW_SUCCESS:
       return Object.assign({}, state, {
         assetList: Object.assign({}, state.assetList, {
@@ -88,7 +76,18 @@ export default function (state = initialState, action) {
           },
         }),
       });
-    // updates to channel list
+    // channel actions
+    case actions.CHANNEL_REQUEST_SUCCESS:
+      return Object.assign({}, state, {
+        channelRequests: Object.assign({}, state.channelRequests, {
+          [action.data.id]: {
+            error  : action.data.error,
+            name   : action.data.name,
+            longId : action.data.longId,
+            shortId: action.data.shortId,
+          },
+        }),
+      });
     case actions.CHANNEL_NEW_SUCCESS:
       return Object.assign({}, state, {
         channelList: Object.assign({}, state.channelList, {

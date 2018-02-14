@@ -1,8 +1,7 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
 import * as actions from 'constants/show_action_types';
-import { addRequestToAssetRequests, updateRequestError, addRequestToChannelRequests, showNewChannel, addAssetToAssetList } from 'actions/show';
+import { addRequestToAssetRequests, updateRequestError, addAssetToAssetList } from 'actions/show';
 import { getLongClaimId, getShortId, getClaimData } from 'api/assetApi';
-import { getChannelData } from 'api/channelApi';
 
 function* newAssetRequest (action) {
   const { id, name, modifier } = action.data;
@@ -25,7 +24,7 @@ function* newAssetRequest (action) {
   } catch (error) {
     return yield put(updateRequestError(error.message));
   }
-  // get claim data
+  // get asset claim data
   console.log(`getting asset claim data ${name} ${longId}`);
   let claimData;
   try {
@@ -40,24 +39,6 @@ function* newAssetRequest (action) {
   yield put(updateRequestError(null));
 };
 
-function* newChannelRequest (action) {
-  const { id, name, channelId } = action.data;
-  console.log('getting channel long id');
-  let data;
-  try {
-    ({data} = yield call(getChannelData, name, channelId));
-  } catch (error) {
-    return yield put(updateRequestError(error.message));
-  }
-  const { longChannelClaimId: longId, shortChannelClaimId: shortId } = data;
-  yield put(addRequestToChannelRequests(id, null, name, longId, shortId));
-  yield put(showNewChannel(name, shortId, longId));
-}
-
 export function* watchNewAssetRequest () {
   yield takeLatest(actions.ASSET_REQUEST_NEW, newAssetRequest);
-};
-
-export function* watchNewChannelRequest () {
-  yield takeLatest(actions.CHANNEL_REQUEST_ASYNC, newChannelRequest);
 };

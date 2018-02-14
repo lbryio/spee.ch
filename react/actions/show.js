@@ -62,7 +62,7 @@ export function addAssetToAssetList (id, error, name, claimId, shortId, claimDat
 
 export function newChannelRequest (id, name, channelId) {
   return {
-    type: actions.CHANNEL_REQUEST_ASYNC,
+    type: actions.CHANNEL_REQUEST_NEW,
     data: {id, name, channelId},
   };
 };
@@ -73,18 +73,6 @@ export function addRequestToChannelRequests (id, error, name, longId, shortId) {
     data: { id, error, name, longId, shortId },
   };
 }
-
-// show a channel
-
-export function showNewChannel (name, shortId, longId) {
-  const id = `c#${name}#${longId}`;  // move to the action
-  return {
-    type: actions.CHANNEL_NEW_ASYNC,
-    data: { id, name, shortId, longId },
-  };
-};
-
-// add channels to channel list
 
 export function addNewChannelToChannelList (id, name, shortId, longId, claimsData) {
   return {
