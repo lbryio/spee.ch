@@ -1,15 +1,14 @@
 import { connect } from 'react-redux';
 import View from './view';
 import { fileRequested } from 'actions/show';
+import selectAsset from 'selectors/asset';
 
 const mapStateToProps = ({ show }) => {
   // select error and status
   const error  = show.displayAsset.error;
   const status = show.displayAsset.status;
   // select asset
-  const request = show.requestList[show.request.id];
-  const assetKey = request.key;
-  const asset = show.assetList[assetKey];
+  const asset = selectAsset(show);
   //  return props
   return {
     error,

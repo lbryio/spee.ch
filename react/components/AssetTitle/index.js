@@ -1,15 +1,10 @@
 import { connect } from 'react-redux';
 import View from './view';
+import selectAsset from 'selectors/asset';
 
 const mapStateToProps = ({ show }) => {
   // select title
-  const request = show.requestList[show.request.id];
-  const assetKey = request.key;
-  const asset = show.assetList[assetKey];
-  let title;
-  if (asset) {
-    title = asset.claimData.title;
-  };
+  const { claimData: { title } } = selectAsset(show);
   //  return props
   return {
     title,
