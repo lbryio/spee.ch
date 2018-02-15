@@ -10,13 +10,13 @@ function handleLbrynetResponse ({ data }, resolve, reject) {
     // check for an error
     if (data.result.error) {
       logger.debug('Lbrynet api error:', data.result.error);
-      reject(data.result.error);
+      reject(new Error(data.result.error));
       return;
     };
     resolve(data.result);
     return;
   }
-  // fallback in case the just timed out
+  // fallback in case it just timed out
   reject(JSON.stringify(data));
 }
 

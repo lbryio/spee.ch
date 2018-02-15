@@ -20,7 +20,7 @@ module.exports = (app) => {
         return next(err);
       }
       if (!user) {
-        return res.status(200).json({
+        return res.status(400).json({
           success: false,
           message: info.message,
         });
@@ -39,12 +39,17 @@ module.exports = (app) => {
       });
     })(req, res, next);
   });
+  // route to log out
+  app.get('/logout', (req, res) => {
+    req.logout();
+    res.status(200).json({success: true, message: 'you successfully logged out'});
+  });
   // see if user is authenticated, and return credentials if so
   app.get('/user', (req, res) => {
     if (req.user) {
-      res.status(200).json({success: true, message: req.user});
+      res.status(200).json({success: true, data: req.user});
     } else {
-      res.status(200).json({success: false, message: 'user is not logged in'});
+      res.status(401).json({success: false, message: 'user is not logged in'});
     }
   });
 };

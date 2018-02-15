@@ -1,9 +1,10 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 function Logo () {
   return (
     <svg version="1.1" id="Layer_1" x="0px" y="0px" height="24px" viewBox="0 0 80 31" enableBackground="new 0 0 80 31" className="nav-bar-logo">
-      <a href="/">
+      <Link to="/">
         <title>Logo</title>
         <desc>Spee.ch logo</desc>
         <g id="About">
@@ -20,7 +21,7 @@ function Logo () {
             </g>
           </g>
         </g>
-      </a>
+      </Link>
     </svg>
   );
 };

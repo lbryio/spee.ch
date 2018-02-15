@@ -342,6 +342,7 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
   };
 
   Claim.resolveClaim = function (name, claimId) {
+    logger.debug(`Claim.resolveClaim: ${name} ${claimId}`);
     return new Promise((resolve, reject) => {
       this
         .findAll({

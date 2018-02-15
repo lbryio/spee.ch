@@ -4,7 +4,7 @@ import * as actions from 'constants/publish_action_types';
 export function selectFile (file) {
   return {
     type: actions.FILE_SELECTED,
-    file: file,
+    data: file,
   };
 };
 
@@ -17,15 +17,17 @@ export function clearFile () {
 export function updateMetadata (name, value) {
   return {
     type: actions.METADATA_UPDATE,
-    name,
-    value,
+    data: {
+      name,
+      value,
+    },
   };
 };
 
 export function updateClaim (value) {
   return {
     type: actions.CLAIM_UPDATE,
-    value,
+    data: value,
   };
 };
 
@@ -39,29 +41,33 @@ export function setPublishInChannel (channel) {
 export function updatePublishStatus (status, message) {
   return {
     type: actions.PUBLISH_STATUS_UPDATE,
-    status,
-    message,
+    data: {
+      status,
+      message,
+    },
   };
 };
 
 export function updateError (name, value) {
   return {
     type: actions.ERROR_UPDATE,
-    name,
-    value,
+    data: {
+      name,
+      value,
+    },
   };
 };
 
-export function updateSelectedChannel (value) {
+export function updateSelectedChannel (channelName) {
   return {
     type: actions.SELECTED_CHANNEL_UPDATE,
-    value,
+    data: channelName,
   };
 };
 
-export function toggleMetadataInputs (value) {
+export function toggleMetadataInputs (showMetadataInputs) {
   return {
     type: actions.TOGGLE_METADATA_INPUTS,
-    value,
+    data: showMetadataInputs,
   };
 };

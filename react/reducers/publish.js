@@ -26,27 +26,23 @@ const initialState = {
   },
 };
 
-/*
-Reducers describe how the application's state changes in response to actions
-*/
-
 export default function (state = initialState, action) {
   switch (action.type) {
     case actions.FILE_SELECTED:
       return Object.assign({}, state, {
-        file: action.file,
+        file: action.data,
       });
     case actions.FILE_CLEAR:
       return initialState;
     case actions.METADATA_UPDATE:
       return Object.assign({}, state, {
         metadata: Object.assign({}, state.metadata, {
-          [action.name]: action.value,
+          [action.data.name]: action.data.value,
         }),
       });
     case actions.CLAIM_UPDATE:
       return Object.assign({}, state, {
-        claim: action.value,
+        claim: action.data,
       });
     case actions.SET_PUBLISH_IN_CHANNEL:
       return Object.assign({}, state, {
@@ -54,24 +50,21 @@ export default function (state = initialState, action) {
       });
     case actions.PUBLISH_STATUS_UPDATE:
       return Object.assign({}, state, {
-        status: Object.assign({}, state.status, {
-          status : action.status,
-          message: action.message,
-        }),
+        status: action.data,
       });
     case actions.ERROR_UPDATE:
       return Object.assign({}, state, {
         error: Object.assign({}, state.error, {
-          [action.name]: action.value,
+          [action.data.name]: action.data.value,
         }),
       });
     case actions.SELECTED_CHANNEL_UPDATE:
       return Object.assign({}, state, {
-        selectedChannel: action.value,
+        selectedChannel: action.data,
       });
     case actions.TOGGLE_METADATA_INPUTS:
       return Object.assign({}, state, {
-        showMetadataInputs: action.value,
+        showMetadataInputs: action.data,
       });
     default:
       return state;

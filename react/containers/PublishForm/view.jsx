@@ -1,4 +1,5 @@
 import React from 'react';
+import { withRouter } from 'react-router-dom';
 import Dropzone from 'containers/Dropzone';
 import PublishTitleInput from 'containers/PublishTitleInput';
 import PublishUrlInput from 'containers/PublishUrlInput';
@@ -10,9 +11,7 @@ import * as publishStates from 'constants/publish_claim_states';
 class PublishForm extends React.Component {
   constructor (props) {
     super(props);
-    this.validateChannelSelection = this.validateChannelSelection.bind(this);
-    this.validatePublishParams = this.validatePublishParams.bind(this);
-    this.makePublishRequest = this.makePublishRequest.bind(this);
+    // this.makePublishRequest = this.makePublishRequest.bind(this);
     this.publish = this.publish.bind(this);
   }
   validateChannelSelection () {
@@ -49,37 +48,33 @@ class PublishForm extends React.Component {
   }
   makePublishRequest (file, metadata) {
     console.log('making publish request');
-    const uri = '/api/claim-publish';
+    const uri = '/api/claim/publish';
     const xhr = new XMLHttpRequest();
     const fd = this.appendDataToFormData(file, metadata);
-    const that = this;
-    xhr.upload.addEventListener('loadstart', function () {
-      that.props.onPublishStatusChange(publishStates.LOAD_START, 'upload started');
+    xhr.upload.addEventListener('loadstart', () => {
+      this.props.onPublishStatusChange(publishStates.LOAD_START, 'upload started');
     });
-    xhr.upload.addEventListener('progress', function (e) {
+    xhr.upload.addEventListener('progress', (e) => {
       if (e.lengthComputable) {
         const percentage = Math.round((e.loaded * 100) / e.total);
         console.log('progress:', percentage);
-        that.props.onPublishStatusChange(publishStates.LOADING, `${percentage}%`);
+        this.props.onPublishStatusChange(publishStates.LOADING, `${percentage}%`);
       }
     }, false);
-    xhr.upload.addEventListener('load', function () {
+    xhr.upload.addEventListener('load', () => {
       console.log('loaded 100%');
-      that.props.onPublishStatusChange(publishStates.PUBLISHING, null);
+      this.props.onPublishStatusChange(publishStates.PUBLISHING, null);
     }, false);
     xhr.open('POST', uri, true);
-    xhr.onreadystatechange = function () {
+    xhr.onreadystatechange = () => {
       if (xhr.readyState === 4) {
-        console.log('publish response:', xhr.response);
-        if (xhr.status === 200) {
-          console.log('publish complete!');
-          const url = JSON.parse(xhr.response).message.url;
-          that.props.onPublishStatusChange(publishStates.SUCCESS, url);
-          window.location = url;
-        } else if (xhr.status === 502) {
-          that.props.onPublishStatusChange(publishStates.FAILED, 'Spee.ch was not able to get a response from the LBRY network.');
+        const response = JSON.parse(xhr.response);
+        console.log('publish response:', response);
+        if ((xhr.status === 200) && response.success) {
+          this.props.history.push(`/${response.data.claimId}/${response.data.name}`);
+          this.props.onPublishStatusChange(publishStates.SUCCESS, response.data.url);
         } else {
-          that.props.onPublishStatusChange(publishStates.FAILED, JSON.parse(xhr.response).message);
+          this.props.onPublishStatusChange(publishStates.FAILED, response.message);
         }
       }
     };
@@ -107,7 +102,6 @@ class PublishForm extends React.Component {
     fd.append('file', file);
     for (var key in metadata) {
       if (metadata.hasOwnProperty(key)) {
-        console.log('adding form data', key, metadata[key]);
         fd.append(key, metadata[key]);
       }
     }
@@ -116,21 +110,20 @@ class PublishForm extends React.Component {
   publish () {
     console.log('publishing file');
     // publish the asset
-    const that = this;
     this.validateChannelSelection()
       .then(() => {
-        return that.validatePublishParams();
+        return this.validatePublishParams();
       })
       .then(() => {
-        const metadata = that.createMetadata();
+        const metadata = this.createMetadata();
         // publish the claim
-        return that.makePublishRequest(that.props.file, metadata);
+        return this.makePublishRequest(this.props.file, metadata);
       })
       .then(() => {
-        that.props.onPublishStatusChange('publish request made');
+        this.props.onPublishStatusChange('publish request made');
       })
       .catch((error) => {
-        that.props.onPublishSubmitError(error.message);
+        this.props.onPublishSubmitError(error.message);
       });
   }
   render () {
@@ -176,4 +169,4 @@ class PublishForm extends React.Component {
   }
 };
 
-export default PublishForm;
+export default withRouter(PublishForm);

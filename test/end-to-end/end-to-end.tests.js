@@ -84,8 +84,28 @@ describe('end-to-end', function () {
     });
   });
 
+  describe('channel data request from client', function () {
+    const url = '/@test';
+    const urlWithShortClaimId = '/@test:3';
+    const urlWithMediumClaimId = '/@test:3b5bc6b6819172c6';
+    const urlWithLongClaimId = '/@test:3b5bc6b6819172c6e2f3f90aa855b14a956b4a82';
+
+    describe(url, function () {
+      it('should pass the tests I write here');
+    });
+    describe(urlWithShortClaimId, function () {
+      it('should pass the tests I write here');
+    });
+    describe(urlWithMediumClaimId, function () {
+      it('should pass the tests I write here');
+    });
+    describe(urlWithLongClaimId, function () {
+      it('should pass the tests I write here');
+    });
+  });
+
   describe('publish requests', function () {
-    const publishUrl = '/api/claim-publish';
+    const publishUrl = '/api/claim/publish';
     const filePath = './test/mock-data/bird.jpeg';
     const fileName = 'byrd.jpeg';
     const channelName = testChannel;

@@ -13,18 +13,18 @@ function parseJSON (response) {
 }
 
 /**
- * Checks if a network request came back fine, and throws an error if not
+ * Parses the status returned by a network request
  *
  * @param  {object} response   A response from a network request
+ * @param  {object} response   The parsed JSON from the network request
  *
- * @return {object|undefined} Returns either the response, or throws an error
+ * @return {object | undefined} Returns object with status and statusText, or undefined
  */
-function checkStatus (response) {
+function checkStatus (response, jsonResponse) {
   if (response.status >= 200 && response.status < 300) {
-    return response;
+    return jsonResponse;
   }
-
-  const error = new Error(response.statusText);
+  const error = new Error(jsonResponse.message);
   error.response = response;
   throw error;
 }
@@ -37,8 +37,13 @@ function checkStatus (response) {
  *
  * @return {object}           The response data
  */
+
 export default function request (url, options) {
   return fetch(url, options)
-    .then(checkStatus)
-    .then(parseJSON);
+    .then(response => {
+      return Promise.all([response, parseJSON(response)]);
+    })
+    .then(([response, jsonResponse]) => {
+      return checkStatus(response, jsonResponse);
+    });
 }

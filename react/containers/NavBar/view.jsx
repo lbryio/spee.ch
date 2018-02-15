@@ -1,7 +1,8 @@
 import React from 'react';
-import request from 'utils/request';
+import { NavLink, withRouter } from 'react-router-dom';
 import Logo from 'components/Logo';
 import NavBarChannelDropdown from 'components/NavBarChannelOptionsDropdown';
+import request from 'utils/request';
 
 const VIEW = 'VIEW';
 const LOGOUT = 'LOGOUT';
@@ -18,25 +19,24 @@ class NavBar extends React.Component {
     this.checkForLoggedInUser();
   }
   checkForLoggedInUser () {
-    // check for whether a channel is already logged in
-    const params = {
-      credentials: 'include',
-    }
+    const params = {credentials: 'include'};
     request('/user', params)
-      .then(({success, message}) => {
-        if (success) {
-          this.props.onChannelLogin(message.channelName, message.shortChannelId, message.channelClaimId);
-        } else {
-          console.log('user was not logged in');
-        }
+      .then(({ data }) => {
+        this.props.onChannelLogin(data.channelName, data.shortChannelId, data.channelClaimId);
       })
       .catch(error => {
-        console.log('authenticate user errored:', error);
+        console.log('/user error:', error.message);
       });
   }
   logoutUser () {
-    // send logout request to server
-    window.location.href = '/logout'; // NOTE: replace with a call to the server
+    const params = {credentials: 'include'};
+    request('/logout', params)
+      .then(() => {
+        this.props.onChannelLogout();
+      })
+      .catch(error => {
+        console.log('/logout error', error.message);
+      });
   }
   handleSelection (event) {
     console.log('handling selection', event);
@@ -48,7 +48,7 @@ class NavBar extends React.Component {
         break;
       case VIEW:
         // redirect to channel page
-        window.location.href = `/${this.props.channelName}:${this.props.channelLongId}`;
+        this.props.history.push(`/${this.props.channelName}:${this.props.channelLongId}`);
         break;
       default:
         break;
@@ -63,17 +63,18 @@ class NavBar extends React.Component {
             <span className="nav-bar-tagline">Open-source, decentralized image and video sharing.</span>
           </div>
           <div className="nav-bar--right">
-            <a className="nav-bar-link link--nav-active" href="/">Publish</a>
-            <a className="nav-bar-link link--nav" href="/about">About</a>
+            <NavLink className="nav-bar-link link--nav" activeClassName="link--nav-active" to="/" exact={true}>Publish</NavLink>
+            <NavLink className="nav-bar-link link--nav"  activeClassName="link--nav-active" to="/about">About</NavLink>
             { this.props.channelName ? (
               <NavBarChannelDropdown
                 channelName={this.props.channelName}
                 handleSelection={this.handleSelection}
+                defaultSelection={this.props.channelName}
                 VIEW={VIEW}
                 LOGOUT={LOGOUT}
               />
             ) : (
-              <a id="nav-bar-login-link" className="nav-bar-link link--nav" href="/login">Channel</a>
+              <NavLink id="nav-bar-login-link" className="nav-bar-link link--nav" activeClassName="link--nav-active" to="/login">Channel</NavLink>
             )}
           </div>
         </div>
@@ -82,4 +83,4 @@ class NavBar extends React.Component {
   }
 }
 
-export default NavBar;
+export default withRouter(NavBar);
