@@ -1,9 +1,10 @@
-import { takeLatest } from 'redux-saga/effects';
+import { call, put, takeLatest } from 'redux-saga/effects';
 import * as actions from 'constants/show_action_types';
 import { onRequestError, onNewChannelRequest, onNewAssetRequest } from 'actions/show';
 import lbryUri from 'utils/lbryUri';
 
-function parseAndUpdateIdentifierAndClaim (modifier, claim) {
+function* parseAndUpdateIdentifierAndClaim (modifier, claim) {
+  console.log('parseAndUpdateIdentifierAndClaim');
   // this is a request for an asset
   // claim will be an asset claim
   // the identifier could be a channel or a claim id
@@ -12,45 +13,46 @@ function parseAndUpdateIdentifierAndClaim (modifier, claim) {
     ({ isChannel, channelName, channelClaimId, claimId } = lbryUri.parseIdentifier(modifier));
     ({ claimName, extension } = lbryUri.parseClaim(claim));
   } catch (error) {
-    return onRequestError(error.message);
+    return yield put(onRequestError(error.message));
   }
   // trigger an new action to update the store
   if (isChannel) {
-    return onNewAssetRequest(claimName, null, channelName, channelClaimId, extension);
-  } else {
-    return onNewAssetRequest(claimName, claimId, null, null, extension);
-  }
+    return yield put(onNewAssetRequest(claimName, null, channelName, channelClaimId, extension));
+  };
+  yield put(onNewAssetRequest(claimName, claimId, null, null, extension));
 }
-function parseAndUpdateClaimOnly (claim) {
+function* parseAndUpdateClaimOnly (claim) {
+  console.log('parseAndUpdateIdentifierAndClaim');
   // this could be a request for an asset or a channel page
   // claim could be an asset claim or a channel claim
   let isChannel, channelName, channelClaimId;
   try {
     ({ isChannel, channelName, channelClaimId } = lbryUri.parseIdentifier(claim));
   } catch (error) {
-    return onRequestError(error.message);
+    return yield put(onRequestError(error.message));
   }
   // trigger an new action to update the store
   // return early if this request is for a channel
   if (isChannel) {
-    return onNewChannelRequest(channelName, channelClaimId);
+    return yield put(onNewChannelRequest(channelName, channelClaimId));
   }
   // if not for a channel, parse the claim request
   let claimName, extension;
   try {
     ({claimName, extension} = lbryUri.parseClaim(claim));
   } catch (error) {
-    return onRequestError(error.message);
+    return yield put(onRequestError(error.message));
   }
-  onNewAssetRequest(claimName, null, null, null, extension);
+  yield put(onNewAssetRequest(claimName, null, null, null, extension));
 }
 
 function* handleShowPageUri (action) {
-  const { params: { identifier, claim } } = action.data;
+  console.log('handleShowPageUri');
+  const { identifier, claim } = action.data;
   if (identifier) {
-    return parseAndUpdateIdentifierAndClaim(identifier, claim);
+    return yield call(parseAndUpdateIdentifierAndClaim, identifier, claim);
   }
-  parseAndUpdateClaimOnly(claim);
+  yield call(parseAndUpdateClaimOnly, claim);
 };
 
 export function* watchHandleShowPageUri () {
