@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import View from './view';
 import { fileRequested } from 'actions/show';
-import selectAsset from 'selectors/asset';
+import { selectAsset } from 'selectors/show';
 
 const mapStateToProps = ({ show }) => {
   // select error and status

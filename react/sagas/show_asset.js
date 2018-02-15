@@ -1,11 +1,19 @@
-import { call, put, takeLatest } from 'redux-saga/effects';
+import { call, put, select, takeLatest } from 'redux-saga/effects';
 import * as actions from 'constants/show_action_types';
 import { addRequestToRequestList, onRequestError, addAssetToAssetList } from 'actions/show';
 import { getLongClaimId, getShortId, getClaimData } from 'api/assetApi';
+import { selectShowState } from 'selectors/show';
 
 function* newAssetRequest (action) {
   const { requestId, name, modifier } = action.data;
-  // get long id
+  const state = yield select(selectShowState);
+  // is this an existing request?
+  // If this uri is in the request list, it's already been fetched
+  if (state.requestList[requestId]) {
+    console.log('that request already exists in the request list!');
+    return null;
+  }
+  // get long id && add request to request list
   console.log(`getting asset long id ${name}`);
   let longId;
   try {
@@ -14,9 +22,14 @@ function* newAssetRequest (action) {
     console.log('error:', error);
     return yield put(onRequestError(error.message));
   }
-  // put action to add request to asset request list
   const assetKey = `a#${name}#${longId}`;
   yield put(addRequestToRequestList(requestId, null, assetKey));
+  // is this an existing asset?
+  // If this asset is in the asset list, it's already been fetched
+  if (state.assetList[assetKey]) {
+    console.log('that asset already exists in the asset list!');
+    return null;
+  }
   // get short Id
   console.log(`getting asset short id ${name} ${longId}`);
   let shortId;
@@ -33,7 +46,7 @@ function* newAssetRequest (action) {
   } catch (error) {
     return yield put(onRequestError(error.message));
   }
-  // put action to add asset to asset list
+  // add asset to asset list
   yield put(addAssetToAssetList(assetKey, null, name, longId, shortId, claimData));
   // clear any errors in request error
   yield put(onRequestError(null));

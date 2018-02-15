@@ -7,10 +7,10 @@ const initialState = {
     type : null,
     id   : null,
   },
-  requestList: {},
-  channelList     : {},
-  assetList       : {},
-  displayAsset    : {
+  requestList : {},
+  channelList : {},
+  assetList   : {},
+  displayAsset: {
     error : null,
     status: LOCAL_CHECK,
   },

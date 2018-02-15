@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import View from './view';
-import selectAsset from 'selectors/asset';
+import { selectAsset } from 'selectors/show';
 
 const mapStateToProps = ({ show }) => {
   // select title
