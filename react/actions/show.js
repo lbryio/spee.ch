@@ -3,12 +3,19 @@ import * as actions from 'constants/show_action_types';
 import { CHANNEL, ASSET_LITE, ASSET_DETAILS } from 'constants/show_request_types';
 
 // basic request parsing
+export function handleShowPageUri (params) {
+  return {
+    type: actions.HANDLE_SHOW_URI,
+    data: params,
+  };
+};
+
 export function onRequestError (error) {
   return {
     type: actions.REQUEST_UPDATE_ERROR,
     data: error,
   };
-}
+};
 
 export function onNewChannelRequest (channelName, channelId) {
   const requestType = CHANNEL;
@@ -41,7 +48,7 @@ export function onNewAssetRequest (name, id, channelName, channelId, extension) 
 
 export function addRequestToRequestList (id, error, key) {
   return {
-    type: actions.PREVIOUS_REQUEST_ADD,
+    type: actions.REQUEST_LIST_ADD,
     data: { id, error, key },
   };
 };

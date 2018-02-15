@@ -34,7 +34,7 @@ export default function (state = initialState, action) {
         }),
       });
     // store requests
-    case actions.PREVIOUS_REQUEST_ADD:
+    case actions.REQUEST_LIST_ADD:
       return Object.assign({}, state, {
         requestList: Object.assign({}, state.requestList, {
           [action.data.id]: {
