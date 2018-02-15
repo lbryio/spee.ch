@@ -5,11 +5,11 @@ const googleApiKey = config.analytics.googleId;
 
 function createServeEventParams (headers, ip, originalUrl) {
   return {
-    ec : 'serve',
-    ea : originalUrl,
-    uip: ip,
-    ua : headers['user-agent'],
-    ul : headers['accept-language'],
+    eventCategory    : 'client requests',
+    eventAction      : 'serve request',
+    eventLabel       : originalUrl,
+    ipOverride       : ip,
+    userAgentOverride: headers['user-agent'],
   };
 };
 
@@ -21,8 +21,7 @@ function createPublishTimingEventParams (label, startTime, endTime, ip, headers)
     userTimingTime        : durration,
     userTimingLabel       : label,
     uip                   : ip,
-    ua                    : headers['user-agent'],
-    ul                    : headers['accept-language'],
+    userAgentOverride     : headers['user-agent'],
   };
 };
 
