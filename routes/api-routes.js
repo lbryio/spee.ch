@@ -5,9 +5,9 @@ const multipartMiddleware = multipart({uploadDir: files.uploadDirectory});
 const db = require('../models');
 const { checkClaimNameAvailability, checkChannelAvailability, publish } = require('../controllers/publishController.js');
 const { getClaimList, resolveUri, getClaim } = require('../helpers/lbryApi.js');
-const { createPublishParams, parsePublishApiRequestBody, parsePublishApiRequestFiles, parsePublishApiChannel, addGetResultsToFileData, createFileData, returnPublishTimingActionType } = require('../helpers/publishHelpers.js');
+const { createPublishParams, parsePublishApiRequestBody, parsePublishApiRequestFiles, parsePublishApiChannel, addGetResultsToFileData, createFileData } = require('../helpers/publishHelpers.js');
 const errorHandlers = require('../helpers/errorHandlers.js');
-const { sendGoogleAnalyticsTiming } = require('../helpers/statsHelpers.js');
+const { sendGAAnonymousPublishTiming, sendGAChannelPublishTiming } = require('../helpers/googleAnalytics.js');
 const { authenticateIfNoUserToken } = require('../auth/authentication.js');
 const { getChannelData, getChannelClaims, getClaimId } = require('../controllers/serveController.js');
 
@@ -134,12 +134,10 @@ module.exports = (app) => {
   app.post('/api/claim/publish', multipartMiddleware, ({ body, files, headers, ip, originalUrl, user }, res) => {
     logger.debug('api/claim-publish body:', body);
     logger.debug('api/claim-publish files:', files);
-    // record the start time of the request and create variable for storing the action type
-    const publishStartTime = Date.now();
-    logger.debug('publish request started @', publishStartTime);
-    let timingActionType;
     // define variables
     let  name, fileName, filePath, fileType, nsfw, license, title, description, thumbnail, channelName, channelPassword;
+    // record the start time of the request
+    const publishStartTime = Date.now();
     // validate the body and files of the request
     try {
       // validateApiPublishRequest(body, files);
@@ -166,8 +164,6 @@ module.exports = (app) => {
         return createPublishParams(filePath, name, title, description, license, nsfw, thumbnail, channelName);
       })
       .then(publishParams => {
-        // set the timing event type for reporting
-        timingActionType = returnPublishTimingActionType(publishParams.channel_name);
         // publish the asset
         return publish(publishParams, fileName, fileType);
       })
@@ -182,10 +178,13 @@ module.exports = (app) => {
             lbryTx : result,
           },
         });
-        // log the publish end time
+        // record the publish end time and send to google analytics
         const publishEndTime = Date.now();
-        logger.debug('publish request completed @', publishEndTime);
-        sendGoogleAnalyticsTiming(timingActionType, headers, ip, originalUrl, publishStartTime, publishEndTime);
+        if (channelName) {
+          sendGAChannelPublishTiming(headers, ip, originalUrl, publishStartTime, publishEndTime);
+        } else {
+          sendGAAnonymousPublishTiming(headers, ip, originalUrl, publishStartTime, publishEndTime);
+        }
       })
       .catch(error => {
         errorHandlers.handleErrorResponse(originalUrl, ip, error, res);
