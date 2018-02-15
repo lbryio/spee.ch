@@ -1,6 +1,5 @@
 import { connect } from 'react-redux';
 import { handleShowPageUri } from 'actions/show';
-// import { onRequestError, onNewChannelRequest, onNewAssetRequest } from 'actions/show';
 import View from './view';
 
 const mapStateToProps = ({ show }) => {

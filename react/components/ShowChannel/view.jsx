@@ -4,12 +4,6 @@ import NavBar from 'containers/NavBar';
 import ChannelClaimsDisplay from 'containers/ChannelClaimsDisplay';
 
 class ShowChannel extends React.Component {
-  // componentDidMount () {
-  //   const { channel, requestId, requestChannelName, requestChannelId } = this.props;
-  //   if (!channel) {
-  //     return this.props.onNewChannelRequest(requestId, requestChannelName, requestChannelId);  // check the channel you have in the request and see you have no channel so fetch that channel?
-  //   }
-  // }
   render () {
     const { channel } = this.props;
     if (channel) {
