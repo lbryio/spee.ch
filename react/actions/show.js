@@ -48,13 +48,6 @@ export function addRequestToRequestList (id, error, key) {
 
 // asset actions
 
-// export function addRequestToAssetRequests (id, error, name, claimId) {
-//   return {
-//     type: actions.ASSET_REQUEST_ADD,
-//     data: { id, error, name, claimId },
-//   };
-// };
-
 export function addAssetToAssetList (id, error, name, claimId, shortId, claimData) {
   return {
     type: actions.ASSET_ADD,
@@ -64,21 +57,12 @@ export function addAssetToAssetList (id, error, name, claimId, shortId, claimDat
 
 // channel actions
 
-// export function addRequestToChannelRequests (id, error, name, longId, shortId) {
-//   return {
-//     type: actions.CHANNEL_REQUEST_ADD,
-//     data: { id, error, name, longId, shortId },
-//   };
-// };
-
 export function addNewChannelToChannelList (id, name, shortId, longId, claimsData) {
   return {
     type: actions.CHANNEL_ADD,
     data: { id, name, shortId, longId, claimsData },
   };
 };
-
-//  update channel data
 
 export function onUpdateChannelClaims (channelKey, name, longId, page) {
   return {

@@ -15,6 +15,7 @@ function* retrieveFile (action) {
     return yield put(updateDisplayAssetError(error.message));
   };
   if (isAvailable) {
+    yield put(updateDisplayAssetError(null));
     return yield put(updateFileAvailability(AVAILABLE));
   }
   yield put(updateFileAvailability(UNAVAILABLE));
