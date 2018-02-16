@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import withAnalytics from 'utils/googleAnalytics';
 
+import GAListener from 'components/GAListener';
 import PublishPage from 'components/PublishPage';
 import AboutPage from 'components/AboutPage';
 import LoginPage from 'containers/LoginPage';
@@ -13,14 +13,16 @@ import FourOhFourPage from 'components/FourOhFourPage';
 const Root = ({ store }) => (
   <Provider store={store}>
     <BrowserRouter>
-      <Switch>
-        <Route exact path="/" component={withAnalytics(PublishPage)} />
-        <Route exact path="/about" component={withAnalytics(AboutPage)} />
-        <Route exact path="/login" component={withAnalytics(LoginPage)} />
-        <Route exact path="/:identifier/:claim" component={withAnalytics(ShowPage)} />
-        <Route exact path="/:claim" component={withAnalytics(ShowPage)} />
-        <Route component={withAnalytics(FourOhFourPage)} />
-      </Switch>
+      <GAListener>
+        <Switch>
+          <Route exact path="/" component={PublishPage} />
+          <Route exact path="/about" component={AboutPage} />
+          <Route exact path="/login" component={LoginPage} />
+          <Route exact path="/:identifier/:claim" component={ShowPage} />
+          <Route exact path="/:claim" component={ShowPage} />
+          <Route component={FourOhFourPage} />
+        </Switch>
+      </GAListener>
     </BrowserRouter>
   </Provider>
 );
