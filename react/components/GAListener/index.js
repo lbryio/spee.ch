@@ -1,8 +1,8 @@
 import React from 'react';
 import GoogleAnalytics from 'react-ga';
 import { withRouter } from 'react-router-dom';
-// const config = require('../../../../config/speechConfig.js');
-const googleApiKey = 'UA-60403362-3'; // config.analytics.googleId;
+const config = require('../../../config/speechConfig.js');
+const googleApiKey = config.analytics.googleId;
 
 GoogleAnalytics.initialize(googleApiKey);
 
