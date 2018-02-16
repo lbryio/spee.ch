@@ -1,5 +1,5 @@
 const Handlebars = require('handlebars');
-const { site, analytics, claim: claimDefaults } = require('../config/speechConfig.js');
+const { site, claim: claimDefaults } = require('../config/speechConfig.js');
 
 function determineOgTitle (storedTitle, defaultTitle) {
   return ifEmptyReturnOther(storedTitle, defaultTitle);
@@ -63,16 +63,6 @@ module.exports = {
     const headerBoilerplate = `<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no"><meta http-equiv="X-UA-Compatible" content="ie=edge"><title>${site.title}</title><link rel="stylesheet" href="/assets/css/reset.css" type="text/css"><link rel="stylesheet" href="/assets/css/general.css" type="text/css"><link rel="stylesheet" href="/assets/css/mediaQueries.css" type="text/css">`;
     return new Handlebars.SafeString(headerBoilerplate);
   },
-  googleAnalytics () {
-    const googleApiKey = analytics.googleId;
-    const gaCode = `<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-        ga('create', '${googleApiKey}', 'auto');
-        ga('send', 'pageview');</script>`;
-    return new Handlebars.SafeString(gaCode);
-  },
   addOpenGraph (claim) {
     const { ogTitle, ogDescription, showUrl, source, ogThumbnailContentType } = createOpenGraphDataFromClaim(claim, claimDefaults.defaultTitle, claimDefaults.defaultDescription);
     const thumbnail = claim.thumbnail;
@@ -118,30 +108,6 @@ module.exports = {
     } else {
       const twitterCard = '<meta name="twitter:card" content="summary_large_image" >';
       return new Handlebars.SafeString(`${basicTwitterTags} ${twitterCard}`);
-    }
-  },
-  ifConditional (varOne, operator, varTwo, options) {
-    switch (operator) {
-      case '===':
-        return (varOne === varTwo) ? options.fn(this) : options.inverse(this);
-      case '!==':
-        return (varOne !== varTwo) ? options.fn(this) : options.inverse(this);
-      case '<':
-        return (varOne < varTwo) ? options.fn(this) : options.inverse(this);
-      case '<=':
-        return (varOne <= varTwo) ? options.fn(this) : options.inverse(this);
-      case '>':
-        return (varOne > varTwo) ? options.fn(this) : options.inverse(this);
-      case '>=':
-        return (varOne >= varTwo) ? options.fn(this) : options.inverse(this);
-      case '&&':
-        return (varOne && varTwo) ? options.fn(this) : options.inverse(this);
-      case '||':
-        return (varOne || varTwo) ? options.fn(this) : options.inverse(this);
-      case 'mod3':
-        return ((parseInt(varOne) % 3) === 0) ? options.fn(this) : options.inverse(this);
-      default:
-        return options.inverse(this);
     }
   },
 };
