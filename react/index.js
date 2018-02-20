@@ -1,10 +1,14 @@
 import React from 'react';
 import { render } from 'react-dom';
+import { Provider } from 'react-redux';
 import { createStore, applyMiddleware, compose } from 'redux';
+import { BrowserRouter } from 'react-router-dom';
 import Reducer from 'reducers';
 import createSagaMiddleware from 'redux-saga';
 import rootSaga  from 'sagas';
-import Root from './root';
+
+import GAListener from 'components/GAListener';
+import App from './app';
 
 const sagaMiddleware = createSagaMiddleware();
 const middleware = applyMiddleware(sagaMiddleware);
@@ -19,6 +23,12 @@ let store = createStore(
 sagaMiddleware.run(rootSaga);
 
 render(
-  <Root store={store} />,
+  <Provider store={store}>
+    <BrowserRouter>
+      <GAListener>
+        <App />
+      </GAListener>
+    </BrowserRouter>
+  </Provider>,
   document.getElementById('react-app')
 );
