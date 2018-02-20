@@ -79,7 +79,7 @@ db.sequelize
     require('./routes/api-routes.js')(app);
     require('./routes/page-routes.js')(app);
     require('./routes/serve-routes.js')(app);
-    require('./routes/home-routes.js')(app);
+    require('./routes/fallback-routes.js')(app);
     const http = require('http');
     return http.Server(app);
   })

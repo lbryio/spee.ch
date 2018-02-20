@@ -1,8 +1,14 @@
 const { site } = require('../config/speechConfig.js');
 
 module.exports = (app) => {
+  // route for the home page
+  app.get('/', (req, res) => {
+    console.log('rendering homepage');
+    res.status(200).render('index');
+  });
   // route to display login page
   app.get('/login', (req, res) => {
+    console.log('rendering login page');
     res.status(200).render('index');
   });
   // route to show 'about' page
