@@ -1,10 +1,10 @@
 const { site } = require('../config/speechConfig.js');
-// const handleRender = require('../helpers/handleRender.jsx');
+const handleRender = require('../helpers/handleRender.jsx');
 
 module.exports = (app) => {
   // route for the home page
   app.get('/', (req, res) => {
-    res.status(200).render('index');
+    handleRender(req, res);
   });
   // route to display login page
   app.get('/login', (req, res) => {

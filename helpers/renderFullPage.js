@@ -14,7 +14,7 @@ module.exports = (html, preloadedState) => {
             <script>
                 window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(/</g, '\\\u003c')}
             </script>
-            <script src="/static/bundle.js"></script>
+            <script src="/bundle/bundle.js"></script>
         </body>
     </html>
   `;

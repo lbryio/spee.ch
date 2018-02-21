@@ -1,11 +1,12 @@
+import React from 'react';
 import { renderToString } from 'react-dom/server';
 import { createStore } from 'redux';
 import Reducer from '../react/reducers';
-import renderFullPage from './renderFullPage.js';
-
+import { Provider } from 'react-redux';
 import StaticRouter from 'react-router-dom/StaticRouter';
 import GAListener from '../react/components/GAListener';
 import App from '../react/app';
+import renderFullPage from './renderFullPage.js';
 
 module.exports = (req, res) => {
   let context = {};
