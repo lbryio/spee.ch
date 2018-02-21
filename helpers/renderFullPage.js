@@ -1,9 +1,18 @@
+const { site } = require('../config/speechConfig.js');
+
 module.exports = (html, preloadedState) => {
   // take the html and preloadedState and return the full page
   return `
     <!DOCTYPE html>
     <html lang="en" prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb#">
         <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+            <meta http-equiv="X-UA-Compatible" content="ie=edge">
+            <title>${site.title}</title>
+            <link rel="stylesheet" href="/assets/css/reset.css" type="text/css">
+            <link rel="stylesheet" href="/assets/css/general.css" type="text/css">
+            <link rel="stylesheet" href="/assets/css/mediaQueries.css" type="text/css">
             <!--google font-->
             <link href="https://fonts.googleapis.com/css?family=Roboto:300" rel="stylesheet">
         </head>
