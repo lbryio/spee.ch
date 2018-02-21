@@ -10,18 +10,24 @@ import rootSaga  from 'sagas';
 import GAListener from 'components/GAListener';
 import App from './app';
 
+// get the state from a global variable injected into the server-generated HTML
+const preloadedState = window.__PRELOADED_STATE__ || null;
+
+// Allow the passed state to be garbage-collected
+delete window.__PRELOADED_STATE__
+
+// create and apply middleware
 const sagaMiddleware = createSagaMiddleware();
 const middleware = applyMiddleware(sagaMiddleware);
+const reduxMiddleware = window.__REDUX_DEVTOOLS_EXTENSION__ ? compose(middleware, window.__REDUX_DEVTOOLS_EXTENSION__()) : middleware;
 
-const enhancer = window.__REDUX_DEVTOOLS_EXTENSION__ ? compose(middleware, window.__REDUX_DEVTOOLS_EXTENSION__()) : middleware;
+// create teh store
+let store = createStore(Reducer, preloadedState, reduxMiddleware);
 
-let store = createStore(
-  Reducer,
-  enhancer,
-);
-
+// run the saga middlweare
 sagaMiddleware.run(rootSaga);
 
+// render the app
 render(
   <Provider store={store}>
     <BrowserRouter>

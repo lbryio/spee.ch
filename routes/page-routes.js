@@ -1,4 +1,5 @@
 const { site } = require('../config/speechConfig.js');
+// const handleRender = require('../helpers/handleRender.jsx');
 
 module.exports = (app) => {
   // route for the home page
