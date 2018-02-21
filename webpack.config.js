@@ -36,23 +36,30 @@ module.exports = [
     },
   },
   {
-    target   : 'node',
+    target: 'node',
+    node  : {
+      __dirname: true,
+    },
     externals: nodeExternals(),
     entry    : ['./index.js'],
     output   : {
-      path      : __dirname,
-      publicPath: '',
-      filename  : 'server.js',
+      path    : Path.join(__dirname, 'build/'),
+      filename: 'server.js',
     },
     watch : true,
     module: {
-      loaders: [
+      rules: [
         {
-          loader : 'babel-loader',
+          test   : /.jsx?$/,
           exclude: /node_modules/,
-          query  : {
+          loader : 'babel-loader',
+          options: {
             presets: ['es2015'],
           },
+        },
+        {
+          test  : /.css$/,
+          loader: 'css-loader',
         },
       ],
     },
@@ -61,7 +68,7 @@ module.exports = [
         'node_modules',
         __dirname,
       ],
-      extensions: ['.js'],
+      extensions: ['.js', '.json', '.jsx', '.css'],
     },
   },
 ];

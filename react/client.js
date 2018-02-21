@@ -22,7 +22,12 @@ const middleware = applyMiddleware(sagaMiddleware);
 const reduxMiddleware = window.__REDUX_DEVTOOLS_EXTENSION__ ? compose(middleware, window.__REDUX_DEVTOOLS_EXTENSION__()) : middleware;
 
 // create teh store
-let store = createStore(Reducer, preloadedState, reduxMiddleware);
+let store;
+if (preloadedState) {
+  store = createStore(Reducer, preloadedState, reduxMiddleware);
+} else {
+  store = createStore(Reducer, reduxMiddleware);
+}
 
 // run the saga middlweare
 sagaMiddleware.run(rootSaga);
