@@ -5,38 +5,41 @@ const REACT_ROOT = Path.resolve(__dirname, 'react/');
 console.log('REACT_ROOT:', REACT_ROOT);
 
 module.exports = [
-  // {
-  //   target: 'web',
-  //   entry : ['babel-polyfill', 'whatwg-fetch', './react/client.js'],
-  //   output: {
-  //     path      : Path.join(__dirname, 'public/bundle/'),
-  //     publicPath: 'public/bundle/',
-  //     filename  : 'bundle.js',
-  //   },
-  //   watch : true,
-  //   module: {
-  //     loaders: [
-  //       {
-  //         test   : /.jsx?$/,
-  //         loader : 'babel-loader',
-  //         exclude: /node_modules/,
-  //         query  : {
-  //           presets: ['es2015', 'react', 'stage-2'],
-  //         },
-  //       },
-  //     ],
-  //   },
-  //   resolve: {
-  //     modules: [
-  //       REACT_ROOT,
-  //       'node_modules',
-  //       __dirname,
-  //     ],
-  //     extensions: ['.js', '.jsx', '.scss'],
-  //   },
-  // },
   {
-    target   : 'node',
+    target: 'web',
+    entry : ['babel-polyfill', 'whatwg-fetch', './react/client.js'],
+    output: {
+      path      : Path.join(__dirname, 'public/bundle/'),
+      publicPath: 'public/bundle/',
+      filename  : 'bundle.js',
+    },
+    watch : true,
+    module: {
+      loaders: [
+        {
+          test   : /.jsx?$/,
+          loader : 'babel-loader',
+          exclude: /node_modules/,
+          query  : {
+            presets: ['es2015', 'react', 'stage-2'],
+          },
+        },
+      ],
+    },
+    resolve: {
+      modules: [
+        REACT_ROOT,
+        'node_modules',
+        __dirname,
+      ],
+      extensions: ['.js', '.jsx', '.scss'],
+    },
+  },
+  {
+    target: 'node',
+    node  : {
+      __dirname: false,
+    },
     externals: [nodeExternals()],
     entry    : ['./server.js'],
     output   : {

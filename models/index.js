@@ -1,7 +1,7 @@
-const fs = require('fs');
-const path = require('path');
+// const fs = require('fs');
+// const path = require('path');
 const Sequelize = require('sequelize');
-const basename = path.basename(module.filename);
+// const basename = path.basename(module.filename);
 const logger = require('winston');
 const config = require('../config/speechConfig.js');
 const { database, username, password } = config.sql;
@@ -30,16 +30,30 @@ sequelize
     logger.error('Sequelize was unable to connect to the database:', err);
   });
 
-// add each model to the db object
-fs
-  .readdirSync(__dirname)
-  .filter(file => {
-    return (file.indexOf('.') !== 0 && file !== basename && file.slice(-3) === '.js');
-  })
-  .forEach(file => {
-    const model = sequelize['import'](path.join(__dirname, file));
-    db[model.name] = model;
-  });
+// // add each model to the db object
+// fs
+//   .readdirSync(__dirname)
+//   .filter(file => {
+//     return (file.indexOf('.') !== 0 && file !== basename && file.slice(-3) === '.js');
+//   })
+//   .forEach(file => {
+//     const model = sequelize['import'](path.join(__dirname, file));
+//     db[model.name] = model;
+//   });
+
+// manually add each model to the db
+const Certificate = require('./certificate.js');
+const Channel = require('./channel.js');
+const Claim = require('./claim.js');
+const File = require('./file.js');
+const Request = require('./request.js');
+const User = require('./user.js');
+db['Certificate'] = sequelize.import('Certificate', Certificate);
+db['Channel'] = sequelize.import('Channel', Channel);
+db['Claim'] = sequelize.import('Claim', Claim);
+db['File'] = sequelize.import('File', File);
+db['Request'] = sequelize.import('Request', Request);
+db['User'] = sequelize.import('User', User);
 
 // run model.association for each model in the db object that has an association
 Object.keys(db).forEach(modelName => {
