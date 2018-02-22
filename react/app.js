@@ -9,11 +9,11 @@ import FourOhFourPage from 'components/FourOhFourPage';
 const App = () => {
   return (
     <Switch>
-      <Route exact path="/" component={PublishPage} />
-      <Route exact path="/about" component={AboutPage} />
-      <Route exact path="/login" component={LoginPage} />
-      <Route exact path="/:identifier/:claim" component={ShowPage} />
-      <Route exact path="/:claim" component={ShowPage} />
+      <Route exact path='/' component={PublishPage} />
+      <Route exact path='/about' component={AboutPage} />
+      <Route exact path='/login' component={LoginPage} />
+      <Route exact path='/:identifier/:claim' component={ShowPage} />
+      <Route exact path='/:claim' component={ShowPage} />
       <Route component={FourOhFourPage} />
     </Switch>
   );

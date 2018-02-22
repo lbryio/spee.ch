@@ -14,7 +14,7 @@ import App from './app';
 const preloadedState = window.__PRELOADED_STATE__ || null;
 
 // Allow the passed state to be garbage-collected
-delete window.__PRELOADED_STATE__
+delete window.__PRELOADED_STATE__;
 
 // create and apply middleware
 const sagaMiddleware = createSagaMiddleware();

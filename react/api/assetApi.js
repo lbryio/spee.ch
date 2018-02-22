@@ -19,7 +19,7 @@ export function getLongClaimId (name, modifier) {
       'Content-Type': 'application/json',
     }),
     body: JSON.stringify(body),
-  }
+  };
   // create url
   const url = `/api/claim/long-id`;
   // return the request promise

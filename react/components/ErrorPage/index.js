@@ -7,9 +7,9 @@ class ErrorPage extends React.Component {
     const { error } = this.props;
     return (
       <div>
-        <NavBar/>
-        <div className="row row--padded">
-            <p>{error}</p>
+        <NavBar />
+        <div className='row row--padded'>
+          <p>{error}</p>
         </div>
       </div>
     );
@@ -18,6 +18,6 @@ class ErrorPage extends React.Component {
 
 ErrorPage.propTypes = {
   error: PropTypes.string.isRequired,
-}
+};
 
 export default ErrorPage;

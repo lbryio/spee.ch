@@ -14,6 +14,6 @@ const mapDispatchToProps = dispatch => {
       dispatch(updateMetadata(name, value));
     },
   };
-}
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(View);

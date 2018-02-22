@@ -3,7 +3,7 @@ import * as actions from 'constants/show_action_types';
 import { onRequestError, onNewChannelRequest, onNewAssetRequest } from 'actions/show';
 import lbryUri from 'utils/lbryUri';
 
-function* parseAndUpdateIdentifierAndClaim (modifier, claim) {
+function * parseAndUpdateIdentifierAndClaim (modifier, claim) {
   console.log('parseAndUpdateIdentifierAndClaim');
   // this is a request for an asset
   // claim will be an asset claim
@@ -21,7 +21,7 @@ function* parseAndUpdateIdentifierAndClaim (modifier, claim) {
   };
   yield put(onNewAssetRequest(claimName, claimId, null, null, extension));
 }
-function* parseAndUpdateClaimOnly (claim) {
+function * parseAndUpdateClaimOnly (claim) {
   console.log('parseAndUpdateIdentifierAndClaim');
   // this could be a request for an asset or a channel page
   // claim could be an asset claim or a channel claim
@@ -46,7 +46,7 @@ function* parseAndUpdateClaimOnly (claim) {
   yield put(onNewAssetRequest(claimName, null, null, null, extension));
 }
 
-function* handleShowPageUri (action) {
+function * handleShowPageUri (action) {
   console.log('handleShowPageUri');
   const { identifier, claim } = action.data;
   if (identifier) {
@@ -55,6 +55,6 @@ function* handleShowPageUri (action) {
   yield call(parseAndUpdateClaimOnly, claim);
 };
 
-export function* watchHandleShowPageUri () {
+export function * watchHandleShowPageUri () {
   yield takeLatest(actions.HANDLE_SHOW_URI, handleShowPageUri);
 };

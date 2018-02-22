@@ -4,7 +4,7 @@ import { addNewChannelToChannelList, addRequestToRequestList, onRequestError, up
 import { getChannelClaims, getChannelData } from 'api/channelApi';
 import { selectShowState } from 'selectors/show';
 
-function* getNewChannelAndUpdateChannelList (action) {
+function * getNewChannelAndUpdateChannelList (action) {
   const { requestId, channelName, channelId } = action.data;
   const state = yield select(selectShowState);
   // is this an existing request?
@@ -44,11 +44,11 @@ function* getNewChannelAndUpdateChannelList (action) {
   yield put(onRequestError(null));
 }
 
-export function* watchNewChannelRequest () {
+export function * watchNewChannelRequest () {
   yield takeLatest(actions.CHANNEL_REQUEST_NEW, getNewChannelAndUpdateChannelList);
 };
 
-function* getNewClaimsAndUpdateChannel (action) {
+function * getNewClaimsAndUpdateChannel (action) {
   const { channelKey, name, longId, page } = action.data;
   let claimsData;
   try {
@@ -59,6 +59,6 @@ function* getNewClaimsAndUpdateChannel (action) {
   yield put(updateChannelClaims(channelKey, claimsData));
 }
 
-export function* watchUpdateChannelClaims () {
+export function * watchUpdateChannelClaims () {
   yield takeLatest(actions.CHANNEL_CLAIMS_UPDATE_ASYNC, getNewClaimsAndUpdateChannel);
 }

@@ -17,8 +17,7 @@ spee.ch is a single-serving site that reads and publishes images and videos to a
 	* create your `speechConfig.js` file
 	  * copy `speechConfig.js.example` and name it `speechConfig.js`
 	  * replace the `null` values in the config file with the appropriate values for your environement
-	* to start the server, from your command line run `node serverindex.js`
-		* To run hot, use `nodemon` instead of `node`
+	* to start the server, from your command line run `node serverBundle.js`
 * visit [localhost:3000](http://localhost:3000)
 
 ## Tests

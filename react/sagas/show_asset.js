@@ -4,7 +4,7 @@ import { addRequestToRequestList, onRequestError, addAssetToAssetList } from 'ac
 import { getLongClaimId, getShortId, getClaimData } from 'api/assetApi';
 import { selectShowState } from 'selectors/show';
 
-function* newAssetRequest (action) {
+function * newAssetRequest (action) {
   const { requestId, name, modifier } = action.data;
   const state = yield select(selectShowState);
   // is this an existing request?
@@ -52,6 +52,6 @@ function* newAssetRequest (action) {
   yield put(onRequestError(null));
 };
 
-export function* watchNewAssetRequest () {
+export function * watchNewAssetRequest () {
   yield takeLatest(actions.ASSET_REQUEST_NEW, newAssetRequest);
 };

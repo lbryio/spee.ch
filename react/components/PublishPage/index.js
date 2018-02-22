@@ -6,9 +6,9 @@ class PublishPage extends React.Component {
   render () {
     return (
       <div className={'row row--tall flex-container--column'}>
-        <NavBar/>
+        <NavBar />
         <div className={'row row--tall row--padded flex-container--column'}>
-          <PublishTool/>
+          <PublishTool />
         </div>
       </div>
     );
