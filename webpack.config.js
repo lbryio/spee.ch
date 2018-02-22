@@ -41,7 +41,7 @@ module.exports = [
       __dirname: false,
     },
     externals: [nodeExternals()],
-    entry    : ['./server.js'],
+    entry    : ['babel-polyfill', 'whatwg-fetch', './server.js'],
     output   : {
       path      : Path.resolve(__dirname),
       publicPath: '/',

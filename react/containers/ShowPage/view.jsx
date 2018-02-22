@@ -3,10 +3,15 @@ import ErrorPage from 'components/ErrorPage';
 import ShowAssetLite from 'components/ShowAssetLite';
 import ShowAssetDetails from 'components/ShowAssetDetails';
 import ShowChannel from 'components/ShowChannel';
+import { handleShowPageUri } from 'actions/show';
 
 import { CHANNEL, ASSET_LITE, ASSET_DETAILS } from 'constants/show_request_types';
 
 class ShowPage extends React.Component {
+  static fetchData (store, match) {
+    console.log('the store:', store);
+    return store.dispatch(handleShowPageUri(match.params));
+  }
   componentDidMount () {
     this.props.handleShowPageUri(this.props.match.params);
   }

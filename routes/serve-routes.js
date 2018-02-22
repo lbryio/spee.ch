@@ -1,13 +1,13 @@
 const { sendGAServeEvent } = require('../helpers/googleAnalytics');
-
 const { determineResponseType, flipClaimNameAndIdForBackwardsCompatibility, logRequestData, getClaimIdAndServeAsset } = require('../helpers/serveHelpers.js');
 const lbryUri = require('../helpers/lbryUri.js');
-
+const handleShowRender = require('../helpers/handleShowRender.jsx');
 const SERVE = 'SERVE';
 
 module.exports = (app) => {
   // route to serve a specific asset using the channel or claim id
-  app.get('/:identifier/:claim', ({ headers, ip, originalUrl, params }, res) => {
+  app.get('/:identifier/:claim', (req, res) => {
+    const { headers, ip, originalUrl, params } = req;
     // decide if this is a show request
     let hasFileExtension;
     try {
@@ -17,7 +17,8 @@ module.exports = (app) => {
     }
     let responseType = determineResponseType(hasFileExtension, headers);
     if (responseType !== SERVE) {
-      return res.status(200).render('index');
+      // return res.status(200).render('index');
+      return handleShowRender(req, res);
     }
     // handle serve request
     // send google analytics

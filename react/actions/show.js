@@ -4,6 +4,7 @@ import { CHANNEL, ASSET_LITE, ASSET_DETAILS } from 'constants/show_request_types
 
 // basic request parsing
 export function handleShowPageUri (params) {
+  console.log('dispatching handleShowpageUri');
   return {
     type: actions.HANDLE_SHOW_URI,
     data: params,

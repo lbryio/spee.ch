@@ -3,7 +3,7 @@ import { renderToString } from 'react-dom/server';
 import { createStore } from 'redux';
 import Reducer from '../react/reducers';
 import { Provider } from 'react-redux';
-import StaticRouter from 'react-router-dom/StaticRouter';
+import { StaticRouter } from 'react-router-dom';
 import GAListener from '../react/components/GAListener';
 import App from '../react/app';
 import renderFullPage from './renderFullPage.js';
@@ -28,7 +28,7 @@ module.exports = (req, res) => {
   // check for a redirect
   if (context.url) {
     // Somewhere a `<Redirect>` was rendered
-    res.redirect(301, context.url);
+    return res.redirect(301, context.url);
   } else {
     // we're good, send the response
   }
