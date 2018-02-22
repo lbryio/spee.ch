@@ -8,7 +8,6 @@ class AssetDisplay extends React.Component {
     this.props.onFileRequest(name, claimId);
   }
   render () {
-    console.log('rendering assetdisplay', this.props);
     const { status, error, asset: { claimData: { name, claimId, contentType, fileExt, thumbnail } } } = this.props;
     return (
       <div id="asset-display-component">
