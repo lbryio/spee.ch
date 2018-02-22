@@ -3,8 +3,7 @@ import * as actions from 'constants/show_action_types';
 import { CHANNEL, ASSET_LITE, ASSET_DETAILS } from 'constants/show_request_types';
 
 // basic request parsing
-export function handleShowPageUri (params) {
-  console.log('dispatching handleShowpageUri');
+export function onHandleShowPageUri (params) {
   return {
     type: actions.HANDLE_SHOW_URI,
     data: params,
@@ -13,7 +12,7 @@ export function handleShowPageUri (params) {
 
 export function onRequestError (error) {
   return {
-    type: actions.REQUEST_UPDATE_ERROR,
+    type: actions.REQUEST_ERROR,
     data: error,
   };
 };
@@ -43,6 +42,16 @@ export function onNewAssetRequest (name, id, channelName, channelId, extension) 
           id  : channelId,
         },
       },
+    },
+  };
+};
+
+export function onRequestUpdate (requestType, requestId) {
+  return {
+    type: actions.REQUEST_UPDATE,
+    data: {
+      requestType,
+      requestId,
     },
   };
 };

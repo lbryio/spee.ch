@@ -1,10 +1,14 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
 import * as actions from 'constants/show_action_types';
 import { onRequestError, onNewChannelRequest, onNewAssetRequest } from 'actions/show';
+import { newAssetRequest } from 'sagas/show_asset';
+import { newChannelRequest } from 'sagas/show_channel';
 import lbryUri from 'utils/lbryUri';
 
 function * parseAndUpdateIdentifierAndClaim (modifier, claim) {
   console.log('parseAndUpdateIdentifierAndClaim');
+  console.log('modifier:', modifier);
+  console.log('claim:', claim);
   // this is a request for an asset
   // claim will be an asset claim
   // the identifier could be a channel or a claim id
@@ -17,9 +21,9 @@ function * parseAndUpdateIdentifierAndClaim (modifier, claim) {
   }
   // trigger an new action to update the store
   if (isChannel) {
-    return yield put(onNewAssetRequest(claimName, null, channelName, channelClaimId, extension));
+    return yield call(newAssetRequest, onNewAssetRequest(claimName, null, channelName, channelClaimId, extension));
   };
-  yield put(onNewAssetRequest(claimName, claimId, null, null, extension));
+  yield call(newAssetRequest, onNewAssetRequest(claimName, claimId, null, null, extension));
 }
 function * parseAndUpdateClaimOnly (claim) {
   console.log('parseAndUpdateIdentifierAndClaim');
@@ -34,7 +38,7 @@ function * parseAndUpdateClaimOnly (claim) {
   // trigger an new action to update the store
   // return early if this request is for a channel
   if (isChannel) {
-    return yield put(onNewChannelRequest(channelName, channelClaimId));
+    return yield call(newChannelRequest, onNewChannelRequest(channelName, channelClaimId));
   }
   // if not for a channel, parse the claim request
   let claimName, extension;
@@ -43,11 +47,12 @@ function * parseAndUpdateClaimOnly (claim) {
   } catch (error) {
     return yield put(onRequestError(error.message));
   }
-  yield put(onNewAssetRequest(claimName, null, null, null, extension));
+  yield call(newAssetRequest, onNewAssetRequest(claimName, null, null, null, extension));
 }
 
-function * handleShowPageUri (action) {
+export function * handleShowPageUri (action) {
   console.log('handleShowPageUri');
+  console.log('action:', action);
   const { identifier, claim } = action.data;
   if (identifier) {
     return yield call(parseAndUpdateIdentifierAndClaim, identifier, claim);
