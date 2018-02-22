@@ -25,6 +25,14 @@ module.exports = (req, res) => {
     </Provider>
   );
 
+  // check for a redirect
+  if (context.url) {
+    // Somewhere a `<Redirect>` was rendered
+    res.redirect(301, context.url);
+  } else {
+    // we're good, send the response
+  }
+
   // get the initial state from our Redux store
   const preloadedState = store.getState();
 
