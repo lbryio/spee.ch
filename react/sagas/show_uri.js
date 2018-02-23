@@ -7,8 +7,6 @@ import lbryUri from 'utils/lbryUri';
 
 function * parseAndUpdateIdentifierAndClaim (modifier, claim) {
   console.log('parseAndUpdateIdentifierAndClaim');
-  console.log('modifier:', modifier);
-  console.log('claim:', claim);
   // this is a request for an asset
   // claim will be an asset claim
   // the identifier could be a channel or a claim id

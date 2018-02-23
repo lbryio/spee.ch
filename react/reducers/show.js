@@ -26,7 +26,6 @@ export default function (state = initialState, action) {
         }),
       });
     case actions.REQUEST_UPDATE:
-      console.log('REQUEST UPDATE');
       return Object.assign({}, state, {
         request: Object.assign({}, state.request, {
           type: action.data.requestType,
