@@ -6,12 +6,13 @@
   "scripts": {
     "test": "mocha --recursive",
     "test-all": "mocha --recursive",
-    "start": "nodemon server.js",
+    "start": "server.js",
     "lint": "eslint .",
     "fix": "eslint . --fix",
     "precommit": "eslint .",
     "babel": "babel",
-    "webpack": "webpack"
+    "build-dev": "webpack",
+    "build-production": "webpack"
   },
   "repository": {
     "type": "git",
@@ -89,6 +90,7 @@
     "nodemon": "^1.15.1",
     "redux-devtools": "^3.4.1",
     "regenerator-transform": "^0.12.3",
-    "webpack": "^3.10.0"
+    "webpack": "^3.10.0",
+    "webpack-merge": "^4.1.2"
   }
 }

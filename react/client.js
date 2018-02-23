@@ -24,10 +24,8 @@ const reduxMiddleware = window.__REDUX_DEVTOOLS_EXTENSION__ ? compose(middleware
 // create teh store
 let store;
 if (preloadedState) {
-  console.log('initial load: preloaded state found');
   store = createStore(Reducer, preloadedState, reduxMiddleware);
 } else {
-  console.log('initial load: no preloaded state found');
   store = createStore(Reducer, reduxMiddleware);
 }
 
