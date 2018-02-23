@@ -41,11 +41,11 @@ module.exports = [
       __dirname: false,
     },
     externals: [nodeExternals()],
-    entry    : ['babel-polyfill', 'whatwg-fetch', './server.js'],
+    entry    : ['babel-polyfill', 'whatwg-fetch', './index.js'],
     output   : {
       path      : Path.resolve(__dirname),
       publicPath: '/',
-      filename  : 'serverBundle.js',
+      filename  : 'server.js',
     },
     watch : true,
     module: {
