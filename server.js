@@ -3,7 +3,6 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const expressHandlebars = require('express-handlebars');
 const Handlebars = require('handlebars');
-const handlebarsHelpers = require('./helpers/handlebarsHelpers.js');
 const { populateLocalsDotUser, serializeSpeechUser, deserializeSpeechUser } = require('./helpers/authHelpers.js');
 const config = require('./config/speechConfig.js');
 const logger = require('winston');
@@ -53,9 +52,8 @@ app.use(passport.session());
 
 // configure handlebars & register it with express app
 const hbs = expressHandlebars.create({
-  defaultLayout: 'main', // sets the default layout
+  defaultLayout: 'embed', // sets the default layout
   handlebars   : Handlebars, // includes basic handlebars for access to that library
-  helpers      : handlebarsHelpers,  // custom defined helpers
 });
 app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');

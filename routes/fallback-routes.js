@@ -1,7 +1,9 @@
+const handlePageRender = require('../helpers/handlePageRender.jsx');
+
 module.exports = app => {
   // a catch-all route if someone visits a page that does not exist
-  app.use('*', ({ originalUrl, ip }, res) => {
+  app.use('*', (req, res) => {
     // send response
-    res.status(404).render('404');
+    handlePageRender(req, res);
   });
 };
