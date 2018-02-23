@@ -12,11 +12,11 @@ const { site: { title, host } } = require('../../../config/speechConfig.js');
 class ShowAssetDetails extends React.Component {
   render () {
     const { asset } = this.props;
-    let channelName, certificateId, name, claimId;
-    if (asset.claimData) {
-      ({ channelName, certificateId, name, claimId } = asset.claimData);
-    };
     if (asset) {
+      let channelName, certificateId, name, claimId;
+      if (asset.claimData) {
+        ({ channelName, certificateId, name, claimId } = asset.claimData);
+      };
       return (
         <div>
           <Helmet>
