@@ -1,30 +1,24 @@
 import React from 'react';
-import Helmet from 'react-helmet';
+import SEO from 'components/SEO';
 import OpenGraphTags from 'components/OpenGraphTags';
 import { Link } from 'react-router-dom';
 import AssetDisplay from 'components/AssetDisplay';
-
-const { site: { title, host } } = require('../../../config/speechConfig.js');
+import { createPageTitle } from 'utils/pageTitle';
+import { createAssetCanonicalLink } from 'utils/canonicalLink';
+import { createAssetMetaTags } from 'utils/metaTags';
 
 class ShowLite extends React.Component {
   render () {
     const { asset } = this.props;
     if (asset) {
-      let channelName, certificateId, name, claimId, fileExt;
-      if (asset.claimData) {
-        ({ channelName, certificateId, name, claimId, fileExt } = asset.claimData);
-      };
+      const { name, claimId } = asset.claimData;
+      const pageTitle = createPageTitle(name);
+      const canonicalLink = createAssetCanonicalLink(asset);
+      const metaTags = createAssetMetaTags(asset);
       return (
         <div className='row row--tall flex-container--column flex-container--center-center'>
-          <Helmet>
-            <title>{title} - {name}</title>
-            {channelName ? (
-              <link rel='canonical' href={`${host}/${channelName}:${certificateId}/${name}.${fileExt}`} />
-            ) : (
-              <link rel='canonical' href={`${host}/${claimId}/${name}.${fileExt}`} />
-            )}
-            <OpenGraphTags />
-          </Helmet>
+          <SEO pageTitle={pageTitle} canonicalLink={canonicalLink} metaTags={metaTags} />
+          <OpenGraphTags />
           <div>
             <AssetDisplay />
             <Link id='asset-boilerpate' className='link--primary fine-print' to={`/${claimId}/${name}`}>hosted

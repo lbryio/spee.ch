@@ -1,18 +1,19 @@
 import React from 'react';
-import Helmet from 'react-helmet';
+import SEO from 'components/SEO';
 import NavBar from 'containers/NavBar';
 import PublishTool from 'containers/PublishTool';
-
-const { site: { title, host } } = require('../../../config/speechConfig.js');
+import { createPageTitle } from 'utils/pageTitle';
+import { createBasicCanonicalLink } from 'utils/canonicalLink';
+import { createBasicMetaTags } from 'utils/metaTags';
 
 class HomePage extends React.Component {
   render () {
+    const pageTitle = createPageTitle();
+    const canonicalLink = createBasicCanonicalLink();
+    const metaTags = createBasicMetaTags();
     return (
       <div className={'row row--tall flex-container--column'}>
-        <Helmet>
-          <title>{title}</title>
-          <link rel='canonical' href={`${host}/`} />
-        </Helmet>
+        <SEO pageTitle={pageTitle} canonicalLink={canonicalLink} metaTags={metaTags} />
         <NavBar />
         <div className={'row row--tall row--padded flex-container--column'}>
           <PublishTool />

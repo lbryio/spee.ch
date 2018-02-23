@@ -7,6 +7,7 @@ import { StaticRouter } from 'react-router-dom';
 import GAListener from '../react/components/GAListener';
 import App from '../react/app';
 import renderFullPage from './renderFullPage.js';
+import Helmet from 'react-helmet';
 
 module.exports = (req, res) => {
   let context = {};
@@ -25,6 +26,9 @@ module.exports = (req, res) => {
     </Provider>
   );
 
+  // get head tags from helmet
+  const helmet = Helmet.renderStatic();
+
   // check for a redirect
   if (context.url) {
     // Somewhere a `<Redirect>` was rendered
@@ -37,5 +41,5 @@ module.exports = (req, res) => {
   const preloadedState = store.getState();
 
   // send the rendered page back to the client
-  res.send(renderFullPage(html, preloadedState));
+  res.send(renderFullPage(helmet, html, preloadedState));
 };

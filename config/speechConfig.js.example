@@ -26,6 +26,7 @@ module.exports = {
     title: 'Spee.ch',
     name : 'Spee.ch',
     host : 'https://spee.ch',
+    description: 'Open-source, decentralized image and video sharing.'
   },
   claim: {
     defaultTitle      : 'Spee.ch',

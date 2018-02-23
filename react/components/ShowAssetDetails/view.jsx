@@ -1,33 +1,25 @@
 import React from 'react';
-import Helmet from 'react-helmet';
-import OpenGraphTags from 'components/OpenGraphTags';
+import SEO from 'components/SEO';
 import NavBar from 'containers/NavBar';
 import ErrorPage from 'components/ErrorPage';
 import AssetTitle from 'components/AssetTitle';
 import AssetDisplay from 'components/AssetDisplay';
 import AssetInfo from 'components/AssetInfo';
-
-const { site: { title, host } } = require('../../../config/speechConfig.js');
+import { createPageTitle } from 'utils/pageTitle';
+import { createAssetCanonicalLink } from 'utils/canonicalLink';
+import { createAssetMetaTags } from 'utils/metaTags';
 
 class ShowAssetDetails extends React.Component {
   render () {
     const { asset } = this.props;
     if (asset) {
-      let channelName, certificateId, name, claimId;
-      if (asset.claimData) {
-        ({ channelName, certificateId, name, claimId } = asset.claimData);
-      };
+      const { name } = asset.claimData;
+      const pageTitle = createPageTitle(`${name} - details`);
+      const canonicalLink = createAssetCanonicalLink(asset);
+      const metaTags = createAssetMetaTags(asset);
       return (
         <div>
-          <Helmet>
-            <title>{title} - {name} - details</title>
-            {channelName ? (
-              <link rel='canonical' href={`${host}/${channelName}:${certificateId}/${name}`} />
-            ) : (
-              <link rel='canonical' href={`${host}/${claimId}/${name}`} />
-            )}
-          </Helmet>
-          <OpenGraphTags />
+          <SEO pageTitle={pageTitle} canonicalLink={canonicalLink} metaTags={metaTags} />
           <NavBar />
           <div className='row row--tall row--padded'>
             <div className='column column--10'>

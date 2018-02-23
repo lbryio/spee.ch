@@ -1,22 +1,23 @@
 import React from 'react';
-import Helmet from 'react-helmet';
+import SEO from 'components/SEO';
 import ErrorPage from 'components/ErrorPage';
 import NavBar from 'containers/NavBar';
 import ChannelClaimsDisplay from 'containers/ChannelClaimsDisplay';
-
-const { site: { title, host } } = require('../../../config/speechConfig.js');
+import { createPageTitle } from 'utils/pageTitle';
+import { createChannelCanonicalLink } from 'utils/canonicalLink';
+import { createChannelMetaTags } from 'utils/metaTags';
 
 class ShowChannel extends React.Component {
   render () {
     const { channel } = this.props;
     if (channel) {
       const { name, longId, shortId } = channel;
+      const pageTitle = createPageTitle(`${name}`);
+      const canonicalLink = createChannelCanonicalLink(channel);
+      const metaTags = createChannelMetaTags(channel);
       return (
         <div>
-          <Helmet>
-            <title>{title} - {name}</title>
-            <link rel='canonical' href={`${host}/${name}:${longId}`} />
-          </Helmet>
+          <SEO pageTitle={pageTitle} canonicalLink={canonicalLink} metaTags={metaTags} />
           <NavBar />
           <div className='row row--tall row--padded'>
             <div className='column column--10'>

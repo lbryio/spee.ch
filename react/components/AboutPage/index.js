@@ -1,17 +1,18 @@
 import React from 'react';
 import NavBar from 'containers/NavBar';
-import Helmet from 'react-helmet';
-
-const { site: { title, host } } = require('../../../config/speechConfig.js');
+import SEO from 'components/SEO';
+import { createPageTitle } from 'utils/pageTitle';
+import { createBasicCanonicalLink } from 'utils/canonicalLink';
+import { createBasicMetaTags } from 'utils/metaTags';
 
 class AboutPage extends React.Component {
   render () {
+    const pageTitle = createPageTitle('About');
+    const canonicalLink = createBasicCanonicalLink('about');
+    const metaTags = createBasicMetaTags();
     return (
       <div>
-        <Helmet>
-          <title>{title} - About</title>
-          <link rel='canonical' href={`${host}/about`} />
-        </Helmet>
+        <SEO pageTitle={pageTitle} canonicalLink={canonicalLink} metaTags={metaTags} />
         <NavBar />
         <div className='row row--padded'>
           <div className='column column--5 column--med-10 align-content-top'>

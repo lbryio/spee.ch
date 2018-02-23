@@ -74,7 +74,7 @@ class OpenGraphTags extends React.Component {
             {/* image twitter tags */}
             <meta name='twitter:card' content='summary_large_image' />
           </Helmet>
-        )};
+        )}
       </div>
     );
   }

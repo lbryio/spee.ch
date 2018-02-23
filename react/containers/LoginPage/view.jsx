@@ -1,11 +1,12 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import Helmet from 'react-helmet';
+import SEO from 'components/SEO';
 import NavBar from 'containers/NavBar';
 import ChannelLoginForm from 'containers/ChannelLoginForm';
 import ChannelCreateForm from 'containers/ChannelCreateForm';
-
-const { site: { title, host } } = require('../../../config/speechConfig.js');
+import { createPageTitle } from 'utils/pageTitle';
+import { createBasicCanonicalLink } from 'utils/canonicalLink';
+import { createBasicMetaTags } from 'utils/metaTags';
 
 class LoginPage extends React.Component {
   componentWillReceiveProps (newProps) {
@@ -16,12 +17,12 @@ class LoginPage extends React.Component {
     }
   }
   render () {
+    const pageTitle = createPageTitle('Login');
+    const canonicalLink = createBasicCanonicalLink('login');
+    const metaTags = createBasicMetaTags();
     return (
       <div>
-        <Helmet>
-          <title>{title} - Login</title>
-          <link rel='canonical' href={`${host}/login`} />
-        </Helmet>
+        <SEO pageTitle={pageTitle} canonicalLink={canonicalLink} metaTags={metaTags} />
         <NavBar />
         <div className='row row--padded'>
           <div className='column column--5 column--med-10 align-content-top'>

@@ -50,7 +50,6 @@ function * parseAndUpdateClaimOnly (claim) {
 
 export function * handleShowPageUri (action) {
   console.log('handleShowPageUri');
-  console.log('action:', action);
   const { identifier, claim } = action.data;
   if (identifier) {
     return yield call(parseAndUpdateIdentifierAndClaim, identifier, claim);
