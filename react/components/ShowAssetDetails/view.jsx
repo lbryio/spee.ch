@@ -1,5 +1,6 @@
 import React from 'react';
 import Helmet from 'react-helmet';
+import OpenGraphTags from 'components/OpenGraphTags';
 import NavBar from 'containers/NavBar';
 import ErrorPage from 'components/ErrorPage';
 import AssetTitle from 'components/AssetTitle';
@@ -26,6 +27,7 @@ class ShowAssetDetails extends React.Component {
               <link rel='canonical' href={`${host}/${claimId}/${name}`} />
             )}
           </Helmet>
+          <OpenGraphTags />
           <NavBar />
           <div className='row row--tall row--padded'>
             <div className='column column--10'>

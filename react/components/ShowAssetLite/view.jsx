@@ -1,5 +1,6 @@
 import React from 'react';
 import Helmet from 'react-helmet';
+import OpenGraphTags from 'components/OpenGraphTags';
 import { Link } from 'react-router-dom';
 import AssetDisplay from 'components/AssetDisplay';
 
@@ -22,6 +23,7 @@ class ShowLite extends React.Component {
             ) : (
               <link rel='canonical' href={`${host}/${claimId}/${name}.${fileExt}`} />
             )}
+            <OpenGraphTags />
           </Helmet>
           <div>
             <AssetDisplay />

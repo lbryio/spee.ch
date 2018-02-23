@@ -9,6 +9,7 @@ module.exports = (helmet, html, preloadedState) => {
             <meta http-equiv="X-UA-Compatible" content="ie=edge">
             <!--helmet-->
             ${helmet.title.toString()}
+            ${helmet.meta.toString()}
             ${helmet.link.toString()}
             <!--style sheets-->
             <link rel="stylesheet" href="/assets/css/reset.css" type="text/css">
