@@ -1,10 +1,17 @@
 import React from 'react';
 import NavBar from 'containers/NavBar';
+import Helmet from 'react-helmet';
+
+const { site: { title, host } } = require('../../../config/speechConfig.js');
 
 class AboutPage extends React.Component {
   render () {
     return (
       <div>
+        <Helmet>
+          <title>{title} - About</title>
+          <link rel='canonical' href={`${host}/about`} />
+        </Helmet>
         <NavBar />
         <div className='row row--padded'>
           <div className='column column--5 column--med-10 align-content-top'>

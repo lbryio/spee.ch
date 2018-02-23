@@ -1,5 +1,4 @@
-import Request from 'utils/request';
-import request from '../utils/request';
+import request from 'utils/request';
 const { site: { host } } = require('../../config/speechConfig.js');
 
 export function getChannelData (name, id) {
@@ -12,6 +11,6 @@ export function getChannelData (name, id) {
 export function getChannelClaims (name, longId, page) {
   console.log('getting channel claims for channel:', name, longId);
   if (!page) page = 1;
-  const url = `${host}/api/channel/claims/${name}/${longId}/${page}`;
+  const url = `/api/channel/claims/${name}/${longId}/${page}`;
   return Request(url);
 };

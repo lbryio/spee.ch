@@ -1,6 +1,4 @@
-const { site } = require('../config/speechConfig.js');
-
-module.exports = (html, preloadedState) => {
+module.exports = (helmet, html, preloadedState) => {
   // take the html and preloadedState and return the full page
   return `
     <!DOCTYPE html>
@@ -9,7 +7,10 @@ module.exports = (html, preloadedState) => {
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
             <meta http-equiv="X-UA-Compatible" content="ie=edge">
-            <title>${site.title}</title>
+            <!--helmet-->
+            ${helmet.title.toString()}
+            ${helmet.link.toString()}
+            <!--style sheets-->
             <link rel="stylesheet" href="/assets/css/reset.css" type="text/css">
             <link rel="stylesheet" href="/assets/css/general.css" type="text/css">
             <link rel="stylesheet" href="/assets/css/mediaQueries.css" type="text/css">

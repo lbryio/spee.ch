@@ -12,6 +12,8 @@ import { call } from 'redux-saga/effects';
 import { handleShowPageUri } from '../react/sagas/show_uri';
 import { onHandleShowPageUri } from '../react/actions/show';
 
+import Helmet from 'react-helmet';
+
 const returnSagaWithParams = (saga, params) => {
   return function * () {
     yield call(saga, params);
@@ -49,6 +51,9 @@ module.exports = (req, res) => {
         </Provider>
       );
 
+      // get head tags from helmet
+      const helmet = Helmet.renderStatic();
+
       // check for a redirect
       if (context.url) {
         console.log('REDIRECTING:', context.url);
@@ -61,6 +66,6 @@ module.exports = (req, res) => {
       const preloadedState = store.getState();
 
       // send the rendered page back to the client
-      res.send(renderFullPage(html, preloadedState));
+      res.send(renderFullPage(helmet, html, preloadedState));
     });
 };
