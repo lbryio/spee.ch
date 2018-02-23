@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 const AssetPreview = ({ name, claimId, fileExt, contentType }) => {
   const directSourceLink = `${claimId}/${name}.${fileExt}`;
-  const showUrlLink = `${claimId}/${name}`;
+  const showUrlLink = `/${claimId}/${name}`;
   return (
     <div className='asset-holder'>
       <Link to={showUrlLink} >
