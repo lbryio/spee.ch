@@ -6,13 +6,13 @@
   "scripts": {
     "test": "mocha --recursive",
     "test-all": "mocha --recursive",
-    "start": "server.js",
+    "start": "node server.js",
     "lint": "eslint .",
     "fix": "eslint . --fix",
     "precommit": "eslint .",
     "babel": "babel",
-    "build-dev": "webpack",
-    "build-production": "webpack"
+    "build-dev": "webpack --config webpack.dev.js",
+    "build-prod": "webpack --config webpack.prod.js"
   },
   "repository": {
     "type": "git",

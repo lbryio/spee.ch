@@ -1,6 +1,5 @@
 import React from 'react';
 import SEO from 'components/SEO';
-import OpenGraphTags from 'components/OpenGraphTags';
 import { Link } from 'react-router-dom';
 import AssetDisplay from 'components/AssetDisplay';
 import { createPageTitle } from 'utils/pageTitle';
@@ -18,7 +17,6 @@ class ShowLite extends React.Component {
       return (
         <div className='row row--tall flex-container--column flex-container--center-center'>
           <SEO pageTitle={pageTitle} canonicalLink={canonicalLink} metaTags={metaTags} />
-          <OpenGraphTags />
           <div>
             <AssetDisplay />
             <Link id='asset-boilerpate' className='link--primary fine-print' to={`/${claimId}/${name}`}>hosted
