@@ -1,14 +1,14 @@
 const Path = require('path');
-
 const REACT_ROOT = Path.resolve(__dirname, 'react/');
 
 module.exports = {
-  entry : ['babel-polyfill', 'whatwg-fetch', './react/index.js'],
+  target: 'web',
+  entry : ['babel-polyfill', 'whatwg-fetch', './react/client.js'],
   output: {
-    path    : Path.join(__dirname, '/public/bundle/'),
-    filename: 'bundle.js',
+    path      : Path.join(__dirname, 'public/bundle/'),
+    publicPath: 'public/bundle/',
+    filename  : 'bundle.js',
   },
-  watch : true,
   module: {
     loaders: [
       {

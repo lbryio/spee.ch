@@ -3,11 +3,9 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const expressHandlebars = require('express-handlebars');
 const Handlebars = require('handlebars');
-const handlebarsHelpers = require('./helpers/handlebarsHelpers.js');
 const { populateLocalsDotUser, serializeSpeechUser, deserializeSpeechUser } = require('./helpers/authHelpers.js');
 const config = require('./config/speechConfig.js');
 const logger = require('winston');
-const { getDownloadDirectory } = require('./helpers/lbryApi');
 const helmet = require('helmet');
 const PORT = 3000; // set port
 const app = express(); // create an Express application
@@ -54,9 +52,8 @@ app.use(passport.session());
 
 // configure handlebars & register it with express app
 const hbs = expressHandlebars.create({
-  defaultLayout: 'main', // sets the default layout
+  defaultLayout: 'embed', // sets the default layout
   handlebars   : Handlebars, // includes basic handlebars for access to that library
-  helpers      : handlebarsHelpers,  // custom defined helpers
 });
 app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
@@ -67,19 +64,12 @@ app.use(populateLocalsDotUser);
 // start the server
 db.sequelize
   .sync() // sync sequelize
-  .then(() => {  // get the download directory from the daemon
-    logger.info('Retrieving daemon download directory...');
-    return getDownloadDirectory();
-  })
-  .then(hostedContentPath => {
-    // add the hosted content folder at a static path
-    app.use('/media', express.static(hostedContentPath));
-    // require routes
+  .then(() => { // require routes
     require('./routes/auth-routes.js')(app);
     require('./routes/api-routes.js')(app);
     require('./routes/page-routes.js')(app);
     require('./routes/serve-routes.js')(app);
-    require('./routes/home-routes.js')(app);
+    require('./routes/fallback-routes.js')(app);
     const http = require('http');
     return http.Server(app);
   })

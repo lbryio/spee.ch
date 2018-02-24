@@ -1,14 +1,16 @@
 import { call, put, select, takeLatest } from 'redux-saga/effects';
 import * as actions from 'constants/show_action_types';
-import { addRequestToRequestList, onRequestError, addAssetToAssetList } from 'actions/show';
+import { addRequestToRequestList, onRequestError, onRequestUpdate, addAssetToAssetList } from 'actions/show';
 import { getLongClaimId, getShortId, getClaimData } from 'api/assetApi';
 import { selectShowState } from 'selectors/show';
 
-function* newAssetRequest (action) {
-  const { requestId, name, modifier } = action.data;
-  const state = yield select(selectShowState);
+export function * newAssetRequest (action) {
+  const { requestType, requestId, name, modifier } = action.data;
+  // put an action to update the request in redux
+  yield put(onRequestUpdate(requestType, requestId));
   // is this an existing request?
   // If this uri is in the request list, it's already been fetched
+  const state = yield select(selectShowState);
   if (state.requestList[requestId]) {
     console.log('that request already exists in the request list!');
     return null;
@@ -52,6 +54,6 @@ function* newAssetRequest (action) {
   yield put(onRequestError(null));
 };
 
-export function* watchNewAssetRequest () {
+export function * watchNewAssetRequest () {
   yield takeLatest(actions.ASSET_REQUEST_NEW, newAssetRequest);
 };

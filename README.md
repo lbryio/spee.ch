@@ -1,5 +1,5 @@
-# spee.ch
-spee.ch is a single-serving site that reads and publishes images and videos to and from the [LBRY](https://lbry.io/) blockchain.
+# Spee.ch
+Spee.ch is a web app that reads and publishes images and videos to and from the [LBRY](https://lbry.io/) blockchain.
 
 ## how to run this repository locally
 * start mysql
@@ -16,9 +16,9 @@ spee.ch is a single-serving site that reads and publishes images and videos to a
 	* run `npm install`
 	* create your `speechConfig.js` file
 	  * copy `speechConfig.js.example` and name it `speechConfig.js`
-	  * replace the `null` values in the config file with the appropriate values for your environement
-	* to start the server, from your command line run `node speech.js`
-		* To run hot, use `nodemon` instead of `node`
+	  * replace the `null` values in the config file with the appropriate values for your environment
+	* build the app by running `npm run build-prod`
+	* to start the server, run `npm run start`
 * visit [localhost:3000](http://localhost:3000)
 
 ## Tests

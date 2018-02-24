@@ -19,14 +19,13 @@ const initialState = {
 export default function (state = initialState, action) {
   switch (action.type) {
     // handle request
-    case actions.REQUEST_UPDATE_ERROR:
+    case actions.REQUEST_ERROR:
       return Object.assign({}, state, {
         request: Object.assign({}, state.request, {
           error: action.data,
         }),
       });
-    case actions.CHANNEL_REQUEST_NEW:
-    case actions.ASSET_REQUEST_NEW:
+    case actions.REQUEST_UPDATE:
       return Object.assign({}, state, {
         request: Object.assign({}, state.request, {
           type: action.data.requestType,

@@ -318,15 +318,15 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
       this.findOne({
         where: {name, claimId},
       })
-      .then(result => {
-        if (!result) {
-          return resolve(null);
-        };
-        resolve(claimId);
-      })
-      .catch(error => {
-        reject(error);
-      });
+        .then(result => {
+          if (!result) {
+            return resolve(null);
+          };
+          resolve(claimId);
+        })
+        .catch(error => {
+          reject(error);
+        });
     });
   };
 

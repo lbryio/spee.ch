@@ -1,14 +1,16 @@
 import {call, put, select, takeLatest} from 'redux-saga/effects';
 import * as actions from 'constants/show_action_types';
-import { addNewChannelToChannelList, addRequestToRequestList, onRequestError, updateChannelClaims } from 'actions/show';
+import { addNewChannelToChannelList, addRequestToRequestList, onRequestError, onRequestUpdate, updateChannelClaims } from 'actions/show';
 import { getChannelClaims, getChannelData } from 'api/channelApi';
 import { selectShowState } from 'selectors/show';
 
-function* getNewChannelAndUpdateChannelList (action) {
-  const { requestId, channelName, channelId } = action.data;
-  const state = yield select(selectShowState);
+export function * newChannelRequest (action) {
+  const { requestType, requestId, channelName, channelId } = action.data;
+  // put an action to update the request in redux
+  yield put(onRequestUpdate(requestType, requestId));
   // is this an existing request?
   // If this uri is in the request list, it's already been fetched
+  const state = yield select(selectShowState);
   if (state.requestList[requestId]) {
     console.log('that request already exists in the request list!');
     return null;
@@ -44,11 +46,11 @@ function* getNewChannelAndUpdateChannelList (action) {
   yield put(onRequestError(null));
 }
 
-export function* watchNewChannelRequest () {
-  yield takeLatest(actions.CHANNEL_REQUEST_NEW, getNewChannelAndUpdateChannelList);
+export function * watchNewChannelRequest () {
+  yield takeLatest(actions.CHANNEL_REQUEST_NEW, newChannelRequest);
 };
 
-function* getNewClaimsAndUpdateChannel (action) {
+function * getNewClaimsAndUpdateChannel (action) {
   const { channelKey, name, longId, page } = action.data;
   let claimsData;
   try {
@@ -59,6 +61,6 @@ function* getNewClaimsAndUpdateChannel (action) {
   yield put(updateChannelClaims(channelKey, claimsData));
 }
 
-export function* watchUpdateChannelClaims () {
+export function * watchUpdateChannelClaims () {
   yield takeLatest(actions.CHANNEL_CLAIMS_UPDATE_ASYNC, getNewClaimsAndUpdateChannel);
 }

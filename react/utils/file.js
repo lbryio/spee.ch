@@ -35,4 +35,4 @@ module.exports = {
         throw new Error(file.type + ' is not a supported file type. Only, .jpeg, .png, .gif, and .mp4 files are currently supported.');
     }
   },
-}
+};

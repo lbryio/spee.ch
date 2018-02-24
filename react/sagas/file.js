@@ -4,7 +4,7 @@ import { updateFileAvailability, updateDisplayAssetError } from 'actions/show';
 import { UNAVAILABLE, AVAILABLE } from 'constants/asset_display_states';
 import { checkFileAvailability, triggerClaimGet } from 'api/fileApi';
 
-function* retrieveFile (action) {
+function * retrieveFile (action) {
   const name = action.data.name;
   const claimId = action.data.claimId;
   // see if the file is available
@@ -28,6 +28,6 @@ function* retrieveFile (action) {
   yield put(updateFileAvailability(AVAILABLE));
 };
 
-export function* watchFileIsRequested () {
+export function * watchFileIsRequested () {
   yield takeLatest(actions.FILE_REQUESTED, retrieveFile);
 };

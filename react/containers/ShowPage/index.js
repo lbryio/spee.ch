@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { handleShowPageUri } from 'actions/show';
+import { onHandleShowPageUri } from 'actions/show';
 import View from './view';
 
 const mapStateToProps = ({ show }) => {
@@ -10,7 +10,7 @@ const mapStateToProps = ({ show }) => {
 };
 
 const mapDispatchToProps = {
-  handleShowPageUri,
+  onHandleShowPageUri,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(View);

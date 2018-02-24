@@ -22,6 +22,6 @@ const mapDispatchToProps = dispatch => {
       dispatch(updateSelectedChannel(value));
     },
   };
-}
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(View);
