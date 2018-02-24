@@ -1,18 +1,12 @@
 import React from 'react';
 import NavBar from 'containers/NavBar';
 import SEO from 'components/SEO';
-import { createPageTitle } from 'utils/pageTitle';
-import { createBasicCanonicalLink } from 'utils/canonicalLink';
-import { createBasicMetaTags } from 'utils/metaTags';
 
 class AboutPage extends React.Component {
   render () {
-    const pageTitle = createPageTitle('About');
-    const canonicalLink = createBasicCanonicalLink('about');
-    const metaTags = createBasicMetaTags();
     return (
       <div>
-        <SEO pageTitle={pageTitle} canonicalLink={canonicalLink} metaTags={metaTags} />
+        <SEO pageTitle={'About'} pageUri={'about'} />
         <NavBar />
         <div className='row row--padded'>
           <div className='column column--5 column--med-10 align-content-top'>

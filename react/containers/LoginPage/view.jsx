@@ -4,9 +4,6 @@ import SEO from 'components/SEO';
 import NavBar from 'containers/NavBar';
 import ChannelLoginForm from 'containers/ChannelLoginForm';
 import ChannelCreateForm from 'containers/ChannelCreateForm';
-import { createPageTitle } from 'utils/pageTitle';
-import { createBasicCanonicalLink } from 'utils/canonicalLink';
-import { createBasicMetaTags } from 'utils/metaTags';
 
 class LoginPage extends React.Component {
   componentWillReceiveProps (newProps) {
@@ -17,12 +14,9 @@ class LoginPage extends React.Component {
     }
   }
   render () {
-    const pageTitle = createPageTitle('Login');
-    const canonicalLink = createBasicCanonicalLink('login');
-    const metaTags = createBasicMetaTags();
     return (
       <div>
-        <SEO pageTitle={pageTitle} canonicalLink={canonicalLink} metaTags={metaTags} />
+        <SEO pageTitle={'Login'} pageUri={'login'} />
         <NavBar />
         <div className='row row--padded'>
           <div className='column column--5 column--med-10 align-content-top'>

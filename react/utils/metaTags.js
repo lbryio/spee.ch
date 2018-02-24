@@ -20,7 +20,7 @@ const determineOgThumbnailContentType = (thumbnail) => {
   return '';
 };
 
-export const createBasicMetaTags = () => {
+const createBasicMetaTags = () => {
   return [
     {property: 'og:title', content: title},
     {property: 'og:url', content: host},
@@ -31,7 +31,7 @@ export const createBasicMetaTags = () => {
   ];
 };
 
-export const createChannelMetaTags = (channel) => {
+const createChannelMetaTags = (channel) => {
   const { name, longId } = channel;
   return [
     {property: 'og:title', content: `${name} on ${title}`},
@@ -43,7 +43,7 @@ export const createChannelMetaTags = (channel) => {
   ];
 };
 
-export const createAssetMetaTags = (asset) => {
+const createAssetMetaTags = (asset) => {
   const { claimData } = asset;
   const { contentType } = claimData;
   const embedUrl = `${host}/${claimData.claimId}/${claimData.name}`;
@@ -83,4 +83,14 @@ export const createAssetMetaTags = (asset) => {
     metaTags.push({property: 'twitter:card', content: 'summary_large_image'});
   }
   return metaTags;
+};
+
+export const createMetaTags = (asset, channel) => {
+  if (asset) {
+    return createAssetMetaTags(asset);
+  };
+  if (channel) {
+    return createChannelMetaTags(channel);
+  };
+  return createBasicMetaTags();
 };

@@ -7,6 +7,7 @@
     "test": "mocha --recursive",
     "test-all": "mocha --recursive",
     "start": "node server.js",
+    "start-dev": "nodemon server.js",
     "lint": "eslint .",
     "fix": "eslint . --fix",
     "precommit": "eslint .",
