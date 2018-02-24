@@ -9,18 +9,18 @@ class ShowLite extends React.Component {
     if (asset) {
       const { name, claimId } = asset.claimData;
       return (
-        <div className='row row--tall flex-container--column flex-container--center-center'>
+        <div id='show-lite-container' className='row row--tall flex-container--column flex-container--center-center'>
           <SEO pageTitle={name} asset={asset} />
-          <div>
-            <AssetDisplay />
-            <Link id='asset-boilerpate' className='link--primary fine-print' to={`/${claimId}/${name}`}>hosted
-              via Spee.ch</Link>
-          </div>
+          <AssetDisplay />
+          <Link id='asset-boilerpate' className='link--primary fine-print' to={`/${claimId}/${name}`}>hosted
+            via Spee.ch</Link>
         </div>
       );
     }
     return (
-      <p>loading asset data...</p>
+      <div className='row row--tall row--padded flex-container--column flex-container--center-center'>
+        <p>loading asset data...</p>
+      </div>
     );
   }
 };

@@ -540,17 +540,28 @@ table {
 	margin : 0px
 }
 
+/* show */
+
 .asset {
-	width: 100%;
+	max-width: 100%;
 }
 
-#show-body #asset-boilerpate {
-	display: none;
-}
-
-#showlite-body #asset-display-component {
-	max-width: 50%;
+/* show lite */
+#show-lite-container {
 	text-align: center;
+}
+
+#show-lite-container #asset-display-component {
+	max-height: calc(100vh - 3em);
+}
+
+#show-lite-container #asset-display-component .asset {
+	max-height: calc(100vh - 3em);
+	max-width: 100vw;
+}
+
+#asset-boilerplate {
+	max-height: 3em;
 }
 
 /* video */
