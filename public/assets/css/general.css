@@ -540,32 +540,39 @@ table {
 	margin : 0px
 }
 
+/* show */
+
 .asset {
-	width: 100%;
+	max-width: 100%;
 }
 
-#show-body #asset-boilerpate {
-	display: none;
-}
-
-#showlite-body #asset-display-component {
-	max-width: 50%;
-	text-align: center;
-}
-
-/* video */
-
-#video-asset {
-    background-color: #000000;
+#video {
 	cursor: pointer;
-}
-#showlite-body #video-asset {
 	background-color: #ffffff;
 	width: calc(100% - 12px - 12px - 2px);
 	margin: 6px;
 	padding: 6px;
 	border: 1px solid #d0d0d0;
 }
+
+/* show lite */
+#show-lite-container {
+	text-align: center;
+}
+
+#show-lite-container #asset-display-component {
+	max-height: calc(100vh - 3em);
+}
+
+#show-lite-container #asset-display-component .asset {
+	max-height: calc(100vh - 3em);
+	max-width: 100vw;
+}
+
+#asset-boilerplate {
+	max-height: 3em;
+}
+
 
 /* item lists */
 
