@@ -83,11 +83,11 @@ class Dropzone extends React.Component {
   }
   render () {
     return (
-      <div className="row row--tall flex-container--column">
+      <div className='row row--tall flex-container--column'>
         <form>
-          <input className="input-file" type="file" id="file_input" name="file_input" accept="video/*,image/*" onChange={this.handleFileInput} encType="multipart/form-data"/>
+          <input className='input-file' type='file' id='file_input' name='file_input' accept='video/*,image/*' onChange={this.handleFileInput} encType='multipart/form-data' />
         </form>
-        <div id="preview-dropzone" className={'row row--padded row--tall dropzone' + (this.state.dragOver ? ' dropzone--drag-over' : '')} onDrop={this.handleDrop} onDragOver={this.handleDragOver} onDragEnd={this.handleDragEnd} onDragEnter={this.handleDragEnter} onDragLeave={this.handleDragLeave} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} onClick={this.handleClick}>
+        <div id='preview-dropzone' className={'row row--padded row--tall dropzone' + (this.state.dragOver ? ' dropzone--drag-over' : '')} onDrop={this.handleDrop} onDragOver={this.handleDragOver} onDragEnd={this.handleDragEnd} onDragEnter={this.handleDragEnter} onDragLeave={this.handleDragLeave} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} onClick={this.handleClick}>
           {this.props.file ? (
             <div>
               <Preview
@@ -95,38 +95,38 @@ class Dropzone extends React.Component {
                 file={this.props.file}
                 thumbnail={this.props.thumbnail}
               />
-              <div id="dropzone-text-holder" className={'flex-container--column flex-container--center-center'}>
-              { this.state.dragOver ? (
-                <div id="dropzone-dragover">
-                  <p className="blue">Drop it.</p>
-                </div>
-              ) : (
-                null
-              )}
-              { this.state.mouseOver ? (
-                <div id="dropzone-instructions">
-                  <p className="info-message-placeholder info-message--failure" id="input-error-file-selection">{this.props.fileError}</p>
-                  <p>Drag & drop image or video here to publish</p>
-                  <p className="fine-print">OR</p>
-                  <p className="blue--underlined">CHOOSE FILE</p>
-                </div>
-              ) : (
-                null
-              )}
+              <div id='dropzone-text-holder' className={'flex-container--column flex-container--center-center'}>
+                { this.state.dragOver ? (
+                  <div id='dropzone-dragover'>
+                    <p className='blue'>Drop it.</p>
+                  </div>
+                ) : (
+                  null
+                )}
+                { this.state.mouseOver ? (
+                  <div id='dropzone-instructions'>
+                    <p className='info-message-placeholder info-message--failure' id='input-error-file-selection'>{this.props.fileError}</p>
+                    <p>Drag & drop image or video here to publish</p>
+                    <p className='fine-print'>OR</p>
+                    <p className='blue--underlined'>CHOOSE FILE</p>
+                  </div>
+                ) : (
+                  null
+                )}
               </div>
             </div>
           ) : (
-            <div id="dropzone-text-holder" className={'flex-container--column flex-container--center-center'}>
+            <div id='dropzone-text-holder' className={'flex-container--column flex-container--center-center'}>
               { this.state.dragOver ? (
-                <div id="dropzone-dragover">
-                  <p className="blue">Drop it.</p>
+                <div id='dropzone-dragover'>
+                  <p className='blue'>Drop it.</p>
                 </div>
               ) : (
-                <div id="dropzone-instructions">
-                  <p className="info-message-placeholder info-message--failure" id="input-error-file-selection">{this.props.fileError}</p>
+                <div id='dropzone-instructions'>
+                  <p className='info-message-placeholder info-message--failure' id='input-error-file-selection'>{this.props.fileError}</p>
                   <p>Drag & drop image or video here to publish</p>
-                  <p className="fine-print">OR</p>
-                  <p className="blue--underlined">CHOOSE FILE</p>
+                  <p className='fine-print'>OR</p>
+                  <p className='blue--underlined'>CHOOSE FILE</p>
                 </div>
               )}
             </div>
