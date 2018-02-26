@@ -12,13 +12,16 @@ const mapStateToProps = ({ publish }) => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onFileSelect: (file) => {
+    selectFile: (file) => {
       dispatch(selectFile(file));
       dispatch(updateError('publishSubmit', null));
     },
-    onFileError: (value) => {
+    setFileError: (value) => {
       dispatch(clearFile());
       dispatch(updateError('file', value));
+    },
+    clearFileError: () => {
+      dispatch(updateError('file', null));
     },
   };
 };

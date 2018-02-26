@@ -74,11 +74,11 @@ class Dropzone extends React.Component {
       try {
         validateFile(file); // validate the file's name, type, and size
       } catch (error) {
-        return this.props.onFileError(error.message);
+        return this.props.setFileError(error.message);
       }
       // stage it so it will be ready when the publish button is clicked
-      this.props.onFileError(null);
-      this.props.onFileSelect(file);
+      this.props.clearFileError(null);
+      this.props.selectFile(file);
     }
   }
   render () {
