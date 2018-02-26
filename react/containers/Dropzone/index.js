@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { selectFile, updateError } from 'actions/publish';
+import { selectFile, updateError, clearFile } from 'actions/publish';
 import View from './view';
 
 const mapStateToProps = ({ publish }) => {
@@ -12,12 +12,16 @@ const mapStateToProps = ({ publish }) => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onFileSelect: (file) => {
+    selectFile: (file) => {
       dispatch(selectFile(file));
       dispatch(updateError('publishSubmit', null));
     },
-    onFileError: (value) => {
+    setFileError: (value) => {
+      dispatch(clearFile());
       dispatch(updateError('file', value));
+    },
+    clearFileError: () => {
+      dispatch(updateError('file', null));
     },
   };
 };
