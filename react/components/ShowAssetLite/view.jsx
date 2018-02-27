@@ -9,7 +9,7 @@ class ShowLite extends React.Component {
     if (asset) {
       const { name, claimId } = asset.claimData;
       return (
-        <div id='show-lite-container' className='row row--tall flex-container--column flex-container--center-center'>
+        <div className='row row--tall flex-container--column flex-container--center-center show-lite-container'>
           <SEO pageTitle={name} asset={asset} />
           <AssetDisplay />
           <Link id='asset-boilerpate' className='link--primary fine-print' to={`/${claimId}/${name}`}>hosted
