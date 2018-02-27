@@ -105,7 +105,7 @@ describe('end-to-end', function () {
   });
 
   describe('publish requests', function () {
-    const publishUrl = '/api/claim-publish';
+    const publishUrl = '/api/claim/publish';
     const filePath = './test/mock-data/bird.jpeg';
     const fileName = 'byrd.jpeg';
     const channelName = testChannel;

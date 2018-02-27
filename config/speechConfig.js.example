@@ -24,11 +24,13 @@ module.exports = {
   },
   site: {
     title: 'Spee.ch',
+    name : 'Spee.ch',
     host : 'https://spee.ch',
+    description: 'Open-source, decentralized image and video sharing.'
   },
   publish: {
     thumbnailChannel: '@channelName:channelId',  // create a channel to use for thumbnail images
-  },
+  }
   claim: {
     defaultTitle      : 'Spee.ch',
     defaultThumbnail  : 'https://spee.ch/assets/img/video_thumb_default.png',

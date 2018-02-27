@@ -1,4 +1,3 @@
-const constants = require('../constants');
 const logger = require('winston');
 const fs = require('fs');
 const { site, wallet } = require('../config/speechConfig.js');
@@ -176,12 +175,5 @@ module.exports = {
       fileType: contentType,
       nsfw,
     };
-  },
-  returnPublishTimingActionType (channelName) {
-    if (channelName) {
-      return constants.PUBLISH_IN_CHANNEL_CLAIM;
-    } else {
-      return constants.PUBLISH_ANONYMOUS_CLAIM;
-    }
   },
 };

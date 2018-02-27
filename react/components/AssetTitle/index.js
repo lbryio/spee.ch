@@ -1,11 +1,14 @@
-import React from 'react';
+import { connect } from 'react-redux';
+import View from './view';
+import { selectAsset } from 'selectors/show';
 
-const AssetTitle = ({title}) => {
-  return (
-    <div>
-      <span className="text--large">{title}</span>
-    </div>
-  );
+const mapStateToProps = ({ show }) => {
+  // select title
+  const { claimData: { title } } = selectAsset(show);
+  //  return props
+  return {
+    title,
+  };
 };
 
-export default AssetTitle;
+export default connect(mapStateToProps, null)(View);

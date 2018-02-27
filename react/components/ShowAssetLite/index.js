@@ -1,36 +1,21 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
-import AssetDisplay from 'components/AssetDisplay';
+import { connect } from 'react-redux';
+import View from './view';
 
-class ShowLite extends React.Component {
-  render () {
-    return (
-      <div className="row row--tall flex-container--column flex-container--center-center">
-        {this.props.error &&
-          <p>{this.props.error}</p>
-        }
-        {this.props.claimData &&
-        <div>
-          <AssetDisplay
-            name={this.props.claimData.name}
-            claimId={this.props.claimData.claimId}
-            src={`/${this.props.claimData.claimId}/${this.props.claimData.name}.${this.props.claimData.fileExt}`}
-            contentType={this.props.claimData.contentType}
-            fileExt={this.props.claimData.fileExt}
-            thumbnail={this.props.claimData.thumbnail}
-            />
-          <Link id="asset-boilerpate" className="link--primary fine-print" to={`/${this.props.claimData.claimId}/${this.props.claimData.name}`}>hosted via Spee.ch</Link>
-        </div>
-        }
-      </div>
-    );
-  }
+const mapStateToProps = ({ show }) => {
+  // select request info
+  const requestId = show.request.id;
+  // select asset info
+  let asset;
+  const request = show.requestList[requestId] || null;
+  const assetList = show.assetList;
+  if (request && assetList) {
+    const assetKey = request.key;  // note: just store this in the request
+    asset = assetList[assetKey] || null;
+  };
+  // return props
+  return {
+    asset,
+  };
 };
 
-ShowLite.propTypes = {
-  error    : PropTypes.string,
-  claimData: PropTypes.object.isRequired,
-};
-
-export default ShowLite;
+export default connect(mapStateToProps, null)(View);

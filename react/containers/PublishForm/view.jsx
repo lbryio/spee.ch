@@ -11,9 +11,7 @@ import * as publishStates from 'constants/publish_claim_states';
 class PublishForm extends React.Component {
   constructor (props) {
     super(props);
-    this.validateChannelSelection = this.validateChannelSelection.bind(this);
-    this.validatePublishParams = this.validatePublishParams.bind(this);
-    this.makePublishRequest = this.makePublishRequest.bind(this);
+    // this.makePublishRequest = this.makePublishRequest.bind(this);
     this.publish = this.publish.bind(this);
   }
   validateChannelSelection () {
@@ -50,35 +48,33 @@ class PublishForm extends React.Component {
   }
   makePublishRequest (file, metadata) {
     console.log('making publish request');
-    const uri = '/api/claim-publish';
+    const uri = '/api/claim/publish';
     const xhr = new XMLHttpRequest();
     const fd = this.appendDataToFormData(file, metadata);
-    const that = this;
-    xhr.upload.addEventListener('loadstart', function () {
-      that.props.onPublishStatusChange(publishStates.LOAD_START, 'upload started');
+    xhr.upload.addEventListener('loadstart', () => {
+      this.props.onPublishStatusChange(publishStates.LOAD_START, 'upload started');
     });
-    xhr.upload.addEventListener('progress', function (e) {
+    xhr.upload.addEventListener('progress', (e) => {
       if (e.lengthComputable) {
         const percentage = Math.round((e.loaded * 100) / e.total);
         console.log('progress:', percentage);
-        that.props.onPublishStatusChange(publishStates.LOADING, `${percentage}%`);
+        this.props.onPublishStatusChange(publishStates.LOADING, `${percentage}%`);
       }
     }, false);
-    xhr.upload.addEventListener('load', function () {
+    xhr.upload.addEventListener('load', () => {
       console.log('loaded 100%');
-      that.props.onPublishStatusChange(publishStates.PUBLISHING, null);
+      this.props.onPublishStatusChange(publishStates.PUBLISHING, null);
     }, false);
     xhr.open('POST', uri, true);
-    xhr.onreadystatechange = function () {
+    xhr.onreadystatechange = () => {
       if (xhr.readyState === 4) {
         const response = JSON.parse(xhr.response);
         console.log('publish response:', response);
         if ((xhr.status === 200) && response.success) {
-          that.props.onPublishStatusChange(publishStates.SUCCESS, response.data.url);
-          // redirect to the published asset's show page
-          that.props.history.push(`/${response.data.claimId}/${response.data.name}`);
+          this.props.history.push(`/${response.data.claimId}/${response.data.name}`);
+          this.props.onFileClear();
         } else {
-          that.props.onPublishStatusChange(publishStates.FAILED, response.message);
+          this.props.onPublishStatusChange(publishStates.FAILED, response.message);
         }
       }
     };
@@ -106,7 +102,6 @@ class PublishForm extends React.Component {
     fd.append('file', file);
     for (var key in metadata) {
       if (metadata.hasOwnProperty(key)) {
-        console.log('adding form data', key, metadata[key]);
         fd.append(key, metadata[key]);
       }
     }
@@ -115,60 +110,56 @@ class PublishForm extends React.Component {
   publish () {
     console.log('publishing file');
     // publish the asset
-    const that = this;
     this.validateChannelSelection()
       .then(() => {
-        return that.validatePublishParams();
+        return this.validatePublishParams();
       })
       .then(() => {
-        const metadata = that.createMetadata();
+        const metadata = this.createMetadata();
         // publish the claim
-        return that.makePublishRequest(that.props.file, metadata);
-      })
-      .then(() => {
-        that.props.onPublishStatusChange('publish request made');
+        return this.makePublishRequest(this.props.file, metadata);
       })
       .catch((error) => {
-        that.props.onPublishSubmitError(error.message);
+        this.props.onPublishSubmitError(error.message);
       });
   }
   render () {
     return (
-      <div className="row row--no-bottom">
-        <div className="column column--10">
+      <div className='row row--no-bottom'>
+        <div className='column column--10'>
           <PublishTitleInput />
         </div>
         {/* left column */}
-        <div className="column column--5 column--sml-10" >
-          <div className="row row--padded">
+        <div className='column column--5 column--sml-10' >
+          <div className='row row--padded'>
             <Dropzone />
           </div>
         </div>
         {/* right column */}
-        <div className="column column--5 column--sml-10 align-content-top">
-          <div id="publish-active-area" className="row row--padded">
-            <div className="row row--padded row--no-top row--wide">
+        <div className='column column--5 column--sml-10 align-content-top'>
+          <div id='publish-active-area' className='row row--padded'>
+            <div className='row row--padded row--no-top row--wide'>
               <PublishUrlInput />
             </div>
-            <div className="row row--padded row--no-top row--wide">
+            <div className='row row--padded row--no-top row--wide'>
               <ChannelSelect />
             </div>
             { (this.props.file.type === 'video/mp4') && (
-              <div className="row row--padded row--no-top row--wide ">
+              <div className='row row--padded row--no-top row--wide '>
                 <PublishThumbnailInput />
               </div>
             )}
-            <div className="row row--padded row--no-top row--no-bottom row--wide">
+            <div className='row row--padded row--no-top row--no-bottom row--wide'>
               <PublishMetadataInputs />
             </div>
-            <div className="row row--wide align-content-center">
-              <button id="publish-submit" className="button--primary button--large" onClick={this.publish}>Publish</button>
+            <div className='row row--wide align-content-center'>
+              <button id='publish-submit' className='button--primary button--large' onClick={this.publish}>Publish</button>
             </div>
-            <div className="row row--padded row--no-bottom align-content-center">
-              <button className="button--cancel" onClick={this.props.onFileClear}>Cancel</button>
+            <div className='row row--padded row--no-bottom align-content-center'>
+              <button className='button--cancel' onClick={this.props.onFileClear}>Cancel</button>
             </div>
-            <div className="row row--short align-content-center">
-              <p className="fine-print">By clicking 'Publish', you affirm that you have the rights to publish this content to the LBRY network, and that you understand the properties of publishing it to a decentralized, user-controlled network. <a className="link--primary" target="_blank" href="https://lbry.io/learn">Read more.</a></p>
+            <div className='row row--short align-content-center'>
+              <p className='fine-print'>By clicking 'Publish', you affirm that you have the rights to publish this content to the LBRY network, and that you understand the properties of publishing it to a decentralized, user-controlled network. <a className='link--primary' target='_blank' href='https://lbry.io/learn'>Read more.</a></p>
             </div>
           </div>
         </div>

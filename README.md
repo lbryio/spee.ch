@@ -1,5 +1,5 @@
-# spee.ch
-spee.ch is a single-serving site that reads and publishes images and videos to and from the [LBRY](https://lbry.io/) blockchain.
+# Spee.ch
+Spee.ch is a web app that reads and publishes images and videos to and from the [LBRY](https://lbry.io/) blockchain.
 
 ## how to run this repository locally
 * start mysql
@@ -16,9 +16,9 @@ spee.ch is a single-serving site that reads and publishes images and videos to a
 	* run `npm install`
 	* create your `speechConfig.js` file
 	  * copy `speechConfig.js.example` and name it `speechConfig.js`
-	  * replace the `null` values in the config file with the appropriate values for your environement
-	* to start the server, from your command line run `node speech.js`
-		* To run hot, use `nodemon` instead of `node`
+	  * replace the `null` values in the config file with the appropriate values for your environment
+	* build the app by running `npm run build-prod`
+	* to start the server, run `npm run start`
 * visit [localhost:3000](http://localhost:3000)
 
 ## Tests
@@ -29,20 +29,20 @@ spee.ch is a single-serving site that reads and publishes images and videos to a
 ## API
 
 #### GET
-* /api/claim-resolve/:name/:claimId
-	* example: `curl https://spee.ch/api/claim-resolve/doitlive/xyz`
-* /api/claim-list/:name
-	* example: `curl https://spee.ch/api/claim-list/doitlive`
-* /api/claim-is-available/:name (
+* /api/claim/resolve/:name/:claimId
+	* example: `curl https://spee.ch/api/claim/resolve/doitlive/xyz`
+* /api/claim/list/:name
+	* example: `curl https://spee.ch/api/claim/list/doitlive`
+* /api/claim/availability/:name (
   * returns `true`/`false` for whether a name is available through spee.ch
-	* example: `curl https://spee.ch/api/claim-is-available/doitlive`
-* /api/channel-is-available/:name (
+	* example: `curl https://spee.ch/api/claim/availability/doitlive`
+* /api/channel/availability/:name (
     * returns `true`/`false` for whether a channel is available through spee.ch
-  	* example: `curl https://spee.ch/api/channel-is-available/@CoolChannel`
+  	* example: `curl https://spee.ch/api/channel/availability/@CoolChannel`
 
 #### POST
-* /api/claim-publish
-  * example: `curl -X POST -F 'name=MyPictureName' -F 'file=@/path/to/myPicture.jpeg' https://spee.ch/api/claim-publish`
+* /api/claim/publish
+  * example: `curl -X POST -F 'name=MyPictureName' -F 'file=@/path/to/myPicture.jpeg' https://spee.ch/api/claim/publish`
   * Parameters:
     * `name`
     * `file` (must be type .mp4, .jpeg, .jpg, .gif, or .png)

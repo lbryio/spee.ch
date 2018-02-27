@@ -1,81 +1,50 @@
-import React from 'react/index';
-import AssetPreview from 'components/AssetPreview/index';
-import request from 'utils/request';
+import React from 'react';
+import AssetPreview from 'components/AssetPreview';
 
 class ChannelClaimsDisplay extends React.Component {
   constructor (props) {
     super(props);
-    this.state = {
-      error: null,
-    };
-    this.updateClaimsData = this.updateClaimsData.bind(this);
-    this.showPreviousResultsPage = this.showPreviousResultsPage.bind(this);
     this.showNextResultsPage = this.showNextResultsPage.bind(this);
-  }
-  componentDidMount () {
-    const name = this.props.name;
-    const longId = this.props.longId;
-    this.updateClaimsData(name, longId, 1);
-  }
-  componentWillReceiveProps (nextProps) {
-    if (nextProps.name !== this.props.name || nextProps.longId !== this.props.longId) {
-      this.updateClaimsData(nextProps.name, nextProps.longId, 1);
-    }
-  }
-  updateClaimsData (name, longId, page) {
-    const url = `/api/channel-claims/${name}/${longId}/${page}`;
-    const that = this;
-    return request(url)
-      .then(({ success, message, data }) => {
-        console.log('api/channel-claims response:', data);
-        if (!success) {
-          return that.setState({error: message});
-        }
-        that.setState({error: null}); // move this error to redux state
-        that.props.onChannelClaimsDataUpdate(data.claims, data.currentPage, data.totalPages, data.totalResults);
-      })
-      .catch((error) => {
-        that.setState({error: error.message});
-      });
-  }
-  componentWillUnmount () {
-    this.props.onChannelClaimsDataClear();
+    this.showPreviousResultsPage = this.showPreviousResultsPage.bind(this);
   }
   showPreviousResultsPage () {
-    const previousPage = parseInt(this.props.currentPage) - 1;
-    this.updateClaimsData(this.props.name, this.props.longId, previousPage);
+    const { channel: { claimsData: { currentPage } } } = this.props;
+    const previousPage = parseInt(currentPage) - 1;
+    this.showNewPage(previousPage);
   }
   showNextResultsPage () {
-    const nextPage = parseInt(this.props.currentPage) + 1;
-    this.updateClaimsData(this.props.name, this.props.longId, nextPage);
+    const { channel: { claimsData: { currentPage } } } = this.props;
+    const nextPage = parseInt(currentPage) + 1;
+    this.showNewPage(nextPage);
+  }
+  showNewPage (page) {
+    const { channelKey, channel: { name, longId } } = this.props;
+    this.props.onUpdateChannelClaims(channelKey, name, longId, page);
   }
   render () {
+    const { channel: { claimsData: { claims, currentPage, totalPages } } } = this.props;
     return (
-      <div>
-        {this.state.error ? (
-          <div className="row">
-            <div className="column column--10">
-              <p>{this.state.error}</p>
+      <div className="row row--tall">
+        {(claims.length > 0) ? (
+          <div>
+            {claims.map((claim, index) => <AssetPreview
+              name={claim.name}
+              claimId={claim.claimId}
+              fileExt={claim.fileExt}
+              contentType={claim.contentType}
+              key={`${claim.name}-${index}`}
+            />)}
+            <div>
+              {(currentPage > 1) &&
+              <button className={'button--secondary'} onClick={this.showPreviousResultsPage}>Previous Page</button>
+              }
+              {(currentPage < totalPages) &&
+              <button className={'button--secondary'} onClick={this.showNextResultsPage}>Next Page</button>
+              }
             </div>
           </div>
         ) : (
-          <div className="row row--tall">
-            {this.props.claims &&
-            <div>
-              {this.props.claims.map((claim, index) => <AssetPreview
-                name={claim.name}
-                claimId={claim.claimId}
-                fileExt={claim.fileExt}
-                contentType={claim.contentType}
-                key={`${claim.name}-${index}`}
-              />)}
-              <div>
-                {(this.props.currentPage > 1) && <button onClick={this.showPreviousResultsPage}>Previous Page</button>}
-                {(this.props.currentPage < this.props.totalPages) && <button onClick={this.showNextResultsPage}>Next Page</button>}
-              </div>
-            </div>
-            }
-          </div>
+          <p>There are no claims in this channel</p>
         )}
       </div>
     );

@@ -1,24 +1,29 @@
 const { site } = require('../config/speechConfig.js');
+const handlePageRender = require('../helpers/handlePageRender.jsx');
 
 module.exports = (app) => {
+  // route for the home page
+  app.get('/', (req, res) => {
+    handlePageRender(req, res);
+  });
   // route to display login page
   app.get('/login', (req, res) => {
-    res.status(200).render('index');
+    handlePageRender(req, res);
   });
   // route to show 'about' page
   app.get('/about', (req, res) => {
-    res.status(200).render('index');
+    handlePageRender(req, res);
   });
   // route to display a list of the trending images
   app.get('/trending', (req, res) => {
     res.status(301).redirect('/popular');
   });
-  app.get('/popular', ({ ip, originalUrl }, res) => {
-    res.status(200).render('index');
+  app.get('/popular', (req, res) => {
+    handlePageRender(req, res);
   });
   // route to display a list of the trending images
-  app.get('/new', ({ ip, originalUrl }, res) => {
-    res.status(200).render('index');
+  app.get('/new', (req, res) => {
+    handlePageRender(req, res);
   });
   // route to send embedable video player (for twitter)
   app.get('/embed/:claimId/:name', ({ params }, res) => {

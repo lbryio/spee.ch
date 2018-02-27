@@ -27,22 +27,21 @@ class ChannelLoginForm extends React.Component {
       }),
       credentials: 'include',
     }
-    const that = this;
     request('login', params)
       .then(({success, channelName, shortChannelId, channelClaimId, message}) => {
         console.log('loginToChannel success:', success);
         if (success) {
-          that.props.onChannelLogin(channelName, shortChannelId, channelClaimId);
+          this.props.onChannelLogin(channelName, shortChannelId, channelClaimId);
         } else {
-          that.setState({'error': message});
+          this.setState({'error': message});
         };
       })
       .catch(error => {
         console.log('login error', error);
         if (error.message) {
-          that.setState({'error': error.message});
+          this.setState({'error': error.message});
         } else {
-          that.setState({'error': error});
+          this.setState({'error': error});
         }
       });
   }

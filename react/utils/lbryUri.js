@@ -4,15 +4,13 @@ module.exports = {
   REGEXP_ADDRESS        : /^b(?=[^0OIl]{32,33})[0-9A-Za-z]{32,33}$/,
   CHANNEL_CHAR          : '@',
   parseIdentifier       : function (identifier) {
-    console.log('parsing identifier:', identifier);
     const componentsRegex = new RegExp(
       '([^:$#/]*)' + // value (stops at the first separator or end)
       '([:$#]?)([^/]*)' // modifier separator, modifier (stops at the first path separator or end)
     );
-    const [proto, value, modifierSeperator, modifier] = componentsRegex
+    const [proto, value, modifierSeperator, modifier] = componentsRegex  // eslint-disable-line no-unused-vars
       .exec(identifier)
       .map(match => match || null);
-    console.log(`${proto}, ${value}, ${modifierSeperator}, ${modifier}`);
 
     // Validate and process name
     if (!value) {
@@ -54,15 +52,13 @@ module.exports = {
     };
   },
   parseClaim: function (name) {
-    console.log('parsing name:', name);
     const componentsRegex = new RegExp(
       '([^:$#/.]*)' + // name (stops at the first extension)
       '([:$#.]?)([^/]*)' // extension separator, extension (stops at the first path separator or end)
     );
-    const [proto, claimName, extensionSeperator, extension] = componentsRegex
+    const [proto, claimName, extensionSeperator, extension] = componentsRegex // eslint-disable-line no-unused-vars
       .exec(name)
       .map(match => match || null);
-    console.log(`${proto}, ${claimName}, ${extensionSeperator}, ${extension}`);
 
     // Validate and process name
     if (!claimName) {

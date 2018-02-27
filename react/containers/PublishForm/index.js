@@ -1,6 +1,5 @@
 import {connect} from 'react-redux';
-import {clearFile, selectFile, updateError, updatePublishStatus} from 'actions/publish';
-import {updateLoggedInChannel} from 'actions/channel';
+import {clearFile, updateError, updatePublishStatus} from 'actions/publish';
 import View from './view';
 
 const mapStateToProps = ({ channel, publish }) => {
@@ -23,14 +22,8 @@ const mapStateToProps = ({ channel, publish }) => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onFileSelect: (file) => {
-      dispatch(selectFile(file));
-    },
     onFileClear: () => {
       dispatch(clearFile());
-    },
-    onChannelLogin: (name, shortId, longId) => {
-      dispatch(updateLoggedInChannel(name, shortId, longId));
     },
     onPublishStatusChange: (status, message) => {
       dispatch(updatePublishStatus(status, message));

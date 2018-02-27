@@ -1,22 +1,16 @@
 import { connect } from 'react-redux';
-import { updateRequestWithChannelRequest, updateRequestWithAssetRequest } from 'actions/show';
+import { onHandleShowPageUri } from 'actions/show';
 import View from './view';
 
 const mapStateToProps = ({ show }) => {
   return {
-    requestType: show.requestType,
+    error      : show.request.error,
+    requestType: show.request.type,
   };
 };
 
-const mapDispatchToProps = dispatch => {
-  return {
-    onChannelRequest: (name, id) => {
-      dispatch(updateRequestWithChannelRequest(name, id));
-    },
-    onAssetRequest: (name, id, channelName, channelId, extension) => {
-      dispatch(updateRequestWithAssetRequest(name, id, channelName, channelId, extension));
-    },
-  };
+const mapDispatchToProps = {
+  onHandleShowPageUri,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(View);

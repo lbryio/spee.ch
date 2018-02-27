@@ -5,8 +5,10 @@ import * as actions from 'constants/channel_action_types';
 export function updateLoggedInChannel (name, shortId, longId) {
   return {
     type: actions.CHANNEL_UPDATE,
-    name,
-    shortId,
-    longId,
+    data: {
+      name,
+      shortId,
+      longId,
+    },
   };
 };

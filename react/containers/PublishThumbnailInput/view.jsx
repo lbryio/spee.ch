@@ -17,8 +17,7 @@ const ThumbnailPreview = ({dataUrl}) => {
         <img style={imageStyle} src={dataUrl} alt='image preview here' />
       ) : (
         <p>loading...</p>
-        )
-      }
+      )}
     </div>
   );
 }
@@ -27,8 +26,12 @@ class PublishThumbnailInput extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
-      error: null,
-    };
+      videoPreviewSrc: null,
+      thumbnailError : null,
+      thumbnailInput : '',
+    }
+    this.handleInput = this.handleInput.bind(this);
+    this.updateVideoThumb = this.updateVideoThumb.bind(this);
   }
   componentDidMount () {
     this.setClaimAndThumbailUrl(this.props.publishClaim);

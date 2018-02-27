@@ -11,13 +11,8 @@ class ChannelCreateForm extends React.Component {
       password: '',
       status  : null,
     };
-    this.cleanseChannelInput = this.cleanseChannelInput.bind(this);
     this.handleChannelInput = this.handleChannelInput.bind(this);
     this.handleInput = this.handleInput.bind(this);
-    this.updateIsChannelAvailable = this.updateIsChannelAvailable.bind(this);
-    this.checkIsChannelAvailable = this.checkIsChannelAvailable.bind(this);
-    this.checkIsPasswordProvided = this.checkIsPasswordProvided.bind(this);
-    this.makePublishChannelRequest = this.makePublishChannelRequest.bind(this);
     this.createChannel = this.createChannel.bind(this);
   }
   cleanseChannelInput (input) {
@@ -41,24 +36,23 @@ class ChannelCreateForm extends React.Component {
     this.setState({[name]: value});
   }
   updateIsChannelAvailable (channel) {
-    const that = this;
     const channelWithAtSymbol = `@${channel}`;
-    request(`/api/channel-is-available/${channelWithAtSymbol}`)
+    request(`/api/channel/availability/${channelWithAtSymbol}`)
       .then(isAvailable => {
         if (isAvailable) {
-          that.setState({'error': null});
+          this.setState({'error': null});
         } else {
-          that.setState({'error': 'That channel has already been claimed'});
+          this.setState({'error': 'That channel has already been claimed'});
         }
       })
       .catch((error) => {
-        that.setState({'error': error.message});
+        this.setState({'error': error.message});
       });
   }
   checkIsChannelAvailable (channel) {
     const channelWithAtSymbol = `@${channel}`;
     return new Promise((resolve, reject) => {
-      request(`/api/channel-is-available/${channelWithAtSymbol}`)
+      request(`/api/channel/availability/${channelWithAtSymbol}`)
         .then(isAvailable => {
           console.log('checkIsChannelAvailable result:', isAvailable);
           if (!isAvailable) {
@@ -105,21 +99,20 @@ class ChannelCreateForm extends React.Component {
   }
   createChannel (event) {
     event.preventDefault();
-    const that = this;
     this.checkIsPasswordProvided()
       .then(() => {
-        return that.checkIsChannelAvailable(that.state.channel, that.state.password);
+        return this.checkIsChannelAvailable(this.state.channel, this.state.password);
       })
       .then(() => {
-        that.setState({status: 'We are publishing your new channel.  Sit tight...'});
-        return that.makePublishChannelRequest(that.state.channel, that.state.password);
+        this.setState({status: 'We are publishing your new channel.  Sit tight...'});
+        return this.makePublishChannelRequest(this.state.channel, this.state.password);
       })
       .then(result => {
-        that.setState({status: null});
-        that.props.onChannelLogin(result.channelName, result.shortChannelId, result.channelClaimId);
+        this.setState({status: null});
+        this.props.onChannelLogin(result.channelName, result.shortChannelId, result.channelClaimId);
       })
       .catch((error) => {
-        that.setState({'error': error.message, status: null});
+        this.setState({'error': error.message, status: null});
       });
   }
   render () {
