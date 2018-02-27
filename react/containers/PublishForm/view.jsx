@@ -72,7 +72,7 @@ class PublishForm extends React.Component {
         console.log('publish response:', response);
         if ((xhr.status === 200) && response.success) {
           this.props.history.push(`/${response.data.claimId}/${response.data.name}`);
-          this.props.onPublishStatusChange(publishStates.SUCCESS, response.data.url);
+          this.props.onFileClear();
         } else {
           this.props.onPublishStatusChange(publishStates.FAILED, response.message);
         }
@@ -118,9 +118,6 @@ class PublishForm extends React.Component {
         const metadata = this.createMetadata();
         // publish the claim
         return this.makePublishRequest(this.props.file, metadata);
-      })
-      .then(() => {
-        this.props.onPublishStatusChange('publish request made');
       })
       .catch((error) => {
         this.props.onPublishSubmitError(error.message);

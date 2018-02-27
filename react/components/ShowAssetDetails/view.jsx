@@ -20,7 +20,7 @@ class ShowAssetDetails extends React.Component {
               <AssetTitle />
             </div>
             <div className='column column--5 column--sml-10 align-content-top'>
-              <div className='row row--padded'>
+              <div className='row row--padded show-details-container'>
                 <AssetDisplay />
               </div>
             </div><div className='column column--5 column--sml-10 align-content-top'>
