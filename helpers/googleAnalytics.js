@@ -52,11 +52,11 @@ module.exports = {
     sendGoogleAnalyticsEvent(ip, params);
   },
   sendGAAnonymousPublishTiming (headers, ip, originalUrl, startTime, endTime) {
-    const params = createPublishTimingEventParams('anonymous', startTime, endTime, ip, headers);
+    const params = createPublishTimingEventParams('PUBLISH_ANONYMOUS_CLAIM', startTime, endTime, ip, headers);
     sendGoogleAnalyticsTiming(ip, params);
   },
   sendGAChannelPublishTiming (headers, ip, originalUrl, startTime, endTime) {
-    const params = createPublishTimingEventParams('anonymous', startTime, endTime, ip, headers);
+    const params = createPublishTimingEventParams('PUBLISH_IN_CHANNEL_CLAIM', startTime, endTime, ip, headers);
     sendGoogleAnalyticsTiming(ip, params);
   },
 };
