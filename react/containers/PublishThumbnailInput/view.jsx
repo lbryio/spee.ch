@@ -65,11 +65,6 @@ class PublishThumbnailInput extends React.Component {
     canvas.height = video.videoHeight;
     canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
     const imageDataUrl = canvas.toDataURL();
-    const success = imageDataUrl.length > 1000;
-    if (!success) {
-      this.setState({error: 'error taking snapshot'});
-      return false;
-    }
     return imageDataUrl;
   }
   render () {
