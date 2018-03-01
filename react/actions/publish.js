@@ -86,8 +86,9 @@ export function updateThumbnailSelectedFile (file) {
   };
 };
 
-export function startPublish () {
+export function startPublish (history) {
   return {
     type: actions.PUBLISH_START,
+    data: { history },
   };
 }

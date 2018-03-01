@@ -6,9 +6,15 @@ import PublishUrlInput from 'containers/PublishUrlInput';
 import PublishThumbnailInput from 'containers/PublishThumbnailInput';
 import PublishMetadataInputs from 'containers/PublishMetadataInputs';
 import ChannelSelect from 'containers/ChannelSelect';
-import * as publishStates from 'constants/publish_claim_states';
 
 class PublishForm extends React.Component {
+  constructor (props) {
+    super(props)
+    this.onPublishSubmit = this.onPublishSubmit.bind(this);
+  }
+  onPublishSubmit () {
+    this.props.startPublish(this.props.history);
+  }
   render () {
     return (
       <div className='row row--no-bottom'>
@@ -39,10 +45,10 @@ class PublishForm extends React.Component {
               <PublishMetadataInputs />
             </div>
             <div className='row row--wide align-content-center'>
-              <button id='publish-submit' className='button--primary button--large' onClick={this.props.startPublish}>Publish</button>
+              <button id='publish-submit' className='button--primary button--large' onClick={this.onPublishSubmit}>Publish</button>
             </div>
             <div className='row row--padded row--no-bottom align-content-center'>
-              <button className='button--cancel' onClick={this.props.onFileClear}>Cancel</button>
+              <button className='button--cancel' onClick={this.props.clearFile}>Cancel</button>
             </div>
             <div className='row row--short align-content-center'>
               <p className='fine-print'>By clicking 'Publish', you affirm that you have the rights to publish this content to the LBRY network, and that you understand the properties of publishing it to a decentralized, user-controlled network. <a className='link--primary' target='_blank' href='https://lbry.io/learn'>Read more.</a></p>

@@ -1,38 +1,16 @@
 import {connect} from 'react-redux';
-import {clearFile, updateError, updatePublishStatus, startPublish} from 'actions/publish';
+import {clearFile, startPublish} from 'actions/publish';
 import View from './view';
 
 const mapStateToProps = ({ channel, publish }) => {
   return {
-    loggedInChannel   : channel.loggedInChannel,
-    file              : publish.file,
-    claim             : publish.claim,
-    title             : publish.metadata.title,
-    thumbnail         : publish.metadata.thumbnail,
-    description       : publish.metadata.description,
-    license           : publish.metadata.license,
-    nsfw              : publish.metadata.nsfw,
-    publishInChannel  : publish.publishInChannel,
-    selectedChannel   : publish.selectedChannel,
-    fileError         : publish.error.file,
-    urlError          : publish.error.url,
-    publishSubmitError: publish.error.publishSubmit,
+    file: publish.file,
   };
 };
 
-const mapDispatchToProps = dispatch => {
-  return {
-    onFileClear: () => {
-      dispatch(clearFile());
-    },
-    onPublishStatusChange: (status, message) => {
-      dispatch(updatePublishStatus(status, message));
-    },
-    onPublishSubmitError: (value) => {
-      dispatch(updateError('publishSubmit', value));
-    },
-    startPublish,
-  };
+const mapDispatchToProps = {
+  clearFile,
+  startPublish,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(View);
