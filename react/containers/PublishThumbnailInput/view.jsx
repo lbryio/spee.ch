@@ -64,8 +64,7 @@ class PublishThumbnailInput extends React.Component {
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
     canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
-    const imageDataUrl = canvas.toDataURL();
-    return imageDataUrl;
+    return canvas.toDataURL();
   }
   render () {
     const { error, videoSource, sliderMinRange, sliderMaxRange, sliderValue } = this.state;

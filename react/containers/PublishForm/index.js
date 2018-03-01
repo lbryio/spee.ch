@@ -1,5 +1,5 @@
 import {connect} from 'react-redux';
-import {clearFile, updateError, updatePublishStatus} from 'actions/publish';
+import {clearFile, updateError, updatePublishStatus, startPublish} from 'actions/publish';
 import View from './view';
 
 const mapStateToProps = ({ channel, publish }) => {
@@ -28,12 +28,10 @@ const mapDispatchToProps = dispatch => {
     onPublishStatusChange: (status, message) => {
       dispatch(updatePublishStatus(status, message));
     },
-    onChannelSelectionError: (value) => {
-      dispatch(updateError('channel', value));
-    },
     onPublishSubmitError: (value) => {
       dispatch(updateError('publishSubmit', value));
     },
+    startPublish,
   };
 };
 

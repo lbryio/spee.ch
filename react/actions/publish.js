@@ -85,3 +85,9 @@ export function updateThumbnailSelectedFile (file) {
     data: file,
   };
 };
+
+export function startPublish () {
+  return {
+    type: actions.PUBLISH_START,
+  };
+}
