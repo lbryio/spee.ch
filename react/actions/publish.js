@@ -75,23 +75,13 @@ export function toggleMetadataInputs (showMetadataInputs) {
 export function updateThumbnailClaim (claim, url) {
   return {
     type: actions.THUMBNAIL_CLAIM_UPDATE,
-    claim,
-    url,
-  };
-};
-
-export function updateThumbnailFileOptions (fileOne, fileTwo, fileThree) {
-  return {
-    type: actions.THUMBNAIL_FILES_UPDATE,
-    fileOne,
-    fileTwo,
-    fileThree,
+    data: { claim, url },
   };
 };
 
 export function updateThumbnailSelectedFile (file) {
   return {
     type: actions.THUMBNAIL_FILE_SELECT,
-    file,
+    data: file,
   };
 };

@@ -1,117 +1,113 @@
 import React from 'react';
 
-const ThumbnailPreview = ({dataUrl}) => {
-  const divStyle = {
-    width  : '30%',
-    margin : '1%',
-    display: 'inline-block',
-    border : 'solid 1px black',
-  };
-  const imageStyle = {
-    width  : '100%',
-    display: 'block',
-  };
-  return (
-    <div style={divStyle}>
-      { dataUrl ? (
-        <img style={imageStyle} src={dataUrl} alt='image preview here' />
-      ) : (
-        <p>loading...</p>
-      )}
-    </div>
-  );
-};
-
 class PublishThumbnailInput extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
-      videoPreviewSrc: null,
-      thumbnailError : null,
-      thumbnailInput : '',
+      videoSource   : null,
+      error         : null,
+      sliderMinRange: 1,
+      sliderMaxRange: null,
+      sliderValue   : null,
     };
+    this.handleSliderChange = this.handleSliderChange.bind(this);
+    this.handleVideoLoadedData = this.handleVideoLoadedData.bind(this);
+    this.setThumbnailWithSnapshot = this.setThumbnailWithSnapshot.bind(this);
   }
   componentDidMount () {
-    this.setClaimAndThumbailUrl(this.props.publishClaim);
-    this.previewThumbnails(this.props.publishFile);
+    this.setThumbnailClaimAndUrl();
+    this.setVideoSource();
   }
-  componentWillReceiveProps (nextProps) {
-    if (nextProps.publishClaim !== this.props.publishClaim) {
-      console.log(nextProps.publishClaim, this.props.publishClaim);
-      this.setClaimAndThumbailUrl(nextProps.publishClaim);
-    }
+  setThumbnailClaimAndUrl () {
+    const { claim, host, thumbnailChannel } = this.props;
+    const url = `${host}/${thumbnailChannel}/${claim}-thumb.png`;
+    this.props.onThumbnailChange(`${claim}-thumb`, url);
   }
-  previewThumbnails (videoFile) {
-    console.log('video file:', videoFile);
-    this.loadFileAndReturnThumbnails(videoFile)
-      .then((thumbnail) => {
-        this.selectVideoThumb(thumbnail);
-        this.setPossibleThumbnailFiles(thumbnail, thumbnail, thumbnail);
-      })
-      .catch(error => {
-        console.log('error:', error);
-        this.setState({error: error.message});
-      });
+  setVideoSource () {
+    const { file } = this.props;
+    const previewReader = new FileReader();
+    previewReader.readAsDataURL(file);
+    previewReader.onloadend = () => {
+      this.setState({videoSource: previewReader.result});
+    };
   }
-  loadFileAndReturnThumbnails (file) {
-    return new Promise((resolve, reject) => {
-      var fileReader = new FileReader();
-      fileReader.onload = () => {
-        console.log('file loaded');
-        const blob = new Blob([fileReader.result], {type: file.type});
-        const url = URL.createObjectURL(blob);
-        let video = document.createElement('video');
-        const snapShot = () => {
-          let canvas = document.createElement('canvas');
-          canvas.width = video.videoWidth;
-          canvas.height = video.videoHeight;
-          canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
-          const imageDataUrl = canvas.toDataURL();
-          const success = imageDataUrl.length > 1000;
-          if (success) {
-            return imageDataUrl;
-          }
-          return success;
-        };
-        const loadedata = () => {
-          console.log('loadeddata');
-          console.log('readyState', video.readyState);
-          const duration = video.duration;
-          console.log('readyState', duration);
-          const thumb = snapShot();
-          resolve(thumb);
-        };
-        video.addEventListener('loadeddata', loadedata);
-        video.preload = 'metadata';
-        video.src = url;
-        // Load video in Safari / IE11
-        video.muted = true;
-        video.playsInline = true;
-        video.play();
-      };
-      fileReader.readAsArrayBuffer(file);
+  handleVideoLoadedData (event) {
+    const duration = event.target.duration;
+    // set the slider
+    this.setState({
+      sliderMaxRange: duration * 100,
+      sliderValue   : duration * 100 / 2,
     });
+    // update the current time of the video
+    let video = document.getElementById('video-thumb-player');
+    video.currentTime = duration / 2;
   }
-  selectVideoThumb (dataUrl) {
-    // update this.props.selectedFile
-    this.props.onThumbnailFileSelect(dataUrl);
+  handleSliderChange (event) {
+    const value = parseInt(event.target.value);
+    // update the slider value
+    this.setState({
+      sliderValue: value,
+    });
+    // update the current time of the video
+    let video = document.getElementById('video-thumb-player');
+    video.currentTime = value / 100;
   }
-  setPossibleThumbnailFiles (fileOne, fileTwo, fileThree) {
-    console.log('updating thumbnail file options');
-    this.props.onThumbnailFileOptionsChange(fileOne, fileTwo, fileThree);
+  setThumbnailWithSnapshot () {
+    // take a snapshot
+    const snapshot = this.takeSnapShot();
+    // set the thumbnail in redux store
+    if (snapshot) this.props.onThumbnailFileSelect(snapshot);
   }
-  setClaimAndThumbailUrl (claim) {
-    // set thumbnail claim based on publish claim name
-    const url = `${this.props.host}/${this.props.channel}/${claim}.jpeg`;
-    this.props.onThumbnailClaimChange(claim, url);
+  takeSnapShot () {
+    let video = document.getElementById('video-thumb-player');
+    let canvas = document.createElement('canvas');
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+    const imageDataUrl = canvas.toDataURL();
+    const success = imageDataUrl.length > 1000;
+    if (!success) {
+      this.setState({error: 'error taking snapshot'});
+      return false;
+    }
+    return imageDataUrl;
   }
   render () {
+    const { error, videoSource, sliderMinRange, sliderMaxRange, sliderValue } = this.state;
     return (
       <div>
-        <label className='label'>Thumbnail:</label>
         <div>
-          <p className='info-message-placeholder info-message--failure'>{this.state.error}</p>
-          {this.props.potentialFiles.map((file, index) => <ThumbnailPreview dataUrl={file} key={index} />)}
+          { error ? (
+            <p className='info-message--failure'>{error}</p>
+          ) : (
+            <p className='info-message'>Use slider to set thumbnail:</p>
+          )}
+          <video
+            id='video-thumb-player'
+            preload='metadata'
+            muted
+            style={{display: 'none'}}
+            playsInline
+            onLoadedData={this.handleVideoLoadedData}
+            src={videoSource}
+            onTimeUpdate={this.setThumbnailWithSnapshot}
+          />
+          {
+            sliderValue ? (
+              <div className='slide-container'>
+                <input
+                  type='range'
+                  min={sliderMinRange}
+                  max={sliderMaxRange}
+                  value={sliderValue}
+                  className='slider'
+                  onChange={this.handleSliderChange}
+                />
+              </div>
+            ) : (
+              <p>loading slider... </p>
+            )
+          }
         </div>
       </div>
     );

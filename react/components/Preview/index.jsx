@@ -34,10 +34,10 @@ class Preview extends React.Component {
   render () {
     return (
       <img
-        id="dropzone-preview"
+        id='dropzone-preview'
         src={this.state.imgSource}
         className={this.props.dimPreview ? 'dim' : ''}
-        alt="publish preview"
+        alt='publish preview'
       />
     );
   }

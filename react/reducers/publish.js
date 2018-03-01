@@ -26,11 +26,9 @@ const initialState = {
     nsfw       : false,
   },
   thumbnail: {
-    channel       : publish.thumbnailChannel,
-    claim         : null,
-    url           : null,
-    potentialFiles: [],  // should be named 'thumbnailFiles' or something
-    selectedFile  : null,
+    channel     : publish.thumbnailChannel,
+    claim       : null,
+    selectedFile: null,
   },
 };
 
@@ -76,21 +74,17 @@ export default function (state = initialState, action) {
       });
     case actions.THUMBNAIL_CLAIM_UPDATE:
       return Object.assign({}, state, {
-        thumbnail: Object.assign({}, state.thumbnail, {
-          claim: action.claim,
-          url  : action.url,
+        metadata: Object.assign({}, state.metadata, {
+          thumbnail: action.data.url,
         }),
-      });
-    case actions.THUMBNAIL_FILES_UPDATE:
-      return Object.assign({}, state, {
         thumbnail: Object.assign({}, state.thumbnail, {
-          potentialFiles: [action.fileOne, action.fileTwo, action.fileThree],
+          claim: action.data.claim,
         }),
       });
     case actions.THUMBNAIL_FILE_SELECT:
       return Object.assign({}, state, {
         thumbnail: Object.assign({}, state.thumbnail, {
-          selectedFile: action.file,
+          selectedFile: action.data,
         }),
       });
     default:
