@@ -6,11 +6,11 @@ const ThumbnailPreview = ({dataUrl}) => {
     margin : '1%',
     display: 'inline-block',
     border : 'solid 1px black',
-  }
+  };
   const imageStyle = {
     width  : '100%',
     display: 'block',
-  }
+  };
   return (
     <div style={divStyle}>
       { dataUrl ? (
@@ -20,7 +20,7 @@ const ThumbnailPreview = ({dataUrl}) => {
       )}
     </div>
   );
-}
+};
 
 class PublishThumbnailInput extends React.Component {
   constructor (props) {
@@ -29,18 +29,13 @@ class PublishThumbnailInput extends React.Component {
       videoPreviewSrc: null,
       thumbnailError : null,
       thumbnailInput : '',
-    }
-    this.handleInput = this.handleInput.bind(this);
-    this.updateVideoThumb = this.updateVideoThumb.bind(this);
+    };
   }
   componentDidMount () {
     this.setClaimAndThumbailUrl(this.props.publishClaim);
     this.previewThumbnails(this.props.publishFile);
   }
   componentWillReceiveProps (nextProps) {
-    // if (nextProps.publishFile !== this.publishFile) {
-    //   this.createThumbnails(nextProps.publishFile);
-    // }
     if (nextProps.publishClaim !== this.props.publishClaim) {
       console.log(nextProps.publishClaim, this.props.publishClaim);
       this.setClaimAndThumbailUrl(nextProps.publishClaim);
@@ -50,7 +45,6 @@ class PublishThumbnailInput extends React.Component {
     console.log('video file:', videoFile);
     this.loadFileAndReturnThumbnails(videoFile)
       .then((thumbnail) => {
-        console.log('thumbs:', thumbnail);
         this.selectVideoThumb(thumbnail);
         this.setPossibleThumbnailFiles(thumbnail, thumbnail, thumbnail);
       })
@@ -67,9 +61,7 @@ class PublishThumbnailInput extends React.Component {
         const blob = new Blob([fileReader.result], {type: file.type});
         const url = URL.createObjectURL(blob);
         let video = document.createElement('video');
-        const snapShot = (time) => {
-          console.log('creating thubmnail @', time);
-          // video.currentTime = time;
+        const snapShot = () => {
           let canvas = document.createElement('canvas');
           canvas.width = video.videoWidth;
           canvas.height = video.videoHeight;
@@ -80,15 +72,15 @@ class PublishThumbnailInput extends React.Component {
             return imageDataUrl;
           }
           return success;
-        }
+        };
         const loadedata = () => {
           console.log('loadeddata');
           console.log('readyState', video.readyState);
           const duration = video.duration;
           console.log('readyState', duration);
-          const thumb = snapShot(duration / 2);
+          const thumb = snapShot();
           resolve(thumb);
-        }
+        };
         video.addEventListener('loadeddata', loadedata);
         video.preload = 'metadata';
         video.src = url;
@@ -116,10 +108,10 @@ class PublishThumbnailInput extends React.Component {
   render () {
     return (
       <div>
-        <label className="label">Thumbnail:</label>
+        <label className='label'>Thumbnail:</label>
         <div>
-            <p className="info-message-placeholder info-message--failure">{this.state.error}</p>
-            {this.props.potentialFiles.map((file, index) => <ThumbnailPreview dataUrl={file} key={index}/>)}
+          <p className='info-message-placeholder info-message--failure'>{this.state.error}</p>
+          {this.props.potentialFiles.map((file, index) => <ThumbnailPreview dataUrl={file} key={index} />)}
         </div>
       </div>
     );
