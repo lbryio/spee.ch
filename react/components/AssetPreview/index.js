@@ -25,6 +25,18 @@ const AssetPreview = ({ name, claimId, fileExt, contentType }) => {
                   <source src={directSourceLink} type={contentType} />
                 </video>
               );
+            case 'video/ogg':
+              return (
+                <video className={'asset-preview'}>
+                  <source src={directSourceLink} type={contentType} />
+                </video>
+              );
+            case 'video/webm':
+              return (
+                <video className={'asset-preview'}>
+                  <source src={directSourceLink} type={contentType} />
+                </video>
+              );
             default:
               return (
                 <p>unsupported file type</p>
