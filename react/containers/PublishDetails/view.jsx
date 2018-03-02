@@ -7,7 +7,7 @@ import PublishThumbnailInput from 'containers/PublishThumbnailInput';
 import PublishMetadataInputs from 'containers/PublishMetadataInputs';
 import ChannelSelect from 'containers/ChannelSelect';
 
-class PublishForm extends React.Component {
+class PublishDetails extends React.Component {
   constructor (props) {
     super(props)
     this.onPublishSubmit = this.onPublishSubmit.bind(this);
@@ -60,4 +60,4 @@ class PublishForm extends React.Component {
   }
 };
 
-export default withRouter(PublishForm);
+export default withRouter(PublishDetails);

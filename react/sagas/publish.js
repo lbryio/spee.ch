@@ -9,8 +9,8 @@ import { createPublishMetadata, createPublishFormData } from 'utils/publish';
 import { makePublishRequestChannel } from 'channels/publish';
 
 function * publishFile (action) {
-  const { history } = action.data;
   console.log('publishing file');
+  const { history } = action.data;
   const { publishInChannel, selectedChannel, file, claim, metadata, error: { url: urlError } } = yield select(selectPublishState);
   const { loggedInChannel } = yield select(selectChannelState);
   // validate the channel selection
@@ -33,7 +33,6 @@ function * publishFile (action) {
   const channel = yield call(makePublishRequestChannel, publishFormData);
   while (true) {
     const {loadStart, progress, load, success, error} = yield take(channel);
-    console.log('emitted:', loadStart, progress, load, success, error);
     if (error) {
       return yield put(updatePublishStatus(publishStates.FAILED, error.message));
     }
@@ -42,7 +41,7 @@ function * publishFile (action) {
       return history.push(`/${success.data.claimId}/${success.data.name}`);
     }
     if (loadStart) {
-      yield put(updatePublishStatus(publishStates.LOAD_START, 'upload started'));
+      yield put(updatePublishStatus(publishStates.LOAD_START, null));
     }
     if (progress) {
       yield put(updatePublishStatus(publishStates.LOADING, `${progress}%`));
