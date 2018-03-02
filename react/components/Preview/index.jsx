@@ -17,7 +17,11 @@ class Preview extends React.Component {
       this.setPreviewImageSource(newProps.file);
     }
     if (newProps.thumbnail !== this.props.thumbnail) {
-      this.setPreviewImageSourceFromFile(newProps.thumbnail);
+      if (newProps.thumbnail) {
+        this.setPreviewImageSourceFromFile(newProps.thumbnail);
+      } else {
+        this.setState({imgSource: this.state.defaultThumbnail});
+      }
     }
   }
   setPreviewImageSourceFromFile (file) {
