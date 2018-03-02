@@ -14,6 +14,10 @@ function determineFileExtensionFromContentType (contentType) {
       return 'gif';
     case 'video/mp4':
       return 'mp4';
+    case 'video/ogg':
+      return 'ogg';
+    case 'video/webm':
+      return 'webm';
     default:
       logger.debug('setting unknown file type as file extension jpeg');
       return 'jpeg';
