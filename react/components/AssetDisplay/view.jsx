@@ -58,6 +58,24 @@ class AssetDisplay extends React.Component {
                   <p>Your browser does not support the <code>video</code> element.</p>
                 </video>
               );
+            case 'video/ogg':
+              return (
+                <video id='video' className='asset' controls poster={thumbnail}>
+                  <source
+                    src={`/${claimId}/${name}.${fileExt}`}
+                  />
+                  <p>Your browser does not support the <code>video</code> element.</p>
+                </video>
+              );
+            case 'video/ogg':
+              return (
+                <video id='video' className='asset' controls poster={thumbnail}>
+                  <source
+                    src={`/${claimId}/${name}.${fileExt}`}
+                  />
+                  <p>Your browser does not support the <code>video</code> element.</p>
+                </video>
+              );
             default:
               return (
                 <p>Unsupported file type</p>
