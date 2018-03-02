@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+const { claim: { defaultThumbnail } } = require('../../../config/speechConfig.js');
 
-const AssetPreview = ({ name, claimId, fileExt, contentType }) => {
+const AssetPreview = ({ claimData: { name, claimId, fileExt, contentType, thumbnail } }) => {
   const directSourceLink = `${claimId}/${name}.${fileExt}`;
   const showUrlLink = `/${claimId}/${name}`;
   return (
@@ -12,18 +13,21 @@ const AssetPreview = ({ name, claimId, fileExt, contentType }) => {
             case 'image/jpeg':
             case 'image/jpg':
             case 'image/png':
-              return (
-                <img className={'asset-preview'} src={directSourceLink} alt={name} />
-              );
             case 'image/gif':
               return (
-                <img className={'asset-preview'} src={directSourceLink} alt={name} />
+                <img
+                  className={'asset-preview'}
+                  src={directSourceLink}
+                  alt={name}
+                />
               );
             case 'video/mp4':
               return (
-                <video className={'asset-preview'}>
-                  <source src={directSourceLink} type={contentType} />
-                </video>
+                <img
+                  className={'asset-preview'}
+                  src={thumbnail || defaultThumbnail}
+                  alt={name}
+                />
               );
             default:
               return (
