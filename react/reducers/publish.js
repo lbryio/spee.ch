@@ -35,7 +35,7 @@ const initialState = {
 export default function (state = initialState, action) {
   switch (action.type) {
     case actions.FILE_SELECTED:
-      return Object.assign({}, state, {
+      return Object.assign({}, initialState, {  // note: clears to initial state
         file: action.data,
       });
     case actions.FILE_CLEAR:

@@ -14,14 +14,10 @@ const mapDispatchToProps = dispatch => {
   return {
     selectFile: (file) => {
       dispatch(selectFile(file));
-      dispatch(updateError('publishSubmit', null));
     },
     setFileError: (value) => {
       dispatch(clearFile());
       dispatch(updateError('file', value));
-    },
-    clearFileError: () => {
-      dispatch(updateError('file', null));
     },
   };
 };

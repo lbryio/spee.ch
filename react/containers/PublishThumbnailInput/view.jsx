@@ -15,16 +15,28 @@ class PublishThumbnailInput extends React.Component {
     this.setThumbnailWithSnapshot = this.setThumbnailWithSnapshot.bind(this);
   }
   componentDidMount () {
-    this.setThumbnailClaimAndUrl();
-    this.setVideoSource();
+    console.log('thumbnail input did mount');
+    const { claim, file, host, thumbnailChannel } = this.props;
+    this.setThumbnailClaimAndUrl(claim, host, thumbnailChannel);
+    this.setVideoSource(file);
   }
-  setThumbnailClaimAndUrl () {
-    const { claim, host, thumbnailChannel } = this.props;
+  componentWillReceiveProps (nextProps) {
+    // if file changes
+    if (nextProps.file !== this.props.file) {
+      const { file } = nextProps;
+      this.setVideoSource(file);
+    };
+    // if claim changes
+    if (nextProps.claim !== this.props.claim) {
+      const { claim, host, thumbnailChannel } = nextProps;
+      this.setThumbnailClaimAndUrl(claim, host, thumbnailChannel);
+    }
+  }
+  setThumbnailClaimAndUrl (claim, host, thumbnailChannel) {
     const url = `${host}/${thumbnailChannel}/${claim}-thumb.png`;
     this.props.onThumbnailChange(`${claim}-thumb`, url);
   }
-  setVideoSource () {
-    const { file } = this.props;
+  setVideoSource (file) {
     const previewReader = new FileReader();
     previewReader.readAsDataURL(file);
     previewReader.onloadend = () => {
