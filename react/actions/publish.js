@@ -72,16 +72,10 @@ export function toggleMetadataInputs (showMetadataInputs) {
   };
 };
 
-export function updateThumbnailClaim (claim, url) {
+export function onNewThumbnail (file) {
+  console.log('new thumbnail action created');
   return {
-    type: actions.THUMBNAIL_CLAIM_UPDATE,
-    data: { claim, url },
-  };
-};
-
-export function updateThumbnailSelectedFile (file) {
-  return {
-    type: actions.THUMBNAIL_FILE_SELECT,
+    type: actions.THUMBNAIL_NEW,
     data: file,
   };
 };

@@ -7,7 +7,7 @@ function dataURItoBlob(dataURI) {
   let mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
   // write the bytes of the string to a typed array
   let ia = new Uint8Array(byteString.length);
-  for (var i = 0; i < byteString.length; i++) {
+  for (let i = 0; i < byteString.length; i++) {
     ia[i] = byteString.charCodeAt(i);
   }
   return new Blob([ia], {type: mimeString});
@@ -23,36 +23,26 @@ class PublishThumbnailInput extends React.Component {
       sliderMaxRange: null,
       sliderValue   : null,
     };
-    this.handleSliderChange = this.handleSliderChange.bind(this);
     this.handleVideoLoadedData = this.handleVideoLoadedData.bind(this);
-    this.setThumbnailWithSnapshot = this.setThumbnailWithSnapshot.bind(this);
+    this.handleSliderChange = this.handleSliderChange.bind(this);
+    this.createThumbnail = this.createThumbnail.bind(this);
   }
   componentDidMount () {
-    console.log('thumbnail input did mount');
-    const { claim, file, host, thumbnailChannel } = this.props;
-    this.setThumbnailClaimAndUrl(claim, host, thumbnailChannel);
+    const { file } = this.props;
     this.setVideoSource(file);
   }
   componentWillReceiveProps (nextProps) {
     // if file changes
-    if (nextProps.file !== this.props.file) {
+    if (nextProps.file && nextProps.file !== this.props.file) {
       const { file } = nextProps;
       this.setVideoSource(file);
     };
-    // if claim changes
-    if (nextProps.claim !== this.props.claim) {
-      const { claim, host, thumbnailChannel } = nextProps;
-      this.setThumbnailClaimAndUrl(claim, host, thumbnailChannel);
-    }
-  }
-  setThumbnailClaimAndUrl (claim, host, thumbnailChannel) {
-    const url = `${host}/${thumbnailChannel}/${claim}-thumb.png`;
-    this.props.onThumbnailChange(`${claim}-thumb`, url);
   }
   setVideoSource (file) {
     const previewReader = new FileReader();
     previewReader.readAsDataURL(file);
     previewReader.onloadend = () => {
+      console.log('preview reader complete');
       this.setState({videoSource: previewReader.result});
     };
   }
@@ -77,22 +67,19 @@ class PublishThumbnailInput extends React.Component {
     let video = document.getElementById('video-thumb-player');
     video.currentTime = value / 100;
   }
-  setThumbnailWithSnapshot () {
+  createThumbnail () {
     // take a snapshot
-    const snapshot = this.takeSnapShot();
-    // set the thumbnail in redux store
-    if (snapshot) {
-      this.props.onThumbnailFileSelect(snapshot);
-    }
-  }
-  takeSnapShot () {
     let video = document.getElementById('video-thumb-player');
     let canvas = document.createElement('canvas');
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
     canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
-    const dataUri = canvas.toDataURL();
-    return dataURItoBlob(dataUri);
+    const dataUrl = canvas.toDataURL();
+    const snapshot = dataURItoBlob(dataUrl)
+    // set the thumbnail in redux store
+    if (snapshot) {
+      this.props.onNewThumbnail(snapshot);
+    }
   }
   render () {
     const { error, videoSource, sliderMinRange, sliderMaxRange, sliderValue } = this.state;
@@ -112,7 +99,7 @@ class PublishThumbnailInput extends React.Component {
             playsInline
             onLoadedData={this.handleVideoLoadedData}
             src={videoSource}
-            onTimeUpdate={this.setThumbnailWithSnapshot}
+            onSeeked={this.createThumbnail}
           />
           {
             sliderValue ? (
@@ -127,7 +114,7 @@ class PublishThumbnailInput extends React.Component {
                 />
               </div>
             ) : (
-              <p>loading slider... </p>
+              <p className='info-message' >loading... </p>
             )
           }
         </div>

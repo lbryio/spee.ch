@@ -25,11 +25,8 @@ const initialState = {
     license    : '',
     nsfw       : false,
   },
-  thumbnail: {
-    channel     : publish.thumbnailChannel,
-    claim       : null,
-    selectedFile: null,
-  },
+  thumbnailChannel: publish.thumbnailChannel,
+  thumbnail       : null,
 };
 
 export default function (state = initialState, action) {
@@ -72,20 +69,9 @@ export default function (state = initialState, action) {
       return Object.assign({}, state, {
         showMetadataInputs: action.data,
       });
-    case actions.THUMBNAIL_CLAIM_UPDATE:
+    case actions.THUMBNAIL_NEW:
       return Object.assign({}, state, {
-        metadata: Object.assign({}, state.metadata, {
-          thumbnail: action.data.url,
-        }),
-        thumbnail: Object.assign({}, state.thumbnail, {
-          claim: action.data.claim,
-        }),
-      });
-    case actions.THUMBNAIL_FILE_SELECT:
-      return Object.assign({}, state, {
-        thumbnail: Object.assign({}, state.thumbnail, {
-          selectedFile: action.data,
-        }),
+        thumbnail: action.data,
       });
     default:
       return state;

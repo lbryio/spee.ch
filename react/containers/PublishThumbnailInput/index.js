@@ -1,29 +1,15 @@
 import { connect } from 'react-redux';
-import { updateThumbnailClaim, updateThumbnailSelectedFile } from 'actions/publish';
+import { onNewThumbnail } from 'actions/publish';
 import View from './view';
 
-const mapStateToProps = ({ publish, site }) => {
+const mapStateToProps = ({ publish: { file } }) => {
   return {
-    host            : site.host,
-    // file props
-    file            : publish.file,
-    claim           : publish.claim,
-    // channel props
-    thumbnailChannel: publish.thumbnail.channel,
-    thumbnailClaim  : publish.thumbnail.claim,
-    thumbnailFile   : publish.thumbnail.selectedFile,
+    file,
   };
 };
 
-const mapDispatchToProps = dispatch => {
-  return {
-    onThumbnailChange: (claim, url) => {
-      dispatch(updateThumbnailClaim(claim, url));
-    },
-    onThumbnailFileSelect: (file) => {
-      dispatch(updateThumbnailSelectedFile(file));
-    },
-  };
+const mapDispatchToProps = {
+  onNewThumbnail,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(View);
