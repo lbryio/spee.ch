@@ -43,7 +43,10 @@ class PublishThumbnailInput extends React.Component {
     previewReader.readAsDataURL(file);
     previewReader.onloadend = () => {
       console.log('preview reader complete');
-      this.setState({videoSource: previewReader.result});
+      const dataUri = previewReader.result;
+      const blob = dataURItoBlob(dataUri);
+      const videoSource = URL.createObjectURL(blob);
+      this.setState({ videoSource });
     };
   }
   handleVideoLoadedData (event) {
@@ -75,7 +78,7 @@ class PublishThumbnailInput extends React.Component {
     canvas.height = video.videoHeight;
     canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
     const dataUrl = canvas.toDataURL();
-    const snapshot = dataURItoBlob(dataUrl)
+    const snapshot = dataURItoBlob(dataUrl);
     // set the thumbnail in redux store
     if (snapshot) {
       this.props.onNewThumbnail(snapshot);
