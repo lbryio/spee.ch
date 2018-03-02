@@ -10,25 +10,31 @@ class Preview extends React.Component {
     };
   }
   componentDidMount () {
-    this.previewFile(this.props.file);
+    this.setPreviewImageSource(this.props.file);
   }
   componentWillReceiveProps (newProps) {
     if (newProps.file !== this.props.file) {
-      this.previewFile(newProps.file);
+      this.setPreviewImageSource(newProps.file);
     }
     if (newProps.thumbnail !== this.props.thumbnail) {
-      this.setState({imgSource: (newProps.thumbnail || this.state.defaultThumbnail)});
+      this.setPreviewImageSourceFromFile(newProps.thumbnail);
     }
   }
-  previewFile (file) {
+  setPreviewImageSourceFromFile (file) {
+    const previewReader = new FileReader();
+    previewReader.readAsDataURL(file);
+    previewReader.onloadend = () => {
+      this.setState({imgSource: previewReader.result});
+    };
+  }
+  setPreviewImageSource (file) {
     if (file.type !== 'video/mp4') {
-      const previewReader = new FileReader();
-      previewReader.readAsDataURL(file);
-      previewReader.onloadend = () => {
-        this.setState({imgSource: previewReader.result});
-      };
+      this.setPreviewImageSourceFromFile(file);
     } else {
-      this.setState({imgSource: (this.props.thumbnail || this.state.defaultThumbnail)});
+      if (this.props.thumbnail) {
+        this.setPreviewImageSourceFromFile(this.props.thumbnail);
+      }
+      this.setState({imgSource: this.state.defaultThumbnail});
     }
   }
   render () {
@@ -46,7 +52,7 @@ class Preview extends React.Component {
 Preview.propTypes = {
   dimPreview: PropTypes.bool.isRequired,
   file      : PropTypes.object.isRequired,
-  thumbnail : PropTypes.string,
+  thumbnail : PropTypes.object,
 };
 
 export default Preview;

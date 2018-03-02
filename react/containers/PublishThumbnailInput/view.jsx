@@ -1,5 +1,18 @@
 import React from 'react';
 
+function dataURItoBlob(dataURI) {
+  // convert base64/URLEncoded data component to raw binary data held in a string
+  let byteString = atob(dataURI.split(',')[1]);
+  // separate out the mime component
+  let mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+  // write the bytes of the string to a typed array
+  let ia = new Uint8Array(byteString.length);
+  for (var i = 0; i < byteString.length; i++) {
+    ia[i] = byteString.charCodeAt(i);
+  }
+  return new Blob([ia], {type: mimeString});
+}
+
 class PublishThumbnailInput extends React.Component {
   constructor (props) {
     super(props);
@@ -68,7 +81,9 @@ class PublishThumbnailInput extends React.Component {
     // take a snapshot
     const snapshot = this.takeSnapShot();
     // set the thumbnail in redux store
-    if (snapshot) this.props.onThumbnailFileSelect(snapshot);
+    if (snapshot) {
+      this.props.onThumbnailFileSelect(snapshot);
+    }
   }
   takeSnapShot () {
     let video = document.getElementById('video-thumb-player');
@@ -76,7 +91,8 @@ class PublishThumbnailInput extends React.Component {
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
     canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
-    return canvas.toDataURL();
+    const dataUri = canvas.toDataURL();
+    return dataURItoBlob(dataUri);
   }
   render () {
     const { error, videoSource, sliderMinRange, sliderMaxRange, sliderValue } = this.state;
