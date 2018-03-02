@@ -45,7 +45,7 @@ Spee.ch is a web app that reads and publishes images and videos to and from the 
   * example: `curl -X POST -F 'name=MyPictureName' -F 'file=@/path/to/myPicture.jpeg' https://spee.ch/api/claim/publish`
   * Parameters:
     * `name`
-    * `file` (must be type .mp4, .jpeg, .jpg, .gif, or .png)
+    * `file` (must be type .mp4, .ogg, .webm, .jpeg, .jpg, .gif, or .png)
     * `nsfw` (optional)
     * `license` (optional)
     * `title` (optional)
