@@ -1,8 +1,7 @@
-export const createPublishMetadata = (claim, { type }, { title, thumbnail, description, license, nsfw }, publishInChannel, selectedChannel) => {
+export const createPublishMetadata = (claim, { type }, { title, description, license, nsfw }, publishInChannel, selectedChannel) => {
   let metadata = {
     name: claim,
     title,
-    thumbnail,
     description,
     license,
     nsfw,
@@ -25,4 +24,8 @@ export const createPublishFormData = (file, metadata) => {
     }
   }
   return fd;
+};
+
+export const createThumbnailUrl = (channel, channelId, claim, host) => {
+  return `${host}/${channel}:${channelId}/${claim}-thumb.png`;
 };

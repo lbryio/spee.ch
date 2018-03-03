@@ -29,7 +29,8 @@ module.exports = {
     description: 'Open-source, decentralized image and video sharing.'
   },
   publish: {
-    thumbnailChannel: '@channelName:channelId',  // create a channel to use for thumbnail images
+    thumbnailChannel  : '@channelName',  // create a channel to use for thumbnail images
+    thumbnailChannelId: 'xyz123...',  // the channel_id (claim id) for the channel above
   }
   claim: {
     defaultTitle      : 'Spee.ch',

@@ -20,13 +20,13 @@ const initialState = {
   claim   : '',
   metadata: {
     title      : '',
-    thumbnail  : '',
     description: '',
     license    : '',
     nsfw       : false,
   },
-  thumbnailChannel: publish.thumbnailChannel,
-  thumbnail       : null,
+  thumbnailChannel  : publish.thumbnailChannel,
+  thumbnailChannelId: publish.thumbnailChannelId,
+  thumbnail         : null,
 };
 
 export default function (state = initialState, action) {

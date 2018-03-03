@@ -29,7 +29,6 @@ module.exports = {
     };
   },
   parsePublishApiRequestFiles ({file}) {
-    logger.debug('file', file);
     // make sure a file was provided
     if (!file) {
       throw new Error('no file with key of [file] found in request');
@@ -45,7 +44,6 @@ module.exports = {
     }
     // validate the file name
     if (/'/.test(file.name)) {
-      logger.debug('publish > file validation > file name had apostrophe in it');
       throw new Error('apostrophes are not allowed in the file name');
     }
     // validate the file

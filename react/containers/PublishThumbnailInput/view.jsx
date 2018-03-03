@@ -78,7 +78,10 @@ class PublishThumbnailInput extends React.Component {
     canvas.height = video.videoHeight;
     canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
     const dataUrl = canvas.toDataURL();
-    const snapshot = dataURItoBlob(dataUrl);
+    const blob = dataURItoBlob(dataUrl);
+    const snapshot = new File([blob], `thumbnail.png`, {
+      type: 'image/png',
+    });
     // set the thumbnail in redux store
     if (snapshot) {
       this.props.onNewThumbnail(snapshot);
