@@ -34,20 +34,17 @@ function * publishFile (action) {
     publishMetadata['thumbnail'] = createThumbnailUrl(thumbnailChannel, thumbnailChannelId,  claim, host);
   }
   // create form data for main publish
-  const publishFormData = createPublishFormData(file, publishMetadata);
+  const publishFormData = createPublishFormData(file, thumbnail, publishMetadata);
   // make the publish request
   const publishChannel = yield call(makePublishRequestChannel, publishFormData);
-  let publishInProgress = true;
-  while (publishInProgress) {
+  while (true) {
     const {loadStart, progress, load, success, error} = yield take(publishChannel);
     if (error) {
-      yield put(updatePublishStatus(publishStates.FAILED, error.message));
-      publishInProgress = false;
+      return yield put(updatePublishStatus(publishStates.FAILED, error.message));
     }
     if (success) {
       yield put(clearFile());
-      history.push(`/${success.data.claimId}/${success.data.name}`);
-      publishInProgress = false;
+      return history.push(`/${success.data.claimId}/${success.data.name}`);
     }
     if (loadStart) {
       yield put(updatePublishStatus(publishStates.LOAD_START, null));
@@ -57,41 +54,6 @@ function * publishFile (action) {
     }
     if (load) {
       yield put(updatePublishStatus(publishStates.PUBLISHING, null));
-    }
-  }
-  // publish thumbnail
-  if (thumbnail) {
-    // create form data for thumbnail publish
-    const thumbnailMetadata = {
-      name        : `${claim}-thumb`,
-      title       : `${claim} thumbnail`,
-      description : `a thumbnail for ${claim}`,
-      license     : publishMetadata.license,
-      nsfw        : publishMetadata.nsfw,
-      type        : 'image/png',
-      channel_name: thumbnailChannel,
-      channel_id  : thumbnailChannelId,
-    };
-    const thumbnailFormData = createPublishFormData(thumbnail, thumbnailMetadata);
-    // make the publish reqeust
-    const thumbnailPublishChannel = yield call(makePublishRequestChannel, thumbnailFormData);
-    while (true) {
-      const {loadStart, progress, load, success, error} = yield take(thumbnailPublishChannel);
-      if (error) {
-        return console.log('thumbnail error:', error.message);
-      }
-      if (success) {
-        return console.log('thumbnail success:', success.data);
-      }
-      if (loadStart) {
-        console.log('thumbnail load started.');
-      }
-      if (progress) {
-        console.log('thumbnail progress:', `${progress}%`);
-      }
-      if (load) {
-        console.log('thumbnail load completed.');
-      }
     }
   }
 };

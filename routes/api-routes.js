@@ -5,7 +5,7 @@ const multipartMiddleware = multipart({uploadDir: files.uploadDirectory});
 const db = require('../models');
 const { checkClaimNameAvailability, checkChannelAvailability, publish } = require('../controllers/publishController.js');
 const { getClaimList, resolveUri, getClaim } = require('../helpers/lbryApi.js');
-const { createPublishParams, parsePublishApiRequestBody, parsePublishApiRequestFiles, parsePublishApiChannel, addGetResultsToFileData, createFileData } = require('../helpers/publishHelpers.js');
+const { addGetResultsToFileData, createFileData, createPublishParams, createThumbnailPublishParams, parsePublishApiRequestBody, parsePublishApiRequestFiles, parsePublishApiChannel } = require('../helpers/publishHelpers.js');
 const errorHandlers = require('../helpers/errorHandlers.js');
 const { sendGAAnonymousPublishTiming, sendGAChannelPublishTiming } = require('../helpers/googleAnalytics.js');
 const { authenticateIfNoUserToken } = require('../auth/authentication.js');
@@ -135,14 +135,14 @@ module.exports = (app) => {
     logger.debug('api/claim-publish body:', body);
     logger.debug('api/claim-publish files:', files);
     // define variables
-    let  name, fileName, filePath, fileType, nsfw, license, title, description, thumbnail, channelName, channelPassword;
+    let  name, fileName, filePath, fileType, thumbnailFileName, thumbnailFilePath, thumbnailFileType, nsfw, license, title, description, thumbnail, channelName, channelPassword;
     // record the start time of the request
     const publishStartTime = Date.now();
     // validate the body and files of the request
     try {
       // validateApiPublishRequest(body, files);
       ({name, nsfw, license, title, description, thumbnail} = parsePublishApiRequestBody(body));
-      ({fileName, filePath, fileType} = parsePublishApiRequestFiles(files));
+      ({fileName, filePath, fileType, thumbnailFileName, thumbnailFilePath, thumbnailFileType} = parsePublishApiRequestFiles(files));
       ({channelName, channelPassword} = parsePublishApiChannel(body, user));
     } catch (error) {
       return res.status(400).json({success: false, message: error.message});
@@ -161,9 +161,16 @@ module.exports = (app) => {
           throw new Error('That name is already claimed by another user.');
         }
         // create publish parameters object
-        return createPublishParams(filePath, name, title, description, license, nsfw, thumbnail, channelName);
+        return Promise.all([
+          createPublishParams(filePath, name, title, description, license, nsfw, thumbnail, channelName),
+          createThumbnailPublishParams(thumbnailFilePath, name, license, nsfw),
+        ]);
       })
-      .then(publishParams => {
+      .then(([publishParams, thumbnailPublishParams]) => {
+        // publish the thumbnail
+        if (thumbnailPublishParams) {
+          publish(thumbnailPublishParams, thumbnailFileName, thumbnailFileType);
+        }
         // publish the asset
         return publish(publishParams, fileName, fileType);
       })

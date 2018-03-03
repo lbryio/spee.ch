@@ -1,6 +1,6 @@
 const logger = require('winston');
 const fs = require('fs');
-const { site, wallet } = require('../config/speechConfig.js');
+const { site, wallet, publish } = require('../config/speechConfig.js');
 
 module.exports = {
   parsePublishApiRequestBody ({name, nsfw, license, title, description, thumbnail}) {
@@ -28,7 +28,7 @@ module.exports = {
       thumbnail,
     };
   },
-  parsePublishApiRequestFiles ({file}) {
+  parsePublishApiRequestFiles ({file, thumbnail}) {
     // make sure a file was provided
     if (!file) {
       throw new Error('no file with key of [file] found in request');
@@ -50,9 +50,12 @@ module.exports = {
     module.exports.validateFileTypeAndSize(file);
     // return results
     return {
-      fileName: file.name,
-      filePath: file.path,
-      fileType: file.type,
+      fileName         : file.name,
+      filePath         : file.path,
+      fileType         : file.type,
+      thumbnailFileName: (thumbnail ? thumbnail.name : null),
+      thumbnailFilePath: (thumbnail ? thumbnail.path : null),
+      thumbnailFileType: (thumbnail ? thumbnail.type : null),
     };
   },
   parsePublishApiChannel ({channelName, channelPassword}, user) {
@@ -138,7 +141,7 @@ module.exports = {
       claim_address: wallet.lbryClaimAddress,
     };
     // add thumbnail to channel if video
-    if (thumbnail !== null) {
+    if (thumbnail) {
       publishParams['metadata']['thumbnail'] = thumbnail;
     }
     // add channel to params, if applicable
@@ -146,6 +149,29 @@ module.exports = {
       publishParams['channel_name'] = channelName;
     }
     return publishParams;
+  },
+  createThumbnailPublishParams (thumbnailFilePath, claimName, license, nsfw) {
+    if (!thumbnailFilePath) {
+      return;
+    }
+    logger.debug(`Creating Thumbnail Publish Parameters`);
+    // create the publish params
+    return {
+      name     : `${claimName}-thumb`,
+      file_path: thumbnailFilePath,
+      bid      : 0.01,
+      metadata : {
+        title      : `${claimName} thumbnail`,
+        description: `a thumbnail for ${claimName}`,
+        author     : site.title,
+        language   : 'en',
+        license,
+        nsfw,
+      },
+      claim_address: wallet.lbryClaimAddress,
+      channel_name : publish.thumbnailChannel,
+      channel_id   : publish.thumbnailChannelId,
+    };
   },
   deleteTemporaryFile (filePath) {
     fs.unlink(filePath, err => {

@@ -13,10 +13,14 @@ export const createPublishMetadata = (claim, { type }, { title, description, lic
   return metadata;
 };
 
-export const createPublishFormData = (file, metadata) => {
+export const createPublishFormData = (file, thumbnail, metadata) => {
   let fd = new FormData();
   // append file
   fd.append('file', file);
+  // append thumbnail
+  if (thumbnail) {
+    fd.append('thumbnail', thumbnail);
+  }
   // append metadata
   for (let key in metadata) {
     if (metadata.hasOwnProperty(key)) {
