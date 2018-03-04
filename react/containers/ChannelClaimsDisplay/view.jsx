@@ -28,10 +28,7 @@ class ChannelClaimsDisplay extends React.Component {
         {(claims.length > 0) ? (
           <div>
             {claims.map((claim, index) => <AssetPreview
-              name={claim.name}
-              claimId={claim.claimId}
-              fileExt={claim.fileExt}
-              contentType={claim.contentType}
+              claimData={claim}
               key={`${claim.name}-${index}`}
             />)}
             <div>
