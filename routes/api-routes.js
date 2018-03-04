@@ -132,8 +132,8 @@ module.exports = (app) => {
   });
   // route to run a publish request on the daemon
   app.post('/api/claim/publish', multipartMiddleware, ({ body, files, headers, ip, originalUrl, user }, res) => {
-    logger.debug('api/claim-publish body:', body);
-    logger.debug('api/claim-publish files:', files);
+    logger.debug('api/claim/publish req.body:', body);
+    logger.debug('api/claim/publish req.files:', files);
     // define variables
     let  name, fileName, filePath, fileType, thumbnailFileName, thumbnailFilePath, thumbnailFileType, nsfw, license, title, description, thumbnail, channelName, channelPassword;
     // record the start time of the request
