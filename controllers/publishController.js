@@ -86,31 +86,24 @@ module.exports = {
         });
     });
   },
-  checkClaimNameAvailability (name) {
-    return new Promise((resolve, reject) => {
-      // find any records where the name is used
-      db.File.findAll({ where: { name } })
-        .then(result => {
-          if (result.length >= 1) {
-            const claimAddress = config.wallet.lbryClaimAddress;
-            // filter out any results that were not published from spee.ch's wallet address
-            const filteredResult = result.filter((claim) => {
-              return (claim.address === claimAddress);
-            });
-            // return based on whether any non-spee.ch claims were left
-            if (filteredResult.length >= 1) {
-              resolve(false);
-            } else {
-              resolve(true);
-            }
-          } else {
-            resolve(true);
-          }
-        })
-        .catch(error => {
-          reject(error);
-        });
-    });
+  validateClaimName (name) {
+    // find any records where the name is used
+    return db.File.findAll({ where: { name } })
+      .then(result => {
+        if (result.length >= 1) {
+          const claimAddress = config.wallet.lbryClaimAddress;
+          // filter out any results that were not published from spee.ch's wallet address
+          const filteredResult = result.filter((claim) => {
+            return (claim.address === claimAddress);
+          });
+          // return based on whether any non-spee.ch claims were left
+          if (filteredResult.length >= 1) {
+            throw new Error('That claim is already in use');
+          };
+          return name;
+        };
+        return name;
+      });
   },
   checkChannelAvailability (name) {
     return new Promise((resolve, reject) => {
