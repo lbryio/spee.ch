@@ -86,7 +86,7 @@ module.exports = {
         });
     });
   },
-  validateClaimName (name) {
+  claimNameIsAvailable (name) {
     // find any records where the name is used
     return db.File.findAll({ where: { name } })
       .then(result => {

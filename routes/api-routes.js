@@ -3,9 +3,9 @@ const multipart = require('connect-multiparty');
 const { files, site } = require('../config/speechConfig.js');
 const multipartMiddleware = multipart({uploadDir: files.uploadDirectory});
 const db = require('../models');
-const { validateClaimName, checkChannelAvailability, publish } = require('../controllers/publishController.js');
+const { claimNameIsAvailable, checkChannelAvailability, publish } = require('../controllers/publishController.js');
 const { getClaimList, resolveUri, getClaim } = require('../helpers/lbryApi.js');
-const { createPublishParams, parsePublishApiRequestBody, parsePublishApiRequestFiles, addGetResultsToFileData, createFileData } = require('../helpers/publishHelpers.js');
+const { createBasicPublishParams, parsePublishApiRequestBody, parsePublishApiRequestFiles, addGetResultsToFileData, createFileData } = require('../helpers/publishHelpers.js');
 const errorHandlers = require('../helpers/errorHandlers.js');
 const { sendGAAnonymousPublishTiming, sendGAChannelPublishTiming } = require('../helpers/googleAnalytics.js');
 const { authenticateUser } = require('../auth/authentication.js');
@@ -108,7 +108,7 @@ module.exports = (app) => {
   });
   // route to check whether this site published to a claim
   app.get('/api/claim/availability/:name', ({ ip, originalUrl, params }, res) => {
-    validateClaimName(params.name)
+    claimNameIsAvailable(params.name)
       .then(result => {
         res.status(200).json(result);
       })
@@ -146,8 +146,8 @@ module.exports = (app) => {
     // check channel authorization
     Promise.all([
       authenticateUser(channelName, channelId, channelPassword, user),
-      validateClaimName(name),
-      createPublishParams(filePath, name, title, description, license, nsfw, thumbnail),
+      claimNameIsAvailable(name),
+      createBasicPublishParams(filePath, name, title, description, license, nsfw, thumbnail),
     ])
       .then(([{channelName, channelClaimId}, validatedClaimName, publishParams]) => {
         // add channel details to the publish params
@@ -155,8 +155,6 @@ module.exports = (app) => {
           publishParams['channel_name'] = channelName;
           publishParams['channel_id'] = channelClaimId;
         }
-        logger.debug('validated claim name:', validatedClaimName);
-        logger.debug('publish params:', publishParams);
         // publish the asset
         return publish(publishParams, fileName, fileType);
       })

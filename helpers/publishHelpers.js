@@ -86,7 +86,7 @@ module.exports = {
     }
     return file;
   },
-  createPublishParams (filePath, name, title, description, license, nsfw, thumbnail) {
+  createBasicPublishParams (filePath, name, title, description, license, nsfw, thumbnail) {
     logger.debug(`Creating Publish Parameters`);
     // provide defaults for title
     if (title === null || title.trim() === '') {
