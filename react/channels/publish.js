@@ -1,24 +1,20 @@
 import {buffers, END, eventChannel} from 'redux-saga';
 
 export const makePublishRequestChannel = (fd) => {
-  console.log('making publish request');
   return eventChannel(emitter => {
     const uri = '/api/claim/publish';
     const xhr = new XMLHttpRequest();
     // add event listeners
     const onLoadStart = () => {
-      console.log('load started');
       emitter({loadStart: true});
     };
     const onProgress = (event) => {
       if (event.lengthComputable) {
         const percentage = Math.round((event.loaded * 100) / event.total);
-        console.log('progress:', percentage);
         emitter({progress: percentage});
       }
     };
     const onLoad = () => {
-      console.log('load completed');
       emitter({load: true});
     };
     xhr.upload.addEventListener('loadstart', onLoadStart);

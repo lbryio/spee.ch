@@ -12,11 +12,9 @@ export function * newChannelRequest (action) {
   // If this uri is in the request list, it's already been fetched
   const state = yield select(selectShowState);
   if (state.requestList[requestId]) {
-    console.log('that request already exists in the request list!');
     return null;
   }
   // get channel long id
-  console.log('getting channel long id and short id');
   let longId, shortId;
   try {
     ({ data: {longChannelClaimId: longId, shortChannelClaimId: shortId} } = yield call(getChannelData, channelName, channelId));
@@ -29,11 +27,9 @@ export function * newChannelRequest (action) {
   // is this an existing channel?
   // If this channel is in the channel list, it's already been fetched
   if (state.channelList[channelKey]) {
-    console.log('that channel already exists in the channel list!');
     return null;
   }
   // get channel claims data
-  console.log('getting channel claims data');
   let claimsData;
   try {
     ({ data: claimsData } = yield call(getChannelClaims, channelName, longId, 1));

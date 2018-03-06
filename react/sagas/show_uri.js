@@ -6,7 +6,6 @@ import { newChannelRequest } from 'sagas/show_channel';
 import lbryUri from 'utils/lbryUri';
 
 function * parseAndUpdateIdentifierAndClaim (modifier, claim) {
-  console.log('parseAndUpdateIdentifierAndClaim');
   // this is a request for an asset
   // claim will be an asset claim
   // the identifier could be a channel or a claim id
@@ -24,7 +23,6 @@ function * parseAndUpdateIdentifierAndClaim (modifier, claim) {
   yield call(newAssetRequest, onNewAssetRequest(claimName, claimId, null, null, extension));
 }
 function * parseAndUpdateClaimOnly (claim) {
-  console.log('parseAndUpdateIdentifierAndClaim');
   // this could be a request for an asset or a channel page
   // claim could be an asset claim or a channel claim
   let isChannel, channelName, channelClaimId;
@@ -49,7 +47,6 @@ function * parseAndUpdateClaimOnly (claim) {
 }
 
 export function * handleShowPageUri (action) {
-  console.log('handleShowPageUri');
   const { identifier, claim } = action.data;
   if (identifier) {
     return yield call(parseAndUpdateIdentifierAndClaim, identifier, claim);

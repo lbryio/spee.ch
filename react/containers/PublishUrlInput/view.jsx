@@ -44,12 +44,10 @@ class PublishUrlInput extends React.Component {
       return this.props.onUrlError('Enter a url above');
     }
     request(`/api/claim/availability/${claim}`)
-      .then(response => {
-        console.log('api/claim/availability response:', response);
+      .then(() => {
         this.props.onUrlError(null);
       })
       .catch((error) => {
-        console.log('api/claim/availability error:', error);
         this.props.onUrlError(error.message);
       });
   }

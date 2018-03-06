@@ -73,7 +73,6 @@ export function toggleMetadataInputs (showMetadataInputs) {
 };
 
 export function onNewThumbnail (file) {
-  console.log('new thumbnail action created');
   return {
     type: actions.THUMBNAIL_NEW,
     data: file,

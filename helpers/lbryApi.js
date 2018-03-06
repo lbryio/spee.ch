@@ -71,7 +71,6 @@ module.exports = {
   },
   resolveUri (uri) {
     logger.debug(`lbryApi >> Resolving URI for "${uri}"`);
-    // console.log('resolving uri', uri);
     return new Promise((resolve, reject) => {
       axios
         .post(lbryApiUri, {

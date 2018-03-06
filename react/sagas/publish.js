@@ -10,7 +10,6 @@ import { createPublishMetadata, createPublishFormData, createThumbnailUrl } from
 import { makePublishRequestChannel } from 'channels/publish';
 
 function * publishFile (action) {
-  console.log('publishing file');
   const { history } = action.data;
   const { publishInChannel, selectedChannel, file, claim, metadata, thumbnailChannel, thumbnailChannelId, thumbnail, error: { url: urlError } } = yield select(selectPublishState);
   const { loggedInChannel } = yield select(selectChannelState);

@@ -26,7 +26,6 @@ class Dropzone extends React.Component {
     this.setState({dragOver: false});
     // if dropped items aren't files, reject them
     const dt = event.dataTransfer;
-    console.log('dt', dt);
     if (dt.items) {
       if (dt.items[0].kind === 'file') {
         const droppedFile = dt.items[0].getAsFile();

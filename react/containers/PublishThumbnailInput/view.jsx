@@ -42,7 +42,6 @@ class PublishThumbnailInput extends React.Component {
     const previewReader = new FileReader();
     previewReader.readAsDataURL(file);
     previewReader.onloadend = () => {
-      console.log('preview reader complete');
       const dataUri = previewReader.result;
       const blob = dataURItoBlob(dataUri);
       const videoSource = URL.createObjectURL(blob);

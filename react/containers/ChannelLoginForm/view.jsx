@@ -29,7 +29,6 @@ class ChannelLoginForm extends React.Component {
     };
     request('login', params)
       .then(({success, channelName, shortChannelId, channelClaimId, message}) => {
-        console.log('loginToChannel success:', success);
         if (success) {
           this.props.onChannelLogin(channelName, shortChannelId, channelClaimId);
         } else {
@@ -37,7 +36,6 @@ class ChannelLoginForm extends React.Component {
         };
       })
       .catch(error => {
-        console.log('login error', error);
         if (error.message) {
           this.setState({'error': error.message});
         } else {

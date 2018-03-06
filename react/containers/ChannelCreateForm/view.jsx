@@ -54,7 +54,6 @@ class ChannelCreateForm extends React.Component {
     return new Promise((resolve, reject) => {
       request(`/api/channel/availability/${channelWithAtSymbol}`)
         .then(isAvailable => {
-          console.log('checkIsChannelAvailable result:', isAvailable);
           if (!isAvailable) {
             return reject(new Error('That channel has already been claimed'));
           }
@@ -69,10 +68,8 @@ class ChannelCreateForm extends React.Component {
     const password = this.state.password;
     return new Promise((resolve, reject) => {
       if (!password || password.length < 1) {
-        console.log('password not provided');
         return reject(new Error('Please provide a password'));
       }
-      console.log('password provided');
       resolve();
     });
   }
@@ -88,12 +85,10 @@ class ChannelCreateForm extends React.Component {
     return new Promise((resolve, reject) => {
       request('/signup', params)
         .then(result => {
-          console.log('makePublishChannelRequest result:', result);
           return resolve(result);
         })
         .catch(error => {
-          console.log('create channel request failed:', error);
-          reject(new Error('Unfortunately, we encountered an error while creating your channel.  Please let us know in Discord!'));
+          reject(new Error(`Unfortunately, we encountered an error while creating your channel. Please let us know in Discord! ${error.message}`));
         });
     });
   }

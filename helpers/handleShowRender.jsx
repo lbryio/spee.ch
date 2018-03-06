@@ -39,7 +39,6 @@ module.exports = (req, res) => {
     .run(saga)
     .done
     .then(() => {
-      console.log('preload sagas are done');
       // render component to a string
       const html = renderToString(
         <Provider store={store}>
@@ -56,10 +55,7 @@ module.exports = (req, res) => {
 
       // check for a redirect
       if (context.url) {
-        console.log('REDIRECTING:', context.url);
         return res.redirect(301, context.url);
-      } else {
-        console.log(`we're good, send the response`);
       }
 
       // get the initial state from our Redux store

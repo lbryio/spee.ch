@@ -39,9 +39,7 @@ class NavBar extends React.Component {
       });
   }
   handleSelection (event) {
-    console.log('handling selection', event);
     const value = event.target.selectedOptions[0].value;
-    console.log('value', value);
     switch (value) {
       case LOGOUT:
         this.logoutUser();
