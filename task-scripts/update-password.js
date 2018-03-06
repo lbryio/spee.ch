@@ -26,18 +26,17 @@ db.sequelize.sync() // sync sequelize
     if (!user) {
       throw new Error('no user found');
     }
-    return new Promise((resolve, reject) => {
-      user.comparePassword(oldPassword, (passwordErr, isMatch) => {
-        if (passwordErr) {
-          return reject(passwordErr);
-        }
-        if (!isMatch) {
-          return reject('Incorrect old password.');
-        }
-        logger.debug('Password was a match, updating password');
-        return resolve(user.changePassword(newPassword));
-      });
-    });
+    return Promise.all([
+      user.comparePassword(oldPassword),
+      user,
+    ]);
+  })
+  .then(([isMatch, user]) => {
+    if (!isMatch) {
+      throw new Error('Incorrect old password.');
+    }
+    logger.debug('Password was a match, updating password');
+    return user.changePassword(newPassword);
   })
   .then(() => {
     logger.debug('Password successfully updated');

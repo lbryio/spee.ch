@@ -178,6 +178,7 @@ module.exports = (app) => {
         }
       })
       .catch(error => {
+        console.log('handling error response...');
         errorHandlers.handleErrorResponse(originalUrl, ip, error, res);
       });
   });

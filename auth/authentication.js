@@ -56,20 +56,18 @@ module.exports = {
             logger.debug('no user found');
             throw new Error('Authentication failed, you do not have access to that channel');
           }
-          return user.comparePassword(userPassword, (passwordErr, isMatch) => {
-            if (passwordErr) {
-              logger.error('comparePassword error:', passwordErr);
-              throw new Error('Authentication failed, you do not have access to that channel');
-            }
-            if (!isMatch) {
-              logger.debug('incorrect password');
-              throw new Error('Authentication failed, you do not have access to that channel');
-            }
-            logger.debug('...password was a match...');
-            resolve(channelData);
-          });
+          return user.comparePassword(userPassword);
+        })
+        .then(isMatch => {
+          if (!isMatch) {
+            logger.debug('incorrect password');
+            throw new Error('Authentication failed, you do not have access to that channel');
+          }
+          logger.debug('...password was a match...');
+          resolve(channelData);
         })
         .catch(error => {
+          logger.warn('authenticateChannelCredentials error');
           reject(error);
         });
     });
