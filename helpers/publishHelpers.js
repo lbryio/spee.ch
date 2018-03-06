@@ -57,30 +57,6 @@ module.exports = {
       fileType: file.type,
     };
   },
-  parsePublishApiChannel ({channelName, channelPassword}, user) {
-    logger.debug('publish api parser input:', {channelName, channelPassword, user});
-    // if anonymous or '' provided, publish will be anonymous (even if client is logged in)
-    // if a channel name is provided...
-    if (channelName) {
-      // make sure a password was provided if no user token is provided
-      if (!user && !channelPassword) {
-        throw new Error('Unauthenticated channel name provided without password');
-      }
-      // if request comes from the client with a token
-      // ensure this publish uses that channel name
-      if (user) {
-        channelName = user.channelName;
-      } ;
-      // add the @ if the channel name is missing it
-      if (channelName.indexOf('@') !== 0) {
-        channelName = `@${channelName}`;
-      }
-    }
-    return {
-      channelName,
-      channelPassword,
-    };
-  },
   validateFileTypeAndSize (file) {
     // check file type and size
     switch (file.type) {
@@ -110,7 +86,7 @@ module.exports = {
     }
     return file;
   },
-  createPublishParams (filePath, name, title, description, license, nsfw, thumbnail, channelName) {
+  createBasicPublishParams (filePath, name, title, description, license, nsfw, thumbnail) {
     logger.debug(`Creating Publish Parameters`);
     // provide defaults for title
     if (title === null || title.trim() === '') {
@@ -142,10 +118,6 @@ module.exports = {
     // add thumbnail to channel if video
     if (thumbnail !== null) {
       publishParams['metadata']['thumbnail'] = thumbnail;
-    }
-    // add channel to params, if applicable
-    if (channelName) {
-      publishParams['channel_name'] = channelName;
     }
     return publishParams;
   },

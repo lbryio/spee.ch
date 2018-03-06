@@ -30,33 +30,33 @@ module.exports = new PassportLocalStrategy(
     passwordField: 'password',
   },
   (username, password, done) => {
-    logger.debug('logging user in');
-    return db
-      .User
-      .findOne({where: {userName: username}})
+    return db.User
+      .findOne({
+        where: {userName: username},
+      })
       .then(user => {
         if (!user) {
-          // logger.debug('no user found');
+          logger.debug('no user found');
           return done(null, false, {message: 'Incorrect username or password'});
         }
-        user.comparePassword(password, (passwordErr, isMatch) => {
-          if (passwordErr) {
-            logger.error('passwordErr:', passwordErr);
-            return done(null, false, {message: passwordErr});
-          }
-          if (!isMatch) {
-            // logger.debug('incorrect password');
-            return done(null, false, {message: 'Incorrect username or password'});
-          }
-          logger.debug('Password was a match, returning User');
-          return returnUserAndChannelInfo(user)
-            .then((userInfo) => {
-              return done(null, userInfo);
-            })
-            .catch(error => {
-              return done(error);
-            });
-        });
+        return user.comparePassword(password)
+          .then(isMatch => {
+            if (!isMatch) {
+              logger.debug('incorrect password');
+              return done(null, false, {message: 'Incorrect username or password'});
+            }
+            logger.debug('Password was a match, returning User');
+            return returnUserAndChannelInfo(user)
+              .then(userInfo => {
+                return done(null, userInfo);
+              })
+              .catch(error => {
+                return error;
+              });
+          })
+          .catch(error => {
+            return error;
+          });
       })
       .catch(error => {
         return done(error);
