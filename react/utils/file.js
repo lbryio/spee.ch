@@ -19,15 +19,15 @@ module.exports = {
         }
         break;
       case 'image/gif':
-        if (file.size > 50000000) {
+        if (file.size > 30000000) {
           console.log('file was too big');
-          throw new Error('Sorry, GIFs are limited to 50 megabytes.');
+          throw new Error('Sorry, GIFs are limited to 30 megabytes.');
         }
         break;
       case 'video/mp4':
-        if (file.size > 50000000) {
+        if (file.size > 20000000) {
           console.log('file was too big');
-          throw new Error('Sorry, videos are limited to 50 megabytes.');
+          throw new Error('Sorry, videos are limited to 20 megabytes.');
         }
         break;
       default:

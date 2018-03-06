@@ -51,10 +51,14 @@ class PublishThumbnailInput extends React.Component {
   }
   handleVideoLoadedData (event) {
     const duration = event.target.duration;
+    const totalMinutes = Math.floor(duration / 60);
+    const totalSeconds = Math.floor(duration % 60);
     // set the slider
     this.setState({
       sliderMaxRange: duration * 100,
       sliderValue   : duration * 100 / 2,
+      totalMinutes,
+      totalSeconds,
     });
     // update the current time of the video
     let video = document.getElementById('video-thumb-player');
@@ -88,28 +92,28 @@ class PublishThumbnailInput extends React.Component {
     }
   }
   render () {
-    const { error, videoSource, sliderMinRange, sliderMaxRange, sliderValue } = this.state;
+    const { error, videoSource, sliderMinRange, sliderMaxRange, sliderValue, totalMinutes, totalSeconds } = this.state;
     return (
       <div>
-        <div>
-          { error ? (
-            <p className='info-message--failure'>{error}</p>
-          ) : (
-            <p className='info-message'>Use slider to set thumbnail:</p>
-          )}
-          <video
-            id='video-thumb-player'
-            preload='metadata'
-            muted
-            style={{display: 'none'}}
-            playsInline
-            onLoadedData={this.handleVideoLoadedData}
-            src={videoSource}
-            onSeeked={this.createThumbnail}
-          />
-          {
-            sliderValue ? (
-              <div className='slide-container'>
+        <label className='label'>Thumbnail:</label>
+        <video
+          id='video-thumb-player'
+          preload='metadata'
+          muted
+          style={{display: 'none'}}
+          playsInline
+          onLoadedData={this.handleVideoLoadedData}
+          src={videoSource}
+          onSeeked={this.createThumbnail}
+        />
+        {
+          sliderValue ? (
+            <div>
+              <div className='flex-container--row flex-container--space-between-center' style={{width: '100%'}}>
+                <span className='info-message'>0'00"</span>
+                <span className='info-message'>{totalMinutes}'{totalSeconds}"</span>
+              </div>
+              <div>
                 <input
                   type='range'
                   min={sliderMinRange}
@@ -119,11 +123,16 @@ class PublishThumbnailInput extends React.Component {
                   onChange={this.handleSliderChange}
                 />
               </div>
-            ) : (
-              <p className='info-message' >loading... </p>
-            )
-          }
-        </div>
+            </div>
+          ) : (
+            <p className='info-message' >loading... </p>
+          )
+        }
+        { error ? (
+          <p className='info-message--failure'>{error}</p>
+        ) : (
+          <p className='info-message'>Use slider to set thumbnail</p>
+        )}
       </div>
     );
   }

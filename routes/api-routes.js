@@ -5,9 +5,7 @@ const multipartMiddleware = multipart({uploadDir: files.uploadDirectory});
 const db = require('../models');
 const { claimNameIsAvailable, checkChannelAvailability, publish } = require('../controllers/publishController.js');
 const { getClaimList, resolveUri, getClaim } = require('../helpers/lbryApi.js');
-
 const { addGetResultsToFileData, createBasicPublishParams, createThumbnailPublishParams, parsePublishApiRequestBody, parsePublishApiRequestFiles, createFileData } = require('../helpers/publishHelpers.js');
-
 const errorHandlers = require('../helpers/errorHandlers.js');
 const { sendGAAnonymousPublishTiming, sendGAChannelPublishTiming } = require('../helpers/googleAnalytics.js');
 const { authenticateUser } = require('../auth/authentication.js');

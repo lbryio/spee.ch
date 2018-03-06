@@ -14,10 +14,14 @@ class PublishUrlInput extends React.Component {
     }
   }
   componentWillReceiveProps ({ claim, fileName }) {
-    if (!claim) {
+    // if a new file was chosen, update the claim name
+    if (fileName !== this.props.fileName) {
       return this.setClaimName(fileName);
     }
-    this.checkClaimIsAvailable(claim);
+    // if the claim has updated, check its availability
+    if (claim !== this.props.claim) {
+      this.validateClaim(claim);
+    }
   }
   handleInput (event) {
     let value = event.target.value;
@@ -35,35 +39,42 @@ class PublishUrlInput extends React.Component {
     const cleanClaimName = this.cleanseInput(fileNameWithoutEnding);
     this.props.onClaimChange(cleanClaimName);
   }
-  checkClaimIsAvailable (claim) {
+  validateClaim (claim) {
+    if (!claim) {
+      return this.props.onUrlError('Enter a url above');
+    }
     request(`/api/claim/availability/${claim}`)
-      .then(() => {
+      .then(response => {
+        console.log('api/claim/availability response:', response);
         this.props.onUrlError(null);
       })
       .catch((error) => {
+        console.log('api/claim/availability error:', error);
         this.props.onUrlError(error.message);
       });
   }
   render () {
+    const { claim, loggedInChannelName, loggedInChannelShortId, publishInChannel, selectedChannel, urlError } = this.props;
     return (
-      <div>
-        <p id='input-error-claim-name' className='info-message-placeholder info-message--failure'>{this.props.urlError}</p>
-        <div className='column column--3 column--sml-10'>
-          <label className='label'>URL:</label>
-        </div><div className='column column--7 column--sml-10 input-text--primary span--relative'>
-
+      <div className='column column--10 column--sml-10'>
+        <div className='input-text--primary span--relative'>
           <span className='url-text--secondary'>spee.ch / </span>
-
           <UrlMiddle
-            publishInChannel={this.props.publishInChannel}
-            selectedChannel={this.props.selectedChannel}
-            loggedInChannelName={this.props.loggedInChannelName}
-            loggedInChannelShortId={this.props.loggedInChannelShortId}
+            publishInChannel={publishInChannel}
+            selectedChannel={selectedChannel}
+            loggedInChannelName={loggedInChannelName}
+            loggedInChannelShortId={loggedInChannelShortId}
           />
-
-          <input type='text' id='claim-name-input' className='input-text' name='claim' placeholder='your-url-here' onChange={this.handleInput} value={this.props.claim} />
-          { (this.props.claim && !this.props.urlError) && <span id='input-success-claim-name' className='info-message--success span--absolute'>{'\u2713'}</span> }
-          { this.props.urlError && <span id='input-success-channel-name' className='info-message--failure span--absolute'>{'\u2716'}</span> }
+          <input type='text' id='claim-name-input' className='input-text' name='claim' placeholder='your-url-here' onChange={this.handleInput} value={claim} />
+          { (claim && !urlError) && <span id='input-success-claim-name' className='info-message--success span--absolute'>{'\u2713'}</span> }
+          { urlError && <span id='input-success-channel-name' className='info-message--failure span--absolute'>{'\u2716'}</span> }
+        </div>
+        <div>
+          { urlError ? (
+            <p id='input-error-claim-name' className='info-message--failure'>{urlError}</p>
+          ) : (
+            <p className='info-message'>Choose a custom url</p>
+          )}
         </div>
       </div>
     );
