@@ -53,8 +53,8 @@ module.exports = {
   },
   chooseGaPublishLabel (publishParams) {
     if (publishParams.channel_name || publishParams.channel_id) {
-      return 'PUBLISH_IN_CHANNEL';
+      return 'PUBLISH_IN_CHANNEL_CLAIM';
     }
-    return 'PUBLISH_ANONYMOUS';
+    return 'PUBLISH_ANONYMOUS_CLAIM';
   },
 };
