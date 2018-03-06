@@ -3,12 +3,14 @@ const multipart = require('connect-multiparty');
 const { files, site } = require('../config/speechConfig.js');
 const multipartMiddleware = multipart({uploadDir: files.uploadDirectory});
 const db = require('../models');
-const { checkClaimNameAvailability, checkChannelAvailability, publish } = require('../controllers/publishController.js');
+const { claimNameIsAvailable, checkChannelAvailability, publish } = require('../controllers/publishController.js');
 const { getClaimList, resolveUri, getClaim } = require('../helpers/lbryApi.js');
-const { addGetResultsToFileData, createFileData, createPublishParams, createThumbnailPublishParams, parsePublishApiRequestBody, parsePublishApiRequestFiles, parsePublishApiChannel } = require('../helpers/publishHelpers.js');
+
+const { addGetResultsToFileData, createBasicPublishParams, createThumbnailPublishParams, parsePublishApiRequestBody, parsePublishApiRequestFiles, createFileData } = require('../helpers/publishHelpers.js');
+
 const errorHandlers = require('../helpers/errorHandlers.js');
 const { sendGAAnonymousPublishTiming, sendGAChannelPublishTiming } = require('../helpers/googleAnalytics.js');
-const { authenticateIfNoUserToken } = require('../auth/authentication.js');
+const { authenticateUser } = require('../auth/authentication.js');
 const { getChannelData, getChannelClaims, getClaimId } = require('../controllers/serveController.js');
 
 const NO_CHANNEL = 'NO_CHANNEL';
@@ -108,13 +110,9 @@ module.exports = (app) => {
   });
   // route to check whether this site published to a claim
   app.get('/api/claim/availability/:name', ({ ip, originalUrl, params }, res) => {
-    checkClaimNameAvailability(params.name)
+    claimNameIsAvailable(params.name)
       .then(result => {
-        if (result === true) {
-          res.status(200).json(true);
-        } else {
-          res.status(200).json(false);
-        }
+        res.status(200).json(result);
       })
       .catch(error => {
         errorHandlers.handleErrorResponse(originalUrl, ip, error, res);
@@ -135,7 +133,7 @@ module.exports = (app) => {
     logger.debug('api/claim/publish req.body:', body);
     logger.debug('api/claim/publish req.files:', files);
     // define variables
-    let  name, fileName, filePath, fileType, thumbnailFileName, thumbnailFilePath, thumbnailFileType, nsfw, license, title, description, thumbnail, channelName, channelPassword;
+    let  name, fileName, filePath, fileType, thumbnailFileName, thumbnailFilePath, thumbnailFileType, nsfw, license, title, description, thumbnail, channelName, channelId, channelPassword;
     // record the start time of the request
     const publishStartTime = Date.now();
     // validate the body and files of the request
@@ -143,30 +141,23 @@ module.exports = (app) => {
       // validateApiPublishRequest(body, files);
       ({name, nsfw, license, title, description, thumbnail} = parsePublishApiRequestBody(body));
       ({fileName, filePath, fileType, thumbnailFileName, thumbnailFilePath, thumbnailFileType} = parsePublishApiRequestFiles(files));
-      ({channelName, channelPassword} = parsePublishApiChannel(body, user));
+      ({channelName, channelId, channelPassword} = body);
     } catch (error) {
       return res.status(400).json({success: false, message: error.message});
     }
     // check channel authorization
-    authenticateIfNoUserToken(channelName, channelPassword, user)
-      .then(authenticated => {
-        if (!authenticated) {
-          throw new Error('Authentication failed, you do not have access to that channel');
+    Promise.all([
+      authenticateUser(channelName, channelId, channelPassword, user),
+      claimNameIsAvailable(name),
+      createBasicPublishParams(filePath, name, title, description, license, nsfw, thumbnail),
+      createThumbnailPublishParams(thumbnailFilePath, name, license, nsfw),
+    ])
+      .then(([{channelName, channelClaimId}, validatedClaimName, publishParams, thumbnailPublishParams]) => {
+        // add channel details to the publish params
+        if (channelName && channelClaimId) {
+          publishParams['channel_name'] = channelName;
+          publishParams['channel_id'] = channelClaimId;
         }
-        // make sure the claim name is available
-        return checkClaimNameAvailability(name);
-      })
-      .then(result => {
-        if (!result) {
-          throw new Error('That name is already claimed by another user.');
-        }
-        // create publish parameters object
-        return Promise.all([
-          createPublishParams(filePath, name, title, description, license, nsfw, thumbnail, channelName),
-          createThumbnailPublishParams(thumbnailFilePath, name, license, nsfw),
-        ]);
-      })
-      .then(([publishParams, thumbnailPublishParams]) => {
         // publish the thumbnail
         if (thumbnailPublishParams) {
           publish(thumbnailPublishParams, thumbnailFileName, thumbnailFileType);

@@ -24,8 +24,8 @@ module.exports = (sequelize, { STRING }) => {
     User.hasOne(db.Channel);
   };
 
-  User.prototype.comparePassword = function (password, callback) {
-    bcrypt.compare(password, this.password, callback);
+  User.prototype.comparePassword = function (password) {
+    return bcrypt.compare(password, this.password);
   };
 
   User.prototype.changePassword = function (newPassword) {

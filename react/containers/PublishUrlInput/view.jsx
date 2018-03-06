@@ -37,13 +37,8 @@ class PublishUrlInput extends React.Component {
   }
   checkClaimIsAvailable (claim) {
     request(`/api/claim/availability/${claim}`)
-      .then(isAvailable => {
-        console.log('checkClaimIsAvailable request response:', isAvailable);
-        if (isAvailable) {
-          this.props.onUrlError(null);
-        } else {
-          this.props.onUrlError('That url has already been claimed');
-        }
+      .then(() => {
+        this.props.onUrlError(null);
       })
       .catch((error) => {
         this.props.onUrlError(error.message);

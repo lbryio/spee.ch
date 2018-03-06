@@ -3,7 +3,7 @@ const expect = chai.expect;
 const chaiHttp = require('chai-http');
 const { site, testing } = require('../../config/speechConfig.js');
 const { host } = site;
-const { testChannel, testChannelPassword } = testing;
+const { testChannel, testChannelId, testChannelPassword } = testing;
 const requestTimeout = 20000;
 const publishTimeout = 120000;
 const fs = require('fs');
@@ -109,19 +109,64 @@ describe('end-to-end', function () {
     const filePath = './test/mock-data/bird.jpeg';
     const fileName = 'byrd.jpeg';
     const channelName = testChannel;
+    const channelId = testChannelId;
     const channelPassword = testChannelPassword;
+    const date = new Date();
+    const name = `test-publish-${date.getFullYear()}-${date.getMonth()}-${date.getDate()}-${date.getTime()}`;
 
-    describe('anonymous publishes', function () {
-      it(`should receive a status code 200 within ${publishTimeout}ms @usesLbc`, function (done) {
-        const date = new Date();
-        const name = `test-publish-${date.getFullYear()}-${date.getMonth()}-${date.getDate()}-${date.getTime()}`;
+    describe('api/claim/publish', function () {
+
+      it(`should receive a status code 400 if username does not exist`, function (done) {
         chai.request(host)
           .post(publishUrl)
           .type('form')
           .attach('file', fs.readFileSync(filePath), fileName)
           .field('name', name)
+          .field('channelName', `@${name}`)
+          .field('channelPassword', channelPassword)
           .end(function (err, res) {
-            // expect(err).to.be.null;
+            expect(res).to.have.status(400);
+            done();
+          });
+      }).timeout(publishTimeout);
+
+      it(`should receive a status code 400 if the wrong password is used with the channel name`, function (done) {
+        chai.request(host)
+          .post(publishUrl)
+          .type('form')
+          .attach('file', fs.readFileSync(filePath), fileName)
+          .field('name', name)
+          .field('channelName', channelName)
+          .field('channelPassword', 'xxxxx')
+          .end(function (err, res) {
+            expect(res).to.have.status(400);
+            done();
+          });
+      }).timeout(publishTimeout);
+
+      it(`should receive a status code 400 if the wrong password is used with the channel id`, function (done) {
+        chai.request(host)
+          .post(publishUrl)
+          .type('form')
+          .attach('file', fs.readFileSync(filePath), fileName)
+          .field('name', name)
+          .field('channelName', channelName)
+          .field('channelPassword', 'xxxxx')
+          .end(function (err, res) {
+            expect(res).to.have.status(400);
+            done();
+          });
+      }).timeout(publishTimeout);
+    });
+
+    describe('anonymous publishes', function () {
+      it(`should receive a status code 200 within ${publishTimeout}ms @usesLbc`, function (done) {
+        chai.request(host)
+          .post(publishUrl)
+          .type('form')
+          .attach('file', fs.readFileSync(filePath), fileName)
+          .field('name', `${name}-anonymous`)
+          .end(function (err, res) {
             expect(res).to.have.status(200);
             done();
           });
@@ -130,17 +175,14 @@ describe('end-to-end', function () {
 
     describe('in-channel publishes', function () {
       it(`should receive a status code 200 within ${publishTimeout}ms @usesLbc`, function (done) {
-        const date = new Date();
-        const name = `test-publish-${date.getFullYear()}-${date.getMonth()}-${date.getDate()}-${date.getTime()}`;
         chai.request(host)
           .post(publishUrl)
           .type('form')
           .attach('file', fs.readFileSync(filePath), fileName)
-          .field('name', name)
+          .field('name', `${name}-channel`)
           .field('channelName', channelName)
           .field('channelPassword', channelPassword)
           .end(function (err, res) {
-            // expect(err).to.be.null;
             expect(res).to.have.status(200);
             done();
           });
