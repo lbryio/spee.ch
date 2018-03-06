@@ -35,6 +35,7 @@ module.exports = {
   },
   testing: {
     testChannel        : '@testpublishchannel', // a channel to make test publishes in
+    testChannelId      : 'xyz123...', // the claim id for the test channel
     testChannelPassword: 'password',  // password for the test channel
   },
   api: {
