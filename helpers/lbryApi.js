@@ -3,7 +3,7 @@ const logger = require('winston');
 const config = require('../config/speechConfig.js');
 const { apiHost, apiPort } = config.api;
 const lbryApiUri = 'http://' + apiHost + ':' + apiPort;
-const { chooseGaPublishLabel, sendGATimingEvent } = require('./googleAnalytics.js');
+const { chooseGaLbrynetPublishLabel, sendGATimingEvent } = require('./googleAnalytics.js');
 
 const handleLbrynetResponse = ({ data }, resolve, reject) => {
   logger.debug('lbry api data:', data);
@@ -32,7 +32,7 @@ module.exports = {
           params: publishParams,
         })
         .then(response => {
-          sendGATimingEvent('lbrynet', 'publish', chooseGaPublishLabel(publishParams), gaStartTime, Date.now());
+          sendGATimingEvent('lbrynet', 'publish', chooseGaLbrynetPublishLabel(publishParams), gaStartTime, Date.now());
           handleLbrynetResponse(response, resolve, reject);
         })
         .catch(error => {

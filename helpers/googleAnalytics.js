@@ -51,7 +51,7 @@ module.exports = {
     const params = createPublishTimingEventParams(category, variable, label, startTime, endTime);
     sendGoogleAnalyticsTiming(siteName, params);
   },
-  chooseGaPublishLabel (publishParams) {
+  chooseGaLbrynetPublishLabel (publishParams) {
     if (publishParams.channel_name || publishParams.channel_id) {
       return 'PUBLISH_IN_CHANNEL_CLAIM';
     }

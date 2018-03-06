@@ -175,7 +175,7 @@ module.exports = (app) => {
           },
         });
         // record the publish end time and send to google analytics
-        sendGATimingEvent('end-to-end', 'publish', 'publish endpoint', gaStartTime, Date.now());
+        sendGATimingEvent('end-to-end', 'publish', fileType, gaStartTime, Date.now());
       })
       .catch(error => {
         errorHandlers.handleErrorResponse(originalUrl, ip, error, res);
