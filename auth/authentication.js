@@ -67,7 +67,6 @@ module.exports = {
           resolve(channelData);
         })
         .catch(error => {
-          logger.warn('authenticateChannelCredentials error');
           reject(error);
         });
     });
