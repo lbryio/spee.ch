@@ -5,7 +5,7 @@ const multipartMiddleware = multipart({uploadDir: files.uploadDirectory});
 const db = require('../models');
 const { claimNameIsAvailable, checkChannelAvailability, publish } = require('../controllers/publishController.js');
 const { getClaimList, resolveUri, getClaim } = require('../helpers/lbryApi.js');
-const { createBasicPublishParams, parsePublishApiRequestBody, parsePublishApiRequestFiles, addGetResultsToFileData, createFileData } = require('../helpers/publishHelpers.js');
+const { addGetResultsToFileData, createBasicPublishParams, createThumbnailPublishParams, parsePublishApiRequestBody, parsePublishApiRequestFiles, createFileData } = require('../helpers/publishHelpers.js');
 const errorHandlers = require('../helpers/errorHandlers.js');
 const { sendGAAnonymousPublishTiming, sendGAChannelPublishTiming } = require('../helpers/googleAnalytics.js');
 const { authenticateUser } = require('../auth/authentication.js');
@@ -128,17 +128,17 @@ module.exports = (app) => {
   });
   // route to run a publish request on the daemon
   app.post('/api/claim/publish', multipartMiddleware, ({ body, files, headers, ip, originalUrl, user }, res) => {
-    logger.debug('api/claim-publish body:', body);
-    logger.debug('api/claim-publish files:', files);
+    logger.debug('api/claim/publish req.body:', body);
+    logger.debug('api/claim/publish req.files:', files);
     // define variables
-    let  name, fileName, filePath, fileType, nsfw, license, title, description, thumbnail, channelName, channelId, channelPassword;
+    let  name, fileName, filePath, fileType, thumbnailFileName, thumbnailFilePath, thumbnailFileType, nsfw, license, title, description, thumbnail, channelName, channelId, channelPassword;
     // record the start time of the request
     const publishStartTime = Date.now();
     // validate the body and files of the request
     try {
       // validateApiPublishRequest(body, files);
       ({name, nsfw, license, title, description, thumbnail} = parsePublishApiRequestBody(body));
-      ({fileName, filePath, fileType} = parsePublishApiRequestFiles(files));
+      ({fileName, filePath, fileType, thumbnailFileName, thumbnailFilePath, thumbnailFileType} = parsePublishApiRequestFiles(files));
       ({channelName, channelId, channelPassword} = body);
     } catch (error) {
       return res.status(400).json({success: false, message: error.message});
@@ -148,12 +148,17 @@ module.exports = (app) => {
       authenticateUser(channelName, channelId, channelPassword, user),
       claimNameIsAvailable(name),
       createBasicPublishParams(filePath, name, title, description, license, nsfw, thumbnail),
+      createThumbnailPublishParams(thumbnailFilePath, name, license, nsfw),
     ])
-      .then(([{channelName, channelClaimId}, validatedClaimName, publishParams]) => {
+      .then(([{channelName, channelClaimId}, validatedClaimName, publishParams, thumbnailPublishParams]) => {
         // add channel details to the publish params
         if (channelName && channelClaimId) {
           publishParams['channel_name'] = channelName;
           publishParams['channel_id'] = channelClaimId;
+        }
+        // publish the thumbnail
+        if (thumbnailPublishParams) {
+          publish(thumbnailPublishParams, thumbnailFileName, thumbnailFileType);
         }
         // publish the asset
         return publish(publishParams, fileName, fileType);

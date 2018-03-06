@@ -51,7 +51,7 @@ class AssetDisplay extends React.Component {
               );
             case 'video/mp4':
               return (
-                <video id='video' className='asset' controls poster={thumbnail}>
+                <video className='asset video' controls poster={thumbnail}>
                   <source
                     src={`/${claimId}/${name}.${fileExt}`}
                   />

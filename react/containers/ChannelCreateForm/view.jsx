@@ -54,7 +54,6 @@ class ChannelCreateForm extends React.Component {
     return new Promise((resolve, reject) => {
       request(`/api/channel/availability/${channelWithAtSymbol}`)
         .then(isAvailable => {
-          console.log('checkIsChannelAvailable result:', isAvailable);
           if (!isAvailable) {
             return reject(new Error('That channel has already been claimed'));
           }
@@ -69,10 +68,8 @@ class ChannelCreateForm extends React.Component {
     const password = this.state.password;
     return new Promise((resolve, reject) => {
       if (!password || password.length < 1) {
-        console.log('password not provided');
         return reject(new Error('Please provide a password'));
       }
-      console.log('password provided');
       resolve();
     });
   }
@@ -88,12 +85,10 @@ class ChannelCreateForm extends React.Component {
     return new Promise((resolve, reject) => {
       request('/signup', params)
         .then(result => {
-          console.log('makePublishChannelRequest result:', result);
           return resolve(result);
         })
         .catch(error => {
-          console.log('create channel request failed:', error);
-          reject(new Error('Unfortunately, we encountered an error while creating your channel.  Please let us know in Discord!'));
+          reject(new Error(`Unfortunately, we encountered an error while creating your channel. Please let us know in Discord! ${error.message}`));
         });
     });
   }
@@ -119,38 +114,41 @@ class ChannelCreateForm extends React.Component {
     return (
       <div>
         { !this.state.status ? (
-          <form id="publish-channel-form">
-            <p id="input-error-channel-name" className="info-message-placeholder info-message--failure">{this.state.error}</p>
-            <div className="row row--wide row--short">
-              <div className="column column--3 column--sml-10">
-                <label className="label" htmlFor="new-channel-name">Name:</label>
-              </div><div className="column column--6 column--sml-10">
-                <div className="input-text--primary flex-container--row flex-container--left-bottom span--relative">
+          <form id='publish-channel-form'>
+            <div className='row row--wide row--short'>
+              <div className='column column--3 column--sml-10'>
+                <label className='label' htmlFor='new-channel-name'>Name:</label>
+              </div><div className='column column--6 column--sml-10'>
+                <div className='input-text--primary flex-container--row flex-container--left-bottom span--relative'>
                   <span>@</span>
-                  <input type="text" name="channel" id="new-channel-name" className="input-text" placeholder="exampleChannelName" value={this.state.channel} onChange={this.handleChannelInput} />
-                  { (this.state.channel && !this.state.error) && <span id="input-success-channel-name" className="info-message--success span--absolute">{'\u2713'}</span> }
-                  { this.state.error && <span id="input-success-channel-name" className="info-message--failure span--absolute">{'\u2716'}</span> }
+                  <input type='text' name='channel' id='new-channel-name' className='input-text' placeholder='exampleChannelName' value={this.state.channel} onChange={this.handleChannelInput} />
+                  { (this.state.channel && !this.state.error) && <span id='input-success-channel-name' className='info-message--success span--absolute'>{'\u2713'}</span> }
+                  { this.state.error && <span id='input-success-channel-name' className='info-message--failure span--absolute'>{'\u2716'}</span> }
                 </div>
               </div>
             </div>
-            <div className="row row--wide row--short">
-              <div className="column column--3 column--sml-10">
-                <label className="label" htmlFor="new-channel-password">Password:</label>
-              </div><div className="column column--6 column--sml-10">
-                <div className="input-text--primary">
-                  <input type="password" name="password" id="new-channel-password" className="input-text"  placeholder="" value={this.state.password} onChange={this.handleInput} />
+            <div className='row row--wide row--short'>
+              <div className='column column--3 column--sml-10'>
+                <label className='label' htmlFor='new-channel-password'>Password:</label>
+              </div><div className='column column--6 column--sml-10'>
+                <div className='input-text--primary'>
+                  <input type='password' name='password' id='new-channel-password' className='input-text'  placeholder='' value={this.state.password} onChange={this.handleInput} />
                 </div>
               </div>
             </div>
-
-            <div className="row row--wide">
-              <button className="button--primary" onClick={this.createChannel}>Create Channel</button>
+            {this.state.error ? (
+              <p className='info-message--failure'>{this.state.error}</p>
+            ) : (
+              <p className='info-message'>Choose a name and password for your channel</p>
+            )}
+            <div className='row row--wide'>
+              <button className='button--primary' onClick={this.createChannel}>Create Channel</button>
             </div>
           </form>
         ) : (
           <div>
-            <p className="fine-print">{this.state.status}</p>
-            <ProgressBar size={12}/>
+            <p className='fine-print'>{this.state.status}</p>
+            <ProgressBar size={12} />
           </div>
         )}
       </div>

@@ -28,6 +28,10 @@ module.exports = {
     host : 'https://spee.ch',
     description: 'Open-source, decentralized image and video sharing.'
   },
+  publish: {
+    thumbnailChannel  : '@channelName',  // create a channel to use for thumbnail images
+    thumbnailChannelId: 'xyz123...',  // the channel_id (claim id) for the channel above
+  }
   claim: {
     defaultTitle      : 'Spee.ch',
     defaultThumbnail  : 'https://spee.ch/assets/img/video_thumb_default.png',

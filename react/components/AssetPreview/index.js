@@ -24,7 +24,7 @@ const AssetPreview = ({ claimData: { name, claimId, fileExt, contentType, thumbn
             case 'video/mp4':
               return (
                 <img
-                  className={'asset-preview'}
+                  className={'asset-preview video'}
                   src={thumbnail || defaultThumbnail}
                   alt={name}
                 />

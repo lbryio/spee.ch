@@ -19,18 +19,17 @@ class Dropzone extends React.Component {
     this.handleMouseLeave = this.handleMouseLeave.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.handleFileInput = this.handleFileInput.bind(this);
-    this.selectFile = this.selectFile.bind(this);
+    this.chooseFile = this.chooseFile.bind(this);
   }
   handleDrop (event) {
     event.preventDefault();
     this.setState({dragOver: false});
     // if dropped items aren't files, reject them
     const dt = event.dataTransfer;
-    console.log('dt', dt);
     if (dt.items) {
-      if (dt.items[0].kind == 'file') {
+      if (dt.items[0].kind === 'file') {
         const droppedFile = dt.items[0].getAsFile();
-        this.selectFile(droppedFile);
+        this.chooseFile(droppedFile);
       }
     }
   }
@@ -61,15 +60,14 @@ class Dropzone extends React.Component {
   }
   handleClick (event) {
     event.preventDefault();
-    // trigger file input
     document.getElementById('file_input').click();
   }
   handleFileInput (event) {
     event.preventDefault();
     const fileList = event.target.files;
-    this.selectFile(fileList[0]);
+    this.chooseFile(fileList[0]);
   }
-  selectFile (file) {
+  chooseFile (file) {
     if (file) {
       try {
         validateFile(file); // validate the file's name, type, and size
@@ -77,7 +75,6 @@ class Dropzone extends React.Component {
         return this.props.setFileError(error.message);
       }
       // stage it so it will be ready when the publish button is clicked
-      this.props.clearFileError(null);
       this.props.selectFile(file);
     }
   }

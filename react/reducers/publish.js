@@ -1,5 +1,6 @@
 import * as actions from 'constants/publish_action_types';
 import { LOGIN } from 'constants/publish_channel_select_states';
+const { publish } = require('../../config/speechConfig.js');
 
 const initialState = {
   publishInChannel  : false,
@@ -19,17 +20,19 @@ const initialState = {
   claim   : '',
   metadata: {
     title      : '',
-    thumbnail  : '',
     description: '',
     license    : '',
     nsfw       : false,
   },
+  thumbnailChannel  : publish.thumbnailChannel,
+  thumbnailChannelId: publish.thumbnailChannelId,
+  thumbnail         : null,
 };
 
 export default function (state = initialState, action) {
   switch (action.type) {
     case actions.FILE_SELECTED:
-      return Object.assign({}, state, {
+      return Object.assign({}, initialState, {  // note: clears to initial state
         file: action.data,
       });
     case actions.FILE_CLEAR:
@@ -65,6 +68,10 @@ export default function (state = initialState, action) {
     case actions.TOGGLE_METADATA_INPUTS:
       return Object.assign({}, state, {
         showMetadataInputs: action.data,
+      });
+    case actions.THUMBNAIL_NEW:
+      return Object.assign({}, state, {
+        thumbnail: action.data,
       });
     default:
       return state;

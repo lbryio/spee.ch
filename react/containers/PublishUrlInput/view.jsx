@@ -8,15 +8,19 @@ class PublishUrlInput extends React.Component {
     this.handleInput = this.handleInput.bind(this);
   }
   componentDidMount () {
-    if (!this.props.claim || this.props.claim === '') {
-      this.setClaimNameFromFileName();
+    const { claim, fileName } = this.props;
+    if (!claim) {
+      this.setClaimName(fileName);
     }
   }
-  componentWillReceiveProps ({claim: newClaim}) {
-    if (newClaim) {
-      this.checkClaimIsAvailable(newClaim);
-    } else {
-      this.props.onUrlError('Please enter a URL');
+  componentWillReceiveProps ({ claim, fileName }) {
+    // if a new file was chosen, update the claim name
+    if (fileName !== this.props.fileName) {
+      return this.setClaimName(fileName);
+    }
+    // if the claim has updated, check its availability
+    if (claim !== this.props.claim) {
+      this.validateClaim(claim);
     }
   }
   handleInput (event) {
@@ -30,16 +34,17 @@ class PublishUrlInput extends React.Component {
     input = input.replace(/[^A-Za-z0-9-]/g, '');  // remove all characters that are not A-Z, a-z, 0-9, or '-'
     return input;
   }
-  setClaimNameFromFileName () {
-    const fileName = this.props.fileName;
+  setClaimName (fileName) {
     const fileNameWithoutEnding = fileName.substring(0, fileName.lastIndexOf('.'));
     const cleanClaimName = this.cleanseInput(fileNameWithoutEnding);
     this.props.onClaimChange(cleanClaimName);
   }
-  checkClaimIsAvailable (claim) {
+  validateClaim (claim) {
+    if (!claim) {
+      return this.props.onUrlError('Enter a url above');
+    }
     request(`/api/claim/availability/${claim}`)
-      .then(validatedClaimName => {
-        console.log('api/claim/availability response:', validatedClaimName);
+      .then(() => {
         this.props.onUrlError(null);
       })
       .catch((error) => {
@@ -47,25 +52,27 @@ class PublishUrlInput extends React.Component {
       });
   }
   render () {
+    const { claim, loggedInChannelName, loggedInChannelShortId, publishInChannel, selectedChannel, urlError } = this.props;
     return (
-      <div>
-        <p id="input-error-claim-name" className="info-message-placeholder info-message--failure">{this.props.urlError}</p>
-        <div className="column column--3 column--sml-10">
-          <label className="label">URL:</label>
-        </div><div className="column column--7 column--sml-10 input-text--primary span--relative">
-
-          <span className="url-text--secondary">spee.ch / </span>
-
+      <div className='column column--10 column--sml-10'>
+        <div className='input-text--primary span--relative'>
+          <span className='url-text--secondary'>spee.ch / </span>
           <UrlMiddle
-            publishInChannel={this.props.publishInChannel}
-            selectedChannel={this.props.selectedChannel}
-            loggedInChannelName={this.props.loggedInChannelName}
-            loggedInChannelShortId={this.props.loggedInChannelShortId}
+            publishInChannel={publishInChannel}
+            selectedChannel={selectedChannel}
+            loggedInChannelName={loggedInChannelName}
+            loggedInChannelShortId={loggedInChannelShortId}
           />
-
-          <input type="text" id="claim-name-input" className="input-text" name='claim' placeholder="your-url-here" onChange={this.handleInput} value={this.props.claim}/>
-          { (this.props.claim && !this.props.urlError) && <span id="input-success-claim-name" className="info-message--success span--absolute">{'\u2713'}</span> }
-          { this.props.urlError && <span id="input-success-channel-name" className="info-message--failure span--absolute">{'\u2716'}</span> }
+          <input type='text' id='claim-name-input' className='input-text' name='claim' placeholder='your-url-here' onChange={this.handleInput} value={claim} />
+          { (claim && !urlError) && <span id='input-success-claim-name' className='info-message--success span--absolute'>{'\u2713'}</span> }
+          { urlError && <span id='input-success-channel-name' className='info-message--failure span--absolute'>{'\u2716'}</span> }
+        </div>
+        <div>
+          { urlError ? (
+            <p id='input-error-claim-name' className='info-message--failure'>{urlError}</p>
+          ) : (
+            <p className='info-message'>Choose a custom url</p>
+          )}
         </div>
       </div>
     );

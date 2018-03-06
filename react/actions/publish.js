@@ -71,3 +71,17 @@ export function toggleMetadataInputs (showMetadataInputs) {
     data: showMetadataInputs,
   };
 };
+
+export function onNewThumbnail (file) {
+  return {
+    type: actions.THUMBNAIL_NEW,
+    data: file,
+  };
+};
+
+export function startPublish (history) {
+  return {
+    type: actions.PUBLISH_START,
+    data: { history },
+  };
+}

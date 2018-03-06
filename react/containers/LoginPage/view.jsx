@@ -9,7 +9,6 @@ class LoginPage extends React.Component {
   componentWillReceiveProps (newProps) {
     // re-route the user to the homepage if the user is logged in
     if (newProps.loggedInChannelName !== this.props.loggedInChannelName) {
-      console.log('user logged into new channel:', newProps.loggedInChannelName);
       this.props.history.push(`/`);
     }
   }

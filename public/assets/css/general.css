@@ -283,11 +283,12 @@ a, a:visited {
 
 /* ERROR MESSAGES */
 
-.info-message--success, .info-message--failure {
+.info-message, .info-message--success, .info-message--failure {
 
 	font-size: medium;
 	margin: 0px;
 	padding: 0.3em;
+	color: #9b9b9b;
 }
 
 .info-message--success {
@@ -542,7 +543,7 @@ table {
 
 /* show */
 
-#video {
+.video {
 	cursor: pointer;
 	background-color: #ffffff;
 	width: calc(100% - 12px - 12px - 2px);
@@ -603,33 +604,6 @@ table {
 	text-align: center;
 }
 
-/* ---- grid items ---- */
-
-.grid-item {
-	width: calc(33% - 2rem);
-	padding: 0px;
-	margin: 1rem;
-	float: left;
-	border: 0.5px solid white;
-}
-
-.grid-item-image {
-	width: 100%;
-}
-
-.grid-item-details {
-	position: absolute;
-	top: 0px;
-	left: 0px;
-	height: 100%;
-	width: 100%;
-	cursor: pointer;
-}
-
-.grid-item-details-text {
-	font-size: medium;
-	margin: 0px;
-	text-align: center;
-	padding: 1em 0px 1em 0px;
-	width: 100%;
+.slider {
+	width: 100%
 }
