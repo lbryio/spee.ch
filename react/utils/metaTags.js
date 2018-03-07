@@ -13,6 +13,10 @@ const determineOgThumbnailContentType = (thumbnail) => {
         return 'image/gif';
       case 'mp4':
         return 'video/mp4';
+      case 'ogg':
+        return 'video/ogg';
+      case 'webm':
+        return 'video/webm';
       default:
         return 'image/jpeg';
     }
