@@ -158,6 +158,13 @@ a, a:visited {
 	color: #4156C5;
 }
 
+.link--secondary, .link--secondary:visited {
+	font-size: medium;
+	margin: 0px;
+	padding: 0.3em;
+	color: #9b9b9b;
+}
+
 .link--nav {
 	color: black;
 	border-bottom: 2px solid white;
@@ -459,6 +466,10 @@ button {
 	border: 0px;
 	background-color: white;
 	color: #9b9b9b;
+}
+
+.button--wide {
+	width: 100%;
 }
 
 /* TABLES */
