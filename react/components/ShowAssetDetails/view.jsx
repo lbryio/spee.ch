@@ -10,7 +10,7 @@ class ShowAssetDetails extends React.Component {
   render () {
     const { asset } = this.props;
     if (asset) {
-      const { name } = asset.claimData;
+      const { claimData: { name } } = asset;
       return (
         <div>
           <SEO pageTitle={`${name} - details`} asset={asset} />
