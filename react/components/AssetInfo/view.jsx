@@ -109,9 +109,9 @@ class AssetInfo extends React.Component {
         </div>
 
         <div className='flex-container--row flex-container--space-between-bottom'>
-          <a className='link--primary' href={`${host}/${claimId}/${name}.${fileExt}`} download={name}>Download</a>
           <Link className='link--primary' to={`/${shortId}/${name}.${fileExt}`}><span
             className='text'>Direct Link</span></Link>
+          <a className='link--primary' href={`${host}/${claimId}/${name}.${fileExt}`} download={name}>Download</a>
           <a className='link--primary' target='_blank' href='https://lbry.io/dmca'>Report</a>
         </div>
 
