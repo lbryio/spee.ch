@@ -13,11 +13,11 @@ function createServeEventParams (headers, ip, originalUrl) {
 };
 
 function createPublishTimingEventParams (category, variable, label, startTime, endTime) {
-  const durration = endTime - startTime;
+  const duration = endTime - startTime;
   return {
     userTimingCategory    : category,
     userTimingVariableName: variable,
-    userTimingTime        : durration,
+    userTimingTime        : duration,
     userTimingLabel       : label,
   };
 };
@@ -51,10 +51,7 @@ module.exports = {
     const params = createPublishTimingEventParams(category, variable, label, startTime, endTime);
     sendGoogleAnalyticsTiming(siteName, params);
   },
-  chooseGaLbrynetPublishLabel (publishParams) {
-    if (publishParams.channel_name || publishParams.channel_id) {
-      return 'PUBLISH_IN_CHANNEL_CLAIM';
-    }
-    return 'PUBLISH_ANONYMOUS_CLAIM';
+  chooseGaLbrynetPublishLabel ({ channel_name: channelName, channel_id: channelId }) {
+    return (channelName || channelId ? 'PUBLISH_IN_CHANNEL_CLAIM' : 'PUBLISH_ANONYMOUS_CLAIM');
   },
 };
