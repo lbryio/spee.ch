@@ -3,8 +3,9 @@ const logger = require('winston');
 const config = require('../config/speechConfig.js');
 const { apiHost, apiPort } = config.api;
 const lbryApiUri = 'http://' + apiHost + ':' + apiPort;
+const { chooseGaLbrynetPublishLabel, sendGATimingEvent } = require('./googleAnalytics.js');
 
-function handleLbrynetResponse ({ data }, resolve, reject) {
+const handleLbrynetResponse = ({ data }, resolve, reject) => {
   logger.debug('lbry api data:', data);
   if (data.result) {
     // check for an error
@@ -18,11 +19,12 @@ function handleLbrynetResponse ({ data }, resolve, reject) {
   }
   // fallback in case it just timed out
   reject(JSON.stringify(data));
-}
+};
 
 module.exports = {
   publishClaim (publishParams) {
     logger.debug(`lbryApi >> Publishing claim to "${publishParams.name}"`);
+    const gaStartTime = Date.now();
     return new Promise((resolve, reject) => {
       axios
         .post(lbryApiUri, {
@@ -30,6 +32,7 @@ module.exports = {
           params: publishParams,
         })
         .then(response => {
+          sendGATimingEvent('lbrynet', 'publish', chooseGaLbrynetPublishLabel(publishParams), gaStartTime, Date.now());
           handleLbrynetResponse(response, resolve, reject);
         })
         .catch(error => {
@@ -39,6 +42,7 @@ module.exports = {
   },
   getClaim (uri) {
     logger.debug(`lbryApi >> Getting Claim for "${uri}"`);
+    const gaStartTime = Date.now();
     return new Promise((resolve, reject) => {
       axios
         .post(lbryApiUri, {
@@ -46,6 +50,7 @@ module.exports = {
           params: { uri, timeout: 20 },
         })
         .then(response => {
+          sendGATimingEvent('lbrynet', 'getClaim', 'GET', gaStartTime, Date.now());
           handleLbrynetResponse(response, resolve, reject);
         })
         .catch(error => {
@@ -55,6 +60,7 @@ module.exports = {
   },
   getClaimList (claimName) {
     logger.debug(`lbryApi >> Getting claim_list for "${claimName}"`);
+    const gaStartTime = Date.now();
     return new Promise((resolve, reject) => {
       axios
         .post(lbryApiUri, {
@@ -62,6 +68,7 @@ module.exports = {
           params: { name: claimName },
         })
         .then(response => {
+          sendGATimingEvent('lbrynet', 'getClaimList', 'CLAIM_LIST', gaStartTime, Date.now());
           handleLbrynetResponse(response, resolve, reject);
         })
         .catch(error => {
@@ -71,6 +78,7 @@ module.exports = {
   },
   resolveUri (uri) {
     logger.debug(`lbryApi >> Resolving URI for "${uri}"`);
+    const gaStartTime = Date.now();
     return new Promise((resolve, reject) => {
       axios
         .post(lbryApiUri, {
@@ -78,6 +86,7 @@ module.exports = {
           params: { uri },
         })
         .then(({ data }) => {
+          sendGATimingEvent('lbrynet', 'resolveUri', 'RESOLVE', gaStartTime, Date.now());
           if (data.result[uri].error) {  // check for errors
             reject(data.result[uri].error);
           } else {  // if no errors, resolve
@@ -91,12 +100,14 @@ module.exports = {
   },
   getDownloadDirectory () {
     logger.debug('lbryApi >> Retrieving the download directory path from lbry daemon...');
+    const gaStartTime = Date.now();
     return new Promise((resolve, reject) => {
       axios
         .post(lbryApiUri, {
           method: 'settings_get',
         })
         .then(({ data }) => {
+          sendGATimingEvent('lbrynet', 'getDownloadDirectory', 'SETTINGS_GET', gaStartTime, Date.now());
           if (data.result) {
             resolve(data.result.download_directory);
           } else {
@@ -110,6 +121,8 @@ module.exports = {
     });
   },
   createChannel (name) {
+    logger.debug(`lbryApi >> Creating channel for ${name}...`);
+    const gaStartTime = Date.now();
     return new Promise((resolve, reject) => {
       axios
         .post(lbryApiUri, {
@@ -120,11 +133,10 @@ module.exports = {
           },
         })
         .then(response => {
-          logger.verbose('createChannel response:', response);
+          sendGATimingEvent('lbrynet', 'createChannel', 'CHANNEL_NEW', gaStartTime, Date.now());
           handleLbrynetResponse(response, resolve, reject);
         })
         .catch(error => {
-          logger.error('createChannel error:', error);
           reject(error);
         });
     });

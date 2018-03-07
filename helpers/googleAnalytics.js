@@ -1,7 +1,6 @@
 const logger = require('winston');
 const ua = require('universal-analytics');
-const config = require('../config/speechConfig.js');
-const googleApiKey = config.analytics.googleId;
+const { analytics : { googleId }, site: { name: siteName } } = require('../config/speechConfig.js');
 
 function createServeEventParams (headers, ip, originalUrl) {
   return {
@@ -13,21 +12,19 @@ function createServeEventParams (headers, ip, originalUrl) {
   };
 };
 
-function createPublishTimingEventParams (label, startTime, endTime, ip, headers) {
-  const durration = endTime - startTime;
+function createPublishTimingEventParams (category, variable, label, startTime, endTime) {
+  const duration = endTime - startTime;
   return {
-    userTimingCategory    : 'lbrynet',
-    userTimingVariableName: 'publish',
-    userTimingTime        : durration,
+    userTimingCategory    : category,
+    userTimingVariableName: variable,
+    userTimingTime        : duration,
     userTimingLabel       : label,
-    uip                   : ip,
-    userAgentOverride     : headers['user-agent'],
   };
 };
 
 function sendGoogleAnalyticsEvent (ip, params) {
   const visitorId = ip.replace(/\./g, '-');
-  const visitor = ua(googleApiKey, visitorId, { strictCidFormat: false, https: true });
+  const visitor = ua(googleId, visitorId, { strictCidFormat: false, https: true });
   visitor.event(params, (err) => {
     if (err) {
       logger.error('Google Analytics Event Error >>', err);
@@ -35,9 +32,8 @@ function sendGoogleAnalyticsEvent (ip, params) {
   });
 };
 
-function sendGoogleAnalyticsTiming (ip, params) {
-  const visitorId = ip.replace(/\./g, '-');
-  const visitor = ua(googleApiKey, visitorId, { strictCidFormat: false, https: true });
+function sendGoogleAnalyticsTiming (visitorId, params) {
+  const visitor = ua(googleId, visitorId, { strictCidFormat: false, https: true });
   visitor.timing(params, (err) => {
     if (err) {
       logger.error('Google Analytics Event Error >>', err);
@@ -51,12 +47,11 @@ module.exports = {
     const params = createServeEventParams(headers, ip, originalUrl);
     sendGoogleAnalyticsEvent(ip, params);
   },
-  sendGAAnonymousPublishTiming (headers, ip, originalUrl, startTime, endTime) {
-    const params = createPublishTimingEventParams('PUBLISH_ANONYMOUS_CLAIM', startTime, endTime, ip, headers);
-    sendGoogleAnalyticsTiming(ip, params);
+  sendGATimingEvent (category, variable, label, startTime, endTime) {
+    const params = createPublishTimingEventParams(category, variable, label, startTime, endTime);
+    sendGoogleAnalyticsTiming(siteName, params);
   },
-  sendGAChannelPublishTiming (headers, ip, originalUrl, startTime, endTime) {
-    const params = createPublishTimingEventParams('PUBLISH_IN_CHANNEL_CLAIM', startTime, endTime, ip, headers);
-    sendGoogleAnalyticsTiming(ip, params);
+  chooseGaLbrynetPublishLabel ({ channel_name: channelName, channel_id: channelId }) {
+    return (channelName || channelId ? 'PUBLISH_IN_CHANNEL_CLAIM' : 'PUBLISH_ANONYMOUS_CLAIM');
   },
 };

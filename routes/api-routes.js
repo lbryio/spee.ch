@@ -7,7 +7,7 @@ const { claimNameIsAvailable, checkChannelAvailability, publish } = require('../
 const { getClaimList, resolveUri, getClaim } = require('../helpers/lbryApi.js');
 const { addGetResultsToFileData, createBasicPublishParams, createThumbnailPublishParams, parsePublishApiRequestBody, parsePublishApiRequestFiles, createFileData } = require('../helpers/publishHelpers.js');
 const errorHandlers = require('../helpers/errorHandlers.js');
-const { sendGAAnonymousPublishTiming, sendGAChannelPublishTiming } = require('../helpers/googleAnalytics.js');
+const { sendGATimingEvent } = require('../helpers/googleAnalytics.js');
 const { authenticateUser } = require('../auth/authentication.js');
 const { getChannelData, getChannelClaims, getClaimId } = require('../controllers/serveController.js');
 
@@ -131,9 +131,9 @@ module.exports = (app) => {
     logger.debug('api/claim/publish req.body:', body);
     logger.debug('api/claim/publish req.files:', files);
     // define variables
-    let  name, fileName, filePath, fileType, thumbnailFileName, thumbnailFilePath, thumbnailFileType, nsfw, license, title, description, thumbnail, channelName, channelId, channelPassword;
+    let  channelName, channelId, channelPassword, description, fileName, filePath, fileType, gaStartTime, license, name, nsfw, thumbnail, thumbnailFileName, thumbnailFilePath, thumbnailFileType, title;
     // record the start time of the request
-    const publishStartTime = Date.now();
+    gaStartTime = Date.now();
     // validate the body and files of the request
     try {
       // validateApiPublishRequest(body, files);
@@ -175,12 +175,7 @@ module.exports = (app) => {
           },
         });
         // record the publish end time and send to google analytics
-        const publishEndTime = Date.now();
-        if (channelName) {
-          sendGAChannelPublishTiming(headers, ip, originalUrl, publishStartTime, publishEndTime);
-        } else {
-          sendGAAnonymousPublishTiming(headers, ip, originalUrl, publishStartTime, publishEndTime);
-        }
+        sendGATimingEvent('end-to-end', 'publish', fileType, gaStartTime, Date.now());
       })
       .catch(error => {
         errorHandlers.handleErrorResponse(originalUrl, ip, error, res);
