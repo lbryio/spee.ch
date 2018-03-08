@@ -88,11 +88,15 @@ const startServer = (mysqlConfig) => {
     });
 };
 
-const speech = {
-  start (config) {
-    const { mysqlConfig } = config;
-    startServer(mysqlConfig);
+module.exports = {
+  hello () {
+    console.log('hello world');
   },
+  speak (something) {
+    console.log(something);
+  },
+  // start (config) {
+  //   const { mysqlConfig } = config;
+  //   startServer(mysqlConfig);
+  // },
 };
-
-module.exports = speech;
