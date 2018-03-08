@@ -88,15 +88,15 @@ const startServer = (mysqlConfig) => {
     });
 };
 
-module.exports = {
+exports = {
   hello () {
     console.log('hello world');
   },
   speak (something) {
     console.log(something);
   },
-  // start (config) {
-  //   const { mysqlConfig } = config;
-  //   startServer(mysqlConfig);
-  // },
+  start (config) {
+    const { mysqlConfig } = config;
+    startServer(mysqlConfig);
+  },
 };
