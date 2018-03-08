@@ -2,9 +2,9 @@ import React from 'react';
 import SEO from 'components/SEO';
 import NavBar from 'containers/NavBar';
 import ErrorPage from 'components/ErrorPage';
-import AssetTitle from 'components/AssetTitle';
-import AssetDisplay from 'components/AssetDisplay';
-import AssetInfo from 'components/AssetInfo';
+import AssetTitle from 'containers/AssetTitle';
+import AssetDisplay from 'containers/AssetDisplay';
+import AssetInfo from 'containers/AssetInfo';
 
 class ShowAssetDetails extends React.Component {
   render () {

@@ -54,15 +54,15 @@ class NavBar extends React.Component {
   }
   render () {
     return (
-      <div className="row row--wide nav-bar">
-        <div className="row row--padded row--short flex-container--row flex-container--space-between-center">
+      <div className='row row--wide nav-bar'>
+        <div className='row row--padded row--short flex-container--row flex-container--space-between-center'>
           <Logo />
-          <div className="nav-bar--center">
-            <span className="nav-bar-tagline">Open-source, decentralized image and video sharing.</span>
+          <div className='nav-bar--center'>
+            <span className='nav-bar-tagline'>Open-source, decentralized image and video sharing.</span>
           </div>
-          <div className="nav-bar--right">
-            <NavLink className="nav-bar-link link--nav" activeClassName="link--nav-active" to="/" exact={true}>Publish</NavLink>
-            <NavLink className="nav-bar-link link--nav"  activeClassName="link--nav-active" to="/about">About</NavLink>
+          <div className='nav-bar--right'>
+            <NavLink className='nav-bar-link link--nav' activeClassName='link--nav-active' to='/' exact>Publish</NavLink>
+            <NavLink className='nav-bar-link link--nav'  activeClassName='link--nav-active' to='/about'>About</NavLink>
             { this.props.channelName ? (
               <NavBarChannelDropdown
                 channelName={this.props.channelName}
@@ -72,7 +72,7 @@ class NavBar extends React.Component {
                 LOGOUT={LOGOUT}
               />
             ) : (
-              <NavLink id="nav-bar-login-link" className="nav-bar-link link--nav" activeClassName="link--nav-active" to="/login">Channel</NavLink>
+              <NavLink id='nav-bar-login-link' className='nav-bar-link link--nav' activeClassName='link--nav-active' to='/login'>Channel</NavLink>
             )}
           </div>
         </div>
