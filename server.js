@@ -90,5 +90,5 @@ const startServer = (mysqlConfig) => {
 
 module.exports = (config) => {
   const { mysqlConfig } = config;
-  startServer(mysqlConfig);
+  return startServer(mysqlConfig);
 };
