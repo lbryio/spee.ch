@@ -7,12 +7,12 @@ class ExpandingTextarea extends Component {
   }
 
   render () {
-    const { onChange, ...rest } = this.props;
+    const { ...rest } = this.props;
     return (
       <textarea
-        { ...rest }
+        {...rest}
         ref={x => this.el = x}
-        onChange={ this._handleChange.bind(this) }
+        onChange={this._handleChange.bind(this)}
       />
     );
   }
