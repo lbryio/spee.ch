@@ -8,11 +8,11 @@ module.exports = {
     __dirname: false,
   },
   externals: [nodeExternals()],
-  entry    : ['babel-polyfill', 'whatwg-fetch', './index.js'],
+  entry    : ['babel-polyfill', 'whatwg-fetch', './server.js'],
   output   : {
     path      : Path.join(__dirname, '/'),
     publicPath: '/',
-    filename  : 'server.js',
+    filename  : 'index.js',
   },
   module: {
     rules: [

@@ -9,7 +9,6 @@ const logger = require('winston');
 const helmet = require('helmet');
 const PORT = 3000; // set port
 const app = express(); // create an Express application
-const db = require('./models'); // require our models for syncing
 const passport = require('passport');
 const cookieSession = require('cookie-session');
 
@@ -62,23 +61,34 @@ app.set('view engine', 'handlebars');
 app.use(populateLocalsDotUser);
 
 // start the server
-db.sequelize
-  .sync() // sync sequelize
-  .then(() => { // require routes
-    require('./routes/auth-routes.js')(app);
-    require('./routes/api-routes.js')(app);
-    require('./routes/page-routes.js')(app);
-    require('./routes/serve-routes.js')(app);
-    require('./routes/fallback-routes.js')(app);
-    const http = require('http');
-    return http.Server(app);
-  })
-  .then(server => { // start the server
-    server.listen(PORT, () => {
-      logger.info('Trusting proxy?', app.get('trust proxy'));
-      logger.info(`Server is listening on PORT ${PORT}`);
+const startServer = (mysqlConfig) => {
+  const db = require('./models')(mysqlConfig); // require our models for syncing
+  db.sequelize
+    // sync sequelize
+    .sync()
+    // require routes
+    .then(() => {
+      require('./routes/auth-routes.js')(app);
+      require('./routes/api-routes.js')(app);
+      require('./routes/page-routes.js')(app);
+      require('./routes/serve-routes.js')(app);
+      require('./routes/fallback-routes.js')(app);
+      const http = require('http');
+      return http.Server(app);
+    })
+    // start the server
+    .then(server => {
+      server.listen(PORT, () => {
+        logger.info('Trusting proxy?', app.get('trust proxy'));
+        logger.info(`Server is listening on PORT ${PORT}`);
+      });
+    })
+    .catch((error) => {
+      logger.error(`Startup Error:`, error);
     });
-  })
-  .catch((error) => {
-    logger.error(`Startup Error >> ${error.message}`, error);
-  });
+};
+
+module.exports = (config) => {
+  const { mysqlConfig } = config;
+  startServer(mysqlConfig);
+};

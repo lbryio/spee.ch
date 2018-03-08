@@ -6,8 +6,8 @@
   "scripts": {
     "test": "mocha --recursive",
     "test-all": "mocha --recursive",
-    "start": "node server.js",
-    "start-dev": "nodemon server.js",
+    "start": "node index.js",
+    "start-dev": "nodemon index.js",
     "lint": "eslint .",
     "fix": "eslint . --fix",
     "precommit": "eslint .",
