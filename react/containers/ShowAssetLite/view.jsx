@@ -1,7 +1,7 @@
 import React from 'react';
-import SEO from 'components/SEO';
+import SEO from 'components/SEO/index';
 import { Link } from 'react-router-dom';
-import AssetDisplay from 'components/AssetDisplay';
+import AssetDisplay from 'containers/AssetDisplay/index';
 
 class ShowLite extends React.Component {
   render () {

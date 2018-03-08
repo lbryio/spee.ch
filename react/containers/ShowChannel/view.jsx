@@ -1,8 +1,8 @@
 import React from 'react';
-import SEO from 'components/SEO';
-import ErrorPage from 'components/ErrorPage';
-import NavBar from 'containers/NavBar';
-import ChannelClaimsDisplay from 'containers/ChannelClaimsDisplay';
+import SEO from 'components/SEO/index';
+import ErrorPage from 'components/ErrorPage/index';
+import NavBar from 'containers/NavBar/index';
+import ChannelClaimsDisplay from 'containers/ChannelClaimsDisplay/index';
 
 class ShowChannel extends React.Component {
   render () {

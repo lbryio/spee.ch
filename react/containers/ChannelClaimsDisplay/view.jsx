@@ -24,7 +24,7 @@ class ChannelClaimsDisplay extends React.Component {
   render () {
     const { channel: { claimsData: { claims, currentPage, totalPages } } } = this.props;
     return (
-      <div className="row row--tall">
+      <div className='row row--tall'>
         {(claims.length > 0) ? (
           <div>
             {claims.map((claim, index) => <AssetPreview
