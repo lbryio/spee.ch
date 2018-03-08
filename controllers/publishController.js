@@ -2,7 +2,7 @@ const logger = require('winston');
 const db = require('../models');
 const lbryApi = require('../helpers/lbryApi.js');
 const publishHelpers = require('../helpers/publishHelpers.js');
-const config = require('../config/speechConfig.js');
+const { publish : { primaryClaimAddress, additionalClaimAddresses } } = require('../config/speechConfig.js');
 
 module.exports = {
   publish (publishParams, fileName, fileType) {
@@ -95,10 +95,11 @@ module.exports = {
       })
       .then(result => {
         if (result.length >= 1) {
-          const claimAddress = config.wallet.lbryClaimAddress;
+          const claimAddresses = additionalClaimAddresses || [];
+          claimAddresses.push(primaryClaimAddress);
           // filter out any that were not published from this address
-          const filteredResult = result.filter((claim) => {
-            return (claim.address === claimAddress);
+          const filteredResult = result.filter(({ address }) => {
+            return (claimAddresses.includes(address));
           });
           if (filteredResult.length >= 1) {
             throw new Error('That claim is already in use');
