@@ -16,14 +16,12 @@ const NO_CLAIM = 'NO_CLAIM';
 
 module.exports = (app) => {
   // route to check whether site has published to a channel
-  app.get('/api/channel/availability/:name', ({ ip, originalUrl, params }, res) => {
-    checkChannelAvailability(params.name)
-      .then(result => {
-        if (result === true) {
-          res.status(200).json(true);
-        } else {
-          res.status(200).json(false);
-        }
+  app.get('/api/channel/availability/:name', ({ ip, originalUrl, params: { name } }, res) => {
+    const gaStartTime = Date.now();
+    checkChannelAvailability(name)
+      .then(availableName => {
+        res.status(200).json(availableName);
+        sendGATimingEvent('end-to-end', 'claim name availability', name, gaStartTime, Date.now());
       })
       .catch(error => {
         errorHandlers.handleErrorResponse(originalUrl, ip, error, res);

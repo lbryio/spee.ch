@@ -106,21 +106,24 @@ module.exports = {
           return name;
         };
         return name;
+      })
+      .catch(error => {
+        throw error;
       });
   },
   checkChannelAvailability (name) {
-    return new Promise((resolve, reject) => {
-      // find any records where the name is used
-      db.Channel.findAll({ where: { channelName: name } })
-        .then(result => {
-          if (result.length >= 1) {
-            return resolve(false);
-          }
-          resolve(true);
-        })
-        .catch(error => {
-          reject(error);
-        });
-    });
+    return db.Channel
+      .findAll({
+        where: { channelName: name },
+      })
+      .then(result => {
+        if (result.length >= 1) {
+          throw new Error('That channel has already been claimed');
+        }
+        return name;
+      })
+      .catch(error => {
+        throw error;
+      });
   },
 };

@@ -38,31 +38,12 @@ class ChannelCreateForm extends React.Component {
   updateIsChannelAvailable (channel) {
     const channelWithAtSymbol = `@${channel}`;
     request(`/api/channel/availability/${channelWithAtSymbol}`)
-      .then(isAvailable => {
-        if (isAvailable) {
-          this.setState({'error': null});
-        } else {
-          this.setState({'error': 'That channel has already been claimed'});
-        }
+      .then(() => {
+        this.setState({'error': null});
       })
       .catch((error) => {
         this.setState({'error': error.message});
       });
-  }
-  checkIsChannelAvailable (channel) {
-    const channelWithAtSymbol = `@${channel}`;
-    return new Promise((resolve, reject) => {
-      request(`/api/channel/availability/${channelWithAtSymbol}`)
-        .then(isAvailable => {
-          if (!isAvailable) {
-            return reject(new Error('That channel has already been claimed'));
-          }
-          resolve();
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
   }
   checkIsPasswordProvided () {
     const password = this.state.password;
@@ -96,7 +77,9 @@ class ChannelCreateForm extends React.Component {
     event.preventDefault();
     this.checkIsPasswordProvided()
       .then(() => {
-        return this.checkIsChannelAvailable(this.state.channel, this.state.password);
+        if (this.state.error) {
+          throw new Error();
+        }
       })
       .then(() => {
         this.setState({status: 'We are publishing your new channel.  Sit tight...'});
@@ -107,7 +90,7 @@ class ChannelCreateForm extends React.Component {
         this.props.onChannelLogin(result.channelName, result.shortChannelId, result.channelClaimId);
       })
       .catch((error) => {
-        this.setState({'error': error.message, status: null});
+        if (error.message) this.setState({'error': error.message, status: null});
       });
   }
   render () {
