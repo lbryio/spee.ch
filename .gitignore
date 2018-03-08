@@ -2,4 +2,3 @@ node_modules
 .idea
 config/sequelizeCliConfig.js
 config/speechConfig.js
-public/bundle
