@@ -88,7 +88,11 @@ const startServer = (mysqlConfig) => {
     });
 };
 
-module.exports = (config) => {
-  const { mysqlConfig } = config;
-  return startServer(mysqlConfig);
+const speech = {
+  start (config) {
+    const { mysqlConfig } = config;
+    startServer(mysqlConfig);
+  },
 };
+
+module.exports = speech;
