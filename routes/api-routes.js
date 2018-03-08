@@ -107,10 +107,12 @@ module.exports = (app) => {
       });
   });
   // route to check whether this site published to a claim
-  app.get('/api/claim/availability/:name', ({ ip, originalUrl, params }, res) => {
-    claimNameIsAvailable(params.name)
+  app.get('/api/claim/availability/:name', ({ ip, originalUrl, params: { name } }, res) => {
+    const gaStartTime = Date.now();
+    claimNameIsAvailable(name)
       .then(result => {
         res.status(200).json(result);
+        sendGATimingEvent('end-to-end', 'claim name availability', name, gaStartTime, Date.now());
       })
       .catch(error => {
         errorHandlers.handleErrorResponse(originalUrl, ip, error, res);
@@ -128,8 +130,6 @@ module.exports = (app) => {
   });
   // route to run a publish request on the daemon
   app.post('/api/claim/publish', multipartMiddleware, ({ body, files, headers, ip, originalUrl, user }, res) => {
-    logger.debug('api/claim/publish req.body:', body);
-    logger.debug('api/claim/publish req.files:', files);
     // define variables
     let  channelName, channelId, channelPassword, description, fileName, filePath, fileType, gaStartTime, license, name, nsfw, thumbnail, thumbnailFileName, thumbnailFilePath, thumbnailFileType, title;
     // record the start time of the request

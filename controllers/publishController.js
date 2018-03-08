@@ -88,7 +88,11 @@ module.exports = {
   },
   claimNameIsAvailable (name) {
     // find any records where the name is used
-    return db.File.findAll({ where: { name } })
+    return db.Claim
+      .findAll({
+        attributes: ['address'],
+        where     : { name },
+      })
       .then(result => {
         if (result.length >= 1) {
           const claimAddress = config.wallet.lbryClaimAddress;
