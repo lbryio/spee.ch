@@ -10,9 +10,10 @@ module.exports = {
   externals: [nodeExternals()],
   entry    : ['babel-polyfill', 'whatwg-fetch', './server.js'],
   output   : {
-    path      : Path.join(__dirname, '/'),
-    publicPath: '/',
-    filename  : 'index.js',
+    path         : Path.join(__dirname, '/'),
+    publicPath   : '/',
+    filename     : 'index.js',
+    libraryExport: 'default',
   },
   module: {
     rules: [
