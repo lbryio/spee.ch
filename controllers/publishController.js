@@ -96,11 +96,10 @@ module.exports = {
       .then(result => {
         if (result.length >= 1) {
           const claimAddress = config.wallet.lbryClaimAddress;
-          // filter out any results that were not published from spee.ch's wallet address
+          // filter out any that were not published from this address
           const filteredResult = result.filter((claim) => {
             return (claim.address === claimAddress);
           });
-          // return based on whether any non-spee.ch claims were left
           if (filteredResult.length >= 1) {
             throw new Error('That claim is already in use');
           };
