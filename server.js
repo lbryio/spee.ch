@@ -88,7 +88,7 @@ const startServer = (mysqlConfig) => {
     });
 };
 
-exports = {
+module.exports = {
   hello () {
     console.log('hello world');
   },
