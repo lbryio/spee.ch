@@ -1,5 +1,5 @@
 import React from 'react';
-import ProgressBar from 'components/ProgressBar/index';
+import ProgressBar from 'components/ProgressBar';
 import { LOCAL_CHECK, UNAVAILABLE, ERROR, AVAILABLE } from 'constants/asset_display_states';
 
 class AssetDisplay extends React.Component {
