@@ -10,11 +10,12 @@ const cookieSession = require('cookie-session');
 // logging dependencies
 const logger = require('winston');
 
-function SpeechServer (config) {
-  this.mysqlConfig = config.mysql;
-  this.siteConfig = config.siteConfig;
-  this.lbrynetConfig = config.lbrynetConfig;
-  this.db = require('./models')(config.mysqlConfig);
+function SpeechServer ({mysqlConfig, siteConfig, slackConfig, lbrynetConfig}) {
+  this.mysqlConfig = mysqlConfig;
+  this.siteConfig = siteConfig;
+  this.slackConfig = slackConfig;
+  this.lbrynetConfig = lbrynetConfig;
+  this.db = require('./models')(mysqlConfig);
   this.PORT = 3000;
   this.speak = (something) => {
     console.log(something);
@@ -26,8 +27,8 @@ function SpeechServer (config) {
     this.startServer();
   };
   this.configureLogging = () => {
-    require('./config/loggerConfig.js')(logger);
-    require('./config/slackConfig.js')(logger);
+    require('./helpers/configureLogger.js')(logger);
+    require('./helpers/configureSlack.js')(logger, this.slackConfig);
   };
   this.configureApp = () => {
     const app = express(); // create an Express application

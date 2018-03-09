@@ -1,8 +1,7 @@
-const { logging } = require('./speechConfig.js');
-const { slackWebHook, slackErrorChannel, slackInfoChannel } = logging;
 const winstonSlackWebHook = require('winston-slack-webhook').SlackWebHook;
 
-module.exports = (winston) => {
+module.exports = (winston, slackConfig) => {
+  const {slackWebHook, slackErrorChannel, slackInfoChannel} = slackConfig;
   if (slackWebHook) {
     // add a transport for errors to slack
     if (slackErrorChannel) {

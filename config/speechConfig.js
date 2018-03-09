@@ -2,11 +2,6 @@ module.exports = {
   analytics: {
     googleId: 'UA-60403362-6', // google id for analytics tracking; leave `null` if not applicable
   },
-  logging: {
-    slackWebHook     : 'https://hooks.slack.com/services/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',  // enter a webhook if you wish to push logs to slack; otherwise leave as `null`
-    slackErrorChannel: null,  // enter a slack channel (#example) for errors to be sent to; otherwise leave null
-    slackInfoChannel : '#speech-dev1-errors',  // enter a slack channel (#info) for info level logs to be sent to otherwise leave null
-  },
   session: {
     sessionKey: 'nans$#kfjanwe234rydns',  // enter a secret key to be used for session encryption
   },

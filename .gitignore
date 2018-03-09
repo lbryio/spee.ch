@@ -1,2 +1,4 @@
 node_modules
 .idea
+/config/sequelizeCliConfig.js
+/config/testingConfig.js
