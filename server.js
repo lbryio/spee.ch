@@ -61,7 +61,8 @@ app.set('view engine', 'handlebars');
 app.use(populateLocalsDotUser);
 
 // start the server
-const startServer = (mysqlConfig) => {
+const start = (config) => {
+  const { mysqlConfig } = config;
   const db = require('./models')(mysqlConfig); // require our models for syncing
   db.sequelize
     // sync sequelize
@@ -89,14 +90,8 @@ const startServer = (mysqlConfig) => {
 };
 
 module.exports = {
-  hello () {
-    console.log('hello world');
-  },
   speak (something) {
     console.log(something);
   },
-  start (config) {
-    const { mysqlConfig } = config;
-    startServer(mysqlConfig);
-  },
+  start,
 };

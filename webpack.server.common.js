@@ -13,7 +13,8 @@ module.exports = {
     path         : Path.join(__dirname, '/'),
     publicPath   : '/',
     filename     : 'index.js',
-    libraryExport: 'default',
+    library      : '',
+    libraryTarget: 'commonjs-module',
   },
   module: {
     rules: [
