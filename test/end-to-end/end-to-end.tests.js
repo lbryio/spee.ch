@@ -1,9 +1,8 @@
 const chai = require('chai');
 const expect = chai.expect;
 const chaiHttp = require('chai-http');
-const { site, testing } = require('../../config/speechConfig.js');
-const { host } = site;
-const { testChannel, testChannelId, testChannelPassword } = testing;
+const { site: { host } } = require('../../config/speechConfig.js');
+const { testChannel, testChannelId, testChannelPassword } = require('../../config/testingConfig.js');
 const requestTimeout = 20000;
 const publishTimeout = 120000;
 const fs = require('fs');

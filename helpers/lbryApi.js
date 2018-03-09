@@ -1,6 +1,6 @@
 const axios = require('axios');
 const logger = require('winston');
-const { api: { apiHost, apiPort } } = require('../config/speechConfig.js');
+const { api: { apiHost, apiPort } } = require('../config/lbryConfig.js');
 const lbryApiUri = 'http://' + apiHost + ':' + apiPort;
 const { chooseGaLbrynetPublishLabel, sendGATimingEvent } = require('./googleAnalytics.js');
 

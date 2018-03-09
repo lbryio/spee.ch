@@ -1,4 +1,7 @@
-module.exports = (winston, logLevel) => {
+const logLevel = 'debug';  // options: silly, debug, verbose, info
+
+module.exports = (winston) => {
+  // configure
   winston.configure({
     transports: [
       new (winston.transports.Console)({
@@ -11,7 +14,7 @@ module.exports = (winston, logLevel) => {
       }),
     ],
   });
-
+  // test all the log levels
   winston.error('Level 0');
   winston.warn('Level 1');
   winston.info('Level 2');

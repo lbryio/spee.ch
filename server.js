@@ -1,19 +1,14 @@
-// load dependencies
+// app dependencies
 const express = require('express');
 const bodyParser = require('body-parser');
 const expressHandlebars = require('express-handlebars');
 const Handlebars = require('handlebars');
-const { populateLocalsDotUser, serializeSpeechUser, deserializeSpeechUser } = require('./helpers/authHelpers.js');
-const { logging: { logLevel } } = require('./config/speechConfig.js');
-const logger = require('winston');
 const helmet = require('helmet');
-const app = express(); // create an Express application
 const passport = require('passport');
+const { populateLocalsDotUser, serializeSpeechUser, deserializeSpeechUser } = require('./helpers/authHelpers.js');
 const cookieSession = require('cookie-session');
-
-// configure logging
-require('./config/loggerConfig.js')(logger, logLevel);
-require('./config/slackConfig.js')(logger);
+// logging dependencies
+const logger = require('winston');
 
 function SpeechServer (config) {
   this.mysqlConfig = config.mysql;
@@ -25,6 +20,18 @@ function SpeechServer (config) {
     console.log(something);
   };
   this.start = () => {
+    this.configureLogging();
+    this.configureApp();
+    this.configureServer();
+    this.startServer();
+  };
+  this.configureLogging = () => {
+    require('./config/loggerConfig.js')(logger);
+    require('./config/slackConfig.js')(logger);
+  };
+  this.configureApp = () => {
+    const app = express(); // create an Express application
+
     // trust the proxy to get ip address for us
     app.enable('trust proxy');
 
@@ -72,11 +79,13 @@ function SpeechServer (config) {
     require('./routes/serve-routes.js')(app);
     require('./routes/fallback-routes.js')(app);
 
-    const http = require('http');
-    const server = http.Server(app);
-    this.startServer(server);
+    this.app = app;
   };
-  this.startServer = (server) => {
+  this.configureServer = () => {
+    const http = require('http');
+    this.server = http.Server(this.app);
+  };
+  this.startServer = () => {
     // print config variables
     require('./helpers/configVarCheck.js')(this.config);
     this.db.sequelize
@@ -84,7 +93,7 @@ function SpeechServer (config) {
       .sync()
       // start the server
       .then(() => {
-        server.listen(this.PORT, () => {
+        this.server.listen(this.PORT, () => {
           logger.info(`Server is listening on PORT ${this.PORT}`);
         });
       })
