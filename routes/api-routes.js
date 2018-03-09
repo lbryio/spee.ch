@@ -14,7 +14,7 @@ const { getChannelData, getChannelClaims, getClaimId } = require('../controllers
 const NO_CHANNEL = 'NO_CHANNEL';
 const NO_CLAIM = 'NO_CLAIM';
 
-module.exports = (app) => {
+module.exports = (app, siteConfig) => {
   // route to check whether site has published to a channel
   app.get('/api/channel/availability/:name', ({ ip, originalUrl, params }, res) => {
     checkChannelAvailability(params.name)

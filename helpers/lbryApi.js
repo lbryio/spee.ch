@@ -1,7 +1,6 @@
 const axios = require('axios');
 const logger = require('winston');
-const config = require('../config/speechConfig.js');
-const { apiHost, apiPort } = config.api;
+const { api: { apiHost, apiPort } } = require('../config/speechConfig.js');
 const lbryApiUri = 'http://' + apiHost + ':' + apiPort;
 const { chooseGaLbrynetPublishLabel, sendGATimingEvent } = require('./googleAnalytics.js');
 
