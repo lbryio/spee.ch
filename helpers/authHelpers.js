@@ -1,4 +1,3 @@
-// const db = require('../models'); // require our models for syncing
 const logger = require('winston');
 
 module.exports = {
