@@ -19,9 +19,12 @@ function SpeechServer (config) {
   this.mysqlConfig = config.mysql;
   this.siteConfig = config.siteConfig;
   this.lbrynetConfig = config.lbrynetConfig;
-  this.db = require('./models')(this.mysqlConfig);
+  this.db = require('./models')(config.mysqlConfig);
   this.PORT = 3000;
-  this.app = (function () {
+  this.speak = (something) => {
+    console.log(something);
+  };
+  this.start = () => {
     // trust the proxy to get ip address for us
     app.enable('trust proxy');
 
@@ -69,16 +72,11 @@ function SpeechServer (config) {
     require('./routes/serve-routes.js')(app);
     require('./routes/fallback-routes.js')(app);
 
-    return app;
-  }());
-  this.server = (function () {
     const http = require('http');
-    return http.Server(this.app);
-  })();
-  this.speak = (something) => {
-    console.log(something);
+    const server = http.Server(app);
+    this.startServer(server);
   };
-  this.start = () => {
+  this.startServer = (server) => {
     // print config variables
     require('./helpers/configVarCheck.js')(this.config);
     this.db.sequelize
@@ -86,8 +84,7 @@ function SpeechServer (config) {
       .sync()
       // start the server
       .then(() => {
-        this.server.listen(this.PORT, () => {
-          logger.info('Trusting proxy?', this.app.get('trust proxy'));
+        server.listen(this.PORT, () => {
           logger.info(`Server is listening on PORT ${this.PORT}`);
         });
       })

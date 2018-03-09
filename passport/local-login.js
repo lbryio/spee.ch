@@ -22,7 +22,7 @@ module.exports = (db) => {
           reject(error);
         });
     });
-  }
+  };
 
   return new PassportLocalStrategy(
     {
