@@ -41,6 +41,26 @@ class Preview extends React.Component {
       this.setState({imgSource: this.state.defaultThumbnail});
     }
   }
+ setPreviewImageSource (file) {
+    if (file.type !== 'video/ogg') {
+      this.setPreviewImageSourceFromFile(file);
+    } else {
+      if (this.props.thumbnail) {
+        this.setPreviewImageSourceFromFile(this.props.thumbnail);
+      }
+      this.setState({imgSource: this.state.defaultThumbnail});
+    }
+  }
+ setPreviewImageSource (file) {
+    if (file.type !== 'video/webm') {
+      this.setPreviewImageSourceFromFile(file);
+    } else {
+      if (this.props.thumbnail) {
+        this.setPreviewImageSourceFromFile(this.props.thumbnail);
+      }
+      this.setState({imgSource: this.state.defaultThumbnail});
+    }
+  }
   render () {
     return (
       <img
