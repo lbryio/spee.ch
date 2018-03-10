@@ -39,6 +39,12 @@ class PublishDetails extends React.Component {
             { (this.props.file.type === 'video/mp4') && (
               <div className='row row--padded row--no-top row--wide '>
                 <PublishThumbnailInput />
+            { (this.props.file.type === 'video/ogg') && (
+              <div className='row row--padded row--no-top row--wide '>
+                <PublishThumbnailInput />
+            { (this.props.file.type === 'video/webm') && (
+              <div className='row row--padded row--no-top row--wide '>
+                <PublishThumbnailInput />
               </div>
             )}
             <div className='row row--padded row--no-top row--no-bottom row--wide'>
