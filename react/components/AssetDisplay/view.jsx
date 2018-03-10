@@ -67,7 +67,7 @@ class AssetDisplay extends React.Component {
                   <p>Your browser does not support the <code>video</code> element.</p>
                 </video>
               );
-            case 'video/ogg':
+            case 'video/webm':
               return (
                 <video id='video' className='asset' controls poster={thumbnail}>
                   <source
