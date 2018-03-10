@@ -1,4 +1,4 @@
-module.exports = {
+const speechConfig = {
   analytics: {
     googleId: 'UA-60403362-6', // google id for analytics tracking; leave `null` if not applicable
   },
@@ -26,3 +26,5 @@ module.exports = {
     defaultDescription: 'Open-source, decentralized image and video sharing.',
   },
 };
+
+module.exports = speechConfig;

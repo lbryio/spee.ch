@@ -1,6 +1,7 @@
 const winstonSlackWebHook = require('winston-slack-webhook').SlackWebHook;
+const slackConfig = require('../config/slackConfig.js');
 
-module.exports = (winston, slackConfig) => {
+module.exports = (winston) => {
   const {slackWebHook, slackErrorChannel, slackInfoChannel} = slackConfig;
   if (slackWebHook) {
     // add a transport for errors to slack

@@ -7,28 +7,35 @@ const helmet = require('helmet');
 const passport = require('passport');
 const { populateLocalsDotUser, serializeSpeechUser, deserializeSpeechUser } = require('./helpers/authHelpers.js');
 const cookieSession = require('cookie-session');
+const http = require('http');
 // logging dependencies
 const logger = require('winston');
 
-function SpeechServer ({mysqlConfig, siteConfig, slackConfig, lbrynetConfig}) {
-  this.mysqlConfig = mysqlConfig;
-  this.siteConfig = siteConfig;
-  this.slackConfig = slackConfig;
-  this.lbrynetConfig = lbrynetConfig;
-  this.db = require('./models')(mysqlConfig);
+function SpeechServer ({ mysqlConfig, siteConfig, slackConfig }) {
   this.PORT = 3000;
   this.speak = (something) => {
     console.log(something);
   };
   this.start = () => {
+    this.configureConfigFiles();
     this.configureLogging();
     this.configureApp();
     this.configureServer();
     this.startServer();
   };
+  this.configureConfigFiles = () => {
+    const mysqlAppConfig = require('./config/mysqlConfig.js');
+    mysqlAppConfig.configure(mysqlConfig);
+    const slackAppConfig = require('./config/slackConfig.js');
+    slackAppConfig.configure(slackConfig);
+    // print the config variables
+    console.log('configured config files');
+    require('./helpers/configVarCheck.js')(mysqlAppConfig);
+    require('./helpers/configVarCheck.js')(slackAppConfig);
+  };
   this.configureLogging = () => {
     require('./helpers/configureLogger.js')(logger);
-    require('./helpers/configureSlack.js')(logger, this.slackConfig);
+    require('./helpers/configureSlack.js')(logger);
   };
   this.configureApp = () => {
     const app = express(); // create an Express application
@@ -49,14 +56,14 @@ function SpeechServer ({mysqlConfig, siteConfig, slackConfig, lbrynetConfig}) {
     // configure passport
     passport.serializeUser(serializeSpeechUser);
     passport.deserializeUser(deserializeSpeechUser);
-    const localSignupStrategy = require('./passport/local-signup.js')(this.db);
-    const localLoginStrategy = require('./passport/local-login.js')(this.db);
+    const localSignupStrategy = require('./passport/local-signup.js');
+    const localLoginStrategy = require('./passport/local-login.js');
     passport.use('local-signup', localSignupStrategy);
     passport.use('local-login', localLoginStrategy);
     // initialize passport
     app.use(cookieSession({
       name  : 'session',
-      keys  : [this.siteConfig.session.sessionKey],
+      keys  : [siteConfig.session.sessionKey],
       maxAge: 24 * 60 * 60 * 1000, // i.e. 24 hours
     }));
     app.use(passport.initialize());
@@ -83,15 +90,12 @@ function SpeechServer ({mysqlConfig, siteConfig, slackConfig, lbrynetConfig}) {
     this.app = app;
   };
   this.configureServer = () => {
-    const http = require('http');
     this.server = http.Server(this.app);
   };
   this.startServer = () => {
-    // print config variables
-    require('./helpers/configVarCheck.js')(this.config);
-    this.db.sequelize
+    const db = require('./models');
     // sync sequelize
-      .sync()
+    db.sequelize.sync()
       // start the server
       .then(() => {
         this.server.listen(this.PORT, () => {
