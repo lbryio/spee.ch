@@ -36,7 +36,7 @@ module.exports = {
         }
         break;
       default:
-        throw new Error(file.type + ' is not a supported file type. Only, .jpeg, .png, .gif, .ogg, and .webm files are currently supported.');
+        throw new Error(file.type + ' is not a supported file type. Only, .jpeg, .png, .gif, .mp4, .ogg, and .webm files are currently supported.');
     }
   },
 };
