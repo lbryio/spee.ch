@@ -90,6 +90,14 @@ class AssetInfo extends React.Component {
                     <input type='text' id='embed-text' className='input-disabled input-text--full-width' readOnly
                       onClick={this.select} spellCheck='false'
                       value={`<video width="100%" controls poster="${thumbnail}" src="${host}/${claimId}/${name}.${fileExt}"/></video>`} />
+                  {(contentType === 'video/ogg') ? (
+                    <input type='text' id='embed-text' className='input-disabled input-text--full-width' readOnly
+                      onClick={this.select} spellCheck='false'
+                      value={`<video width="100%" controls poster="${thumbnail}" src="${host}/${claimId}/${name}.${fileExt}"/></video>`} />
+                  {(contentType === 'video/webm') ? (
+                    <input type='text' id='embed-text' className='input-disabled input-text--full-width' readOnly
+                      onClick={this.select} spellCheck='false'
+                      value={`<video width="100%" controls poster="${thumbnail}" src="${host}/${claimId}/${name}.${fileExt}"/></video>`} />
                   ) : (
                     <input type='text' id='embed-text' className='input-disabled input-text--full-width' readOnly
                       onClick={this.select} spellCheck='false'
