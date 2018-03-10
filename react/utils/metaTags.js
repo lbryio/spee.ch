@@ -13,6 +13,10 @@ const determineOgThumbnailContentType = (thumbnail) => {
         return 'image/gif';
       case 'mp4':
         return 'video/mp4';
+      case 'ogg':
+        return 'video/ogg';
+      case 'webm':
+        return 'video/webm';
       default:
         return 'image/jpeg';
     }
@@ -62,7 +66,7 @@ const createAssetMetaTags = (asset) => {
     {property: 'og:image:height', content: 315},
     {property: 'twitter:site', content: '@spee_ch'},
   ];
-  if (contentType === 'video/mp4' || contentType === 'video/webm') {
+  if (contentType === 'video/mp4' || contentType === 'video/ogg'|| contentType === 'video/webm') {
     metaTags.push({property: 'og:video', content: source});
     metaTags.push({property: 'og:video:secure_url', content: source});
     metaTags.push({property: 'og:video:type', content: contentType});
