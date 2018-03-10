@@ -29,6 +29,22 @@ const AssetPreview = ({ claimData: { name, claimId, fileExt, contentType, thumbn
                   alt={name}
                 />
               );
+            case 'video/ogg':
+              return (
+                <img
+                  className={'asset-preview video'}
+                  src={thumbnail || defaultThumbnail}
+                  alt={name}
+                />
+              );
+            case 'video/webm':
+              return (
+                <img
+                  className={'asset-preview video'}
+                  src={thumbnail || defaultThumbnail}
+                  alt={name}
+                />
+              );
             default:
               return (
                 <p>unsupported file type</p>
