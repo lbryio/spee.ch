@@ -50,6 +50,7 @@ class AssetDisplay extends React.Component {
                 />
               );
             case 'video/mp4':
+           case 'video/mp4':
               return (
                 <video id='video' className='asset' controls poster={thumbnail}>
                   <source
@@ -58,7 +59,7 @@ class AssetDisplay extends React.Component {
                   <p>Your browser does not support the <code>video</code> element.</p>
                 </video>
               );
-            case 'video/ogg':
+		case 'video/ogg':
               return (
                 <video id='video' className='asset' controls poster={thumbnail}>
                   <source
