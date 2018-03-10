@@ -26,11 +26,10 @@ function SpeechServer ({ mysqlConfig, siteConfig, slackConfig }) {
   this.configureConfigFiles = () => {
     const mysqlAppConfig = require('./config/mysqlConfig.js');
     mysqlAppConfig.configure(mysqlConfig);
+    const siteAppConfig = require('./config/siteConfig.js');
+    siteAppConfig.configure(siteConfig);
     const slackAppConfig = require('./config/slackConfig.js');
     slackAppConfig.configure(slackConfig);
-    // // print the config variables
-    // require('./helpers/configVarCheck.js')(mysqlAppConfig);
-    // require('./helpers/configVarCheck.js')(slackAppConfig);
   };
   this.configureLogging = () => {
     require('./helpers/configureLogger.js')(logger);
