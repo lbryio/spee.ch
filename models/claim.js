@@ -1,7 +1,6 @@
 const logger = require('winston');
 const { returnShortId } = require('../helpers/sequelizeHelpers.js');
-const { claim, site } = require('../config/speechConfig.js');
-const { defaultThumbnail } = claim;
+const { assetDefaults: { thumbnail: defaultThumbnail }, details: { host } } = require('../config/siteConfig.js');
 
 function determineFileExtensionFromContentType (contentType) {
   switch (contentType) {
@@ -31,7 +30,7 @@ function prepareClaimData (claim) {
   // logger.debug('preparing claim data based on resolved data:', claim);
   claim['thumbnail'] = determineThumbnail(claim.thumbnail, defaultThumbnail);
   claim['fileExt'] = determineFileExtensionFromContentType(claim.contentType);
-  claim['host'] = site.host;
+  claim['host'] = host;
   return claim;
 };
 

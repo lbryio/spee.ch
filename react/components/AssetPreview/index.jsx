@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-const { claim: { defaultThumbnail } } = require('../../../config/speechConfig.js');
+const { assetDefaults: { thumbnail: defaultThumbnail } } = require('../../../config/siteConfig.js');
 
 const AssetPreview = ({ claimData: { name, claimId, fileExt, contentType, thumbnail } }) => {
   const directSourceLink = `${claimId}/${name}.${fileExt}`;

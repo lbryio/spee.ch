@@ -1,7 +1,7 @@
 import React from 'react';
 import NavBar from 'containers/NavBar';
 import Helmet from 'react-helmet';
-const { site: { title, host } } = require('../../../config/speechConfig.js');
+const { details: { title, host } } = require('../../../config/siteConfig.js');
 
 class FourOhForPage extends React.Component {
   render () {

@@ -1,4 +1,4 @@
-const { site: { title, host, description }, claim: { defaultThumbnail, defaultDescription } } = require('../../config/speechConfig.js');
+const { details: { title, host, description }, assetDefaults: { thumbnail: defaultThumbnail, description: defaultDescription } } = require('../../config/siteConfig.js');
 
 const determineOgThumbnailContentType = (thumbnail) => {
   if (thumbnail) {

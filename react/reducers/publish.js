@@ -1,6 +1,5 @@
 import * as actions from 'constants/publish_action_types';
 import { LOGIN } from 'constants/publish_channel_select_states';
-const { publish } = require('../../config/speechConfig.js');
 
 const initialState = {
   publishInChannel  : false,
@@ -24,9 +23,7 @@ const initialState = {
     license    : '',
     nsfw       : false,
   },
-  thumbnailChannel  : publish.thumbnailChannel,
-  thumbnailChannelId: publish.thumbnailChannelId,
-  thumbnail         : null,
+  thumbnail: null,
 };
 
 export default function (state = initialState, action) {

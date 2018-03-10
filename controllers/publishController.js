@@ -2,7 +2,7 @@ const logger = require('winston');
 const db = require('../models');
 const lbryApi = require('../helpers/lbryApi.js');
 const publishHelpers = require('../helpers/publishHelpers.js');
-const config = require('../config/speechConfig.js');
+const { publishing: { primaryClaimAddress } } = require('../config/siteConfig.js');
 
 module.exports = {
   publish (publishParams, fileName, fileType) {
@@ -91,10 +91,9 @@ module.exports = {
     return db.File.findAll({ where: { name } })
       .then(result => {
         if (result.length >= 1) {
-          const claimAddress = config.wallet.lbryClaimAddress;
           // filter out any results that were not published from spee.ch's wallet address
           const filteredResult = result.filter((claim) => {
-            return (claim.address === claimAddress);
+            return (claim.address === primaryClaimAddress);
           });
           // return based on whether any non-spee.ch claims were left
           if (filteredResult.length >= 1) {

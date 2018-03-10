@@ -1,6 +1,6 @@
 const logger = require('winston');
 const ua = require('universal-analytics');
-const { analytics : { googleId }, site: { name: siteName } } = require('../config/speechConfig.js');
+const { analytics : { googleId }, details: { name: siteName } } = require('../config/siteConfig.js');
 
 function createServeEventParams (headers, ip, originalUrl) {
   return {

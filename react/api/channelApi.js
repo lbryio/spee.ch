@@ -1,5 +1,5 @@
 import Request from 'utils/request';
-const { site: { host } } = require('../../config/speechConfig.js');
+const { details: { host } } = require('../../config/siteConfig.js');
 
 export function getChannelData (name, id) {
   if (!id) id = 'none';

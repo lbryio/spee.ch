@@ -1,7 +1,7 @@
-const { site } = require('../../config/speechConfig.js');
+const { details: { host } } = require('../../config/siteConfig.js');
 
 const initialState = {
-  host: site.host,
+  host: host,
 };
 
 export default function (state = initialState, action) {

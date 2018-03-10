@@ -1,4 +1,4 @@
-const { site: { host } } = require('../../config/speechConfig.js');
+const { details: { host } } = require('../../config/siteConfig.js');
 
 const createBasicCanonicalLink = (page) => {
   if (!page) {

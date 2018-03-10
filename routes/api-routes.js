@@ -1,7 +1,7 @@
 const logger = require('winston');
 const multipart = require('connect-multiparty');
-const { files, site } = require('../config/speechConfig.js');
-const multipartMiddleware = multipart({uploadDir: files.uploadDirectory});
+const { publishing: { uploadDirectory }, details: { host } } = require('../config/siteConfig.js');
+const multipartMiddleware = multipart({uploadDir: uploadDirectory});
 const db = require('../models');
 const { claimNameIsAvailable, checkChannelAvailability, publish } = require('../controllers/publishController.js');
 const { getClaimList, resolveUri, getClaim } = require('../helpers/lbryApi.js');
@@ -170,7 +170,7 @@ module.exports = (app) => {
           data   : {
             name,
             claimId: result.claim_id,
-            url    : `${site.host}/${result.claim_id}/${name}`,
+            url    : `${host}/${result.claim_id}/${name}`,
             lbryTx : result,
           },
         });

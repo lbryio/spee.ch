@@ -1,5 +1,5 @@
 import Request from 'utils/request';
-const { site: { host } } = require('../../config/speechConfig.js');
+const { details: { host } } = require('../../config/siteConfig.js');
 
 export function checkFileAvailability (name, claimId) {
   const url = `${host}/api/file/availability/${name}/${claimId}`;
