@@ -3,8 +3,10 @@ import View from './view';
 
 const mapStateToProps = ({ publish }) => {
   return {
-    file  : publish.file,
-    status: publish.status.status,
+    disabled       : publish.disabled,
+    disabledMessage: publish.disabledMessage,
+    file           : publish.file,
+    status         : publish.status.status,
   };
 };
 
