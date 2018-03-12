@@ -3,6 +3,7 @@ import { LOGIN } from 'constants/publish_channel_select_states';
 const { publish } = require('../../config/speechConfig.js');
 
 const initialState = {
+  disabled          : publish.disabled,
   publishInChannel  : false,
   selectedChannel   : LOGIN,
   showMetadataInputs: false,
