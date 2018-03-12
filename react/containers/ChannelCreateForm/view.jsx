@@ -49,8 +49,7 @@ class ChannelCreateForm extends React.Component {
     const channelWithAtSymbol = `@${channel}`;
     return request(`/api/channel/availability/${channelWithAtSymbol}`);
   }
-  checkIsPasswordProvided () {
-    const password = this.state.password;
+  checkIsPasswordProvided (password) {
     return new Promise((resolve, reject) => {
       if (!password || password.length < 1) {
         return reject(new Error('Please provide a password'));
@@ -79,9 +78,9 @@ class ChannelCreateForm extends React.Component {
   }
   createChannel (event) {
     event.preventDefault();
-    this.checkIsPasswordProvided()
+    this.checkIsPasswordProvided(this.state.password)
       .then(() => {
-        return this.checkIsChannelAvailable();
+        return this.checkIsChannelAvailable(this.state.channel);
       })
       .then(() => {
         this.setState({status: 'We are publishing your new channel.  Sit tight...'});
