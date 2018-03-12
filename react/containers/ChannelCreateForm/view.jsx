@@ -91,7 +91,11 @@ class ChannelCreateForm extends React.Component {
         this.props.onChannelLogin(result.channelName, result.shortChannelId, result.channelClaimId);
       })
       .catch((error) => {
-        if (error.message) this.setState({'error': error.message, status: null});
+        if (error.message) {
+          this.setState({'error': error.message, status: null});
+        } else {
+          this.setState({'error': error, status: null});
+        };
       });
   }
   render () {
