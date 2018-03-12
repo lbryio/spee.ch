@@ -1,7 +1,4 @@
-// const fs = require('fs');
-// const path = require('path');
 const Sequelize = require('sequelize');
-// const basename = path.basename(module.filename);
 const logger = require('winston');
 const config = require('../config/speechConfig.js');
 const { database, username, password } = config.sql;

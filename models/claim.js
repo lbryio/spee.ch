@@ -349,14 +349,13 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
           where: { name, claimId },
         })
         .then(claimArray => {
-          logger.debug('claims found on resolve:', claimArray.length);
           switch (claimArray.length) {
             case 0:
               return resolve(null);
             case 1:
               return resolve(prepareClaimData(claimArray[0].dataValues));
             default:
-              logger.error(`more than one entry matches that name (${name}) and claimID (${claimId})`);
+              logger.error(`more than one record matches ${name}#${claimId} in db.Claim`);
               return resolve(prepareClaimData(claimArray[0].dataValues));
           }
         })

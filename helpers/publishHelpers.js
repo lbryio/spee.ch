@@ -1,6 +1,6 @@
 const logger = require('winston');
 const fs = require('fs');
-const { site, wallet, publish } = require('../config/speechConfig.js');
+const { site, publish } = require('../config/speechConfig.js');
 
 module.exports = {
   parsePublishApiRequestBody ({name, nsfw, license, title, description, thumbnail}) {
@@ -114,7 +114,7 @@ module.exports = {
         license,
         nsfw,
       },
-      claim_address: wallet.lbryClaimAddress,
+      claim_address: publish.primaryClaimAddress,
     };
     // add thumbnail to channel if video
     if (thumbnail) {
@@ -140,7 +140,7 @@ module.exports = {
         license,
         nsfw,
       },
-      claim_address: wallet.lbryClaimAddress,
+      claim_address: publish.primaryClaimAddress,
       channel_name : publish.thumbnailChannel,
       channel_id   : publish.thumbnailChannelId,
     };

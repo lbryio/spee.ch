@@ -2,7 +2,9 @@ const logger = require('winston');
 const db = require('../models');
 const lbryApi = require('../helpers/lbryApi.js');
 const publishHelpers = require('../helpers/publishHelpers.js');
-const config = require('../config/speechConfig.js');
+const { publish : { primaryClaimAddress, additionalClaimAddresses } } = require('../config/speechConfig.js');
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
 
 module.exports = {
   publish (publishParams, fileName, fileType) {
@@ -87,37 +89,42 @@ module.exports = {
     });
   },
   claimNameIsAvailable (name) {
+    const claimAddresses = additionalClaimAddresses || [];
+    claimAddresses.push(primaryClaimAddress);
     // find any records where the name is used
-    return db.File.findAll({ where: { name } })
+    return db.Claim
+      .findAll({
+        attributes: ['address'],
+        where     : {
+          name,
+          address: {
+            [Op.or]: claimAddresses,
+          },
+        },
+      })
       .then(result => {
         if (result.length >= 1) {
-          const claimAddress = config.wallet.lbryClaimAddress;
-          // filter out any results that were not published from spee.ch's wallet address
-          const filteredResult = result.filter((claim) => {
-            return (claim.address === claimAddress);
-          });
-          // return based on whether any non-spee.ch claims were left
-          if (filteredResult.length >= 1) {
-            throw new Error('That claim is already in use');
-          };
-          return name;
+          throw new Error('That claim is already in use');
         };
         return name;
+      })
+      .catch(error => {
+        throw error;
       });
   },
   checkChannelAvailability (name) {
-    return new Promise((resolve, reject) => {
-      // find any records where the name is used
-      db.Channel.findAll({ where: { channelName: name } })
-        .then(result => {
-          if (result.length >= 1) {
-            return resolve(false);
-          }
-          resolve(true);
-        })
-        .catch(error => {
-          reject(error);
-        });
-    });
+    return db.Channel
+      .findAll({
+        where: { channelName: name },
+      })
+      .then(result => {
+        if (result.length >= 1) {
+          throw new Error('That channel has already been claimed');
+        }
+        return name;
+      })
+      .catch(error => {
+        throw error;
+      });
   },
 };
