@@ -1,8 +1,8 @@
 import React from 'react';
 import ErrorPage from 'components/ErrorPage';
-import ShowAssetLite from 'components/ShowAssetLite';
-import ShowAssetDetails from 'components/ShowAssetDetails';
-import ShowChannel from 'components/ShowChannel';
+import ShowAssetLite from 'containers/ShowAssetLite';
+import ShowAssetDetails from 'containers/ShowAssetDetails';
+import ShowChannel from 'containers/ShowChannel';
 
 import { CHANNEL, ASSET_LITE, ASSET_DETAILS } from 'constants/show_request_types';
 

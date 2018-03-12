@@ -24,48 +24,48 @@ class PublishMetadataInputs extends React.Component {
   }
   render () {
     return (
-      <div id="publish-details" className="row row--padded row--no-top row--wide">
-      {this.props.showMetadataInputs && (
-        <div>
-          <div className="row row--no-top">
-            <div className="column column--3 column--med-10 align-content-top">
-              <label htmlFor="publish-license" className="label">Description:</label>
-            </div><div className="column column--7 column--sml-10">
-              <ExpandingTextArea
-                id="publish-description"
-                className="textarea textarea--primary textarea--full-width"
-                rows={1}
-                maxLength={2000}
-                style={{ maxHeight: 200 }}
-                name="description"
-                placeholder="Optional description"
-                value={this.props.description}
-                onChange={this.handleInput} />
+      <div id='publish-details' className='row row--padded row--no-top row--wide'>
+        {this.props.showMetadataInputs && (
+          <div>
+            <div className='row row--no-top'>
+              <div className='column column--3 column--med-10 align-content-top'>
+                <label htmlFor='publish-license' className='label'>Description:</label>
+              </div><div className='column column--7 column--sml-10'>
+                <ExpandingTextArea
+                  id='publish-description'
+                  className='textarea textarea--primary textarea--full-width'
+                  rows={1}
+                  maxLength={2000}
+                  style={{ maxHeight: 200 }}
+                  name='description'
+                  placeholder='Optional description'
+                  value={this.props.description}
+                  onChange={this.handleInput} />
+              </div>
             </div>
-          </div>
 
-          <div className="row row--no-top">
-            <div className="column column--3 column--med-10">
-              <label htmlFor="publish-license" className="label">License:</label>
-            </div><div className="column column--7 column--sml-10">
-              <select type="text" name="license" id="publish-license" className="select select--primary" onChange={this.handleSelect}>
-                <option value=" ">Unspecified</option>
-                <option value="Public Domain">Public Domain</option>
-                <option value="Creative Commons">Creative Commons</option>
-              </select>
+            <div className='row row--no-top'>
+              <div className='column column--3 column--med-10'>
+                <label htmlFor='publish-license' className='label'>License:</label>
+              </div><div className='column column--7 column--sml-10'>
+                <select type='text' name='license' id='publish-license' className='select select--primary' onChange={this.handleSelect}>
+                  <option value=' '>Unspecified</option>
+                  <option value='Public Domain'>Public Domain</option>
+                  <option value='Creative Commons'>Creative Commons</option>
+                </select>
+              </div>
             </div>
-          </div>
 
-          <div className="row row--no-top">
-            <div className="column column--3">
-              <label htmlFor="publish-nsfw" className="label">Mature:</label>
-            </div><div className="column column--7">
-              <input className="input-checkbox" type="checkbox" id="publish-nsfw" name="nsfw" value={this.props.nsfw} onChange={this.handleInput} />
+            <div className='row row--no-top'>
+              <div className='column column--3'>
+                <label htmlFor='publish-nsfw' className='label'>Mature:</label>
+              </div><div className='column column--7'>
+                <input className='input-checkbox' type='checkbox' id='publish-nsfw' name='nsfw' value={this.props.nsfw} onChange={this.handleInput} />
+              </div>
             </div>
           </div>
-        </div>
-      )}
-        <button className="button--secondary" onClick={this.toggleShowInputs}>{this.props.showMetadataInputs ? 'less' : 'more'}</button>
+        )}
+        <button className='button--secondary' onClick={this.toggleShowInputs}>{this.props.showMetadataInputs ? 'less' : 'more'}</button>
       </div>
     );
   }
