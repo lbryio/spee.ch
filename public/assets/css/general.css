@@ -85,9 +85,12 @@ h3, p {
 	font-size: x-large;
 }
 
-
 .text--large {
 	font-size: 2rem;
+}
+
+.text--disabled {
+	color: #9b9b9b;
 }
 
 .pull-quote {
@@ -163,6 +166,11 @@ a, a:visited {
 	margin: 0px;
 	padding: 0.3em;
 	color: #9b9b9b;
+}
+
+.link--disabled-text {
+	color: #9b9b9b;
+	text-decoration: underline;
 }
 
 .link--nav {
@@ -504,7 +512,7 @@ table {
 
 /* PUBLISH FORM */
 
-.dropzone {
+.dropzone, .dropzone--disabled {
 	border: 2px dashed #9b9b9b;
 	text-align: center;
 	position: relative;
