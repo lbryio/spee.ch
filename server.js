@@ -13,12 +13,9 @@ const logger = require('winston');
 
 function SpeechServer ({ mysqlConfig, siteConfig, slackConfig }) {
   this.PORT = 3000;
-  this.speak = (something) => {
-    console.log(something);
-  };
   this.start = () => {
-    this.configureConfigFiles();
     this.configureLogging();
+    this.configureConfigFiles();
     this.configureApp();
     this.configureServer();
     this.startServer();
@@ -61,7 +58,7 @@ function SpeechServer ({ mysqlConfig, siteConfig, slackConfig }) {
     // initialize passport
     app.use(cookieSession({
       name  : 'session',
-      keys  : [siteConfig.session.sessionKey],
+      keys  : [siteConfig.auth.sessionKey],
       maxAge: 24 * 60 * 60 * 1000, // i.e. 24 hours
     }));
     app.use(passport.initialize());

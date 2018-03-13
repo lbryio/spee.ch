@@ -1,8 +1,8 @@
-const { details: { title: siteTitle } } = require('../../config/siteConfig.js');
+const { details: { title } } = require('../../config/siteConfig.js');
 
 export const createPageTitle = (pageTitle) => {
   if (!pageTitle) {
-    return `${siteTitle}`;
+    return `${title}`;
   }
-  return `${siteTitle} - ${pageTitle}`;
+  return `${title} - ${pageTitle}`;
 };

@@ -1,6 +1,6 @@
 const logger = require('winston');
 const ua = require('universal-analytics');
-const { analytics : { googleId }, details: { name: siteName } } = require('../config/siteConfig.js');
+const { analytics : { googleId }, details: { title } } = require('../config/siteConfig.js');
 
 function createServeEventParams (headers, ip, originalUrl) {
   return {
@@ -49,7 +49,7 @@ module.exports = {
   },
   sendGATimingEvent (category, variable, label, startTime, endTime) {
     const params = createPublishTimingEventParams(category, variable, label, startTime, endTime);
-    sendGoogleAnalyticsTiming(siteName, params);
+    sendGoogleAnalyticsTiming(title, params);
   },
   chooseGaLbrynetPublishLabel ({ channel_name: channelName, channel_id: channelId }) {
     return (channelName || channelId ? 'PUBLISH_IN_CHANNEL_CLAIM' : 'PUBLISH_ANONYMOUS_CLAIM');
