@@ -11,8 +11,8 @@ function SiteConfig () {
     sessionKey: 'default',
   };
   this.details = {
-    title      : 'Spee.h Dev1',
-    host       : 'https://dev1.spee.ch',
+    title      : 'Spee.ch',
+    host       : 'default',
     description: 'Open-source, decentralized image and video sharing.',
   };
   this.publishing = {
@@ -28,7 +28,7 @@ function SiteConfig () {
     if (!config) {
       return console.log('No site config received.');
     }
-    const {analytics, publishing, details, assetDefaults, auth} = config;
+    const { analytics, assetDefaults, auth, details, publishing } = config;
     this.analytics = analytics;
     this.assetDefaults = assetDefaults;
     this.auth = auth;
