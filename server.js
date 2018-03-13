@@ -12,7 +12,6 @@ const http = require('http');
 const logger = require('winston');
 
 function SpeechServer ({ mysqlConfig, siteConfig, slackConfig }) {
-  this.PORT = 3000;
   this.start = () => {
     this.configureConfigFiles();
     this.configureLogging();
@@ -25,6 +24,7 @@ function SpeechServer ({ mysqlConfig, siteConfig, slackConfig }) {
     mysqlAppConfig.configure(mysqlConfig);
     const siteAppConfig = require('./config/siteConfig.js');
     siteAppConfig.configure(siteConfig);
+    this.PORT = siteAppConfig.details.port;
     const slackAppConfig = require('./config/slackConfig.js');
     slackAppConfig.configure(slackConfig);
   };

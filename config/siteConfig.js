@@ -11,6 +11,7 @@ function SiteConfig () {
     sessionKey: 'default',
   };
   this.details = {
+    port       : 3000,
     title      : 'Spee.ch',
     host       : 'default',
     description: 'Open-source, decentralized image and video sharing.',
