@@ -60,7 +60,6 @@
     "request-promise": "^4.2.2",
     "sequelize": "^4.1.0",
     "sequelize-cli": "^3.0.0-3",
-    "sleep": "^5.1.1",
     "universal-analytics": "^0.4.13",
     "webpack-node-externals": "^1.6.0",
     "whatwg-fetch": "^2.0.3",
