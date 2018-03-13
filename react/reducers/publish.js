@@ -4,6 +4,7 @@ const { publishing } = require('../../config/siteConfig.js');
 
 const initialState = {
   disabled          : publishing.disabled,
+  disabledMessage   : publishing.disabledMessage,
   publishInChannel  : false,
   selectedChannel   : LOGIN,
   showMetadataInputs: false,

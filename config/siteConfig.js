@@ -16,8 +16,9 @@ function SiteConfig () {
     description: 'Open-source, decentralized image and video sharing.',
   };
   this.publishing = {
-    additionalClaimAddresses: [],  // optional
+    additionalClaimAddresses: [],
     disabled                : false,
+    disabledMessage         : 'Please check back soon.',
     primaryClaimAddress     : 'default',
     thumbnailChannel        : 'default',
     thumbnailChannelId      : 'default',
@@ -29,10 +30,10 @@ function SiteConfig () {
     }
     const {analytics, publishing, details, assetDefaults, auth} = config;
     this.analytics = analytics;
-    this.publishing = publishing;
-    this.details = details;
     this.assetDefaults = assetDefaults;
     this.auth = auth;
+    this.details = details;
+    this.publishing = publishing;
   };
 };
 
