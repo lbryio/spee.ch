@@ -25,8 +25,18 @@ module.exports = {
           throw new Error('Sorry, videos are limited to 50 megabytes.');
         }
         break;
+      case 'video/ogg':
+        if (file.size > 50000000) {
+          throw new Error('Sorry, videos are limited to 50 megabytes.');
+        }
+        break;
+      case 'video/webm':
+        if (file.size > 50000000) {
+          throw new Error('Sorry, videos are limited to 50 megabytes.');
+        }
+        break;
       default:
-        throw new Error(file.type + ' is not a supported file type. Only, .jpeg, .png, .gif, and .mp4 files are currently supported.');
+        throw new Error(file.type + ' is not a supported file type. Only, .jpeg, .png, .gif, .mp4, .ogg, and .webm files are currently supported.');
     }
   },
 };
