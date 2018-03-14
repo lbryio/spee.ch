@@ -1,7 +1,7 @@
 {
   "name": "spee.ch",
   "version": "0.0.1",
-  "description": "a single-serving site that reads and publishes images to and from the LBRY blockchain",
+  "description": "a web application that reads and publishes images to and from the LBRY blockchain",
   "main": "index.js",
   "scripts": {
     "test": "mocha --recursive",
