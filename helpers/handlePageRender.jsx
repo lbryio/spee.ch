@@ -4,7 +4,7 @@ import { createStore } from 'redux';
 import Reducer from '../react/reducers';
 import { Provider } from 'react-redux';
 import { StaticRouter } from 'react-router-dom';
-import GAListener from '../react/containers/GAListener';
+import GAListener from '../react/components/GAListener';
 import App from '../react/app';
 import renderFullPage from './renderFullPage.js';
 import Helmet from 'react-helmet';

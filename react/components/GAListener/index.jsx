@@ -1,8 +1,9 @@
 import React from 'react';
 import GoogleAnalytics from 'react-ga';
 import { withRouter } from 'react-router-dom';
+const { analytics: { googleId } } = require('../../../config/siteConfig.js');
 
-GoogleAnalytics.initialize(null);
+GoogleAnalytics.initialize(googleId);
 
 class GAListener extends React.Component {
   componentDidMount () {
