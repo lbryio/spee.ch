@@ -16,7 +16,9 @@ class GAListener extends React.Component {
   render () {
     // initiate analytics
     const { googleAnalyticsId } = this.props;
-    GoogleAnalytics.initialize(googleAnalyticsId);
+    if (googleAnalyticsId) {
+      GoogleAnalytics.initialize(googleAnalyticsId);
+    }
     // return children
     return this.props.children;
   }
