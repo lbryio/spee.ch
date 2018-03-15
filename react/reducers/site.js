@@ -1,18 +1,29 @@
 const siteConfig = require('../../config/siteConfig.js');
 
 const {
-  analytics: { googleId: googleAnalyticsId },
-  assetDefaults: { thumbnail: defaultThumbnail },
-  details: { title, host },
+  analytics: {
+    googleId: googleAnalyticsId,
+  },
+  assetDefaults: {
+    thumbnail: defaultThumbnail,
+    description: defaultDescription,
+  },
+  details: {
+    description,
+    host,
+    title,
+    twitter,
+  },
 } = siteConfig;
 
 const initialState = {
+  description,
   googleAnalyticsId,
   host,
   title,
-  defaults: {
-    defaultThumbnail,
-  },
+  twitter,
+  defaultDescription,
+  defaultThumbnail,
 };
 
 export default function (state = initialState, action) {

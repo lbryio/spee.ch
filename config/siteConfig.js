@@ -3,18 +3,19 @@ function SiteConfig () {
     googleId: 'default',
   };
   this.assetDefaults = {
-    title      : 'Spee.ch',
+    description: 'An asset published on Spee.ch',
     thumbnail  : 'https://spee.ch/assets/img/video_thumb_default.png',
-    description: 'Open-source, decentralized image and video sharing.',
+    title      : 'Spee.ch',
   };
   this.auth = {
     sessionKey: 'default',
   };
   this.details = {
+    description: 'Open-source, decentralized image and video sharing.',
+    host       : 'default',
     port       : 3000,
     title      : 'Spee.ch',
-    host       : 'default',
-    description: 'Open-source, decentralized image and video sharing.',
+    twitter    : '@spee_ch',
   };
   this.publishing = {
     additionalClaimAddresses: [],

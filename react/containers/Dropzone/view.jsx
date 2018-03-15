@@ -1,6 +1,6 @@
 import React from 'react';
 import { validateFile } from 'utils/file';
-import Preview from 'components/Preview';
+import PublishPreview from 'components/PublishPreview';
 
 class Dropzone extends React.Component {
   constructor (props) {
@@ -87,7 +87,7 @@ class Dropzone extends React.Component {
         <div id='preview-dropzone' className={'row row--padded row--tall dropzone' + (this.state.dragOver ? ' dropzone--drag-over' : '')} onDrop={this.handleDrop} onDragOver={this.handleDragOver} onDragEnd={this.handleDragEnd} onDragEnter={this.handleDragEnter} onDragLeave={this.handleDragLeave} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} onClick={this.handleClick}>
           {this.props.file ? (
             <div>
-              <Preview
+              <PublishPreview
                 dimPreview={this.state.dimPreview}
                 file={this.props.file}
                 thumbnail={this.props.thumbnail}
