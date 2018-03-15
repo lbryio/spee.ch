@@ -4,8 +4,13 @@ import { withRouter } from 'react-router-dom';
 
 class GAListener extends React.Component {
   componentDidMount () {
-    this.sendPageView(this.props.history.location);
-    this.props.history.listen(this.sendPageView);
+    // initiate analytics
+    const { googleAnalyticsId } = this.props;
+    if (googleAnalyticsId) {
+      GoogleAnalytics.initialize(googleAnalyticsId);
+      this.sendPageView(this.props.history.location);
+      this.props.history.listen(this.sendPageView);
+    }
   }
 
   sendPageView (location) {
@@ -14,12 +19,6 @@ class GAListener extends React.Component {
   }
 
   render () {
-    // initiate analytics
-    const { googleAnalyticsId } = this.props;
-    if (googleAnalyticsId) {
-      GoogleAnalytics.initialize(googleAnalyticsId);
-    }
-    // return children
     return this.props.children;
   }
 }
