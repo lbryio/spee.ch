@@ -1,7 +1,13 @@
-const { details: { host }, assetDefaults: { thumbnail: defaultThumbnail } } = require('../../config/siteConfig.js');
+const siteConfig = require('../../config/siteConfig.js');
+
+const {
+  details: { title, host },
+  assetDefaults: { thumbnail: defaultThumbnail },
+} = siteConfig;
 
 const initialState = {
   host,
+  title,
   defaults: {
     defaultThumbnail,
   },

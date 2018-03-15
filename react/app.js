@@ -4,7 +4,7 @@ import HomePage from 'components/HomePage';
 import AboutPage from 'components/AboutPage';
 import LoginPage from 'containers/LoginPage';
 import ShowPage from 'containers/ShowPage';
-import FourOhFourPage from 'components/FourOhFourPage';
+import FourOhFourPage from 'containers/FourOhFourPage';
 
 const App = () => {
   return (

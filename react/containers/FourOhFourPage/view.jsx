@@ -1,10 +1,10 @@
 import React from 'react';
-import NavBar from 'containers/NavBar';
+import NavBar from 'containers/NavBar/index';
 import Helmet from 'react-helmet';
-const { details: { title, host } } = require('../../../config/siteConfig.js');
 
 class FourOhForPage extends React.Component {
   render () {
+    const {title, host} = this.props;
     return (
       <div>
         <Helmet>
