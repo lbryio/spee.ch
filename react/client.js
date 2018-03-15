@@ -7,7 +7,7 @@ import Reducer from 'reducers';
 import createSagaMiddleware from 'redux-saga';
 import rootSaga  from 'sagas';
 
-import GAListener from 'components/GAListener';
+import GAListener from 'containers/GAListener';
 import App from './app';
 
 // get the state from a global variable injected into the server-generated HTML

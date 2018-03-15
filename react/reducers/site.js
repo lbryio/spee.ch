@@ -1,11 +1,13 @@
 const siteConfig = require('../../config/siteConfig.js');
 
 const {
-  details: { title, host },
+  analytics: { googleId: googleAnalyticsId },
   assetDefaults: { thumbnail: defaultThumbnail },
+  details: { title, host },
 } = siteConfig;
 
 const initialState = {
+  googleAnalyticsId,
   host,
   title,
   defaults: {

@@ -1,9 +1,6 @@
 import React from 'react';
 import GoogleAnalytics from 'react-ga';
 import { withRouter } from 'react-router-dom';
-const {analytics: googleId} = require('../../../config/siteConfig.js');
-
-GoogleAnalytics.initialize(googleId);
 
 class GAListener extends React.Component {
   componentDidMount () {
@@ -17,6 +14,10 @@ class GAListener extends React.Component {
   }
 
   render () {
+    // initiate analytics
+    const { googleAnalyticsId } = this.props;
+    GoogleAnalytics.initialize(googleAnalyticsId);
+    // return children
     return this.props.children;
   }
 }
