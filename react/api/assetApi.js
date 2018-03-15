@@ -1,6 +1,6 @@
 import Request from 'utils/request';
 
-export function getLongClaimId (name, modifier) {
+export function getLongClaimId (host, name, modifier) {
   let body = {};
   // create request params
   if (modifier) {
@@ -18,17 +18,17 @@ export function getLongClaimId (name, modifier) {
     body   : JSON.stringify(body),
   };
   // create url
-  const url = `/api/claim/long-id`;
+  const url = `${host}/api/claim/long-id`;
   // return the request promise
   return Request(url, params);
 };
 
-export function getShortId (name, claimId) {
-  const url = `/api/claim/short-id/${claimId}/${name}`;
+export function getShortId (host, name, claimId) {
+  const url = `${host}/api/claim/short-id/${claimId}/${name}`;
   return Request(url);
 };
 
-export function getClaimData (name, claimId) {
-  const url = `/api/claim/data/${name}/${claimId}`;
+export function getClaimData (host, name, claimId) {
+  const url = `${host}/api/claim/data/${name}/${claimId}`;
   return Request(url);
 };
