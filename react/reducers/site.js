@@ -1,7 +1,10 @@
-const { details: { host } } = require('../../config/siteConfig.js');
+const { details: { host }, assetDefaults: { thumbnail: defaultThumbnail } } = require('../../config/siteConfig.js');
 
 const initialState = {
-  host: host,
+  host,
+  defaults: {
+    defaultThumbnail,
+  },
 };
 
 export default function (state = initialState, action) {
