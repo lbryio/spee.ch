@@ -1,5 +1,4 @@
 import Request from 'utils/request';
-const { details: { host } } = require('../../config/siteConfig.js');
 
 export function getLongClaimId (name, modifier) {
   let body = {};
@@ -19,17 +18,17 @@ export function getLongClaimId (name, modifier) {
     body   : JSON.stringify(body),
   };
   // create url
-  const url = `${host}/api/claim/long-id`;
+  const url = `/api/claim/long-id`;
   // return the request promise
   return Request(url, params);
 };
 
 export function getShortId (name, claimId) {
-  const url = `${host}/api/claim/short-id/${claimId}/${name}`;
+  const url = `/api/claim/short-id/${claimId}/${name}`;
   return Request(url);
 };
 
 export function getClaimData (name, claimId) {
-  const url = `${host}/api/claim/data/${name}/${claimId}`;
+  const url = `/api/claim/data/${name}/${claimId}`;
   return Request(url);
 };
