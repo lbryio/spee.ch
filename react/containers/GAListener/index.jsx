@@ -2,7 +2,7 @@ import React from 'react';
 import GoogleAnalytics from 'react-ga';
 import { withRouter } from 'react-router-dom';
 
-GoogleAnalytics.initialize('test');
+GoogleAnalytics.initialize(null);
 
 class GAListener extends React.Component {
   componentDidMount () {
