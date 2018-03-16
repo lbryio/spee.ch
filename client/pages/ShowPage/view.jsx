@@ -1,5 +1,5 @@
 import React from 'react';
-import ErrorPage from 'components/ErrorPage';
+import ErrorPage from 'pages/ErrorPage';
 import ShowAssetLite from 'containers/ShowAssetLite';
 import ShowAssetDetails from 'containers/ShowAssetDetails';
 import ShowChannel from 'containers/ShowChannel';

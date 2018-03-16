@@ -1,6 +1,6 @@
 import React from 'react';
 import SEO from 'components/SEO';
-import ErrorPage from 'components/ErrorPage';
+import ErrorPage from 'pages/ErrorPage';
 import NavBar from 'containers/NavBar';
 import ChannelClaimsDisplay from 'containers/ChannelClaimsDisplay';
 
