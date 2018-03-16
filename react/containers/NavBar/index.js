@@ -1,13 +1,14 @@
 import { connect } from 'react-redux';
 import { updateLoggedInChannel } from 'actions/channel';
+import {updateSelectedChannel} from 'actions/publish';
 import View from './view';
-import {updateSelectedChannel} from '../../actions/publish';
 
-const mapStateToProps = ({ channel }) => {
+const mapStateToProps = ({ channel, site }) => {
   return {
     channelName   : channel.loggedInChannel.name,
     channelShortId: channel.loggedInChannel.shortId,
     channelLongId : channel.loggedInChannel.longId,
+    siteDescription: site.description,
   };
 };
 
