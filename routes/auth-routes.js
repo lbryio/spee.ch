@@ -3,19 +3,35 @@ const passport = require('passport');
 
 module.exports = (app) => {
   // route for sign up
-  app.post('/signup', passport.authenticate('local-signup'), (req, res) => {
-    logger.verbose(`successful signup for ${req.user.channelName}`);
-    res.status(200).json({
-      success       : true,
-      channelName   : req.user.channelName,
-      channelClaimId: req.user.channelClaimId,
-      shortChannelId: req.user.shortChannelId,
-    });
+  app.post('/signup', (req, res, next) => {
+    passport.authenticate('local-signup', (err, user, info) => {
+      logger.verbose(`successful signup for ${req.user.channelName}`);
+      if (err) {
+        console.log('err >> err:', err);
+        return res.status(400).json({
+          success: false,
+          message: info.message,
+        });
+      }
+      if (!user) {
+        console.log('!user >> info:', info);
+        return res.status(400).json({
+          success: false,
+          message: info.message,
+        });
+      }
+      res.status(200).json({
+        success       : true,
+        channelName   : req.user.channelName,
+        channelClaimId: req.user.channelClaimId,
+        shortChannelId: req.user.shortChannelId,
+      });
+    })(req, res, next);
   });
   // route for log in
   app.post('/login', (req, res, next) => {
     passport.authenticate('local-login', (err, user, info) => {
-      logger.debug('info:', info);
+      logger.verbose('login info:', info);
       if (err) {
         return next(err);
       }
