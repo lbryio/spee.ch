@@ -53,12 +53,13 @@ class NavBar extends React.Component {
     }
   }
   render () {
+    const { siteDescription } =  this.props;
     return (
       <div className='row row--wide nav-bar'>
         <div className='row row--padded row--short flex-container--row flex-container--space-between-center'>
           <Logo />
           <div className='nav-bar--center'>
-            <span className='nav-bar-tagline'>Open-source, decentralized image and video sharing.</span>
+            <span className='nav-bar-tagline'>{siteDescription}</span>
           </div>
           <div className='nav-bar--right'>
             <NavLink className='nav-bar-link link--nav' activeClassName='link--nav-active' to='/' exact>Publish</NavLink>
