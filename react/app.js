@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import HomePage from 'pages/HomePage';
+import HomePage from 'pages/HomePage'; // or use the provided local homepage
 import AboutPage from 'pages/AboutPage';
 import LoginPage from 'containers/LoginPage';
 import ShowPage from 'pages/ShowPage';

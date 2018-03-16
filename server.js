@@ -23,11 +23,7 @@ function SpeechServer () {
   this.configureSlack = (slackConfig) => {
     require('./config/slackConfig.js').configure(slackConfig);
   };
-  this.configureLogging = () => {
-    require('./helpers/configureLogger.js')(logger);
-    require('./helpers/configureSlack.js')(logger);
-  };
-  this.configureApp = () => {
+  this.createApp = () => {
     // create an Express application
     const app = express();
 
@@ -77,15 +73,13 @@ function SpeechServer () {
 
     this.app = app;
   };
-  this.initialize = (pages, models, routes) => {
-    this.configureLogging();
-    this.configureApp();
-    this.updatePages(pages);
-    this.updateModels(models);
-    this.updateRoutes(routes);
+  this.initialize = () => {
+    require('./helpers/configureLogger.js')(logger);
+    require('./helpers/configureSlack.js')(logger);
+    this.createApp();
     this.server = http.Server(this.app);
   };
-  this.blastoff = () => {
+  this.start = () => {
     const db = require('./models');
     // sync sequelize
     db.sequelize.sync()
