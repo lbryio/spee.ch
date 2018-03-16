@@ -1,7 +1,29 @@
-const { details: { host } } = require('../../config/siteConfig.js');
+const siteConfig = require('../../config/siteConfig.js');
+
+const {
+  analytics: {
+    googleId: googleAnalyticsId,
+  },
+  assetDefaults: {
+    thumbnail: defaultThumbnail,
+    description: defaultDescription,
+  },
+  details: {
+    description,
+    host,
+    title,
+    twitter,
+  },
+} = siteConfig;
 
 const initialState = {
-  host: host,
+  description,
+  googleAnalyticsId,
+  host,
+  title,
+  twitter,
+  defaultDescription,
+  defaultThumbnail,
 };
 
 export default function (state = initialState, action) {

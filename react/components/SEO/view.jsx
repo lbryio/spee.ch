@@ -8,10 +8,16 @@ import { createCanonicalLink } from 'utils/canonicalLink';
 
 class SEO extends React.Component {
   render () {
-    let { pageTitle, asset, channel, pageUri } = this.props;
-    pageTitle = createPageTitle(pageTitle);
-    const metaTags = createMetaTags(asset, channel);
-    const canonicalLink = createCanonicalLink(asset, channel, pageUri);
+    // props from state
+    const { defaultDescription, defaultThumbnail, siteDescription, siteHost, siteTitle, siteTwitter } = this.props;
+    // props from parent
+    const { asset, channel, pageUri } = this.props;
+    let { pageTitle } = this.props;
+    // create page title, tags, and canonical link
+    pageTitle = createPageTitle(siteTitle, pageTitle);
+    const metaTags = createMetaTags(siteDescription, siteHost, siteTitle, siteTwitter, asset, channel, defaultDescription, defaultThumbnail);
+    const canonicalLink = createCanonicalLink(asset, channel, pageUri, siteHost);
+    // render results
     return (
       <Helmet
         title={pageTitle}

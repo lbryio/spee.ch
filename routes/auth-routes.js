@@ -15,7 +15,6 @@ module.exports = (app) => {
   // route for log in
   app.post('/login', (req, res, next) => {
     passport.authenticate('local-login', (err, user, info) => {
-      logger.debug('info:', info);
       if (err) {
         return next(err);
       }

@@ -1,7 +1,6 @@
 import Request from 'utils/request';
-const { details: { host } } = require('../../config/siteConfig.js');
 
-export function getLongClaimId (name, modifier) {
+export function getLongClaimId (host, name, modifier) {
   let body = {};
   // create request params
   if (modifier) {
@@ -24,12 +23,12 @@ export function getLongClaimId (name, modifier) {
   return Request(url, params);
 };
 
-export function getShortId (name, claimId) {
+export function getShortId (host, name, claimId) {
   const url = `${host}/api/claim/short-id/${claimId}/${name}`;
   return Request(url);
 };
 
-export function getClaimData (name, claimId) {
+export function getClaimData (host, name, claimId) {
   const url = `${host}/api/claim/data/${name}/${claimId}`;
   return Request(url);
 };

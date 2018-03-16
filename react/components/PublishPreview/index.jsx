@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-class Preview extends React.Component {
+class PublishPreview extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
@@ -53,10 +53,10 @@ class Preview extends React.Component {
   }
 };
 
-Preview.propTypes = {
+PublishPreview.propTypes = {
   dimPreview: PropTypes.bool.isRequired,
   file      : PropTypes.object.isRequired,
   thumbnail : PropTypes.object,
 };
 
-export default Preview;
+export default PublishPreview;
