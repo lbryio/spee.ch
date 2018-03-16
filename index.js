@@ -1,5 +1,5 @@
-const server = require('./server.js');
-const client = require('./client.js');
+const server = require('./server/server.js');
+const client = require('./client/client.js');
 
 const exports = {
   server,
