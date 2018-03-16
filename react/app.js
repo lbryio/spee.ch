@@ -1,9 +1,9 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import HomePage from 'components/HomePage';
-import AboutPage from 'components/AboutPage';
+import HomePage from 'pages/HomePage';
+import AboutPage from 'pages/AboutPage';
 import LoginPage from 'containers/LoginPage';
-import ShowPage from 'containers/ShowPage';
+import ShowPage from 'pages/ShowPage';
 import FourOhFourPage from 'containers/FourOhFourPage';
 
 const App = () => {
