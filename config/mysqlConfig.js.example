@@ -1,7 +1,5 @@
-function MysqlConfig () {
-  this.database = 'default';
-  this.username = 'default';
-  this.password = 'default';
+module.exports = {
+  database: 'default',
+  username: 'default',
+  password: 'default',
 };
-
-module.exports = new MysqlConfig();

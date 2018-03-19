@@ -1,4 +1,4 @@
-const { logLevel } = require('../../config/loggerConfig');
+const { logLevel } = require('../../devConfig/loggerConfig');
 
 module.exports = (winston) => {
   // configure

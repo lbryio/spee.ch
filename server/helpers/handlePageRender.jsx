@@ -1,11 +1,11 @@
 import React from 'react';
 import { renderToString } from 'react-dom/server';
 import { createStore } from 'redux';
-import Reducer from '../../client/reducers/index';
+import Reducer from 'reducers';
 import { Provider } from 'react-redux';
 import { StaticRouter } from 'react-router-dom';
-import GAListener from '../../client/components/GAListener/index';
-import App from '../../client/app';
+import GAListener from 'components/GAListener';
+import App from 'app.jsx';
 import renderFullPage from './renderFullPage.js';
 import Helmet from 'react-helmet';
 

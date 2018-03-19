@@ -1,5 +1,5 @@
 const winstonSlackWebHook = require('winston-slack-webhook').SlackWebHook;
-const slackConfig = require('../../config/slackConfig.js');
+const slackConfig = require('../../devConfig/slackConfig.js');
 
 module.exports = (winston) => {
   const {slackWebHook, slackErrorChannel, slackInfoChannel} = slackConfig;

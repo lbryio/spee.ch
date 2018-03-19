@@ -1,16 +1,16 @@
 import React from 'react';
 import { renderToString } from 'react-dom/server';
 import { createStore, applyMiddleware } from 'redux';
-import Reducer from '../../client/reducers/index';
+import Reducer from 'reducers/index';
 import { Provider } from 'react-redux';
 import { StaticRouter } from 'react-router-dom';
-import GAListener from '../../client/components/GAListener/index';
-import App from '../../client/app';
+import GAListener from 'components/GAListener';
+import App from 'app.jsx';
 import renderFullPage from './renderFullPage';
 import createSagaMiddleware from 'redux-saga';
 import { call } from 'redux-saga/effects';
-import { handleShowPageUri } from '../../client/sagas/show_uri';
-import { onHandleShowPageUri } from '../../client/actions/show';
+import { handleShowPageUri } from 'sagas/show_uri';
+import { onHandleShowPageUri } from 'actions/show';
 
 import Helmet from 'react-helmet';
 

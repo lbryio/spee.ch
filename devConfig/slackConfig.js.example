@@ -1,7 +1,5 @@
-function SlackConfig () {
-  this.slackWebHook      = null;
-  this.slackErrorChannel = null;
-  this.slackInfoChannel  = null;
+module.exports = {
+  slackWebHook     : null,
+  slackErrorChannel: null,
+  slackInfoChannel : null,
 };
-
-module.exports = new SlackConfig();

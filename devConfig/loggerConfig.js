@@ -1,5 +1,3 @@
-const loggerConfig = {
+module.exports = {
   logLevel: 'debug',  // options: silly, debug, verbose, info
 };
-
-module.exports = loggerConfig;
