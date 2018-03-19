@@ -1,0 +1,5 @@
+module.exports = {
+  database: 'default',
+  username: 'default',
+  password: 'default',
+};

@@ -1,7 +1,7 @@
 # Spee.ch
 Spee.ch is a web app that reads and publishes images and videos to and from the [LBRY](https://lbry.io/) blockchain.
 
-## How to run this repository locally
+##Installation
 * start mysql
 	* install mysql
 	* create a database called `lbry`
@@ -12,10 +12,13 @@ Spee.ch is a web app that reads and publishes images and videos to and from the 
 * start spee.ch
 	* clone this repo
 	* run `npm install`
-	* create your `speechConfig.js` file
-	  * copy `speechConfig.js.example` and name it `speechConfig.js`
+	* create your own config files in `/config`
+	  * copy `example.js.example` and name it `example.js`
 	  * replace the `null` values in the config file with the appropriate values for your environment
-	* build the app by running `npm run build-prod`
+	* create your own config files in `/devConfig`
+	  * copy `example.js.example` and name it `example.js`
+	  * note: you must create these files, but the default values are sufficient if you do not want to update them.
+	* build the app by running `npm run build`
 	* to start the server, run `npm run start`
 * visit [localhost:3000](http://localhost:3000)
 * start spee.ch-sync (optional, recommended)
@@ -45,8 +48,8 @@ Spee.ch is a web app that reads and publishes images and videos to and from the 
 * /api/claim/publish
   * example: `curl -F 'name=MyPictureName' -F 'file=@/path/to/myPicture.jpeg' https://spee.ch/api/claim/publish`
   * Parameters:
-    * `name`
-    * `file` (must be type .mp4, .jpeg, .jpg, .gif, or .png)
+    * `name` (required)
+    * `file` (required) (must be type .mp4, .jpeg, .jpg, .gif, or .png)
     * `nsfw` (optional)
     * `license` (optional)
     * `title` (optional)

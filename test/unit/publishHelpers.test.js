@@ -2,7 +2,7 @@ const chai = require('chai');
 const expect = chai.expect;
 
 describe('publishHelpers.js', function () {
-  const publishHelpers = require('../../helpers/publishHelpers.js');
+  const publishHelpers = require('../../server/helpers/publishHelpers.js');
 
   describe('#parsePublishApiRequestBody()', function () {
     it('should throw an error if no body', function () {
