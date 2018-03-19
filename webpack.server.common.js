@@ -1,6 +1,6 @@
 const Path = require('path');
 const nodeExternals = require('webpack-node-externals');
-const REACT_ROOT = Path.resolve(__dirname, 'react/');
+const REACT_ROOT = Path.resolve(__dirname, 'client/');
 
 module.exports = {
   target: 'node',

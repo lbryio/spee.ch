@@ -5,35 +5,27 @@ const expressHandlebars = require('express-handlebars');
 const Handlebars = require('handlebars');
 const helmet = require('helmet');
 const passport = require('passport');
-const { populateLocalsDotUser, serializeSpeechUser, deserializeSpeechUser } = require('./helpers/authHelpers.js');
+const { serializeSpeechUser, deserializeSpeechUser } = require('./server/helpers/authHelpers.js');
 const cookieSession = require('cookie-session');
 const http = require('http');
 // logging dependencies
 const logger = require('winston');
 
-function SpeechServer ({ mysqlConfig, siteConfig, slackConfig }) {
-  this.start = () => {
-    this.configureConfigFiles();
-    this.configureLogging();
-    this.configureApp();
-    this.configureServer();
-    this.startServer();
+function SpeechServer () {
+  this.configureMysql = (mysqlConfig) => {
+    require('./config/mysqlConfig.js').configure(mysqlConfig);
   };
-  this.configureConfigFiles = () => {
-    const mysqlAppConfig = require('./config/mysqlConfig.js');
-    mysqlAppConfig.configure(mysqlConfig);
-    const siteAppConfig = require('./config/siteConfig.js');
-    siteAppConfig.configure(siteConfig);
-    this.PORT = siteAppConfig.details.port;
-    const slackAppConfig = require('./config/slackConfig.js');
-    slackAppConfig.configure(slackConfig);
+  this.configureSite = (siteConfig) => {
+    require('./config/siteConfig.js').configure(siteConfig);
+    this.sessionKey = siteConfig.auth.sessionKey;
+    this.PORT = siteConfig.details.port;
   };
-  this.configureLogging = () => {
-    require('./helpers/configureLogger.js')(logger);
-    require('./helpers/configureSlack.js')(logger);
+  this.configureSlack = (slackConfig) => {
+    require('./config/slackConfig.js').configure(slackConfig);
   };
-  this.configureApp = () => {
-    const app = express(); // create an Express application
+  this.createApp = () => {
+    // create an Express application
+    const app = express();
 
     // trust the proxy to get ip address for us
     app.enable('trust proxy');
@@ -51,14 +43,14 @@ function SpeechServer ({ mysqlConfig, siteConfig, slackConfig }) {
     // configure passport
     passport.serializeUser(serializeSpeechUser);
     passport.deserializeUser(deserializeSpeechUser);
-    const localSignupStrategy = require('./passport/local-signup.js');
-    const localLoginStrategy = require('./passport/local-login.js');
+    const localSignupStrategy = require('./server/passport/local-signup.js');
+    const localLoginStrategy = require('./server/passport/local-login.js');
     passport.use('local-signup', localSignupStrategy);
     passport.use('local-login', localLoginStrategy);
     // initialize passport
     app.use(cookieSession({
       name  : 'session',
-      keys  : [siteConfig.auth.sessionKey],
+      keys  : [this.sessionKey],
       maxAge: 24 * 60 * 60 * 1000, // i.e. 24 hours
     }));
     app.use(passport.initialize());
@@ -72,23 +64,23 @@ function SpeechServer ({ mysqlConfig, siteConfig, slackConfig }) {
     app.engine('handlebars', hbs.engine);
     app.set('view engine', 'handlebars');
 
-    // middleware to pass user info back to client (for handlebars access), if user is logged in
-    app.use(populateLocalsDotUser);  // note: I don't think I need this any more?
-
     // set the routes on the app
-    require('./routes/auth-routes.js')(app);
-    require('./routes/api-routes.js')(app);
-    require('./routes/page-routes.js')(app);
-    require('./routes/serve-routes.js')(app);
-    require('./routes/fallback-routes.js')(app);
+    require('./server/routes/auth-routes.js')(app);
+    require('./server/routes/api-routes.js')(app);
+    require('./server/routes/page-routes.js')(app);
+    require('./server/routes/asset-routes.js')(app);
+    require('./server/routes/fallback-routes.js')(app);
 
     this.app = app;
   };
-  this.configureServer = () => {
+  this.initialize = () => {
+    require('./server/helpers/configureLogger.js')(logger);
+    require('./server/helpers/configureSlack.js')(logger);
+    this.createApp();
     this.server = http.Server(this.app);
   };
-  this.startServer = () => {
-    const db = require('./models');
+  this.start = () => {
+    const db = require('./server/models/index');
     // sync sequelize
     db.sequelize.sync()
       // start the server

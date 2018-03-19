@@ -1,9 +1,9 @@
 const Path = require('path');
-const REACT_ROOT = Path.resolve(__dirname, 'react/');
+const REACT_ROOT = Path.resolve(__dirname, 'client/');
 
 module.exports = {
   target: 'web',
-  entry : ['babel-polyfill', 'whatwg-fetch', './react/client.js'],
+  entry : ['babel-polyfill', 'whatwg-fetch', './client/client.js'],
   output: {
     path      : Path.join(__dirname, 'public/bundle/'),
     publicPath: 'public/bundle/',
