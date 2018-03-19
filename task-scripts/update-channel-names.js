@@ -2,9 +2,7 @@
 const logger = require('winston');
 const db = require('../models'); // require our models for syncing
 // configure logging
-const config = require('../config/speechConfig.js');
-const { logLevel } = config.logging;
-require('../config/loggerConfig.js')(logger, logLevel);
+require('../helpers/configureLogger.js')(logger);
 
 let totalClaims = 0;
 let totalClaimsNoCertificate = 0;

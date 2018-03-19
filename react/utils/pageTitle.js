@@ -1,6 +1,4 @@
-const { site: { title: siteTitle } } = require('../../config/speechConfig.js');
-
-export const createPageTitle = (pageTitle) => {
+export const createPageTitle = (siteTitle, pageTitle) => {
   if (!pageTitle) {
     return `${siteTitle}`;
   }

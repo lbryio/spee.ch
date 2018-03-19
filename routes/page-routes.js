@@ -1,4 +1,4 @@
-const { site } = require('../config/speechConfig.js');
+const { details: host } = require('../config/siteConfig.js');
 const handlePageRender = require('../helpers/handlePageRender.jsx');
 
 module.exports = (app) => {
@@ -29,7 +29,6 @@ module.exports = (app) => {
   app.get('/embed/:claimId/:name', ({ params }, res) => {
     const claimId = params.claimId;
     const name = params.name;
-    const host = site.host;
     // get and render the content
     res.status(200).render('embed', { layout: 'embed', host, claimId, name });
   });

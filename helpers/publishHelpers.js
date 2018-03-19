@@ -1,6 +1,7 @@
 const logger = require('winston');
 const fs = require('fs');
-const { site, publish } = require('../config/speechConfig.js');
+
+const { details, publishing } = require('../config/siteConfig.js');
 
 module.exports = {
   parsePublishApiRequestBody ({name, nsfw, license, title, description, thumbnail}) {
@@ -109,12 +110,12 @@ module.exports = {
       metadata : {
         description,
         title,
-        author  : site.title,
+        author  : details.title,
         language: 'en',
         license,
         nsfw,
       },
-      claim_address: publish.primaryClaimAddress,
+      claim_address: publishing.primaryClaimAddress,
     };
     // add thumbnail to channel if video
     if (thumbnail) {
@@ -135,14 +136,14 @@ module.exports = {
       metadata : {
         title      : `${claimName} thumbnail`,
         description: `a thumbnail for ${claimName}`,
-        author     : site.title,
+        author     : details.title,
         language   : 'en',
         license,
         nsfw,
       },
-      claim_address: publish.primaryClaimAddress,
-      channel_name : publish.thumbnailChannel,
-      channel_id   : publish.thumbnailChannelId,
+      claim_address: publishing.primaryClaimAddress,
+      channel_name : publishing.thumbnailChannel,
+      channel_id   : publishing.thumbnailChannelId,
     };
   },
   deleteTemporaryFile (filePath) {

@@ -1,9 +1,7 @@
-const config = require('../config/speechConfig.js');
 const logger = require('winston');
 
-module.exports = function () {
+module.exports = (config) => {
   // get the config file
-
   for (let configCategoryKey in config) {
     if (config.hasOwnProperty(configCategoryKey)) {
       // get the final variables for each config category

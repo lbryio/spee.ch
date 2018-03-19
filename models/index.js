@@ -1,9 +1,9 @@
 const Sequelize = require('sequelize');
 const logger = require('winston');
-const config = require('../config/speechConfig.js');
-const { database, username, password } = config.sql;
-const db = {};
 
+console.log('exporting sequelize models');
+const { database, username, password } = require('../config/mysqlConfig');
+const db = {};
 // set sequelize options
 const sequelize = new Sequelize(database, username, password, {
   host          : 'localhost',
@@ -18,6 +18,7 @@ const sequelize = new Sequelize(database, username, password, {
   },
 });
 
+// establish mysql connection
 sequelize
   .authenticate()
   .then(() => {
@@ -27,7 +28,7 @@ sequelize
     logger.error('Sequelize was unable to connect to the database:', err);
   });
 
-// manually add each model to the db
+// manually add each model to the db object
 const Certificate = require('./certificate.js');
 const Channel = require('./channel.js');
 const Claim = require('./claim.js');
@@ -55,7 +56,9 @@ db.Sequelize = Sequelize;
 // add an 'upsert' method to the db object
 db.upsert = (Model, values, condition, tableName) => {
   return Model
-    .findOne({ where: condition })
+    .findOne({
+      where: condition,
+    })
     .then(obj => {
       if (obj) {  // update
         logger.debug(`updating record in db.${tableName}`);
@@ -69,11 +72,6 @@ db.upsert = (Model, values, condition, tableName) => {
       logger.error(`${tableName}.upsert error`, error);
       throw error;
     });
-};
-
-// add a 'getTrendingFiles' method to the db object.  note: change this to get claims directly.  might need new association between Request and Claim
-db.getTrendingFiles = (startDate) => {
-  return db.sequelize.query(`SELECT COUNT(*), File.* FROM Request LEFT JOIN File ON Request.FileId = File.id WHERE FileId IS NOT NULL AND nsfw != 1 AND trendingEligible = 1 AND Request.createdAt > "${startDate}" GROUP BY FileId ORDER BY COUNT(*) DESC LIMIT 25;`, { type: db.sequelize.QueryTypes.SELECT });
 };
 
 module.exports = db;

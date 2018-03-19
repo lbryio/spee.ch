@@ -1,8 +1,8 @@
 const PassportLocalStrategy = require('passport-local').Strategy;
-const db = require('../models');
 const logger = require('winston');
+const db = require('../models');
 
-function returnUserAndChannelInfo (userInstance) {
+const returnUserAndChannelInfo = (userInstance) => {
   return new Promise((resolve, reject) => {
     let userInfo = {};
     userInfo['id'] = userInstance.id;
@@ -22,7 +22,7 @@ function returnUserAndChannelInfo (userInstance) {
         reject(error);
       });
   });
-}
+};
 
 module.exports = new PassportLocalStrategy(
   {
@@ -61,5 +61,5 @@ module.exports = new PassportLocalStrategy(
       .catch(error => {
         return done(error);
       });
-  }
+  },
 );

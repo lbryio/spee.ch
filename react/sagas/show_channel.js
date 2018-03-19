@@ -3,6 +3,7 @@ import * as actions from 'constants/show_action_types';
 import { addNewChannelToChannelList, addRequestToRequestList, onRequestError, onRequestUpdate, updateChannelClaims } from 'actions/show';
 import { getChannelClaims, getChannelData } from 'api/channelApi';
 import { selectShowState } from 'selectors/show';
+import { selectSiteHost } from 'selectors/site';
 
 export function * newChannelRequest (action) {
   const { requestType, requestId, channelName, channelId } = action.data;
@@ -11,13 +12,14 @@ export function * newChannelRequest (action) {
   // is this an existing request?
   // If this uri is in the request list, it's already been fetched
   const state = yield select(selectShowState);
+  const host = yield select(selectSiteHost);
   if (state.requestList[requestId]) {
     return null;
   }
   // get channel long id
   let longId, shortId;
   try {
-    ({ data: {longChannelClaimId: longId, shortChannelClaimId: shortId} } = yield call(getChannelData, channelName, channelId));
+    ({ data: {longChannelClaimId: longId, shortChannelClaimId: shortId} } = yield call(getChannelData, host, channelName, channelId));
   } catch (error) {
     return yield put(onRequestError(error.message));
   }
@@ -32,7 +34,7 @@ export function * newChannelRequest (action) {
   // get channel claims data
   let claimsData;
   try {
-    ({ data: claimsData } = yield call(getChannelClaims, channelName, longId, 1));
+    ({ data: claimsData } = yield call(getChannelClaims, host, longId, channelName, 1));
   } catch (error) {
     return yield put(onRequestError(error.message));
   }
@@ -48,9 +50,10 @@ export function * watchNewChannelRequest () {
 
 function * getNewClaimsAndUpdateChannel (action) {
   const { channelKey, name, longId, page } = action.data;
+  const host = yield select(selectSiteHost);
   let claimsData;
   try {
-    ({ data: claimsData } = yield call(getChannelClaims, name, longId, page));
+    ({ data: claimsData } = yield call(getChannelClaims, host, longId, name, page));
   } catch (error) {
     return yield put(onRequestError(error.message));
   }

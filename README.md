@@ -1,7 +1,7 @@
 # Spee.ch
 Spee.ch is a web app that reads and publishes images and videos to and from the [LBRY](https://lbry.io/) blockchain.
 
-## How to run this repository locally
+##Installation
 * start mysql
 	* install mysql
 	* create a database called `lbry`
@@ -12,7 +12,8 @@ Spee.ch is a web app that reads and publishes images and videos to and from the 
 * start spee.ch
 	* clone this repo
 	* run `npm install`
-	* create your `speechConfig.js` file
+	* create your `
+	speechConfig.js` file
 	  * copy `speechConfig.js.example` and name it `speechConfig.js`
 	  * replace the `null` values in the config file with the appropriate values for your environment
 	* build the app by running `npm run build-prod`

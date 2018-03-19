@@ -3,6 +3,7 @@ import * as actions from 'constants/show_action_types';
 import { addRequestToRequestList, onRequestError, onRequestUpdate, addAssetToAssetList } from 'actions/show';
 import { getLongClaimId, getShortId, getClaimData } from 'api/assetApi';
 import { selectShowState } from 'selectors/show';
+import { selectSiteHost } from 'selectors/site';
 
 export function * newAssetRequest (action) {
   const { requestType, requestId, name, modifier } = action.data;
@@ -11,13 +12,14 @@ export function * newAssetRequest (action) {
   // is this an existing request?
   // If this uri is in the request list, it's already been fetched
   const state = yield select(selectShowState);
+  const host = yield select(selectSiteHost);
   if (state.requestList[requestId]) {
     return null;
   }
   // get long id && add request to request list
   let longId;
   try {
-    ({data: longId} = yield call(getLongClaimId, name, modifier));
+    ({data: longId} = yield call(getLongClaimId, host, name, modifier));
   } catch (error) {
     return yield put(onRequestError(error.message));
   }
@@ -31,14 +33,14 @@ export function * newAssetRequest (action) {
   // get short Id
   let shortId;
   try {
-    ({data: shortId} = yield call(getShortId, name, longId));
+    ({data: shortId} = yield call(getShortId, host, name, longId));
   } catch (error) {
     return yield put(onRequestError(error.message));
   }
   // get asset claim data
   let claimData;
   try {
-    ({data: claimData} = yield call(getClaimData, name, longId));
+    ({data: claimData} = yield call(getClaimData, host, name, longId));
   } catch (error) {
     return yield put(onRequestError(error.message));
   }
