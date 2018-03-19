@@ -1,12 +1,8 @@
 node_modules/
 .idea/
-config/lbryConfig.js
-config/loggerConfig.js
+
 config/mysqlConfig.js
 config/siteConfig.js
-devConfig/slackConfig.js
-devConfig/sequelizeCliConfig.js
-devConfig/testingConfig.js
 
 public/bundle/
 index.js

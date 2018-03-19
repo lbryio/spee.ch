@@ -13,11 +13,9 @@ Spee.ch is a web app that reads and publishes images and videos to and from the 
 	* clone this repo
 	* run `npm install`
 	* create your own config files in `/config`
-	  * copy `example.js.example` and name it `example.js`
+	  * copy `mysqlConfig.js.example` and name it `mysqlConfig.js`
+	  * copy `siteConfig.js.example` and name it `siteConfig.js`
 	  * replace the `null` values in the config file with the appropriate values for your environment
-	* create your own config files in `/devConfig`
-	  * copy `example.js.example` and name it `example.js`
-	  * note: you must create these files, but the default values are sufficient if you do not want to update them.
 	* build the app by running `npm run build`
 	* to start the server, run `npm run start`
 * visit [localhost:3000](http://localhost:3000)
