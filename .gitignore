@@ -1,4 +1,9 @@
-node_modules
-.idea
-/devConfig/sequelizeCliConfig.js
-/devConfig/testingConfig.js
+node_modules/
+.idea/
+config/lbryConfig.js
+config/loggerConfig.js
+config/mysqlConfig.js
+config/siteConfig.js
+config/slackConfig.js
+devConfig/sequelizeCliConfig.js
+devConfig/testingConfig.js
