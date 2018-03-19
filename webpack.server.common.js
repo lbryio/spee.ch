@@ -1,6 +1,6 @@
 const Path = require('path');
 const nodeExternals = require('webpack-node-externals');
-const REACT_ROOT = Path.resolve(__dirname, 'client/');
+const CLIENT_ROOT = Path.resolve(__dirname, 'client/');
 
 module.exports = {
   target: 'node',
@@ -8,10 +8,10 @@ module.exports = {
     __dirname: false,
   },
   externals: [nodeExternals()],
-  entry    : ['babel-polyfill', 'whatwg-fetch', './server.js'],
+  entry    : ['babel-polyfill', 'whatwg-fetch', './server/server.js'],
   output   : {
-    path         : Path.join(__dirname, '/'),
-    publicPath   : '/',
+    path         : Path.join(__dirname, 'server/'),
+    publicPath   : 'server/',
     filename     : 'index.js',
     library      : '',
     libraryTarget: 'commonjs-module',
@@ -34,7 +34,7 @@ module.exports = {
   },
   resolve: {
     modules: [
-      REACT_ROOT,
+      CLIENT_ROOT,
       'node_modules',
       __dirname,
     ],
