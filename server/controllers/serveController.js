@@ -1,4 +1,4 @@
-const db = require('../models/index');
+const db = require('../models');
 const logger = require('winston');
 const { returnPaginatedChannelClaims } = require('../helpers/channelPagination.js');
 

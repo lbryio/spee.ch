@@ -1,7 +1,7 @@
 import React from 'react';
 import { renderToString } from 'react-dom/server';
 import { createStore, applyMiddleware } from 'redux';
-import Reducer from 'reducers/index';
+import Reducer from 'reducers';
 import { Provider } from 'react-redux';
 import { StaticRouter } from 'react-router-dom';
 import GAListener from 'components/GAListener';
