@@ -5,7 +5,7 @@ const expressHandlebars = require('express-handlebars');
 const Handlebars = require('handlebars');
 const helmet = require('helmet');
 const passport = require('passport');
-const { serializeSpeechUser, deserializeSpeechUser } = require('./server/helpers/authHelpers.js');
+const { serializeSpeechUser, deserializeSpeechUser } = require('./helpers/authHelpers.js');
 const cookieSession = require('cookie-session');
 const http = require('http');
 // logging dependencies
@@ -13,16 +13,16 @@ const logger = require('winston');
 
 function SpeechServer () {
   this.configureMysql = (mysqlConfig) => {
-    require('./config/mysqlConfig.js').configure(mysqlConfig);
+    require('../config/mysqlConfig.js').configure(mysqlConfig);
   };
   this.configureSite = (siteConfig) => {
-    require('./config/siteConfig.js').configure(siteConfig);
-    console.log(require('./config/siteConfig.js'));
+    require('../config/siteConfig.js').configure(siteConfig);
+    console.log(require('../config/siteConfig.js'));
     this.sessionKey = siteConfig.auth.sessionKey;
     this.PORT = siteConfig.details.port;
   };
   this.configureSlack = (slackConfig) => {
-    require('./config/slackConfig.js').configure(slackConfig);
+    require('../config/slackConfig.js').configure(slackConfig);
   };
   this.createApp = () => {
     // create an Express application
@@ -44,8 +44,8 @@ function SpeechServer () {
     // configure passport
     passport.serializeUser(serializeSpeechUser);
     passport.deserializeUser(deserializeSpeechUser);
-    const localSignupStrategy = require('./server/passport/local-signup.js');
-    const localLoginStrategy = require('./server/passport/local-login.js');
+    const localSignupStrategy = require('./passport/local-signup.js');
+    const localLoginStrategy = require('./passport/local-login.js');
     passport.use('local-signup', localSignupStrategy);
     passport.use('local-login', localLoginStrategy);
     // initialize passport
@@ -66,22 +66,22 @@ function SpeechServer () {
     app.set('view engine', 'handlebars');
 
     // set the routes on the app
-    require('./server/routes/auth-routes.js')(app);
-    require('./server/routes/api-routes.js')(app);
-    require('./server/routes/page-routes.js')(app);
-    require('./server/routes/asset-routes.js')(app);
-    require('./server/routes/fallback-routes.js')(app);
+    require('./routes/auth-routes.js')(app);
+    require('./routes/api-routes.js')(app);
+    require('./routes/page-routes.js')(app);
+    require('./routes/asset-routes.js')(app);
+    require('./routes/fallback-routes.js')(app);
 
     this.app = app;
   };
   this.initialize = () => {
-    require('./server/helpers/configureLogger.js')(logger);
-    require('./server/helpers/configureSlack.js')(logger);
+    require('./helpers/configureLogger.js')(logger);
+    require('./helpers/configureSlack.js')(logger);
     this.createApp();
     this.server = http.Server(this.app);
   };
   this.start = () => {
-    const db = require('./server/models/index');
+    const db = require('./models/index');
     // sync sequelize
     db.sequelize.sync()
       // start the server
