@@ -26,17 +26,16 @@ Spee.ch is a web app that reads and publishes images and videos to and from the 
     * install and run this [`speech-sync`](https://github.com/billbitt/spee.ch-sync) tool
 
 ## Development & App Structure
-* the `client/` folder houses all of the `react` and `redux` code.
-  * `client.js` is the entry point for the app.  This file is the entry point for webpack to build the client bundle.
-  * `app.jsx` is the parent component that houses the rest of the app components
-  * components are located in `client/components`, `client/containers`, and `client/pages`
+* the `client/` folder houses all of the `react` and `redux` code
+  * `client.js` is the entry point for the react app
+  * [react components](https://reactjs.org/docs/react-component.html) are located in `client/components`, `client/containers`, and `client/pages`
       * `/components` contains the 'dumb' components that receive props (if any) from their parents
       * `/containers` contains the 'smart' redux-connected components that receive props from the `redux-store`
       * `/pages` contains the components which act as the main pages of the app
   * actions are located in the `client/actions` folder
   * reducers are located in the `client/reducers` folder
   * sagas are located in the `client/sagas` folder 
-* the `server/` folder contains all of server code.
+* the `server/` folder contains all of server code
   * `server.js` is the entry point for the server.  It creates the [express app](https://expressjs.com/), requires the routes, syncs the database, and starts the server listening on the `PORT` designated in the config file. This file is the entry point for webpack to build the server bundle.
   * the `/routes` folder contains all of the routes for the express app
   * the `/models` folder contains all of the models which the app uses to interact with the `mysql` database.  Note: this app uses the [sequelize](http://docs.sequelizejs.com/) orm.
