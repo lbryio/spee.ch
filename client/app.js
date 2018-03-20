@@ -1,10 +1,10 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
+import { dynamicImport } from 'utils/dynamicImport';
 import AboutPage from 'pages/AboutPage';
 import LoginPage from 'pages/LoginPage';
 import ShowPage from 'pages/ShowPage';
 import FourOhFourPage from 'containers/FourOhFourPage';
-const dynamicImport = require('utils/dynamicImport.js');
 const HomePage = dynamicImport('pages/HomePage'); // or use the provided local homepage
 
 const App = () => {
