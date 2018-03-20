@@ -1,4 +1,4 @@
-const serverBaseConfig = require('./webpack.server.common.js');
+const packageBaseConfig = require('./webpack.package.common.js');
 const clientBaseConfig = require('./webpack.client.common.js');
 const merge = require('webpack-merge');
 
@@ -8,6 +8,6 @@ const devBuildConfig = {
 };
 
 module.exports = [
-  merge(serverBaseConfig, devBuildConfig),
+  merge(packageBaseConfig, devBuildConfig),
   merge(clientBaseConfig, devBuildConfig),
 ];
