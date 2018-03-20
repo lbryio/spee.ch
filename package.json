@@ -6,8 +6,8 @@
   "scripts": {
     "test": "mocha --recursive",
     "test-all": "mocha --recursive",
-    "start": "node server/index.js",
-    "start-dev": "nodemon server/index.js",
+    "start": "node index.js",
+    "start-dev": "nodemon index.js",
     "lint": "eslint .",
     "fix": "eslint . --fix",
     "precommit": "eslint .",
@@ -15,7 +15,9 @@
     "build-dev": "webpack --config webpack.dev.js",
     "build-dev-client": "webpack --config webpack.dev.client.js",
     "build-dev-server": "webpack --config webpack.dev.server.js",
-    "build": "webpack --config webpack.prod.js"
+    "build": "webpack --config webpack.prod.js",
+    "build-client": "webpack --config webpack.prod.client.js",
+    "build-server": "webpack --config webpack.prod.server.js"
   },
   "repository": {
     "type": "git",

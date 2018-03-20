@@ -43,7 +43,7 @@ Spee.ch is a web app that reads and publishes images and videos to and from the 
 * webpack
   * During the build process, webpack creates two bundles for this project: 
     *  (1) a client-side app bundle which will be located at `public/bundle/bundle.js`
-    *  (2) a server bundle which will be located at `server/index.js`
+    *  (2) a server bundle which will be located at `index.js`
 * configuration
   * the `config/` folder contains all of the required config files.  The project contains `.example` files which can be copied to create the necessary `.js` files
   * the `devConfig/` folder contains optional config files.  Updating these files is not necessary.  If you update these files, make sure to add them to your `.gitignore` file so they are not included in source control.
