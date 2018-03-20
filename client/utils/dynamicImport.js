@@ -14,9 +14,9 @@ export const dynamicImport = (filePath) => {
   if (!filePath) {
     throw new Error('no file path provided to dynamicImport()');
   }
-  if (filePath.typeof !== 'string') {
+  if (typeof filePath !== 'string') {
     console.log('dynamicImport > filePath:', filePath);
-    console.log('dynamicImport > filePath type:', filePath.typeof);
+    console.log('dynamicImport > filePath type:', typeof filePath);
     throw new Error('file path provided to dynamicImport() must be a string');
   }
   // split out the file folders  // filter out any empty or white-space-only strings
