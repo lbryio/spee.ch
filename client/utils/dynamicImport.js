@@ -9,7 +9,7 @@ function getDeepestChildValue (parent, childrenKeys) {
   return child;
 }
 
-const dynamicImport = (filePath) => {
+export const dynamicImport = (filePath) => {
   // validate inputs
   if (!filePath) {
     throw new Error('no file path provided to dynamicImport()');
@@ -25,8 +25,6 @@ const dynamicImport = (filePath) => {
   if (customComponent) {
     return customComponent;  // return custom component
   } else {
-    return require(filePath);  // return default component
+    return require(`${filePath}`);
   }
 };
-
-export default dynamicImport;
