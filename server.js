@@ -17,6 +17,7 @@ function SpeechServer () {
   };
   this.configureSite = (siteConfig) => {
     require('./config/siteConfig.js').configure(siteConfig);
+    console.log(require('./config/siteConfig.js'));
     this.sessionKey = siteConfig.auth.sessionKey;
     this.PORT = siteConfig.details.port;
   };

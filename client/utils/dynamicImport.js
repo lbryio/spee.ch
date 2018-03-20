@@ -1,4 +1,4 @@
-const { componentsConfig } = require('../config/siteConfig.js');
+const { componentsConfig } = require('../../config/siteConfig.js');
 
 function getDeepestChildValue (parent, childrenKeys) {
   let childKey = childrenKeys.shift(); // .shift() retrieves the first element of array and removes it from array
