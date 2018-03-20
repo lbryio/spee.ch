@@ -4,8 +4,8 @@ const components = require('client/components');
 // const pages = require('client/pages');
 
 const exports = {
-  server,
-  components,
+  SpeechServer: server,
+  Components  : components,
   // containers,
   // pages,
 };
