@@ -19,6 +19,10 @@ export const dynamicImport = (filePath) => {
     console.log('dynamicImport > filePath type:', typeof filePath);
     throw new Error('file path provided to dynamicImport() must be a string');
   }
+  if (!componentsConfig) {
+    console.log('no componentsConfig found in siteConfig.js');
+    return require(`${filePath}`);
+  }
   // split out the file folders  // filter out any empty or white-space-only strings
   const folders = filePath.split('/').filter(folderName => folderName.replace(/\s/g, '').length);
   // check for the component corresponding to file path in the site config object
