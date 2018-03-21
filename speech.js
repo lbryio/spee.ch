@@ -1,11 +1,11 @@
-const server = require('server/server.js');
-const components = require('client/components');
+const Server = require('server/server.js');
+const Components = require('client/components');
 // const containers = require('client/containers');
 // const pages = require('client/pages');
 
 const exports = {
-  SpeechServer: server,
-  Components  : components,
+  Server,
+  Components,
   // containers,
   // pages,
 };

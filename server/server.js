@@ -11,7 +11,7 @@ const http = require('http');
 // logging dependencies
 const logger = require('winston');
 
-function SpeechServer () {
+function Server () {
   this.configureMysql = (mysqlConfig) => {
     require('../config/mysqlConfig.js').configure(mysqlConfig);
   };
@@ -96,4 +96,4 @@ function SpeechServer () {
   };
 };
 
-module.exports = SpeechServer;
+module.exports = Server;

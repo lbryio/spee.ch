@@ -1,16 +1,16 @@
-import ActiveStatusBar from 'components/ActiveStatusBar';
-import AssetPreview from 'components/AssetPreview';
-import ExpandingTextArea from 'components/ExpandingTextArea';
-import GAListener from 'components/GAListener';
-import InactiveStatusBar from 'components/InactiveStatusBar';
-import Logo from 'components/Logo';
-import NavBarChannelOptionsDropdown from 'components/NavBarChannelOptionsDropdown';
-import ProgressBar from 'components/ProgressBar';
-import PublishPreview from 'components/PublishPreview';
-import PublishUrlMiddleDisplay from 'components/PublishUrlMiddleDisplay';
-import SEO from 'components/SEO';
+import ActiveStatusBar from './ActiveStatusBar';
+import AssetPreview from './AssetPreview';
+import ExpandingTextArea from './ExpandingTextArea';
+import GAListener from './GAListener';
+import InactiveStatusBar from './InactiveStatusBar';
+import Logo from './Logo';
+import NavBarChannelOptionsDropdown from './NavBarChannelOptionsDropdown';
+import ProgressBar from './ProgressBar';
+import PublishPreview from './PublishPreview';
+import PublishUrlMiddleDisplay from './PublishUrlMiddleDisplay';
+import SEO from './SEO';
 
-const components = {
+module.exports = {
   ActiveStatusBar,
   AssetPreview,
   ExpandingTextArea,
@@ -22,6 +22,4 @@ const components = {
   PublishPreview,
   PublishUrlMiddleDisplay,
   SEO,
-}
-
-export default components;
+};
