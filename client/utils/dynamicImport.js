@@ -1,4 +1,4 @@
-const { componentsConfig } = require('../../config/siteConfig.js');
+const { customComponents } = require('../../config/siteConfig.js');
 
 function getDeepestChildValue (parent, childrenKeys) {
   let childKey = childrenKeys.shift(); // .shift() retrieves the first element of array and removes it from array
@@ -19,17 +19,16 @@ export const dynamicImport = (filePath) => {
     console.log('dynamicImport > filePath type:', typeof filePath);
     throw new Error('file path provided to dynamicImport() must be a string');
   }
-  if (!componentsConfig) {
-    console.log('no componentsConfig found in siteConfig.js');
+  if (!customComponents) {
     return require(`${filePath}`);
   }
   // split out the file folders  // filter out any empty or white-space-only strings
   const folders = filePath.split('/').filter(folderName => folderName.replace(/\s/g, '').length);
   // check for the component corresponding to file path in the site config object
-  // i.e. componentsConfig[folders[0]][folders[2][...][folders[n]]
-  const customComponent = getDeepestChildValue(componentsConfig, folders);
-  if (customComponent) {
-    return customComponent;  // return custom component
+  // i.e. customComponents[folders[0]][folders[2][...][folders[n]]
+  const component = getDeepestChildValue(customComponents, folders);
+  if (component) {
+    return component;  // return custom component
   } else {
     return require(`${filePath}`);
   }

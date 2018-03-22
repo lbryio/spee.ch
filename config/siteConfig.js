@@ -10,7 +10,7 @@ function SiteConfig () {
   this.auth = {
     sessionKey: 'default',
   };
-  this.componentsConfig = {
+  this.customComponents = {
     components: {},
     containers: {},
     pages     : {},
@@ -35,13 +35,13 @@ function SiteConfig () {
     if (!config) {
       return console.log('No site config received.');
     }
-    const { analytics, assetDefaults, auth, componentsConfig, details, publishing } = config;
+    const { analytics, assetDefaults, auth, customComponents, details, publishing } = config;
     this.analytics = analytics;
     this.assetDefaults = assetDefaults;
     this.auth = auth;
     this.details = details;
     this.publishing = publishing;
-    this.componentsConfig = componentsConfig;
+    this.customComponents = customComponents;
   };
 };
 
