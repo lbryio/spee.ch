@@ -11,13 +11,12 @@ const http = require('http');
 // logging dependencies
 const logger = require('winston');
 
-function SpeechServer () {
+function Server () {
   this.configureMysql = (mysqlConfig) => {
     require('../config/mysqlConfig.js').configure(mysqlConfig);
   };
   this.configureSite = (siteConfig) => {
     require('../config/siteConfig.js').configure(siteConfig);
-    console.log(require('../config/siteConfig.js'));
     this.sessionKey = siteConfig.auth.sessionKey;
     this.PORT = siteConfig.details.port;
   };
@@ -96,4 +95,4 @@ function SpeechServer () {
   };
 };
 
-module.exports = SpeechServer;
+module.exports = Server;
