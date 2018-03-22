@@ -1,4 +1,12 @@
 const Path = require('path');
-const importSubModules = require('build/utils/importSubModules');
+const { getSubDirectoryNames } = require('build/getFolderNames.js');
+
 const thisFolder = Path.resolve(__dirname, 'client/components/');
-module.exports = importSubModules(thisFolder);
+let modules = {};
+
+getSubDirectoryNames(thisFolder)
+  .forEach((name) => {
+    modules[name] = require(`./${name}`).default;
+  });
+
+module.exports = modules;
