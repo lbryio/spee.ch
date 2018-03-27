@@ -1,6 +1,5 @@
 const logger = require('winston');
-const db = require('../models/index');
-
+const { db } = require('mysqlConfig');
 module.exports = {
   postToStats (action, url, ipAddress, name, claimId, result) {
     logger.debug('action:', action);
