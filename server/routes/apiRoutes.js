@@ -1,8 +1,6 @@
 const logger = require('winston');
-const multipart = require('connect-multiparty');
-const { publishing: { uploadDirectory }, details: { host } } = require('../../config/siteConfig.js');
-const multipartMiddleware = multipart({uploadDir: uploadDirectory});
-const db = require('../models/index');
+const { details: { host } } = require('../../config/siteConfig.js');
+const db = require('../models');
 const { claimNameIsAvailable, checkChannelAvailability, publish } = require('../controllers/publishController.js');
 const { getClaimList, resolveUri, getClaim } = require('../helpers/lbryApi.js');
 const { addGetResultsToFileData, createBasicPublishParams, createThumbnailPublishParams, parsePublishApiRequestBody, parsePublishApiRequestFiles, createFileData } = require('../helpers/publishHelpers.js');
@@ -14,9 +12,9 @@ const { getChannelData, getChannelClaims, getClaimId } = require('../controllers
 const NO_CHANNEL = 'NO_CHANNEL';
 const NO_CLAIM = 'NO_CLAIM';
 
-module.exports = (app) => {
+module.exports = {
   // route to check whether site has published to a channel
-  app.get('/api/channel/availability/:name', ({ ip, originalUrl, params: { name } }, res) => {
+  channelAvailabilityRoute ({ ip, originalUrl, params: { name } }, res) {
     const gaStartTime = Date.now();
     checkChannelAvailability(name)
       .then(availableName => {
@@ -26,9 +24,9 @@ module.exports = (app) => {
       .catch(error => {
         errorHandlers.handleErrorResponse(originalUrl, ip, error, res);
       });
-  });
+  },
   // route to get a short channel id from long channel Id
-  app.get('/api/channel/short-id/:longId/:name', ({ ip, originalUrl, params }, res) => {
+  channelShortIdRoute ({ ip, originalUrl, params }, res) {
     db.Certificate.getShortChannelIdFromLongChannelId(params.longId, params.name)
       .then(shortId => {
         res.status(200).json(shortId);
@@ -36,8 +34,8 @@ module.exports = (app) => {
       .catch(error => {
         errorHandlers.handleErrorResponse(originalUrl, ip, error, res);
       });
-  });
-  app.get('/api/channel/data/:channelName/:channelClaimId', ({ ip, originalUrl, body, params }, res) => {
+  },
+  channelDataRoute ({ ip, originalUrl, body, params }, res) {
     const channelName = params.channelName;
     let channelClaimId = params.channelClaimId;
     if (channelClaimId === 'none') channelClaimId = null;
@@ -51,8 +49,8 @@ module.exports = (app) => {
       .catch(error => {
         errorHandlers.handleErrorResponse(originalUrl, ip, error, res);
       });
-  });
-  app.get('/api/channel/claims/:channelName/:channelClaimId/:page', ({ ip, originalUrl, body, params }, res) => {
+  },
+  channelClaimsRoute ({ ip, originalUrl, body, params }, res) {
     const channelName = params.channelName;
     let channelClaimId = params.channelClaimId;
     if (channelClaimId === 'none') channelClaimId = null;
@@ -67,9 +65,9 @@ module.exports = (app) => {
       .catch(error => {
         errorHandlers.handleErrorResponse(originalUrl, ip, error, res);
       });
-  });
+  },
   // route to run a claim_list request on the daemon
-  app.get('/api/claim/list/:name', ({ ip, originalUrl, params }, res) => {
+  claimListRoute ({ ip, originalUrl, params }, res) {
     getClaimList(params.name)
       .then(claimsList => {
         res.status(200).json(claimsList);
@@ -77,9 +75,9 @@ module.exports = (app) => {
       .catch(error => {
         errorHandlers.handleErrorResponse(originalUrl, ip, error, res);
       });
-  });
+  },
   // route to get an asset
-  app.get('/api/claim/get/:name/:claimId', ({ ip, originalUrl, params }, res) => {
+  claimGetRoute ({ ip, originalUrl, params }, res) {
     const name = params.name;
     const claimId = params.claimId;
     // resolve the claim
@@ -103,9 +101,9 @@ module.exports = (app) => {
       .catch(error => {
         errorHandlers.handleErrorResponse(originalUrl, ip, error, res);
       });
-  });
+  },
   // route to check whether this site published to a claim
-  app.get('/api/claim/availability/:name', ({ ip, originalUrl, params: { name } }, res) => {
+  claimAvailabilityRoute ({ ip, originalUrl, params: { name } }, res) {
     const gaStartTime = Date.now();
     claimNameIsAvailable(name)
       .then(result => {
@@ -115,9 +113,9 @@ module.exports = (app) => {
       .catch(error => {
         errorHandlers.handleErrorResponse(originalUrl, ip, error, res);
       });
-  });
+  },
   // route to run a resolve request on the daemon
-  app.get('/api/claim/resolve/:name/:claimId', ({ headers, ip, originalUrl, params }, res) => {
+  claimResolveRoute ({ headers, ip, originalUrl, params }, res) {
     resolveUri(`${params.name}#${params.claimId}`)
       .then(resolvedUri => {
         res.status(200).json(resolvedUri);
@@ -125,9 +123,9 @@ module.exports = (app) => {
       .catch(error => {
         errorHandlers.handleErrorResponse(originalUrl, ip, error, res);
       });
-  });
+  },
   // route to run a publish request on the daemon
-  app.post('/api/claim/publish', multipartMiddleware, ({ body, files, headers, ip, originalUrl, user }, res) => {
+  claimPublishRoute ({ body, files, headers, ip, originalUrl, user }, res) {
     // define variables
     let  channelName, channelId, channelPassword, description, fileName, filePath, fileType, gaStartTime, license, name, nsfw, thumbnail, thumbnailFileName, thumbnailFilePath, thumbnailFileType, title;
     // record the start time of the request
@@ -178,9 +176,9 @@ module.exports = (app) => {
       .catch(error => {
         errorHandlers.handleErrorResponse(originalUrl, ip, error, res);
       });
-  });
+  },
   // route to get a short claim id from long claim Id
-  app.get('/api/claim/short-id/:longId/:name', ({ ip, originalUrl, body, params }, res) => {
+  claimShortIdRoute ({ ip, originalUrl, body, params }, res) {
     db.Claim.getShortClaimIdFromLongClaimId(params.longId, params.name)
       .then(shortId => {
         res.status(200).json({success: true, data: shortId});
@@ -188,8 +186,8 @@ module.exports = (app) => {
       .catch(error => {
         errorHandlers.handleErrorResponse(originalUrl, ip, error, res);
       });
-  });
-  app.post('/api/claim/long-id', ({ ip, originalUrl, body, params }, res) => {
+  },
+  claimLongIdRoute ({ ip, originalUrl, body, params }, res) {
     logger.debug('body:', body);
     const channelName = body.channelName;
     const channelClaimId = body.channelClaimId;
@@ -208,8 +206,8 @@ module.exports = (app) => {
       .catch(error => {
         errorHandlers.handleErrorResponse(originalUrl, ip, error, res);
       });
-  });
-  app.get('/api/claim/data/:claimName/:claimId', ({ ip, originalUrl, body, params }, res) => {
+  },
+  claimDataRoute ({ ip, originalUrl, body, params }, res) {
     const claimName = params.claimName;
     let claimId = params.claimId;
     if (claimId === 'none') claimId = null;
@@ -223,9 +221,9 @@ module.exports = (app) => {
       .catch(error => {
         errorHandlers.handleErrorResponse(originalUrl, ip, error, res);
       });
-  });
+  },
   // route to see if asset is available locally
-  app.get('/api/file/availability/:name/:claimId', ({ ip, originalUrl, params }, res) => {
+  fileAvailabilityRoute ({ ip, originalUrl, params }, res) {
     const name = params.name;
     const claimId = params.claimId;
     db.File.findOne({where: {name, claimId}})
@@ -238,5 +236,5 @@ module.exports = (app) => {
       .catch(error => {
         errorHandlers.handleErrorResponse(originalUrl, ip, error, res);
       });
-  });
+  },
 };

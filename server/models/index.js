@@ -1,8 +1,9 @@
 const Sequelize = require('sequelize');
 const logger = require('winston');
 
-console.log('exporting sequelize models');
+logger.info('exporting sequelize models');
 const { database, username, password } = require('../../config/mysqlConfig');
+
 const db = {};
 // set sequelize options
 const sequelize = new Sequelize(database, username, password, {

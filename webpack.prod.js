@@ -2,7 +2,6 @@ const webpack = require('webpack');
 const merge = require('webpack-merge');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const packageBaseConfig = require('./webpack.package.common.js');
-const clientBaseConfig = require('./webpack.client.common.js');
 
 const productionBuildConfig = {
   devtool: 'source-map',
@@ -18,5 +17,4 @@ const productionBuildConfig = {
 
 module.exports = [
   merge(packageBaseConfig, productionBuildConfig),
-  merge(clientBaseConfig, productionBuildConfig),
 ];
