@@ -7,6 +7,8 @@ const logger = require('./config/loggerConfig.js');
 const mysql = require('./config/mysqlConfig.js');
 const slack = require('./config/slackConfig.js');
 const database = require('./server/models');
+const localLoginStrategy = require('./server/passport/local-login.js');
+const localSignupStrategy = require('./server/passport/local-signup.js');
 
 const exports = {
   // Server,
@@ -20,6 +22,10 @@ const exports = {
     slack,
   },
   database,
+  passport: {
+    localLoginStrategy,
+    localSignupStrategy,
+  },
 };
 
 module.exports = exports;

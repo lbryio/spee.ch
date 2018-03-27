@@ -6,6 +6,7 @@ function mysql () {
     if (!config) {
       return console.log('No MySQL config received.');
     }
+    console.log('configuring mysql credentials...');
     const {database, username, password} = config;
     this.database = database;
     this.username = username;
