@@ -1,4 +1,5 @@
 const logger = require('winston');
+
 function LoggerConfig () {
   this.logLevel = 'debug';
   this.configure = (config) => {
