@@ -1,18 +1,18 @@
 const logger = require('winston');
-const { details: { host } } = require('../../config/siteConfig.js');
-const { db } = require('../../config/mysqlConfig.js');
-const { claimNameIsAvailable, checkChannelAvailability, publish } = require('../controllers/publishController.js');
-const { getClaimList, resolveUri, getClaim } = require('../helpers/lbryApi.js');
-const { addGetResultsToFileData, createBasicPublishParams, createThumbnailPublishParams, parsePublishApiRequestBody, parsePublishApiRequestFiles, createFileData } = require('../helpers/publishHelpers.js');
-const errorHandlers = require('../helpers/errorHandlers.js');
-const { sendGATimingEvent } = require('../helpers/googleAnalytics.js');
-const { authenticateUser } = require('../auth/authentication.js');
-const { getChannelData, getChannelClaims, getClaimId } = require('../controllers/serveController.js');
+const { details: { host } } = require('../../../config/siteConfig.js');
+const { db } = require('../../../config/mysqlConfig.js');
+const { claimNameIsAvailable, checkChannelAvailability, publish } = require('../../controllers/publishController.js');
+const { getClaimList, resolveUri, getClaim } = require('../../helpers/lbryApi.js');
+const { addGetResultsToFileData, createBasicPublishParams, createThumbnailPublishParams, parsePublishApiRequestBody, parsePublishApiRequestFiles, createFileData } = require('../../helpers/publishHelpers.js');
+const errorHandlers = require('../../helpers/errorHandlers.js');
+const { sendGATimingEvent } = require('../../helpers/googleAnalytics.js');
+const { authenticateUser } = require('../../auth/authentication.js');
+const { getChannelData, getChannelClaims, getClaimId } = require('../../controllers/serveController.js');
 
 const NO_CHANNEL = 'NO_CHANNEL';
 const NO_CLAIM = 'NO_CLAIM';
 
-const apiRoutes = {
+const routes = {
   // route to check whether site has published to a channel
   channelAvailabilityRoute ({ ip, originalUrl, params: { name } }, res) {
     const gaStartTime = Date.now();
@@ -20,19 +20,6 @@ const apiRoutes = {
       .then(availableName => {
         res.status(200).json(availableName);
         sendGATimingEvent('end-to-end', 'claim name availability', name, gaStartTime, Date.now());
-      })
-      .catch(error => {
-        errorHandlers.handleErrorResponse(originalUrl, ip, error, res);
-      });
-  },
-  // route to get a short channel id from long channel Id
-  channelShortIdRoute ({ ip, originalUrl, params }, res) {
-    console.log('hello');
-    logger.debug('host:', host);
-    logger.debug('db:', db);
-    db.Certificate.getShortChannelIdFromLongChannelId(params.longId, params.name)
-      .then(shortId => {
-        res.status(200).json(shortId);
       })
       .catch(error => {
         errorHandlers.handleErrorResponse(originalUrl, ip, error, res);
@@ -242,4 +229,4 @@ const apiRoutes = {
   },
 };
 
-module.exports = apiRoutes;
+module.exports = routes;
