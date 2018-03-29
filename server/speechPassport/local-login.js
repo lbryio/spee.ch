@@ -1,6 +1,6 @@
 const PassportLocalStrategy = require('passport-local').Strategy;
 const logger = require('winston');
-const { db } = require('mysqlConfig');
+const db = require('models');
 
 const returnUserAndChannelInfo = (userInstance) => {
   return new Promise((resolve, reject) => {

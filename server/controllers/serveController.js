@@ -1,6 +1,6 @@
-const { db } = require('mysqlConfig');
+const db = require('models');
 const logger = require('winston');
-const { returnPaginatedChannelClaims } = require('../helpers/channelPagination.js');
+const { returnPaginatedChannelClaims } = require('helpers/channelPagination.js');
 
 const NO_CHANNEL = 'NO_CHANNEL';
 const NO_CLAIM = 'NO_CLAIM';

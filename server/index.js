@@ -87,7 +87,7 @@ function Server () {
     this.server = http.Server(this.app);
   };
   this.start = () => {
-    const db = require('./models/');
+    const db = require('models');
     const PORT = siteConfig.details.port;
     // sync sequelize
     db.sequelize.sync()

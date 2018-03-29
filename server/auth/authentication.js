@@ -1,4 +1,4 @@
-const { db } = require('mysqlConfig');
+const db = require('models');
 const logger = require('winston');
 
 module.exports = {
