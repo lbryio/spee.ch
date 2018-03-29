@@ -12,18 +12,23 @@ const claimShortId = require('./claimShortId');
 const claimList = require('./claimList');
 const fileAvailability = require('./fileAvailability');
 
-module.exports = {
-  channelAvailability,
-  channelClaims,
-  channelData,
-  channelShortId,
-  claimAvailability,
-  claimData,
-  claimGet,
-  claimLongId,
-  claimPublish,
-  claimResolve,
-  claimShortId,
-  claimList,
-  fileAvailability,
+const multipartMiddleware = require('helpers/multipartMiddleware');
+
+module.exports = (app) => {
+  // channel routes
+  app.get('/api/channel/availability/:name', channelAvailability);
+  app.get('/api/channel/short-id/:longId/:name', channelShortId);
+  app.get('/api/channel/data/:channelName/:channelClaimId', channelData);
+  app.get('/api/channel/claims/:channelName/:channelClaimId/:page', channelClaims);
+  // claim routes
+  app.get('/api/claim/list/:name', claimList);
+  app.get('/api/claim/get/:name/:claimId', claimGet);
+  app.get('/api/claim/availability/:name', claimAvailability);
+  app.get('/api/claim/resolve/:name/:claimId', claimResolve);
+  app.post('/api/claim/publish', multipartMiddleware, claimPublish);
+  app.get('/api/claim/short-id/:longId/:name', claimShortId);
+  app.post('/api/claim/long-id', claimLongId);
+  app.get('/api/claim/data/:claimName/:claimId', claimData);
+  // file routes
+  app.get('/api/file/availability/:name/:claimId', fileAvailability);
 };

@@ -8,18 +8,16 @@ const { handleErrorResponse } = require('helpers/errorHandlers.js');
 
 */
 
-const channelAvailability = () => {
-  return ({ ip, originalUrl, params: { name } }, res) => {
-    const gaStartTime = Date.now();
-    checkChannelAvailability(name)
-      .then(availableName => {
-        res.status(200).json(availableName);
-        sendGATimingEvent('end-to-end', 'claim name availability', name, gaStartTime, Date.now());
-      })
-      .catch(error => {
-        handleErrorResponse(originalUrl, ip, error, res);
-      });
-  };
+const channelAvailability = ({ ip, originalUrl, params: { name } }, res) => {
+  const gaStartTime = Date.now();
+  checkChannelAvailability(name)
+    .then(availableName => {
+      res.status(200).json(availableName);
+      sendGATimingEvent('end-to-end', 'claim name availability', name, gaStartTime, Date.now());
+    })
+    .catch(error => {
+      handleErrorResponse(originalUrl, ip, error, res);
+    });
 };
 
 module.exports = channelAvailability;
