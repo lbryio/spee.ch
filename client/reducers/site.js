@@ -1,4 +1,4 @@
-const siteConfig = require('../../config/siteConfig.js');
+const siteConfig = require('siteConfig.js');
 
 const {
   analytics: {
