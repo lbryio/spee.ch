@@ -6,6 +6,7 @@ import GAListener from 'components/GAListener';
 const api = require('./server/routes/api/');
 const asset = require('./server/routes/asset/');
 const auth = require('./server/routes/auth/');
+const page = require('./server/routes/page/');
 const logger = require('./config/loggerConfig.js');
 const mysql = require('./config/mysqlConfig');
 const site = require('./config/siteConfig');
@@ -28,6 +29,7 @@ const exports = {
     api,
     asset,
     auth,
+    page,
   },
 };
 

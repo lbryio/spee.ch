@@ -9,7 +9,7 @@ const claimLongId = require('./claimLongId');
 const claimPublish = require('./claimPublish');
 const claimResolve = require('./claimResolve');
 const claimShortId = require('./claimShortId');
-const claimsList = require('./claimsList');
+const claimList = require('./claimList');
 const fileAvailability = require('./fileAvailability');
 
 module.exports = {
@@ -24,6 +24,6 @@ module.exports = {
   claimPublish,
   claimResolve,
   claimShortId,
-  claimsList,
+  claimList,
   fileAvailability,
 };
