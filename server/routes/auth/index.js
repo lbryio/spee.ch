@@ -1,11 +1,12 @@
-const signup = require('./signup');
-const login = require('./login');
-const logout = require('./logout');
-const user = require('./user');
+const speechPassport = require('speechPassport');
+const handleSignupRequest = require('./signup');
+const handleLoginRequest = require('./login');
+const handleLogoutRequest = require('./logout');
+const handleUserRequest = require('./user');
 
-module.exports = {
-  signup,
-  login,
-  logout,
-  user,
+module.exports = (app) => {
+  app.post('/signup', speechPassport.authenticate('local-signup'), handleSignupRequest);
+  app.post('/login', handleLoginRequest);
+  app.get('/logout', handleLogoutRequest);
+  app.get('/user', handleUserRequest);
 };

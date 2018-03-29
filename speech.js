@@ -11,7 +11,7 @@ const logger = require('./config/loggerConfig.js');
 const mysql = require('./config/mysqlConfig');
 const site = require('./config/siteConfig');
 const slack = require('./config/slackConfig.js');
-const passport = require('./server/passport/');
+const passport = require('./server/speechPassport/');
 const models = require('./server/models/');
 
 const exports = {

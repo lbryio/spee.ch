@@ -4,11 +4,8 @@ const bodyParser = require('body-parser');
 const expressHandlebars = require('express-handlebars');
 const Handlebars = require('handlebars');
 const helmet = require('helmet');
-const passport = require('passport');
-const { serializeSpeechUser, deserializeSpeechUser } = require('./helpers/authHelpers.js');
 const cookieSession = require('cookie-session');
 const http = require('http');
-// logging dependencies
 const logger = require('winston');
 
 function Server () {
@@ -41,20 +38,15 @@ function Server () {
     });
 
     // configure passport
-    passport.serializeUser(serializeSpeechUser);
-    passport.deserializeUser(deserializeSpeechUser);
-    const localSignupStrategy = require('./passport/local-signup.js');
-    const localLoginStrategy = require('./passport/local-login.js');
-    passport.use('local-signup', localSignupStrategy);
-    passport.use('local-login', localLoginStrategy);
+    const speechPassport = require('speechPassport');
     // initialize passport
     app.use(cookieSession({
       name  : 'session',
       keys  : [this.sessionKey],
       maxAge: 24 * 60 * 60 * 1000, // i.e. 24 hours
     }));
-    app.use(passport.initialize());
-    app.use(passport.session());
+    app.use(speechPassport.initialize());
+    app.use(speechPassport.session());
 
     // configure handlebars & register it with express app
     const hbs = expressHandlebars.create({
@@ -80,7 +72,7 @@ function Server () {
     this.server = http.Server(this.app);
   };
   this.start = () => {
-    const db = require('./models/index');
+    const db = require('./models/');
     // sync sequelize
     db.sequelize.sync()
     // start the server
