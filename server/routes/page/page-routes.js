@@ -1,5 +1,5 @@
-const { details: host } = require('../../config/siteConfig.js');
-const handlePageRender = require('../helpers/handlePageRender.jsx');
+const { details: host } = require('../../../config/siteConfig.js');
+const handlePageRender = require('../../helpers/handlePageRender.jsx');
 
 module.exports = (app) => {
   // route for the home page

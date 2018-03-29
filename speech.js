@@ -1,4 +1,5 @@
-const apiRoutes = require('./server/routes/apiRoutes/');
+const api = require('./server/routes/api/');
+const asset = require('./server/routes/asset/');
 const logger = require('./config/loggerConfig.js');
 const mysql = require('./config/mysqlConfig');
 const site = require('./config/siteConfig');
@@ -8,13 +9,16 @@ const models = require('./server/models/');
 // const Components = require('./client/components');
 
 const exports = {
-  apiRoutes,
   logger,
+  models,
   mysql,
+  passport,
   site,
   slack,
-  passport,
-  models,
+  routes: {
+    api,
+    asset,
+  },
   // Components,
 };
 
