@@ -1,4 +1,4 @@
-const { resolveUri } = require('../../helpers/lbryApi.js');
+const { resolveUri } = require('helpers/lbryApi.js');
 const { handleErrorResponse } = require('helpers/errorHandlers.js');
 
 /*

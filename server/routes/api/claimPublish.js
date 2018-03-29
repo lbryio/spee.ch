@@ -1,8 +1,9 @@
-const { createBasicPublishParams, createThumbnailPublishParams, parsePublishApiRequestBody, parsePublishApiRequestFiles } = require('../../helpers/publishHelpers.js');
-const { claimNameIsAvailable, publish } = require('../../controllers/publishController.js');
-const { authenticateUser } = require('../../auth/authentication.js');
-const { sendGATimingEvent } = require('../../helpers/googleAnalytics.js');
+const { createBasicPublishParams, createThumbnailPublishParams, parsePublishApiRequestBody, parsePublishApiRequestFiles } = require('helpers/publishHelpers.js');
+const { claimNameIsAvailable, publish } = require('controllers/publishController.js');
+const { authenticateUser } = require('auth/authentication.js');
+const { sendGATimingEvent } = require('helpers/googleAnalytics.js');
 const { handleErrorResponse } = require('helpers/errorHandlers.js');
+const { details: { host } } = require('siteConfig.js');
 
 /*
 
@@ -10,7 +11,7 @@ const { handleErrorResponse } = require('helpers/errorHandlers.js');
 
 */
 
-const claimPublish = (db, host) => {
+const claimPublish = (db) => {
   return ({ body, files, headers, ip, originalUrl, user }, res) => {
     // define variables
     let  channelName, channelId, channelPassword, description, fileName, filePath, fileType, gaStartTime, license, name, nsfw, thumbnail, thumbnailFileName, thumbnailFilePath, thumbnailFileType, title;

@@ -1,4 +1,4 @@
-const { getClaim } = require('../../helpers/lbryApi.js');
+const { getClaim } = require('helpers/lbryApi.js');
 const { addGetResultsToFileData, createFileData } = require('../../helpers/publishHelpers.js');
 const { handleErrorResponse } = require('helpers/errorHandlers.js');
 
