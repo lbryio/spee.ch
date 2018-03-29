@@ -1,3 +1,5 @@
+const logger = require('winston');
+
 function SiteConfig () {
   this.analytics = {
     googleId: 'default',
@@ -33,9 +35,10 @@ function SiteConfig () {
   };
   this.configure = (config) => {
     if (!config) {
-      return console.log('No site config received.');
+      return logger.warn('No site config received.');
     }
     const { analytics, assetDefaults, auth, customComponents, details, publishing } = config;
+    logger.info('Configuring site details...');
     this.analytics = analytics;
     this.assetDefaults = assetDefaults;
     this.auth = auth;

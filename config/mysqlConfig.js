@@ -1,12 +1,19 @@
+const logger = require('winston');
+
 function mysql () {
-  this.db = {};
-  this.configure = (db) => {
-    if (!db) {
-      return console.log('No MySQL config received.');
+  this.database = 'default';
+  this.username = 'default';
+  this.password = 'default';
+  this.configure = (config) => {
+    if (!config) {
+      return logger.warn('No MySQL config received.');
     }
     // configure credentials
-    console.log('configuring mysql...');
-    this.db = db;
+    logger.info('configuring mysql...');
+    const { database, username, password } = config;
+    this.database = database;
+    this.username = username;
+    this.password = password;
   };
 };
 

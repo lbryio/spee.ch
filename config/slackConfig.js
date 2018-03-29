@@ -7,10 +7,10 @@ function SlackConfig () {
   this.slackInfoChannel  = 'default';
   this.configure = (config) => {
     if (!config) {
-      return console.log('no slack config received');
+      return winston.warn('No slack config received');
     }
     // update variables
-    console.log('configuring slack logger...');
+    winston.info('configuring slack logger...');
     const {slackWebHook, slackErrorChannel, slackInfoChannel} = config;
     this.slackWebHook = slackWebHook;
     this.slackErrorChannel = slackErrorChannel;
@@ -39,7 +39,7 @@ function SlackConfig () {
         });
       };
       // send test messages
-      console.log('testing slack logger...');
+      winston.info('testing slack logger...');
       winston.error('Slack "error" logging is online.');
       winston.info('Slack "info" logging is online.');
     } else {

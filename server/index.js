@@ -25,13 +25,13 @@ function Server () {
     require('slackConfig.js').configure(slackConfig);
   };
   this.configureClientBundle = () => {
-    console.log('configure the client here by passing in the bundle and configuring it, or better yet: taking in the components to use dynamically from here.');
+    logger.info('configure the client here by passing in the bundle and configuring it, or better yet: taking in the components to use dynamically from here.');
   }
   this.configureModels = () => {
-    console.log('here is where you could add/overwrite the default models')
+    logger.info('here is where you could add/overwrite the default models')
   }
   this.configureRoutes = () => {
-    console.log('here is where you could add/overwrite the default routes')
+    logger.info('here is where you could add/overwrite the default routes')
   }
   this.createApp = () => {
     // create an Express application
@@ -79,8 +79,6 @@ function Server () {
     this.app = app;
   };
   this.initialize = () => {
-    // require('./helpers/configureLogger.js')(logger);
-    // require('./helpers/configureSlack.js')(logger);
     this.createApp();
     this.server = http.Server(this.app);
   };

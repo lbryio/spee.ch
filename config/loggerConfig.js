@@ -4,9 +4,9 @@ function LoggerConfig () {
   this.logLevel = 'debug';
   this.configure = (config) => {
     if (!config) {
-      return console.log('No logger config received.');
+      return logger.warn('No logger config received.');
     }
-    console.log('configuring winston logger...');
+    logger.info('configuring winston logger...');
     // update values with local config params
     const {logLevel} = config;
     this.logLevel = logLevel;
@@ -24,7 +24,7 @@ function LoggerConfig () {
       ],
     });
     // test all the log levels
-    console.log('testing winston log levels...');
+    logger.info('testing winston log levels...');
     logger.error('Level 0');
     logger.warn('Level 1');
     logger.info('Level 2');
