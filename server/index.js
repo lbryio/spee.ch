@@ -7,19 +7,32 @@ const helmet = require('helmet');
 const cookieSession = require('cookie-session');
 const http = require('http');
 const logger = require('winston');
+const requestLogger = require('middleware/requestLogger.js');
 
 function Server () {
+  this.configureLogger = (loggerConfig) => {
+    require('loggerConfig.js').configure(loggerConfig);
+  }
   this.configureMysql = (mysqlConfig) => {
-    require('../config/mysqlConfig.js').configure(mysqlConfig);
+    require('mysqlConfig.js').configure(mysqlConfig);
   };
-  this.configureSite = (siteConfig) => {
-    require('../config/siteConfig.js').configure(siteConfig);
+  this.configureSiteDetails = (siteConfig) => {
+    require('siteConfig.js').configure(siteConfig);
     this.sessionKey = siteConfig.auth.sessionKey;
     this.PORT = siteConfig.details.port;
   };
   this.configureSlack = (slackConfig) => {
-    require('../config/slackConfig.js').configure(slackConfig);
+    require('slackConfig.js').configure(slackConfig);
   };
+  this.configureClientBundle = () => {
+    console.log('configure the client here by passing in the bundle and configuring it, or better yet: taking in the components to use dynamically from here.');
+  }
+  this.configureModels = () => {
+    console.log('here is where you could add/overwrite the default models')
+  }
+  this.configureRoutes = () => {
+    console.log('here is where you could add/overwrite the default routes')
+  }
   this.createApp = () => {
     // create an Express application
     const app = express();
@@ -30,12 +43,12 @@ function Server () {
     // add middleware
     app.use(helmet()); // set HTTP headers to protect against well-known web vulnerabilties
     app.use(express.static(`${__dirname}/public`)); // 'express.static' to serve static files from public directory
+    // note: take in a different public folder, so it can serve it's own bundle from there?
     app.use(bodyParser.json()); // 'body parser' for parsing application/json
     app.use(bodyParser.urlencoded({ extended: true })); // 'body parser' for parsing application/x-www-form-urlencoded
-    app.use((req, res, next) => {  // custom logging middleware to log all incoming http requests
-      logger.verbose(`Request on ${req.originalUrl} from ${req.ip}`);
-      next();
-    });
+
+    // add custom middleware (note: build out to accept dynamically use what is in server/middleware/
+    app.use(requestLogger);
 
     // configure passport
     const speechPassport = require('speechPassport');
@@ -57,17 +70,17 @@ function Server () {
     app.set('view engine', 'handlebars');
 
     // set the routes on the app
-    require('./routes/auth.js')(app);
-    require('./routes/api.js')(app);
-    require('./routes/pages.js')(app);
-    require('./routes/assets.js')(app);
-    require('./routes/fallback.js')(app);
+    require('./routes/auth/')(app);
+    require('./routes/api/')(app);
+    require('./routes/pages/')(app);
+    require('./routes/assets/')(app);
+    require('./routes/fallback/')(app);
 
     this.app = app;
   };
   this.initialize = () => {
-    require('./helpers/configureLogger.js')(logger);
-    require('./helpers/configureSlack.js')(logger);
+    // require('./helpers/configureLogger.js')(logger);
+    // require('./helpers/configureSlack.js')(logger);
     this.createApp();
     this.server = http.Server(this.app);
   };
