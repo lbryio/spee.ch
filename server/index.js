@@ -9,30 +9,33 @@ const http = require('http');
 const logger = require('winston');
 const requestLogger = require('middleware/requestLogger.js');
 
+const loggerConfig = require('loggerConfig.js');
+const mysqlConfig = require('mysqlConfig.js');
+const siteConfig = require('siteConfig.js');
+const slackConfig = require('slackConfig.js');
+
 function Server () {
-  this.configureLogger = (loggerConfig) => {
-    require('loggerConfig.js').configure(loggerConfig);
-  }
-  this.configureMysql = (mysqlConfig) => {
-    require('mysqlConfig.js').configure(mysqlConfig);
+  this.configureLogger = (userConfig) => {
+    loggerConfig.update(userConfig);
   };
-  this.configureSiteDetails = (siteConfig) => {
-    require('siteConfig.js').configure(siteConfig);
-    this.sessionKey = siteConfig.auth.sessionKey;
-    this.PORT = siteConfig.details.port;
+  this.configureMysql = (userConfig) => {
+    mysqlConfig.update(userConfig);
   };
-  this.configureSlack = (slackConfig) => {
-    require('slackConfig.js').configure(slackConfig);
+  this.configureSiteDetails = (userConfig) => {
+    siteConfig.update(userConfig);
+  };
+  this.configureSlack = (userConfig) => {
+    slackConfig.update(userConfig);
   };
   this.configureClientBundle = () => {
-    logger.info('configure the client here by passing in the bundle and configuring it, or better yet: taking in the components to use dynamically from here.');
-  }
+    logger.debug('configure the client here by passing in the bundle and configuring it, or better yet: taking in the components to use dynamically from here.');
+  };
   this.configureModels = () => {
-    logger.info('here is where you could add/overwrite the default models')
-  }
+    logger.debug('here is where you could add/overwrite the default models')
+  };
   this.configureRoutes = () => {
-    logger.info('here is where you could add/overwrite the default routes')
-  }
+    logger.debug('here is where you could add/overwrite the default routes')
+  };
   this.createApp = () => {
     // create an Express application
     const app = express();
@@ -53,9 +56,10 @@ function Server () {
     // configure passport
     const speechPassport = require('speechPassport');
     // initialize passport
+    const sessionKey = siteConfig.auth.sessionKey;
     app.use(cookieSession({
       name  : 'session',
-      keys  : [this.sessionKey],
+      keys  : [sessionKey],
       maxAge: 24 * 60 * 60 * 1000, // i.e. 24 hours
     }));
     app.use(speechPassport.initialize());
@@ -84,12 +88,13 @@ function Server () {
   };
   this.start = () => {
     const db = require('./models/');
+    const PORT = siteConfig.details.port;
     // sync sequelize
     db.sequelize.sync()
     // start the server
       .then(() => {
-        this.server.listen(this.PORT, () => {
-          logger.info(`Server is listening on PORT ${this.PORT}`);
+        this.server.listen(PORT, () => {
+          logger.info(`Server is listening on PORT ${PORT}`);
         });
       })
       .catch((error) => {

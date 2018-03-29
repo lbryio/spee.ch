@@ -5,7 +5,7 @@ function SlackConfig () {
   this.slackWebHook      = 'default';
   this.slackErrorChannel = 'default';
   this.slackInfoChannel  = 'default';
-  this.configure = (config) => {
+  this.update = (config) => {
     if (!config) {
       return winston.warn('No slack config received');
     }

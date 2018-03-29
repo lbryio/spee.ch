@@ -33,7 +33,7 @@ function SiteConfig () {
     thumbnailChannelId      : 'default',
     uploadDirectory         : '/home/lbry/Uploads',
   };
-  this.configure = (config) => {
+  this.update = (config) => {
     if (!config) {
       return logger.warn('No site config received.');
     }

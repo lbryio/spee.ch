@@ -2,7 +2,7 @@ const logger = require('winston');
 
 function LoggerConfig () {
   this.logLevel = 'debug';
-  this.configure = (config) => {
+  this.update = (config) => {
     if (!config) {
       return logger.warn('No logger config received.');
     }

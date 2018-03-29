@@ -4,7 +4,7 @@ function mysql () {
   this.database = 'default';
   this.username = 'default';
   this.password = 'default';
-  this.configure = (config) => {
+  this.update = (config) => {
     if (!config) {
       return logger.warn('No MySQL config received.');
     }
