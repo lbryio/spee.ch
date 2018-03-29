@@ -31,11 +31,12 @@ function SiteConfig () {
     thumbnailChannelId      : 'default',
     uploadDirectory         : '/home/lbry/Uploads',
   };
+  this.routes = {};
   this.update = (config) => {
     if (!config) {
       return console.log('No site config received.');
     }
-    const { analytics, assetDefaults, auth, customComponents, details, publishing } = config;
+    const { analytics, assetDefaults, auth, customComponents, details, publishing, routes } = config;
     console.log('Configuring site details...');
     this.analytics = analytics;
     this.assetDefaults = assetDefaults;
@@ -43,6 +44,7 @@ function SiteConfig () {
     this.details = details;
     this.publishing = publishing;
     this.customComponents = customComponents;
+    this.routes = routes;
   };
 };
 

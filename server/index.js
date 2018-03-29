@@ -8,7 +8,7 @@ const cookieSession = require('cookie-session');
 const http = require('http');
 const logger = require('winston');
 const requestLogger = require('middleware/requestLogger.js');
-
+const Path = require('path');
 const loggerConfig = require('loggerConfig.js');
 const mysqlConfig = require('mysqlConfig.js');
 const siteConfig = require('siteConfig.js');
@@ -43,12 +43,24 @@ function Server () {
     // trust the proxy to get ip address for us
     app.enable('trust proxy');
 
-    // add middleware
-    app.use(helmet()); // set HTTP headers to protect against well-known web vulnerabilties
-    app.use(express.static(`${__dirname}/public`)); // 'express.static' to serve static files from public directory
-    // note: take in a different public folder, so it can serve it's own bundle from there?
-    app.use(bodyParser.json()); // 'body parser' for parsing application/json
-    app.use(bodyParser.urlencoded({ extended: true })); // 'body parser' for parsing application/x-www-form-urlencoded
+    /* add middleware */
+    // set HTTP headers to protect against well-known web vulnerabilties
+    app.use(helmet());
+    // 'express.static' to serve static files from public directory
+    if (siteConfig.routes.public) {
+      // take in a different public folder, so it can serve it's own bundle if needed
+      const { publicFolder } = siteConfig.routes;
+      app.use(express.static(publicFolder))
+      logger.info('serving static files from custom path:', publicFolder);
+    } else {
+      const publicPath = Path.resolve(__dirname, 'public');
+      app.use(express.static(publicPath));
+      logger.info('serving static files from default path:', publicPath);
+    };
+    // 'body parser' for parsing application/json
+    app.use(bodyParser.json());
+    // 'body parser' for parsing application/x-www-form-urlencoded
+    app.use(bodyParser.urlencoded({ extended: true }));
 
     // add custom middleware (note: build out to accept dynamically use what is in server/middleware/
     app.use(requestLogger);
