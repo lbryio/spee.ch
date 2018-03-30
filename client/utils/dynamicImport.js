@@ -2,7 +2,6 @@ const { customComponents } = require('siteConfig.js');
 
 function getDeepestChildValue (parent, childrenKeys) {
   if (!parent[childrenKeys[0]]) {
-    console.log('NO PAGE FOUND FOR:', childrenKeys[0], 'in', parent);
     return null;
   }
   let childKey = childrenKeys.shift(); // .shift() retrieves the first element of array and removes it from array
@@ -24,6 +23,7 @@ export const dynamicImport = (filePath) => {
     throw new Error('file path provided to dynamicImport() must be a string');
   }
   if (!customComponents) {
+    console.log('No customComponents found in siteConfig.js');
     return null;
   }
   // split out the file folders  // filter out any empty or white-space-only strings
@@ -32,8 +32,10 @@ export const dynamicImport = (filePath) => {
   // i.e. customComponents[folders[0]][folders[2][...][folders[n]]
   const component = getDeepestChildValue(customComponents, folders);
   if (component) {
-    return component;  // return custom component
+    console.log('Found custom component:', component);
+    return component;
   } else {
+    console.log('Found custom component:', component);
     return null;
   }
 };

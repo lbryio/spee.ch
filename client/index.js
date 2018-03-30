@@ -6,9 +6,10 @@ import { BrowserRouter } from 'react-router-dom';
 import Reducer from 'reducers';
 import createSagaMiddleware from 'redux-saga';
 import rootSaga  from 'sagas';
-
 import GAListener from 'components/GAListener';
 import App from './app';
+
+const siteConfig = require('siteConfig.js');
 
 // get the state from a global variable injected into the server-generated HTML
 const preloadedState = window.__PRELOADED_STATE__ || null;
@@ -21,7 +22,7 @@ const sagaMiddleware = createSagaMiddleware();
 const middleware = applyMiddleware(sagaMiddleware);
 const reduxMiddleware = window.__REDUX_DEVTOOLS_EXTENSION__ ? compose(middleware, window.__REDUX_DEVTOOLS_EXTENSION__()) : middleware;
 
-// create teh store
+// create the store
 let store;
 if (preloadedState) {
   store = createStore(Reducer, preloadedState, reduxMiddleware);
@@ -29,17 +30,26 @@ if (preloadedState) {
   store = createStore(Reducer, reduxMiddleware);
 }
 
-// run the saga middlweare
-sagaMiddleware.run(rootSaga);
+function Client () {
+  this.configureSiteDetails = (userConfig) => {
+    siteConfig.update(userConfig);
+  };
+  this.start = () => {
+    // run the saga middlweare
+    sagaMiddleware.run(rootSaga);
 
-// render the app
-hydrate(
-  <Provider store={store}>
-    <BrowserRouter>
-      <GAListener>
-        <App />
-      </GAListener>
-    </BrowserRouter>
-  </Provider>,
-  document.getElementById('react-app')
-);
+    // render the app
+    hydrate(
+      <Provider store={store}>
+        <BrowserRouter>
+          <GAListener>
+            <App />
+          </GAListener>
+        </BrowserRouter>
+      </Provider>,
+      document.getElementById('react-app')
+    );
+  };
+};
+
+module.exports = Client;
