@@ -1,12 +1,14 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import HomePage from 'pages/HomePage';
-import AboutPage from 'pages/AboutPage';
+import { dynamicImport } from 'utils/dynamicImport';
+// import HomePage from 'pages/HomePage';
+// import AboutPage from 'pages/AboutPage';
 import LoginPage from 'pages/LoginPage';
 import ShowPage from 'pages/ShowPage';
 import FourOhFourPage from 'containers/FourOhFourPage';
-// import { dynamicImport } from 'utils/dynamicImport';
-// const HomePage = dynamicImport('pages/HomePage'); // or use the provided local homepage
+
+const HomePage = dynamicImport('pages/HomePage') || require('pages/HomePage').default;
+const AboutPage = dynamicImport('pages/AboutPage') || require('pages/AboutPage').default;
 
 const App = () => {
   return (
