@@ -47,14 +47,14 @@ function Server () {
     // set HTTP headers to protect against well-known web vulnerabilties
     app.use(helmet());
     // 'express.static' to serve static files from public directory
-    if (siteConfig.routes.public) {
+    if (siteConfig.routes.publicFolder) {
       // take in a different public folder, so it can serve it's own bundle if needed
-      const { publicFolder } = siteConfig.routes;
-      app.use(express.static(publicFolder))
+      const publicFolder = Path.resolve(process.cwd(), siteConfig.routes.publicFolder);
+      app.use('/static', express.static(publicFolder));
       logger.info('serving static files from custom path:', publicFolder);
     } else {
       const publicPath = Path.resolve(__dirname, 'public');
-      app.use(express.static(publicPath));
+      app.use('/static', express.static(publicPath));
       logger.info('serving static files from default path:', publicPath);
     };
     // 'body parser' for parsing application/json
