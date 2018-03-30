@@ -4,7 +4,7 @@ const CONFIG_ROOT = Path.resolve(__dirname, 'config/');
 
 module.exports = {
   target: 'web',
-  entry : ['babel-polyfill', 'whatwg-fetch', './client/index.js'],
+  entry : ['babel-polyfill', 'whatwg-fetch', './client/client.js'],
   output: {
     path      : Path.join(__dirname, 'exports/'),
     publicPath: 'exports/',
