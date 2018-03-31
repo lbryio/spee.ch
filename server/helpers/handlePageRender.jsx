@@ -1,11 +1,9 @@
 import React from 'react';
 import { renderToString } from 'react-dom/server';
 import { createStore } from 'redux';
-import Reducer from 'client/reducers';
 import { Provider } from 'react-redux';
 import { StaticRouter } from 'react-router-dom';
-import GAListener from 'client/components/GAListener/';
-import App from 'client/app';
+import { Reducers, GAListener, App } from 'spee.ch-components';
 import renderFullPage from './renderFullPage.js';
 import Helmet from 'react-helmet';
 
@@ -13,7 +11,7 @@ module.exports = (req, res) => {
   let context = {};
 
   // create a new Redux store instance
-  const store = createStore(Reducer);
+  const store = createStore(Reducers);
 
   // render component to a string
   const html = renderToString(

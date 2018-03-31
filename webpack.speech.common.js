@@ -1,6 +1,5 @@
 const Path = require('path');
 const nodeExternals = require('webpack-node-externals');
-const CLIENT_ROOT = Path.resolve(__dirname, 'client/');
 const CONFIG_ROOT = Path.resolve(__dirname, 'config/');
 const SERVER_ROOT = Path.resolve(__dirname, 'server/');
 
@@ -36,7 +35,6 @@ module.exports = {
   },
   resolve: {
     modules: [
-      CLIENT_ROOT,
       CONFIG_ROOT,
       SERVER_ROOT,
       'node_modules',

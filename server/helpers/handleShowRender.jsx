@@ -1,16 +1,12 @@
 import React from 'react';
 import { renderToString } from 'react-dom/server';
 import { createStore, applyMiddleware } from 'redux';
-import Reducer from '../../client/reducers/index';
 import { Provider } from 'react-redux';
 import { StaticRouter } from 'react-router-dom';
-import GAListener from '../../client/components/GAListener/index';
-import App from '../../client/app';
 import renderFullPage from './renderFullPage';
 import createSagaMiddleware from 'redux-saga';
 import { call } from 'redux-saga/effects';
-import { handleShowPageUri } from '../../client/sagas/show_uri';
-import { onHandleShowPageUri } from '../../client/actions/show';
+import { Reducers, GAListener, App, Sagas, Actions } from 'spee.ch-components';
 
 import Helmet from 'react-helmet';
 
@@ -28,11 +24,11 @@ module.exports = (req, res) => {
   const middleware = applyMiddleware(sagaMiddleware);
 
   // create a new Redux store instance
-  const store = createStore(Reducer, middleware);
+  const store = createStore(Reducers, middleware);
 
   // create saga
-  const action = onHandleShowPageUri(req.params);
-  const saga = returnSagaWithParams(handleShowPageUri, action);
+  const action = Actions.onHandleShowPageUri(req.params);
+  const saga = returnSagaWithParams(Sagas.handleShowPageUri, action);
 
   // run the saga middleware
   sagaMiddleware
