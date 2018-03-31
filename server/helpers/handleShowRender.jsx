@@ -10,6 +10,10 @@ import { Reducers, GAListener, App, Sagas, Actions } from 'spee.ch-components';
 
 import Helmet from 'react-helmet';
 
+// configure the reducers by passing initial state configs
+const siteConfig = require('siteConfig.js');
+const customizedReducers = Reducers(siteConfig);
+
 const returnSagaWithParams = (saga, params) => {
   return function * () {
     yield call(saga, params);
@@ -24,7 +28,7 @@ module.exports = (req, res) => {
   const middleware = applyMiddleware(sagaMiddleware);
 
   // create a new Redux store instance
-  const store = createStore(Reducers, middleware);
+  const store = createStore(customizedReducers, middleware);
 
   // create saga
   const action = Actions.onHandleShowPageUri(req.params);
@@ -60,4 +64,6 @@ module.exports = (req, res) => {
       // send the rendered page back to the client
       res.send(renderFullPage(helmet, html, preloadedState));
     });
+
+  console.log('hello from spee.ch handleShowRender.jsx');
 };

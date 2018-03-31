@@ -7,11 +7,16 @@ import { Reducers, GAListener, App } from 'spee.ch-components';
 import renderFullPage from './renderFullPage.js';
 import Helmet from 'react-helmet';
 
+const siteConfig = require('siteConfig.js');
+
 module.exports = (req, res) => {
   let context = {};
 
+  // customize the reducer by passing in intial state configs
+  const customizedReducers = Reducers(siteConfig);
+
   // create a new Redux store instance
-  const store = createStore(Reducers);
+  const store = createStore(customizedReducers);
 
   // render component to a string
   const html = renderToString(
@@ -40,4 +45,6 @@ module.exports = (req, res) => {
 
   // send the rendered page back to the client
   res.send(renderFullPage(helmet, html, preloadedState));
+
+  console.log('hello from spee.ch handlePageRender.jsx');
 };
