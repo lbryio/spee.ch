@@ -4,6 +4,13 @@ import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import { StaticRouter } from 'react-router-dom';
 import { Reducers, GAListener, App } from 'spee.ch-components';
+/*
+  ^ note: to do this better, maybe
+  these should be passed in from the implementation (www.spee.ch)
+  after they have been customized,
+  so that there is no conflict between the SSR here and
+  the bundle sent to the server?
+*/
 import renderFullPage from './renderFullPage.js';
 import Helmet from 'react-helmet';
 
