@@ -1,18 +1,25 @@
 import React from 'react';
 import { renderToString } from 'react-dom/server';
 import { createStore, applyMiddleware } from 'redux';
-import Reducer from '../../client/reducers/index';
 import { Provider } from 'react-redux';
 import { StaticRouter } from 'react-router-dom';
-import GAListener from '../../client/components/GAListener/index';
-import App from '../../client/app';
 import renderFullPage from './renderFullPage';
 import createSagaMiddleware from 'redux-saga';
 import { call } from 'redux-saga/effects';
-import { handleShowPageUri } from '../../client/sagas/show_uri';
-import { onHandleShowPageUri } from '../../client/actions/show';
-
+import { Reducers, GAListener, App, Sagas, Actions } from 'spee.ch-components';
+/*
+  ^ note: to do this right, maybe
+  these should be passed in from the implementation (www.spee.ch) itself,
+  so that there are no conflicts between the SSR here and
+  the bundle sent to the server?
+  there might also be issues if this package uses a different version of spee.ch-components than www.spee.ch does?
+*/
 import Helmet from 'react-helmet';
+
+// configure the reducers by passing initial state configs
+const siteConfig = require('siteConfig.js');
+const CustomizedReducers = Reducers(siteConfig);
+const CustomizedApp = App(siteConfig);
 
 const returnSagaWithParams = (saga, params) => {
   return function * () {
@@ -28,11 +35,11 @@ module.exports = (req, res) => {
   const middleware = applyMiddleware(sagaMiddleware);
 
   // create a new Redux store instance
-  const store = createStore(Reducer, middleware);
+  const store = createStore(CustomizedReducers, middleware);
 
   // create saga
-  const action = onHandleShowPageUri(req.params);
-  const saga = returnSagaWithParams(handleShowPageUri, action);
+  const action = Actions.onHandleShowPageUri(req.params);
+  const saga = returnSagaWithParams(Sagas.handleShowPageUri, action);
 
   // run the saga middleware
   sagaMiddleware
@@ -44,7 +51,7 @@ module.exports = (req, res) => {
         <Provider store={store}>
           <StaticRouter location={req.url} context={context}>
             <GAListener>
-              <App />
+              <CustomizedApp />
             </GAListener>
           </StaticRouter>
         </Provider>
@@ -64,4 +71,6 @@ module.exports = (req, res) => {
       // send the rendered page back to the client
       res.send(renderFullPage(helmet, html, preloadedState));
     });
+
+  console.log('hello from spee.ch handleShowRender.jsx');
 };

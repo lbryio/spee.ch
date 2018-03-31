@@ -1,8 +1,8 @@
 const logger = require('winston');
-const db = require('../models/index');
-const lbryApi = require('../helpers/lbryApi.js');
-const publishHelpers = require('../helpers/publishHelpers.js');
-const { publishing: { primaryClaimAddress, additionalClaimAddresses } } = require('../../config/siteConfig.js');
+const db = require('models');
+const lbryApi = require('helpers/lbryApi.js');
+const publishHelpers = require('helpers/publishHelpers.js');
+const { publishing: { primaryClaimAddress, additionalClaimAddresses } } = require('siteConfig.js');
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 
@@ -18,7 +18,11 @@ module.exports = {
           // get the channel information
           if (publishParams.channel_name) {
             logger.debug(`this claim was published in channel: ${publishParams.channel_name}`);
-            return db.Channel.findOne({where: {channelName: publishParams.channel_name}});
+            return db.Channel.findOne({
+              where: {
+                channelName: publishParams.channel_name,
+              },
+            });
           } else {
             logger.debug('this claim was not published in a channel');
             return null;

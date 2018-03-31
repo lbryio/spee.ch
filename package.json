@@ -1,7 +1,7 @@
 {
   "name": "spee.ch",
-  "version": "0.0.1",
-  "description": "a web application that reads and publishes images to and from the LBRY blockchain",
+  "version": "0.1.0",
+  "description": "an npm package that exports a customizeable spee.ch server",
   "main": "index.js",
   "scripts": {
     "test": "mocha --recursive",
@@ -64,7 +64,8 @@
     "webpack-node-externals": "^1.6.0",
     "whatwg-fetch": "^2.0.3",
     "winston": "^2.3.1",
-    "winston-slack-webhook": "billbitt/winston-slack-webhook"
+    "winston-slack-webhook": "billbitt/winston-slack-webhook",
+    "spee.ch-components": "git://github.com/billbitt/spee.ch-components.git"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",

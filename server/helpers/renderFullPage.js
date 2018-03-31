@@ -12,9 +12,9 @@ module.exports = (helmet, html, preloadedState) => {
             ${helmet.meta.toString()}
             ${helmet.link.toString()}
             <!--style sheets-->
-            <link rel="stylesheet" href="/assets/css/reset.css" type="text/css">
-            <link rel="stylesheet" href="/assets/css/general.css" type="text/css">
-            <link rel="stylesheet" href="/assets/css/mediaQueries.css" type="text/css">
+            <link rel="stylesheet" href="/static/assets/css/reset.css" type="text/css">
+            <link rel="stylesheet" href="/static/assets/css/general.css" type="text/css">
+            <link rel="stylesheet" href="/static/assets/css/mediaQueries.css" type="text/css">
             <!--google font-->
             <link href="https://fonts.googleapis.com/css?family=Roboto:300" rel="stylesheet">
         </head>
@@ -25,7 +25,7 @@ module.exports = (helmet, html, preloadedState) => {
             <script>
                 window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(/</g, '\\\u003c')}
             </script>
-            <script src="/bundle/bundle.js"></script>
+            <script src="/static/bundle/bundle.js"></script>
         </body>
     </html>
   `;

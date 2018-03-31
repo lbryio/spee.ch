@@ -1,14 +1,20 @@
+const Certificate = require('models/certificate.js');
+const Channel = require('models/channel.js');
+const Claim = require('models/claim.js');
+const File = require('models/file.js');
+const Request = require('models/request.js');
+const User = require('models/user.js');
+
 const Sequelize = require('sequelize');
 const logger = require('winston');
 
-console.log('exporting sequelize models');
-const { database, username, password } = require('../../config/mysqlConfig');
-const db = {};
+const {database, username, password} = require('mysqlConfig.js');
+
 // set sequelize options
 const sequelize = new Sequelize(database, username, password, {
   host          : 'localhost',
   dialect       : 'mysql',
-  dialectOptions: {decimalNumbers: true}, // fix to ensure DECIMAL will not be stored as a string
+  dialectOptions: {decimalNumbers: true},
   logging       : false,
   pool          : {
     max    : 5,
@@ -28,13 +34,8 @@ sequelize
     logger.error('Sequelize was unable to connect to the database:', err);
   });
 
-// manually add each model to the db object
-const Certificate = require('./certificate.js');
-const Channel = require('./channel.js');
-const Claim = require('./claim.js');
-const File = require('./file.js');
-const Request = require('./request.js');
-const User = require('./user.js');
+// manually add each model to the db object (note: make this dynamic)
+const db = {};
 db['Certificate'] = sequelize.import('Certificate', Certificate);
 db['Channel'] = sequelize.import('Channel', Channel);
 db['Claim'] = sequelize.import('Claim', Claim);
@@ -43,6 +44,7 @@ db['Request'] = sequelize.import('Request', Request);
 db['User'] = sequelize.import('User', User);
 
 // run model.association for each model in the db object that has an association
+logger.info('associating db models...');
 Object.keys(db).forEach(modelName => {
   if (db[modelName].associate) {
     logger.info('Associating model:', modelName);
@@ -50,9 +52,9 @@ Object.keys(db).forEach(modelName => {
   }
 });
 
+// add sequelize/Sequelize to db
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
-
 // add an 'upsert' method to the db object
 db.upsert = (Model, values, condition, tableName) => {
   return Model

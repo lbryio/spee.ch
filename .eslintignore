@@ -1,4 +1,4 @@
 node_modules/
-public/bundle
+exports/
 index.js
-test
+test/
