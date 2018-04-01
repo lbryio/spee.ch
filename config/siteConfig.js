@@ -10,11 +10,9 @@ function SiteConfig () {
   this.auth = {
     sessionKey: 'default',
   };
-  this.customComponents = {
-    components: {},
-    containers: {},
-    pages     : {},
-  };
+  this.customComponents = {};
+  this.customContainers = {};
+  this.customPages = {};
   this.details = {
     description: 'Open-source, decentralized image and video sharing.',
     host       : 'default',
@@ -36,7 +34,7 @@ function SiteConfig () {
     if (!config) {
       return console.log('No site config received.');
     }
-    const { analytics, assetDefaults, auth, customComponents, details, publishing, routes } = config;
+    const { analytics, assetDefaults, auth, customComponents, customContainers, customPages, details, publishing, routes } = config;
     console.log('Configuring site details...');
     this.analytics = analytics;
     this.assetDefaults = assetDefaults;
@@ -44,6 +42,8 @@ function SiteConfig () {
     this.details = details;
     this.publishing = publishing;
     this.customComponents = customComponents;
+    this.customContainers = customContainers;
+    this.customPages = customPages;
     this.routes = routes;
   };
 };

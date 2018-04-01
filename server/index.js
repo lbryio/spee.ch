@@ -50,11 +50,11 @@ function Server () {
     if (siteConfig.routes.publicFolder) {
       // take in a different public folder, so it can serve it's own bundle if needed
       const publicFolder = Path.resolve(process.cwd(), siteConfig.routes.publicFolder);
-      app.use('/static', express.static(publicFolder));
+      app.use(express.static(publicFolder));
       logger.info('serving static files from custom path:', publicFolder);
     } else {
       const publicPath = Path.resolve(__dirname, 'public');
-      app.use('/static', express.static(publicPath));
+      app.use(express.static(publicPath));
       logger.info('serving static files from default path:', publicPath);
     };
     // 'body parser' for parsing application/json
