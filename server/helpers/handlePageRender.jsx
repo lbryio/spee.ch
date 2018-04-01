@@ -20,19 +20,20 @@ module.exports = (req, res) => {
   let context = {};
 
   // customize the reducer by passing in intial state configs
-  const CustomizedReducers = Reducers(siteConfig);
-  const CustomizedApp = App(siteConfig);
+  const MyReducers = Reducers(siteConfig);
+  const MyApp = App(siteConfig);
+  const MyGAListener = GAListener(siteConfig);
 
   // create a new Redux store instance
-  const store = createStore(CustomizedReducers);
+  const store = createStore(MyReducers);
 
   // render component to a string
   const html = renderToString(
     <Provider store={store}>
       <StaticRouter location={req.url} context={context}>
-        <GAListener>
-          <CustomizedApp />
-        </GAListener>
+        <MyGAListener>
+          <MyApp />
+        </MyGAListener>
       </StaticRouter>
     </Provider>
   );
