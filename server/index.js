@@ -50,7 +50,7 @@ function Server () {
       app.use(express.static(publicFolder));
       logger.info('serving static files from custom path:', publicFolder);
     } else {
-      const publicPath = Path.resolve(process.cwd(), 'static');
+      const publicPath = Path.resolve(process.cwd(), 'public');
       app.use(express.static(publicPath));
       logger.warn(`serving static files from default static path at ${publicPath}.  Please specify a path in your config/siteConfig.js file`, );
     };
