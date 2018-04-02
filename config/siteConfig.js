@@ -5,7 +5,7 @@ function SiteConfig () {
   this.assetDefaults = {
     description: 'An asset published on Spee.ch',
     thumbnail  : 'https://spee.ch/assets/img/video_thumb_default.png',
-    title      : 'Spee.ch',
+    title      : 'A Spee.ch Implementation',
   };
   this.auth = {
     sessionKey: 'default',
@@ -14,11 +14,11 @@ function SiteConfig () {
   this.customContainers = {};
   this.customPages = {};
   this.details = {
-    description: 'Open-source, decentralized image and video sharing.',
-    host       : 'default',
+    description: 'Welcome to my decentralized image and video sharing site.',
+    host       : 'http://localhost:3000',
     port       : 3000,
-    title      : 'Spee.ch',
-    twitter    : '@spee_ch',
+    title      : 'My Spee.ch Site',
+    twitter    : '@exampleTwitterHandle',
   };
   this.publishing = {
     additionalClaimAddresses: [],
