@@ -50,9 +50,9 @@ function Server () {
       app.use(express.static(publicFolder));
       logger.info('serving static files from custom path:', publicFolder);
     } else {
-      const publicPath = Path.resolve(__dirname, 'public');
+      const publicPath = Path.resolve(process.cwd(), 'static');
       app.use(express.static(publicPath));
-      logger.info('serving static files from default path:', publicPath);
+      logger.warn(`serving static files from default static path at ${publicPath}.  Please specify a path in your config/siteConfig.js file`, );
     };
     // 'body parser' for parsing application/json
     app.use(bodyParser.json());
