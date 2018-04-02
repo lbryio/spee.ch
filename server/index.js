@@ -21,14 +21,11 @@ function Server () {
   this.configureMysql = (userConfig) => {
     mysqlConfig.update(userConfig);
   };
-  this.configureSiteDetails = (userConfig) => {
+  this.configureSite = (userConfig) => {
     siteConfig.update(userConfig);
   };
   this.configureSlack = (userConfig) => {
     slackConfig.update(userConfig);
-  };
-  this.configureClientBundle = () => {
-    logger.debug('configure the client here by passing in the bundle and configuring it, or better yet: taking in the components to use dynamically from here.');
   };
   this.configureModels = () => {
     logger.debug('here is where you could add/overwrite the default models')
