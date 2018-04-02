@@ -9,7 +9,7 @@ module.exports = {
     __dirname: false,
   },
   externals: [nodeExternals()],
-  entry    : ['babel-polyfill', 'whatwg-fetch', './speech.js'],
+  entry    : ['babel-polyfill', 'whatwg-fetch', './server/index.js'],
   output   : {
     path         : Path.join(__dirname, '/'),
     publicPath   : '/',
