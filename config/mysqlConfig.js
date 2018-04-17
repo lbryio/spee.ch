@@ -1,6 +1,6 @@
 const logger = require('winston');
 
-function mysql () {
+function MysqlConfig () {
   this.database = 'default';
   this.username = 'default';
   this.password = 'default';
@@ -17,4 +17,4 @@ function mysql () {
   };
 }
 
-module.exports = new mysql();
+module.exports = new MysqlConfig();
