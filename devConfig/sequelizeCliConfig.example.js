@@ -1,4 +1,4 @@
-module.exports = {
+const sequelizeCliConfig = {
   development: {
     username: '',
     password: '',
@@ -21,3 +21,5 @@ module.exports = {
     dialect : 'mysql',
   },
 };
+
+module.exports = sequelizeCliConfig;

@@ -15,6 +15,6 @@ function mysql () {
     this.username = username;
     this.password = password;
   };
-};
+}
 
 module.exports = new mysql();

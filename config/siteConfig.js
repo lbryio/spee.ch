@@ -46,6 +46,6 @@ function SiteConfig () {
     this.customPages = customPages;
     this.routes = routes;
   };
-};
+}
 
 module.exports = new SiteConfig();
