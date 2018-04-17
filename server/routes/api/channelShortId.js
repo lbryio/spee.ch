@@ -1,5 +1,5 @@
-const { handleErrorResponse } = require('helpers/errorHandlers.js');
-const db = require('models');
+const { handleErrorResponse } = require('../../helpers/errorHandlers.js');
+const db = require('../../models');
 
 /*
 

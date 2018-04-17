@@ -1,5 +1,5 @@
-const { getClaimList } = require('helpers/lbryApi.js');
-const { handleErrorResponse } = require('helpers/errorHandlers.js');
+const { getClaimList } = require('../../helpers/lbryApi.js');
+const { handleErrorResponse } = require('../../helpers/errorHandlers.js');
 
 /*
 

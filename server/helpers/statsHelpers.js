@@ -1,5 +1,5 @@
 const logger = require('winston');
-const db = require('models');
+const db = require('../models');
 
 module.exports = {
   postToStats (action, url, ipAddress, name, claimId, result) {
