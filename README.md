@@ -52,7 +52,7 @@ If you find a bug or experience a problem, please report your issue here on gith
 ## Contribute
 
 ### Below is a guide to the issue tags in this repo
-####level 1
+#### level 1
 Issues with spee.ch that anyone with basic web development can handle, little-to-no experience with the spee.ch codebase is required.
 
 #### level 2 
