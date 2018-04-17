@@ -1,7 +1,7 @@
 # Spee.ch
 Spee.ch is a web app that reads and publishes images and videos to and from the [LBRY](https://lbry.io/) blockchain.
 
-##Installation
+## Installation
 * start mysql
 	* install mysql
 	* create a database called `lbry`
