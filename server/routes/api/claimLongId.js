@@ -1,5 +1,5 @@
-const { getClaimId } = require('controllers/serveController.js');
-const { handleErrorResponse } = require('helpers/errorHandlers.js');
+const { getClaimId } = require('../../controllers/serveController.js');
+const { handleErrorResponse } = require('../../helpers/errorHandlers.js');
 
 const NO_CHANNEL = 'NO_CHANNEL';
 const NO_CLAIM = 'NO_CLAIM';

@@ -1,9 +1,9 @@
-const { createBasicPublishParams, createThumbnailPublishParams, parsePublishApiRequestBody, parsePublishApiRequestFiles } = require('helpers/publishHelpers.js');
-const { claimNameIsAvailable, publish } = require('controllers/publishController.js');
-const { authenticateUser } = require('auth/authentication.js');
-const { sendGATimingEvent } = require('helpers/googleAnalytics.js');
-const { handleErrorResponse } = require('helpers/errorHandlers.js');
-const { details: { host } } = require('siteConfig.js');
+const { createBasicPublishParams, createThumbnailPublishParams, parsePublishApiRequestBody, parsePublishApiRequestFiles } = require('../../helpers/publishHelpers.js');
+const { claimNameIsAvailable, publish } = require('../../controllers/publishController.js');
+const { authenticateUser } = require('../../auth/authentication.js');
+const { sendGATimingEvent } = require('../../helpers/googleAnalytics.js');
+const { handleErrorResponse } = require('../../helpers/errorHandlers.js');
+const { details: { host } } = require('../../../config/siteConfig.js');
 
 /*
 

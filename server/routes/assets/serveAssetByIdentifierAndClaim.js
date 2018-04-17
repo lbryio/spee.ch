@@ -1,12 +1,12 @@
-const { sendGAServeEvent } = require('helpers/googleAnalytics');
+const { sendGAServeEvent } = require('../../helpers/googleAnalytics');
 const {
   determineResponseType,
   flipClaimNameAndIdForBackwardsCompatibility,
   logRequestData,
   getClaimIdAndServeAsset,
-} = require('helpers/serveHelpers.js');
-const lbryUri = require('helpers/lbryUri.js');
-const handleShowRender = require('helpers/handleShowRender.jsx');
+} = require('../../helpers/serveHelpers.js');
+const lbryUri = require('../../helpers/lbryUri.js');
+const handleShowRender = require('../../helpers/handleShowRender.jsx');
 
 const SERVE = 'SERVE';
 
