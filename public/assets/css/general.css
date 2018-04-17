@@ -570,6 +570,18 @@ table {
 	padding: 6px;
 	border: 1px solid #d0d0d0;
 }
+video:-moz-full-screen {
+border:none;
+padding:0;
+}
+video:-webkit-full-screen {
+border:none;
+padding:0;
+}
+video:fullscreen {
+border:none;
+padding:0;
+}
 
 /* show lite */
 .show-lite-container {
