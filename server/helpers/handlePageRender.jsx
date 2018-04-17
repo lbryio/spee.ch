@@ -54,6 +54,4 @@ module.exports = (req, res) => {
 
   // send the rendered page back to the client
   res.send(renderFullPage(helmet, html, preloadedState));
-
-  console.log('hello from spee.ch handlePageRender.jsx');
 };
