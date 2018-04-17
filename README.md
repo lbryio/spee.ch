@@ -1,5 +1,4 @@
 # Spee.ch
-
 This repo packages the spee.ch server for use with spee.ch implementations.
 
 ## Installation
