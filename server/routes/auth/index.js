@@ -1,4 +1,4 @@
-const speechPassport = require('../speechPassport');
+const speechPassport = require('../../speechPassport');
 const handleSignupRequest = require('./signup');
 const handleLoginRequest = require('./login');
 const handleLogoutRequest = require('./logout');

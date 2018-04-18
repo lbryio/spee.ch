@@ -2,3 +2,5 @@ node_modules/
 exports/
 index.js
 test/
+server/render/handlePageRender.js
+server/render/handleShowRender.js

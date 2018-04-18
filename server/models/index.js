@@ -8,7 +8,7 @@ const User = require('./user.js');
 const Sequelize = require('sequelize');
 const logger = require('winston');
 
-const {database, username, password} = require('mysqlConfig.js');
+const {database, username, password} = require('../../config/mysqlConfig.js');
 
 // set sequelize options
 const sequelize = new Sequelize(database, username, password, {

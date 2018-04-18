@@ -1,7 +1,7 @@
 const { sendGAServeEvent } = require('../../helpers/googleAnalytics');
 const { determineResponseType, logRequestData, getClaimIdAndServeAsset } = require('../../helpers/serveHelpers.js');
 const lbryUri = require('../../helpers/lbryUri.js');
-const handleShowRender = require('../../helpers/handleShowRender.jsx');
+const handleShowRender = require('../../render/handleShowRender.js');
 const SERVE = 'SERVE';
 
 /*

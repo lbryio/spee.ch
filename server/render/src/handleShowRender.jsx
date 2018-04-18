@@ -3,7 +3,7 @@ import { renderToString } from 'react-dom/server';
 import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import { StaticRouter } from 'react-router-dom';
-import renderFullPage from './renderFullPage';
+import renderFullPage from '../../helpers/renderFullPage';
 import createSagaMiddleware from 'redux-saga';
 import { call } from 'redux-saga/effects';
 import { Reducers, GAListener, App, Sagas, Actions } from 'spee.ch-components';
@@ -16,7 +16,7 @@ import { Reducers, GAListener, App, Sagas, Actions } from 'spee.ch-components';
 */
 import Helmet from 'react-helmet';
 
-const siteConfig = require('../../config/siteConfig.js');
+const siteConfig = require('../../../config/siteConfig.js');
 
 const returnSagaWithParams = (saga, params) => {
   return function * () {

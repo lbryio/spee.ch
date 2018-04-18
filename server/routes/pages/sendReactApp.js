@@ -1,4 +1,4 @@
-const handlePageRender = require('../../helpers/handlePageRender.jsx');
+const handlePageRender = require('../../render/handlePageRender.js');
 
 const sendReactApp = (req, res) => {
   handlePageRender(req, res);
