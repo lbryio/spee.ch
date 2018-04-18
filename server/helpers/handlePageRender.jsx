@@ -14,7 +14,7 @@ import { Reducers, GAListener, App } from 'spee.ch-components';
 import renderFullPage from './renderFullPage.js';
 import Helmet from 'react-helmet';
 
-const siteConfig = require('siteConfig.js');
+const siteConfig = require('../../config/siteConfig.js');
 
 module.exports = (req, res) => {
   let context = {};

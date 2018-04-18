@@ -1,9 +1,9 @@
-const Certificate = require('models/certificate.js');
-const Channel = require('models/channel.js');
-const Claim = require('models/claim.js');
-const File = require('models/file.js');
-const Request = require('models/request.js');
-const User = require('models/user.js');
+const Certificate = require('./certificate.js');
+const Channel = require('./channel.js');
+const Claim = require('./claim.js');
+const File = require('./file.js');
+const Request = require('./request.js');
+const User = require('./user.js');
 
 const Sequelize = require('sequelize');
 const logger = require('winston');
