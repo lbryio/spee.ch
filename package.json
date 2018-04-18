@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha --recursive",
-    "test-all": "mocha --recursive",
+    "test:no-lbc": "npm test -- --grep @usesLbc --invert",
     "lint": "eslint .",
     "fix": "eslint . --fix",
     "precommit": "eslint .",

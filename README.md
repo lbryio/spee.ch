@@ -1,21 +1,28 @@
 # Spee.ch
 This repo packages the spee.ch server for use with spee.ch implementations.
 
-## Installation
-visit [lbryio/www.spee.ch](https://github.com/lbryio/www.spee.ch) to get started
+### Quick start
+To get started running your own version of spee.ch, visit [lbryio/www.spee.ch](https://github.com/lbryio/www.spee.ch)
 
-## Development / Structure 
+### Install
+```
+npm install spee.ch --save 
+```
+
+## Development 
 * the `server/` folder contains all of the server code
-  * `index.js` is the entry point for the server.  It creates the [express app](https://expressjs.com/), requires the routes, syncs the database, and starts the server listening on the `PORT` designated in the config file. This file is the entry point for webpack to build the server bundle.
+  * `index.js` is the entry point for the server.  It creates the [express app](https://expressjs.com/), requires the routes, syncs the database, and starts the server listening on the `PORT` designated in the config file.
   * the `server/routes` folder contains all of the routes for the express app
   * the `server/models` folder contains all of the models which the app uses to interact with the `mysql` database.  Note: this app uses the [sequelize](http://docs.sequelizejs.com/) ORM.
 * webpack
   * During the build process, webpack creates a bundle for this project at `index.js`: 
 
 ## Tests
-* This package uses `mocha` with `chai` for testing.  
-* To run all tests that do not require LBC, run `npm test -- --grep @usesLbc --invert`
-* To run all tests, including those that require LBC (like publishing), simply run `npm test`
+* This package uses `mocha` with `chai` for testing.
+* Before running tests, create a `testingConfig.js` file in `devConfig/` by copying `testingConfig.example.js`   
+* To run tests:
+  *  To run all tests, including those that require LBC (like publishing), simply run `npm test`
+  *  To run only tests that do not require LBC, run `npm run test:no-lbc`
 
 ## API
 
@@ -64,6 +71,4 @@ Issues with spee.ch strong familiarity with the spee.ch code base and how the lb
 Issues with lbry (e.g. the spee.ch wallet, lbrynet configuration, etc.) that require strong familiarity with the lbry daemon and/or network to fix. Generally these issues are best suited for the lbry protocol team but are placed in this repo because of they are part of the spee.ch implementation
 
 ### Stack
-The spee.ch stack is MySQL, Express.js, Node.js, React.js.  Spee.ch runs lbrynet on its server, and spee.ch uses the lbrynet api to make requests such as `publish`, `create_channel`, and `get`.
 
-spee.ch also runs a sync tool, which decodes the `LBRY` blocks as they are mined and stores the claims in mysql.  It stores all claims in the `Claims` table, and all channel claims in the `Certificates` table. 
