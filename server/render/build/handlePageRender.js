@@ -12,7 +12,7 @@ var _reactRouterDom = require("react-router-dom");
 
 var _spee = require("spee.ch-components");
 
-var _renderFullPage = _interopRequireDefault(require("../../helpers/renderFullPage.js"));
+var _renderFullPage = _interopRequireDefault(require("../renderFullPage.js"));
 
 var _reactHelmet = _interopRequireDefault(require("react-helmet"));
 

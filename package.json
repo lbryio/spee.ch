@@ -9,8 +9,8 @@
     "lint": "eslint .",
     "fix": "eslint . --fix",
     "precommit": "eslint .",
-    "build": "babel server/render/src -d server/render",
-    "build:watch": "babel server/render/src -w -d server/render"
+    "build": "babel server/render/src -d server/render/build",
+    "build:watch": "babel server/render/src -w -d server/render/build"
 
   },
   "repository": {

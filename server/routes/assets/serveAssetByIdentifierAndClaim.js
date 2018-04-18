@@ -6,7 +6,7 @@ const {
   getClaimIdAndServeAsset,
 } = require('../../helpers/serveHelpers.js');
 const lbryUri = require('../../helpers/lbryUri.js');
-const handleShowRender = require('../../render/handleShowRender.js');
+const handleShowRender = require('../../render/build/handleShowRender.js');
 
 const SERVE = 'SERVE';
 

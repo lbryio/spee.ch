@@ -10,7 +10,7 @@ var _reactRedux = require("react-redux");
 
 var _reactRouterDom = require("react-router-dom");
 
-var _renderFullPage = _interopRequireDefault(require("../../helpers/renderFullPage"));
+var _renderFullPage = _interopRequireDefault(require("../renderFullPage"));
 
 var _reduxSaga = _interopRequireDefault(require("redux-saga"));
 

@@ -11,7 +11,7 @@ import { Reducers, GAListener, App } from 'spee.ch-components';
   the bundle sent to the server?
   there might also be issues if this package uses a different version of spee.ch-components than www.spee.ch does?
 */
-import renderFullPage from '../../helpers/renderFullPage.js';
+import renderFullPage from '../renderFullPage.js';
 import Helmet from 'react-helmet';
 
 const siteConfig = require('../../../config/siteConfig.js');
