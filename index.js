@@ -19,6 +19,12 @@ function Server () {
   this.configureMysql = mysqlConfig.update(userConfig);
   this.configureSite = siteConfig.update(userConfig);
   this.configureSlack = slackConfig.update(userConfig);
+  this.configureModels = () => {
+    logger.debug('here is where you could add/overwrite the default models')
+  };
+  this.configureRoutes = () => {
+    logger.debug('here is where you could add/overwrite the default routes')
+  };
   this.createApp = () => {
     // create an Express application
     const app = express();
@@ -38,7 +44,7 @@ function Server () {
     } else {
       const publicPath = Path.resolve(process.cwd(), 'public');
       app.use(express.static(publicPath));
-      logger.warn(`serving static files from default static path at ${publicPath}.  Please specify a path in your config/siteConfig.js file`, );
+      logger.warn(`serving static files from default static path at ${publicPath}.  Please specify a path in your config/siteConfig.js file`);
     };
     // 'body parser' for parsing application/json
     app.use(bodyParser.json());
