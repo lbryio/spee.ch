@@ -1,7 +1,6 @@
 // load dependencies
 const logger = require('winston');
-const db = require('../models'); // require our models for syncing
-// configure logging
+const db = require('../models');
 require('../helpers/configureLogger.js')(logger);
 
 let totalClaims = 0;

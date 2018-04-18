@@ -1,8 +1,4 @@
-node_modules/
-.idea/
-
-config/mysqlConfig.js
-config/siteConfig.js
-
-public/bundle/
-index.js
+node_modules
+.idea
+/devConfig/sequelizeCliConfig.js
+/devConfig/testingConfig.js

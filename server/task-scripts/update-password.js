@@ -1,6 +1,6 @@
 // load dependencies
 const logger = require('winston');
-const db = require('../models/index');
+const db = require('../models');
 // configure logging
 require('../helpers/configureLogger.js')(logger);
 

@@ -18,7 +18,11 @@ module.exports = {
           // get the channel information
           if (publishParams.channel_name) {
             logger.debug(`this claim was published in channel: ${publishParams.channel_name}`);
-            return db.Channel.findOne({where: {channelName: publishParams.channel_name}});
+            return db.Channel.findOne({
+              where: {
+                channelName: publishParams.channel_name,
+              },
+            });
           } else {
             logger.debug('this claim was not published in a channel');
             return null;

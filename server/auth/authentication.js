@@ -1,5 +1,5 @@
-const db = require('../models');
 const logger = require('winston');
+const db = require('../models');
 
 module.exports = {
   authenticateUser (channelName, channelId, channelPassword, user) {
