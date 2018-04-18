@@ -15,10 +15,10 @@ const siteConfig = require('./config/siteConfig.js');
 const slackConfig = require('./config/slackConfig.js');
 
 function Server () {
-  this.configureLogger = loggerConfig.update(userConfig);
-  this.configureMysql = mysqlConfig.update(userConfig);
-  this.configureSite = siteConfig.update(userConfig);
-  this.configureSlack = slackConfig.update(userConfig);
+  this.configureLogger = loggerConfig.update;
+  this.configureMysql = mysqlConfig.update;
+  this.configureSite = siteConfig.update;
+  this.configureSlack = slackConfig.update;
   this.configureModels = () => {
     logger.debug('here is where you could add/overwrite the default models')
   };
