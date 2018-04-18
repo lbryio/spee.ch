@@ -61,5 +61,5 @@ module.exports = new PassportLocalStrategy(
       .catch(error => {
         return done(error);
       });
-  },
+  }
 );
