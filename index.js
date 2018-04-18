@@ -61,7 +61,6 @@ function Server () {
     app.use(cookieSession({
       name  : 'session',
       keys  : [sessionKey],
-      maxAge: 24 * 60 * 60 * 1000, // i.e. 24 hours
     }));
     app.use(speechPassport.initialize());
     app.use(speechPassport.session());
