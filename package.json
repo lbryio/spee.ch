@@ -11,7 +11,6 @@
     "precommit": "eslint .",
     "build": "babel server/render/src -d server/render/build",
     "build:watch": "babel server/render/src -w -d server/render/build"
-
   },
   "repository": {
     "type": "git",
@@ -30,7 +29,7 @@
   "homepage": "https://github.com/lbryio/spee.ch#readme",
   "dependencies": {
     "axios": "^0.16.1",
-    "bcrypt": "^1.0.3",
+    "bcrypt": "^2.0.1",
     "body-parser": "^1.17.1",
     "connect-multiparty": "^2.0.0",
     "cookie-session": "^2.0.0-beta.3",
@@ -50,10 +49,10 @@
     "redux": "^3.7.2",
     "redux-saga": "^0.16.0",
     "sequelize": "^4.1.0",
+    "spee.ch-components": "git://github.com/lbryio/spee.ch-components.git",
     "universal-analytics": "^0.4.13",
     "winston": "^2.3.1",
-    "winston-slack-webhook": "billbitt/winston-slack-webhook",
-    "spee.ch-components": "git://github.com/lbryio/spee.ch-components.git"
+    "winston-slack-webhook": "billbitt/winston-slack-webhook"
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0-beta.37",
