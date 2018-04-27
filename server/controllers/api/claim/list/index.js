@@ -1,5 +1,5 @@
-const { getClaimList } = require('../../lbrynet/index');
-const { handleErrorResponse } = require('../utils/errorHandlers.js');
+const { getClaimList } = require('../../../../lbrynet');
+const { handleErrorResponse } = require('../../../utils/errorHandlers.js');
 
 /*
 

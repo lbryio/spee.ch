@@ -1,6 +1,6 @@
-const checkChannelAvailability = require('../utils/checkChannelAvailability.js');
-const { sendGATimingEvent } = require('../../utils/googleAnalytics.js');
-const { handleErrorResponse } = require('../utils/errorHandlers.js');
+const checkChannelAvailability = require('./checkChannelAvailability.js');
+const { sendGATimingEvent } = require('../../../../utils/googleAnalytics.js');
+const { handleErrorResponse } = require('../../../utils/errorHandlers.js');
 
 /*
 

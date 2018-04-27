@@ -1,5 +1,5 @@
-const db = require('../../models/index');
-const { publishing: { primaryClaimAddress, additionalClaimAddresses } } = require('../../../config/siteConfig.js');
+const db = require('../../../../models');
+const { publishing: { primaryClaimAddress, additionalClaimAddresses } } = require('../../../../../config/siteConfig.js');
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 

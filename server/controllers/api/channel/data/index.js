@@ -1,20 +1,19 @@
-const { getChannelClaims } = require('../utils/serveHelpers.js');
-const { handleErrorResponse } = require('../utils/errorHandlers.js');
+const { getChannelData } = require('../../../utils/serveHelpers.js');
+const { handleErrorResponse } = require('../../../utils/errorHandlers.js');
 
 const NO_CHANNEL = 'NO_CHANNEL';
 
 /*
 
-  route to get all claims for channel
+  route to get data for a channel
 
 */
 
-const channelClaims = ({ ip, originalUrl, body, params }, res) => {
+const channelData = ({ ip, originalUrl, body, params }, res) => {
   const channelName = params.channelName;
   let channelClaimId = params.channelClaimId;
   if (channelClaimId === 'none') channelClaimId = null;
-  const page = params.page;
-  getChannelClaims(channelName, channelClaimId, page)
+  getChannelData(channelName, channelClaimId, 0)
     .then(data => {
       if (data === NO_CHANNEL) {
         return res.status(404).json({success: false, message: 'No matching channel was found'});
@@ -26,4 +25,4 @@ const channelClaims = ({ ip, originalUrl, body, params }, res) => {
     });
 };
 
-module.exports = channelClaims;
+module.exports = channelData;

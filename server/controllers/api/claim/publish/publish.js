@@ -1,6 +1,6 @@
 const logger = require('winston');
-const db = require('../../models');
-const { publishClaim } = require('../../lbrynet');
+const db = require('../../../../models');
+const { publishClaim } = require('../../../../lbrynet');
 const deleteFile = require('./deleteFile.js');
 
 const publish = (publishParams, fileName, fileType) => {

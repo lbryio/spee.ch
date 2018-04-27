@@ -1,7 +1,7 @@
-const { getClaim } = require('../../lbrynet');
-const { addGetResultsToFileData, createFileData } = require('../utils/file.js');
-const { handleErrorResponse } = require('../utils/errorHandlers.js');
-const db = require('../../models');
+const { getClaim } = require('../../../../lbrynet');
+const { addGetResultsToFileData, createFileData } = require('../../../utils/file.js');
+const { handleErrorResponse } = require('../../../utils/errorHandlers.js');
+const db = require('../../../../models');
 
 /*
 

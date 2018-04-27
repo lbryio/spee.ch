@@ -1,5 +1,5 @@
-const { resolveUri } = require('../../lbrynet/index');
-const { handleErrorResponse } = require('../utils/errorHandlers.js');
+const { resolveUri } = require('../../../../lbrynet/index');
+const { handleErrorResponse } = require('../../../utils/errorHandlers.js');
 
 /*
 
