@@ -4,6 +4,7 @@ const Claim = require('./claim.js');
 const File = require('./file.js');
 const Request = require('./request.js');
 const User = require('./user.js');
+const Blocked = require('./blocked.js');
 
 const Sequelize = require('sequelize');
 const logger = require('winston');
@@ -42,6 +43,7 @@ db['Claim'] = sequelize.import('Claim', Claim);
 db['File'] = sequelize.import('File', File);
 db['Request'] = sequelize.import('Request', Request);
 db['User'] = sequelize.import('User', User);
+db['Blocked'] = sequelize.import('Blocked', Blocked);
 
 // run model.association for each model in the db object that has an association
 logger.info('associating db models...');
