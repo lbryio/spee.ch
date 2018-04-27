@@ -1,4 +1,4 @@
-const { getClaimList } = require('../../utils/lbryApi.js');
+const { getClaimList } = require('../../lbrynet/index');
 const { handleErrorResponse } = require('../utils/errorHandlers.js');
 
 /*

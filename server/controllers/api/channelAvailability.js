@@ -1,4 +1,4 @@
-const { checkChannelAvailability } = require('../../controllers/publishController.js');
+const checkChannelAvailability = require('../utils/checkChannelAvailability.js');
 const { sendGATimingEvent } = require('../../utils/googleAnalytics.js');
 const { handleErrorResponse } = require('../utils/errorHandlers.js');
 

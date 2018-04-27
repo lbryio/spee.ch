@@ -21,8 +21,8 @@ module.exports = {
         message = error.message;
       } else {
         message = error;
-      };
-    };
+      }
+    }
     return [status, message];
   },
   useObjectPropertiesIfNoKeys: function (err) {

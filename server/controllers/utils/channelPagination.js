@@ -4,7 +4,7 @@ module.exports = {
   returnPaginatedChannelClaims (channelName, longChannelClaimId, claims, page) {
     const totalPages = module.exports.determineTotalPages(claims);
     const paginationPage = module.exports.getPageFromQuery(page);
-    const viewData = {
+    return {
       channelName       : channelName,
       longChannelClaimId: longChannelClaimId,
       claims            : module.exports.extractPageFromClaims(claims, paginationPage),
@@ -14,7 +14,6 @@ module.exports = {
       totalPages        : totalPages,
       totalResults      : module.exports.determineTotalClaims(claims),
     };
-    return viewData;
   },
   getPageFromQuery (page) {
     if (page) {
@@ -30,8 +29,7 @@ module.exports = {
     // logger.debug(`pageNumber ${pageNumber} is number?`, Number.isInteger(pageNumber));
     const claimStartIndex = (pageNumber - 1) * CLAIMS_PER_PAGE;
     const claimEndIndex = claimStartIndex + CLAIMS_PER_PAGE;
-    const pageOfClaims = claims.slice(claimStartIndex, claimEndIndex);
-    return pageOfClaims;
+    return claims.slice(claimStartIndex, claimEndIndex);
   },
   determineTotalPages (claims) {
     if (!claims) {

@@ -1,4 +1,4 @@
-const speechPassport = require('../../speechPassport');
+const speechPassport = require('../../speechPassport/index');
 
 const login = (req, res, next) => {
   speechPassport.authenticate('local-login', (err, user, info) => {

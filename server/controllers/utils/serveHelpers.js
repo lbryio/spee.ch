@@ -1,6 +1,6 @@
-const db = require('../models');
+const db = require('../../models/index');
 const logger = require('winston');
-const { returnPaginatedChannelClaims } = require('./utils/channelPagination.js');
+const { returnPaginatedChannelClaims } = require('./channelPagination.js');
 
 const NO_CHANNEL = 'NO_CHANNEL';
 const NO_CLAIM = 'NO_CLAIM';

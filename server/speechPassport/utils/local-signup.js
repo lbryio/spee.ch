@@ -1,7 +1,7 @@
 const PassportLocalStrategy = require('passport-local').Strategy;
-const lbryApi = require('../../utils/lbryApi.js');
+const { createChannel } = require('../../lbrynet');
 const logger = require('winston');
-const db = require('../../models/index');
+const db = require('../../models');
 
 module.exports = new PassportLocalStrategy(
   {
@@ -14,7 +14,7 @@ module.exports = new PassportLocalStrategy(
     // server-side validaton of inputs (username, password)
 
     // create the channel and retrieve the metadata
-    return lbryApi.createChannel(`@${username}`)
+    return createChannel(`@${username}`)
       .then(tx => {
         // create user record
         const userData = {

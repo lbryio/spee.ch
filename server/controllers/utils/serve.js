@@ -1,5 +1,5 @@
 const logger = require('winston');
-const { getClaimId, getLocalFileRecord } = require('../../controllers/serveController.js');
+const { getClaimId, getLocalFileRecord } = require('./serveHelpers.js');
 const { handleErrorResponse } = require('./errorHandlers.js');
 
 const SERVE = 'SERVE';

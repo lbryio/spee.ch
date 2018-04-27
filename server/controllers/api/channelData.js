@@ -1,4 +1,4 @@
-const { getChannelData } = require('../../controllers/serveController.js');
+const { getChannelData } = require('../utils/serveHelpers.js');
 const { handleErrorResponse } = require('../utils/errorHandlers.js');
 
 const NO_CHANNEL = 'NO_CHANNEL';

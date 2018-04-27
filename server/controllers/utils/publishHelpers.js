@@ -1,7 +1,5 @@
 const logger = require('winston');
-const fs = require('fs');
-
-const { details, publishing } = require('../../config/siteConfig.js');
+const { details, publishing } = require('../../../config/siteConfig.js');
 
 module.exports = {
   parsePublishApiRequestBody ({name, nsfw, license, title, description, thumbnail}) {
@@ -145,15 +143,6 @@ module.exports = {
       channel_name : publishing.thumbnailChannel,
       channel_id   : publishing.thumbnailChannelId,
     };
-  },
-  deleteTemporaryFile (filePath) {
-    fs.unlink(filePath, err => {
-      if (err) {
-        logger.error(`error deleting temporary file ${filePath}`);
-        throw err;
-      }
-      logger.debug(`successfully deleted ${filePath}`);
-    });
   },
   addGetResultsToFileData (fileInfo, getResult) {
     fileInfo.fileName = getResult.file_name;

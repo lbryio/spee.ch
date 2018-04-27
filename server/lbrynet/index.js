@@ -1,24 +1,9 @@
 const axios = require('axios');
 const logger = require('winston');
 const { api: { apiHost, apiPort } } = require('../../config/lbryConfig.js');
-const lbryApiUri = 'http://' + apiHost + ':' + apiPort;
-const { chooseGaLbrynetPublishLabel, sendGATimingEvent } = require('./googleAnalytics.js');
-
-const handleLbrynetResponse = ({ data }, resolve, reject) => {
-  logger.debug('lbry api data:', data);
-  if (data.result) {
-    // check for an error
-    if (data.result.error) {
-      logger.debug('Lbrynet api error:', data.result.error);
-      reject(new Error(data.result.error));
-      return;
-    };
-    resolve(data.result);
-    return;
-  }
-  // fallback in case it just timed out
-  reject(JSON.stringify(data));
-};
+const lbrynetUri = 'http://' + apiHost + ':' + apiPort;
+const { chooseGaLbrynetPublishLabel, sendGATimingEvent } = require('../utils/googleAnalytics.js');
+const handleLbrynetResponse = require('./utils/handleLbrynetResponse.js');
 
 module.exports = {
   publishClaim (publishParams) {
@@ -26,7 +11,7 @@ module.exports = {
     const gaStartTime = Date.now();
     return new Promise((resolve, reject) => {
       axios
-        .post(lbryApiUri, {
+        .post(lbrynetUri, {
           method: 'publish',
           params: publishParams,
         })
@@ -44,7 +29,7 @@ module.exports = {
     const gaStartTime = Date.now();
     return new Promise((resolve, reject) => {
       axios
-        .post(lbryApiUri, {
+        .post(lbrynetUri, {
           method: 'get',
           params: { uri, timeout: 20 },
         })
@@ -62,7 +47,7 @@ module.exports = {
     const gaStartTime = Date.now();
     return new Promise((resolve, reject) => {
       axios
-        .post(lbryApiUri, {
+        .post(lbrynetUri, {
           method: 'claim_list',
           params: { name: claimName },
         })
@@ -80,7 +65,7 @@ module.exports = {
     const gaStartTime = Date.now();
     return new Promise((resolve, reject) => {
       axios
-        .post(lbryApiUri, {
+        .post(lbrynetUri, {
           method: 'resolve',
           params: { uri },
         })
@@ -102,7 +87,7 @@ module.exports = {
     const gaStartTime = Date.now();
     return new Promise((resolve, reject) => {
       axios
-        .post(lbryApiUri, {
+        .post(lbrynetUri, {
           method: 'settings_get',
         })
         .then(({ data }) => {
@@ -124,7 +109,7 @@ module.exports = {
     const gaStartTime = Date.now();
     return new Promise((resolve, reject) => {
       axios
-        .post(lbryApiUri, {
+        .post(lbrynetUri, {
           method: 'channel_new',
           params: {
             channel_name: name,

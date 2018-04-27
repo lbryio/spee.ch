@@ -1,4 +1,4 @@
-const { claimNameIsAvailable } = require('../../controllers/publishController.js');
+const checkClaimAvailability = require('../utils/checkClaimAvailability.js');
 const { sendGATimingEvent } = require('../../utils/googleAnalytics.js');
 const { handleErrorResponse } = require('../utils/errorHandlers.js');
 
@@ -10,7 +10,7 @@ const { handleErrorResponse } = require('../utils/errorHandlers.js');
 
 const claimAvailability = ({ ip, originalUrl, params: { name } }, res) => {
   const gaStartTime = Date.now();
-  claimNameIsAvailable(name)
+  checkClaimAvailability(name)
     .then(result => {
       res.status(200).json(result);
       sendGATimingEvent('end-to-end', 'claim name availability', name, gaStartTime, Date.now());

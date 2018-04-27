@@ -1,5 +1,5 @@
-const { getClaim } = require('../../utils/lbryApi.js');
-const { addGetResultsToFileData, createFileData } = require('../../helpers/publishHelpers.js');
+const { getClaim } = require('../../lbrynet');
+const { addGetResultsToFileData, createFileData } = require('../utils/file.js');
 const { handleErrorResponse } = require('../utils/errorHandlers.js');
 const db = require('../../models');
 

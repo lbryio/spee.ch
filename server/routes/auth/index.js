@@ -1,8 +1,8 @@
 const speechPassport = require('../../speechPassport');
-const handleSignupRequest = require('./signup');
-const handleLoginRequest = require('./login');
-const handleLogoutRequest = require('./logout');
-const handleUserRequest = require('./user');
+const handleSignupRequest = require('../../controllers/auth/signup');
+const handleLoginRequest = require('../../controllers/auth/login');
+const handleLogoutRequest = require('../../controllers/auth/logout');
+const handleUserRequest = require('../../controllers/auth/user');
 
 module.exports = (app) => {
   app.post('/signup', speechPassport.authenticate('local-signup'), handleSignupRequest);

@@ -1,9 +1,15 @@
-const { createBasicPublishParams, createThumbnailPublishParams, parsePublishApiRequestBody, parsePublishApiRequestFiles } = require('../../helpers/publishHelpers.js');
-const { claimNameIsAvailable, publish } = require('../../controllers/publishController.js');
+const { details: { host } } = require('../../../config/siteConfig.js');
 const { authenticateUser } = require('../../auth/authentication.js');
 const { sendGATimingEvent } = require('../../utils/googleAnalytics.js');
 const { handleErrorResponse } = require('../utils/errorHandlers.js');
-const { details: { host } } = require('../../../config/siteConfig.js');
+const checkClaimAvailability = require('../utils/checkClaimAvailability');
+const publish = require('../utils/publish.js');
+const {
+  createBasicPublishParams,
+  createThumbnailPublishParams,
+  parsePublishApiRequestBody,
+  parsePublishApiRequestFiles,
+} = require('../utils/publishHelpers.js');
 
 /*
 
@@ -29,7 +35,7 @@ const claimPublish = ({ body, files, headers, ip, originalUrl, user }, res) => {
   Promise
     .all([
       authenticateUser(channelName, channelId, channelPassword, user),
-      claimNameIsAvailable(name),
+      checkClaimAvailability(name),
       createBasicPublishParams(filePath, name, title, description, license, nsfw, thumbnail),
       createThumbnailPublishParams(thumbnailFilePath, name, license, nsfw),
     ])
@@ -39,7 +45,7 @@ const claimPublish = ({ body, files, headers, ip, originalUrl, user }, res) => {
         publishParams['channel_name'] = channelName;
         publishParams['channel_id'] = channelClaimId;
       }
-      // publish the thumbnail
+      // publish the thumbnail, if one exists
       if (thumbnailPublishParams) {
         publish(thumbnailPublishParams, thumbnailFileName, thumbnailFileType);
       }
