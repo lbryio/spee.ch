@@ -1,5 +1,6 @@
 const { getClaim } = require('../../../../lbrynet');
-const { addGetResultsToFileData, createFileData } = require('../../../utils/file.js');
+const addGetResultsToFileData = require('./addGetResultsToFileData.js');
+const createFileData = require('./createFileData.js');
 const { handleErrorResponse } = require('../../../utils/errorHandlers.js');
 const db = require('../../../../models');
 

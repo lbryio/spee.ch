@@ -1,12 +1,12 @@
 const { sendGAServeEvent } = require('../../../utils/googleAnalytics');
-const {
-  determineResponseType,
-  flipClaimNameAndIdForBackwardsCompatibility,
-  logRequestData,
-  getClaimIdAndServeAsset,
-} = require('../../utils/serve.js');
-const lbryUri = require('../../utils/lbryUri.js');
 const handleShowRender = require('../../../render/build/handleShowRender.js');
+
+const lbryUri = require('../utils/lbryUri.js');
+
+const determineResponseType = require('../utils/determineResponseType.js');
+const getClaimIdAndServeAsset = require('../utils/getClaimIdAndServeAsset.js');
+const flipClaimNameAndIdForBackwardsCompatibility = require('../utils/flipClaimNameAndIdForBackwardsCompatibility.js');
+const logRequestData = require('../utils/logRequestData.js');
 
 const SERVE = 'SERVE';
 
