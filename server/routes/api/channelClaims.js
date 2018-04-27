@@ -1,5 +1,5 @@
 const { getChannelClaims } = require('../../controllers/serveController.js');
-const { handleErrorResponse } = require('../../helpers/errorHandlers.js');
+const { handleErrorResponse } = require('../utils/errorHandlers.js');
 
 const NO_CHANNEL = 'NO_CHANNEL';
 

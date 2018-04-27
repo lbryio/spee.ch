@@ -2,7 +2,7 @@ const { createBasicPublishParams, createThumbnailPublishParams, parsePublishApiR
 const { claimNameIsAvailable, publish } = require('../../controllers/publishController.js');
 const { authenticateUser } = require('../../auth/authentication.js');
 const { sendGATimingEvent } = require('../../helpers/googleAnalytics.js');
-const { handleErrorResponse } = require('../../helpers/errorHandlers.js');
+const { handleErrorResponse } = require('../utils/errorHandlers.js');
 const { details: { host } } = require('../../../config/siteConfig.js');
 
 /*

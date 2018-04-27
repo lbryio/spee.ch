@@ -1,10 +1,11 @@
 const passport = require('passport');
-const localLoginStrategy = require('./local-login.js');
-const localSignupStrategy = require('./local-signup.js');
-const { serializeSpeechUser, deserializeSpeechUser } = require('../helpers/authHelpers.js');
+const localLoginStrategy = require('./utils/local-login.js');
+const localSignupStrategy = require('./utils/local-signup.js');
+const serializeUser = require('./utils/serializeUser.js');
+const deserializeUser = require('./utils/deserializeUser.js');
 
-passport.deserializeUser(deserializeSpeechUser);
-passport.serializeUser(serializeSpeechUser);
+passport.deserializeUser(deserializeUser);
+passport.serializeUser(serializeUser);
 passport.use('local-login', localLoginStrategy);
 passport.use('local-signup', localSignupStrategy);
 

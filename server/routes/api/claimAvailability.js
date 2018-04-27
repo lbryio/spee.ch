@@ -1,6 +1,6 @@
 const { claimNameIsAvailable } = require('../../controllers/publishController.js');
 const { sendGATimingEvent } = require('../../helpers/googleAnalytics.js');
-const { handleErrorResponse } = require('../../helpers/errorHandlers.js');
+const { handleErrorResponse } = require('../utils/errorHandlers.js');
 
 /*
 
