@@ -10,8 +10,8 @@ function isValidShortIdOrClaimId (input) {
   return (isValidClaimId(input) || isValidShortId(input));
 };
 
-const flipClaimNameAndIdForBackwardsCompatibility = (identifier, name) => {
-  // this is a patch for backwards compatability with '/name/claim_id' url format
+const flipClaimNameAndId = (identifier, name) => {
+  // this is a patch for backwards compatability with '/name/claimId' url format
   if (isValidShortIdOrClaimId(name) && !isValidShortIdOrClaimId(identifier)) {
     const tempName = name;
     name = identifier;
@@ -20,4 +20,4 @@ const flipClaimNameAndIdForBackwardsCompatibility = (identifier, name) => {
   return [identifier, name];
 };
 
-module.exports = flipClaimNameAndIdForBackwardsCompatibility;
+module.exports = flipClaimNameAndId;

@@ -1,6 +1,6 @@
 const handlePageRequest = require('../../controllers/pages/sendReactApp');
 const handleEmbedRequest = require('../../controllers/pages/sendEmbedPage');
-const redirect = require('../../controllers/pages/redirect');
+const redirect = require('../../controllers/utils/redirect');
 
 module.exports = (app) => {
   app.get('/', handlePageRequest);

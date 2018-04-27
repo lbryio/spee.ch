@@ -5,7 +5,7 @@ const lbryUri = require('../utils/lbryUri.js');
 
 const determineResponseType = require('../utils/determineResponseType.js');
 const getClaimIdAndServeAsset = require('../utils/getClaimIdAndServeAsset.js');
-const flipClaimNameAndIdForBackwardsCompatibility = require('../utils/flipClaimNameAndIdForBackwardsCompatibility.js');
+const flipClaimNameAndId = require('../utils/flipClaimNameAndId.js');
 const logRequestData = require('../utils/logRequestData.js');
 
 const SERVE = 'SERVE';
@@ -46,8 +46,9 @@ const serverAssetByIdentifierAndClaim = (req, res) => {
   } catch (error) {
     return res.status(400).json({success: false, message: error.message});
   }
+  // for backwards compatability, flip claim name and claim id if necessary
   if (!isChannel) {
-    [claimId, claimName] = flipClaimNameAndIdForBackwardsCompatibility(claimId, claimName);
+    [claimId, claimName] = flipClaimNameAndId(claimId, claimName);
   }
   // log the request data for debugging
   logRequestData(responseType, claimName, channelName, claimId);

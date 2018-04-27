@@ -1,13 +1,17 @@
 const { details: { host } } = require('../../../../../config/siteConfig.js');
-const { authenticateUser } = require('../../../../auth/authentication.js');
+
 const { sendGATimingEvent } = require('../../../../utils/googleAnalytics.js');
+
 const { handleErrorResponse } = require('../../../utils/errorHandlers.js');
+
+const checkClaimAvailability = require('../utils/checkClaimAvailability.js');
+
 const publish = require('./publish.js');
 const createBasicPublishParams = require('./createBasicPublishParams.js');
 const createThumbnailPublishParams = require('./createThumbnailPublishParams.js');
 const parsePublishApiRequestBody = require('./parsePublishApiRequestBody.js');
 const parsePublishApiRequestFiles = require('./parsePublishApiRequestFiles.js');
-const checkClaimAvailability = require('../utils/checkClaimAvailability.js');
+const authenticateUser = require('./authentication.js');
 
 /*
 
