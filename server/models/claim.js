@@ -1,5 +1,5 @@
 const logger = require('winston');
-const { returnShortId } = require('../helpers/sequelizeHelpers.js');
+const returnShortId = require('./utils/returnShortId.js');
 const { assetDefaults: { thumbnail: defaultThumbnail }, details: { host } } = require('../../config/siteConfig.js');
 
 function determineFileExtensionFromContentType (contentType) {

@@ -1,5 +1,5 @@
 const PassportLocalStrategy = require('passport-local').Strategy;
-const lbryApi = require('../../helpers/lbryApi.js');
+const lbryApi = require('../../utils/lbryApi.js');
 const logger = require('winston');
 const db = require('../../models/index');
 

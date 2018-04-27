@@ -55,7 +55,7 @@ function Server () {
     app.use(requestLogger);
 
     // configure passport
-    const speechPassport = require('./server/speechPassport/index');
+    const speechPassport = require('./server/speechPassport');
     // initialize passport
     const sessionKey = siteConfig.auth.sessionKey;
     app.use(cookieSession({

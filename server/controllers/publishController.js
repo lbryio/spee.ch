@@ -1,6 +1,6 @@
 const logger = require('winston');
 const db = require('../models');
-const lbryApi = require('../helpers/lbryApi.js');
+const lbryApi = require('../utils/lbryApi.js');
 const publishHelpers = require('../helpers/publishHelpers.js');
 const { publishing: { primaryClaimAddress, additionalClaimAddresses } } = require('../../config/siteConfig.js');
 const Sequelize = require('sequelize');

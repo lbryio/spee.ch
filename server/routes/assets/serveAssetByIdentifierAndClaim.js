@@ -1,4 +1,4 @@
-const { sendGAServeEvent } = require('../../helpers/googleAnalytics');
+const { sendGAServeEvent } = require('../../utils/googleAnalytics');
 const {
   determineResponseType,
   flipClaimNameAndIdForBackwardsCompatibility,

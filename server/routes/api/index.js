@@ -12,7 +12,7 @@ const claimShortId = require('./claimShortId');
 const claimList = require('./claimList');
 const fileAvailability = require('./fileAvailability');
 
-const multipartMiddleware = require('../../helpers/multipartMiddleware');
+const multipartMiddleware = require('../utils/multipartMiddleware');
 
 module.exports = (app) => {
   // channel routes

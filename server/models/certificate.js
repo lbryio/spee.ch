@@ -1,5 +1,5 @@
 const logger = require('winston');
-const { returnShortId } = require('../helpers/sequelizeHelpers.js');
+const returnShortId = require('./utils/returnShortId.js');
 
 module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
   const Certificate = sequelize.define(
