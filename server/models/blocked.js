@@ -1,9 +1,19 @@
 const logger = require('winston');
 
+const BLOCKED_CLAIM = 'BLOCKED_CLAIM';
+
 module.exports = (sequelize, { STRING }) => {
   const Blocked = sequelize.define(
     'Blocked',
     {
+      claimId: {
+        type     : STRING,
+        allowNull: false,
+      },
+      name: {
+        type     : STRING,
+        allowNull: false,
+      },
       outpoint: {
         type     : STRING,
         allowNull: false,
@@ -14,22 +24,24 @@ module.exports = (sequelize, { STRING }) => {
     }
   );
 
-  Blocked.isBlocked = function (outpoint) {
-    logger.debug(`checking to see if ${outpoint} is blocked`);
+  Blocked.isNotBlocked = function (claimId, name) {
+    logger.debug(`checking to see if ${name}#${claimId} is not blocked`);
     return new Promise((resolve, reject) => {
       this.findOne({
         where: {
-          outpoint,
+          claimId,
+          name,
         },
       })
         .then(result => {
-          if (!result) {
-            return resolve(false);
+          if (result) {
+            return reject(BLOCKED_CLAIM);
           }
           resolve(true);
         })
         .catch(error => {
-          reject(error);
+          logger.error(error);
+          reject(BLOCKED_CLAIM);
         });
     });
   };

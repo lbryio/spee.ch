@@ -1,4 +1,4 @@
-const checkClaimAvailability = require('../utils/checkClaimAvailability.js');
+const checkClaimAvailability = require('./checkClaimAvailability.js');
 const { sendGATimingEvent } = require('../../../../utils/googleAnalytics.js');
 const { handleErrorResponse } = require('../../../utils/errorHandlers.js');
 

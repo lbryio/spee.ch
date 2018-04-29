@@ -4,7 +4,7 @@ const { sendGATimingEvent } = require('../../../../utils/googleAnalytics.js');
 
 const { handleErrorResponse } = require('../../../utils/errorHandlers.js');
 
-const checkClaimAvailability = require('../utils/checkClaimAvailability.js');
+const checkClaimAvailability = require('../availability/checkClaimAvailability.js');
 
 const publish = require('./publish.js');
 const createBasicPublishParams = require('./createBasicPublishParams.js');

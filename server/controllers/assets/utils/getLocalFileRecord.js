@@ -1,4 +1,4 @@
-const db = require('../../models');
+const db = require('../../../models');
 
 const NO_FILE = 'NO_FILE';
 

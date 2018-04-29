@@ -1,50 +1,43 @@
-const logger = require('winston');
-const getClaimId = require('../../utils/getClaimId.js');
-const getLocalFileRecord = require('../../utils/getLocalFileRecord.js');
+const db = require('../../../models');
+
+const getClaimId = require('../../api/claim/longId/getClaimId.js');
 const { handleErrorResponse } = require('../../utils/errorHandlers.js');
 
-const NO_FILE = 'NO_FILE';
+const serveAssetToClient = require('./serveAssetToClient.js');
+
 const NO_CHANNEL = 'NO_CHANNEL';
 const NO_CLAIM = 'NO_CLAIM';
-
-const serveAssetToClient = (claimId, name, res) => {
-  return getLocalFileRecord(claimId, name)
-    .then(fileRecord => {
-      // check that a local record was found
-      if (fileRecord === NO_FILE) {
-        return res.status(307).redirect(`/api/claim/get/${name}/${claimId}`);
-      }
-      // serve the file
-      const {filePath, fileType} = fileRecord;
-      logger.verbose(`serving file: ${filePath}`);
-      const sendFileOptions = {
-        headers: {
-          'X-Content-Type-Options': 'nosniff',
-          'Content-Type'          : fileType || 'image/jpeg',
-        },
-      };
-      res.status(200).sendFile(filePath, sendFileOptions);
-    })
-    .catch(error => {
-      throw error;
-    });
-};
+const BLOCKED_CLAIM = 'BLOCKED_CLAIM';
 
 const getClaimIdAndServeAsset = (channelName, channelClaimId, claimName, claimId, originalUrl, ip, res) => {
-  // get the claim Id and then serve the asset
   getClaimId(channelName, channelClaimId, claimName, claimId)
     .then(fullClaimId => {
-      if (fullClaimId === NO_CLAIM) {
-        return res.status(404).json({success: false, message: 'no claim id could be found'});
-      } else if (fullClaimId === NO_CHANNEL) {
-        return res.status(404).json({success: false, message: 'no channel id could be found'});
-      }
-      serveAssetToClient(fullClaimId, claimName, res);
-      // postToStats(responseType, originalUrl, ip, claimName, fullClaimId, 'success');
+      claimId = fullClaimId;
+      return db.Blocked.isNotBlocked(fullClaimId, claimName);
+    })
+    .then(() => {
+      serveAssetToClient(claimId, claimName, res);
     })
     .catch(error => {
+      if (error === NO_CLAIM) {
+        return res.status(404).json({
+          success: false,
+          message: 'No claim id could be found',
+        });
+      }
+      if (error === NO_CHANNEL) {
+        return res.status(404).json({
+          success: false,
+          message: 'No channel id could be found',
+        });
+      }
+      if (error === BLOCKED_CLAIM) {
+        return res.status(410).json({
+          success: false,
+          message: 'In response to a complaint we received under the US Digital Millennium Copyright Act, we have blocked access to this content from our applications. For more details, see https://lbry.io/faq/dmca',
+        });
+      }
       handleErrorResponse(originalUrl, ip, error, res);
-      // postToStats(responseType, originalUrl, ip, claimName, fullClaimId, 'fail');
     });
 };
 
