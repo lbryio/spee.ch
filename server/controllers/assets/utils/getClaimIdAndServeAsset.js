@@ -7,7 +7,7 @@ const NO_FILE = 'NO_FILE';
 const NO_CHANNEL = 'NO_CHANNEL';
 const NO_CLAIM = 'NO_CLAIM';
 
-function serveAssetToClient (claimId, name, res) {
+const serveAssetToClient = (claimId, name, res) => {
   return getLocalFileRecord(claimId, name)
     .then(fileRecord => {
       // check that a local record was found

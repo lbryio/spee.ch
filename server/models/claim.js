@@ -315,7 +315,10 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
   Claim.validateLongClaimId = function (name, claimId) {
     return new Promise((resolve, reject) => {
       this.findOne({
-        where: {name, claimId},
+        where: {
+          name,
+          claimId,
+        },
       })
         .then(result => {
           if (!result) {
