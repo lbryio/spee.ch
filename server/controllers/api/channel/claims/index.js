@@ -16,12 +16,15 @@ const channelClaims = ({ ip, originalUrl, body, params }, res) => {
   const page = params.page;
   getChannelClaims(channelName, channelClaimId, page)
     .then(data => {
-      if (data === NO_CHANNEL) {
-        return res.status(404).json({success: false, message: 'No matching channel was found'});
-      }
       res.status(200).json({success: true, data});
     })
     .catch(error => {
+      if (error === NO_CHANNEL) {
+        return res.status(404).json({
+          success: false,
+          message: 'No matching channel was found',
+        });
+      }
       handleErrorResponse(originalUrl, ip, error, res);
     });
 };

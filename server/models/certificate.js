@@ -120,7 +120,7 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
         .then(result => {
           switch (result.length) {
             case 0:
-              throw new Error('No channel(s) found with that channel name');
+              return reject(NO_CHANNEL);
             default:
               return resolve(returnShortId(result, longChannelId));
           }
