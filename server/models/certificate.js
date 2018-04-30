@@ -1,5 +1,15 @@
 const logger = require('winston');
-const { returnShortId } = require('../helpers/sequelizeHelpers.js');
+const returnShortId = require('./utils/returnShortId.js');
+
+const NO_CHANNEL = 'NO_CHANNEL';
+
+function isLongChannelId (channelId) {
+  return (channelId && (channelId.length === 40));
+}
+
+function isShortChannelId (channelId) {
+  return (channelId && (channelId.length < 40));
+}
 
 module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
   const Certificate = sequelize.define(
@@ -110,13 +120,32 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
         .then(result => {
           switch (result.length) {
             case 0:
-              throw new Error('No channel(s) found with that channel name');
+              return reject(NO_CHANNEL);
             default:
               return resolve(returnShortId(result, longChannelId));
           }
         })
         .catch(error => {
           reject(error);
+        });
+    });
+  };
+
+  Certificate.validateLongChannelId = function (name, claimId) {
+    logger.debug(`validateLongChannelId(${name}, ${claimId})`);
+    return new Promise((resolve, reject) => {
+      this.findOne({
+        where: {name, claimId},
+      })
+        .then(result => {
+          if (!result) {
+            return reject(NO_CHANNEL);
+          }
+          resolve(claimId);
+        })
+        .catch(error => {
+          logger.error(error);
+          reject(NO_CHANNEL);
         });
     });
   };
@@ -137,13 +166,14 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
         .then(result => {
           switch (result.length) {
             case 0:
-              return resolve(null);
-            default: // note results must be sorted
+              return reject(NO_CHANNEL);
+            default:
               return resolve(result[0].claimId);
           }
         })
         .catch(error => {
-          reject(error);
+          logger.error(error);
+          reject(NO_CHANNEL);
         });
     });
   };
@@ -159,43 +189,26 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
         .then(result => {
           switch (result.length) {
             case 0:
-              return resolve(null);
+              return reject(NO_CHANNEL);
             default:
               return resolve(result[0].claimId);
           }
         })
         .catch(error => {
-          reject(error);
-        });
-    });
-  };
-
-  Certificate.validateLongChannelId = function (name, claimId) {
-    logger.debug(`validateLongChannelId(${name}, ${claimId})`);
-    return new Promise((resolve, reject) => {
-      this.findOne({
-        where: {name, claimId},
-      })
-        .then(result => {
-          if (!result) {
-            return resolve(null);
-          };
-          resolve(claimId);
-        })
-        .catch(error => {
-          reject(error);
+          logger.error(error);
+          reject(NO_CHANNEL);
         });
     });
   };
 
   Certificate.getLongChannelId = function (channelName, channelClaimId) {
     logger.debug(`getLongChannelId(${channelName}, ${channelClaimId})`);
-    if (channelClaimId && (channelClaimId.length === 40)) {  // if a full channel id is provided
+    if (isLongChannelId(channelClaimId)) {
       return this.validateLongChannelId(channelName, channelClaimId);
-    } else if (channelClaimId && channelClaimId.length < 40) {  // if a short channel id is provided
+    } else if (isShortChannelId(channelClaimId)) {
       return this.getLongChannelIdFromShortChannelId(channelName, channelClaimId);
     } else {
-      return this.getLongChannelIdFromChannelName(channelName);  // if no channel id provided
+      return this.getLongChannelIdFromChannelName(channelName);
     }
   };
 

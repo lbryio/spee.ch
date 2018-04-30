@@ -1,6 +1,8 @@
 const logger = require('winston');
-const { returnShortId } = require('../helpers/sequelizeHelpers.js');
+const returnShortId = require('./utils/returnShortId.js');
 const { assetDefaults: { thumbnail: defaultThumbnail }, details: { host } } = require('../../config/siteConfig.js');
+
+const NO_CLAIM = 'NO_CLAIM';
 
 function determineFileExtensionFromContentType (contentType) {
   switch (contentType) {
@@ -17,14 +19,14 @@ function determineFileExtensionFromContentType (contentType) {
       logger.debug('setting unknown file type as file extension jpeg');
       return 'jpeg';
   }
-};
+}
 
 function determineThumbnail (storedThumbnail, defaultThumbnail) {
   if (storedThumbnail === '') {
     return defaultThumbnail;
   }
   return storedThumbnail;
-};
+}
 
 function prepareClaimData (claim) {
   // logger.debug('preparing claim data based on resolved data:', claim);
@@ -32,7 +34,15 @@ function prepareClaimData (claim) {
   claim['fileExt'] = determineFileExtensionFromContentType(claim.contentType);
   claim['host'] = host;
   return claim;
-};
+}
+
+function isLongClaimId (claimId) {
+  return (claimId && (claimId.length === 40));
+}
+
+function isShortClaimId (claimId) {
+  return (claimId && (claimId.length < 40));
+}
 
 module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
   const Claim = sequelize.define(
@@ -265,6 +275,27 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
     });
   };
 
+  Claim.validateLongClaimId = function (name, claimId) {
+    return new Promise((resolve, reject) => {
+      this.findOne({
+        where: {
+          name,
+          claimId,
+        },
+      })
+        .then(result => {
+          if (!result) {
+            return reject(NO_CLAIM);
+          }
+          resolve(claimId);
+        })
+        .catch(error => {
+          logger.error(error);
+          reject(NO_CLAIM);
+        });
+    });
+  };
+
   Claim.getLongClaimIdFromShortClaimId = function (name, shortId) {
     return new Promise((resolve, reject) => {
       this
@@ -279,13 +310,14 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
         .then(result => {
           switch (result.length) {
             case 0:
-              return resolve(null);
-            default: // note results must be sorted
+              return reject(NO_CLAIM);
+            default:
               return resolve(result[0].claimId);
           }
         })
         .catch(error => {
-          reject(error);
+          logger.error(error);
+          reject(NO_CLAIM);
         });
     });
   };
@@ -295,48 +327,31 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
       this
         .findAll({
           where: { name },
-          order: [['effectiveAmount', 'DESC'], ['height', 'ASC']],  // note: maybe height and effective amount need to switch?
+          order: [['effectiveAmount', 'DESC'], ['height', 'ASC']],
         })
         .then(result => {
-          logger.debug('length of result', result.length);
           switch (result.length) {
             case 0:
-              return resolve(null);
+              return reject(NO_CLAIM);
             default:
               return resolve(result[0].dataValues.claimId);
           }
         })
         .catch(error => {
-          reject(error);
-        });
-    });
-  };
-
-  Claim.validateLongClaimId = function (name, claimId) {
-    return new Promise((resolve, reject) => {
-      this.findOne({
-        where: {name, claimId},
-      })
-        .then(result => {
-          if (!result) {
-            return resolve(null);
-          };
-          resolve(claimId);
-        })
-        .catch(error => {
-          reject(error);
+          logger.error(error);
+          reject(NO_CLAIM);
         });
     });
   };
 
   Claim.getLongClaimId = function (claimName, claimId) {
-    logger.debug(`getLongClaimId(${claimName}, ${claimId})`);
-    if (claimId && (claimId.length === 40)) {  // if a full claim id is provided
+    // logger.debug(`getLongClaimId(${claimName}, ${claimId})`);
+    if (isLongClaimId(claimId)) {
       return this.validateLongClaimId(claimName, claimId);
-    } else if (claimId && claimId.length < 40) {
-      return this.getLongClaimIdFromShortClaimId(claimName, claimId);  // if a short claim id is provided
+    } else if (isShortClaimId(claimId)) {
+      return this.getLongClaimIdFromShortClaimId(claimName, claimId);
     } else {
-      return this.getTopFreeClaimIdByClaimName(claimName);  // if no claim id is provided
+      return this.getTopFreeClaimIdByClaimName(claimName);
     }
   };
 
