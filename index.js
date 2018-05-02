@@ -29,21 +29,18 @@ function Server () {
     app.enable('trust proxy');
 
     /* add middleware */
+
     // set HTTP headers to protect against well-known web vulnerabilties
     app.use(helmet());
+
     // 'express.static' to serve static files from public directory
-    if (siteConfig.routes.publicFolder) {
-      // take in a different public folder, so it can serve it's own bundle if needed
-      const publicFolder = Path.resolve(process.cwd(), siteConfig.routes.publicFolder);
-      app.use(express.static(publicFolder));
-      logger.info('serving static files from custom path:', publicFolder);
-    } else {
-      const publicPath = Path.resolve(process.cwd(), 'public');
-      app.use(express.static(publicPath));
-      logger.warn(`serving static files from default static path at ${publicPath}.  Please specify a path in your config/siteConfig.js file`);
-    };
+    const publicPath = Path.resolve(process.cwd(), 'public');
+    app.use(express.static(publicPath));
+    logger.info(`serving static files from default static path at ${publicPath}.`);
+
     // 'body parser' for parsing application/json
     app.use(bodyParser.json());
+
     // 'body parser' for parsing application/x-www-form-urlencoded
     app.use(bodyParser.urlencoded({ extended: true }));
 
