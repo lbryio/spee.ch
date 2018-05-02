@@ -10,9 +10,6 @@ function SiteConfig () {
   this.auth = {
     sessionKey: 'default',
   };
-  this.customComponents = {};
-  this.customContainers = {};
-  this.customPages = {};
   this.details = {
     description: 'Welcome to my decentralized image and video sharing site.',
     host       : 'http://localhost:3000',
@@ -29,22 +26,17 @@ function SiteConfig () {
     thumbnailChannelId      : 'default',
     uploadDirectory         : '/home/lbry/Uploads',
   };
-  this.routes = {};
   this.update = (config) => {
     if (!config) {
       return console.log('No site config received.');
     }
-    const { analytics, assetDefaults, auth, customComponents, customContainers, customPages, details, publishing, routes } = config;
+    const { analytics, assetDefaults, auth, details, publishing } = config;
     console.log('Configuring site details...');
     this.analytics = analytics;
     this.assetDefaults = assetDefaults;
     this.auth = auth;
     this.details = details;
     this.publishing = publishing;
-    this.customComponents = customComponents;
-    this.customContainers = customContainers;
-    this.customPages = customPages;
-    this.routes = routes;
   };
 }
 

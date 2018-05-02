@@ -13,18 +13,14 @@ const loggerConfig = require('./config/loggerConfig.js');
 const mysqlConfig = require('./config/mysqlConfig.js');
 const siteConfig = require('./config/siteConfig.js');
 const slackConfig = require('./config/slackConfig.js');
+const viewsConfig = require('./config/viewsConfig.js');
 
 function Server () {
   this.configureLogger = loggerConfig.update;
   this.configureMysql = mysqlConfig.update;
   this.configureSite = siteConfig.update;
   this.configureSlack = slackConfig.update;
-  this.configureModels = () => {
-    logger.debug('here is where you could add/overwrite the default models')
-  };
-  this.configureRoutes = () => {
-    logger.debug('here is where you could add/overwrite the default routes')
-  };
+  this.configureViews = viewsConfig.update;
   this.createApp = () => {
     // create an Express application
     const app = express();
