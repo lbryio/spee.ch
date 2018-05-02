@@ -27,11 +27,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 */
 var siteConfig = require('../../../config/siteConfig.js');
 
+var viewsConfig = require('../../../config/viewsConfig.js');
+
 module.exports = function (req, res) {
   var context = {}; // customize the reducer by passing in intial state configs
 
   var MyReducers = (0, _spee.Reducers)(siteConfig);
-  var MyApp = (0, _spee.App)(siteConfig);
+  var MyApp = (0, _spee.App)(viewsConfig);
   var MyGAListener = (0, _spee.GAListener)(siteConfig); // create a new Redux store instance
 
   var store = (0, _redux.createStore)(MyReducers); // render component to a string
