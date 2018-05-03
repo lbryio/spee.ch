@@ -14,9 +14,15 @@ const claimData = ({ ip, originalUrl, body, params }, res) => {
   db.Claim.resolveClaim(claimName, claimId)
     .then(claimInfo => {
       if (!claimInfo) {
-        return res.status(404).json({success: false, message: 'No claim could be found'});
+        return res.status(404).json({
+          success: false,
+          message: 'No claim could be found'
+        });
       }
-      res.status(200).json({success: true, data: claimInfo});
+      res.status(200).json({
+        success: true,
+        data: claimInfo
+      });
     })
     .catch(error => {
       handleErrorResponse(originalUrl, ip, error, res);
