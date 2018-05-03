@@ -11,9 +11,18 @@ const { handleErrorResponse } = require('../../../utils/errorHandlers.js');
 const channelAvailability = ({ ip, originalUrl, params: { name } }, res) => {
   const gaStartTime = Date.now();
   checkChannelAvailability(name)
-    .then(availableName => {
-      res.status(200).json(availableName);
-      sendGATimingEvent('end-to-end', 'claim name availability', name, gaStartTime, Date.now());
+    .then(isAvailable => {
+      let responseObject = {
+        success: true,
+        data: isAvailable,
+      };
+      if (isAvailable) {
+        responseObject['message'] = `That channel name is available`
+      } else {
+        responseObject['message'] = `That channel is already in use`
+      }
+      res.status(200).json(responseObject);
+      sendGATimingEvent('end-to-end', 'channel name availability', name, gaStartTime, Date.now());
     })
     .catch(error => {
       handleErrorResponse(originalUrl, ip, error, res);
