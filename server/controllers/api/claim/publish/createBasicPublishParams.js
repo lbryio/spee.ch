@@ -34,6 +34,7 @@ const createBasicPublishParams = (filePath, name, title, description, license, n
   if (thumbnail) {
     publishParams['metadata']['thumbnail'] = thumbnail;
   }
+  logger.debug('publish params:', publishParams);
   return publishParams;
 };
 
