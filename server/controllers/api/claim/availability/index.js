@@ -21,7 +21,6 @@ const claimAvailability = ({ ip, originalUrl, params: { name } }, res) => {
       } else {
         responseObject['message'] = `That name is already in use`
       }
-      console.log('response object', responseObject);
       res.status(200).json(responseObject);
       sendGATimingEvent('end-to-end', 'claim name availability', name, gaStartTime, Date.now());
     })
