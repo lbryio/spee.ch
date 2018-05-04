@@ -28,7 +28,7 @@ function SlackConfig () {
           iconEmoji : ':face_with_head_bandage:',
         });
       };
-      if (slackInfoChannel) {
+      if (this.slackInfoChannel) {
         winston.add(winstonSlackWebHook, {
           name      : 'slack-info-transport',
           level     : 'info',

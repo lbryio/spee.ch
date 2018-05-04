@@ -31,6 +31,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 */
 var siteConfig = require('../../../config/siteConfig.js');
 
+var viewsConfig = require('../../../config/viewsConfig.js');
+
 var returnSagaWithParams = function returnSagaWithParams(saga, params) {
   return (
     /*#__PURE__*/
@@ -56,7 +58,7 @@ module.exports = function (req, res) {
   var context = {}; // configure the reducers by passing initial state configs
 
   var MyReducers = (0, _spee.Reducers)(siteConfig);
-  var MyApp = (0, _spee.App)(siteConfig);
+  var MyApp = (0, _spee.App)(viewsConfig);
   var MyGAListener = (0, _spee.GAListener)(siteConfig); // create and apply middleware
 
   var sagaMiddleware = (0, _reduxSaga.default)();
