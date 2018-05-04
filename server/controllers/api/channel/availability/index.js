@@ -8,9 +8,16 @@ const { handleErrorResponse } = require('../../../utils/errorHandlers.js');
 
 */
 
+function addAtSymbolIfNecessary (name) {
+  if (name.substring(0,1) !== '@') {
+    return `@${name}`;
+  }
+  return name;
+}
+
 const channelAvailability = ({ ip, originalUrl, params: { name } }, res) => {
   const gaStartTime = Date.now();
-  let name = `@${name}`;
+  name = addAtSymbolIfNecessary(name);
   checkChannelAvailability(name)
     .then(isAvailable => {
       let responseObject = {
