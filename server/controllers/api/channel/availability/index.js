@@ -8,12 +8,29 @@ const { handleErrorResponse } = require('../../../utils/errorHandlers.js');
 
 */
 
+function addAtSymbolIfNecessary (name) {
+  if (name.substring(0,1) !== '@') {
+    return `@${name}`;
+  }
+  return name;
+}
+
 const channelAvailability = ({ ip, originalUrl, params: { name } }, res) => {
   const gaStartTime = Date.now();
+  name = addAtSymbolIfNecessary(name);
   checkChannelAvailability(name)
-    .then(availableName => {
-      res.status(200).json(availableName);
-      sendGATimingEvent('end-to-end', 'claim name availability', name, gaStartTime, Date.now());
+    .then(isAvailable => {
+      let responseObject = {
+        success: true,
+        data: isAvailable,
+      };
+      if (isAvailable) {
+        responseObject['message'] = `${name} is available`
+      } else {
+        responseObject['message'] = `${name} is already in use`
+      }
+      res.status(200).json(responseObject);
+      sendGATimingEvent('end-to-end', 'channel name availability', name, gaStartTime, Date.now());
     })
     .catch(error => {
       handleErrorResponse(originalUrl, ip, error, res);

@@ -1,6 +1,10 @@
 const logout = (req, res) => {
   req.logout();
-  res.status(200).json({success: true, message: 'you successfully logged out'});
+  const responseObject = {
+    success: true,
+    message: 'you successfully logged out'
+  };
+  res.status(200).json(responseObject);
 };
 
 module.exports = logout;

@@ -1,4 +1,4 @@
-const db = require('../../../../models/index');
+const db = require('../../../../models');
 const { publishing: { primaryClaimAddress, additionalClaimAddresses } } = require('../../../../../config/siteConfig.js');
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
@@ -18,10 +18,7 @@ const claimAvailability = (name) => {
       },
     })
     .then(result => {
-      if (result.length >= 1) {
-        throw new Error('That claim is already in use');
-      }
-      return name;
+      return (result.length <= 0);
     })
     .catch(error => {
       throw error;
