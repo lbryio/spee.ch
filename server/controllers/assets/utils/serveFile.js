@@ -10,7 +10,7 @@ const serveFile = ({ filePath, fileType }, res) => {
   };
   res.status(200).sendFile(filePath, sendFileOptions, (error) => {
     if (error) {
-      logger.warn(error);
+      logger.warn(filePath, error);
       res.status(404).send();
     }
   });
