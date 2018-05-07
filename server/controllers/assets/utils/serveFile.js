@@ -8,12 +8,7 @@ const serveFile = ({ filePath, fileType }, res) => {
       'Content-Type'          : fileType || 'image/jpeg',
     },
   };
-  res.status(200).sendFile(filePath, sendFileOptions, (error) => {
-    if (error) {
-      logger.warn(filePath, error);
-      res.status(404).send();
-    }
-  });
+  res.status(200).sendFile(filePath, sendFileOptions);
 };
 
 module.exports = serveFile;
