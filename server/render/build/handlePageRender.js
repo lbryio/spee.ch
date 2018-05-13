@@ -25,15 +25,14 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
   the bundle sent to the server?
   there might also be issues if this package uses a different version of spee.ch-components than www.spee.ch does?
 */
-var siteConfig = require('../../../config/siteConfig.js');
+var siteConfig = require('../../../config/siteConfig.js'); // const viewsConfig = require('../../../config/viewsConfig.js');
 
-var viewsConfig = require('../../../config/viewsConfig.js');
 
 module.exports = function (req, res) {
   var context = {}; // customize the reducer by passing in intial state configs
 
   var MyReducers = (0, _spee.Reducers)(siteConfig);
-  var MyApp = (0, _spee.App)(viewsConfig);
+  var MyApp = _spee.App;
   var MyGAListener = (0, _spee.GAListener)(siteConfig); // create a new Redux store instance
 
   var store = (0, _redux.createStore)(MyReducers); // render component to a string

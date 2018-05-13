@@ -15,14 +15,14 @@ import renderFullPage from '../renderFullPage.js';
 import Helmet from 'react-helmet';
 
 const siteConfig = require('../../../config/siteConfig.js');
-const viewsConfig = require('../../../config/viewsConfig.js');
+// const viewsConfig = require('../../../config/viewsConfig.js');
 
 module.exports = (req, res) => {
   let context = {};
 
   // customize the reducer by passing in intial state configs
   const MyReducers = Reducers(siteConfig);
-  const MyApp = App(viewsConfig);
+  const MyApp = App;
   const MyGAListener = GAListener(siteConfig);
 
   // create a new Redux store instance
