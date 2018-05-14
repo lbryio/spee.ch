@@ -22,13 +22,6 @@ var _reactHelmet = _interopRequireDefault(require("react-helmet"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-/*
-  ^ note: to do this right, maybe
-  these should be passed in from the implementation (www.spee.ch) itself,
-  so that there are no conflicts between the SSR here and
-  the bundle sent to the server?
-  there might also be issues if this package uses a different version of spee.ch-components than www.spee.ch does?
-*/
 var siteConfig = require('../../../config/siteConfig.js'); // const viewsConfig = require('../../../config/viewsConfig.js');
 
 
