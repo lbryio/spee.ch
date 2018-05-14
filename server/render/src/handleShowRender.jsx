@@ -10,7 +10,6 @@ import { Reducers, GAListener, App, Sagas, Actions } from 'spee.ch-components';
 import Helmet from 'react-helmet';
 
 const siteConfig = require('../../../config/siteConfig.js');
-// const viewsConfig = require('../../../config/viewsConfig.js');
 
 const returnSagaWithParams = (saga, params) => {
   return function * () {
