@@ -303,7 +303,7 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
           where: {
             name,
             claimId: {
-              $like: `${shortId}%`,
+              [sequelize.Op.like]: `${shortId}%`,
             }},
           order: [['height', 'ASC']],
         })

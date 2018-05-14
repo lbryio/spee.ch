@@ -15,7 +15,9 @@ const {database, username, password} = require('../../config/mysqlConfig.js');
 const sequelize = new Sequelize(database, username, password, {
   host          : 'localhost',
   dialect       : 'mysql',
-  dialectOptions: {decimalNumbers: true},
+  dialectOptions: {
+    decimalNumbers: true
+  },
   logging       : false,
   pool          : {
     max    : 5,
@@ -23,6 +25,7 @@ const sequelize = new Sequelize(database, username, password, {
     idle   : 10000,
     acquire: 10000,
   },
+  operatorsAliases: false,
 });
 
 // establish mysql connection
