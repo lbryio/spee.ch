@@ -158,7 +158,7 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
           where: {
             name   : channelName,
             claimId: {
-              $like: `${channelClaimId}%`,
+              [sequelize.Op.like]: `${channelClaimId}%`,
             },
           },
           order: [['height', 'ASC']],
