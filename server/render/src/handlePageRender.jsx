@@ -4,25 +4,17 @@ import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import { StaticRouter } from 'react-router-dom';
 import { Reducers, GAListener, App } from 'spee.ch-components';
-/*
-  ^ note: to do this right, maybe
-  these should be passed in from the implementation (www.spee.ch) itself,
-  so that there are no conflicts between the SSR here and
-  the bundle sent to the server?
-  there might also be issues if this package uses a different version of spee.ch-components than www.spee.ch does?
-*/
 import renderFullPage from '../renderFullPage.js';
 import Helmet from 'react-helmet';
 
 const siteConfig = require('../../../config/siteConfig.js');
-const viewsConfig = require('../../../config/viewsConfig.js');
 
 module.exports = (req, res) => {
   let context = {};
 
   // customize the reducer by passing in intial state configs
   const MyReducers = Reducers(siteConfig);
-  const MyApp = App(viewsConfig);
+  const MyApp = App;
   const MyGAListener = GAListener(siteConfig);
 
   // create a new Redux store instance

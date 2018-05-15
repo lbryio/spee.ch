@@ -7,17 +7,9 @@ import renderFullPage from '../renderFullPage';
 import createSagaMiddleware from 'redux-saga';
 import { call } from 'redux-saga/effects';
 import { Reducers, GAListener, App, Sagas, Actions } from 'spee.ch-components';
-/*
-  ^ note: to do this right, maybe
-  these should be passed in from the implementation (www.spee.ch) itself,
-  so that there are no conflicts between the SSR here and
-  the bundle sent to the server?
-  there might also be issues if this package uses a different version of spee.ch-components than www.spee.ch does?
-*/
 import Helmet from 'react-helmet';
 
 const siteConfig = require('../../../config/siteConfig.js');
-const viewsConfig = require('../../../config/viewsConfig.js');
 
 const returnSagaWithParams = (saga, params) => {
   return function * () {
@@ -30,7 +22,7 @@ module.exports = (req, res) => {
 
   // configure the reducers by passing initial state configs
   const MyReducers = Reducers(siteConfig);
-  const MyApp = App(viewsConfig);
+  const MyApp = App;
   const MyGAListener = GAListener(siteConfig);
 
   // create and apply middleware

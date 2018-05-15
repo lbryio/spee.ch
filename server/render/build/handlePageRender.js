@@ -18,22 +18,13 @@ var _reactHelmet = _interopRequireDefault(require("react-helmet"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-/*
-  ^ note: to do this right, maybe
-  these should be passed in from the implementation (www.spee.ch) itself,
-  so that there are no conflicts between the SSR here and
-  the bundle sent to the server?
-  there might also be issues if this package uses a different version of spee.ch-components than www.spee.ch does?
-*/
 var siteConfig = require('../../../config/siteConfig.js');
-
-var viewsConfig = require('../../../config/viewsConfig.js');
 
 module.exports = function (req, res) {
   var context = {}; // customize the reducer by passing in intial state configs
 
   var MyReducers = (0, _spee.Reducers)(siteConfig);
-  var MyApp = (0, _spee.App)(viewsConfig);
+  var MyApp = _spee.App;
   var MyGAListener = (0, _spee.GAListener)(siteConfig); // create a new Redux store instance
 
   var store = (0, _redux.createStore)(MyReducers); // render component to a string
