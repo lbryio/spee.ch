@@ -13,6 +13,7 @@ const loggerConfig = require('./config/loggerConfig.js');
 const mysqlConfig = require('./config/mysqlConfig.js');
 const siteConfig = require('./config/siteConfig.js');
 const slackConfig = require('./config/slackConfig.js');
+const createDatabaseIfNotExists = require('./server/models/utils/createDatabaseIfNotExists.js');
 
 function Server () {
   this.configureLogger = loggerConfig.update;
@@ -81,8 +82,11 @@ function Server () {
     const db = require('./server/models');
     const PORT = siteConfig.details.port;
     // sync sequelize
-    db.sequelize.sync()
-    // start the server
+    createDatabaseIfNotExists()
+      .then(() => {
+        db.sequelize.sync()
+      })
+      // start the server
       .then(() => {
         this.server.listen(PORT, () => {
           logger.info(`Server is listening on PORT ${PORT}`);

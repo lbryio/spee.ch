@@ -25,12 +25,11 @@ function LoggerConfig () {
     });
     // test all the log levels
     logger.info('testing winston log levels...');
-    logger.error('Level 0');
-    logger.warn('Level 1');
-    logger.info('Level 2');
-    logger.verbose('Level 3');
-    logger.debug('Level 4');
-    logger.silly('Level 5');
+    logger.warn('Testing: Log Level 1');
+    logger.info('Testing: Log Level 2');
+    logger.verbose('Testing: Log Level 3');
+    logger.debug('Testing: Log Level 4');
+    logger.silly('Testing: Log Level 5');
   };
 };
 
