@@ -14,8 +14,6 @@ npm install spee.ch --save
   * `index.js` is the entry point for the server.  It creates the [express app](https://expressjs.com/), requires the routes, syncs the database, and starts the server listening on the `PORT` designated in the config file.
   * the `server/routes` folder contains all of the routes for the express app
   * the `server/models` folder contains all of the models which the app uses to interact with the `mysql` database.  Note: this app uses the [sequelize](http://docs.sequelizejs.com/) ORM.
-* webpack
-  * During the build process, webpack creates a bundle for this project at `index.js`: 
 
 ## Tests
 * This package uses `mocha` with `chai` for testing.
