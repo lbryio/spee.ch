@@ -84,15 +84,12 @@ function Server () {
     const PORT = siteConfig.details.port;
     // sync sequelize
     createDatabaseIfNotExists()
-      getWalletBalance()
+      .then(() => {
+        return getWalletBalance();
+      })
       .then(balance => {
         logger.info('starting LBC balance:', balance);
-      })
-      .then(() => {
-        db.sequelize.sync()
-      })
-      // start the server
-      .then(() => {
+        db.sequelize.sync();
         this.server.listen(PORT, () => {
           logger.info(`Server is listening on PORT ${PORT}`);
         });
