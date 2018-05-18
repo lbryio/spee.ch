@@ -14,6 +14,7 @@ const mysqlConfig = require('./config/mysqlConfig.js');
 const siteConfig = require('./config/siteConfig.js');
 const slackConfig = require('./config/slackConfig.js');
 const createDatabaseIfNotExists = require('./server/models/utils/createDatabaseIfNotExists.js');
+const { getWalletBalance } = require('./server/lbrynet');
 
 function Server () {
   this.configureLogger = loggerConfig.update;
@@ -83,6 +84,10 @@ function Server () {
     const PORT = siteConfig.details.port;
     // sync sequelize
     createDatabaseIfNotExists()
+      getWalletBalance()
+      .then(balance => {
+        logger.info('starting LBC balance:', balance);
+      })
       .then(() => {
         db.sequelize.sync()
       })
@@ -92,8 +97,13 @@ function Server () {
           logger.info(`Server is listening on PORT ${PORT}`);
         });
       })
-      .catch((error) => {
-        logger.error(`Startup Error:`, error);
+      .catch(error => {
+        if (error.code === 'ECONNREFUSED') {
+          return logger.error('Connection refused.  The daemon may not be running.')
+        } else if (error.message) {
+          logger.error(error.message);
+        }
+        logger.error(error);
       });
   };
 };
