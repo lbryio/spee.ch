@@ -125,4 +125,20 @@ module.exports = {
         });
     });
   },
+  getWalletBalance () {
+    const gaStartTime = Date.now();
+    return new Promise((resolve, reject) => {
+      axios
+        .post(lbrynetUri, {
+          method: 'wallet_balance',
+        })
+        .then(response => {
+          sendGATimingEvent('lbrynet', 'getWalletBalance', 'SETTINGS_GET', gaStartTime, Date.now());
+          handleLbrynetResponse(response, resolve, reject);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  },
 };
