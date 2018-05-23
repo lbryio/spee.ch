@@ -1,0 +1,12 @@
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.CHANNEL_LOGOUT = exports.CHANNEL_LOGIN_CHECK = exports.CHANNEL_UPDATE = void 0;
+var CHANNEL_UPDATE = 'CHANNEL_UPDATE';
+exports.CHANNEL_UPDATE = CHANNEL_UPDATE;
+var CHANNEL_LOGIN_CHECK = 'CHANNEL_LOGIN_CHECK';
+exports.CHANNEL_LOGIN_CHECK = CHANNEL_LOGIN_CHECK;
+var CHANNEL_LOGOUT = 'CHANNEL_LOGOUT';
+exports.CHANNEL_LOGOUT = CHANNEL_LOGOUT;
