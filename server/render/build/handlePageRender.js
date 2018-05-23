@@ -10,11 +10,11 @@ var _reactRedux = require("react-redux");
 
 var _reactRouterDom = require("react-router-dom");
 
-var _reducers = _interopRequireDefault(require("client/build/reducers"));
+var _reducers = _interopRequireDefault(require("@reducers"));
 
-var _GAListener = _interopRequireDefault(require("client/build/components/GAListener"));
+var _GAListener = _interopRequireDefault(require("@components/GAListener"));
 
-var _app = _interopRequireDefault(require("client/build/app.js"));
+var _app = _interopRequireDefault(require("@app"));
 
 var _renderFullPage = _interopRequireDefault(require("../renderFullPage.js"));
 

@@ -6,11 +6,11 @@ import { StaticRouter } from 'react-router-dom';
 import renderFullPage from '../renderFullPage';
 import createSagaMiddleware from 'redux-saga';
 import { call } from 'redux-saga/effects';
-import Reducers from 'client/build/reducers';
-import GAListener from 'client/build/components/GAListener';
-import App from 'client/build/app.js';
-import Sagas from 'client/build/sagas';
-import Actions from 'client/build/actions';
+import Reducers from '@reducers';
+import GAListener from '@components/GAListener';
+import App from '@app';
+import Sagas from '@sagas';
+import Actions from '@actions';
 import Helmet from 'react-helmet';
 
 const siteConfig = require('../../../config/siteConfig.js');
