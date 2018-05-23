@@ -14,7 +14,7 @@ const mysqlConfig = require('./config/mysqlConfig.js');
 const siteConfig = require('./config/siteConfig.js');
 const slackConfig = require('./config/slackConfig.js');
 const createDatabaseIfNotExists = require('./server/models/utils/createDatabaseIfNotExists.js');
-const { getWalletBalance } = require('./server/lbrynet');
+const { getWalletBalance } = require('./server/lbrynet/index');
 
 function Server () {
   this.configureLogger = loggerConfig.update;
@@ -48,7 +48,7 @@ function Server () {
     app.use(requestLogger);
 
     // configure passport
-    const speechPassport = require('./server/speechPassport');
+    const speechPassport = require('./server/speechPassport/index');
     // initialize passport
     const sessionKey = siteConfig.auth.sessionKey;
     app.use(cookieSession({
@@ -67,11 +67,11 @@ function Server () {
     app.set('view engine', 'handlebars');
 
     // set the routes on the app
-    require('./server/routes/auth')(app);
-    require('./server/routes/api')(app);
-    require('./server/routes/pages')(app);
-    require('./server/routes/assets')(app);
-    require('./server/routes/fallback')(app);
+    require('./server/routes/auth/index')(app);
+    require('./server/routes/api/index')(app);
+    require('./server/routes/pages/index')(app);
+    require('./server/routes/assets/index')(app);
+    require('./server/routes/fallback/index')(app);
 
     this.app = app;
   };
@@ -80,7 +80,7 @@ function Server () {
     this.server = http.Server(this.app);
   };
   this.start = () => {
-    const db = require('./server/models');
+    const db = require('./server/models/index');
     const PORT = siteConfig.details.port;
     // sync sequelize
     createDatabaseIfNotExists()

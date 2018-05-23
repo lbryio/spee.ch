@@ -23,7 +23,7 @@
     "lbry",
     "blockchain"
   ],
-  "author": "@billbitt @kauffj @filipnyquist",
+  "author": "@lbryio",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/lbryio/spee.ch/issues"

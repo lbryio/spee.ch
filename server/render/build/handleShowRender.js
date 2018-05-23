@@ -16,7 +16,15 @@ var _reduxSaga = _interopRequireDefault(require("redux-saga"));
 
 var _effects = require("redux-saga/effects");
 
-var _spee = require("spee.ch-components");
+var _reducers = _interopRequireDefault(require("client/build/reducers"));
+
+var _GAListener = _interopRequireDefault(require("client/build/components/GAListener"));
+
+var _app = _interopRequireDefault(require("client/build/app.js"));
+
+var _sagas = _interopRequireDefault(require("client/build/sagas"));
+
+var _actions = _interopRequireDefault(require("client/build/actions"));
 
 var _reactHelmet = _interopRequireDefault(require("react-helmet"));
 
@@ -48,18 +56,18 @@ var returnSagaWithParams = function returnSagaWithParams(saga, params) {
 module.exports = function (req, res) {
   var context = {}; // configure the reducers by passing initial state configs
 
-  var MyReducers = (0, _spee.Reducers)(siteConfig);
-  var MyApp = _spee.App;
-  var MyGAListener = (0, _spee.GAListener)(siteConfig); // create and apply middleware
+  var MyReducers = (0, _reducers.default)(siteConfig);
+  var MyApp = _app.default;
+  var MyGAListener = (0, _GAListener.default)(siteConfig); // create and apply middleware
 
   var sagaMiddleware = (0, _reduxSaga.default)();
   var middleware = (0, _redux.applyMiddleware)(sagaMiddleware); // create a new Redux store instance
 
   var store = (0, _redux.createStore)(MyReducers, middleware); // create saga
 
-  var action = _spee.Actions.onHandleShowPageUri(req.params);
+  var action = _actions.default.onHandleShowPageUri(req.params);
 
-  var saga = returnSagaWithParams(_spee.Sagas.handleShowPageUri, action); // run the saga middleware
+  var saga = returnSagaWithParams(_sagas.default.handleShowPageUri, action); // run the saga middleware
 
   sagaMiddleware.run(saga).done.then(function () {
     // render component to a string
