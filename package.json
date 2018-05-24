@@ -9,8 +9,10 @@
     "lint": "eslint .",
     "fix": "eslint . --fix",
     "precommit": "eslint .",
-    "build": "babel server/render/src -d server/render/build",
-    "build:watch": "babel server/render/src -w -d server/render/build"
+    "build:server": "babel server/render/src -d server/render/build",
+    "build:server:watch": "babel server/render/src -w -d server/render/build",
+    "build:client": "babel client/src -d client/build",
+    "build:client:watch": "babel client/src -w -d client/build"
   },
   "repository": {
     "type": "git",
@@ -21,7 +23,7 @@
     "lbry",
     "blockchain"
   ],
-  "author": "@billbitt @kauffj @filipnyquist",
+  "author": "@lbryio",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/lbryio/spee.ch/issues"
@@ -49,7 +51,6 @@
     "redux": "^3.7.2",
     "redux-saga": "^0.16.0",
     "sequelize": "^4.1.0",
-    "spee.ch-components": "git://github.com/lbryio/spee.ch-components.git",
     "universal-analytics": "^0.4.13",
     "winston": "^2.3.1",
     "winston-slack-webhook": "billbitt/winston-slack-webhook"
@@ -60,6 +61,7 @@
     "@babel/plugin-proposal-object-rest-spread": "^7.0.0-beta.42",
     "@babel/preset-env": "^7.0.0-beta.37",
     "@babel/preset-react": "^7.0.0-beta.37",
+    "cross-fetch": "^2.1.1",
     "chai": "^4.1.2",
     "chai-http": "^3.0.0",
     "eslint": "4.18.0",

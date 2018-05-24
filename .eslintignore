@@ -3,3 +3,4 @@ exports/
 index.js
 test/
 server/render/build
+client/build

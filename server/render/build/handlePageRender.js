@@ -10,7 +10,11 @@ var _reactRedux = require("react-redux");
 
 var _reactRouterDom = require("react-router-dom");
 
-var _spee = require("spee.ch-components");
+var _reducers = _interopRequireDefault(require("@reducers"));
+
+var _GAListener = _interopRequireDefault(require("@components/GAListener"));
+
+var _app = _interopRequireDefault(require("@app"));
 
 var _renderFullPage = _interopRequireDefault(require("../renderFullPage.js"));
 
@@ -23,9 +27,9 @@ var siteConfig = require('../../../config/siteConfig.js');
 module.exports = function (req, res) {
   var context = {}; // customize the reducer by passing in intial state configs
 
-  var MyReducers = (0, _spee.Reducers)(siteConfig);
-  var MyApp = _spee.App;
-  var MyGAListener = (0, _spee.GAListener)(siteConfig); // create a new Redux store instance
+  var MyReducers = (0, _reducers.default)(siteConfig);
+  var MyApp = _app.default;
+  var MyGAListener = (0, _GAListener.default)(siteConfig); // create a new Redux store instance
 
   var store = (0, _redux.createStore)(MyReducers); // render component to a string
 

@@ -3,7 +3,9 @@ import { renderToString } from 'react-dom/server';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import { StaticRouter } from 'react-router-dom';
-import { Reducers, GAListener, App } from 'spee.ch-components';
+import Reducers from '@reducers';
+import GAListener from '@components/GAListener';
+import App from '@app';
 import renderFullPage from '../renderFullPage.js';
 import Helmet from 'react-helmet';
 
