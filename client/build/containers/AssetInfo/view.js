@@ -89,8 +89,7 @@ function (_React$Component) {
       }, _react.default.createElement("span", {
         className: "text"
       }, description)), _react.default.createElement("div", {
-        id: "show-share-buttons"
-      }, _react.default.createElement("div", {
+        id: "show-share-buttons",
         className: "row row--padded row--wide row--no-top"
       }, _react.default.createElement("div", {
         className: "column column--2 column--med-10"
@@ -116,7 +115,7 @@ function (_React$Component) {
         className: "link--primary",
         target: "_blank",
         href: "https://www.reddit.com/submit?url=".concat(host, "/").concat(shortId, "/").concat(name, "&title=").concat(name)
-      }, "reddit"))))), _react.default.createElement("div", {
+      }, "reddit")))), _react.default.createElement("div", {
         className: "row row--padded row--wide row--no-top"
       }, _react.default.createElement("div", {
         id: "show-short-link"
@@ -191,6 +190,8 @@ function (_React$Component) {
         "data-elementtocopy": "embed-text",
         onClick: this.copyToClipboard
       }, "copy")))))), _react.default.createElement("div", {
+        className: "row row--padded row--wide row--no-top"
+      }, _react.default.createElement("div", {
         className: "flex-container--row flex-container--space-between-bottom"
       }, _react.default.createElement(_reactRouterDom.Link, {
         className: "link--primary",
@@ -205,7 +206,13 @@ function (_React$Component) {
         className: "link--primary",
         target: "_blank",
         href: "https://lbry.io/dmca"
-      }, "Report")));
+      }, "Report"))), _react.default.createElement("div", {
+        className: "row row--padded row--wide row--no-top"
+      }, "Hosted via the ", _react.default.createElement("a", {
+        className: "link--primary",
+        href: 'https://lbry.io/get',
+        target: '_blank'
+      }, "LBRY blockchain")));
     }
   }]);
 

@@ -14,8 +14,9 @@ class ShowLite extends React.Component {
         <div className='row row--tall flex-container--column flex-container--center-center show-lite-container'>
           <SEO pageTitle={name} asset={asset} />
           <AssetDisplay />
-          <Link id='asset-boilerpate' className='link--primary fine-print' to={`/${claimId}/${name}`}>hosted
-            via Spee.ch</Link>
+          <div className='fine-print'>
+            <Link id='asset-boilerpate' className='link--primary' to={`/${claimId}/${name}`}> hosted on spee.ch</Link> via the <a  className='link--primary' href={'https://lbry.io/get'} target={'_blank'}>LBRY blockchain</a>
+          </div>
         </div>
       );
     }
