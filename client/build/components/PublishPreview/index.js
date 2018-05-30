@@ -102,7 +102,7 @@ function (_React$Component) {
       return _react.default.createElement("img", {
         id: "dropzone-preview",
         src: this.state.imgSource,
-        className: this.props.dimPreview ? 'dim' : '',
+        className: this.props.dimPreview ? 'publish-preview-dim' : '',
         alt: "publish preview"
       });
     }

@@ -1,0 +1,15 @@
+.info-message, .info-message--success, .info-message--failure {
+
+  font-size: medium;
+  margin: 0px;
+  padding: 0.3em;
+  color: #9b9b9b;
+}
+
+.info-message--success {
+  color: green;
+}
+
+.info-message--failure {
+  color: red;
+}

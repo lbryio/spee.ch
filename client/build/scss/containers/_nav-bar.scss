@@ -1,0 +1,20 @@
+.nav-bar {
+  border-bottom: 0.5px solid #cacaca;
+}
+
+.nav-bar--left {
+  align-self: center;
+}
+
+.nav-bar-tagline {
+  font-size: small;
+}
+
+.nav-bar-link {
+  padding: 1.5rem;
+  display: inline-block;
+}
+
+.nav-bar-logo {
+  cursor: pointer;
+}

@@ -1,0 +1,28 @@
+.dropzone, .dropzone--disabled {
+  border: 2px dashed #9b9b9b;
+  text-align: center;
+  position: relative;
+}
+
+.dropzone:hover, .dropzone--drag-over {
+  border: 2px dashed #4156C5;
+  cursor: pointer;
+}
+
+#dropzone-text-holder {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+
+#dropzone-dragover, #dropzone-instructions {
+  padding: 1em;
+}
+
+#dropzone-preview {
+  display: block;
+  width: 100%;
+}
+

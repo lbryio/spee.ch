@@ -11,7 +11,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var InactiveStatusBar = function InactiveStatusBar() {
   return _react.default.createElement("span", {
-    className: "progress-bar progress-bar--inactive"
+    className: "progress-bar--inactive"
   }, "| ");
 };
 

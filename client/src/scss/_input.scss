@@ -1,0 +1,92 @@
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0px 1000px white inset;
+}
+
+.label, .input-text, .select, .textarea, .text--large {
+  margin: 0px;
+  padding: 0.3em;
+  outline: none;
+  border: 0px;
+  background-color: white;
+  display: inline-block;
+}
+
+.input-disabled {
+  border: 1px solid black;
+  padding: 0.5em;
+  margin: 0px;
+  color: black;
+  background-color: white;
+}
+
+option {
+  font-family: monospace;
+}
+
+
+.input-checkbox {
+  border: 1px solid black;
+  background: white;
+}
+
+.input-file {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+}
+
+.input-radio, .label--pointer {
+  cursor: pointer;
+}
+
+.select--arrow {
+  -moz-appearance:none;
+  -webkit-appearance: none;
+  background: url('./icon/downArrow.svg') no-repeat right;
+  cursor: pointer;
+  padding-right: 1.5em;
+}
+
+.input-text--primary, .select--primary {
+  border-bottom: 1px solid #9b9b9b;
+}
+
+.input-text--primary:focus, .select--primary:focus {
+  border-bottom: 1px solid #9b9b9b;
+}
+
+.textarea--primary {
+  border-bottom: 1px solid #9b9b9b;
+}
+
+.textarea--primary:focus {
+  border-bottom: 1px solid #9b9b9b;
+}
+
+.input-text--full-width, .textarea--full-width {
+  width: calc(100% - 0.6em);
+}
+
+.input-disabled--full-width {
+  width: calc(100% - 1em - 2px);
+}
+
+.url-text--primary, .url-text--secondary {
+  margin:0px;
+  padding:0px;
+}
+
+.url-text--primary {
+  color: black;
+}
+
+.url-text--secondary {
+  color: #9b9b9b;
+}
+
+.slider {
+  width: 100%
+}

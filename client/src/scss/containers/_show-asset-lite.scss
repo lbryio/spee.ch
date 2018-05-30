@@ -1,0 +1,20 @@
+.show-lite-container {
+  text-align: center;
+}
+
+.show-lite-container #asset-display-component {
+  max-height: calc(100vh - 3em);
+}
+
+.show-details-container #asset-display-component .asset {
+  width: 100%
+}
+
+.show-lite-container #asset-display-component .asset {
+  max-height: calc(100vh - 3em);
+  max-width: 100vw;
+}
+
+#asset-boilerplate {
+  max-height: 3em;
+}

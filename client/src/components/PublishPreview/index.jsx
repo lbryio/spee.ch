@@ -46,7 +46,7 @@ class PublishPreview extends React.Component {
       <img
         id='dropzone-preview'
         src={this.state.imgSource}
-        className={this.props.dimPreview ? 'dim' : ''}
+        className={this.props.dimPreview ? 'publish-preview-dim' : ''}
         alt='publish preview'
       />
     );

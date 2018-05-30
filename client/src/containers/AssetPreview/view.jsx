@@ -5,7 +5,7 @@ const AssetPreview = ({ defaultThumbnail, claimData: { name, claimId, fileExt, c
   const directSourceLink = `${claimId}/${name}.${fileExt}`;
   const showUrlLink = `/${claimId}/${name}`;
   return (
-    <div className='asset-holder'>
+    <div className='asset-preview-holder'>
       <Link to={showUrlLink} >
         {(() => {
           switch (contentType) {
@@ -15,7 +15,7 @@ const AssetPreview = ({ defaultThumbnail, claimData: { name, claimId, fileExt, c
             case 'image/gif':
               return (
                 <img
-                  className={'asset-preview'}
+                  className={'asset-preview-image'}
                   src={directSourceLink}
                   alt={name}
                 />
@@ -23,7 +23,7 @@ const AssetPreview = ({ defaultThumbnail, claimData: { name, claimId, fileExt, c
             case 'video/mp4':
               return (
                 <img
-                  className={'asset-preview video'}
+                  className={'asset-preview-video'}
                   src={thumbnail || defaultThumbnail}
                   alt={name}
                 />

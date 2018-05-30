@@ -32,14 +32,14 @@ var AssetPreview = function AssetPreview(_ref) {
       case 'image/png':
       case 'image/gif':
         return _react.default.createElement("img", {
-          className: 'asset-preview',
+          className: 'asset-preview-image',
           src: directSourceLink,
           alt: name
         });
 
       case 'video/mp4':
         return _react.default.createElement("img", {
-          className: 'asset-preview video',
+          className: 'asset-preview-video',
           src: thumbnail || defaultThumbnail,
           alt: name
         });
