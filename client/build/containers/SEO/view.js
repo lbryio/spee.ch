@@ -7,7 +7,15 @@ exports.default = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
+var _reactHelmet = _interopRequireDefault(require("react-helmet"));
+
 var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _pageTitle = require("../../utils/pageTitle");
+
+var _metaTags = require("../../utils/metaTags");
+
+var _canonicalLink = require("../../utils/canonicalLink");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -29,95 +37,59 @@ function _assertThisInitialized(self) { if (self === void 0) { throw new Referen
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.getPrototypeOf || function _getPrototypeOf(o) { return o.__proto__; }; return _getPrototypeOf(o); }
 
-var PublishPreview =
+var SEO =
 /*#__PURE__*/
 function (_React$Component) {
-  function PublishPreview(props) {
-    var _this;
+  function SEO() {
+    _classCallCheck(this, SEO);
 
-    _classCallCheck(this, PublishPreview);
-
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(PublishPreview).call(this, props));
-    _this.state = {
-      imgSource: '',
-      defaultThumbnail: '/assets/img/video_thumb_default.png'
-    };
-    return _this;
+    return _possibleConstructorReturn(this, _getPrototypeOf(SEO).apply(this, arguments));
   }
 
-  _createClass(PublishPreview, [{
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      this.setPreviewImageSource(this.props.file);
-    }
-  }, {
-    key: "componentWillReceiveProps",
-    value: function componentWillReceiveProps(newProps) {
-      if (newProps.file !== this.props.file) {
-        this.setPreviewImageSource(newProps.file);
-      }
-
-      if (newProps.thumbnail !== this.props.thumbnail) {
-        if (newProps.thumbnail) {
-          this.setPreviewImageSourceFromFile(newProps.thumbnail);
-        } else {
-          this.setState({
-            imgSource: this.state.defaultThumbnail
-          });
-        }
-      }
-    }
-  }, {
-    key: "setPreviewImageSourceFromFile",
-    value: function setPreviewImageSourceFromFile(file) {
-      var _this2 = this;
-
-      var previewReader = new FileReader();
-      previewReader.readAsDataURL(file);
-
-      previewReader.onloadend = function () {
-        _this2.setState({
-          imgSource: previewReader.result
-        });
-      };
-    }
-  }, {
-    key: "setPreviewImageSource",
-    value: function setPreviewImageSource(file) {
-      if (file.type !== 'video/mp4') {
-        this.setPreviewImageSourceFromFile(file);
-      } else {
-        if (this.props.thumbnail) {
-          this.setPreviewImageSourceFromFile(this.props.thumbnail);
-        }
-
-        this.setState({
-          imgSource: this.state.defaultThumbnail
-        });
-      }
-    }
-  }, {
+  _createClass(SEO, [{
     key: "render",
     value: function render() {
-      return _react.default.createElement("img", {
-        id: "dropzone-preview",
-        src: this.state.imgSource,
-        className: this.props.dimPreview ? 'publish-preview-dim' : '',
-        alt: "publish preview"
+      // props from state
+      var _this$props = this.props,
+          defaultDescription = _this$props.defaultDescription,
+          defaultThumbnail = _this$props.defaultThumbnail,
+          siteDescription = _this$props.siteDescription,
+          siteHost = _this$props.siteHost,
+          siteTitle = _this$props.siteTitle,
+          siteTwitter = _this$props.siteTwitter; // props from parent
+
+      var _this$props2 = this.props,
+          asset = _this$props2.asset,
+          channel = _this$props2.channel,
+          pageUri = _this$props2.pageUri;
+      var pageTitle = this.props.pageTitle; // create page title, tags, and canonical link
+
+      pageTitle = (0, _pageTitle.createPageTitle)(siteTitle, pageTitle);
+      var metaTags = (0, _metaTags.createMetaTags)(siteDescription, siteHost, siteTitle, siteTwitter, asset, channel, defaultDescription, defaultThumbnail);
+      var canonicalLink = (0, _canonicalLink.createCanonicalLink)(asset, channel, pageUri, siteHost); // render results
+
+      return _react.default.createElement(_reactHelmet.default, {
+        title: pageTitle,
+        meta: metaTags,
+        link: [{
+          rel: 'canonical',
+          href: canonicalLink
+        }]
       });
     }
   }]);
 
-  _inherits(PublishPreview, _React$Component);
+  _inherits(SEO, _React$Component);
 
-  return PublishPreview;
+  return SEO;
 }(_react.default.Component);
 
 ;
-PublishPreview.propTypes = {
-  dimPreview: _propTypes.default.bool.isRequired,
-  file: _propTypes.default.object.isRequired,
-  thumbnail: _propTypes.default.object
+SEO.propTypes = {
+  pageTitle: _propTypes.default.string,
+  pageUri: _propTypes.default.string,
+  channel: _propTypes.default.object,
+  asset: _propTypes.default.object
 };
-var _default = PublishPreview;
+var _default = SEO;
 exports.default = _default;
