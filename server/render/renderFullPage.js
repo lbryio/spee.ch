@@ -12,9 +12,7 @@ module.exports = (helmet, html, preloadedState) => {
             ${helmet.meta.toString()}
             ${helmet.link.toString()}
             <!--style sheets-->
-            <link rel="stylesheet" href="/assets/css/reset.css" type="text/css">
-            <link rel="stylesheet" href="/assets/css/general.css" type="text/css">
-            <link rel="stylesheet" href="/assets/css/mediaQueries.css" type="text/css">
+            <link rel="stylesheet" href="/assets/css/style.css" type="text/css">
             <!--google font-->
             <link href="https://fonts.googleapis.com/css?family=Roboto:300" rel="stylesheet">
         </head>
