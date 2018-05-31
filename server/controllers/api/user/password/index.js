@@ -12,7 +12,7 @@ const { auth: { masterPassword } } = require('../../../../../config/siteConfig.j
 const updateUserPassword = ({ ip, originalUrl, body }, res) => {
   let userRecord;
   const { userName, oldPassword, newPassword } = body;
-  logger.info('body:', body);
+
   if (!masterPassword) {
     return res.status(400).json({
       success: false,
@@ -38,10 +38,10 @@ const updateUserPassword = ({ ip, originalUrl, body }, res) => {
       throw new Error('no user found');
     }
     if (oldPassword === masterPassword) {
-      console.log('master password provided');
+      logger.debug('master password provided');
       return true;
     } else {
-      console.log('old password provided');
+      logger.debug('old password provided');
       return userRecord.comparePassword(oldPassword);
     }
   })
