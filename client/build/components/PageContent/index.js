@@ -7,9 +7,7 @@ exports.default = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
-var _PageLayout = _interopRequireDefault(require("@components/PageLayout"));
-
-var _AboutPageContent = _interopRequireDefault(require("@components/AboutPageContent"));
+var _styleCss = _interopRequireDefault(require("./style.css.js"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -31,30 +29,34 @@ function _assertThisInitialized(self) { if (self === void 0) { throw new Referen
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.getPrototypeOf || function _getPrototypeOf(o) { return o.__proto__; }; return _getPrototypeOf(o); }
 
-var AboutPage =
+var PageContent =
 /*#__PURE__*/
 function (_React$Component) {
-  function AboutPage() {
-    _classCallCheck(this, AboutPage);
+  function PageContent() {
+    _classCallCheck(this, PageContent);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(AboutPage).apply(this, arguments));
+    return _possibleConstructorReturn(this, _getPrototypeOf(PageContent).apply(this, arguments));
   }
 
-  _createClass(AboutPage, [{
+  _createClass(PageContent, [{
+    key: "shouldComponentUpdate",
+    value: function shouldComponentUpdate() {
+      return false;
+    }
+  }, {
     key: "render",
     value: function render() {
-      return _react.default.createElement(_PageLayout.default, {
-        pageTitle: 'About',
-        pageUri: 'about'
-      }, _react.default.createElement(_AboutPageContent.default, null));
+      return _react.default.createElement("div", {
+        style: _styleCss.default,
+        className: 'row--tall flex-container--column'
+      }, this.props.children);
     }
   }]);
 
-  _inherits(AboutPage, _React$Component);
+  _inherits(PageContent, _React$Component);
 
-  return AboutPage;
+  return PageContent;
 }(_react.default.Component);
 
-;
-var _default = AboutPage;
+var _default = PageContent;
 exports.default = _default;
