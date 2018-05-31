@@ -56,11 +56,17 @@ function (_React$Component) {
         }, _react.default.createElement(_SEO.default, {
           pageTitle: name,
           asset: asset
-        }), _react.default.createElement(_AssetDisplay.default, null), _react.default.createElement(_reactRouterDom.Link, {
+        }), _react.default.createElement(_AssetDisplay.default, null), _react.default.createElement("div", {
+          className: "fine-print"
+        }, _react.default.createElement(_reactRouterDom.Link, {
           id: "asset-boilerpate",
-          className: "link--primary fine-print",
+          className: "link--primary",
           to: "/".concat(claimId, "/").concat(name)
-        }, "hosted via Spee.ch"));
+        }, " hosted on spee.ch"), " via the ", _react.default.createElement("a", {
+          className: "link--primary",
+          href: 'https://lbry.io/get',
+          target: '_blank'
+        }, "LBRY blockchain")));
       }
 
       return _react.default.createElement("div", {
