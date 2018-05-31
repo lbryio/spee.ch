@@ -1,9 +1,7 @@
 const { handleErrorResponse } = require('../../../utils/errorHandlers.js');
 const logger = require('winston');
 const db = require('../../../../models');
-const siteConfig = require('./config/siteConfig.js');
-
-const masterPassword = siteConfig.auth.sessionKey;
+const { auth: { masterPassword } } = require('../../../../../config/siteConfig.js');
 
 /*
 
@@ -14,9 +12,20 @@ const masterPassword = siteConfig.auth.sessionKey;
 const updateUserPassword = ({ ip, originalUrl, body }, res) => {
   let userRecord;
   const { userName, oldPassword, newPassword } = body;
-  if (!user || !oldPassword || newPassword) {
-    return res.status(400).json({success: false, message: 'body should include userName (channel name without the @), oldPassword, & newPassword'});
-  };
+  logger.info('body:', body);
+  if (!masterPassword) {
+    return res.status(400).json({
+      success: false,
+      message: 'no master password set in site config',
+    });
+  }
+
+  if (!userName || !oldPassword || !newPassword) {
+    return res.status(400).json({
+      success: false,
+      message: 'body should include userName (channel name without the @), oldPassword, & newPassword',
+    });
+  }
 
   db.User.findOne({
     where: {
@@ -24,16 +33,16 @@ const updateUserPassword = ({ ip, originalUrl, body }, res) => {
     },
   })
   .then(user => {
-    if (!user) {
+    userRecord = user;
+    if (!userRecord) {
       throw new Error('no user found');
     }
-    userRecord = user;
     if (oldPassword === masterPassword) {
       console.log('master password provided');
       return true;
     } else {
       console.log('old password provided');
-      return user.comparePassword(oldPassword);
+      return userRecord.comparePassword(oldPassword);
     }
   })
   .then(isMatch => {
@@ -41,7 +50,7 @@ const updateUserPassword = ({ ip, originalUrl, body }, res) => {
       throw new Error('Incorrect old password.');
     }
     logger.debug('Password was a match, updating password');
-    return user.changePassword(newPassword);
+    return userRecord.changePassword(newPassword);
   })
   .then(() => {
     logger.debug('Password successfully updated');
