@@ -7,9 +7,7 @@ exports.default = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
-var _SEO = _interopRequireDefault(require("@components/SEO"));
-
-var _NavBar = _interopRequireDefault(require("@containers/NavBar"));
+var _PageLayout = _interopRequireDefault(require("@components/PageLayout"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -43,13 +41,9 @@ function (_React$Component) {
   _createClass(MultisitePage, [{
     key: "render",
     value: function render() {
-      return _react.default.createElement("div", null, _react.default.createElement(_SEO.default, {
+      return _react.default.createElement(_PageLayout.default, {
         pageTitle: 'Multisite',
-        pageUri: 'multisite'
-      }), _react.default.createElement(_NavBar.default, null), _react.default.createElement("div", {
-        className: "row row--padded flex-container--row flex-container--center-center"
-      }, _react.default.createElement("div", {
-        className: "column column--8 column--med-10"
+        pageUri: '/multisite'
       }, _react.default.createElement("p", {
         className: "pull-quote"
       }, "Introducing Spee.ch Multisite"), _react.default.createElement("p", null, "Hi there!  My name is ", _react.default.createElement("a", {
@@ -85,7 +79,7 @@ function (_React$Component) {
       }, "CLICK HERE TO RSVP!"))), _react.default.createElement("p", null, "At this first demonstration, we will walk through preparing a server environment, installing LBRY and Spee.ch, and how to make local changes to your Spee.ch instance.  Details below:"), _react.default.createElement("ul", null, _react.default.createElement("li", null, "When: Friday, May 18, 2018"), _react.default.createElement("li", null, "Time: 5:00 p.m. PST"), _react.default.createElement("li", null, "Where: Google Hangouts"), _react.default.createElement("li", null, "Link: ", _react.default.createElement("a", {
         href: 'https://meet.google.com/aex-ghqg-kcs',
         target: '_blank'
-      }, "meet.google.com/aex-ghqg-kcs")), _react.default.createElement("li", null, "System Requirements: If you have a server, please make sure you have MySql, Node and NPM installed. If you need help installing the above, or if you need a server to run your own instance on, please join the Hangout 30 minutes ahead of time and we will help get you set up =]"), _react.default.createElement("li", null, "Questions: hello@lbry.io")))));
+      }, "meet.google.com/aex-ghqg-kcs")), _react.default.createElement("li", null, "System Requirements: If you have a server, please make sure you have MySql, Node and NPM installed. If you need help installing the above, or if you need a server to run your own instance on, please join the Hangout 30 minutes ahead of time and we will help get you set up =]"), _react.default.createElement("li", null, "Questions: hello@lbry.io")));
     }
   }]);
 
@@ -94,6 +88,5 @@ function (_React$Component) {
   return MultisitePage;
 }(_react.default.Component);
 
-;
 var _default = MultisitePage;
 exports.default = _default;

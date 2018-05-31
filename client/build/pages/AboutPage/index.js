@@ -9,7 +9,11 @@ var _react = _interopRequireDefault(require("react"));
 
 var _PageLayout = _interopRequireDefault(require("@components/PageLayout"));
 
-var _AboutPageContent = _interopRequireDefault(require("@components/AboutPageContent"));
+var _HorizontalSplit = _interopRequireDefault(require("@components/HorizontalSplit"));
+
+var _AboutSpeechOne = _interopRequireDefault(require("@components/AboutSpeechOne"));
+
+var _AboutSpeechTwo = _interopRequireDefault(require("@components/AboutSpeechTwo"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -46,7 +50,10 @@ function (_React$Component) {
       return _react.default.createElement(_PageLayout.default, {
         pageTitle: 'About',
         pageUri: 'about'
-      }, _react.default.createElement(_AboutPageContent.default, null));
+      }, _react.default.createElement(_HorizontalSplit.default, {
+        leftSide: _react.default.createElement(_AboutSpeechOne.default, null),
+        rightSide: _react.default.createElement(_AboutSpeechTwo.default, null)
+      }));
     }
   }]);
 

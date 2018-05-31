@@ -1,12 +1,12 @@
 import React from 'react';
 import ErrorPage from '@pages/ErrorPage';
-import ShowAssetLite from '@containers/ShowAssetLite';
-import ShowAssetDetails from '@containers/ShowAssetDetails';
-import ShowChannel from '@containers/ShowChannel';
+import ShowAssetLite from '@pages/ShowAssetLite';
+import ShowAssetDetails from '@pages/ShowAssetDetails';
+import ShowChannel from '@pages/ShowChannel';
 
 import { CHANNEL, ASSET_LITE, ASSET_DETAILS } from '../../constants/show_request_types';
 
-class ShowPage extends React.Component {
+class ContentPageWrapper extends React.Component {
   componentDidMount () {
     this.props.onHandleShowPageUri(this.props.match.params);
   }
@@ -35,4 +35,4 @@ class ShowPage extends React.Component {
   }
 };
 
-export default ShowPage;
+export default ContentPageWrapper;

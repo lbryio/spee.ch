@@ -7,15 +7,15 @@ exports.default = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
-var _reactRouterDom = require("react-router-dom");
+var _ErrorPage = _interopRequireDefault(require("@pages/ErrorPage"));
 
-var _PageLayout = _interopRequireDefault(require("@components/PageLayout"));
+var _ShowAssetLite = _interopRequireDefault(require("@pages/ShowAssetLite"));
 
-var _HorizontalSplit = _interopRequireDefault(require("@components/HorizontalSplit"));
+var _ShowAssetDetails = _interopRequireDefault(require("@pages/ShowAssetDetails"));
 
-var _AboutChannels = _interopRequireDefault(require("@components/AboutChannels"));
+var _ShowChannel = _interopRequireDefault(require("@pages/ShowChannel"));
 
-var _ChannelTools = _interopRequireDefault(require("@components/ChannelTools"));
+var _show_request_types = require("../../constants/show_request_types");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -37,43 +37,61 @@ function _assertThisInitialized(self) { if (self === void 0) { throw new Referen
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.getPrototypeOf || function _getPrototypeOf(o) { return o.__proto__; }; return _getPrototypeOf(o); }
 
-var LoginPage =
+var ContentPageWrapper =
 /*#__PURE__*/
 function (_React$Component) {
-  function LoginPage() {
-    _classCallCheck(this, LoginPage);
+  function ContentPageWrapper() {
+    _classCallCheck(this, ContentPageWrapper);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(LoginPage).apply(this, arguments));
+    return _possibleConstructorReturn(this, _getPrototypeOf(ContentPageWrapper).apply(this, arguments));
   }
 
-  _createClass(LoginPage, [{
+  _createClass(ContentPageWrapper, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      this.props.onHandleShowPageUri(this.props.match.params);
+    }
+  }, {
     key: "componentWillReceiveProps",
-    value: function componentWillReceiveProps(newProps) {
-      // re-route the user to the homepage if the user is logged in
-      if (newProps.loggedInChannelName !== this.props.loggedInChannelName) {
-        this.props.history.push("/");
+    value: function componentWillReceiveProps(nextProps) {
+      if (nextProps.match.params !== this.props.match.params) {
+        this.props.onHandleShowPageUri(nextProps.match.params);
       }
     }
   }, {
     key: "render",
     value: function render() {
-      return _react.default.createElement(_PageLayout.default, {
-        pageTitle: 'Login',
-        pageUri: 'login'
-      }, _react.default.createElement(_HorizontalSplit.default, {
-        leftSide: _react.default.createElement(_AboutChannels.default, null),
-        rightSide: _react.default.createElement(_ChannelTools.default, null)
-      }));
+      var _this$props = this.props,
+          error = _this$props.error,
+          requestType = _this$props.requestType;
+
+      if (error) {
+        return _react.default.createElement(_ErrorPage.default, {
+          error: error
+        });
+      }
+
+      switch (requestType) {
+        case _show_request_types.CHANNEL:
+          return _react.default.createElement(_ShowChannel.default, null);
+
+        case _show_request_types.ASSET_LITE:
+          return _react.default.createElement(_ShowAssetLite.default, null);
+
+        case _show_request_types.ASSET_DETAILS:
+          return _react.default.createElement(_ShowAssetDetails.default, null);
+
+        default:
+          return _react.default.createElement("p", null, "loading...");
+      }
     }
   }]);
 
-  _inherits(LoginPage, _React$Component);
+  _inherits(ContentPageWrapper, _React$Component);
 
-  return LoginPage;
+  return ContentPageWrapper;
 }(_react.default.Component);
 
 ;
-
-var _default = (0, _reactRouterDom.withRouter)(LoginPage);
-
+var _default = ContentPageWrapper;
 exports.default = _default;

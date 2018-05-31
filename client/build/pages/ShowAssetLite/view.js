@@ -9,13 +9,9 @@ var _react = _interopRequireDefault(require("react"));
 
 var _reactRouterDom = require("react-router-dom");
 
-var _PageLayout = _interopRequireDefault(require("@components/PageLayout"));
+var _SEO = _interopRequireDefault(require("@components/SEO"));
 
-var _HorizontalSplit = _interopRequireDefault(require("@components/HorizontalSplit"));
-
-var _AboutChannels = _interopRequireDefault(require("@components/AboutChannels"));
-
-var _ChannelTools = _interopRequireDefault(require("@components/ChannelTools"));
+var _index = _interopRequireDefault(require("../../containers/AssetDisplay/index"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -37,43 +33,47 @@ function _assertThisInitialized(self) { if (self === void 0) { throw new Referen
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.getPrototypeOf || function _getPrototypeOf(o) { return o.__proto__; }; return _getPrototypeOf(o); }
 
-var LoginPage =
+var ShowLite =
 /*#__PURE__*/
 function (_React$Component) {
-  function LoginPage() {
-    _classCallCheck(this, LoginPage);
+  function ShowLite() {
+    _classCallCheck(this, ShowLite);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(LoginPage).apply(this, arguments));
+    return _possibleConstructorReturn(this, _getPrototypeOf(ShowLite).apply(this, arguments));
   }
 
-  _createClass(LoginPage, [{
-    key: "componentWillReceiveProps",
-    value: function componentWillReceiveProps(newProps) {
-      // re-route the user to the homepage if the user is logged in
-      if (newProps.loggedInChannelName !== this.props.loggedInChannelName) {
-        this.props.history.push("/");
-      }
-    }
-  }, {
+  _createClass(ShowLite, [{
     key: "render",
     value: function render() {
-      return _react.default.createElement(_PageLayout.default, {
-        pageTitle: 'Login',
-        pageUri: 'login'
-      }, _react.default.createElement(_HorizontalSplit.default, {
-        leftSide: _react.default.createElement(_AboutChannels.default, null),
-        rightSide: _react.default.createElement(_ChannelTools.default, null)
-      }));
+      var asset = this.props.asset;
+
+      if (asset) {
+        var _asset$claimData = asset.claimData,
+            name = _asset$claimData.name,
+            claimId = _asset$claimData.claimId;
+        return _react.default.createElement("div", {
+          className: "row row--tall flex-container--column flex-container--center-center show-lite-container"
+        }, _react.default.createElement(_SEO.default, {
+          pageTitle: name,
+          asset: asset
+        }), _react.default.createElement(_index.default, null), _react.default.createElement(_reactRouterDom.Link, {
+          id: "asset-boilerpate",
+          className: "link--primary fine-print",
+          to: "/".concat(claimId, "/").concat(name)
+        }, "hosted via Spee.ch"));
+      }
+
+      return _react.default.createElement("div", {
+        className: "row row--tall row--padded flex-container--column flex-container--center-center"
+      }, _react.default.createElement("p", null, "loading asset data..."));
     }
   }]);
 
-  _inherits(LoginPage, _React$Component);
+  _inherits(ShowLite, _React$Component);
 
-  return LoginPage;
+  return ShowLite;
 }(_react.default.Component);
 
 ;
-
-var _default = (0, _reactRouterDom.withRouter)(LoginPage);
-
+var _default = ShowLite;
 exports.default = _default;

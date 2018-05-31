@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 // components
 import SEO from '@components/SEO';
 // containers
-import AssetDisplay from '../AssetDisplay';
+import AssetDisplay from '../../containers/AssetDisplay/index';
 
 class ShowLite extends React.Component {
   render () {

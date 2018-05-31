@@ -7,9 +7,7 @@ exports.default = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
-var _reactHelmet = _interopRequireDefault(require("react-helmet"));
-
-var _index = _interopRequireDefault(require("@containers/NavBar/index"));
+var _PageLayout = _interopRequireDefault(require("@components/PageLayout"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -43,15 +41,10 @@ function (_React$Component) {
   _createClass(FourOhForPage, [{
     key: "render",
     value: function render() {
-      var _this$props = this.props,
-          title = _this$props.title,
-          host = _this$props.host;
-      return _react.default.createElement("div", null, _react.default.createElement(_reactHelmet.default, null, _react.default.createElement("title", null, title, " - 404"), _react.default.createElement("link", {
-        rel: "canonical",
-        href: "".concat(host, "/404")
-      })), _react.default.createElement(_index.default, null), _react.default.createElement("div", {
-        className: "row row--padded"
-      }, _react.default.createElement("h2", null, "404"), _react.default.createElement("p", null, "That page does not exist")));
+      return _react.default.createElement(_PageLayout.default, {
+        pageTitle: '404',
+        pageUri: '/404'
+      }, _react.default.createElement("h2", null, "404"), _react.default.createElement("p", null, "That page does not exist"));
     }
   }]);
 

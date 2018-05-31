@@ -7,15 +7,11 @@ exports.default = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
-var _reactRouterDom = require("react-router-dom");
-
 var _PageLayout = _interopRequireDefault(require("@components/PageLayout"));
 
-var _HorizontalSplit = _interopRequireDefault(require("@components/HorizontalSplit"));
+var _ErrorPage = _interopRequireDefault(require("@pages/ErrorPage"));
 
-var _AboutChannels = _interopRequireDefault(require("@components/AboutChannels"));
-
-var _ChannelTools = _interopRequireDefault(require("@components/ChannelTools"));
+var _ChannelClaimsDisplay = _interopRequireDefault(require("@containers/ChannelClaimsDisplay"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -37,43 +33,46 @@ function _assertThisInitialized(self) { if (self === void 0) { throw new Referen
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.getPrototypeOf || function _getPrototypeOf(o) { return o.__proto__; }; return _getPrototypeOf(o); }
 
-var LoginPage =
+var ShowChannel =
 /*#__PURE__*/
 function (_React$Component) {
-  function LoginPage() {
-    _classCallCheck(this, LoginPage);
+  function ShowChannel() {
+    _classCallCheck(this, ShowChannel);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(LoginPage).apply(this, arguments));
+    return _possibleConstructorReturn(this, _getPrototypeOf(ShowChannel).apply(this, arguments));
   }
 
-  _createClass(LoginPage, [{
-    key: "componentWillReceiveProps",
-    value: function componentWillReceiveProps(newProps) {
-      // re-route the user to the homepage if the user is logged in
-      if (newProps.loggedInChannelName !== this.props.loggedInChannelName) {
-        this.props.history.push("/");
-      }
-    }
-  }, {
+  _createClass(ShowChannel, [{
     key: "render",
     value: function render() {
-      return _react.default.createElement(_PageLayout.default, {
-        pageTitle: 'Login',
-        pageUri: 'login'
-      }, _react.default.createElement(_HorizontalSplit.default, {
-        leftSide: _react.default.createElement(_AboutChannels.default, null),
-        rightSide: _react.default.createElement(_ChannelTools.default, null)
-      }));
+      var channel = this.props.channel;
+
+      if (channel) {
+        var name = channel.name,
+            longId = channel.longId,
+            shortId = channel.shortId;
+        return _react.default.createElement(_PageLayout.default, {
+          pageTitle: name,
+          pageUri: channel
+        }, _react.default.createElement("h2", null, "channel name: ", name), _react.default.createElement("p", {
+          className: 'fine-print'
+        }, "full channel id: ", longId), _react.default.createElement("p", {
+          className: 'fine-print'
+        }, "short channel id: ", shortId), _react.default.createElement(_ChannelClaimsDisplay.default, null));
+      }
+
+      ;
+      return _react.default.createElement(_ErrorPage.default, {
+        error: 'loading channel data...'
+      });
     }
   }]);
 
-  _inherits(LoginPage, _React$Component);
+  _inherits(ShowChannel, _React$Component);
 
-  return LoginPage;
+  return ShowChannel;
 }(_react.default.Component);
 
 ;
-
-var _default = (0, _reactRouterDom.withRouter)(LoginPage);
-
+var _default = ShowChannel;
 exports.default = _default;

@@ -7,15 +7,17 @@ exports.default = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
-var _reactRouterDom = require("react-router-dom");
+var _SEO = _interopRequireDefault(require("@components/SEO"));
 
-var _PageLayout = _interopRequireDefault(require("@components/PageLayout"));
+var _index = _interopRequireDefault(require("../../containers/NavBar/index"));
 
-var _HorizontalSplit = _interopRequireDefault(require("@components/HorizontalSplit"));
+var _index2 = _interopRequireDefault(require("../ErrorPage/index"));
 
-var _AboutChannels = _interopRequireDefault(require("@components/AboutChannels"));
+var _index3 = _interopRequireDefault(require("../../containers/AssetTitle/index"));
 
-var _ChannelTools = _interopRequireDefault(require("@components/ChannelTools"));
+var _index4 = _interopRequireDefault(require("../../containers/AssetDisplay/index"));
+
+var _index5 = _interopRequireDefault(require("../../containers/AssetInfo/index"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -37,43 +39,52 @@ function _assertThisInitialized(self) { if (self === void 0) { throw new Referen
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.getPrototypeOf || function _getPrototypeOf(o) { return o.__proto__; }; return _getPrototypeOf(o); }
 
-var LoginPage =
+var ShowAssetDetails =
 /*#__PURE__*/
 function (_React$Component) {
-  function LoginPage() {
-    _classCallCheck(this, LoginPage);
+  function ShowAssetDetails() {
+    _classCallCheck(this, ShowAssetDetails);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(LoginPage).apply(this, arguments));
+    return _possibleConstructorReturn(this, _getPrototypeOf(ShowAssetDetails).apply(this, arguments));
   }
 
-  _createClass(LoginPage, [{
-    key: "componentWillReceiveProps",
-    value: function componentWillReceiveProps(newProps) {
-      // re-route the user to the homepage if the user is logged in
-      if (newProps.loggedInChannelName !== this.props.loggedInChannelName) {
-        this.props.history.push("/");
-      }
-    }
-  }, {
+  _createClass(ShowAssetDetails, [{
     key: "render",
     value: function render() {
-      return _react.default.createElement(_PageLayout.default, {
-        pageTitle: 'Login',
-        pageUri: 'login'
-      }, _react.default.createElement(_HorizontalSplit.default, {
-        leftSide: _react.default.createElement(_AboutChannels.default, null),
-        rightSide: _react.default.createElement(_ChannelTools.default, null)
-      }));
+      var asset = this.props.asset;
+
+      if (asset) {
+        var name = asset.claimData.name;
+        return _react.default.createElement("div", null, _react.default.createElement(_SEO.default, {
+          pageTitle: "".concat(name, " - details"),
+          asset: asset
+        }), _react.default.createElement(_index.default, null), _react.default.createElement("div", {
+          className: "row row--tall row--padded"
+        }, _react.default.createElement("div", {
+          className: "column column--10"
+        }, _react.default.createElement(_index3.default, null)), _react.default.createElement("div", {
+          className: "column column--5 column--sml-10 align-content-top"
+        }, _react.default.createElement("div", {
+          className: "row row--padded show-details-container"
+        }, _react.default.createElement(_index4.default, null))), _react.default.createElement("div", {
+          className: "column column--5 column--sml-10 align-content-top"
+        }, _react.default.createElement("div", {
+          className: "row row--padded"
+        }, _react.default.createElement(_index5.default, null)))));
+      }
+
+      ;
+      return _react.default.createElement(_index2.default, {
+        error: 'loading asset data...'
+      });
     }
   }]);
 
-  _inherits(LoginPage, _React$Component);
+  _inherits(ShowAssetDetails, _React$Component);
 
-  return LoginPage;
+  return ShowAssetDetails;
 }(_react.default.Component);
 
 ;
-
-var _default = (0, _reactRouterDom.withRouter)(LoginPage);
-
+var _default = ShowAssetDetails;
 exports.default = _default;

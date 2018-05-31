@@ -9,7 +9,7 @@ var _react = _interopRequireDefault(require("react"));
 
 var _PageLayout = _interopRequireDefault(require("@components/PageLayout"));
 
-var _HomePageContent = _interopRequireDefault(require("@components/HomePageContent"));
+var _PublishTool = _interopRequireDefault(require("@containers/PublishTool"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -46,7 +46,7 @@ function (_React$Component) {
       return _react.default.createElement(_PageLayout.default, {
         pageTitle: 'Speech',
         pageUri: ''
-      }, _react.default.createElement(_HomePageContent.default, null));
+      }, _react.default.createElement(_PublishTool.default, null));
     }
   }]);
 
