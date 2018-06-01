@@ -1,18 +1,16 @@
 import React from 'react';
 
-import style from './style.css.js';
-
 class HorizontalSplit extends React.Component {
   shouldComponentUpdate () {
     return false;
   }
   render () {
     return (
-      <div style={style.wrapper}>
-        <div style={style.column}>
+      <div className={'horizontal-split'}>
+        <div className={'column'}>
           {this.props.leftSide}
         </div>
-        <div style={style.column}>
+        <div className={'column'}>
           {this.props.rightSide}
         </div>
       </div>

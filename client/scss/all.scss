@@ -7,18 +7,20 @@
 @import '_tooltip';
 @import '_link';
 @import '_row';
-@import '_column';
+//@import '_column';
 @import '_info-message';
 @import '_input';
 @import '_button';
 @import '_span';
 @import '_video';
-@import 'asset';
-@import 'asset-preview';
-@import 'dropzone';
-@import 'nav-bar';
-@import 'progress-bar';
-@import 'publish-preview';
-@import 'media-queries';
+@import '_asset';
+@import '_asset-preview';
+@import 'containers/_dropzone';
+@import '_nav-bar';
+@import '_progress-bar';
+@import '_publish-preview';
+@import 'components/_horizontal-split';
+@import 'components/_page-content';
+@import '_media-queries';
 
 

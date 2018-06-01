@@ -9,8 +9,6 @@ var _react = _interopRequireDefault(require("react"));
 
 var _reactRouterDom = require("react-router-dom");
 
-var _Dropzone = _interopRequireDefault(require("@containers/Dropzone"));
-
 var _PublishTitleInput = _interopRequireDefault(require("@containers/PublishTitleInput"));
 
 var _PublishUrlInput = _interopRequireDefault(require("@containers/PublishUrlInput"));
@@ -63,16 +61,6 @@ function (_React$Component) {
     key: "render",
     value: function render() {
       return _react.default.createElement("div", {
-        className: "row row--no-bottom"
-      }, _react.default.createElement("div", {
-        className: "column column--10"
-      }, _react.default.createElement(_PublishTitleInput.default, null)), _react.default.createElement("div", {
-        className: "column column--5 column--sml-10"
-      }, _react.default.createElement("div", {
-        className: "row row--padded"
-      }, _react.default.createElement(_Dropzone.default, null))), _react.default.createElement("div", {
-        className: "column column--5 column--sml-10 align-content-top"
-      }, _react.default.createElement("div", {
         id: "publish-active-area",
         className: "row row--padded"
       }, _react.default.createElement("div", {
@@ -102,7 +90,7 @@ function (_React$Component) {
         className: "link--primary",
         target: "_blank",
         href: "https://lbry.io/learn"
-      }, "Read more."))))));
+      }, "Read more."))));
     }
   }]);
 

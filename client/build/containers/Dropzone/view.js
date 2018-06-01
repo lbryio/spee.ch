@@ -9,7 +9,11 @@ var _react = _interopRequireDefault(require("react"));
 
 var _file = require("../../utils/file");
 
-var _PublishPreview = _interopRequireDefault(require("@components/PublishPreview"));
+var _DropzonePreview = _interopRequireDefault(require("@components/DropzonePreview"));
+
+var _DropzoneDropItDisplay = _interopRequireDefault(require("@components/DropzoneDropItDisplay"));
+
+var _DropzoneInstructionsDisplay = _interopRequireDefault(require("@components/DropzoneInstructionsDisplay"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -156,7 +160,7 @@ function (_React$Component) {
     key: "render",
     value: function render() {
       return _react.default.createElement("div", {
-        className: "row row--tall flex-container--column"
+        className: "dropzone-wrapper"
       }, _react.default.createElement("form", null, _react.default.createElement("input", {
         className: "input-file",
         type: "file",
@@ -166,8 +170,7 @@ function (_React$Component) {
         onChange: this.handleFileInput,
         encType: "multipart/form-data"
       })), _react.default.createElement("div", {
-        id: "preview-dropzone",
-        className: 'row row--padded row--tall dropzone' + (this.state.dragOver ? ' dropzone--drag-over' : ''),
+        className: 'dropzone' + (this.state.dragOver ? ' dropzone--drag-over' : ''),
         onDrop: this.handleDrop,
         onDragOver: this.handleDragOver,
         onDragEnd: this.handleDragEnd,
@@ -176,43 +179,15 @@ function (_React$Component) {
         onMouseEnter: this.handleMouseEnter,
         onMouseLeave: this.handleMouseLeave,
         onClick: this.handleClick
-      }, this.props.file ? _react.default.createElement("div", null, _react.default.createElement(_PublishPreview.default, {
+      }, this.props.file ? _react.default.createElement("div", null, _react.default.createElement(_DropzonePreview.default, {
         dimPreview: this.state.dimPreview,
         file: this.props.file,
         thumbnail: this.props.thumbnail
-      }), _react.default.createElement("div", {
-        id: "dropzone-text-holder",
-        className: 'flex-container--column flex-container--center-center'
-      }, this.state.dragOver ? _react.default.createElement("div", {
-        id: "dropzone-dragover"
-      }, _react.default.createElement("p", {
-        className: "blue"
-      }, "Drop it.")) : null, this.state.mouseOver ? _react.default.createElement("div", {
-        id: "dropzone-instructions"
-      }, _react.default.createElement("p", {
-        className: "info-message-placeholder info-message--failure",
-        id: "input-error-file-selection"
-      }, this.props.fileError), _react.default.createElement("p", null, "Drag & drop image or video here to publish"), _react.default.createElement("p", {
-        className: "fine-print"
-      }, "OR"), _react.default.createElement("p", {
-        className: "blue--underlined"
-      }, "CHOOSE FILE")) : null)) : _react.default.createElement("div", {
-        id: "dropzone-text-holder",
-        className: 'flex-container--column flex-container--center-center'
-      }, this.state.dragOver ? _react.default.createElement("div", {
-        id: "dropzone-dragover"
-      }, _react.default.createElement("p", {
-        className: "blue"
-      }, "Drop it.")) : _react.default.createElement("div", {
-        id: "dropzone-instructions"
-      }, _react.default.createElement("p", {
-        className: "info-message-placeholder info-message--failure",
-        id: "input-error-file-selection"
-      }, this.props.fileError), _react.default.createElement("p", null, "Drag & drop image or video here to publish"), _react.default.createElement("p", {
-        className: "fine-print"
-      }, "OR"), _react.default.createElement("p", {
-        className: "blue--underlined"
-      }, "CHOOSE FILE")))));
+      }), this.state.dragOver ? _react.default.createElement(_DropzoneDropItDisplay.default, null) : null, this.state.mouseOver ? _react.default.createElement(_DropzoneInstructionsDisplay.default, {
+        fileError: this.props.fileError
+      }) : null) : this.state.dragOver ? _react.default.createElement(_DropzoneDropItDisplay.default, null) : _react.default.createElement(_DropzoneInstructionsDisplay.default, {
+        fileError: this.props.fileError
+      })));
     }
   }]);
 

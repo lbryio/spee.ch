@@ -1,0 +1,9 @@
+.horizontal-split {
+  display       : flex;
+  flex-direction : row;
+  justify-content: space-between;
+  align-items    : flex-start;
+  .column {
+    width: calc(50% - 1em);
+  }
+};

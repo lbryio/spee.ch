@@ -7,8 +7,6 @@ exports.default = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
-var _styleCss = _interopRequireDefault(require("./style.css.js"));
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -47,11 +45,11 @@ function (_React$Component) {
     key: "render",
     value: function render() {
       return _react.default.createElement("div", {
-        style: _styleCss.default.wrapper
+        className: 'horizontal-split'
       }, _react.default.createElement("div", {
-        style: _styleCss.default.column
+        className: 'column'
       }, this.props.leftSide), _react.default.createElement("div", {
-        style: _styleCss.default.column
+        className: 'column'
       }, this.props.rightSide));
     }
   }]);
