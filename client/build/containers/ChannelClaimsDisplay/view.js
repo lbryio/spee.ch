@@ -70,14 +70,17 @@ function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
-      var _this$props$channel$c = this.props.channel.claimsData,
-          claims = _this$props$channel$c.claims,
-          currentPage = _this$props$channel$c.currentPage,
-          totalPages = _this$props$channel$c.totalPages;
+      var _this$props2 = this.props,
+          _this$props2$channel$ = _this$props2.channel.claimsData,
+          claims = _this$props2$channel$.claims,
+          currentPage = _this$props2$channel$.currentPage,
+          totalPages = _this$props2$channel$.totalPages,
+          defaultThumbnail = _this$props2.defaultThumbnail;
       return _react.default.createElement("div", {
         className: "row row--tall"
       }, claims.length > 0 ? _react.default.createElement("div", null, claims.map(function (claim, index) {
         return _react.default.createElement(_AssetPreview.default, {
+          defaultThumbnail: defaultThumbnail,
           claimData: claim,
           key: "".concat(claim.name, "-").concat(index)
         });

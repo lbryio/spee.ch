@@ -1,16 +1,16 @@
 import React from 'react';
 import PageLayout from '@components/PageLayout';
 import HorizontalSplit from '@components/HorizontalSplit';
-import AboutSpeechOne from '@components/AboutSpeechOne';
-import AboutSpeechTwo from '@components/AboutSpeechTwo';
+import AboutSpeechOverview from '@components/AboutSpeechOverview';
+import AboutSpeechDetails from '@components/AboutSpeechDetails';
 
 class AboutPage extends React.Component {
   render () {
     return (
       <PageLayout pageTitle={'About'} pageUri={'about'} >
         <HorizontalSplit
-          leftSide={<AboutSpeechOne />}
-          rightSide={<AboutSpeechTwo />}
+          leftSide={<AboutSpeechOverview />}
+          rightSide={<AboutSpeechDetails />}
         />
       </PageLayout>
     );

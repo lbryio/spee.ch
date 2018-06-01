@@ -5,7 +5,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 var style = {
-  margin: '1em',
+  margin: '2em',
   backgroundColor: 'red'
 };
 var _default = style;

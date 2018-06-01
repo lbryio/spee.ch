@@ -10,7 +10,7 @@ class AssetDisplay extends React.Component {
   render () {
     const { status, error, asset: { claimData: { name, claimId, contentType, fileExt, thumbnail } } } = this.props;
     return (
-      <div id='asset-display-component'>
+      <div>
         {(status === LOCAL_CHECK) &&
         <div>
           <p>Checking to see if Spee.ch has your asset locally...</p>
@@ -35,26 +35,21 @@ class AssetDisplay extends React.Component {
             case 'image/jpeg':
             case 'image/jpg':
             case 'image/png':
-              return (
-                <img
-                  className='asset'
-                  src={`/${claimId}/${name}.${fileExt}`}
-                  alt={name} />
-              );
             case 'image/gif':
               return (
                 <img
-                  className='asset'
+                  className='asset-image'
                   src={`/${claimId}/${name}.${fileExt}`}
                   alt={name}
                 />
               );
             case 'video/mp4':
               return (
-                <video className='asset video' controls poster={thumbnail}>
-                  <source
-                    src={`/${claimId}/${name}.${fileExt}`}
-                  />
+                <video
+                  className='asset-video'
+                  controls poster={thumbnail}
+                >
+                  <source src={`/${claimId}/${name}.${fileExt}`} />
                   <p>Your browser does not support the <code>video</code> element.</p>
                 </video>
               );

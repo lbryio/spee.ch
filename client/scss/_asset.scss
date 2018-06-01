@@ -1,0 +1,12 @@
+
+.asset-image, .asset-video {
+  width: 100%;
+  margin : 0px
+}
+
+.show-lite-container {
+  .asset-image, .asset-video {
+    max-height: calc(100vh - 3em);
+    max-width: 100vw;
+  }
+}

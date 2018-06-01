@@ -13,12 +13,12 @@
 @import '_button';
 @import '_span';
 @import '_video';
-@import 'containers/_nav-bar.scss';
-@import 'containers/_dropzone.scss';
-@import 'containers/_asset-preview.scss';
-@import 'containers/_show-asset-lite.scss';
-@import 'components/_progress-bar';
-@import 'components/_publish-preview';
+@import 'asset';
+@import 'asset-preview';
+@import 'dropzone';
+@import 'nav-bar';
+@import 'progress-bar';
+@import 'publish-preview';
 @import 'media-queries';
 
 

@@ -11,9 +11,9 @@ var _PageLayout = _interopRequireDefault(require("@components/PageLayout"));
 
 var _HorizontalSplit = _interopRequireDefault(require("@components/HorizontalSplit"));
 
-var _AboutSpeechOne = _interopRequireDefault(require("@components/AboutSpeechOne"));
+var _AboutSpeechOverview = _interopRequireDefault(require("@components/AboutSpeechOverview"));
 
-var _AboutSpeechTwo = _interopRequireDefault(require("@components/AboutSpeechTwo"));
+var _AboutSpeechDetails = _interopRequireDefault(require("@components/AboutSpeechDetails"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -51,8 +51,8 @@ function (_React$Component) {
         pageTitle: 'About',
         pageUri: 'about'
       }, _react.default.createElement(_HorizontalSplit.default, {
-        leftSide: _react.default.createElement(_AboutSpeechOne.default, null),
-        rightSide: _react.default.createElement(_AboutSpeechTwo.default, null)
+        leftSide: _react.default.createElement(_AboutSpeechOverview.default, null),
+        rightSide: _react.default.createElement(_AboutSpeechDetails.default, null)
       }));
     }
   }]);

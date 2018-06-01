@@ -1,5 +1,5 @@
 const style = {
-  margin         : '1em',
+  margin         : '2em',
   backgroundColor: 'red',
 };
 
