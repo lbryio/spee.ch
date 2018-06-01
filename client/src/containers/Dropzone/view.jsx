@@ -1,6 +1,6 @@
 import React from 'react';
 import { validateFile } from '../../utils/file';
-import DropzonePreview from '@components/DropzonePreview';
+import DropzonePreviewImage from '@components/DropzonePreviewImage';
 import DropzoneDropItDisplay from '@components/DropzoneDropItDisplay';
 import DropzoneInstructionsDisplay from '@components/DropzoneInstructionsDisplay';
 
@@ -105,18 +105,20 @@ class Dropzone extends React.Component {
           onMouseLeave={this.handleMouseLeave}
           onClick={this.handleClick}>
           {this.props.file ? (
-            <div>
-              <DropzonePreview
+            <div className={'dropzone-preview-wrapper'}>
+              <DropzonePreviewImage
                 dimPreview={this.state.dimPreview}
                 file={this.props.file}
                 thumbnail={this.props.thumbnail}
               />
-              { this.state.dragOver ? <DropzoneDropItDisplay /> : null }
-              { this.state.mouseOver ? (
-                <DropzoneInstructionsDisplay
-                  fileError={this.props.fileError}
-                />
-              ) : null }
+              <div className={'dropzone-preview-overlay'}>
+                { this.state.dragOver ? <DropzoneDropItDisplay /> : null }
+                { this.state.mouseOver ? (
+                  <DropzoneInstructionsDisplay
+                    fileError={this.props.fileError}
+                  />
+                ) : null }
+              </div>
             </div>
           ) : (
             this.state.dragOver ? <DropzoneDropItDisplay /> : (

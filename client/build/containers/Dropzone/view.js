@@ -9,7 +9,7 @@ var _react = _interopRequireDefault(require("react"));
 
 var _file = require("../../utils/file");
 
-var _DropzonePreview = _interopRequireDefault(require("@components/DropzonePreview"));
+var _DropzonePreviewImage = _interopRequireDefault(require("@components/DropzonePreviewImage"));
 
 var _DropzoneDropItDisplay = _interopRequireDefault(require("@components/DropzoneDropItDisplay"));
 
@@ -179,13 +179,17 @@ function (_React$Component) {
         onMouseEnter: this.handleMouseEnter,
         onMouseLeave: this.handleMouseLeave,
         onClick: this.handleClick
-      }, this.props.file ? _react.default.createElement("div", null, _react.default.createElement(_DropzonePreview.default, {
+      }, this.props.file ? _react.default.createElement("div", {
+        className: 'dropzone-preview-wrapper'
+      }, _react.default.createElement(_DropzonePreviewImage.default, {
         dimPreview: this.state.dimPreview,
         file: this.props.file,
         thumbnail: this.props.thumbnail
-      }), this.state.dragOver ? _react.default.createElement(_DropzoneDropItDisplay.default, null) : null, this.state.mouseOver ? _react.default.createElement(_DropzoneInstructionsDisplay.default, {
+      }), _react.default.createElement("div", {
+        className: 'dropzone-preview-overlay'
+      }, this.state.dragOver ? _react.default.createElement(_DropzoneDropItDisplay.default, null) : null, this.state.mouseOver ? _react.default.createElement(_DropzoneInstructionsDisplay.default, {
         fileError: this.props.fileError
-      }) : null) : this.state.dragOver ? _react.default.createElement(_DropzoneDropItDisplay.default, null) : _react.default.createElement(_DropzoneInstructionsDisplay.default, {
+      }) : null)) : this.state.dragOver ? _react.default.createElement(_DropzoneDropItDisplay.default, null) : _react.default.createElement(_DropzoneInstructionsDisplay.default, {
         fileError: this.props.fileError
       })));
     }

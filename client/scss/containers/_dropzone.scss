@@ -30,9 +30,25 @@
   text-align: center;
 }
 
-#dropzone-preview {
+.dropzone-preview-image {
   display: block;
   padding: 1em;
   width: calc(100% - 2em);
 }
+
+.dropzone-preview-wrapper {
+  position: relative;
+  .dropzone-preview-overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+    justify-content: center;
+  }
+}
+
 

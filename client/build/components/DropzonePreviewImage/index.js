@@ -100,9 +100,8 @@ function (_React$Component) {
     key: "render",
     value: function render() {
       return _react.default.createElement("img", {
-        id: "dropzone-preview",
         src: this.state.imgSource,
-        className: this.props.dimPreview ? 'publish-preview-dim' : '',
+        className: 'dropzone-preview-image ' + (this.props.dimPreview ? 'publish-preview-dim' : ''),
         alt: "publish preview"
       });
     }
