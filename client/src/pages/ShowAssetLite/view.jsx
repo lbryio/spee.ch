@@ -1,9 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-// components
 import SEO from '@components/SEO';
-// containers
-import AssetDisplay from '../../containers/AssetDisplay/index';
+import AssetDisplay from '@containers/AssetDisplay';
 
 class ShowLite extends React.Component {
   render () {
@@ -11,10 +9,10 @@ class ShowLite extends React.Component {
     if (asset) {
       const { name, claimId } = asset.claimData;
       return (
-        <div className='row row--tall flex-container--column flex-container--center-center show-lite-container'>
+        <div className='row--tall flex-container--column flex-container--center-center show-lite-container'>
           <SEO pageTitle={name} asset={asset} />
           <AssetDisplay />
-          <Link id='asset-boilerpate' className='link--primary fine-print' to={`/${claimId}/${name}`}>hosted
+          <Link className='link--primary fine-print' to={`/${claimId}/${name}`}>hosted
             via Spee.ch</Link>
         </div>
       );

@@ -11,7 +11,7 @@ var _reactRouterDom = require("react-router-dom");
 
 var _SEO = _interopRequireDefault(require("@components/SEO"));
 
-var _index = _interopRequireDefault(require("../../containers/AssetDisplay/index"));
+var _AssetDisplay = _interopRequireDefault(require("@containers/AssetDisplay"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -52,12 +52,11 @@ function (_React$Component) {
             name = _asset$claimData.name,
             claimId = _asset$claimData.claimId;
         return _react.default.createElement("div", {
-          className: "row row--tall flex-container--column flex-container--center-center show-lite-container"
+          className: "row--tall flex-container--column flex-container--center-center show-lite-container"
         }, _react.default.createElement(_SEO.default, {
           pageTitle: name,
           asset: asset
-        }), _react.default.createElement(_index.default, null), _react.default.createElement(_reactRouterDom.Link, {
-          id: "asset-boilerpate",
+        }), _react.default.createElement(_AssetDisplay.default, null), _react.default.createElement(_reactRouterDom.Link, {
           className: "link--primary fine-print",
           to: "/".concat(claimId, "/").concat(name)
         }, "hosted via Spee.ch"));

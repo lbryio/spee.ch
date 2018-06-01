@@ -4,7 +4,6 @@ import HorizontalSplit from '@components/HorizontalSplit';
 import AboutSpeechOne from '@components/AboutSpeechOne';
 import AboutSpeechTwo from '@components/AboutSpeechTwo';
 
-
 class AboutPage extends React.Component {
   render () {
     return (

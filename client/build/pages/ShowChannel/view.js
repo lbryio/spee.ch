@@ -11,6 +11,8 @@ var _PageLayout = _interopRequireDefault(require("@components/PageLayout"));
 
 var _ErrorPage = _interopRequireDefault(require("@pages/ErrorPage"));
 
+var _ChannelInfoDisplay = _interopRequireDefault(require("@components/ChannelInfoDisplay"));
+
 var _ChannelClaimsDisplay = _interopRequireDefault(require("@containers/ChannelClaimsDisplay"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -53,15 +55,14 @@ function (_React$Component) {
             shortId = channel.shortId;
         return _react.default.createElement(_PageLayout.default, {
           pageTitle: name,
-          pageUri: channel
-        }, _react.default.createElement("h2", null, "channel name: ", name), _react.default.createElement("p", {
-          className: 'fine-print'
-        }, "full channel id: ", longId), _react.default.createElement("p", {
-          className: 'fine-print'
-        }, "short channel id: ", shortId), _react.default.createElement(_ChannelClaimsDisplay.default, null));
+          channel: channel
+        }, _react.default.createElement(_ChannelInfoDisplay.default, {
+          name: name,
+          longId: longId,
+          shortId: shortId
+        }), _react.default.createElement(_ChannelClaimsDisplay.default, null));
       }
 
-      ;
       return _react.default.createElement(_ErrorPage.default, {
         error: 'loading channel data...'
       });

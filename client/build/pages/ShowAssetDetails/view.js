@@ -7,17 +7,17 @@ exports.default = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
-var _SEO = _interopRequireDefault(require("@components/SEO"));
+var _PageLayout = _interopRequireDefault(require("@components/PageLayout"));
 
-var _index = _interopRequireDefault(require("../../containers/NavBar/index"));
+var _HorizontalSplit = _interopRequireDefault(require("@components/HorizontalSplit"));
 
-var _index2 = _interopRequireDefault(require("../ErrorPage/index"));
+var _AssetTitle = _interopRequireDefault(require("@containers/AssetTitle"));
 
-var _index3 = _interopRequireDefault(require("../../containers/AssetTitle/index"));
+var _AssetDisplay = _interopRequireDefault(require("@containers/AssetDisplay"));
 
-var _index4 = _interopRequireDefault(require("../../containers/AssetDisplay/index"));
+var _AssetInfo = _interopRequireDefault(require("@containers/AssetInfo"));
 
-var _index5 = _interopRequireDefault(require("../../containers/AssetInfo/index"));
+var _ErrorPage = _interopRequireDefault(require("@pages/ErrorPage"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -55,26 +55,16 @@ function (_React$Component) {
 
       if (asset) {
         var name = asset.claimData.name;
-        return _react.default.createElement("div", null, _react.default.createElement(_SEO.default, {
+        return _react.default.createElement(_PageLayout.default, {
           pageTitle: "".concat(name, " - details"),
           asset: asset
-        }), _react.default.createElement(_index.default, null), _react.default.createElement("div", {
-          className: "row row--tall row--padded"
-        }, _react.default.createElement("div", {
-          className: "column column--10"
-        }, _react.default.createElement(_index3.default, null)), _react.default.createElement("div", {
-          className: "column column--5 column--sml-10 align-content-top"
-        }, _react.default.createElement("div", {
-          className: "row row--padded show-details-container"
-        }, _react.default.createElement(_index4.default, null))), _react.default.createElement("div", {
-          className: "column column--5 column--sml-10 align-content-top"
-        }, _react.default.createElement("div", {
-          className: "row row--padded"
-        }, _react.default.createElement(_index5.default, null)))));
+        }, _react.default.createElement(_AssetTitle.default, null), _react.default.createElement(_HorizontalSplit.default, {
+          leftSide: _react.default.createElement(_AssetDisplay.default, null),
+          rightSide: _react.default.createElement(_AssetInfo.default, null)
+        }));
       }
 
-      ;
-      return _react.default.createElement(_index2.default, {
+      return _react.default.createElement(_ErrorPage.default, {
         error: 'loading asset data...'
       });
     }
