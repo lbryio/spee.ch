@@ -1,14 +1,14 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import PublishTitleInput from '@containers/PublishTitleInput';
 import PublishUrlInput from '@containers/PublishUrlInput';
 import PublishThumbnailInput from '@containers/PublishThumbnailInput';
 import PublishMetadataInputs from '@containers/PublishMetadataInputs';
 import ChannelSelect from '@containers/ChannelSelect';
+import Row from '@components/Row';
 
 class PublishDetails extends React.Component {
   constructor (props) {
-    super(props)
+    super(props);
     this.onPublishSubmit = this.onPublishSubmit.bind(this);
   }
   onPublishSubmit () {
@@ -16,30 +16,43 @@ class PublishDetails extends React.Component {
   }
   render () {
     return (
-      <div id='publish-active-area' className='row row--padded'>
-        <div className='row row--padded row--no-top row--wide'>
+      <div>
+        <Row>
           <PublishUrlInput />
-        </div>
-        <div className='row row--padded row--no-top row--wide'>
+        </Row>
+
+        <Row>
           <ChannelSelect />
-        </div>
-        { (this.props.file.type === 'video/mp4') && (
-          <div className='row row--padded row--no-top row--wide '>
+        </Row>
+
+        { this.props.file.type === 'video/mp4' && (
+          <Row>
             <PublishThumbnailInput />
-          </div>
+          </Row>
         )}
-        <div className='row row--padded row--no-top row--no-bottom row--wide'>
+
+        <Row>
           <PublishMetadataInputs />
-        </div>
-        <div className='row row--wide align-content-center'>
-          <button id='publish-submit' className='button--primary button--large' onClick={this.onPublishSubmit}>Publish</button>
-        </div>
-        <div className='row row--padded row--no-bottom align-content-center'>
+        </Row>
+
+        <Row>
+          <button
+            id='publish-submit'
+            className='button--primary button--large'
+            onClick={this.onPublishSubmit}
+          >
+            Publish
+          </button>
+        </Row>
+
+        <Row>
           <button className='button--cancel' onClick={this.props.clearFile}>Cancel</button>
-        </div>
-        <div className='row row--short align-content-center'>
+        </Row>
+
+        <Row>
           <p className='fine-print'>By clicking 'Publish', you affirm that you have the rights to publish this content to the LBRY network, and that you understand the properties of publishing it to a decentralized, user-controlled network. <a className='link--primary' target='_blank' href='https://lbry.io/learn'>Read more.</a></p>
-        </div>
+        </Row>
+
       </div>
     );
   }

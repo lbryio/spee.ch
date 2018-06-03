@@ -67,19 +67,10 @@ function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
-      return _react.default.createElement("div", {
-        id: "publish-details",
-        className: "row row--padded row--no-top row--wide"
-      }, this.props.showMetadataInputs && _react.default.createElement("div", null, _react.default.createElement("div", {
-        className: "row row--no-top"
-      }, _react.default.createElement("div", {
-        className: "column column--3 column--med-10 align-content-top"
-      }, _react.default.createElement("label", {
+      return _react.default.createElement("div", null, this.props.showMetadataInputs && _react.default.createElement("div", null, _react.default.createElement("div", null, _react.default.createElement("div", null, _react.default.createElement("label", {
         htmlFor: "publish-license",
         className: "label"
-      }, "Description:")), _react.default.createElement("div", {
-        className: "column column--7 column--sml-10"
-      }, _react.default.createElement(_ExpandingTextArea.default, {
+      }, "Description:")), _react.default.createElement("div", null, _react.default.createElement(_ExpandingTextArea.default, {
         id: "publish-description",
         className: "textarea textarea--primary textarea--full-width",
         rows: 1,
@@ -91,16 +82,10 @@ function (_React$Component) {
         placeholder: "Optional description",
         value: this.props.description,
         onChange: this.handleInput
-      }))), _react.default.createElement("div", {
-        className: "row row--no-top"
-      }, _react.default.createElement("div", {
-        className: "column column--3 column--med-10"
-      }, _react.default.createElement("label", {
+      }))), _react.default.createElement("div", null, _react.default.createElement("div", null, _react.default.createElement("label", {
         htmlFor: "publish-license",
         className: "label"
-      }, "License:")), _react.default.createElement("div", {
-        className: "column column--7 column--sml-10"
-      }, _react.default.createElement("select", {
+      }, "License:")), _react.default.createElement("div", null, _react.default.createElement("select", {
         type: "text",
         name: "license",
         id: "publish-license",
@@ -112,16 +97,10 @@ function (_React$Component) {
         value: "Public Domain"
       }, "Public Domain"), _react.default.createElement("option", {
         value: "Creative Commons"
-      }, "Creative Commons")))), _react.default.createElement("div", {
-        className: "row row--no-top"
-      }, _react.default.createElement("div", {
-        className: "column column--3"
-      }, _react.default.createElement("label", {
+      }, "Creative Commons")))), _react.default.createElement("div", null, _react.default.createElement("div", null, _react.default.createElement("label", {
         htmlFor: "publish-nsfw",
         className: "label"
-      }, "Mature:")), _react.default.createElement("div", {
-        className: "column column--7"
-      }, _react.default.createElement("input", {
+      }, "Mature:")), _react.default.createElement("div", null, _react.default.createElement("input", {
         className: "input-checkbox",
         type: "checkbox",
         id: "publish-nsfw",

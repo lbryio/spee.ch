@@ -9,7 +9,7 @@ var _react = _interopRequireDefault(require("react"));
 
 var _reactRouterDom = require("react-router-dom");
 
-var _SEO = _interopRequireDefault(require("@components/SEO"));
+var _SEO = _interopRequireDefault(require("@containers/SEO"));
 
 var _AssetDisplay = _interopRequireDefault(require("@containers/AssetDisplay"));
 

@@ -1,10 +1,8 @@
 import React from 'react';
 
-import SEO from '@components/SEO';
-import NavBar from '@containers/NavBar';
+import SEO from '@containers/SEO';
+import NavBar from '@components/NavBar';
 import PageContent from '@components/PageContent';
-
-import style from './style.css.js';
 
 class PageLayout extends React.Component {
   shouldComponentUpdate () {
@@ -12,7 +10,7 @@ class PageLayout extends React.Component {
   }
   render () {
     return (
-      <div style={style} className={'row--tall flex-container--column'}>
+      <div className={'page-layout'}>
         <SEO pageTitle={this.props.pageTitle} pageUri={this.props.pageUri} />
         <NavBar />
         <PageContent>

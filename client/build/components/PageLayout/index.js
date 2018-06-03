@@ -7,13 +7,11 @@ exports.default = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
-var _SEO = _interopRequireDefault(require("@components/SEO"));
+var _SEO = _interopRequireDefault(require("@containers/SEO"));
 
-var _NavBar = _interopRequireDefault(require("@containers/NavBar"));
+var _NavBar = _interopRequireDefault(require("@components/NavBar"));
 
 var _PageContent = _interopRequireDefault(require("@components/PageContent"));
-
-var _styleCss = _interopRequireDefault(require("./style.css.js"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -53,8 +51,7 @@ function (_React$Component) {
     key: "render",
     value: function render() {
       return _react.default.createElement("div", {
-        style: _styleCss.default,
-        className: 'row--tall flex-container--column'
+        className: 'page-layout'
       }, _react.default.createElement(_SEO.default, {
         pageTitle: this.props.pageTitle,
         pageUri: this.props.pageUri

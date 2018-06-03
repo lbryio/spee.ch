@@ -44,20 +44,31 @@ class PublishUrlInput extends React.Component {
   render () {
     const { claim, loggedInChannelName, loggedInChannelShortId, publishInChannel, selectedChannel, urlError } = this.props;
     return (
-      <div className='column column--10 column--sml-10'>
-        <div className='input-text--primary span--relative'>
-          <span className='url-text--secondary'>spee.ch / </span>
-          <UrlMiddle
-            publishInChannel={publishInChannel}
-            selectedChannel={selectedChannel}
-            loggedInChannelName={loggedInChannelName}
-            loggedInChannelShortId={loggedInChannelShortId}
-          />
-          <input type='text' id='claim-name-input' className='input-text' name='claim' placeholder='your-url-here' onChange={this.handleInput} value={claim} />
-          { (claim && !urlError) && <span id='input-success-claim-name' className='info-message--success span--absolute'>{'\u2713'}</span> }
-          { urlError && <span id='input-success-channel-name' className='info-message--failure span--absolute'>{'\u2716'}</span> }
+      <div>
+        <div className={'publish-url-input'}>
+          <div className={'align-left'}>
+            <span className='url-text--secondary'>spee.ch&nbsp;/&nbsp;</span>
+          </div>
+          <div className={'shrink'}>
+            <UrlMiddle
+              publishInChannel={publishInChannel}
+              selectedChannel={selectedChannel}
+              loggedInChannelName={loggedInChannelName}
+              loggedInChannelShortId={loggedInChannelShortId}
+            />
+          </div>
+          <div className={'fill'}>
+            <input
+              type='text'
+              className='input-text input-text--full-width'
+              name='claim'
+              placeholder='your-url-here'
+              onChange={this.handleInput}
+              value={claim}
+            />
+          </div>
         </div>
-        <div>
+        <div className={'publish-url-input-error'}>
           { urlError ? (
             <p id='input-error-claim-name' className='info-message--failure'>{urlError}</p>
           ) : (

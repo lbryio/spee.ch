@@ -15,6 +15,8 @@ var _PublishDetails = _interopRequireDefault(require("@containers/PublishDetails
 
 var _PublishTitleInput = _interopRequireDefault(require("@containers/PublishTitleInput"));
 
+var _Row = _interopRequireDefault(require("@components/Row"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -47,7 +49,7 @@ function (_React$Component) {
   _createClass(PublishPreview, [{
     key: "render",
     value: function render() {
-      return _react.default.createElement("div", null, _react.default.createElement(_PublishTitleInput.default, null), _react.default.createElement(_HorizontalSplit.default, {
+      return _react.default.createElement("div", null, _react.default.createElement(_Row.default, null, _react.default.createElement(_PublishTitleInput.default, null)), _react.default.createElement(_HorizontalSplit.default, {
         leftSide: _react.default.createElement(_Dropzone.default, null),
         rightSide: _react.default.createElement(_PublishDetails.default, null)
       }));

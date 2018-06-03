@@ -1,5 +1,4 @@
 .dropzone-wrapper {
-  background-color: yellow;
   // fill the parent flex container
   flex: 1 0 auto;
   // be a flex container for children
@@ -9,7 +8,6 @@
 
 .dropzone {
   border: 2px dashed #9b9b9b;
-  background-color: red;
   // fill the parent flex container
   flex: 1 0 auto;
   // be a flex container for children
@@ -30,12 +28,6 @@
   text-align: center;
 }
 
-.dropzone-preview-image {
-  display: block;
-  padding: 1em;
-  width: calc(100% - 2em);
-}
-
 .dropzone-preview-wrapper {
   position: relative;
   .dropzone-preview-overlay {
@@ -51,4 +43,8 @@
   }
 }
 
-
+.dropzone-preview-image {
+  display: block;
+  padding: 1em;
+  width: calc(100% - 2em);
+}

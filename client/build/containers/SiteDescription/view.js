@@ -23,49 +23,32 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
 
-function _getPrototypeOf(o) { _getPrototypeOf = Object.getPrototypeOf || function _getPrototypeOf(o) { return o.__proto__; }; return _getPrototypeOf(o); }
-
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
-var PublishTitleInput =
+function _getPrototypeOf(o) { _getPrototypeOf = Object.getPrototypeOf || function _getPrototypeOf(o) { return o.__proto__; }; return _getPrototypeOf(o); }
+
+var SiteDescription =
 /*#__PURE__*/
 function (_React$Component) {
-  function PublishTitleInput(props) {
-    var _this;
+  function SiteDescription() {
+    _classCallCheck(this, SiteDescription);
 
-    _classCallCheck(this, PublishTitleInput);
-
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(PublishTitleInput).call(this, props));
-    _this.handleInput = _this.handleInput.bind(_assertThisInitialized(_assertThisInitialized(_this)));
-    return _this;
+    return _possibleConstructorReturn(this, _getPrototypeOf(SiteDescription).apply(this, arguments));
   }
 
-  _createClass(PublishTitleInput, [{
-    key: "handleInput",
-    value: function handleInput(e) {
-      var name = e.target.name;
-      var value = e.target.value;
-      this.props.onMetadataChange(name, value);
-    }
-  }, {
+  _createClass(SiteDescription, [{
     key: "render",
     value: function render() {
-      return _react.default.createElement("input", {
-        type: "text",
-        id: "publish-title",
-        className: "input-text text--large input-text--full-width",
-        name: "title",
-        placeholder: "Give your content a title...",
-        onChange: this.handleInput,
-        value: this.props.title
-      });
+      return _react.default.createElement("div", {
+        className: "site-description"
+      }, this.props.siteDescription);
     }
   }]);
 
-  _inherits(PublishTitleInput, _React$Component);
+  _inherits(SiteDescription, _React$Component);
 
-  return PublishTitleInput;
+  return SiteDescription;
 }(_react.default.Component);
 
-var _default = PublishTitleInput;
+var _default = SiteDescription;
 exports.default = _default;

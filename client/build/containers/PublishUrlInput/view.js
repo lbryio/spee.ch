@@ -106,32 +106,31 @@ function (_React$Component) {
           publishInChannel = _this$props2.publishInChannel,
           selectedChannel = _this$props2.selectedChannel,
           urlError = _this$props2.urlError;
-      return _react.default.createElement("div", {
-        className: "column column--10 column--sml-10"
+      return _react.default.createElement("div", null, _react.default.createElement("div", {
+        className: 'publish-url-input'
       }, _react.default.createElement("div", {
-        className: "input-text--primary span--relative"
+        className: 'align-left'
       }, _react.default.createElement("span", {
         className: "url-text--secondary"
-      }, "spee.ch / "), _react.default.createElement(_PublishUrlMiddleDisplay.default, {
+      }, "spee.ch\xA0/\xA0")), _react.default.createElement("div", {
+        className: 'shrink'
+      }, _react.default.createElement(_PublishUrlMiddleDisplay.default, {
         publishInChannel: publishInChannel,
         selectedChannel: selectedChannel,
         loggedInChannelName: loggedInChannelName,
         loggedInChannelShortId: loggedInChannelShortId
-      }), _react.default.createElement("input", {
+      })), _react.default.createElement("div", {
+        className: 'fill'
+      }, _react.default.createElement("input", {
         type: "text",
-        id: "claim-name-input",
-        className: "input-text",
+        className: "input-text input-text--full-width",
         name: "claim",
         placeholder: "your-url-here",
         onChange: this.handleInput,
         value: claim
-      }), claim && !urlError && _react.default.createElement("span", {
-        id: "input-success-claim-name",
-        className: "info-message--success span--absolute"
-      }, "\u2713"), urlError && _react.default.createElement("span", {
-        id: "input-success-channel-name",
-        className: "info-message--failure span--absolute"
-      }, "\u2716")), _react.default.createElement("div", null, urlError ? _react.default.createElement("p", {
+      }))), _react.default.createElement("div", {
+        className: 'publish-url-input-error'
+      }, urlError ? _react.default.createElement("p", {
         id: "input-error-claim-name",
         className: "info-message--failure"
       }, urlError) : _react.default.createElement("p", {

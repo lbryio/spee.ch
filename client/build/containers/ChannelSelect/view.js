@@ -69,9 +69,7 @@ function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
-      return _react.default.createElement("div", null, _react.default.createElement("form", null, _react.default.createElement("div", {
-        className: "column column--3 column--med-10"
-      }, _react.default.createElement("input", {
+      return _react.default.createElement("div", null, _react.default.createElement("form", null, _react.default.createElement("div", null, _react.default.createElement("input", {
         type: "radio",
         name: "anonymous-or-channel",
         id: "anonymous-radio",
@@ -82,9 +80,7 @@ function (_React$Component) {
       }), _react.default.createElement("label", {
         className: "label label--pointer",
         htmlFor: "anonymous-radio"
-      }, "Anonymous")), _react.default.createElement("div", {
-        className: "column column--7 column--med-10"
-      }, _react.default.createElement("input", {
+      }, "Anonymous")), _react.default.createElement("div", null, _react.default.createElement("input", {
         type: "radio",
         name: "anonymous-or-channel",
         id: "channel-radio",
@@ -99,14 +95,10 @@ function (_React$Component) {
         className: "info-message--failure"
       }, this.props.channelError) : _react.default.createElement("p", {
         className: "info-message"
-      }, "Publish anonymously or in a channel")), this.props.publishInChannel && _react.default.createElement("div", null, _react.default.createElement("div", {
-        className: "column column--3"
-      }, _react.default.createElement("label", {
+      }, "Publish anonymously or in a channel")), this.props.publishInChannel && _react.default.createElement("div", null, _react.default.createElement("div", null, _react.default.createElement("label", {
         className: "label",
         htmlFor: "channel-name-select"
-      }, "Channel:")), _react.default.createElement("div", {
-        className: "column column--7"
-      }, _react.default.createElement("select", {
+      }, "Channel:")), _react.default.createElement("div", null, _react.default.createElement("select", {
         type: "text",
         id: "channel-name-select",
         className: "select select--arrow",
