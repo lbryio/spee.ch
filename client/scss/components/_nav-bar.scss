@@ -1,7 +1,7 @@
 .nav-bar {
-  padding-left: 2em;
-  padding-right: 2em;
-  border-bottom: 0.5px solid #cacaca;
+  padding-left: $primary-padding;
+  padding-right: $primary-padding;
+  border-bottom: 0.5px solid $tertiary-color;
 }
 
 // old
@@ -15,7 +15,7 @@
 }
 
 .nav-bar-link {
-  padding: 1.5rem;
+  padding: $secondary-padding;
   display: inline-block;
 }
 

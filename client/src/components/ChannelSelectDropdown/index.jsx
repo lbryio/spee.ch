@@ -9,12 +9,7 @@ const ChannelSelectDropdown = ({ selectedChannel, handleSelection, loggedInChann
       value={selectedChannel}
       onChange={handleSelection}>
       { loggedInChannelName && (
-        <option
-          value={loggedInChannelName}
-          id='publish-channel-select-channel-option'
-        >
-          {loggedInChannelName}
-        </option>
+        <option value={loggedInChannelName} >{loggedInChannelName}</option>
       )}
       <option value={LOGIN}>Existing</option>
       <option value={CREATE}>New</option>

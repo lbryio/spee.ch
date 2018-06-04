@@ -60,6 +60,15 @@ function (_React$Component) {
   }
 
   _createClass(ChannelSelect, [{
+    key: "componentWillMount",
+    value: function componentWillMount() {
+      var loggedInChannelName = this.props.loggedInChannelName;
+
+      if (loggedInChannelName) {
+        this.props.onChannelSelect(loggedInChannelName);
+      }
+    }
+  }, {
     key: "toggleAnonymousPublish",
     value: function toggleAnonymousPublish(event) {
       var value = event.target.value;
@@ -79,27 +88,33 @@ function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
+      var _this$props = this.props,
+          publishInChannel = _this$props.publishInChannel,
+          channelError = _this$props.channelError,
+          selectedChannel = _this$props.selectedChannel,
+          loggedInChannelName = _this$props.loggedInChannelName;
       return _react.default.createElement("div", null, _react.default.createElement(_PublishDetailsRow.default, {
         label: _react.default.createElement(_ChooseAnonymousPublishRadio.default, {
-          publishInChannel: this.props.publishInChannel,
+          publishInChannel: publishInChannel,
           toggleAnonymousPublish: this.toggleAnonymousPublish
         }),
         content: _react.default.createElement(_ChooseChannelPublishRadio.default, {
-          publishInChannel: this.props.publishInChannel,
+          publishInChannel: publishInChannel,
           toggleAnonymousPublish: this.toggleAnonymousPublish
         })
       }), _react.default.createElement(_ErrorDisplay.default, {
-        errorMessage: this.props.channelError,
+        errorMessage: channelError,
         defaultMessage: 'Publish anonymously or in a channel'
       }), this.props.publishInChannel && _react.default.createElement("div", null, _react.default.createElement(_PublishDetailsRow.default, {
         label: _react.default.createElement(_Label.default, {
           value: 'Channel:'
         }),
         content: _react.default.createElement(_ChannelSelectDropdown.default, {
-          selectedChannel: this.props.selectedChannel,
-          handleSelection: this.handleSelection
-        }, "loggedInChannelName=", this.props.loggedInChannelName)
-      }), this.props.selectedChannel === _publish_channel_select_states.LOGIN && _react.default.createElement(_ChannelLoginForm.default, null), this.props.selectedChannel === _publish_channel_select_states.CREATE && _react.default.createElement(_ChannelCreateForm.default, null)));
+          selectedChannel: selectedChannel,
+          handleSelection: this.handleSelection,
+          loggedInChannelName: loggedInChannelName
+        })
+      }), selectedChannel === _publish_channel_select_states.LOGIN && _react.default.createElement(_ChannelLoginForm.default, null), selectedChannel === _publish_channel_select_states.CREATE && _react.default.createElement(_ChannelCreateForm.default, null)));
     }
   }]);
 

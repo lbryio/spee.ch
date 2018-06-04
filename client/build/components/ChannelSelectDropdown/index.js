@@ -21,8 +21,7 @@ var ChannelSelectDropdown = function ChannelSelectDropdown(_ref) {
     value: selectedChannel,
     onChange: handleSelection
   }, loggedInChannelName && _react.default.createElement("option", {
-    value: loggedInChannelName,
-    id: "publish-channel-select-channel-option"
+    value: loggedInChannelName
   }, loggedInChannelName), _react.default.createElement("option", {
     value: _publish_channel_select_states.LOGIN
   }, "Existing"), _react.default.createElement("option", {

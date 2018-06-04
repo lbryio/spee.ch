@@ -46,8 +46,16 @@ const customizedPublishReducer = (siteConfig) => {
   return (state = initialState, action) => {
     switch (action.type) {
       case actions.FILE_SELECTED:
-        return Object.assign({}, initialState, {  // note: clears to initial state
-          file: action.data,
+        return Object.assign({}, state, {
+          file    : action.data,
+          claim   : '',
+          metadata: {
+            title      : '',
+            description: '',
+            license    : '',
+            nsfw       : false,
+          },
+          thumbnail: null,
         });
       case actions.FILE_CLEAR:
         return initialState;

@@ -15,6 +15,12 @@ class ChannelSelect extends React.Component {
     this.toggleAnonymousPublish = this.toggleAnonymousPublish.bind(this);
     this.handleSelection = this.handleSelection.bind(this);
   }
+  componentWillMount () {
+    const { loggedInChannelName } = this.props;
+    if (loggedInChannelName) {
+      this.props.onChannelSelect(loggedInChannelName);
+    }
+  }
   toggleAnonymousPublish (event) {
     const value = event.target.value;
     if (value === 'anonymous') {
@@ -28,24 +34,25 @@ class ChannelSelect extends React.Component {
     this.props.onChannelSelect(selectedOption);
   }
   render () {
+    const { publishInChannel, channelError, selectedChannel, loggedInChannelName } = this.props;
     return (
       <div>
         <PublishDetailsRow
           label={
             <ChooseAnonymousPublishRadio
-              publishInChannel={this.props.publishInChannel}
+              publishInChannel={publishInChannel}
               toggleAnonymousPublish={this.toggleAnonymousPublish}
             />
           }
           content={
             <ChooseChannelPublishRadio
-              publishInChannel={this.props.publishInChannel}
+              publishInChannel={publishInChannel}
               toggleAnonymousPublish={this.toggleAnonymousPublish}
             />
           }
         />
         <ErrorDisplay
-          errorMessage={this.props.channelError}
+          errorMessage={channelError}
           defaultMessage={'Publish anonymously or in a channel'}
         />
 
@@ -57,14 +64,14 @@ class ChannelSelect extends React.Component {
               }
               content={
                 <ChannelSelectDropdown
-                  selectedChannel={this.props.selectedChannel}
-                  handleSelection={this.handleSelection}>
-                  loggedInChannelName={this.props.loggedInChannelName}
-                </ChannelSelectDropdown>
+                  selectedChannel={selectedChannel}
+                  handleSelection={this.handleSelection}
+                  loggedInChannelName={loggedInChannelName}
+                />
               }
             />
-            { (this.props.selectedChannel === LOGIN) && <ChannelLoginForm /> }
-            { (this.props.selectedChannel === CREATE) && <ChannelCreateForm /> }
+            { (selectedChannel === LOGIN) && <ChannelLoginForm /> }
+            { (selectedChannel === CREATE) && <ChannelCreateForm /> }
           </div>
         )}
       </div>
