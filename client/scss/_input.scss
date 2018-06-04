@@ -50,7 +50,7 @@ option {
   padding-right: 1.5em;
 }
 
-.input-text--primary, .select--primary {
+.input-area--primary {
   border-bottom: 1px solid #9b9b9b;
 }
 
@@ -62,8 +62,8 @@ option {
   border-bottom: 1px solid #9b9b9b;
 }
 
-.textarea--primary:focus {
-  border-bottom: 1px solid #9b9b9b;
+.input-area--primary:focus {
+  border-bottom: 1px solid black;
 }
 
 .input-text--full-width, .textarea--full-width {

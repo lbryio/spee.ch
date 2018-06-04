@@ -1,0 +1,14 @@
+.publish-details-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.publish-details-label {
+  width: 30%;
+}
+.publish-details-content {
+  width: 70%;
+}

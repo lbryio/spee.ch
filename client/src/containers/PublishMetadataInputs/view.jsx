@@ -1,5 +1,7 @@
 import React from 'react';
-import ExpandingTextArea from '@components/ExpandingTextArea';
+import PublishDescriptionInput from '@components/PublishDescriptionInput';
+import PublishLicenseInput from '@components/PublishLicenseInput';
+import PublishNsfwInput from '@components/PublishNsfwInput';
 
 class PublishMetadataInputs extends React.Component {
   constructor (props) {
@@ -27,58 +29,19 @@ class PublishMetadataInputs extends React.Component {
       <div>
         {this.props.showMetadataInputs && (
           <div>
-            <div>
-              <div>
-                <label htmlFor='publish-license' className='label'>Description:</label>
-              </div>
-              <div>
-                <ExpandingTextArea
-                  id='publish-description'
-                  className='textarea textarea--primary textarea--full-width'
-                  rows={1}
-                  maxLength={2000}
-                  style={{ maxHeight: 200 }}
-                  name='description'
-                  placeholder='Optional description'
-                  value={this.props.description}
-                  onChange={this.handleInput} />
-              </div>
-            </div>
+            <PublishDescriptionInput
+              description={this.props.description}
+              handleInput={this.handleInput}
+            />
 
-            <div>
-              <div>
-                <label htmlFor='publish-license' className='label'>License:</label>
-              </div>
-              <div>
-                <select
-                  type='text'
-                  name='license'
-                  id='publish-license'
-                  className='select select--primary'
-                  onChange={this.handleSelect}
-                >
-                  <option value=' '>Unspecified</option>
-                  <option value='Public Domain'>Public Domain</option>
-                  <option value='Creative Commons'>Creative Commons</option>
-                </select>
-              </div>
-            </div>
+            <PublishLicenseInput
+              handleSelect={this.handleSelect}
+            />
 
-            <div>
-              <div>
-                <label htmlFor='publish-nsfw' className='label'>Mature:</label>
-              </div>
-              <div>
-                <input
-                  className='input-checkbox'
-                  type='checkbox'
-                  id='publish-nsfw'
-                  name='nsfw'
-                  value={this.props.nsfw}
-                  onChange={this.handleInput}
-                />
-              </div>
-            </div>
+            <PublishNsfwInput
+              nsfw={this.props.nsfw}
+              handleInput={this.handleInput}
+            />
           </div>
         )}
         <button

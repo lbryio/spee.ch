@@ -1,5 +1,55 @@
 import React from 'react';
 import request from '../../utils/request';
+import ErrorDisplay from '@components/ErrorDisplay';
+import PublishDetailsRow from '@components/PublishDetailsRow';
+import Label from '@components/Label';
+
+const ChannelLoginNameInput  = ({ channelName, handleInput }) => {
+  return (
+    <PublishDetailsRow
+      label={
+        <Label value={'Name:'} />
+      }
+      content={
+        <div className='input-area--primary'>
+          <span>@</span>
+          <input
+            type='text'
+            id='channel-login-name-input'
+            className='input-text'
+            name='name'
+            placeholder='Your Channel Name'
+            value={channelName}
+            onChange={handleInput}
+          />
+        </div>
+      }
+    />
+  );
+};
+
+const ChannelLoginPasswordInput  = ({ channelPassword, handleInput }) => {
+  return (
+    <PublishDetailsRow
+      label={
+        <Label value={'Password:'} />
+      }
+      content={
+        <div className='input-area--primary'>
+          <input
+            type='password'
+            id='channel-login-password-input'
+            name='password'
+            className='input-text'
+            placeholder=''
+            value={channelPassword}
+            onChange={handleInput}
+          />
+        </div>
+      }
+    />
+  );
+};
 
 class ChannelLoginForm extends React.Component {
   constructor (props) {
@@ -45,35 +95,21 @@ class ChannelLoginForm extends React.Component {
   }
   render () {
     return (
-      <form id='channel-login-form'>
-        <div className='row row--wide row--short'>
-          <div className='column column--3 column--sml-10'>
-            <label className='label' htmlFor='channel-login-name-input'>Name:</label>
-          </div><div className='column column--6 column--sml-10'>
-            <div className='input-text--primary flex-container--row flex-container--left-bottom'>
-              <span>@</span>
-              <input type='text' id='channel-login-name-input' className='input-text' name='name' placeholder='Your Channel Name' value={this.state.channelName} onChange={this.handleInput} />
-            </div>
-          </div>
-        </div>
-        <div className='row row--wide row--short'>
-          <div className='column column--3 column--sml-10'>
-            <label className='label' htmlFor='channel-login-password-input' >Password:</label>
-          </div><div className='column column--6 column--sml-10'>
-            <div className='input-text--primary'>
-              <input type='password' id='channel-login-password-input' name='password' className='input-text' placeholder='' value={this.state.channelPassword} onChange={this.handleInput} />
-            </div>
-          </div>
-        </div>
-        { this.state.error ? (
-          <p className='info-message--failure'>{this.state.error}</p>
-        ) : (
-          <p className='info-message'>Enter the name and password for your channel</p>
-        )}
-        <div className='row row--wide'>
-          <button className='button--primary' onClick={this.loginToChannel}>Authenticate</button>
-        </div>
-      </form>
+      <div>
+        <ChannelLoginNameInput
+          channelName={this.state.channelName}
+          handleInput={this.handleInput}
+        />
+        <ChannelLoginPasswordInput
+          channelPassword={this.state.channelPassword}
+          handleInput={this.handleInput}
+        />
+        <ErrorDisplay
+          errorMessage={this.state.error}
+          defaultMessage={'Enter the name and password for your channel'}
+        />
+        <button className='button--primary' onClick={this.loginToChannel}>Authenticate</button>
+      </div>
     );
   }
 }

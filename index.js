@@ -85,6 +85,7 @@ function Server () {
     // sync sequelize
     createDatabaseIfNotExists()
       .then(() => {
+        logger.info('getting LBC balance from lbrynet...');
         return getWalletBalance();
       })
       .then(balance => {

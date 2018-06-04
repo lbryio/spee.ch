@@ -1,7 +1,13 @@
 import React from 'react';
 import ChannelLoginForm from '@containers/ChannelLoginForm';
 import ChannelCreateForm from '@containers/ChannelCreateForm';
-import * as states from '../../constants/publish_channel_select_states';
+import { LOGIN, CREATE } from '../../constants/publish_channel_select_states';
+import PublishDetailsRow from '@components/PublishDetailsRow';
+import ChooseAnonymousPublishRadio from '@components/ChooseAnonymousPublishRadio';
+import ChooseChannelPublishRadio from '@components/ChooseChannelPublishRadio';
+import ErrorDisplay from '@components/ErrorDisplay';
+import Label from '@components/Label';
+import ChannelSelectDropdown from '@components/ChannelSelectDropdown';
 
 class ChannelSelect extends React.Component {
   constructor (props) {
@@ -24,35 +30,41 @@ class ChannelSelect extends React.Component {
   render () {
     return (
       <div>
-        <form>
-          <div>
-            <input type='radio' name='anonymous-or-channel' id='anonymous-radio' className='input-radio' value='anonymous' checked={!this.props.publishInChannel} onChange={this.toggleAnonymousPublish} />
-            <label className='label label--pointer' htmlFor='anonymous-radio'>Anonymous</label>
-          </div>
-          <div>
-            <input type='radio' name='anonymous-or-channel' id='channel-radio' className='input-radio' value='in a channel' checked={this.props.publishInChannel} onChange={this.toggleAnonymousPublish} />
-            <label className='label label--pointer' htmlFor='channel-radio'>In a channel</label>
-          </div>
-          { this.props.channelError ? (
-            <p className='info-message--failure'>{this.props.channelError}</p>
-          ) : (
-            <p className='info-message'>Publish anonymously or in a channel</p>
-          )}
-        </form>
+        <PublishDetailsRow
+          label={
+            <ChooseAnonymousPublishRadio
+              publishInChannel={this.props.publishInChannel}
+              toggleAnonymousPublish={this.toggleAnonymousPublish}
+            />
+          }
+          content={
+            <ChooseChannelPublishRadio
+              publishInChannel={this.props.publishInChannel}
+              toggleAnonymousPublish={this.toggleAnonymousPublish}
+            />
+          }
+        />
+        <ErrorDisplay
+          errorMessage={this.props.channelError}
+          defaultMessage={'Publish anonymously or in a channel'}
+        />
+
         { this.props.publishInChannel && (
           <div>
-            <div>
-              <label className='label' htmlFor='channel-name-select'>Channel:</label>
-            </div>
-            <div>
-              <select type='text' id='channel-name-select' className='select select--arrow' value={this.props.selectedChannel} onChange={this.handleSelection}>
-                { this.props.loggedInChannelName && <option value={this.props.loggedInChannelName} id='publish-channel-select-channel-option'>{this.props.loggedInChannelName}</option> }
-                <option value={states.LOGIN}>Existing</option>
-                <option value={states.CREATE}>New</option>
-              </select>
-            </div>
-            { (this.props.selectedChannel === states.LOGIN) && <ChannelLoginForm /> }
-            { (this.props.selectedChannel === states.CREATE) && <ChannelCreateForm /> }
+            <PublishDetailsRow
+              label={
+                <Label value={'Channel:'} />
+              }
+              content={
+                <ChannelSelectDropdown
+                  selectedChannel={this.props.selectedChannel}
+                  handleSelection={this.handleSelection}>
+                  loggedInChannelName={this.props.loggedInChannelName}
+                </ChannelSelectDropdown>
+              }
+            />
+            { (this.props.selectedChannel === LOGIN) && <ChannelLoginForm /> }
+            { (this.props.selectedChannel === CREATE) && <ChannelCreateForm /> }
           </div>
         )}
       </div>
