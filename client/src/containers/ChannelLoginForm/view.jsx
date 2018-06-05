@@ -1,55 +1,9 @@
 import React from 'react';
 import request from '../../utils/request';
 import ErrorDisplay from '@components/ErrorDisplay';
-import PublishDetailsRow from '@components/PublishDetailsRow';
-import Label from '@components/Label';
-
-const ChannelLoginNameInput  = ({ channelName, handleInput }) => {
-  return (
-    <PublishDetailsRow
-      label={
-        <Label value={'Name:'} />
-      }
-      content={
-        <div className='input-area--primary'>
-          <span>@</span>
-          <input
-            type='text'
-            id='channel-login-name-input'
-            className='input-text'
-            name='name'
-            placeholder='Your Channel Name'
-            value={channelName}
-            onChange={handleInput}
-          />
-        </div>
-      }
-    />
-  );
-};
-
-const ChannelLoginPasswordInput  = ({ channelPassword, handleInput }) => {
-  return (
-    <PublishDetailsRow
-      label={
-        <Label value={'Password:'} />
-      }
-      content={
-        <div className='input-area--primary'>
-          <input
-            type='password'
-            id='channel-login-password-input'
-            name='password'
-            className='input-text'
-            placeholder=''
-            value={channelPassword}
-            onChange={handleInput}
-          />
-        </div>
-      }
-    />
-  );
-};
+import ChannelLoginNameInput from '@components/ChannelLoginNameInput';
+import ChannelLoginPasswordInput from '@components/ChannelLoginPasswordInput';
+import ButtonPrimary from '@components/ButtonPrimary';
 
 class ChannelLoginForm extends React.Component {
   constructor (props) {
@@ -108,7 +62,10 @@ class ChannelLoginForm extends React.Component {
           errorMessage={this.state.error}
           defaultMessage={'Enter the name and password for your channel'}
         />
-        <button className='button--primary' onClick={this.loginToChannel}>Authenticate</button>
+        <ButtonPrimary
+          value={'Authenticate'}
+          onClickHandler={this.loginToChannel}
+        />
       </div>
     );
   }

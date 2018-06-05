@@ -5,6 +5,9 @@ import PublishThumbnailInput from '@containers/PublishThumbnailInput';
 import PublishMetadataInputs from '@containers/PublishMetadataInputs';
 import ChannelSelect from '@containers/ChannelSelect';
 import Row from '@components/Row';
+import ButtonPrimaryJumbo from '@components/ButtonPrimaryJumbo';
+import ButtonTertiary from '@components/ButtonTertiary';
+import SpaceAround from '@components/SpaceAround';
 
 class PublishDetails extends React.Component {
   constructor (props) {
@@ -36,23 +39,24 @@ class PublishDetails extends React.Component {
         </Row>
 
         <Row>
-          <button
-            id='publish-submit'
-            className='button--primary button--large'
-            onClick={this.onPublishSubmit}
-          >
-            Publish
-          </button>
+          <ButtonPrimaryJumbo
+            value={'Publish'}
+            onClickHandler={this.onPublishSubmit}
+          />
         </Row>
 
         <Row>
-          <button className='button--cancel' onClick={this.props.clearFile}>Cancel</button>
+          <SpaceAround>
+            <ButtonTertiary
+              value={'Cancel'}
+              onClickHandler={this.props.clearFile}
+            />
+          </SpaceAround>
         </Row>
 
         <Row>
           <p className='fine-print'>By clicking 'Publish', you affirm that you have the rights to publish this content to the LBRY network, and that you understand the properties of publishing it to a decentralized, user-controlled network. <a className='link--primary' target='_blank' href='https://lbry.io/learn'>Read more.</a></p>
         </Row>
-
       </div>
     );
   }

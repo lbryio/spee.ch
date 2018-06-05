@@ -10,7 +10,6 @@
 @import '_link';
 @import '_info-message';
 @import '_input';
-@import '_button';
 @import '_span';
 @import '_video';
 @import '_asset';
@@ -21,10 +20,15 @@
 @import 'components/_page-content';
 @import 'components/_horizontal-split';
 @import 'components/_space-between';
+@import 'components/_space-around';
 @import 'components/_column';
 @import 'components/_row';
 @import 'components/_nav-bar';
 @import 'components/_publish-details-row';
+@import 'components/_button';
+@import 'components/_button-primary';
+@import 'components/_button-secondary';
+@import 'components/_button-tertiary';
 @import 'containers/_dropzone';
 @import 'containers/_publish-url-input';
 @import 'containers/_site-description';

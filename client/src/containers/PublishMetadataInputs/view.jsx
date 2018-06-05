@@ -2,6 +2,7 @@ import React from 'react';
 import PublishDescriptionInput from '@components/PublishDescriptionInput';
 import PublishLicenseInput from '@components/PublishLicenseInput';
 import PublishNsfwInput from '@components/PublishNsfwInput';
+import ButtonSecondary from '@components/ButtonSecondary';
 
 class PublishMetadataInputs extends React.Component {
   constructor (props) {
@@ -33,23 +34,19 @@ class PublishMetadataInputs extends React.Component {
               description={this.props.description}
               handleInput={this.handleInput}
             />
-
             <PublishLicenseInput
               handleSelect={this.handleSelect}
             />
-
             <PublishNsfwInput
               nsfw={this.props.nsfw}
               handleInput={this.handleInput}
             />
           </div>
         )}
-        <button
-          className='button--secondary'
-          onClick={this.toggleShowInputs}
-        >
-          {this.props.showMetadataInputs ? 'less' : 'more'}
-        </button>
+        <ButtonSecondary
+          value={this.props.showMetadataInputs ? 'less' : 'more'}
+          onClickHandler={this.toggleShowInputs}
+        />
       </div>
     );
   }

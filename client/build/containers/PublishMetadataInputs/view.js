@@ -13,6 +13,8 @@ var _PublishLicenseInput = _interopRequireDefault(require("@components/PublishLi
 
 var _PublishNsfwInput = _interopRequireDefault(require("@components/PublishNsfwInput"));
 
+var _ButtonSecondary = _interopRequireDefault(require("@components/ButtonSecondary"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -79,10 +81,10 @@ function (_React$Component) {
       }), _react.default.createElement(_PublishNsfwInput.default, {
         nsfw: this.props.nsfw,
         handleInput: this.handleInput
-      })), _react.default.createElement("button", {
-        className: "button--secondary",
-        onClick: this.toggleShowInputs
-      }, this.props.showMetadataInputs ? 'less' : 'more'));
+      })), _react.default.createElement(_ButtonSecondary.default, {
+        value: this.props.showMetadataInputs ? 'less' : 'more',
+        onClickHandler: this.toggleShowInputs
+      }));
     }
   }]);
 

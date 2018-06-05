@@ -1,0 +1,22 @@
+.button--secondary, .button--secondary:focus {
+  border: 0;
+  border-bottom: 1px solid $primary-color;
+  padding: 0.5em;
+  margin: 0.5em 0.3em 0.5em 0.3em;
+  color: $primary-color;
+  background-color: $background-color;
+  outline: 0;
+}
+
+.button--secondary:focus{
+  border-bottom: 1px solid $secondary-color;
+  background-color: $tertiary-color;
+}
+
+.button--secondary:hover {
+  color: $interactive-color;
+}
+
+.button--secondary:active {
+  color: $background-color;
+}

@@ -11,9 +11,11 @@ var _request = _interopRequireDefault(require("../../utils/request"));
 
 var _ErrorDisplay = _interopRequireDefault(require("@components/ErrorDisplay"));
 
-var _PublishDetailsRow = _interopRequireDefault(require("@components/PublishDetailsRow"));
+var _ChannelLoginNameInput = _interopRequireDefault(require("@components/ChannelLoginNameInput"));
 
-var _Label = _interopRequireDefault(require("@components/Label"));
+var _ChannelLoginPasswordInput = _interopRequireDefault(require("@components/ChannelLoginPasswordInput"));
+
+var _ButtonPrimary = _interopRequireDefault(require("@components/ButtonPrimary"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -36,48 +38,6 @@ function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) ===
 function _getPrototypeOf(o) { _getPrototypeOf = Object.getPrototypeOf || function _getPrototypeOf(o) { return o.__proto__; }; return _getPrototypeOf(o); }
 
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-var ChannelLoginNameInput = function ChannelLoginNameInput(_ref) {
-  var channelName = _ref.channelName,
-      handleInput = _ref.handleInput;
-  return _react.default.createElement(_PublishDetailsRow.default, {
-    label: _react.default.createElement(_Label.default, {
-      value: 'Name:'
-    }),
-    content: _react.default.createElement("div", {
-      className: "input-area--primary"
-    }, _react.default.createElement("span", null, "@"), _react.default.createElement("input", {
-      type: "text",
-      id: "channel-login-name-input",
-      className: "input-text",
-      name: "name",
-      placeholder: "Your Channel Name",
-      value: channelName,
-      onChange: handleInput
-    }))
-  });
-};
-
-var ChannelLoginPasswordInput = function ChannelLoginPasswordInput(_ref2) {
-  var channelPassword = _ref2.channelPassword,
-      handleInput = _ref2.handleInput;
-  return _react.default.createElement(_PublishDetailsRow.default, {
-    label: _react.default.createElement(_Label.default, {
-      value: 'Password:'
-    }),
-    content: _react.default.createElement("div", {
-      className: "input-area--primary"
-    }, _react.default.createElement("input", {
-      type: "password",
-      id: "channel-login-password-input",
-      name: "password",
-      className: "input-text",
-      placeholder: "",
-      value: channelPassword,
-      onChange: handleInput
-    }))
-  });
-};
 
 var ChannelLoginForm =
 /*#__PURE__*/
@@ -122,12 +82,12 @@ function (_React$Component) {
         }),
         credentials: 'include'
       };
-      (0, _request.default)('login', params).then(function (_ref3) {
-        var success = _ref3.success,
-            channelName = _ref3.channelName,
-            shortChannelId = _ref3.shortChannelId,
-            channelClaimId = _ref3.channelClaimId,
-            message = _ref3.message;
+      (0, _request.default)('login', params).then(function (_ref) {
+        var success = _ref.success,
+            channelName = _ref.channelName,
+            shortChannelId = _ref.shortChannelId,
+            channelClaimId = _ref.channelClaimId,
+            message = _ref.message;
 
         if (success) {
           _this2.props.onChannelLogin(channelName, shortChannelId, channelClaimId);
@@ -153,19 +113,19 @@ function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
-      return _react.default.createElement("div", null, _react.default.createElement(ChannelLoginNameInput, {
+      return _react.default.createElement("div", null, _react.default.createElement(_ChannelLoginNameInput.default, {
         channelName: this.state.channelName,
         handleInput: this.handleInput
-      }), _react.default.createElement(ChannelLoginPasswordInput, {
+      }), _react.default.createElement(_ChannelLoginPasswordInput.default, {
         channelPassword: this.state.channelPassword,
         handleInput: this.handleInput
       }), _react.default.createElement(_ErrorDisplay.default, {
         errorMessage: this.state.error,
         defaultMessage: 'Enter the name and password for your channel'
-      }), _react.default.createElement("button", {
-        className: "button--primary",
-        onClick: this.loginToChannel
-      }, "Authenticate"));
+      }), _react.default.createElement(_ButtonPrimary.default, {
+        value: 'Authenticate',
+        onClickHandler: this.loginToChannel
+      }));
     }
   }]);
 
