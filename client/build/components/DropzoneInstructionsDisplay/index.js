@@ -19,7 +19,7 @@ var DropzoneInstructionsDisplay = function DropzoneInstructionsDisplay(_ref) {
   }, fileError), _react.default.createElement("p", null, "Drag & drop image or video here to publish"), _react.default.createElement("p", {
     className: "fine-print"
   }, "OR"), _react.default.createElement("p", {
-    className: "blue--underlined"
+    className: "text--underline"
   }, "CHOOSE FILE"));
 };
 

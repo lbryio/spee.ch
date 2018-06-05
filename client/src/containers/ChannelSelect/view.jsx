@@ -5,7 +5,7 @@ import { LOGIN, CREATE } from '../../constants/publish_channel_select_states';
 import PublishDetailsRow from '@components/PublishDetailsRow';
 import ChooseAnonymousPublishRadio from '@components/ChooseAnonymousPublishRadio';
 import ChooseChannelPublishRadio from '@components/ChooseChannelPublishRadio';
-import ErrorDisplay from '@components/ErrorDisplay';
+import FormFeedbackDisplay from '@components/FormFeedbackDisplay';
 import Label from '@components/Label';
 import ChannelSelectDropdown from '@components/ChannelSelectDropdown';
 
@@ -51,7 +51,7 @@ class ChannelSelect extends React.Component {
             />
           }
         />
-        <ErrorDisplay
+        <FormFeedbackDisplay
           errorMessage={channelError}
           defaultMessage={'Publish anonymously or in a channel'}
         />

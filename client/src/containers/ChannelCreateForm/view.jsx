@@ -2,7 +2,7 @@ import React from 'react';
 import ChannelCreateNameInput from '@components/ChannelCreateNameInput';
 import ChannelCreatePasswordInput from '@components/ChannelCreatePasswordInput';
 import ButtonPrimary from '@components/ButtonPrimary';
-import ErrorDisplay from '@components/ErrorDisplay';
+import FormFeedbackDisplay from '@components/FormFeedbackDisplay';
 import ProgressBar from '@components/ProgressBar';
 
 class ChannelCreateForm extends React.Component {
@@ -69,7 +69,7 @@ class ChannelCreateForm extends React.Component {
               value={password.value}
               handlePasswordInput={this.handlePasswordInput}
             />
-            <ErrorDisplay
+            <FormFeedbackDisplay
               errorMessage={formError}
               defaultMessage={'Choose a name and password for your channel'}
             />

@@ -5,8 +5,8 @@ class PublishDisabledMessage extends React.Component {
     const message = this.props.message;
     return (
       <div className='row dropzone--disabled row--tall flex-container--column flex-container--center-center'>
-        <p className='text--disabled'>Publishing is currently disabled.</p>
-        <p className='text--disabled'>{message}</p>
+        <p className='text--secondary'>Publishing is currently disabled.</p>
+        <p className='text--secondary'>{message}</p>
       </div>
     );
   }

@@ -13,7 +13,7 @@ var _ChannelCreatePasswordInput = _interopRequireDefault(require("@components/Ch
 
 var _ButtonPrimary = _interopRequireDefault(require("@components/ButtonPrimary"));
 
-var _ErrorDisplay = _interopRequireDefault(require("@components/ErrorDisplay"));
+var _FormFeedbackDisplay = _interopRequireDefault(require("@components/FormFeedbackDisplay"));
 
 var _ProgressBar = _interopRequireDefault(require("@components/ProgressBar"));
 
@@ -129,7 +129,7 @@ function (_React$Component) {
       }), _react.default.createElement(_ChannelCreatePasswordInput.default, {
         value: password.value,
         handlePasswordInput: this.handlePasswordInput
-      }), _react.default.createElement(_ErrorDisplay.default, {
+      }), _react.default.createElement(_FormFeedbackDisplay.default, {
         errorMessage: formError,
         defaultMessage: 'Choose a name and password for your channel'
       }), _react.default.createElement(_ButtonPrimary.default, {

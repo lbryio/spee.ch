@@ -9,9 +9,9 @@ var _react = _interopRequireDefault(require("react"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var AboutSpeechOne = function AboutSpeechOne() {
+var AboutSpeechOverview = function AboutSpeechOverview() {
   return _react.default.createElement("div", null, _react.default.createElement("p", {
-    className: "pull-quote"
+    className: "text--pull-quote"
   }, "Spee.ch is an open-source project.  Please contribute to the existing site, or fork it and make your own."), _react.default.createElement("p", null, _react.default.createElement("a", {
     className: "link--primary",
     target: "_blank",
@@ -31,5 +31,5 @@ var AboutSpeechOne = function AboutSpeechOne() {
   }, "DOCUMENTATION")));
 };
 
-var _default = AboutSpeechOne;
+var _default = AboutSpeechOverview;
 exports.default = _default;

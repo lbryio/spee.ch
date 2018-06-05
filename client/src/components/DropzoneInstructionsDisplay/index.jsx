@@ -6,7 +6,7 @@ const DropzoneInstructionsDisplay = ({fileError}) => {
       <p className='info-message-placeholder info-message--failure' id='input-error-file-selection'>{fileError}</p>
       <p>Drag & drop image or video here to publish</p>
       <p className='fine-print'>OR</p>
-      <p className='blue--underlined'>CHOOSE FILE</p>
+      <p className='text--underline'>CHOOSE FILE</p>
     </div>
   );
 };

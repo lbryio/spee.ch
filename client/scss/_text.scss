@@ -1,39 +1,54 @@
-body, button, input, textarea, label, select, option, #channel-publish-in-progress > p, #channel-publish-done > p {
-  font-family: 'Lekton', monospace;
-  font-size: large;
+// set defaults
+h1 {
+ font-size: xx-large;
 }
 
-h3, p {
+h2, h3, p {
 
   font-size: x-large;
 }
 
-.text--large {
-  font-size: 2rem;
+h2 {
+  text-decoration: underline;
 }
 
-.text--disabled {
-  color: #9b9b9b;
+h3 {
+  font-weight: bold;
 }
 
-.pull-quote {
+body, button, input, textarea, label, select, option {
+  font-family: 'Lekton', monospace;
+  font-size: large;
+}
+
+// color modifiers
+.text--primary {
+  color: $primary-color;
+}
+
+.text--secondary {
+  color: $secondary-color;
+}
+
+.text--tertiary {
+  color: $tertiary-color;
+}
+
+.text--interactive {
+  color: $interactive-color;
+}
+
+// special texts
+
+.text--pull-quote {
   font-size: 3rem;
   margin-top: 1rem;
 }
 
-.fine-print {
+.text--fine-print {
   font-size: small;
 }
 
-#show-body > .fine-print {
-  text-align: center;
-}
-
-.blue {
-  color: #4156C5;
-}
-
-.blue--underlined {
-  color: #4156C5;
+.text--underline {
   text-decoration: underline;
 }

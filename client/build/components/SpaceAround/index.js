@@ -27,16 +27,16 @@ function _assertThisInitialized(self) { if (self === void 0) { throw new Referen
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.getPrototypeOf || function _getPrototypeOf(o) { return o.__proto__; }; return _getPrototypeOf(o); }
 
-var SpaceBetween =
+var SpaceAround =
 /*#__PURE__*/
 function (_React$Component) {
-  function SpaceBetween() {
-    _classCallCheck(this, SpaceBetween);
+  function SpaceAround() {
+    _classCallCheck(this, SpaceAround);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(SpaceBetween).apply(this, arguments));
+    return _possibleConstructorReturn(this, _getPrototypeOf(SpaceAround).apply(this, arguments));
   }
 
-  _createClass(SpaceBetween, [{
+  _createClass(SpaceAround, [{
     key: "shouldComponentUpdate",
     value: function shouldComponentUpdate() {
       return false;
@@ -50,10 +50,10 @@ function (_React$Component) {
     }
   }]);
 
-  _inherits(SpaceBetween, _React$Component);
+  _inherits(SpaceAround, _React$Component);
 
-  return SpaceBetween;
+  return SpaceAround;
 }(_react.default.Component);
 
-var _default = SpaceBetween;
+var _default = SpaceAround;
 exports.default = _default;

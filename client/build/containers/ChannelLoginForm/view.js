@@ -9,7 +9,7 @@ var _react = _interopRequireDefault(require("react"));
 
 var _request = _interopRequireDefault(require("../../utils/request"));
 
-var _ErrorDisplay = _interopRequireDefault(require("@components/ErrorDisplay"));
+var _FormFeedbackDisplay = _interopRequireDefault(require("@components/FormFeedbackDisplay"));
 
 var _ChannelLoginNameInput = _interopRequireDefault(require("@components/ChannelLoginNameInput"));
 
@@ -119,7 +119,7 @@ function (_React$Component) {
       }), _react.default.createElement(_ChannelLoginPasswordInput.default, {
         channelPassword: this.state.channelPassword,
         handleInput: this.handleInput
-      }), _react.default.createElement(_ErrorDisplay.default, {
+      }), _react.default.createElement(_FormFeedbackDisplay.default, {
         errorMessage: this.state.error,
         defaultMessage: 'Enter the name and password for your channel'
       }), _react.default.createElement(_ButtonPrimary.default, {

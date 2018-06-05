@@ -9,6 +9,8 @@ var _react = _interopRequireDefault(require("react"));
 
 var _PublishUrlMiddleDisplay = _interopRequireDefault(require("@components/PublishUrlMiddleDisplay"));
 
+var _FormFeedbackDisplay = _interopRequireDefault(require("@components/FormFeedbackDisplay"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -128,14 +130,10 @@ function (_React$Component) {
         placeholder: "your-url-here",
         onChange: this.handleInput,
         value: claim
-      }))), _react.default.createElement("div", {
-        className: 'publish-url-input-error'
-      }, urlError ? _react.default.createElement("p", {
-        id: "input-error-claim-name",
-        className: "info-message--failure"
-      }, urlError) : _react.default.createElement("p", {
-        className: "info-message"
-      }, "Choose a custom url")));
+      }))), _react.default.createElement(_FormFeedbackDisplay.default, {
+        errorMessage: urlError,
+        defaultMessage: 'Choose a custom url'
+      }));
     }
   }]);
 

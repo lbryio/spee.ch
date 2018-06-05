@@ -1,5 +1,6 @@
 import React from 'react';
 import UrlMiddle from '@components/PublishUrlMiddleDisplay';
+import FormFeedbackDisplay from '@components/FormFeedbackDisplay';
 
 class PublishUrlInput extends React.Component {
   constructor (props) {
@@ -68,13 +69,10 @@ class PublishUrlInput extends React.Component {
             />
           </div>
         </div>
-        <div className={'publish-url-input-error'}>
-          { urlError ? (
-            <p id='input-error-claim-name' className='info-message--failure'>{urlError}</p>
-          ) : (
-            <p className='info-message'>Choose a custom url</p>
-          )}
-        </div>
+        <FormFeedbackDisplay
+          errorMessage={urlError}
+          defaultMessage={'Choose a custom url'}
+        />
       </div>
     );
   }

@@ -1,6 +1,6 @@
 import React from 'react';
 import request from '../../utils/request';
-import ErrorDisplay from '@components/ErrorDisplay';
+import FormFeedbackDisplay from '@components/FormFeedbackDisplay';
 import ChannelLoginNameInput from '@components/ChannelLoginNameInput';
 import ChannelLoginPasswordInput from '@components/ChannelLoginPasswordInput';
 import ButtonPrimary from '@components/ButtonPrimary';
@@ -58,7 +58,7 @@ class ChannelLoginForm extends React.Component {
           channelPassword={this.state.channelPassword}
           handleInput={this.handleInput}
         />
-        <ErrorDisplay
+        <FormFeedbackDisplay
           errorMessage={this.state.error}
           defaultMessage={'Enter the name and password for your channel'}
         />

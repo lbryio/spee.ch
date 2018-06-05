@@ -1,6 +1,6 @@
 import React from 'react';
 
-class SpaceBetween extends React.Component {
+class SpaceAround extends React.Component {
   shouldComponentUpdate () {
     return false;
   }
@@ -13,4 +13,4 @@ class SpaceBetween extends React.Component {
   }
 }
 
-export default SpaceBetween;
+export default SpaceAround;

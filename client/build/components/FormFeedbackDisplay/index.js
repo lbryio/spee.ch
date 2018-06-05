@@ -9,7 +9,7 @@ var _react = _interopRequireDefault(require("react"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var ErrorDisplay = function ErrorDisplay(_ref) {
+var FormFeedbackDisplay = function FormFeedbackDisplay(_ref) {
   var errorMessage = _ref.errorMessage,
       defaultMessage = _ref.defaultMessage;
   return _react.default.createElement("div", null, errorMessage ? _react.default.createElement("p", {
@@ -19,5 +19,5 @@ var ErrorDisplay = function ErrorDisplay(_ref) {
   }, defaultMessage));
 };
 
-var _default = ErrorDisplay;
+var _default = FormFeedbackDisplay;
 exports.default = _default;

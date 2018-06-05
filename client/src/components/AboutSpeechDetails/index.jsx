@@ -1,6 +1,6 @@
 import React from 'react';
 
-const AboutSpeechTwo = () => {
+const AboutSpeechDetails = () => {
   return (
     <div>
       <p>Spee.ch is a media-hosting site that reads from and publishes content to the <a className='link--primary' href='https://lbry.io'>LBRY</a> blockchain.</p>
@@ -12,4 +12,4 @@ const AboutSpeechTwo = () => {
   );
 };
 
-export default AboutSpeechTwo;
+export default AboutSpeechDetails;

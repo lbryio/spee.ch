@@ -11,9 +11,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var AssetTitle = function AssetTitle(_ref) {
   var title = _ref.title;
-  return _react.default.createElement("div", null, _react.default.createElement("span", {
-    className: "text--large"
-  }, title));
+  return _react.default.createElement("div", null, _react.default.createElement("h3", null, title));
 };
 
 var _default = AssetTitle;

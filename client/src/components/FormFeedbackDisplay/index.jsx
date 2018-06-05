@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ErrorDisplay = ({ errorMessage, defaultMessage }) => {
+const FormFeedbackDisplay = ({ errorMessage, defaultMessage }) => {
   return (
     <div>
       { errorMessage ? (
@@ -12,4 +12,4 @@ const ErrorDisplay = ({ errorMessage, defaultMessage }) => {
   );
 };
 
-export default ErrorDisplay;
+export default FormFeedbackDisplay;

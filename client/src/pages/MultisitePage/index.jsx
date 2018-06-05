@@ -5,7 +5,7 @@ class MultisitePage extends React.Component {
   render () {
     return (
       <PageLayout pageTitle={'Multisite'} pageUri={'/multisite'}>
-        <p className='pull-quote'>Introducing Spee.ch Multisite</p>
+        <p className='text--pull-quote'>Introducing Spee.ch Multisite</p>
         <p>Hi there!  My name is <a href={'https://github.com/billbitt'} target={'_blank'}>Bill</a>, and I’d like to speak with you about Spee.ch.  No, not ‘speech,’ ‘<i><a href={'https://spee.ch'} target={'_blank'}>Spee.ch.</a></i>’ You know what, just read on...</p>
         <h2>A Little Background</h2>
         <p>Wow, time flies!  A little over a year ago Spee.ch was nothing more than a glimmer in the eye of LBRY CEO Jeremy Kaufman.  At that time, the <a href={'https://lbry.io/faq/what-is-lbry'} target={'_blank'}>LBRY protocol</a> was still so early in its development, that there were no web-based applications for interacting with the LBRY blockchain. But then, something beautiful happened.  On March 29th, 2017, Jeremy sat down with Jack, and together they <a href={'https://www.youtube.com/watch?v=C9LCapt_OYw'} target={'_blank'}>live coded a single-page PHP site</a> that could publish images to the LBRY network.  And just like that, Spee.ch was born!</p>

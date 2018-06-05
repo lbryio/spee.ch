@@ -3,7 +3,7 @@ import React from 'react';
 const AssetTitle = ({ title }) => {
   return (
     <div>
-      <span className='text--large'>{title}</span>
+      <h3>{title}</h3>
     </div>
   );
 };

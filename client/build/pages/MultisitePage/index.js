@@ -45,7 +45,7 @@ function (_React$Component) {
         pageTitle: 'Multisite',
         pageUri: '/multisite'
       }, _react.default.createElement("p", {
-        className: "pull-quote"
+        className: "text--pull-quote"
       }, "Introducing Spee.ch Multisite"), _react.default.createElement("p", null, "Hi there!  My name is ", _react.default.createElement("a", {
         href: 'https://github.com/billbitt',
         target: '_blank'

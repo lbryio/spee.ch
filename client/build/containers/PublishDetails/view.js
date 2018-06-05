@@ -25,6 +25,8 @@ var _ButtonTertiary = _interopRequireDefault(require("@components/ButtonTertiary
 
 var _SpaceAround = _interopRequireDefault(require("@components/SpaceAround"));
 
+var _PublishFinePrint = _interopRequireDefault(require("@components/PublishFinePrint"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -72,13 +74,7 @@ function (_React$Component) {
       })), _react.default.createElement(_Row.default, null, _react.default.createElement(_SpaceAround.default, null, _react.default.createElement(_ButtonTertiary.default, {
         value: 'Cancel',
         onClickHandler: this.props.clearFile
-      }))), _react.default.createElement(_Row.default, null, _react.default.createElement("p", {
-        className: "fine-print"
-      }, "By clicking 'Publish', you affirm that you have the rights to publish this content to the LBRY network, and that you understand the properties of publishing it to a decentralized, user-controlled network. ", _react.default.createElement("a", {
-        className: "link--primary",
-        target: "_blank",
-        href: "https://lbry.io/learn"
-      }, "Read more."))));
+      }))), _react.default.createElement(_Row.default, null, _react.default.createElement(_PublishFinePrint.default, null)));
     }
   }]);
 

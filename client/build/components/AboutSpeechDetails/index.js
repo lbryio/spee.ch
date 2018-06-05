@@ -9,7 +9,7 @@ var _react = _interopRequireDefault(require("react"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var AboutSpeechTwo = function AboutSpeechTwo() {
+var AboutSpeechDetails = function AboutSpeechDetails() {
   return _react.default.createElement("div", null, _react.default.createElement("p", null, "Spee.ch is a media-hosting site that reads from and publishes content to the ", _react.default.createElement("a", {
     className: "link--primary",
     href: "https://lbry.io"
@@ -28,5 +28,5 @@ var AboutSpeechTwo = function AboutSpeechTwo() {
   }, "github issues"), "."));
 };
 
-var _default = AboutSpeechTwo;
+var _default = AboutSpeechDetails;
 exports.default = _default;

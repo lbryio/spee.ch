@@ -19,7 +19,7 @@ var _ChooseAnonymousPublishRadio = _interopRequireDefault(require("@components/C
 
 var _ChooseChannelPublishRadio = _interopRequireDefault(require("@components/ChooseChannelPublishRadio"));
 
-var _ErrorDisplay = _interopRequireDefault(require("@components/ErrorDisplay"));
+var _FormFeedbackDisplay = _interopRequireDefault(require("@components/FormFeedbackDisplay"));
 
 var _Label = _interopRequireDefault(require("@components/Label"));
 
@@ -102,7 +102,7 @@ function (_React$Component) {
           publishInChannel: publishInChannel,
           toggleAnonymousPublish: this.toggleAnonymousPublish
         })
-      }), _react.default.createElement(_ErrorDisplay.default, {
+      }), _react.default.createElement(_FormFeedbackDisplay.default, {
         errorMessage: channelError,
         defaultMessage: 'Publish anonymously or in a channel'
       }), this.props.publishInChannel && _react.default.createElement("div", null, _react.default.createElement(_PublishDetailsRow.default, {

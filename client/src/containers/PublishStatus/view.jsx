@@ -10,14 +10,14 @@ class PublishStatus extends React.Component {
         {status === publishStates.LOAD_START &&
         <div className='row align-content-center'>
           <p>File is loading to server</p>
-          <p className='blue'>0%</p>
+          <p className='text--primary'>0%</p>
         </div>
         }
         {status === publishStates.LOADING &&
         <div>
           <div className='row align-content-center'>
             <p>File is loading to server</p>
-            <p className='blue'>{message}</p>
+            <p className='text--primary'>{message}</p>
           </div>
         </div>
         }
