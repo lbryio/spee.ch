@@ -1,5 +1,5 @@
 const logger = require('winston');
-const { details, publishing } = require('../../../../../config/siteConfig.js');
+const { details, publishing } = require('@config/siteConfig.js');
 
 const createThumbnailPublishParams = (thumbnailFilePath, claimName, license, nsfw) => {
   if (!thumbnailFilePath) {

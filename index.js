@@ -12,30 +12,45 @@ const Path = require('path');
 // load local modules
 const requestLogger = require('./server/middleware/requestLogger.js');
 const siteConfig = require('@config/siteConfig.js');
+const PORT = siteConfig.details.port;
 const createDatabaseIfNotExists = require('./server/models/utils/createDatabaseIfNotExists.js');
-const { getWalletBalance } = require('./server/lbrynet/index');
+const { getWalletBalance } = require('./server/lbrynet');
+const db = require('./server/models');
+
+// configure logging
+const configureLogging = require('./server/utils/configureLogging.js');
+configureLogging();
+
+// configure slack logging
+const configureSlack = require('./server/utils/configureSlack.js');
+configureSlack();
 
 /* create app */
-// create an Express application
 const app = express();
+
 // trust the proxy to get ip address for us
 app.enable('trust proxy');
 
-/* add middleware */
 // set HTTP headers to protect against well-known web vulnerabilties
 app.use(helmet());
+
 // 'express.static' to serve static files from public directory
 const publicPath = Path.resolve(process.cwd(), 'public');
 app.use(express.static(publicPath));
 logger.info(`serving static files from default static path at ${publicPath}.`);
+
 // 'body parser' for parsing application/json
 app.use(bodyParser.json());
+
 // 'body parser' for parsing application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
+
 // add custom middleware (note: build out to accept dynamically use what is in server/middleware/
 app.use(requestLogger);
+
 // configure passport
 const speechPassport = require('./server/speechPassport/index');
+
 // initialize passport
 const sessionKey = siteConfig.auth.sessionKey;
 app.use(cookieSession({
@@ -44,6 +59,7 @@ app.use(cookieSession({
 }));
 app.use(speechPassport.initialize());
 app.use(speechPassport.session());
+
 // configure handlebars & register it with express app
 const hbs = expressHandlebars.create({
   defaultLayout: 'embed',
@@ -51,6 +67,7 @@ const hbs = expressHandlebars.create({
 });
 app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
+
 // set the routes on the app
 require('./server/routes/auth/index')(app);
 require('./server/routes/api/index')(app);
@@ -62,8 +79,6 @@ require('./server/routes/fallback/index')(app);
 const server = http.Server(app);
 
 /* start the server */
-const db = require('./server/models/index');
-const PORT = siteConfig.details.port;
 
 const startServer = () => {
   return createDatabaseIfNotExists()

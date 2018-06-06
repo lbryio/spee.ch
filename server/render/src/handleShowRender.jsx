@@ -13,7 +13,7 @@ import Sagas from '@sagas';
 import Actions from '@actions';
 import Helmet from 'react-helmet';
 
-const siteConfig = require('../../../config/siteConfig.js');
+const siteConfig = require('@config/siteConfig.js');
 
 const returnSagaWithParams = (saga, params) => {
   return function * () {
