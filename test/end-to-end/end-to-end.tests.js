@@ -1,8 +1,8 @@
 const chai = require('chai');
 const expect = chai.expect;
 const chaiHttp = require('chai-http');
-const { details: { host } } = require('../../config/siteConfig.js');
-const { testChannel, testChannelId, testChannelPassword } = require('../../devConfig/testingConfig.js');
+const { details: { host } } = require('@config/siteConfig.js');
+const { testChannel, testChannelId, testChannelPassword } = require('@devConfig/testingConfig.js');
 const requestTimeout = 20000;
 const publishTimeout = 120000;
 const fs = require('fs');
