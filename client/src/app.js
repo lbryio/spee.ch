@@ -8,7 +8,7 @@ import ShowPage from '@pages/ShowPage';
 import FourOhFourPage from '@pages/FourOhFourPage';
 import MultisitePage from '@pages/MultisitePage';
 
-const customizedApp = () => {
+const App = () => {
   return (
     <Switch>
       <Route exact path='/' component={HomePage} />
@@ -22,4 +22,4 @@ const customizedApp = () => {
   );
 };
 
-export default customizedApp;
+export default App;
