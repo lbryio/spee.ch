@@ -9,7 +9,7 @@ import App from '@app';
 import renderFullPage from '../renderFullPage.js';
 import Helmet from 'react-helmet';
 
-const siteConfig = require('@config/siteConfig.js');
+const siteConfig = require('@config/siteConfig');
 
 module.exports = (req, res) => {
   let context = {};

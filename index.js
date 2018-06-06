@@ -11,7 +11,7 @@ const Path = require('path');
 
 // load local modules
 const requestLogger = require('./server/middleware/requestLogger.js');
-const siteConfig = require('@config/siteConfig.js');
+const siteConfig = require('@config/siteConfig');
 const PORT = siteConfig.details.port;
 const createDatabaseIfNotExists = require('./server/models/utils/createDatabaseIfNotExists.js');
 const { getWalletBalance } = require('./server/lbrynet');

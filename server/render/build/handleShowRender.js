@@ -30,7 +30,7 @@ var _reactHelmet = _interopRequireDefault(require("react-helmet"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var siteConfig = require('../../../config/siteConfig.js');
+var siteConfig = require('@config/siteConfig');
 
 var returnSagaWithParams = function returnSagaWithParams(saga, params) {
   return (

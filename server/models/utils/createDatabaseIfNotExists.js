@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 
 const createDatabaseIfNotExists = () => {
-  const {database, username, password} = require('@config/mysqlConfig.js');
+  const {database, username, password} = require('@config/mysqlConfig');
   const sequelize = new Sequelize('', username, password, {
     dialect         : 'mysql',
     logging         : false,

@@ -1,4 +1,4 @@
-const { details: { host } } = require('@config/siteConfig.js');
+const { details: { host } } = require('@config/siteConfig');
 
 const sendEmbedPage = ({ params }, res) => {
   const claimId = params.claimId;
