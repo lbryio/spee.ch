@@ -13,7 +13,7 @@ const createServeEventParams = (headers, ip, originalUrl) => {
   };
 };
 
-const createPublishTimingEventParams = (category, variable, label, startTime, endTime) => {
+const createTimingEventParams = (category, variable, label, startTime, endTime) => {
   const duration = endTime - startTime;
   return {
     userTimingCategory    : category,
@@ -24,23 +24,25 @@ const createPublishTimingEventParams = (category, variable, label, startTime, en
 };
 
 const sendGoogleAnalyticsEvent = (ip, params) => {
+  logger.debug('googleId', googleId);
   const visitorId = ip.replace(/\./g, '-');
   const visitor = ua(googleId, visitorId, { strictCidFormat: false, https: true });
   visitor.event(params, (err) => {
     if (err) {
       return logger.error('Google Analytics Event Error >>', err);
     }
-    logger.debug(`Event successfully sent to google analytics`);
+    logger.debug(`Event successfully sent to google analytics`, params);
   });
 };
 
-const sendGoogleAnalyticsTiming = (visitorId, params) => {
-  const visitor = ua(googleId, visitorId, { strictCidFormat: false, https: true });
+const sendGoogleAnalyticsTiming = (siteTitle, params) => {
+  logger.debug('googleId', googleId);
+  const visitor = ua(googleId, siteTitle, { strictCidFormat: false, https: true });
   visitor.timing(params, (err) => {
     if (err) {
       return logger.error('Google Analytics Event Error >>', err);
     }
-    logger.debug(`Timing event successfully sent to google analytics`);
+    logger.debug(`Timing event successfully sent to google analytics`, params);
   });
 };
 
@@ -50,7 +52,7 @@ const sendGAServeEvent = (headers, ip, originalUrl) => {
 };
 
 const sendGATimingEvent = (category, variable, label, startTime, endTime) => {
-  const params = createPublishTimingEventParams(category, variable, label, startTime, endTime);
+  const params = createTimingEventParams(category, variable, label, startTime, endTime);
   sendGoogleAnalyticsTiming(title, params);
 };
 
