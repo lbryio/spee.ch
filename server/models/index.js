@@ -1,3 +1,6 @@
+const Sequelize = require('sequelize');
+const logger = require('winston');
+
 const Certificate = require('./certificate.js');
 const Channel = require('./channel.js');
 const Claim = require('./claim.js');
@@ -6,10 +9,10 @@ const Request = require('./request.js');
 const User = require('./user.js');
 const Blocked = require('./blocked.js');
 
-const Sequelize = require('sequelize');
-const logger = require('winston');
-
 const {database, username, password} = require('@config/mysqlConfig');
+if (!database || !username || !password) {
+  logger.warn('missing database, user, or password from mysqlConfig');
+}
 
 // set sequelize options
 const sequelize = new Sequelize(database, username, password, {

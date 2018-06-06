@@ -13,8 +13,6 @@ import Sagas from '@sagas';
 import Actions from '@actions';
 import Helmet from 'react-helmet';
 
-const siteConfig = require('@config/siteConfig');
-
 const returnSagaWithParams = (saga, params) => {
   return function * () {
     yield call(saga, params);
@@ -24,17 +22,12 @@ const returnSagaWithParams = (saga, params) => {
 module.exports = (req, res) => {
   let context = {};
 
-  // configure the reducers by passing initial state configs
-  const MyReducers = Reducers(siteConfig);
-  const MyApp = App;
-  const MyGAListener = GAListener(siteConfig);
-
   // create and apply middleware
   const sagaMiddleware = createSagaMiddleware();
   const middleware = applyMiddleware(sagaMiddleware);
 
   // create a new Redux store instance
-  const store = createStore(MyReducers, middleware);
+  const store = createStore(Reducers, middleware);
 
   // create saga
   const action = Actions.onHandleShowPageUri(req.params);
@@ -49,9 +42,9 @@ module.exports = (req, res) => {
       const html = renderToString(
         <Provider store={store}>
           <StaticRouter location={req.url} context={context}>
-            <MyGAListener>
-              <MyApp />
-            </MyGAListener>
+            <GAListener>
+              <App />
+            </GAListener>
           </StaticRouter>
         </Provider>
       );

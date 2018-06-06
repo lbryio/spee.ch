@@ -1,19 +1,17 @@
 const winstonSlackWebHook = require('winston-slack-webhook').SlackWebHook;
 const logger = require('winston');
 
-const config = require('@config/loggerConfig');
+const config = require('@config/slackConfig');
+const {slackWebHook, slackErrorChannel, slackInfoChannel} = config;
 
 function configureSlack () {
+  logger.info('configuring slack logger...');
   if (!config) {
     return logger.warn('No slack config found');
   }
-  const {slackWebHook, slackErrorChannel, slackInfoChannel} = config;
-  // update variables
-  logger.info('configuring slack logger...');
-
   // update slack webhook settings
   if (!slackWebHook) {
-    return logger.warn('Slack logging is not enabled because no slackWebHook config var provided.');
+    return logger.info('Slack logging is not enabled because no slackWebHook config var provided.');
   }
   // add a transport for errors to slack
   if (slackErrorChannel) {
@@ -25,6 +23,8 @@ function configureSlack () {
       username  : 'spee.ch',
       iconEmoji : ':face_with_head_bandage:',
     });
+  } else {
+    logger.warn('No slack error channel logging set up');
   }
   // add a transport for info in slack
   if (slackInfoChannel) {
@@ -36,6 +36,8 @@ function configureSlack () {
       username  : 'spee.ch',
       iconEmoji : ':nerd_face:',
     });
+  } else {
+    logger.warn('No slack info channel logging set up');
   }
   // send test messages
   logger.info('Slack logging is online.');
