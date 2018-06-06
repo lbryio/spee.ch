@@ -1,7 +1,7 @@
 import * as actions from '../constants/publish_action_types';
 import { LOGIN } from '../constants/publish_channel_select_states';
 
-import siteConfig from '@config/siteConfig';
+import siteConfig from '@config/siteConfig.json';
 
 // parse inputs
 let disabledConfig = false;

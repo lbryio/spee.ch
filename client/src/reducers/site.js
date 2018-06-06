@@ -1,4 +1,4 @@
-import siteConfig from '@config/siteConfig';
+import siteConfig from '@config/siteConfig.json';
 
 let initialState = {
   description       : 'default description',

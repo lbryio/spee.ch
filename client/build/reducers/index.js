@@ -19,6 +19,8 @@ var _channelCreate = _interopRequireDefault(require("./channelCreate"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+// modules
+// local modules
 var _default = (0, _redux.combineReducers)({
   channel: _channel.default,
   channelCreate: _channelCreate.default,

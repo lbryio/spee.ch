@@ -9,7 +9,7 @@ var actions = _interopRequireWildcard(require("../constants/publish_action_types
 
 var _publish_channel_select_states = require("../constants/publish_channel_select_states");
 
-var _siteConfig = _interopRequireDefault(require("@config/siteConfig"));
+var _siteConfig = _interopRequireDefault(require("@config/siteConfig.json"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 

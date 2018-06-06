@@ -1,5 +1,7 @@
+// modules
 import { combineReducers } from 'redux';
 
+// local modules
 import PublishReducer from './publish';
 import ChannelReducer from './channel';
 import ShowReducer from './show';
