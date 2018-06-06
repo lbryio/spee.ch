@@ -31,7 +31,6 @@ const sendGoogleAnalyticsEvent = (ip, params) => {
     if (err) {
       return logger.error('Google Analytics Event Error >>', err);
     }
-    logger.debug(`Event successfully sent to google analytics`, params);
   });
 };
 
@@ -42,7 +41,6 @@ const sendGoogleAnalyticsTiming = (siteTitle, params) => {
     if (err) {
       return logger.error('Google Analytics Event Error >>', err);
     }
-    logger.debug(`Timing event successfully sent to google analytics`, params);
   });
 };
 

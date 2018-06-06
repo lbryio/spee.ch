@@ -46,7 +46,7 @@ const initialState = {
   thumbnailChannelId,
 };
 
-export default (state = initialState, action) => {
+export default function (state = initialState, action) {
   switch (action.type) {
     case actions.FILE_SELECTED:
       return Object.assign({}, initialState, {  // note: clears to initial state

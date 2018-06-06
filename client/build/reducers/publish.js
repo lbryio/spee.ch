@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = void 0;
+exports.default = _default;
 
 var actions = _interopRequireWildcard(require("../constants/publish_action_types"));
 
@@ -61,7 +61,7 @@ var initialState = {
   thumbnailChannelId: thumbnailChannelId
 };
 
-var _default = function _default() {
+function _default() {
   var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
   var action = arguments.length > 1 ? arguments[1] : undefined;
 
@@ -118,6 +118,6 @@ var _default = function _default() {
     default:
       return state;
   }
-};
+}
 
-exports.default = _default;
+;

@@ -16,6 +16,8 @@ var _reduxSaga = _interopRequireDefault(require("redux-saga"));
 
 var _effects = require("redux-saga/effects");
 
+var _reactHelmet = _interopRequireDefault(require("react-helmet"));
+
 var _reducers = _interopRequireDefault(require("@reducers"));
 
 var _GAListener = _interopRequireDefault(require("@components/GAListener"));
@@ -25,8 +27,6 @@ var _app = _interopRequireDefault(require("@app"));
 var _sagas = _interopRequireDefault(require("@sagas"));
 
 var _actions = _interopRequireDefault(require("@actions"));
-
-var _reactHelmet = _interopRequireDefault(require("react-helmet"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 

@@ -10,6 +10,8 @@ var _reactRedux = require("react-redux");
 
 var _reactRouterDom = require("react-router-dom");
 
+var _reactHelmet = _interopRequireDefault(require("react-helmet"));
+
 var _reducers = _interopRequireDefault(require("@reducers"));
 
 var _GAListener = _interopRequireDefault(require("@components/GAListener"));
@@ -17,8 +19,6 @@ var _GAListener = _interopRequireDefault(require("@components/GAListener"));
 var _app = _interopRequireDefault(require("@app"));
 
 var _renderFullPage = _interopRequireDefault(require("../renderFullPage.js"));
-
-var _reactHelmet = _interopRequireDefault(require("react-helmet"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 

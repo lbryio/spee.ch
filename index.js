@@ -1,9 +1,16 @@
-// set up aliasing
+// set up module aliasing
 const moduleAlias = require('module-alias');
 const createModuleAliases = require('./server/utils/createModuleAliases.js');
 const customAliases = createModuleAliases();
-console.log('custom aliases', customAliases);
 moduleAlias.addAliases(customAliases);
+
+// test configs
+const checkForConfig = require('./server/utils/checkForConfig.js');
+checkForConfig('siteConfig');
+checkForConfig('mysqlConfig');
+checkForConfig('slackConfig');
+checkForConfig('loggerConfig');
+checkForConfig('siteConfig');
 
 // load modules
 const express = require('express');
@@ -25,17 +32,10 @@ const configureLogging = require('./server/utils/configureLogging.js');
 const configureSlack = require('./server/utils/configureSlack.js');
 const speechPassport = require('./server/speechPassport');
 
-// test configs
-const siteConfig = require('@config/siteConfig');
-console.log('siteConfig:', siteConfig);
-const mysqlConfig = require('@config/mysqlConfig');
-console.log('mysqlConfig:', mysqlConfig);
-const slackConfig = require('@config/slackConfig');
-console.log('slackConfig:', slackConfig);
-const loggerConfig = require('@config/loggerConfig');
-console.log('loggerConfig:', loggerConfig);
-
-const PORT = siteConfig.details.port;
+const {
+  details: { port: PORT },
+  auth: { sessionKey },
+} = require('@config/siteConfig');
 
 function Server () {
   this.initialize = () => {
@@ -69,7 +69,6 @@ function Server () {
     app.use(requestLogger);
 
     // initialize passport
-    const sessionKey = siteConfig.auth.sessionKey;
     app.use(cookieSession({
       name  : 'session',
       keys  : [sessionKey],
