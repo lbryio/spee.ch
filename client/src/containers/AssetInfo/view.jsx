@@ -37,19 +37,17 @@ class AssetInfo extends React.Component {
         </div>
         }
 
-        <div id='show-share-buttons'>
-          <div className='row row--padded row--wide row--no-top'>
-            <div className='column column--2 column--med-10'>
-              <span className='text'>Share:</span>
-            </div>
-            <div className='column column--8 column--med-10'>
-              <div
-                className='row row--short row--wide flex-container--row flex-container--space-between-bottom flex-container--wrap'>
-                <a className='link--primary' target='_blank' href={`https://twitter.com/intent/tweet?text=${host}/${shortId}/${name}`}>twitter</a>
-                <a className='link--primary' target='_blank' href={`https://www.facebook.com/sharer/sharer.php?u=${host}/${shortId}/${name}`}>facebook</a>
-                <a className='link--primary' target='_blank' href={`http://tumblr.com/widgets/share/tool?canonicalUrl=${host}/${shortId}/${name}`}>tumblr</a>
-                <a className='link--primary' target='_blank' href={`https://www.reddit.com/submit?url=${host}/${shortId}/${name}&title=${name}`}>reddit</a>
-              </div>
+        <div id='show-share-buttons' className='row row--padded row--wide row--no-top'>
+          <div className='column column--2 column--med-10'>
+            <span className='text'>Share:</span>
+          </div>
+          <div className='column column--8 column--med-10'>
+            <div
+              className='row row--short row--wide flex-container--row flex-container--space-between-bottom flex-container--wrap'>
+              <a className='link--primary' target='_blank' href={`https://twitter.com/intent/tweet?text=${host}/${shortId}/${name}`}>twitter</a>
+              <a className='link--primary' target='_blank' href={`https://www.facebook.com/sharer/sharer.php?u=${host}/${shortId}/${name}`}>facebook</a>
+              <a className='link--primary' target='_blank' href={`http://tumblr.com/widgets/share/tool?canonicalUrl=${host}/${shortId}/${name}`}>tumblr</a>
+              <a className='link--primary' target='_blank' href={`https://www.reddit.com/submit?url=${host}/${shortId}/${name}&title=${name}`}>reddit</a>
             </div>
           </div>
         </div>
@@ -108,11 +106,17 @@ class AssetInfo extends React.Component {
           </div>
         </div>
 
-        <div className='flex-container--row flex-container--space-between-bottom'>
-          <Link className='link--primary' to={`/${shortId}/${name}.${fileExt}`}><span
-            className='text'>Direct Link</span></Link>
-          <a className='link--primary' href={`${host}/${claimId}/${name}.${fileExt}`} download={name}>Download</a>
-          <a className='link--primary' target='_blank' href='https://lbry.io/dmca'>Report</a>
+        <div className='row row--padded row--wide row--no-top'>
+          <div className='flex-container--row flex-container--space-between-bottom'>
+            <Link className='link--primary' to={`/${shortId}/${name}.${fileExt}`}><span
+              className='text'>Direct Link</span></Link>
+            <a className='link--primary' href={`${host}/${claimId}/${name}.${fileExt}`} download={name}>Download</a>
+            <a className='link--primary' target='_blank' href='https://lbry.io/dmca'>Report</a>
+          </div>
+        </div>
+
+        <div className='row row--padded row--wide row--no-top'>
+          Hosted via the <a  className='link--primary' href={'https://lbry.io/get'} target={'_blank'}>LBRY blockchain</a>
         </div>
 
       </div>

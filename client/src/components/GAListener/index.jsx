@@ -2,28 +2,34 @@ import React from 'react';
 import GoogleAnalytics from 'react-ga';
 import { withRouter } from 'react-router-dom';
 
-const customGAListener = (siteConfig) => {
-    const { analytics: { googleId } } = siteConfig;
+import siteConfig from '@config/siteConfig.json';
 
-    GoogleAnalytics.initialize(googleId);
+let googleId = null;
 
-    class GAListener extends React.Component {
-        componentDidMount () {
-            this.sendPageView(this.props.history.location);
-            this.props.history.listen(this.sendPageView);
-        }
+if (siteConfig && siteConfig.analytics) {
+  ({ googleId } = siteConfig.analytics);
+}
 
-        sendPageView (location) {
-            GoogleAnalytics.set({ page: location.pathname });
-            GoogleAnalytics.pageview(location.pathname);
-        }
+if (googleId) {
+  GoogleAnalytics.initialize(googleId);
+}
 
-        render () {
-            return this.props.children;
-        }
+class GAListener extends React.Component {
+  componentDidMount () {
+    this.sendPageView(this.props.history.location);
+    this.props.history.listen(this.sendPageView);
+  }
+
+  sendPageView (location) {
+    if (googleId) {
+      GoogleAnalytics.set({ page: location.pathname });
+      GoogleAnalytics.pageview(location.pathname);
     }
+  }
 
-    return withRouter(GAListener);
-};
+  render () {
+    return this.props.children;
+  }
+}
 
-export default customGAListener;
+export default withRouter(GAListener);

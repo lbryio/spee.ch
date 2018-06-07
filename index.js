@@ -1,4 +1,18 @@
-// app dependencies
+// set up module aliasing
+const moduleAlias = require('module-alias');
+const createModuleAliases = require('./server/utils/createModuleAliases.js');
+const customAliases = createModuleAliases();
+moduleAlias.addAliases(customAliases);
+
+// test configs
+const checkForConfig = require('./server/utils/checkForConfig.js');
+checkForConfig('siteConfig');
+checkForConfig('mysqlConfig');
+checkForConfig('slackConfig');
+checkForConfig('loggerConfig');
+checkForConfig('siteConfig');
+
+// load modules
 const express = require('express');
 const bodyParser = require('body-parser');
 const expressHandlebars = require('express-handlebars');
@@ -7,28 +21,35 @@ const helmet = require('helmet');
 const cookieSession = require('cookie-session');
 const http = require('http');
 const logger = require('winston');
-const requestLogger = require('./server/middleware/requestLogger.js');
 const Path = require('path');
-const loggerConfig = require('./config/loggerConfig.js');
-const mysqlConfig = require('./config/mysqlConfig.js');
-const siteConfig = require('./config/siteConfig.js');
-const slackConfig = require('./config/slackConfig.js');
+
+// load local modules
+const db = require('./server/models');
+const requestLogger = require('./server/middleware/requestLogger.js');
 const createDatabaseIfNotExists = require('./server/models/utils/createDatabaseIfNotExists.js');
-const { getWalletBalance } = require('./server/lbrynet/index');
+const { getWalletBalance } = require('./server/lbrynet');
+const configureLogging = require('./server/utils/configureLogging.js');
+const configureSlack = require('./server/utils/configureSlack.js');
+const speechPassport = require('./server/speechPassport');
+
+const {
+  details: { port: PORT },
+  auth: { sessionKey },
+} = require('@config/siteConfig');
 
 function Server () {
-  this.configureLogger = loggerConfig.update;
-  this.configureMysql = mysqlConfig.update;
-  this.configureSite = siteConfig.update;
-  this.configureSlack = slackConfig.update;
+  this.initialize = () => {
+    // configure logging
+    configureLogging();
+    // configure slack logging
+    configureSlack();
+  };
   this.createApp = () => {
-    // create an Express application
+    /* create app */
     const app = express();
 
     // trust the proxy to get ip address for us
     app.enable('trust proxy');
-
-    /* add middleware */
 
     // set HTTP headers to protect against well-known web vulnerabilties
     app.use(helmet());
@@ -47,10 +68,7 @@ function Server () {
     // add custom middleware (note: build out to accept dynamically use what is in server/middleware/
     app.use(requestLogger);
 
-    // configure passport
-    const speechPassport = require('./server/speechPassport/index');
     // initialize passport
-    const sessionKey = siteConfig.auth.sessionKey;
     app.use(cookieSession({
       name  : 'session',
       keys  : [sessionKey],
@@ -67,33 +85,39 @@ function Server () {
     app.set('view engine', 'handlebars');
 
     // set the routes on the app
-    require('./server/routes/auth/index')(app);
-    require('./server/routes/api/index')(app);
-    require('./server/routes/pages/index')(app);
-    require('./server/routes/assets/index')(app);
-    require('./server/routes/fallback/index')(app);
+    require('./server/routes/auth')(app);
+    require('./server/routes/api')(app);
+    require('./server/routes/pages')(app);
+    require('./server/routes/assets')(app);
+    require('./server/routes/fallback')(app);
 
     this.app = app;
   };
-  this.initialize = () => {
-    this.createApp();
+  this.createServer = () => {
+    /* create server */
     this.server = http.Server(this.app);
   };
-  this.start = () => {
-    const db = require('./server/models/index');
-    const PORT = siteConfig.details.port;
-    // sync sequelize
-    createDatabaseIfNotExists()
+  this.syncDatabase = () => {
+    return createDatabaseIfNotExists()
       .then(() => {
-        logger.info('getting LBC balance from lbrynet...');
-        return getWalletBalance();
-      })
-      .then(balance => {
-        logger.info('starting LBC balance:', balance);
         db.sequelize.sync();
-        this.server.listen(PORT, () => {
+      })
+  };
+  this.start = () => {
+    this.initialize();
+    this.createApp();
+    this.createServer();
+    /* start the server */
+    logger.info('getting LBC balance & syncing database...');
+    Promise.all([
+      this.syncDatabase(),
+      getWalletBalance(),
+    ])
+      .then(([syncResult, walletBalance]) => {
+        logger.info('starting LBC balance:', walletBalance);
+        return this.server.listen(PORT, () => {
           logger.info(`Server is listening on PORT ${PORT}`);
-        });
+        })
       })
       .catch(error => {
         if (error.code === 'ECONNREFUSED') {
@@ -104,6 +128,6 @@ function Server () {
         logger.error(error);
       });
   };
-};
+}
 
 module.exports = Server;

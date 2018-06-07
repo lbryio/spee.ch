@@ -23,7 +23,7 @@ var _MultisitePage = _interopRequireDefault(require("@pages/MultisitePage"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var customizedApp = function customizedApp() {
+var App = function App() {
   return _react.default.createElement(_reactRouterDom.Switch, null, _react.default.createElement(_reactRouterDom.Route, {
     exact: true,
     path: "/",
@@ -53,5 +53,5 @@ var customizedApp = function customizedApp() {
   }));
 };
 
-var _default = customizedApp;
+var _default = App;
 exports.default = _default;
