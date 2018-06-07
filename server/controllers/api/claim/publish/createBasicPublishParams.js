@@ -1,5 +1,5 @@
 const logger = require('winston');
-const { details, publishing } = require('../../../../../config/siteConfig.js');
+const { details, publishing } = require('@config/siteConfig');
 
 const createBasicPublishParams = (filePath, name, title, description, license, nsfw, thumbnail) => {
   logger.debug(`Creating Publish Parameters`);

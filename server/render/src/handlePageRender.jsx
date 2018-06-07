@@ -3,32 +3,26 @@ import { renderToString } from 'react-dom/server';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import { StaticRouter } from 'react-router-dom';
+import Helmet from 'react-helmet';
+
 import Reducers from '@reducers';
 import GAListener from '@components/GAListener';
 import App from '@app';
 import renderFullPage from '../renderFullPage.js';
-import Helmet from 'react-helmet';
-
-const siteConfig = require('../../../config/siteConfig.js');
 
 module.exports = (req, res) => {
   let context = {};
 
-  // customize the reducer by passing in intial state configs
-  const MyReducers = Reducers(siteConfig);
-  const MyApp = App;
-  const MyGAListener = GAListener(siteConfig);
-
   // create a new Redux store instance
-  const store = createStore(MyReducers);
+  const store = createStore(Reducers);
 
   // render component to a string
   const html = renderToString(
     <Provider store={store}>
       <StaticRouter location={req.url} context={context}>
-        <MyGAListener>
-          <MyApp />
-        </MyGAListener>
+        <GAListener>
+          <App />
+        </GAListener>
       </StaticRouter>
     </Provider>
   );

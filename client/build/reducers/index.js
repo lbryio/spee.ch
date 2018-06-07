@@ -19,15 +19,14 @@ var _channelCreate = _interopRequireDefault(require("./channelCreate"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var customizedReducers = function customizedReducers(siteConfig) {
-  return (0, _redux.combineReducers)({
-    channel: _channel.default,
-    channelCreate: _channelCreate.default,
-    publish: (0, _publish.default)(siteConfig),
-    show: _show.default,
-    site: (0, _site.default)(siteConfig)
-  });
-};
+// modules
+// local modules
+var _default = (0, _redux.combineReducers)({
+  channel: _channel.default,
+  channelCreate: _channelCreate.default,
+  publish: _publish.default,
+  show: _show.default,
+  site: _site.default
+});
 
-var _default = customizedReducers;
 exports.default = _default;

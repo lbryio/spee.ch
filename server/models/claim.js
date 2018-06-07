@@ -1,6 +1,6 @@
 const logger = require('winston');
 const returnShortId = require('./utils/returnShortId.js');
-const { assetDefaults: { thumbnail: defaultThumbnail }, details: { host } } = require('../../config/siteConfig.js');
+const { assetDefaults: { thumbnail: defaultThumbnail }, details: { host } } = require('@config/siteConfig');
 
 const NO_CLAIM = 'NO_CLAIM';
 
