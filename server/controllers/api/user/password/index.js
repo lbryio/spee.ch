@@ -1,7 +1,7 @@
 const { handleErrorResponse } = require('../../../utils/errorHandlers.js');
 const logger = require('winston');
 const db = require('../../../../models');
-const { auth: { masterPassword } } = require('../../../../../config/siteConfig.js');
+const { auth: { masterPassword } } = require('@config/siteConfig.js');
 
 /*
 
