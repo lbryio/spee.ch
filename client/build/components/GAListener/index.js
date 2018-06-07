@@ -41,9 +41,9 @@ if (!_siteConfig.default) {
 
 if (_siteConfig.default.analytics) {
   googleId = _siteConfig.default.analytics.googleId;
-}
 
-_reactGa.default.initialize(googleId);
+  _reactGa.default.initialize(googleId);
+}
 
 var GAListener =
 /*#__PURE__*/

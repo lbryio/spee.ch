@@ -12,9 +12,8 @@ if (!siteConfig) {
 
 if (siteConfig.analytics) {
   ({ googleId } = siteConfig.analytics);
+  GoogleAnalytics.initialize(googleId);
 }
-
-GoogleAnalytics.initialize(googleId);
 
 class GAListener extends React.Component {
   componentDidMount () {
