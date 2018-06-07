@@ -6,14 +6,6 @@ import siteConfig from '@config/siteConfig.json';
 
 let googleId = null;
 
-if (!siteConfig) {
-  console.log('WARNING: no site config found for GAListener');
-}
-
-if (!siteConfig.analytics) {
-  console.log('WARNING: no analytics configs found in siteConfig.json');
-}
-
 if (siteConfig && siteConfig.analytics) {
   ({ googleId } = siteConfig.analytics);
 }

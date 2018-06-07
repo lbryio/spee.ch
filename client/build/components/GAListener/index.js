@@ -35,14 +35,6 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.getPrototypeOf || functio
 
 var googleId = null;
 
-if (!_siteConfig.default) {
-  console.log('WARNING: no site config found for GAListener');
-}
-
-if (!_siteConfig.default.analytics) {
-  console.log('WARNING: no analytics configs found in siteConfig.json');
-}
-
 if (_siteConfig.default && _siteConfig.default.analytics) {
   googleId = _siteConfig.default.analytics.googleId;
 }

@@ -24,7 +24,9 @@ const createTimingEventParams = (category, variable, label, startTime, endTime) 
 };
 
 const sendGoogleAnalyticsEvent = (ip, params) => {
-  logger.debug('googleId', googleId);
+  if (!googleId) {
+    return logger.debug('Skipping analytics event because no GoogleId present in configs');
+  }
   const visitorId = ip.replace(/\./g, '-');
   const visitor = ua(googleId, visitorId, { strictCidFormat: false, https: true });
   visitor.event(params, (err) => {
@@ -36,7 +38,9 @@ const sendGoogleAnalyticsEvent = (ip, params) => {
 };
 
 const sendGoogleAnalyticsTiming = (siteTitle, params) => {
-  logger.debug('googleId', googleId);
+  if (!googleId) {
+    return logger.debug('Skipping analytics timing because no GoogleId present in configs');
+  }
   const visitor = ua(googleId, siteTitle, { strictCidFormat: false, https: true });
   visitor.timing(params, (err) => {
     if (err) {
