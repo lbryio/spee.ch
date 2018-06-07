@@ -7,11 +7,18 @@ import siteConfig from '@config/siteConfig.json';
 let googleId = null;
 
 if (!siteConfig) {
-  console.log('no site config found for GAListener');
+  console.log('WARNING: no site config found for GAListener');
 }
 
-if (siteConfig.analytics) {
+if (!siteConfig.analytics) {
+  console.log('WARNING: no analytics configs found in siteConfig.json');
+}
+
+if (siteConfig && siteConfig.analytics) {
   ({ googleId } = siteConfig.analytics);
+}
+
+if (googleId) {
   GoogleAnalytics.initialize(googleId);
 }
 
@@ -22,8 +29,10 @@ class GAListener extends React.Component {
   }
 
   sendPageView (location) {
-    GoogleAnalytics.set({ page: location.pathname });
-    GoogleAnalytics.pageview(location.pathname);
+    if (googleId) {
+      GoogleAnalytics.set({ page: location.pathname });
+      GoogleAnalytics.pageview(location.pathname);
+    }
   }
 
   render () {

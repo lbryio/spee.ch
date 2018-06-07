@@ -36,12 +36,18 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.getPrototypeOf || functio
 var googleId = null;
 
 if (!_siteConfig.default) {
-  console.log('no site config found for GAListener');
+  console.log('WARNING: no site config found for GAListener');
 }
 
-if (_siteConfig.default.analytics) {
-  googleId = _siteConfig.default.analytics.googleId;
+if (!_siteConfig.default.analytics) {
+  console.log('WARNING: no analytics configs found in siteConfig.json');
+}
 
+if (_siteConfig.default && _siteConfig.default.analytics) {
+  googleId = _siteConfig.default.analytics.googleId;
+}
+
+if (googleId) {
   _reactGa.default.initialize(googleId);
 }
 
@@ -63,11 +69,13 @@ function (_React$Component) {
   }, {
     key: "sendPageView",
     value: function sendPageView(location) {
-      _reactGa.default.set({
-        page: location.pathname
-      });
+      if (googleId) {
+        _reactGa.default.set({
+          page: location.pathname
+        });
 
-      _reactGa.default.pageview(location.pathname);
+        _reactGa.default.pageview(location.pathname);
+      }
     }
   }, {
     key: "render",
