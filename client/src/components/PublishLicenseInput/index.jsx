@@ -1,10 +1,10 @@
 import React from 'react';
-import PublishDetailsRow from '@components/PublishDetailsRow';
+import RowLabeled from '@components/RowLabeled';
 import Label from '@components/Label';
 
 const PublishLicenseInput = ({ handleSelect }) => {
   return (
-    <PublishDetailsRow
+    <RowLabeled
       label={
         <Label value={'License:'} />
       }

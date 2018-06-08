@@ -13,7 +13,7 @@ const ChooseAnonymousPublishRadio = ({ publishInChannel, toggleAnonymousPublish 
         onChange={toggleAnonymousPublish}
       />
       <label
-        className='label label--pointer'
+        className='label-radio'
         htmlFor='anonymous-radio'
       >
         Anonymous

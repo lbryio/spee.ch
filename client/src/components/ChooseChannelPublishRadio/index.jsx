@@ -13,7 +13,7 @@ const ChooseChannelPublishRadio = ({ publishInChannel, toggleAnonymousPublish })
         onChange={toggleAnonymousPublish}
       />
       <label
-        className='label label--pointer'
+        className='label-radio'
         htmlFor='channel-radio'
       >
         In a channel

@@ -6,6 +6,8 @@ $interactive-color : blue;
 
 $primary-padding: 3em;
 $secondary-padding: 2em;
+$thin-padding: 0.3em;
+$full-width-thin-padding: calc(100% - 0.6em);
 
 $background-color: $base-color;
 $font-color: $primary-color;

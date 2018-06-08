@@ -5,31 +5,30 @@ a, a:visited {
 }
 
 .link--primary, .link--primary:visited {
-  color: #4156C5;
+  color: $interactive-color;
 }
 
 .link--secondary, .link--secondary:visited {
-  font-size: medium;
   margin: 0px;
   padding: 0.3em;
-  color: #9b9b9b;
+  color: $secondary-color;
 }
 
 .link--disabled-text {
-  color: #9b9b9b;
+  color: $secondary-color;
   text-decoration: underline;
 }
 
 .link--nav {
-  color: black;
+  color: $primary-color;
   border-bottom: 2px solid white;
 }
 
 .link--nav:hover {
-  color: #4156C5;
+  color: $interactive-color;
 }
 
 .link--nav-active {
-  color: #4156C5;
-  border-bottom: 2px solid #4156C5;
+  color: $interactive-color;
+  border-bottom: 2px solid $interactive-color;
 }

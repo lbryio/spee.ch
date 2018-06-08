@@ -56,8 +56,8 @@ function (_React$Component) {
         }, _react.default.createElement(_SEO.default, {
           pageTitle: name,
           asset: asset
-        }), _react.default.createElement(_AssetDisplay.default, null), _react.default.createElement("div", {
-          className: "fine-print"
+        }), _react.default.createElement(_AssetDisplay.default, null), _react.default.createElement("p", {
+          className: "extra-small"
         }, _react.default.createElement(_reactRouterDom.Link, {
           id: "asset-boilerpate",
           className: "link--primary",
@@ -66,7 +66,7 @@ function (_React$Component) {
           className: "link--primary",
           href: 'https://lbry.io/get',
           target: '_blank'
-        }, "LBRY blockchain")));
+        }, "LBRY"), " blockchain"));
       }
 
       return _react.default.createElement("div", {

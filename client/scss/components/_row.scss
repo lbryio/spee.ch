@@ -1,3 +1,19 @@
 .row {
   padding-bottom: 2em;
 }
+
+.row-labeled {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+}
+
+.row-labeled-label {
+  align-self: flex-start;
+  width: 30%;
+}
+.row-labeled-content {
+  align-self: center;
+  width: 70%;
+}

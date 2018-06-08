@@ -9,14 +9,14 @@ var _react = _interopRequireDefault(require("react"));
 
 var _Label = _interopRequireDefault(require("@components/Label"));
 
-var _PublishDetailsRow = _interopRequireDefault(require("@components/PublishDetailsRow"));
+var _RowLabeled = _interopRequireDefault(require("@components/RowLabeled"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var ChannelCreatePasswordInput = function ChannelCreatePasswordInput(_ref) {
   var value = _ref.value,
       handlePasswordInput = _ref.handlePasswordInput;
-  return _react.default.createElement(_PublishDetailsRow.default, {
+  return _react.default.createElement(_RowLabeled.default, {
     label: _react.default.createElement(_Label.default, {
       value: 'Password:'
     }),

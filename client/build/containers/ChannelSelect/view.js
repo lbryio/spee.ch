@@ -13,7 +13,7 @@ var _ChannelCreateForm = _interopRequireDefault(require("@containers/ChannelCrea
 
 var _publish_channel_select_states = require("../../constants/publish_channel_select_states");
 
-var _PublishDetailsRow = _interopRequireDefault(require("@components/PublishDetailsRow"));
+var _RowLabeled = _interopRequireDefault(require("@components/RowLabeled"));
 
 var _ChooseAnonymousPublishRadio = _interopRequireDefault(require("@components/ChooseAnonymousPublishRadio"));
 
@@ -93,7 +93,7 @@ function (_React$Component) {
           channelError = _this$props.channelError,
           selectedChannel = _this$props.selectedChannel,
           loggedInChannelName = _this$props.loggedInChannelName;
-      return _react.default.createElement("div", null, _react.default.createElement(_PublishDetailsRow.default, {
+      return _react.default.createElement("div", null, _react.default.createElement(_RowLabeled.default, {
         label: _react.default.createElement(_ChooseAnonymousPublishRadio.default, {
           publishInChannel: publishInChannel,
           toggleAnonymousPublish: this.toggleAnonymousPublish
@@ -105,7 +105,7 @@ function (_React$Component) {
       }), _react.default.createElement(_FormFeedbackDisplay.default, {
         errorMessage: channelError,
         defaultMessage: 'Publish anonymously or in a channel'
-      }), this.props.publishInChannel && _react.default.createElement("div", null, _react.default.createElement(_PublishDetailsRow.default, {
+      }), this.props.publishInChannel && _react.default.createElement("div", null, _react.default.createElement(_RowLabeled.default, {
         label: _react.default.createElement(_Label.default, {
           value: 'Channel:'
         }),

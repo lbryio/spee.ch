@@ -13,7 +13,7 @@ var DropzoneDropItDisplay = function DropzoneDropItDisplay() {
   return _react.default.createElement("div", {
     className: "dropzone-dropit-display"
   }, _react.default.createElement("p", {
-    className: "text--interactive"
+    className: "interactive"
   }, "Drop it."));
 };
 

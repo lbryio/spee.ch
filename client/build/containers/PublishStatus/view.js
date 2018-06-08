@@ -54,11 +54,11 @@ function (_React$Component) {
       }, status === publishStates.LOAD_START && _react.default.createElement("div", {
         className: "row align-content-center"
       }, _react.default.createElement("p", null, "File is loading to server"), _react.default.createElement("p", {
-        className: "text--primary"
+        className: "primary"
       }, "0%")), status === publishStates.LOADING && _react.default.createElement("div", null, _react.default.createElement("div", {
         className: "row align-content-center"
       }, _react.default.createElement("p", null, "File is loading to server"), _react.default.createElement("p", {
-        className: "text--primary"
+        className: "primary"
       }, message))), status === publishStates.PUBLISHING && _react.default.createElement("div", {
         className: "row align-content-center"
       }, _react.default.createElement("p", null, "Upload complete.  Your file is now being published on the blockchain..."), _react.default.createElement(_ProgressBar.default, {

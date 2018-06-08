@@ -1,10 +1,10 @@
 import React from 'react';
-import PublishDetailsRow from '@components/PublishDetailsRow';
+import RowLabeled from '@components/RowLabeled';
 import Label from '@components/Label';
 
 const ChannelLoginPasswordInput  = ({ channelPassword, handleInput }) => {
   return (
-    <PublishDetailsRow
+    <RowLabeled
       label={
         <Label value={'Password:'} />
       }

@@ -12,7 +12,14 @@ class PublishTitleInput extends React.Component {
   }
   render () {
     return (
-      <input type='text' id='publish-title' className='input-text input-text--full-width' name='title' placeholder='Give your content a title...' onChange={this.handleInput} value={this.props.title} />
+      <input
+        type='text'
+        id='publish-title'
+        className='large full-width'
+        name='title'
+        placeholder='Give your content a title...'
+        onChange={this.handleInput}
+        value={this.props.title} />
     );
   }
 }

@@ -2,7 +2,7 @@ import React from 'react';
 import ChannelLoginForm from '@containers/ChannelLoginForm';
 import ChannelCreateForm from '@containers/ChannelCreateForm';
 import { LOGIN, CREATE } from '../../constants/publish_channel_select_states';
-import PublishDetailsRow from '@components/PublishDetailsRow';
+import RowLabeled from '@components/RowLabeled';
 import ChooseAnonymousPublishRadio from '@components/ChooseAnonymousPublishRadio';
 import ChooseChannelPublishRadio from '@components/ChooseChannelPublishRadio';
 import FormFeedbackDisplay from '@components/FormFeedbackDisplay';
@@ -37,7 +37,7 @@ class ChannelSelect extends React.Component {
     const { publishInChannel, channelError, selectedChannel, loggedInChannelName } = this.props;
     return (
       <div>
-        <PublishDetailsRow
+        <RowLabeled
           label={
             <ChooseAnonymousPublishRadio
               publishInChannel={publishInChannel}
@@ -58,7 +58,7 @@ class ChannelSelect extends React.Component {
 
         { this.props.publishInChannel && (
           <div>
-            <PublishDetailsRow
+            <RowLabeled
               label={
                 <Label value={'Channel:'} />
               }

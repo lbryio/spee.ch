@@ -21,7 +21,7 @@ var ChooseAnonymousPublishRadio = function ChooseAnonymousPublishRadio(_ref) {
     checked: !publishInChannel,
     onChange: toggleAnonymousPublish
   }), _react.default.createElement("label", {
-    className: "label label--pointer",
+    className: "label-radio",
     htmlFor: "anonymous-radio"
   }, "Anonymous"));
 };

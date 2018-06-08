@@ -2,6 +2,9 @@
   padding-left: $primary-padding;
   padding-right: $primary-padding;
   border-bottom: 0.5px solid $tertiary-color;
+  .select--arrow {
+    padding: 0 1.5em 0 0;
+  }
 }
 
 // old

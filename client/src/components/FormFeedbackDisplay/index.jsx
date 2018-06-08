@@ -4,9 +4,13 @@ const FormFeedbackDisplay = ({ errorMessage, defaultMessage }) => {
   return (
     <div>
       { errorMessage ? (
-        <p className='info-message--failure'>{errorMessage}</p>
+        <div className={'form-feedback--failure'}>
+          <p className='small'>{errorMessage}</p>
+        </div>
       ) : (
-        <p className='info-message'>{defaultMessage}</p>
+        <div className={'form-feedback'}>
+          <p className='small'>{defaultMessage}</p>
+        </div>
       )}
     </div>
   );

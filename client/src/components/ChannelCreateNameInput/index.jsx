@@ -1,10 +1,10 @@
 import React from 'react';
 import Label from '@components/Label';
-import PublishDetailsRow from '@components/PublishDetailsRow';
+import RowLabeled from '@components/RowLabeled';
 
 const ChannelCreateNameInput  = ({ value, error, handleNameInput }) => {
   return (
-    <PublishDetailsRow
+    <RowLabeled
       label={
         <Label value={'Name:'} />
       }

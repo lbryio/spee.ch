@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import PageLayout from '@components/PageLayout';
 import HorizontalSplit from '@components/HorizontalSplit';
 
-import AboutChannels from '@components/AboutChannels';
+import ChannelAbout from '@components/ChannelAbout';
 import ChannelTools from '@components/ChannelTools';
 
 class LoginPage extends React.Component {
@@ -17,7 +17,7 @@ class LoginPage extends React.Component {
     return (
       <PageLayout pageTitle={'Login'} pageUri={'login'} >
         <HorizontalSplit
-          leftSide={<AboutChannels />}
+          leftSide={<ChannelAbout />}
           rightSide={<ChannelTools />}
         />
       </PageLayout>

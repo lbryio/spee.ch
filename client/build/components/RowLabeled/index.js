@@ -7,16 +7,6 @@ exports.default = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
-var _reactRouterDom = require("react-router-dom");
-
-var _PageLayout = _interopRequireDefault(require("@components/PageLayout"));
-
-var _HorizontalSplit = _interopRequireDefault(require("@components/HorizontalSplit"));
-
-var _ChannelAbout = _interopRequireDefault(require("@components/ChannelAbout"));
-
-var _ChannelTools = _interopRequireDefault(require("@components/ChannelTools"));
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -37,43 +27,32 @@ function _assertThisInitialized(self) { if (self === void 0) { throw new Referen
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.getPrototypeOf || function _getPrototypeOf(o) { return o.__proto__; }; return _getPrototypeOf(o); }
 
-var LoginPage =
+var RowLabeled =
 /*#__PURE__*/
 function (_React$Component) {
-  function LoginPage() {
-    _classCallCheck(this, LoginPage);
+  function RowLabeled() {
+    _classCallCheck(this, RowLabeled);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(LoginPage).apply(this, arguments));
+    return _possibleConstructorReturn(this, _getPrototypeOf(RowLabeled).apply(this, arguments));
   }
 
-  _createClass(LoginPage, [{
-    key: "componentWillReceiveProps",
-    value: function componentWillReceiveProps(newProps) {
-      // re-route the user to the homepage if the user is logged in
-      if (newProps.loggedInChannelName !== this.props.loggedInChannelName) {
-        this.props.history.push("/");
-      }
-    }
-  }, {
+  _createClass(RowLabeled, [{
     key: "render",
     value: function render() {
-      return _react.default.createElement(_PageLayout.default, {
-        pageTitle: 'Login',
-        pageUri: 'login'
-      }, _react.default.createElement(_HorizontalSplit.default, {
-        leftSide: _react.default.createElement(_ChannelAbout.default, null),
-        rightSide: _react.default.createElement(_ChannelTools.default, null)
-      }));
+      return _react.default.createElement("div", {
+        className: 'row-labeled'
+      }, _react.default.createElement("div", {
+        className: 'row-labeled-label'
+      }, this.props.label), _react.default.createElement("div", {
+        className: 'row-labeled-content'
+      }, this.props.content));
     }
   }]);
 
-  _inherits(LoginPage, _React$Component);
+  _inherits(RowLabeled, _React$Component);
 
-  return LoginPage;
+  return RowLabeled;
 }(_react.default.Component);
 
-;
-
-var _default = (0, _reactRouterDom.withRouter)(LoginPage);
-
+var _default = RowLabeled;
 exports.default = _default;

@@ -43,9 +43,9 @@ function (_React$Component) {
       return _react.default.createElement("div", {
         className: "row dropzone--disabled row--tall flex-container--column flex-container--center-center"
       }, _react.default.createElement("p", {
-        className: "text--secondary"
+        className: "secondary"
       }, "Publishing is currently disabled."), _react.default.createElement("p", {
-        className: "text--secondary"
+        className: "secondary"
       }, message));
     }
   }]);

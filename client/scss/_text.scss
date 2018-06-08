@@ -1,10 +1,14 @@
 // set defaults
+
+h1, h2, h3, h4, p {
+  margin: 0;
+}
+
 h1 {
  font-size: xx-large;
 }
 
-h2, h3, p {
-
+h2, h3 {
   font-size: x-large;
 }
 
@@ -16,39 +20,36 @@ h3 {
   font-weight: bold;
 }
 
-body, button, input, textarea, label, select, option {
+p, body, button, input, textarea, label, select, option {
   font-family: 'Lekton', monospace;
   font-size: large;
+  .extra-large {
+    font-size: 2.5em;
+  }
+  .large {
+    font-size: x-large;
+  }
+  .small {
+    font-size: medium;
+  }
+  .extra-small {
+    font-size: small;
+  }
+  .underline {
+    text-decoration: underline;
+  }
+  .primary {
+    color: $primary-color;
+  }
+  .secondary {
+    color: $secondary-color;
+  }
+  .tertiary {
+    color: $tertiary-color;
+  }
+  .interactive {
+    color: $interactive-color;
+  }
 }
 
-// color modifiers
-.text--primary {
-  color: $primary-color;
-}
 
-.text--secondary {
-  color: $secondary-color;
-}
-
-.text--tertiary {
-  color: $tertiary-color;
-}
-
-.text--interactive {
-  color: $interactive-color;
-}
-
-// special texts
-
-.text--pull-quote {
-  font-size: 3rem;
-  margin-top: 1rem;
-}
-
-.text--fine-print {
-  font-size: small;
-}
-
-.text--underline {
-  text-decoration: underline;
-}

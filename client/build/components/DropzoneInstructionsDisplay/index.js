@@ -14,13 +14,14 @@ var DropzoneInstructionsDisplay = function DropzoneInstructionsDisplay(_ref) {
   return _react.default.createElement("div", {
     className: "dropzone-instructions-display"
   }, _react.default.createElement("p", {
-    className: "info-message-placeholder info-message--failure",
-    id: "input-error-file-selection"
-  }, fileError), _react.default.createElement("p", null, "Drag & drop image or video here to publish"), _react.default.createElement("p", {
-    className: "fine-print"
+    className: 'large'
+  }, "Drag & drop image or video here to publish"), _react.default.createElement("p", {
+    className: "small"
   }, "OR"), _react.default.createElement("p", {
-    className: "text--underline"
-  }, "CHOOSE FILE"));
+    className: "large underline"
+  }, "CHOOSE FILE"), _react.default.createElement("p", {
+    className: "small form-feedback--failure"
+  }, fileError));
 };
 
 var _default = DropzoneInstructionsDisplay;

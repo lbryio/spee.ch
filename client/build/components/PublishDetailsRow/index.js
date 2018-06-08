@@ -7,6 +7,8 @@ exports.default = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
+var _Row = _interopRequireDefault(require("@components/Row"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -27,32 +29,32 @@ function _assertThisInitialized(self) { if (self === void 0) { throw new Referen
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.getPrototypeOf || function _getPrototypeOf(o) { return o.__proto__; }; return _getPrototypeOf(o); }
 
-var PublishDetailsRow =
+var RowLabeled =
 /*#__PURE__*/
 function (_React$Component) {
-  function PublishDetailsRow() {
-    _classCallCheck(this, PublishDetailsRow);
+  function RowLabeled() {
+    _classCallCheck(this, RowLabeled);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(PublishDetailsRow).apply(this, arguments));
+    return _possibleConstructorReturn(this, _getPrototypeOf(RowLabeled).apply(this, arguments));
   }
 
-  _createClass(PublishDetailsRow, [{
+  _createClass(RowLabeled, [{
     key: "render",
     value: function render() {
-      return _react.default.createElement("div", {
+      return _react.default.createElement(_Row.default, null, _react.default.createElement("div", {
         className: 'publish-details-row'
       }, _react.default.createElement("div", {
         className: 'publish-details-label'
       }, this.props.label), _react.default.createElement("div", {
         className: 'publish-details-content'
-      }, this.props.content));
+      }, this.props.content)));
     }
   }]);
 
-  _inherits(PublishDetailsRow, _React$Component);
+  _inherits(RowLabeled, _React$Component);
 
-  return PublishDetailsRow;
+  return RowLabeled;
 }(_react.default.Component);
 
-var _default = PublishDetailsRow;
+var _default = RowLabeled;
 exports.default = _default;

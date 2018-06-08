@@ -2,21 +2,16 @@ input:-webkit-autofill {
   -webkit-box-shadow: 0 0 0px 1000px white inset;
 }
 
-.label, .input-text, .select, .textarea {
-  margin: 0px;
-  padding: 0.3em;
+input, select, textarea {
+  margin: 0;
   outline: none;
-  border: 0px;
-  background-color: white;
+  padding: $thin-padding;
+  border: 0;
+  background-color: $background-color;
   display: inline-block;
-}
-
-.input-disabled {
-  border: 1px solid black;
-  padding: 0.5em;
-  margin: 0px;
-  color: black;
-  background-color: white;
+  .full-width {
+    width: 100%;
+  }
 }
 
 option {
@@ -38,7 +33,7 @@ option {
   z-index: -1;
 }
 
-.input-radio, .label--pointer {
+.input-radio {
   cursor: pointer;
 }
 
@@ -55,36 +50,28 @@ option {
 }
 
 .input-text--primary:focus, .select--primary:focus {
-  border-bottom: 1px solid #9b9b9b;
+  border-bottom: 1px solid $secondary-color;
 }
 
 .textarea--primary {
-  border-bottom: 1px solid #9b9b9b;
+  border-bottom: 1px solid $secondary-color;
 }
 
 .input-area--primary:focus {
-  border-bottom: 1px solid black;
-}
-
-.input-text--full-width, .textarea--full-width {
-  width: calc(100% - 0.6em);
-}
-
-.input-disabled--full-width {
-  width: calc(100% - 1em - 2px);
+  border-bottom: 1px solid $primary-color;
 }
 
 .url-text--primary, .url-text--secondary {
-  margin:0px;
-  padding:0px;
+  margin: 0;
+  padding: 0;
 }
 
 .url-text--primary {
-  color: black;
+  color: $primary-color;
 }
 
 .url-text--secondary {
-  color: #9b9b9b;
+  color: $secondary-color;
 }
 
 .slider {

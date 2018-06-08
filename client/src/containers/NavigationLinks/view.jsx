@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
-import NavBarChannelDropdown from '@components/NavBarChannelOptionsDropdown';
+import NavBarChannelOptionsDropdown from '@components/NavBarChannelOptionsDropdown';
 
 const VIEW = 'VIEW';
 const LOGOUT = 'LOGOUT';
@@ -30,10 +30,23 @@ class NavigationLinks extends React.Component {
   render () {
     return (
       <div className='navigation-links'>
-        <NavLink className='nav-bar-link link--nav' activeClassName='link--nav-active' to='/' exact>Publish</NavLink>
-        <NavLink className='nav-bar-link link--nav'  activeClassName='link--nav-active' to='/about'>About</NavLink>
+        <NavLink
+          className='nav-bar-link link--nav'
+          activeClassName='link--nav-active'
+          to='/'
+          exact
+        >
+          Publish
+        </NavLink>
+        <NavLink
+          className='nav-bar-link link--nav'
+          activeClassName='link--nav-active'
+          to='/about'
+        >
+          About
+        </NavLink>
         { this.props.channelName ? (
-          <NavBarChannelDropdown
+          <NavBarChannelOptionsDropdown
             channelName={this.props.channelName}
             handleSelection={this.handleSelection}
             defaultSelection={this.props.channelName}
@@ -41,7 +54,14 @@ class NavigationLinks extends React.Component {
             LOGOUT={LOGOUT}
           />
         ) : (
-          <NavLink id='nav-bar-login-link' className='nav-bar-link link--nav' activeClassName='link--nav-active' to='/login'>Channel</NavLink>
+          <NavLink
+            id='nav-bar-login-link'
+            className='nav-bar-link link--nav'
+            activeClassName='link--nav-active'
+            to='/login'
+          >
+            Channel
+          </NavLink>
         )}
       </div>
     );

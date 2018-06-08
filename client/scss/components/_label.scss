@@ -1,0 +1,11 @@
+.label {
+  padding-top: $thin-padding;
+  padding-bottom: $thin-padding;
+  display: inline-block;
+}
+
+.label-radio {
+  padding-left: $thin-padding;
+  padding-right: $thin-padding;
+  cursor: pointer;
+}

@@ -53,7 +53,7 @@ function (_React$Component) {
       return _react.default.createElement("input", {
         type: "text",
         id: "publish-title",
-        className: "input-text input-text--full-width",
+        className: "large full-width",
         name: "title",
         placeholder: "Give your content a title...",
         onChange: this.handleInput,
