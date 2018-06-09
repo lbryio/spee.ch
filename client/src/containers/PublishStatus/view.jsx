@@ -1,14 +1,13 @@
 import React from 'react';
 import ProgressBar from '@components/ProgressBar';
 import * as publishStates from '../../constants/publish_claim_states';
-import SpaceAround from '@components/SpaceAround';
 import ButtonSecondary from '@components/ButtonSecondary';
 
 class PublishStatus extends React.Component {
   render () {
     const { status, message, clearFile } = this.props;
     return (
-      <SpaceAround>
+      <div className={'publish-status'}>
         {status === publishStates.LOAD_START &&
         <div>
           <p>File is loading to server</p>
@@ -45,7 +44,7 @@ class PublishStatus extends React.Component {
           />
         </div>
         }
-      </SpaceAround>
+      </div>
     );
   }
 };

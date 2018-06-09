@@ -1,9 +1,6 @@
 import React from 'react';
 
 class VerticalSplit extends React.Component {
-  shouldComponentUpdate () {
-    return false;
-  }
   render () {
     return (
       <div className={'vertical-split'}>

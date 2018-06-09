@@ -11,8 +11,6 @@ var _ProgressBar = _interopRequireDefault(require("@components/ProgressBar"));
 
 var publishStates = _interopRequireWildcard(require("../../constants/publish_claim_states"));
 
-var _SpaceAround = _interopRequireDefault(require("@components/SpaceAround"));
-
 var _ButtonSecondary = _interopRequireDefault(require("@components/ButtonSecondary"));
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
@@ -53,7 +51,9 @@ function (_React$Component) {
           status = _this$props.status,
           message = _this$props.message,
           clearFile = _this$props.clearFile;
-      return _react.default.createElement(_SpaceAround.default, null, status === publishStates.LOAD_START && _react.default.createElement("div", null, _react.default.createElement("p", null, "File is loading to server"), _react.default.createElement("p", {
+      return _react.default.createElement("div", {
+        className: 'publish-status'
+      }, status === publishStates.LOAD_START && _react.default.createElement("div", null, _react.default.createElement("p", null, "File is loading to server"), _react.default.createElement("p", {
         className: 'text--secondary'
       }, "0%")), status === publishStates.LOADING && _react.default.createElement("div", null, _react.default.createElement("p", null, "File is loading to server"), _react.default.createElement("p", {
         className: 'text--secondary'
