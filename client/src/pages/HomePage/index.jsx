@@ -9,8 +9,9 @@ class HomePage extends React.Component {
       <PageLayout
         pageTitle={'Speech'}
         pageUri={''}
-        content={<PublishTool />}
-      />
+      >
+        <PublishTool />
+      </PageLayout>
     );
   }
 };

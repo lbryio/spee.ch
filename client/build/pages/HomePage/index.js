@@ -45,9 +45,8 @@ function (_React$Component) {
     value: function render() {
       return _react.default.createElement(_PageLayout.default, {
         pageTitle: 'Speech',
-        pageUri: '',
-        content: _react.default.createElement(_PublishTool.default, null)
-      });
+        pageUri: ''
+      }, _react.default.createElement(_PublishTool.default, null));
     }
   }]);
 

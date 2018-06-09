@@ -50,7 +50,7 @@ function (_React$Component) {
         pageUri: this.props.pageUri
       }), _react.default.createElement(_NavBar.default, null), _react.default.createElement("div", {
         className: 'content'
-      }, this.props.content));
+      }, this.props.children));
     }
   }]);
 

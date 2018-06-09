@@ -82,9 +82,8 @@ function (_React$Component) {
     value: function render() {
       return _react.default.createElement(_PageLayout.default, {
         pageTitle: 'Multisite',
-        pageUri: '/multisite',
-        content: _react.default.createElement(MultisiteContent, null)
-      });
+        pageUri: '/multisite'
+      }, _react.default.createElement(MultisiteContent, null));
     }
   }]);
 

@@ -53,8 +53,9 @@ class MultisitePage extends React.Component {
       <PageLayout
         pageTitle={'Multisite'}
         pageUri={'/multisite'}
-        content={<MultisiteContent />}
-      />
+      >
+        <MultisiteContent />
+      </PageLayout>
     );
   }
 }

@@ -53,9 +53,7 @@ function (_React$Component) {
         asset: this.props.asset
       }), _react.default.createElement("div", {
         className: 'content'
-      }, this.props.content), _react.default.createElement("div", {
-        className: 'footer'
-      }, this.props.footer));
+      }, this.props.children));
     }
   }]);
 

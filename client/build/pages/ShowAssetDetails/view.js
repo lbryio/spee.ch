@@ -57,12 +57,11 @@ function (_React$Component) {
         var name = asset.claimData.name;
         return _react.default.createElement(_PageLayout.default, {
           pageTitle: "".concat(name, " - details"),
-          asset: asset,
-          content: _react.default.createElement("div", null, _react.default.createElement(_AssetTitle.default, null), _react.default.createElement(_HorizontalSplit.default, {
-            leftSide: _react.default.createElement(_AssetDisplay.default, null),
-            rightSide: _react.default.createElement(_AssetInfo.default, null)
-          }))
-        });
+          asset: asset
+        }, _react.default.createElement(_AssetTitle.default, null), _react.default.createElement(_HorizontalSplit.default, {
+          leftSide: _react.default.createElement(_AssetDisplay.default, null),
+          rightSide: _react.default.createElement(_AssetInfo.default, null)
+        }));
       }
 
       return _react.default.createElement(_ErrorPage.default, {

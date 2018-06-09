@@ -16,16 +16,13 @@ class ShowAssetDetails extends React.Component {
         <PageLayout
           pageTitle={`${name} - details`}
           asset={asset}
-          content={
-            <div>
-              <AssetTitle />
-              <HorizontalSplit
-                leftSide={<AssetDisplay />}
-                rightSide={<AssetInfo />}
-              />
-            </div>
-          }
-        />
+        >
+          <AssetTitle />
+          <HorizontalSplit
+            leftSide={<AssetDisplay />}
+            rightSide={<AssetInfo />}
+          />
+        </PageLayout>
       );
     }
     return (

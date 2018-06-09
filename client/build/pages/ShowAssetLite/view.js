@@ -15,6 +15,8 @@ var _AssetDisplay = _interopRequireDefault(require("@containers/AssetDisplay"));
 
 var _SpaceAround = _interopRequireDefault(require("@components/SpaceAround"));
 
+var _VerticalSplit = _interopRequireDefault(require("@components/VerticalSplit"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -34,6 +36,21 @@ function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) ===
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.getPrototypeOf || function _getPrototypeOf(o) { return o.__proto__; }; return _getPrototypeOf(o); }
+
+var AssetLiteFooter = function AssetLiteFooter(_ref) {
+  var name = _ref.name,
+      claimId = _ref.claimId;
+  return _react.default.createElement(_SpaceAround.default, null, _react.default.createElement("p", {
+    className: 'text--extra-small'
+  }, _react.default.createElement(_reactRouterDom.Link, {
+    className: "link--primary",
+    to: "/".concat(claimId, "/").concat(name)
+  }, " hosted on spee.ch"), " via the ", _react.default.createElement("a", {
+    className: "link--primary",
+    href: 'https://lbry.io/get',
+    target: '_blank'
+  }, "LBRY"), " blockchain"));
+};
 
 var ShowLite =
 /*#__PURE__*/
@@ -55,19 +72,14 @@ function (_React$Component) {
             claimId = _asset$claimData.claimId;
         return _react.default.createElement(_PageLayoutShowLite.default, {
           pageTitle: name,
-          asset: asset,
-          content: _react.default.createElement(_AssetDisplay.default, null),
-          footer: _react.default.createElement(_SpaceAround.default, null, _react.default.createElement("p", {
-            className: 'text--extra-small'
-          }, _react.default.createElement(_reactRouterDom.Link, {
-            className: "link--primary",
-            to: "/".concat(claimId, "/").concat(name)
-          }, " hosted on spee.ch"), " via the ", _react.default.createElement("a", {
-            className: "link--primary",
-            href: 'https://lbry.io/get',
-            target: '_blank'
-          }, "LBRY"), " blockchain"))
-        });
+          asset: asset
+        }, _react.default.createElement(_VerticalSplit.default, {
+          top: _react.default.createElement(_AssetDisplay.default, null),
+          bottom: _react.default.createElement(AssetLiteFooter, {
+            name: name,
+            claimId: claimId
+          })
+        }));
       }
 
       return _react.default.createElement("div", null, _react.default.createElement("p", {

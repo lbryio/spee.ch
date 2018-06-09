@@ -11,10 +11,7 @@ class PageLayoutShowLite extends React.Component {
       <div className={'page-layout-show-lite'}>
         <SEO pageTitle={this.props.pageTitle} asset={this.props.asset} />
         <div className={'content'}>
-          {this.props.content}
-        </div>
-        <div className={'footer'}>
-          {this.props.footer}
+          {this.props.children}
         </div>
       </div>
     );

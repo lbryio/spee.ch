@@ -9,10 +9,9 @@ class ErrorPage extends React.Component {
       <PageLayout
         pageTitle={'Error'}
         pageUri={'error'}
-        content={
-          <p>{error}</p>
-        }
-      />
+      >
+        <p>{error}</p>
+      </PageLayout>
     );
   }
 };

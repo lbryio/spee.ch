@@ -55,13 +55,12 @@ function (_React$Component) {
             shortId = channel.shortId;
         return _react.default.createElement(_PageLayout.default, {
           pageTitle: name,
-          channel: channel,
-          content: _react.default.createElement("div", null, _react.default.createElement(_ChannelInfoDisplay.default, {
-            name: name,
-            longId: longId,
-            shortId: shortId
-          }), _react.default.createElement(_ChannelClaimsDisplay.default, null))
-        });
+          channel: channel
+        }, _react.default.createElement(_ChannelInfoDisplay.default, {
+          name: name,
+          longId: longId,
+          shortId: shortId
+        }), _react.default.createElement(_ChannelClaimsDisplay.default, null));
       }
 
       return _react.default.createElement(_ErrorPage.default, {

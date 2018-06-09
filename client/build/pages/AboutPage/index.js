@@ -49,12 +49,11 @@ function (_React$Component) {
     value: function render() {
       return _react.default.createElement(_PageLayout.default, {
         pageTitle: 'About',
-        pageUri: 'about',
-        content: _react.default.createElement(_HorizontalSplit.default, {
-          leftSide: _react.default.createElement(_AboutSpeechOverview.default, null),
-          rightSide: _react.default.createElement(_AboutSpeechDetails.default, null)
-        })
-      });
+        pageUri: 'about'
+      }, _react.default.createElement(_HorizontalSplit.default, {
+        leftSide: _react.default.createElement(_AboutSpeechOverview.default, null),
+        rightSide: _react.default.createElement(_AboutSpeechDetails.default, null)
+      }));
     }
   }]);
 

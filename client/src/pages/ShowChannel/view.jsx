@@ -13,17 +13,14 @@ class ShowChannel extends React.Component {
         <PageLayout
           pageTitle={name}
           channel={channel}
-          content={
-            <div>
-              <ChannelInfoDisplay
-                name={name}
-                longId={longId}
-                shortId={shortId}
-              />
-              <ChannelClaimsDisplay />
-            </div>
-          }
-        />
+        >
+          <ChannelInfoDisplay
+            name={name}
+            longId={longId}
+            shortId={shortId}
+          />
+          <ChannelClaimsDisplay />
+        </PageLayout>
       );
     }
     return (

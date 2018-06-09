@@ -10,13 +10,12 @@ class AboutPage extends React.Component {
       <PageLayout
         pageTitle={'About'}
         pageUri={'about'}
-        content={
-          <HorizontalSplit
-            leftSide={<AboutSpeechOverview />}
-            rightSide={<AboutSpeechDetails />}
-          />
-        }
-      />
+      >
+        <HorizontalSplit
+          leftSide={<AboutSpeechOverview />}
+          rightSide={<AboutSpeechDetails />}
+        />
+      </PageLayout>
     );
   }
 }

@@ -7,13 +7,10 @@ class FourOhForPage extends React.Component {
       <PageLayout
         pageTitle={'404'}
         pageUri={'/404'}
-        content={
-          <div>
-            <h2>404</h2>
-            <p>That page does not exist</p>
-          </div>
-        }
-      />
+      >
+        <h2>404</h2>
+        <p>That page does not exist</p>
+      </PageLayout>
     );
   }
 };

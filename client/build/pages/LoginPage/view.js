@@ -59,12 +59,11 @@ function (_React$Component) {
     value: function render() {
       return _react.default.createElement(_PageLayout.default, {
         pageTitle: 'Login',
-        pageUri: 'login',
-        content: _react.default.createElement(_HorizontalSplit.default, {
-          leftSide: _react.default.createElement(_ChannelAbout.default, null),
-          rightSide: _react.default.createElement(_ChannelTools.default, null)
-        })
-      });
+        pageUri: 'login'
+      }, _react.default.createElement(_HorizontalSplit.default, {
+        leftSide: _react.default.createElement(_ChannelAbout.default, null),
+        rightSide: _react.default.createElement(_ChannelTools.default, null)
+      }));
     }
   }]);
 

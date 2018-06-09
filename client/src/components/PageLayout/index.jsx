@@ -10,7 +10,7 @@ class PageLayout extends React.Component {
         <SEO pageTitle={this.props.pageTitle} pageUri={this.props.pageUri} />
         <NavBar />
         <div className={'content'}>
-          {this.props.content}
+          {this.props.children}
         </div>
       </div>
     );
