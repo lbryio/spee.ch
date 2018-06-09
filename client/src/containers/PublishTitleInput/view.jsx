@@ -15,7 +15,7 @@ class PublishTitleInput extends React.Component {
       <input
         type='text'
         id='publish-title'
-        className='large full-width'
+        className={'text--large input--full-width'}
         name='title'
         placeholder='Give your content a title...'
         onChange={this.handleInput}

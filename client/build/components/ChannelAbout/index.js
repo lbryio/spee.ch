@@ -11,7 +11,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var ChannelAbout = function ChannelAbout() {
   return _react.default.createElement("div", null, _react.default.createElement("p", {
-    className: 'large'
+    className: 'text--large'
   }, "Channels allow you to publish and group content under an identity. You can create a channel for yourself, or share one with like-minded friends.  You can create 1 channel, or 100, so whether you're ", _react.default.createElement("a", {
     className: "link--primary",
     target: "_blank",

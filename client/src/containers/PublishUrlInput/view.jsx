@@ -48,7 +48,7 @@ class PublishUrlInput extends React.Component {
       <div>
         <div className={'publish-url-input'}>
           <div className={'align-left'}>
-            <span className='url-text--secondary'>spee.ch&nbsp;/&nbsp;</span>
+            <span className='publish-url-text'>spee.ch&nbsp;/&nbsp;</span>
           </div>
           <div className={'shrink'}>
             <UrlMiddle

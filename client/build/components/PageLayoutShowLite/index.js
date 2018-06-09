@@ -7,6 +7,8 @@ exports.default = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
+var _SEO = _interopRequireDefault(require("@containers/SEO"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -27,28 +29,40 @@ function _assertThisInitialized(self) { if (self === void 0) { throw new Referen
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.getPrototypeOf || function _getPrototypeOf(o) { return o.__proto__; }; return _getPrototypeOf(o); }
 
-var SiteDescription =
+var PageLayoutShowLite =
 /*#__PURE__*/
 function (_React$Component) {
-  function SiteDescription() {
-    _classCallCheck(this, SiteDescription);
+  function PageLayoutShowLite() {
+    _classCallCheck(this, PageLayoutShowLite);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(SiteDescription).apply(this, arguments));
+    return _possibleConstructorReturn(this, _getPrototypeOf(PageLayoutShowLite).apply(this, arguments));
   }
 
-  _createClass(SiteDescription, [{
+  _createClass(PageLayoutShowLite, [{
+    key: "shouldComponentUpdate",
+    value: function shouldComponentUpdate() {
+      return false;
+    }
+  }, {
     key: "render",
     value: function render() {
-      return _react.default.createElement("p", {
-        className: 'text--extra-small'
-      }, this.props.siteDescription);
+      return _react.default.createElement("div", {
+        className: 'page-layout-show-lite'
+      }, _react.default.createElement(_SEO.default, {
+        pageTitle: this.props.pageTitle,
+        asset: this.props.asset
+      }), _react.default.createElement("div", {
+        className: 'content'
+      }, this.props.content), _react.default.createElement("div", {
+        className: 'footer'
+      }, this.props.footer));
     }
   }]);
 
-  _inherits(SiteDescription, _React$Component);
+  _inherits(PageLayoutShowLite, _React$Component);
 
-  return SiteDescription;
+  return PageLayoutShowLite;
 }(_react.default.Component);
 
-var _default = SiteDescription;
+var _default = PageLayoutShowLite;
 exports.default = _default;

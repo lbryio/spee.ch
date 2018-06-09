@@ -14,9 +14,9 @@ var ChannelInfoDisplay = function ChannelInfoDisplay(_ref) {
       longId = _ref.longId,
       shortId = _ref.shortId;
   return _react.default.createElement("div", null, _react.default.createElement("h2", null, "channel name: ", name), _react.default.createElement("p", {
-    className: 'fine-print'
+    className: 'text--secondary'
   }, "full channel id: ", longId), _react.default.createElement("p", {
-    className: 'fine-print'
+    className: 'text--secondary'
   }, "short channel id: ", shortId));
 };
 

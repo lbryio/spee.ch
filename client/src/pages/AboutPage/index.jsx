@@ -7,14 +7,18 @@ import AboutSpeechDetails from '@components/AboutSpeechDetails';
 class AboutPage extends React.Component {
   render () {
     return (
-      <PageLayout pageTitle={'About'} pageUri={'about'} >
-        <HorizontalSplit
-          leftSide={<AboutSpeechOverview />}
-          rightSide={<AboutSpeechDetails />}
-        />
-      </PageLayout>
+      <PageLayout
+        pageTitle={'About'}
+        pageUri={'about'}
+        content={
+          <HorizontalSplit
+            leftSide={<AboutSpeechOverview />}
+            rightSide={<AboutSpeechDetails />}
+          />
+        }
+      />
     );
   }
-};
+}
 
 export default AboutPage;

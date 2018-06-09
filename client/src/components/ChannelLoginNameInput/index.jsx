@@ -9,7 +9,7 @@ const ChannelLoginNameInput  = ({ channelName, handleInput }) => {
         <Label value={'Name:'} />
       }
       content={
-        <div className='input-area--primary'>
+        <div className='input-area'>
           <span>@</span>
           <input
             type='text'

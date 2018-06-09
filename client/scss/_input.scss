@@ -2,22 +2,22 @@ input:-webkit-autofill {
   -webkit-box-shadow: 0 0 0px 1000px white inset;
 }
 
-input, select, textarea {
+input {
   margin: 0;
   outline: none;
-  padding: $thin-padding;
+  padding: $input-padding;
   border: 0;
   background-color: $background-color;
   display: inline-block;
-  .full-width {
-    width: 100%;
-  }
 }
 
-option {
-  font-family: monospace;
+.input-text {
+
 }
 
+.input-slider {
+  width: 100%
+}
 
 .input-checkbox {
   border: 1px solid black;
@@ -37,43 +37,14 @@ option {
   cursor: pointer;
 }
 
-.select--arrow {
-  -moz-appearance:none;
-  -webkit-appearance: none;
-  background: url('icon/downArrow.svg') no-repeat right;
-  cursor: pointer;
-  padding-right: 1.5em;
-}
+// input area wrapper
 
-.input-area--primary {
-  border-bottom: 1px solid #9b9b9b;
-}
-
-.input-text--primary:focus, .select--primary:focus {
+.input-area {
   border-bottom: 1px solid $secondary-color;
 }
 
-.textarea--primary {
-  border-bottom: 1px solid $secondary-color;
-}
+// modifiers
 
-.input-area--primary:focus {
-  border-bottom: 1px solid $primary-color;
-}
-
-.url-text--primary, .url-text--secondary {
-  margin: 0;
-  padding: 0;
-}
-
-.url-text--primary {
-  color: $primary-color;
-}
-
-.url-text--secondary {
-  color: $secondary-color;
-}
-
-.slider {
-  width: 100%
+.input--full-width {
+  width: $input-full-width;
 }

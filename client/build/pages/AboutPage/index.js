@@ -49,11 +49,12 @@ function (_React$Component) {
     value: function render() {
       return _react.default.createElement(_PageLayout.default, {
         pageTitle: 'About',
-        pageUri: 'about'
-      }, _react.default.createElement(_HorizontalSplit.default, {
-        leftSide: _react.default.createElement(_AboutSpeechOverview.default, null),
-        rightSide: _react.default.createElement(_AboutSpeechDetails.default, null)
-      }));
+        pageUri: 'about',
+        content: _react.default.createElement(_HorizontalSplit.default, {
+          leftSide: _react.default.createElement(_AboutSpeechOverview.default, null),
+          rightSide: _react.default.createElement(_AboutSpeechDetails.default, null)
+        })
+      });
     }
   }]);
 
@@ -62,6 +63,5 @@ function (_React$Component) {
   return AboutPage;
 }(_react.default.Component);
 
-;
 var _default = AboutPage;
 exports.default = _default;

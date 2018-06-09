@@ -1,6 +1,8 @@
 import React from 'react';
+import FormFeedbackDisplay from '@components/FormFeedbackDisplay';
+import SpaceBetween from '@components/SpaceBetween';
 
-function dataURItoBlob(dataURI) {
+function dataURItoBlob (dataURI) {
   // convert base64/URLEncoded data component to raw binary data held in a string
   let byteString = atob(dataURI.split(',')[1]);
   // separate out the mime component
@@ -108,30 +110,29 @@ class PublishThumbnailInput extends React.Component {
         {
           sliderValue ? (
             <div>
-              <div className='flex-container--row flex-container--space-between-center' style={{width: '100%'}}>
-                <span className='info-message'>0'00"</span>
-                <span className='info-message'>{totalMinutes}'{totalSeconds}"</span>
-              </div>
+              <SpaceBetween style={{width: '100%'}}>
+                <span className='text--small text--secondary'>0'00"</span>
+                <span className='text--small text--secondary'>{totalMinutes}'{totalSeconds}"</span>
+              </SpaceBetween>
               <div>
                 <input
                   type='range'
                   min={sliderMinRange}
                   max={sliderMaxRange}
                   value={sliderValue}
-                  className='slider'
+                  className='input-slider'
                   onChange={this.handleSliderChange}
                 />
               </div>
             </div>
           ) : (
-            <p className='info-message' >loading... </p>
+            <p className={'text--small text--secondary'}>loading... </p>
           )
         }
-        { error ? (
-          <p className='info-message--failure'>{error}</p>
-        ) : (
-          <p className='info-message'>Use slider to set thumbnail</p>
-        )}
+        <FormFeedbackDisplay
+          errorMessage={error}
+          defaultMessage={'Use slider to set thumbnail'}
+        />
       </div>
     );
   }

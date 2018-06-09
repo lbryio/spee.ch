@@ -6,9 +6,13 @@ class ErrorPage extends React.Component {
   render () {
     const { error } = this.props;
     return (
-      <PageLayout pageTitle={'Error'} pageUri={'error'}>
-        <p>{error}</p>
-      </PageLayout>
+      <PageLayout
+        pageTitle={'Error'}
+        pageUri={'error'}
+        content={
+          <p>{error}</p>
+        }
+      />
     );
   }
 };

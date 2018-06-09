@@ -11,7 +11,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var PublishFinePrint = function PublishFinePrint() {
   return _react.default.createElement("p", {
-    className: "extra-small secondary"
+    className: 'text--extra-small text--secondary'
   }, "By clicking 'Publish', you affirm that you have the rights to publish this content to the LBRY network, and that you understand the properties of publishing it to a decentralized, user-controlled network. ", _react.default.createElement("a", {
     className: "link--primary",
     target: "_blank",

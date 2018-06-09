@@ -1,5 +1,3 @@
-/* LINKS */
-
 a, a:visited {
   text-decoration: none;
 }
@@ -12,11 +10,6 @@ a, a:visited {
   margin: 0px;
   padding: 0.3em;
   color: $secondary-color;
-}
-
-.link--disabled-text {
-  color: $secondary-color;
-  text-decoration: underline;
 }
 
 .link--nav {

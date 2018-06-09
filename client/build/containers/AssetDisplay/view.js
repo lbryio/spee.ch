@@ -60,7 +60,9 @@ function (_React$Component) {
           contentType = _this$props$asset$cla2.contentType,
           fileExt = _this$props$asset$cla2.fileExt,
           thumbnail = _this$props$asset$cla2.thumbnail;
-      return _react.default.createElement("div", null, status === _asset_display_states.LOCAL_CHECK && _react.default.createElement("div", null, _react.default.createElement("p", null, "Checking to see if Spee.ch has your asset locally...")), status === _asset_display_states.UNAVAILABLE && _react.default.createElement("div", null, _react.default.createElement("p", null, "Sit tight, we're searching the LBRY blockchain for your asset!"), _react.default.createElement(_ProgressBar.default, {
+      return _react.default.createElement("div", {
+        className: 'asset-display'
+      }, status === _asset_display_states.LOCAL_CHECK && _react.default.createElement("div", null, _react.default.createElement("p", null, "Checking to see if Spee.ch has your asset locally...")), status === _asset_display_states.UNAVAILABLE && _react.default.createElement("div", null, _react.default.createElement("p", null, "Sit tight, we're searching the LBRY blockchain for your asset!"), _react.default.createElement(_ProgressBar.default, {
         size: 12
       }), _react.default.createElement("p", null, "Curious what magic is happening here? ", _react.default.createElement("a", {
         className: "link--primary",

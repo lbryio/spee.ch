@@ -13,13 +13,19 @@ class ShowAssetDetails extends React.Component {
     if (asset) {
       const { claimData: { name } } = asset;
       return (
-        <PageLayout pageTitle={`${name} - details`} asset={asset}>
-          <AssetTitle />
-          <HorizontalSplit
-            leftSide={<AssetDisplay />}
-            rightSide={<AssetInfo />}
-          />
-        </PageLayout>
+        <PageLayout
+          pageTitle={`${name} - details`}
+          asset={asset}
+          content={
+            <div>
+              <AssetTitle />
+              <HorizontalSplit
+                leftSide={<AssetDisplay />}
+                rightSide={<AssetInfo />}
+              />
+            </div>
+          }
+        />
       );
     }
     return (

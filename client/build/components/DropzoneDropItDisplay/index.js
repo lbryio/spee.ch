@@ -11,9 +11,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var DropzoneDropItDisplay = function DropzoneDropItDisplay() {
   return _react.default.createElement("div", {
-    className: "dropzone-dropit-display"
+    className: 'dropzone-dropit-display'
   }, _react.default.createElement("p", {
-    className: "interactive"
+    className: 'text--interactive'
   }, "Drop it."));
 };
 

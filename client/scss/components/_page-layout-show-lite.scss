@@ -1,12 +1,14 @@
-.page-layout {
+.page-layout-show-lite {
   flex: 1 0 auto;
   display: flex;
   flex-direction: column;
+  margin: $primary-padding;
   .content {
     flex: 1 0 auto;
     display: flex;
-    -webkit-flex-direction: column;
     flex-direction: column;
-    margin: $primary-padding;
+  }
+  .footer {
+    flex: 0 1 auto;
   }
 }

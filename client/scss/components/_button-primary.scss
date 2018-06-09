@@ -1,7 +1,8 @@
-
 .button-primary, .button-primary:focus, .button-primary:active {
   border: $button-border-width $button-border-strength $primary-color;
-  padding: 0.5em;
+  margin-top: $thin-padding;
+  margin-bottom: $thin-padding;
+  padding: $thin-padding;
   color: $primary-color;
   background-color: $background-color;
   outline: 0;
@@ -26,7 +27,8 @@
 }
 
 .button-primary--jumbo, .button-primary--jumbo:focus, .button-primary--jumbo:active {
-  width: $button-max-width;
-  padding: $secondary-padding;
+  width: $button-full-width;
+  padding-top: $secondary-padding;
+  padding-bottom: $secondary-padding;
   font-size: x-large;
 }

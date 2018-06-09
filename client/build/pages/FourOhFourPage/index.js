@@ -43,8 +43,9 @@ function (_React$Component) {
     value: function render() {
       return _react.default.createElement(_PageLayout.default, {
         pageTitle: '404',
-        pageUri: '/404'
-      }, _react.default.createElement("h2", null, "404"), _react.default.createElement("p", null, "That page does not exist"));
+        pageUri: '/404',
+        content: _react.default.createElement("div", null, _react.default.createElement("h2", null, "404"), _react.default.createElement("p", null, "That page does not exist"))
+      });
     }
   }]);
 

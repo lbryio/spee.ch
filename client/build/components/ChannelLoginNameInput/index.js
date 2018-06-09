@@ -21,7 +21,7 @@ var ChannelLoginNameInput = function ChannelLoginNameInput(_ref) {
       value: 'Name:'
     }),
     content: _react.default.createElement("div", {
-      className: "input-area--primary"
+      className: "input-area"
     }, _react.default.createElement("span", null, "@"), _react.default.createElement("input", {
       type: "text",
       id: "channel-login-name-input",

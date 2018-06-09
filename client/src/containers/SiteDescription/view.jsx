@@ -3,9 +3,7 @@ import React from 'react';
 class SiteDescription extends React.Component {
   render () {
     return (
-      <p className='extra-small'>
-        {this.props.siteDescription}
-      </p>
+      <p className={'text--extra-small'}>{this.props.siteDescription}</p>
     );
   }
 }

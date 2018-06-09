@@ -113,7 +113,7 @@ function (_React$Component) {
       }, _react.default.createElement("div", {
         className: 'align-left'
       }, _react.default.createElement("span", {
-        className: "url-text--secondary"
+        className: "publish-url-text"
       }, "spee.ch\xA0/\xA0")), _react.default.createElement("div", {
         className: 'shrink'
       }, _react.default.createElement(_PublishUrlMiddleDisplay.default, {

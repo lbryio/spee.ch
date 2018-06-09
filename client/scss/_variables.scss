@@ -2,7 +2,9 @@ $base-color: white;
 $primary-color: black;
 $secondary-color: #9b9b9b;
 $tertiary-color: #ccccc0;
-$interactive-color : blue;
+$interactive-color: blue;
+$success-color: green;
+$failure-color: red;
 
 $primary-padding: 3em;
 $secondary-padding: 2em;
@@ -11,3 +13,10 @@ $full-width-thin-padding: calc(100% - 0.6em);
 
 $background-color: $base-color;
 $font-color: $primary-color;
+
+$button-border-width: 1px;
+$button-border-strength: solid;
+$button-full-width: calc(100% - 2px);
+
+$input-padding: 0.3em;
+$input-full-width: calc(100% - 0.6em);

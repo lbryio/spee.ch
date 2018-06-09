@@ -9,7 +9,7 @@ const ChannelCreatePasswordInput  = ({ value, handlePasswordInput }) => {
         <Label value={'Password:'} />
       }
       content={
-        <div className='input-area--primary'>
+        <div className='input-area'>
           <input
             type='password'
             name='password'

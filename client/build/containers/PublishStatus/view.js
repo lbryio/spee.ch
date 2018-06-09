@@ -11,6 +11,10 @@ var _ProgressBar = _interopRequireDefault(require("@components/ProgressBar"));
 
 var publishStates = _interopRequireWildcard(require("../../constants/publish_claim_states"));
 
+var _SpaceAround = _interopRequireDefault(require("@components/SpaceAround"));
+
+var _ButtonSecondary = _interopRequireDefault(require("@components/ButtonSecondary"));
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -49,40 +53,30 @@ function (_React$Component) {
           status = _this$props.status,
           message = _this$props.message,
           clearFile = _this$props.clearFile;
-      return _react.default.createElement("div", {
-        className: "row row--tall flex-container--column flex-container--center-center"
-      }, status === publishStates.LOAD_START && _react.default.createElement("div", {
-        className: "row align-content-center"
-      }, _react.default.createElement("p", null, "File is loading to server"), _react.default.createElement("p", {
-        className: "primary"
-      }, "0%")), status === publishStates.LOADING && _react.default.createElement("div", null, _react.default.createElement("div", {
-        className: "row align-content-center"
-      }, _react.default.createElement("p", null, "File is loading to server"), _react.default.createElement("p", {
-        className: "primary"
-      }, message))), status === publishStates.PUBLISHING && _react.default.createElement("div", {
-        className: "row align-content-center"
-      }, _react.default.createElement("p", null, "Upload complete.  Your file is now being published on the blockchain..."), _react.default.createElement(_ProgressBar.default, {
+      return _react.default.createElement(_SpaceAround.default, null, status === publishStates.LOAD_START && _react.default.createElement("div", null, _react.default.createElement("p", null, "File is loading to server"), _react.default.createElement("p", {
+        className: 'text--secondary'
+      }, "0%")), status === publishStates.LOADING && _react.default.createElement("div", null, _react.default.createElement("p", null, "File is loading to server"), _react.default.createElement("p", {
+        className: 'text--secondary'
+      }, message)), status === publishStates.PUBLISHING && _react.default.createElement("div", null, _react.default.createElement("p", null, "Upload complete.  Your file is now being published on the blockchain..."), _react.default.createElement(_ProgressBar.default, {
         size: 12
       }), _react.default.createElement("p", null, "Curious what magic is happening here? ", _react.default.createElement("a", {
         className: "link--primary",
         target: "blank",
         href: "https://lbry.io/faq/what-is-lbry"
-      }, "Learn more."))), status === publishStates.SUCCESS && _react.default.createElement("div", {
-        className: "row align-content-center"
-      }, _react.default.createElement("p", null, "Your publish is complete! You are being redirected to it now."), _react.default.createElement("p", null, "If you are not automatically redirected, ", _react.default.createElement("a", {
+      }, "Learn more."))), status === publishStates.SUCCESS && _react.default.createElement("div", null, _react.default.createElement("p", null, "Your publish is complete! You are being redirected to it now."), _react.default.createElement("p", null, "If you are not automatically redirected, ", _react.default.createElement("a", {
         className: "link--primary",
         target: "_blank",
         href: message
-      }, "click here."))), status === publishStates.FAILED && _react.default.createElement("div", {
-        className: "row align-content-center"
-      }, _react.default.createElement("p", null, "Something went wrong..."), _react.default.createElement("p", null, _react.default.createElement("strong", null, message)), _react.default.createElement("p", null, "For help, post the above error text in the #speech channel on the ", _react.default.createElement("a", {
+      }, "click here."))), status === publishStates.FAILED && _react.default.createElement("div", null, _react.default.createElement("p", null, "Something went wrong..."), _react.default.createElement("p", {
+        className: 'text--strong'
+      }, message), _react.default.createElement("p", null, "For help, post the above error text in the #speech channel on the ", _react.default.createElement("a", {
         className: "link--primary",
         href: "https://chat.lbry.io",
         target: "_blank"
-      }, "lbry discord")), _react.default.createElement("button", {
-        className: "button--secondary",
-        onClick: clearFile
-      }, "Reset")));
+      }, "lbry discord")), _react.default.createElement(_ButtonSecondary.default, {
+        value: 'Reset',
+        onClickHandler: clearFile
+      })));
     }
   }]);
 

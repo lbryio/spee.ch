@@ -12,15 +12,15 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var FormFeedbackDisplay = function FormFeedbackDisplay(_ref) {
   var errorMessage = _ref.errorMessage,
       defaultMessage = _ref.defaultMessage;
-  return _react.default.createElement("div", null, errorMessage ? _react.default.createElement("div", {
-    className: 'form-feedback--failure'
-  }, _react.default.createElement("p", {
-    className: "small"
-  }, errorMessage)) : _react.default.createElement("div", {
+  return _react.default.createElement("div", {
     className: 'form-feedback'
-  }, _react.default.createElement("p", {
-    className: "small"
-  }, defaultMessage)));
+  }, errorMessage ? _react.default.createElement("p", {
+    className: 'text--small text--failure'
+  }, errorMessage) : _react.default.createElement("div", null, defaultMessage ? _react.default.createElement("p", {
+    className: 'text--small text--secondary'
+  }, defaultMessage) : _react.default.createElement("p", {
+    className: 'text--small'
+  }, "\xA0")));
 };
 
 var _default = FormFeedbackDisplay;

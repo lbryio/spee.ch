@@ -46,8 +46,9 @@ function (_React$Component) {
       var error = this.props.error;
       return _react.default.createElement(_PageLayout.default, {
         pageTitle: 'Error',
-        pageUri: 'error'
-      }, _react.default.createElement("p", null, error));
+        pageUri: 'error',
+        content: _react.default.createElement("p", null, error)
+      });
     }
   }]);
 

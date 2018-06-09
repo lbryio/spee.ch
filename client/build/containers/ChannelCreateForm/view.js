@@ -136,7 +136,7 @@ function (_React$Component) {
         value: 'Create Channel',
         onClickHandler: this.handleSubmit
       })) : _react.default.createElement("div", null, _react.default.createElement("p", {
-        className: 'fine-print'
+        className: 'text--small text--secondary'
       }, status), _react.default.createElement(_ProgressBar.default, {
         size: 12
       })));

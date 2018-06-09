@@ -3,18 +3,8 @@
   padding-right: $primary-padding;
   border-bottom: 0.5px solid $tertiary-color;
   .select--arrow {
-    padding: 0 1.5em 0 0;
+    padding: 0 1.5em 0 $input-padding;
   }
-}
-
-// old
-
-.nav-bar--left {
-  align-self: center;
-}
-
-.nav-bar-tagline {
-  font-size: small;
 }
 
 .nav-bar-link {

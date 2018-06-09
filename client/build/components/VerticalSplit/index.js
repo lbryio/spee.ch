@@ -27,28 +27,33 @@ function _assertThisInitialized(self) { if (self === void 0) { throw new Referen
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.getPrototypeOf || function _getPrototypeOf(o) { return o.__proto__; }; return _getPrototypeOf(o); }
 
-var SiteDescription =
+var VerticalSplit =
 /*#__PURE__*/
 function (_React$Component) {
-  function SiteDescription() {
-    _classCallCheck(this, SiteDescription);
+  function VerticalSplit() {
+    _classCallCheck(this, VerticalSplit);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(SiteDescription).apply(this, arguments));
+    return _possibleConstructorReturn(this, _getPrototypeOf(VerticalSplit).apply(this, arguments));
   }
 
-  _createClass(SiteDescription, [{
+  _createClass(VerticalSplit, [{
+    key: "shouldComponentUpdate",
+    value: function shouldComponentUpdate() {
+      return false;
+    }
+  }, {
     key: "render",
     value: function render() {
-      return _react.default.createElement("p", {
-        className: 'text--extra-small'
-      }, this.props.siteDescription);
+      return _react.default.createElement("div", {
+        className: 'vertical-split'
+      }, this.props.top, this.props.bottom);
     }
   }]);
 
-  _inherits(SiteDescription, _React$Component);
+  _inherits(VerticalSplit, _React$Component);
 
-  return SiteDescription;
+  return VerticalSplit;
 }(_react.default.Component);
 
-var _default = SiteDescription;
+var _default = VerticalSplit;
 exports.default = _default;

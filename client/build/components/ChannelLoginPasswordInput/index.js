@@ -21,7 +21,7 @@ var ChannelLoginPasswordInput = function ChannelLoginPasswordInput(_ref) {
       value: 'Password:'
     }),
     content: _react.default.createElement("div", {
-      className: "input-area--primary"
+      className: "input-area"
     }, _react.default.createElement("input", {
       type: "password",
       id: "channel-login-password-input",

@@ -10,7 +10,7 @@ class AssetDisplay extends React.Component {
   render () {
     const { status, error, asset: { claimData: { name, claimId, contentType, fileExt, thumbnail } } } = this.props;
     return (
-      <div>
+      <div className={'asset-display'}>
         {(status === LOCAL_CHECK) &&
         <div>
           <p>Checking to see if Spee.ch has your asset locally...</p>

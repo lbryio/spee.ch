@@ -11,8 +11,6 @@ var _SEO = _interopRequireDefault(require("@containers/SEO"));
 
 var _NavBar = _interopRequireDefault(require("@components/NavBar"));
 
-var _PageContent = _interopRequireDefault(require("@components/PageContent"));
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -43,11 +41,6 @@ function (_React$Component) {
   }
 
   _createClass(PageLayout, [{
-    key: "shouldComponentUpdate",
-    value: function shouldComponentUpdate() {
-      return false;
-    }
-  }, {
     key: "render",
     value: function render() {
       return _react.default.createElement("div", {
@@ -55,7 +48,9 @@ function (_React$Component) {
       }, _react.default.createElement(_SEO.default, {
         pageTitle: this.props.pageTitle,
         pageUri: this.props.pageUri
-      }), _react.default.createElement(_NavBar.default, null), _react.default.createElement(_PageContent.default, null, this.props.children));
+      }), _react.default.createElement(_NavBar.default, null), _react.default.createElement("div", {
+        className: 'content'
+      }, this.props.content));
     }
   }]);
 

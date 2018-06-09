@@ -15,12 +15,16 @@ class LoginPage extends React.Component {
   }
   render () {
     return (
-      <PageLayout pageTitle={'Login'} pageUri={'login'} >
-        <HorizontalSplit
-          leftSide={<ChannelAbout />}
-          rightSide={<ChannelTools />}
-        />
-      </PageLayout>
+      <PageLayout
+        pageTitle={'Login'}
+        pageUri={'login'}
+        content={
+          <HorizontalSplit
+            leftSide={<ChannelAbout />}
+            rightSide={<ChannelTools />}
+          />
+        }
+      />
     );
   }
 };

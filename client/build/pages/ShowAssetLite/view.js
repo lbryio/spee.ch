@@ -9,9 +9,11 @@ var _react = _interopRequireDefault(require("react"));
 
 var _reactRouterDom = require("react-router-dom");
 
-var _SEO = _interopRequireDefault(require("@containers/SEO"));
+var _PageLayoutShowLite = _interopRequireDefault(require("@components/PageLayoutShowLite"));
 
 var _AssetDisplay = _interopRequireDefault(require("@containers/AssetDisplay"));
+
+var _SpaceAround = _interopRequireDefault(require("@components/SpaceAround"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -51,27 +53,26 @@ function (_React$Component) {
         var _asset$claimData = asset.claimData,
             name = _asset$claimData.name,
             claimId = _asset$claimData.claimId;
-        return _react.default.createElement("div", {
-          className: "row--tall flex-container--column flex-container--center-center show-lite-container"
-        }, _react.default.createElement(_SEO.default, {
+        return _react.default.createElement(_PageLayoutShowLite.default, {
           pageTitle: name,
-          asset: asset
-        }), _react.default.createElement(_AssetDisplay.default, null), _react.default.createElement("p", {
-          className: "extra-small"
-        }, _react.default.createElement(_reactRouterDom.Link, {
-          id: "asset-boilerpate",
-          className: "link--primary",
-          to: "/".concat(claimId, "/").concat(name)
-        }, " hosted on spee.ch"), " via the ", _react.default.createElement("a", {
-          className: "link--primary",
-          href: 'https://lbry.io/get',
-          target: '_blank'
-        }, "LBRY"), " blockchain"));
+          asset: asset,
+          content: _react.default.createElement(_AssetDisplay.default, null),
+          footer: _react.default.createElement(_SpaceAround.default, null, _react.default.createElement("p", {
+            className: 'text--extra-small'
+          }, _react.default.createElement(_reactRouterDom.Link, {
+            className: "link--primary",
+            to: "/".concat(claimId, "/").concat(name)
+          }, " hosted on spee.ch"), " via the ", _react.default.createElement("a", {
+            className: "link--primary",
+            href: 'https://lbry.io/get',
+            target: '_blank'
+          }, "LBRY"), " blockchain"))
+        });
       }
 
-      return _react.default.createElement("div", {
-        className: "row row--tall row--padded flex-container--column flex-container--center-center"
-      }, _react.default.createElement("p", null, "loading asset data..."));
+      return _react.default.createElement("div", null, _react.default.createElement("p", {
+        className: 'text--secondary'
+      }, "loading asset data..."));
     }
   }]);
 
@@ -80,6 +81,5 @@ function (_React$Component) {
   return ShowLite;
 }(_react.default.Component);
 
-;
 var _default = ShowLite;
 exports.default = _default;

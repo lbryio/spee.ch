@@ -1,7 +1,7 @@
 .progress-bar--inactive {
-  color: lightgrey;
+  color: $secondary-color;
 }
 
 .progress-bar--active {
-  color: #4156C5;
+  color: $primary-color;
 }
