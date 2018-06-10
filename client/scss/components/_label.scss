@@ -9,3 +9,12 @@
   padding-right: $thin-padding;
   cursor: pointer;
 }
+
+@media (max-width: $break-point-medium ) {
+
+  // note: bolding break point lines up with row-label break point
+  .label, .label-radio {
+    font-weight: bold;
+  }
+
+}

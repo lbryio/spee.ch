@@ -17,3 +17,19 @@
   align-self: center;
   width: 70%;
 }
+
+
+@media (max-width: $break-point-medium ) {
+
+  .row-labeled {
+    flex-direction: column;
+  }
+
+  .row-labeled-label {
+    width: 100%;
+  }
+  .row-labeled-content {
+    width: 100%;
+  }
+
+}

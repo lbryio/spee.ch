@@ -5,37 +5,41 @@ h1, h2, h3, h4, p {
 }
 
 h1 {
- font-size: 2.5em;
+ font-size: $text-xx-large;
 }
 
 h2 {
-  font-size: xx-large;
+  font-size: $text-x-large;
 }
 
 h3 {
-  font-size: x-large;
+  font-size: $text-large;
   font-weight: bold;
 }
 
 p, body, button, input, textarea, label, select, option {
   font-family: 'Lekton', monospace;
-  font-size: large;
+  font-size: $text-large;
 }
 
 .text--extra-large {
-  font-size: 2.5em;
+  font-size: $text-xx-large;
 }
 
 .text--large {
-  font-size: x-large;
+  font-size: $text-large;
+}
+
+.text--medium {
+  font-size: $text-medium;
 }
 
 .text--small {
-  font-size: medium;
+  font-size: $text-small;
 }
 
 .text--extra-small {
-  font-size: small;
+  font-size: $text-x-small;
 }
 
 .text--underline {
@@ -64,4 +68,98 @@ p, body, button, input, textarea, label, select, option {
 
 .text--success {
   color: $success-color;
+}
+
+@media (max-width: $break-point-x-large ) {
+  h1 {
+    font-size: $text-x-large;
+  }
+
+  h2 {
+    font-size: $text-large;
+  }
+
+  h3 {
+    font-size: $text-medium;
+  }
+
+  p, body, button, input, textarea, label, select, option {
+    font-size: $text-medium;
+  }
+
+  .text--extra-large {
+    font-size: $text-x-large;
+  }
+
+  .text--large {
+    font-size: $text-medium;
+  }
+
+  .text--medium {
+    font-size: $text-small;
+  }
+
+}
+
+@media (max-width: $break-point-medium) {
+
+  h1 {
+    font-size: $text-large;
+  }
+
+  h2 {
+    font-size: $text-medium;
+  }
+
+  h3 {
+    font-size: $text-small;
+  }
+
+  p, body, button, input, textarea, label, select, option {
+    font-size: $text-small;
+  }
+
+  .text--extra-large {
+    font-size: $text-large;
+  }
+
+  .text--large {
+    font-size: $text-medium;
+  }
+
+  .text--small {
+    font-size: $text-x-small;
+  }
+
+
+}
+
+@media (max-width: $break-point-x-small) {
+
+  h1 {
+    font-size: $text-medium;
+    font-weight: bold;
+  }
+
+  h2 {
+    font-size: $text-small;
+  }
+
+  p, body, button, input, textarea, label, select, option {
+    font-size: $text-x-small;
+  }
+
+  .text--extra-large {
+    font-size: $text-x-small;
+    font-weight: bold;
+  }
+
+  .text--large {
+    font-size: $text-x-small;
+  }
+
+  .text--medium {
+    font-size: $text-x-small;
+  }
+
 }

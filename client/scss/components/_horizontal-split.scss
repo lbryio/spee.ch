@@ -7,3 +7,22 @@
     width: 50%;
   }
 };
+
+
+
+@media (max-width: $break-point-large ) {
+
+  .horizontal-split {
+    display       : flex;
+    flex-direction : column;
+    justify-content: space-between;
+    align-items    : flex-start;
+    .column {
+      width: 100%;
+      padding-left: 0;
+      padding-right: 0;
+      padding-bottom: $secondary-padding;
+    }
+  };
+
+}

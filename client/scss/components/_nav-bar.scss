@@ -15,3 +15,21 @@
 .nav-bar-logo {
   cursor: pointer;
 }
+
+@media (max-width: $break-point-medium ) {
+  .nav-bar-link {
+    padding-top: calc(1em - 2px);
+    padding-right: 1em;
+    padding-bottom: calc(1em - 2px);
+    padding-left: 1em;
+  }
+}
+
+@media (max-width: $break-point-small ) {
+  .nav-bar-link {
+    padding-top: calc(0.5em - 2px);
+    padding-right: 0.5em;
+    padding-bottom: calc(0.5em - 2px);
+    padding-left: 0.5em;
+  }
+}
