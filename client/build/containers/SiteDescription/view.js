@@ -39,9 +39,11 @@ function (_React$Component) {
   _createClass(SiteDescription, [{
     key: "render",
     value: function render() {
-      return _react.default.createElement("p", {
+      return _react.default.createElement("div", {
+        className: 'site-description'
+      }, _react.default.createElement("p", {
         className: 'text--extra-small'
-      }, this.props.siteDescription);
+      }, this.props.siteDescription));
     }
   }]);
 
