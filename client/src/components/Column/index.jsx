@@ -1,9 +1,6 @@
 import React from 'react';
 
 class Column extends React.Component {
-  shouldComponentUpdate () {
-    return false;
-  }
   render () {
     return (
       <div className={'column'}>
