@@ -125,7 +125,7 @@ function (_React$Component) {
         className: 'fill'
       }, _react.default.createElement("input", {
         type: "text",
-        className: "input-text input-text--full-width",
+        className: "input-text input--full-width",
         name: "claim",
         placeholder: "your-url-here",
         onChange: this.handleInput,

@@ -61,7 +61,7 @@ class PublishUrlInput extends React.Component {
           <div className={'fill'}>
             <input
               type='text'
-              className='input-text input-text--full-width'
+              className='input-text input--full-width'
               name='claim'
               placeholder='your-url-here'
               onChange={this.handleInput}
