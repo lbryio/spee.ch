@@ -22,12 +22,13 @@ class ChannelClaimsDisplay extends React.Component {
     this.props.onUpdateChannelClaims(channelKey, name, longId, page);
   }
   render () {
-    const { channel: { claimsData: { claims, currentPage, totalPages } } } = this.props;
+    const { channel: { claimsData: { claims, currentPage, totalPages } }, defaultThumbnail } = this.props;
     return (
       <div className='row row--tall'>
         {(claims.length > 0) ? (
           <div>
             {claims.map((claim, index) => <AssetPreview
+              defaultThumbnail={defaultThumbnail}
               claimData={claim}
               key={`${claim.name}-${index}`}
             />)}

@@ -15,7 +15,7 @@ var _AboutPage = _interopRequireDefault(require("@pages/AboutPage"));
 
 var _LoginPage = _interopRequireDefault(require("@pages/LoginPage"));
 
-var _ShowPage = _interopRequireDefault(require("@pages/ShowPage"));
+var _ContentPageWrapper = _interopRequireDefault(require("@pages/ContentPageWrapper"));
 
 var _FourOhFourPage = _interopRequireDefault(require("@pages/FourOhFourPage"));
 
@@ -43,11 +43,11 @@ var App = function App() {
   }), _react.default.createElement(_reactRouterDom.Route, {
     exact: true,
     path: "/:identifier/:claim",
-    component: _ShowPage.default
+    component: _ContentPageWrapper.default
   }), _react.default.createElement(_reactRouterDom.Route, {
     exact: true,
     path: "/:claim",
-    component: _ShowPage.default
+    component: _ContentPageWrapper.default
   }), _react.default.createElement(_reactRouterDom.Route, {
     component: _FourOhFourPage.default
   }));

@@ -1,46 +1,75 @@
 import React from 'react';
 import ProgressBar from '@components/ProgressBar';
 import * as publishStates from '../../constants/publish_claim_states';
+import ButtonSecondary from '@components/ButtonSecondary';
+import Row from '@components/Row';
 
 class PublishStatus extends React.Component {
   render () {
     const { status, message, clearFile } = this.props;
     return (
-      <div className='row row--tall flex-container--column flex-container--center-center'>
+      <div className={'publish-status'}>
         {status === publishStates.LOAD_START &&
-        <div className='row align-content-center'>
-          <p>File is loading to server</p>
-          <p className='blue'>0%</p>
-        </div>
+          <div className={'status'}>
+            <Row>
+              <p>le is loading to server</p>
+            </Row>
+            <Row>
+              <p className={'text--secondary'}>0%</p>
+            </Row>
+          </div>
         }
         {status === publishStates.LOADING &&
-        <div>
-          <div className='row align-content-center'>
-            <p>File is loading to server</p>
-            <p className='blue'>{message}</p>
+          <div className={'status'}>
+            <Row>
+              <p>File is loading to server</p>
+            </Row>
+            <Row>
+              <p className={'text--secondary'}>{message}</p>
+            </Row>
           </div>
-        </div>
         }
         {status === publishStates.PUBLISHING &&
-        <div className='row align-content-center'>
-          <p>Upload complete.  Your file is now being published on the blockchain...</p>
-          <ProgressBar size={12} />
-          <p>Curious what magic is happening here? <a className='link--primary' target='blank' href='https://lbry.io/faq/what-is-lbry'>Learn more.</a></p>
-        </div>
+          <div className={'status'}>
+            <Row>
+              <p>Upload complete.  Your file is now being published on the blockchain...</p>
+            </Row>
+            <Row>
+              <ProgressBar size={12} />
+            </Row>
+            <Row>
+              <p>Curious what magic is happening here? <a className='link--primary' target='blank' href='https://lbry.io/faq/what-is-lbry'>Learn more.</a></p>
+            </Row>
+          </div>
         }
         {status === publishStates.SUCCESS &&
-        <div className='row align-content-center'>
-          <p>Your publish is complete! You are being redirected to it now.</p>
-          <p>If you are not automatically redirected, <a className='link--primary' target='_blank' href={message}>click here.</a></p>
-        </div>
+          <div className={'status'}>
+            <Row>
+              <p>Your publish is complete! You are being redirected to it now.</p>
+            </Row>
+            <Row>
+              <p>If you are not automatically redirected, <a className='link--primary' target='_blank' href={message}>click here.</a></p>
+            </Row>
+          </div>
         }
         {status === publishStates.FAILED &&
-        <div className='row align-content-center'>
-          <p>Something went wrong...</p>
-          <p><strong>{message}</strong></p>
-          <p>For help, post the above error text in the #speech channel on the <a className='link--primary' href='https://chat.lbry.io' target='_blank'>lbry discord</a></p>
-          <button className='button--secondary' onClick={clearFile}>Reset</button>
-        </div>
+          <div className={'status'}>
+            <Row>
+              <p>Something went wrong...</p>
+            </Row>
+            <Row>
+              <p className={'text--strong'}>{message}</p>
+            </Row>
+            <Row>
+              <p>For help, post the above error text in the #speech channel on the <a className='link--primary' href='https://chat.lbry.io' target='_blank'>lbry discord</a></p>
+            </Row>
+            <Row>
+              <ButtonSecondary
+                value={'Reset'}
+                onClickHandler={clearFile}
+              />
+            </Row>
+          </div>
         }
       </div>
     );

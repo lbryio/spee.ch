@@ -1,0 +1,35 @@
+.row {
+  padding-bottom: 2em;
+}
+
+.row-labeled {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+}
+
+.row-labeled-label {
+  align-self: flex-start;
+  width: 30%;
+}
+.row-labeled-content {
+  align-self: center;
+  width: 70%;
+}
+
+
+@media (max-width: $break-point-medium ) {
+
+  .row-labeled {
+    flex-direction: column;
+  }
+
+  .row-labeled-label {
+    width: 100%;
+  }
+  .row-labeled-content {
+    width: 100%;
+  }
+
+}

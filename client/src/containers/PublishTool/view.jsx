@@ -1,6 +1,6 @@
 import React from 'react';
 import Dropzone from '@containers/Dropzone';
-import PublishDetails from '@containers/PublishDetails';
+import PublishPreview from '@components/PublishPreview';
 import PublishStatus from '@containers/PublishStatus';
 import PublishDisabledMessage from '@containers/PublishDisabledMessage';
 
@@ -17,7 +17,7 @@ class PublishTool extends React.Component {
             <PublishStatus />
           );
         } else {
-          return <PublishDetails />;
+          return <PublishPreview />;
         }
       }
       return <Dropzone />;

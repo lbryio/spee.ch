@@ -1,0 +1,34 @@
+.button-primary, .button-primary:focus, .button-primary:active {
+  border: $button-border-width $button-border-strength $primary-color;
+  margin-top: $thin-padding;
+  margin-bottom: $thin-padding;
+  padding: $thin-padding;
+  color: $primary-color;
+  background-color: $background-color;
+  outline: 0;
+}
+
+.button-primary:focus {
+  border-color: $secondary-color;
+  background-color: $tertiary-color;
+}
+
+
+.button-primary:hover {
+  border-color: $interactive-color;
+  color: $background-color;
+  background-color: $interactive-color;
+}
+
+.button-primary:active{
+  border-color: $background-color;
+  color: $secondary-color;
+  background-color: $tertiary-color;
+}
+
+.button-primary--jumbo, .button-primary--jumbo:focus, .button-primary--jumbo:active {
+  width: $button-full-width;
+  padding-top: $secondary-padding;
+  padding-bottom: $secondary-padding;
+  font-size: x-large;
+}

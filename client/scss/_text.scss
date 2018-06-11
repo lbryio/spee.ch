@@ -1,0 +1,165 @@
+// set defaults
+
+h1, h2, h3, h4, p {
+  margin: 0;
+}
+
+h1 {
+ font-size: $text-xx-large;
+}
+
+h2 {
+  font-size: $text-x-large;
+}
+
+h3 {
+  font-size: $text-large;
+  font-weight: bold;
+}
+
+p, body, button, input, textarea, label, select, option {
+  font-family: 'Lekton', monospace;
+  font-size: $text-large;
+}
+
+.text--extra-large {
+  font-size: $text-xx-large;
+}
+
+.text--large {
+  font-size: $text-large;
+}
+
+.text--medium {
+  font-size: $text-medium;
+}
+
+.text--small {
+  font-size: $text-small;
+}
+
+.text--extra-small {
+  font-size: $text-x-small;
+}
+
+.text--underline {
+  text-decoration: underline;
+}
+
+.text--primary {
+  color: $primary-color;
+}
+
+.text--secondary {
+  color: $secondary-color;
+}
+
+.text--tertiary {
+  color: $tertiary-color;
+}
+
+.text--interactive {
+  color: $interactive-color;
+}
+
+.text--failure {
+  color: $failure-color;
+}
+
+.text--success {
+  color: $success-color;
+}
+
+@media (max-width: $break-point-x-large ) {
+  h1 {
+    font-size: $text-x-large;
+  }
+
+  h2 {
+    font-size: $text-large;
+  }
+
+  h3 {
+    font-size: $text-medium;
+  }
+
+  p, body, button, input, textarea, label, select, option {
+    font-size: $text-medium;
+  }
+
+  .text--extra-large {
+    font-size: $text-x-large;
+  }
+
+  .text--large {
+    font-size: $text-medium;
+  }
+
+  .text--medium {
+    font-size: $text-small;
+  }
+
+}
+
+@media (max-width: $break-point-medium) {
+
+  h1 {
+    font-size: $text-large;
+  }
+
+  h2 {
+    font-size: $text-medium;
+  }
+
+  h3 {
+    font-size: $text-small;
+  }
+
+  p, body, button, input, textarea, label, select, option {
+    font-size: $text-small;
+  }
+
+  .text--extra-large {
+    font-size: $text-large;
+  }
+
+  .text--large {
+    font-size: $text-medium;
+  }
+
+  .text--small {
+    font-size: $text-x-small;
+  }
+
+
+}
+
+@media (max-width: $break-point-x-small) {
+
+  h1 {
+    font-size: $text-medium;
+    font-weight: bold;
+  }
+
+  h2 {
+    font-size: $text-small;
+  }
+
+  p, body, button, input, textarea, label, select, option {
+    font-size: $text-x-small;
+  }
+
+  .text--extra-large {
+    font-size: $text-x-small;
+    font-weight: bold;
+  }
+
+  .text--large {
+    font-size: $text-x-small;
+  }
+
+  .text--medium {
+    font-size: $text-x-small;
+  }
+
+}

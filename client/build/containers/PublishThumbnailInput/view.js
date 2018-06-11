@@ -7,6 +7,10 @@ exports.default = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
+var _FormFeedbackDisplay = _interopRequireDefault(require("@components/FormFeedbackDisplay"));
+
+var _SpaceBetween = _interopRequireDefault(require("@components/SpaceBetween"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -173,29 +177,27 @@ function (_React$Component) {
         onLoadedData: this.handleVideoLoadedData,
         src: videoSource,
         onSeeked: this.createThumbnail
-      }), sliderValue ? _react.default.createElement("div", null, _react.default.createElement("div", {
-        className: "flex-container--row flex-container--space-between-center",
+      }), sliderValue ? _react.default.createElement("div", null, _react.default.createElement(_SpaceBetween.default, {
         style: {
           width: '100%'
         }
       }, _react.default.createElement("span", {
-        className: "info-message"
+        className: "text--small text--secondary"
       }, "0'00\""), _react.default.createElement("span", {
-        className: "info-message"
+        className: "text--small text--secondary"
       }, totalMinutes, "'", totalSeconds, "\"")), _react.default.createElement("div", null, _react.default.createElement("input", {
         type: "range",
         min: sliderMinRange,
         max: sliderMaxRange,
         value: sliderValue,
-        className: "slider",
+        className: "input-slider",
         onChange: this.handleSliderChange
       }))) : _react.default.createElement("p", {
-        className: "info-message"
-      }, "loading... "), error ? _react.default.createElement("p", {
-        className: "info-message--failure"
-      }, error) : _react.default.createElement("p", {
-        className: "info-message"
-      }, "Use slider to set thumbnail"));
+        className: 'text--small text--secondary'
+      }, "loading... "), _react.default.createElement(_FormFeedbackDisplay.default, {
+        errorMessage: error,
+        defaultMessage: 'Use slider to set thumbnail'
+      }));
     }
   }]);
 

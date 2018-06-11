@@ -9,7 +9,7 @@ var _react = _interopRequireDefault(require("react"));
 
 var _Dropzone = _interopRequireDefault(require("@containers/Dropzone"));
 
-var _PublishDetails = _interopRequireDefault(require("@containers/PublishDetails"));
+var _PublishPreview = _interopRequireDefault(require("@components/PublishPreview"));
 
 var _PublishStatus = _interopRequireDefault(require("@containers/PublishStatus"));
 
@@ -54,7 +54,7 @@ function (_React$Component) {
           if (this.props.status) {
             return _react.default.createElement(_PublishStatus.default, null);
           } else {
-            return _react.default.createElement(_PublishDetails.default, null);
+            return _react.default.createElement(_PublishPreview.default, null);
           }
         }
 

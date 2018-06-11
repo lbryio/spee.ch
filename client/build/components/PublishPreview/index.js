@@ -7,7 +7,15 @@ exports.default = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
-var _propTypes = _interopRequireDefault(require("prop-types"));
+var _HorizontalSplit = _interopRequireDefault(require("@components/HorizontalSplit"));
+
+var _Dropzone = _interopRequireDefault(require("@containers/Dropzone"));
+
+var _PublishDetails = _interopRequireDefault(require("@containers/PublishDetails"));
+
+var _PublishTitleInput = _interopRequireDefault(require("@containers/PublishTitleInput"));
+
+var _Row = _interopRequireDefault(require("@components/Row"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -32,79 +40,19 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.getPrototypeOf || functio
 var PublishPreview =
 /*#__PURE__*/
 function (_React$Component) {
-  function PublishPreview(props) {
-    var _this;
-
+  function PublishPreview() {
     _classCallCheck(this, PublishPreview);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(PublishPreview).call(this, props));
-    _this.state = {
-      imgSource: '',
-      defaultThumbnail: '/assets/img/video_thumb_default.png'
-    };
-    return _this;
+    return _possibleConstructorReturn(this, _getPrototypeOf(PublishPreview).apply(this, arguments));
   }
 
   _createClass(PublishPreview, [{
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      this.setPreviewImageSource(this.props.file);
-    }
-  }, {
-    key: "componentWillReceiveProps",
-    value: function componentWillReceiveProps(newProps) {
-      if (newProps.file !== this.props.file) {
-        this.setPreviewImageSource(newProps.file);
-      }
-
-      if (newProps.thumbnail !== this.props.thumbnail) {
-        if (newProps.thumbnail) {
-          this.setPreviewImageSourceFromFile(newProps.thumbnail);
-        } else {
-          this.setState({
-            imgSource: this.state.defaultThumbnail
-          });
-        }
-      }
-    }
-  }, {
-    key: "setPreviewImageSourceFromFile",
-    value: function setPreviewImageSourceFromFile(file) {
-      var _this2 = this;
-
-      var previewReader = new FileReader();
-      previewReader.readAsDataURL(file);
-
-      previewReader.onloadend = function () {
-        _this2.setState({
-          imgSource: previewReader.result
-        });
-      };
-    }
-  }, {
-    key: "setPreviewImageSource",
-    value: function setPreviewImageSource(file) {
-      if (file.type !== 'video/mp4') {
-        this.setPreviewImageSourceFromFile(file);
-      } else {
-        if (this.props.thumbnail) {
-          this.setPreviewImageSourceFromFile(this.props.thumbnail);
-        }
-
-        this.setState({
-          imgSource: this.state.defaultThumbnail
-        });
-      }
-    }
-  }, {
     key: "render",
     value: function render() {
-      return _react.default.createElement("img", {
-        id: "dropzone-preview",
-        src: this.state.imgSource,
-        className: this.props.dimPreview ? 'dim' : '',
-        alt: "publish preview"
-      });
+      return _react.default.createElement("div", null, _react.default.createElement(_Row.default, null, _react.default.createElement(_PublishTitleInput.default, null)), _react.default.createElement(_HorizontalSplit.default, {
+        leftSide: _react.default.createElement(_Dropzone.default, null),
+        rightSide: _react.default.createElement(_PublishDetails.default, null)
+      }));
     }
   }]);
 
@@ -114,10 +62,5 @@ function (_React$Component) {
 }(_react.default.Component);
 
 ;
-PublishPreview.propTypes = {
-  dimPreview: _propTypes.default.bool.isRequired,
-  file: _propTypes.default.object.isRequired,
-  thumbnail: _propTypes.default.object
-};
 var _default = PublishPreview;
 exports.default = _default;

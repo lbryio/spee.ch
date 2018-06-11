@@ -9,7 +9,7 @@ var _react = _interopRequireDefault(require("react"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
 
-var _NavBar = _interopRequireDefault(require("@containers/NavBar"));
+var _PageLayout = _interopRequireDefault(require("@components/PageLayout"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -44,9 +44,10 @@ function (_React$Component) {
     key: "render",
     value: function render() {
       var error = this.props.error;
-      return _react.default.createElement("div", null, _react.default.createElement(_NavBar.default, null), _react.default.createElement("div", {
-        className: "row row--padded"
-      }, _react.default.createElement("p", null, error)));
+      return _react.default.createElement(_PageLayout.default, {
+        pageTitle: 'Error',
+        pageUri: 'error'
+      }, _react.default.createElement("p", null, error));
     }
   }]);
 

@@ -1,0 +1,27 @@
+a, a:visited {
+  text-decoration: none;
+}
+
+.link--primary, .link--primary:visited {
+  color: $interactive-color;
+}
+
+.link--secondary, .link--secondary:visited {
+  margin: 0px;
+  padding: 0.3em;
+  color: $secondary-color;
+}
+
+.link--nav {
+  color: $primary-color;
+  border-bottom: 2px solid white;
+}
+
+.link--nav:hover {
+  color: $interactive-color;
+}
+
+.link--nav-active {
+  color: $interactive-color;
+  border-bottom: 2px solid $interactive-color;
+}

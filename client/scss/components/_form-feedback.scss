@@ -1,0 +1,16 @@
+.form-feedback {
+  padding-top: $thin-padding;
+  padding-bottom: $thin-padding;
+}
+
+.form-feedback--default {
+  color: $secondary-color;
+}
+
+.form-feedback--success {
+  color: $success-color;
+}
+
+.form-feedback--failure {
+  color: $failure-color;
+}

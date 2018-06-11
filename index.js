@@ -108,6 +108,7 @@ function Server () {
     this.createApp();
     this.createServer();
     /* start the server */
+    logger.info('getting LBC balance & syncing database...');
     Promise.all([
       this.syncDatabase(),
       getWalletBalance(),

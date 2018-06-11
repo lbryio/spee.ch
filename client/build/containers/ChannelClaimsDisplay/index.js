@@ -14,7 +14,8 @@ var _view = _interopRequireDefault(require("./view"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var mapStateToProps = function mapStateToProps(_ref) {
-  var show = _ref.show;
+  var show = _ref.show,
+      defaultThumbnail = _ref.site.defaultThumbnail;
   // select channel key
   var request = show.requestList[show.request.id];
   var channelKey = request.key; // select channel claims
@@ -23,7 +24,8 @@ var mapStateToProps = function mapStateToProps(_ref) {
 
   return {
     channelKey: channelKey,
-    channel: channel
+    channel: channel,
+    defaultThumbnail: defaultThumbnail
   };
 };
 

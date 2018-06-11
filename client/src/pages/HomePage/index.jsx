@@ -1,18 +1,17 @@
 import React from 'react';
-import SEO from '@components/SEO';
-import NavBar from '@containers/NavBar';
+import PageLayout from '@components/PageLayout';
+
 import PublishTool from '@containers/PublishTool';
 
 class HomePage extends React.Component {
   render () {
     return (
-      <div className={'row row--tall flex-container--column'}>
-        <SEO />
-        <NavBar />
-        <div className={'row row--tall row--padded flex-container--column'}>
-          <PublishTool />
-        </div>
-      </div>
+      <PageLayout
+        pageTitle={'Speech'}
+        pageUri={''}
+      >
+        <PublishTool />
+      </PageLayout>
     );
   }
 };

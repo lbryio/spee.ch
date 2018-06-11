@@ -9,6 +9,8 @@ var _react = _interopRequireDefault(require("react"));
 
 var _PublishUrlMiddleDisplay = _interopRequireDefault(require("@components/PublishUrlMiddleDisplay"));
 
+var _FormFeedbackDisplay = _interopRequireDefault(require("@components/FormFeedbackDisplay"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -106,37 +108,32 @@ function (_React$Component) {
           publishInChannel = _this$props2.publishInChannel,
           selectedChannel = _this$props2.selectedChannel,
           urlError = _this$props2.urlError;
-      return _react.default.createElement("div", {
-        className: "column column--10 column--sml-10"
+      return _react.default.createElement("div", null, _react.default.createElement("div", {
+        className: 'publish-url-input'
       }, _react.default.createElement("div", {
-        className: "input-text--primary span--relative"
+        className: 'align-left'
       }, _react.default.createElement("span", {
-        className: "url-text--secondary"
-      }, "spee.ch / "), _react.default.createElement(_PublishUrlMiddleDisplay.default, {
+        className: "publish-url-text"
+      }, "spee.ch\xA0/\xA0")), _react.default.createElement("div", {
+        className: 'shrink'
+      }, _react.default.createElement(_PublishUrlMiddleDisplay.default, {
         publishInChannel: publishInChannel,
         selectedChannel: selectedChannel,
         loggedInChannelName: loggedInChannelName,
         loggedInChannelShortId: loggedInChannelShortId
-      }), _react.default.createElement("input", {
+      })), _react.default.createElement("div", {
+        className: 'fill'
+      }, _react.default.createElement("input", {
         type: "text",
-        id: "claim-name-input",
-        className: "input-text",
+        className: "input-text input--full-width",
         name: "claim",
         placeholder: "your-url-here",
         onChange: this.handleInput,
         value: claim
-      }), claim && !urlError && _react.default.createElement("span", {
-        id: "input-success-claim-name",
-        className: "info-message--success span--absolute"
-      }, "\u2713"), urlError && _react.default.createElement("span", {
-        id: "input-success-channel-name",
-        className: "info-message--failure span--absolute"
-      }, "\u2716")), _react.default.createElement("div", null, urlError ? _react.default.createElement("p", {
-        id: "input-error-claim-name",
-        className: "info-message--failure"
-      }, urlError) : _react.default.createElement("p", {
-        className: "info-message"
-      }, "Choose a custom url")));
+      }))), _react.default.createElement(_FormFeedbackDisplay.default, {
+        errorMessage: urlError,
+        defaultMessage: 'Choose a custom url'
+      }));
     }
   }]);
 

@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { onUpdateChannelClaims } from '../../actions/show';
 import View from './view';
 
-const mapStateToProps = ({ show }) => {
+const mapStateToProps = ({ show, site: { defaultThumbnail } }) => {
   // select channel key
   const request = show.requestList[show.request.id];
   const channelKey = request.key;
@@ -12,6 +12,7 @@ const mapStateToProps = ({ show }) => {
   return {
     channelKey,
     channel,
+    defaultThumbnail,
   };
 };
 

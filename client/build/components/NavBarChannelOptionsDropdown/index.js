@@ -15,10 +15,12 @@ function NavBarChannelDropdown(_ref) {
       defaultSelection = _ref.defaultSelection,
       VIEW = _ref.VIEW,
       LOGOUT = _ref.LOGOUT;
-  return _react.default.createElement("select", {
+  return _react.default.createElement("div", {
+    className: 'nav-bar-link link--nav'
+  }, _react.default.createElement("select", {
     type: "text",
     id: "nav-bar-channel-select",
-    className: "select select--arrow link--nav",
+    className: "select select--arrow",
     onChange: handleSelection,
     value: defaultSelection
   }, _react.default.createElement("option", {
@@ -27,9 +29,8 @@ function NavBarChannelDropdown(_ref) {
     value: VIEW
   }, "View"), _react.default.createElement("option", {
     value: LOGOUT
-  }, "Logout"));
+  }, "Logout")));
 }
 
-;
 var _default = NavBarChannelDropdown;
 exports.default = _default;

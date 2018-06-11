@@ -7,7 +7,13 @@ exports.default = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
-var _ExpandingTextArea = _interopRequireDefault(require("@components/ExpandingTextArea"));
+var _PublishDescriptionInput = _interopRequireDefault(require("@components/PublishDescriptionInput"));
+
+var _PublishLicenseInput = _interopRequireDefault(require("@components/PublishLicenseInput"));
+
+var _PublishNsfwInput = _interopRequireDefault(require("@components/PublishNsfwInput"));
+
+var _ButtonSecondary = _interopRequireDefault(require("@components/ButtonSecondary"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -67,71 +73,18 @@ function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
-      return _react.default.createElement("div", {
-        id: "publish-details",
-        className: "row row--padded row--no-top row--wide"
-      }, this.props.showMetadataInputs && _react.default.createElement("div", null, _react.default.createElement("div", {
-        className: "row row--no-top"
-      }, _react.default.createElement("div", {
-        className: "column column--3 column--med-10 align-content-top"
-      }, _react.default.createElement("label", {
-        htmlFor: "publish-license",
-        className: "label"
-      }, "Description:")), _react.default.createElement("div", {
-        className: "column column--7 column--sml-10"
-      }, _react.default.createElement(_ExpandingTextArea.default, {
-        id: "publish-description",
-        className: "textarea textarea--primary textarea--full-width",
-        rows: 1,
-        maxLength: 2000,
-        style: {
-          maxHeight: 200
-        },
-        name: "description",
-        placeholder: "Optional description",
-        value: this.props.description,
-        onChange: this.handleInput
-      }))), _react.default.createElement("div", {
-        className: "row row--no-top"
-      }, _react.default.createElement("div", {
-        className: "column column--3 column--med-10"
-      }, _react.default.createElement("label", {
-        htmlFor: "publish-license",
-        className: "label"
-      }, "License:")), _react.default.createElement("div", {
-        className: "column column--7 column--sml-10"
-      }, _react.default.createElement("select", {
-        type: "text",
-        name: "license",
-        id: "publish-license",
-        className: "select select--primary",
-        onChange: this.handleSelect
-      }, _react.default.createElement("option", {
-        value: " "
-      }, "Unspecified"), _react.default.createElement("option", {
-        value: "Public Domain"
-      }, "Public Domain"), _react.default.createElement("option", {
-        value: "Creative Commons"
-      }, "Creative Commons")))), _react.default.createElement("div", {
-        className: "row row--no-top"
-      }, _react.default.createElement("div", {
-        className: "column column--3"
-      }, _react.default.createElement("label", {
-        htmlFor: "publish-nsfw",
-        className: "label"
-      }, "Mature:")), _react.default.createElement("div", {
-        className: "column column--7"
-      }, _react.default.createElement("input", {
-        className: "input-checkbox",
-        type: "checkbox",
-        id: "publish-nsfw",
-        name: "nsfw",
-        value: this.props.nsfw,
-        onChange: this.handleInput
-      })))), _react.default.createElement("button", {
-        className: "button--secondary",
-        onClick: this.toggleShowInputs
-      }, this.props.showMetadataInputs ? 'less' : 'more'));
+      return _react.default.createElement("div", null, this.props.showMetadataInputs && _react.default.createElement("div", null, _react.default.createElement(_PublishDescriptionInput.default, {
+        description: this.props.description,
+        handleInput: this.handleInput
+      }), _react.default.createElement(_PublishLicenseInput.default, {
+        handleSelect: this.handleSelect
+      }), _react.default.createElement(_PublishNsfwInput.default, {
+        nsfw: this.props.nsfw,
+        handleInput: this.handleInput
+      })), _react.default.createElement(_ButtonSecondary.default, {
+        value: this.props.showMetadataInputs ? 'less' : 'more',
+        onClickHandler: this.toggleShowInputs
+      }));
     }
   }]);
 

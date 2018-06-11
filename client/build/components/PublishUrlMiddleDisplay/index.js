@@ -21,13 +21,13 @@ function UrlMiddle(_ref) {
     if (selectedChannel === loggedInChannelName) {
       return _react.default.createElement("span", {
         id: "url-channel",
-        className: "url-text--secondary"
+        className: "publish-url-text"
       }, loggedInChannelName, ":", loggedInChannelShortId, " /");
     }
 
     return _react.default.createElement("span", {
       id: "url-channel-placeholder",
-      className: "url-text--secondary tooltip"
+      className: "publish-url-text tooltip"
     }, "@channel", _react.default.createElement("span", {
       className: "tooltip-text"
     }, "Select a channel below"), " /");
@@ -35,7 +35,7 @@ function UrlMiddle(_ref) {
 
   return _react.default.createElement("span", {
     id: "url-no-channel-placeholder",
-    className: "url-text--secondary tooltip"
+    className: "publish-url-text tooltip"
   }, "xyz", _react.default.createElement("span", {
     className: "tooltip-text"
   }, "This will be a random id"), " /");

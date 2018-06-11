@@ -7,9 +7,7 @@ exports.default = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
-var _SEO = _interopRequireDefault(require("@components/SEO"));
-
-var _NavBar = _interopRequireDefault(require("@containers/NavBar"));
+var _PageLayout = _interopRequireDefault(require("@components/PageLayout"));
 
 var _PublishTool = _interopRequireDefault(require("@containers/PublishTool"));
 
@@ -45,11 +43,10 @@ function (_React$Component) {
   _createClass(HomePage, [{
     key: "render",
     value: function render() {
-      return _react.default.createElement("div", {
-        className: 'row row--tall flex-container--column'
-      }, _react.default.createElement(_SEO.default, null), _react.default.createElement(_NavBar.default, null), _react.default.createElement("div", {
-        className: 'row row--tall row--padded flex-container--column'
-      }, _react.default.createElement(_PublishTool.default, null)));
+      return _react.default.createElement(_PageLayout.default, {
+        pageTitle: 'Speech',
+        pageUri: ''
+      }, _react.default.createElement(_PublishTool.default, null));
     }
   }]);
 

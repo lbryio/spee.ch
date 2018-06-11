@@ -40,12 +40,10 @@ function (_React$Component) {
     key: "render",
     value: function render() {
       var message = this.props.message;
-      return _react.default.createElement("div", {
-        className: "row dropzone--disabled row--tall flex-container--column flex-container--center-center"
-      }, _react.default.createElement("p", {
-        className: "text--disabled"
+      return _react.default.createElement("div", null, _react.default.createElement("p", {
+        className: 'text--secondary'
       }, "Publishing is currently disabled."), _react.default.createElement("p", {
-        className: "text--disabled"
+        className: 'text--secondary'
       }, message));
     }
   }]);

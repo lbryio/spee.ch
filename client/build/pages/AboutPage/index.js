@@ -7,9 +7,13 @@ exports.default = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
-var _SEO = _interopRequireDefault(require("@components/SEO"));
+var _PageLayout = _interopRequireDefault(require("@components/PageLayout"));
 
-var _NavBar = _interopRequireDefault(require("@containers/NavBar"));
+var _HorizontalSplit = _interopRequireDefault(require("@components/HorizontalSplit"));
+
+var _AboutSpeechOverview = _interopRequireDefault(require("@components/AboutSpeechOverview"));
+
+var _AboutSpeechDetails = _interopRequireDefault(require("@components/AboutSpeechDetails"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -43,53 +47,13 @@ function (_React$Component) {
   _createClass(AboutPage, [{
     key: "render",
     value: function render() {
-      return _react.default.createElement("div", null, _react.default.createElement(_SEO.default, {
+      return _react.default.createElement(_PageLayout.default, {
         pageTitle: 'About',
         pageUri: 'about'
-      }), _react.default.createElement(_NavBar.default, null), _react.default.createElement("div", {
-        className: "row row--padded"
-      }, _react.default.createElement("div", {
-        className: "column column--5 column--med-10 align-content-top"
-      }, _react.default.createElement("div", {
-        className: "column column--8 column--med-10"
-      }, _react.default.createElement("p", {
-        className: "pull-quote"
-      }, "Spee.ch is an open-source project.  Please contribute to the existing site, or fork it and make your own."), _react.default.createElement("p", null, _react.default.createElement("a", {
-        className: "link--primary",
-        target: "_blank",
-        href: "https://twitter.com/spee_ch"
-      }, "TWITTER")), _react.default.createElement("p", null, _react.default.createElement("a", {
-        className: "link--primary",
-        target: "_blank",
-        href: "https://github.com/lbryio/spee.ch"
-      }, "GITHUB")), _react.default.createElement("p", null, _react.default.createElement("a", {
-        className: "link--primary",
-        target: "_blank",
-        href: "https://discord.gg/YjYbwhS"
-      }, "DISCORD CHANNEL")), _react.default.createElement("p", null, _react.default.createElement("a", {
-        className: "link--primary",
-        target: "_blank",
-        href: "https://github.com/lbryio/spee.ch/blob/master/README.md"
-      }, "DOCUMENTATION")))), _react.default.createElement("div", {
-        className: "column column--5 column--med-10 align-content-top"
-      }, _react.default.createElement("div", {
-        className: "column column--8 column--med-10"
-      }, _react.default.createElement("p", null, "Spee.ch is a media-hosting site that reads from and publishes content to the ", _react.default.createElement("a", {
-        className: "link--primary",
-        href: "https://lbry.io"
-      }, "LBRY"), " blockchain."), _react.default.createElement("p", null, "Spee.ch is a hosting service, but with the added benefit that it stores your content on a decentralized network of computers -- the ", _react.default.createElement("a", {
-        className: "link--primary",
-        href: "https://lbry.io/get"
-      }, "LBRY"), " network.  This means that your images are stored in multiple locations without a single point of failure."), _react.default.createElement("h3", null, "Contribute"), _react.default.createElement("p", null, "If you have an idea for your own spee.ch-like site on top of LBRY, fork our ", _react.default.createElement("a", {
-        className: "link--primary",
-        href: "https://github.com/lbryio/spee.ch"
-      }, "github repo"), " and go to town!"), _react.default.createElement("p", null, "If you want to improve spee.ch, join our ", _react.default.createElement("a", {
-        className: "link--primary",
-        href: "https://chat.lbry.io"
-      }, "discord channel"), " or solve one of our ", _react.default.createElement("a", {
-        className: "link--primary",
-        href: "https://github.com/lbryio/spee.ch/issues"
-      }, "github issues"), ".")))));
+      }, _react.default.createElement(_HorizontalSplit.default, {
+        leftSide: _react.default.createElement(_AboutSpeechOverview.default, null),
+        rightSide: _react.default.createElement(_AboutSpeechDetails.default, null)
+      }));
     }
   }]);
 
@@ -98,6 +62,5 @@ function (_React$Component) {
   return AboutPage;
 }(_react.default.Component);
 
-;
 var _default = AboutPage;
 exports.default = _default;

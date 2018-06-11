@@ -1,11 +1,18 @@
-import { connect } from 'react-redux';
-import View from './view';
+import React from 'react';
+import PageLayout from '@components/PageLayout';
 
-const mapStateToProps = ({ site: { host, title } }) => {
-  return {
-    host,
-    title,
-  };
+class FourOhForPage extends React.Component {
+  render () {
+    return (
+      <PageLayout
+        pageTitle={'404'}
+        pageUri={'/404'}
+      >
+        <h2>404</h2>
+        <p>That page does not exist</p>
+      </PageLayout>
+    );
+  }
 };
 
-export default connect(mapStateToProps, null)(View);
+export default FourOhForPage;

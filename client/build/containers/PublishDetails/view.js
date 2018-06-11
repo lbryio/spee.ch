@@ -9,10 +9,6 @@ var _react = _interopRequireDefault(require("react"));
 
 var _reactRouterDom = require("react-router-dom");
 
-var _Dropzone = _interopRequireDefault(require("@containers/Dropzone"));
-
-var _PublishTitleInput = _interopRequireDefault(require("@containers/PublishTitleInput"));
-
 var _PublishUrlInput = _interopRequireDefault(require("@containers/PublishUrlInput"));
 
 var _PublishThumbnailInput = _interopRequireDefault(require("@containers/PublishThumbnailInput"));
@@ -20,6 +16,16 @@ var _PublishThumbnailInput = _interopRequireDefault(require("@containers/Publish
 var _PublishMetadataInputs = _interopRequireDefault(require("@containers/PublishMetadataInputs"));
 
 var _ChannelSelect = _interopRequireDefault(require("@containers/ChannelSelect"));
+
+var _Row = _interopRequireDefault(require("@components/Row"));
+
+var _ButtonPrimaryJumbo = _interopRequireDefault(require("@components/ButtonPrimaryJumbo"));
+
+var _ButtonTertiary = _interopRequireDefault(require("@components/ButtonTertiary"));
+
+var _SpaceAround = _interopRequireDefault(require("@components/SpaceAround"));
+
+var _PublishFinePrint = _interopRequireDefault(require("@components/PublishFinePrint"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -62,47 +68,13 @@ function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
-      return _react.default.createElement("div", {
-        className: "row row--no-bottom"
-      }, _react.default.createElement("div", {
-        className: "column column--10"
-      }, _react.default.createElement(_PublishTitleInput.default, null)), _react.default.createElement("div", {
-        className: "column column--5 column--sml-10"
-      }, _react.default.createElement("div", {
-        className: "row row--padded"
-      }, _react.default.createElement(_Dropzone.default, null))), _react.default.createElement("div", {
-        className: "column column--5 column--sml-10 align-content-top"
-      }, _react.default.createElement("div", {
-        id: "publish-active-area",
-        className: "row row--padded"
-      }, _react.default.createElement("div", {
-        className: "row row--padded row--no-top row--wide"
-      }, _react.default.createElement(_PublishUrlInput.default, null)), _react.default.createElement("div", {
-        className: "row row--padded row--no-top row--wide"
-      }, _react.default.createElement(_ChannelSelect.default, null)), this.props.file.type === 'video/mp4' && _react.default.createElement("div", {
-        className: "row row--padded row--no-top row--wide "
-      }, _react.default.createElement(_PublishThumbnailInput.default, null)), _react.default.createElement("div", {
-        className: "row row--padded row--no-top row--no-bottom row--wide"
-      }, _react.default.createElement(_PublishMetadataInputs.default, null)), _react.default.createElement("div", {
-        className: "row row--wide align-content-center"
-      }, _react.default.createElement("button", {
-        id: "publish-submit",
-        className: "button--primary button--large",
-        onClick: this.onPublishSubmit
-      }, "Publish")), _react.default.createElement("div", {
-        className: "row row--padded row--no-bottom align-content-center"
-      }, _react.default.createElement("button", {
-        className: "button--cancel",
-        onClick: this.props.clearFile
-      }, "Cancel")), _react.default.createElement("div", {
-        className: "row row--short align-content-center"
-      }, _react.default.createElement("p", {
-        className: "fine-print"
-      }, "By clicking 'Publish', you affirm that you have the rights to publish this content to the LBRY network, and that you understand the properties of publishing it to a decentralized, user-controlled network. ", _react.default.createElement("a", {
-        className: "link--primary",
-        target: "_blank",
-        href: "https://lbry.io/learn"
-      }, "Read more."))))));
+      return _react.default.createElement("div", null, _react.default.createElement(_Row.default, null, _react.default.createElement(_PublishUrlInput.default, null)), _react.default.createElement(_Row.default, null, _react.default.createElement(_ChannelSelect.default, null)), this.props.file.type === 'video/mp4' && _react.default.createElement(_Row.default, null, _react.default.createElement(_PublishThumbnailInput.default, null)), _react.default.createElement(_Row.default, null, _react.default.createElement(_PublishMetadataInputs.default, null)), _react.default.createElement(_Row.default, null, _react.default.createElement(_ButtonPrimaryJumbo.default, {
+        value: 'Publish',
+        onClickHandler: this.onPublishSubmit
+      })), _react.default.createElement(_Row.default, null, _react.default.createElement(_SpaceAround.default, null, _react.default.createElement(_ButtonTertiary.default, {
+        value: 'Cancel',
+        onClickHandler: this.props.clearFile
+      }))), _react.default.createElement(_Row.default, null, _react.default.createElement(_PublishFinePrint.default, null)));
     }
   }]);
 

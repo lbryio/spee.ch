@@ -18,18 +18,20 @@ const determineOgThumbnailContentType = (thumbnail) => {
   return '';
 };
 
-const createBasicMetaTags = (siteHost, siteDescription, siteTitle, siteTwitter) => {
+const createBasicMetaTags = ({siteHost, siteDescription, siteTitle, siteTwitter, defaultThumbnail}) => {
   return [
     {property: 'og:title', content: siteTitle},
     {property: 'og:url', content: siteHost},
     {property: 'og:site_name', content: siteTitle},
     {property: 'og:description', content: siteDescription},
     {property: 'twitter:site', content: siteTwitter},
-    {property: 'twitter:card', content: 'summary'},
+    {property: 'twitter:card', content: 'summary_large_image'},
+    {property: 'og:image', content: defaultThumbnail},
+    {property: 'og:image:type', content: 'image/jpeg'},
   ];
 };
 
-const createChannelMetaTags = (siteTitle, siteHost, siteTwitter, channel) => {
+const createChannelMetaTags = ({siteHost, siteTitle, siteTwitter, channel}) => {
   const { name, longId } = channel;
   return [
     {property: 'og:title', content: `${name} on ${siteTitle}`},
@@ -41,7 +43,7 @@ const createChannelMetaTags = (siteTitle, siteHost, siteTwitter, channel) => {
   ];
 };
 
-const createAssetMetaTags = (siteHost, siteTitle, siteTwitter, asset, defaultDescription, defaultThumbnail) => {
+const createAssetMetaTags = ({siteHost, siteTitle, siteTwitter, asset, defaultDescription, defaultThumbnail}) => {
   const { claimData } = asset;
   const { contentType } = claimData;
   const embedUrl = `${siteHost}/${claimData.claimId}/${claimData.name}`;
@@ -83,12 +85,30 @@ const createAssetMetaTags = (siteHost, siteTitle, siteTwitter, asset, defaultDes
   return metaTags;
 };
 
-export const createMetaTags = (siteDescription, siteHost, siteTitle, siteTwitter, asset, channel, defaultDescription, defaultThumbnail) => {
+export const createMetaTags = ({ siteDescription, siteHost, siteTitle, siteTwitter, asset, channel, defaultDescription, defaultThumbnail }) => {
   if (asset) {
-    return createAssetMetaTags(siteHost, siteTitle, siteTwitter, asset, defaultDescription, defaultThumbnail);
-  };
+    return createAssetMetaTags({
+      siteHost,
+      siteTitle,
+      siteTwitter,
+      asset,
+      defaultDescription,
+      defaultThumbnail,
+    });
+  }
   if (channel) {
-    return createChannelMetaTags(siteHost, siteTitle, siteTwitter, channel);
-  };
-  return createBasicMetaTags(siteDescription, siteHost, siteTitle, siteTwitter);
+    return createChannelMetaTags({
+      siteHost,
+      siteTitle,
+      siteTwitter,
+      channel,
+    });
+  }
+  return createBasicMetaTags({
+    siteDescription,
+    siteHost,
+    siteTitle,
+    siteTwitter,
+    defaultThumbnail,
+  });
 };

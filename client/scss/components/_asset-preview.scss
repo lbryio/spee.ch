@@ -1,0 +1,22 @@
+.asset-preview-holder {
+  clear  : both;
+  display: inline-block;
+  width  : 31%;
+  padding: 0px;
+  margin : 1%;
+}
+
+.asset-preview-image {
+  width  : 100%;
+  padding: 0px;
+  margin : 0px
+}
+
+.asset-preview-video {
+  cursor: pointer;
+  background-color: #ffffff;
+  width: calc(100% - 12px - 12px - 2px);
+  margin: 6px;
+  padding: 6px;
+  border: 1px solid #d0d0d0;
+}

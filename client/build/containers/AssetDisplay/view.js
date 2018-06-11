@@ -61,7 +61,7 @@ function (_React$Component) {
           fileExt = _this$props$asset$cla2.fileExt,
           thumbnail = _this$props$asset$cla2.thumbnail;
       return _react.default.createElement("div", {
-        id: "asset-display-component"
+        className: 'asset-display'
       }, status === _asset_display_states.LOCAL_CHECK && _react.default.createElement("div", null, _react.default.createElement("p", null, "Checking to see if Spee.ch has your asset locally...")), status === _asset_display_states.UNAVAILABLE && _react.default.createElement("div", null, _react.default.createElement("p", null, "Sit tight, we're searching the LBRY blockchain for your asset!"), _react.default.createElement(_ProgressBar.default, {
         size: 12
       }), _react.default.createElement("p", null, "Curious what magic is happening here? ", _react.default.createElement("a", {
@@ -79,22 +79,16 @@ function (_React$Component) {
           case 'image/jpeg':
           case 'image/jpg':
           case 'image/png':
-            return _react.default.createElement("img", {
-              className: "asset",
-              src: "/".concat(claimId, "/").concat(name, ".").concat(fileExt),
-              alt: name
-            });
-
           case 'image/gif':
             return _react.default.createElement("img", {
-              className: "asset",
+              className: "asset-image",
               src: "/".concat(claimId, "/").concat(name, ".").concat(fileExt),
               alt: name
             });
 
           case 'video/mp4':
             return _react.default.createElement("video", {
-              className: "asset video",
+              className: "asset-video",
               controls: true,
               poster: thumbnail
             }, _react.default.createElement("source", {

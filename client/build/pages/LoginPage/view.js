@@ -9,13 +9,13 @@ var _react = _interopRequireDefault(require("react"));
 
 var _reactRouterDom = require("react-router-dom");
 
-var _SEO = _interopRequireDefault(require("@components/SEO"));
+var _PageLayout = _interopRequireDefault(require("@components/PageLayout"));
 
-var _NavBar = _interopRequireDefault(require("@containers/NavBar"));
+var _HorizontalSplit = _interopRequireDefault(require("@components/HorizontalSplit"));
 
-var _ChannelLoginForm = _interopRequireDefault(require("@containers/ChannelLoginForm"));
+var _ChannelAbout = _interopRequireDefault(require("@components/ChannelAbout"));
 
-var _ChannelCreateForm = _interopRequireDefault(require("@containers/ChannelCreateForm"));
+var _ChannelTools = _interopRequireDefault(require("@components/ChannelTools"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -57,32 +57,13 @@ function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
-      return _react.default.createElement("div", null, _react.default.createElement(_SEO.default, {
+      return _react.default.createElement(_PageLayout.default, {
         pageTitle: 'Login',
         pageUri: 'login'
-      }), _react.default.createElement(_NavBar.default, null), _react.default.createElement("div", {
-        className: "row row--padded"
-      }, _react.default.createElement("div", {
-        className: "column column--5 column--med-10 align-content-top"
-      }, _react.default.createElement("div", {
-        className: "column column--8 column--med-10"
-      }, _react.default.createElement("p", null, "Channels allow you to publish and group content under an identity. You can create a channel for yourself, or share one with like-minded friends.  You can create 1 channel, or 100, so whether you're ", _react.default.createElement("a", {
-        className: "link--primary",
-        target: "_blank",
-        href: "/@catalonia2017:43dcf47163caa21d8404d9fe9b30f78ef3e146a8"
-      }, "documenting important events"), ", or making a public repository for ", _react.default.createElement("a", {
-        className: "link--primary",
-        target: "_blank",
-        href: "/@catGifs"
-      }, "cat gifs"), " (password: '1234'), try creating a channel for it!"))), _react.default.createElement("div", {
-        className: "column column--5 column--med-10 align-content-top"
-      }, _react.default.createElement("div", {
-        className: "column column--8 column--med-10"
-      }, _react.default.createElement("h3", {
-        className: "h3--no-bottom"
-      }, "Log in to an existing channel:"), _react.default.createElement(_ChannelLoginForm.default, null), _react.default.createElement("h3", {
-        className: "h3--no-bottom"
-      }, "Create a brand new channel:"), _react.default.createElement(_ChannelCreateForm.default, null)))));
+      }, _react.default.createElement(_HorizontalSplit.default, {
+        leftSide: _react.default.createElement(_ChannelAbout.default, null),
+        rightSide: _react.default.createElement(_ChannelTools.default, null)
+      }));
     }
   }]);
 

@@ -1,5 +1,58 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import Label from '@components/Label';
+import RowLabeled from '@components/RowLabeled';
+import Row from '@components/Row';
+import SpaceBetween from '@components/SpaceBetween';
+
+const AssetShareButtons = ({ host, name, shortId }) => {
+  return (
+    <SpaceBetween >
+      <a
+        className='link--primary'
+        target='_blank'
+        href={`https://twitter.com/intent/tweet?text=${host}/${shortId}/${name}`}
+      >
+        twitter
+      </a>
+      <a
+        className='link--primary'
+        target='_blank'
+        href={`https://www.facebook.com/sharer/sharer.php?u=${host}/${shortId}/${name}`}
+      >
+        facebook
+      </a>
+      <a
+        className='link--primary'
+        target='_blank'
+        href={`http://tumblr.com/widgets/share/tool?canonicalUrl=${host}/${shortId}/${name}`}
+      >
+        tumblr
+      </a>
+      <a
+        className='link--primary'
+        target='_blank'
+        href={`https://www.reddit.com/submit?url=${host}/${shortId}/${name}&title=${name}`}
+      >
+        reddit
+      </a>
+    </SpaceBetween>
+  );
+};
+
+const ClickToCopy = ({id, value, copyToClipboard}) => {
+  return (
+    <input
+      id={id}
+      value={value}
+      onClick={copyToClipboard}
+      type='text'
+      className='click-to-copy'
+      readOnly
+      spellCheck='false'
+    />
+  );
+};
 
 class AssetInfo extends React.Component {
   constructor (props) {
@@ -7,8 +60,11 @@ class AssetInfo extends React.Component {
     this.copyToClipboard = this.copyToClipboard.bind(this);
   }
   copyToClipboard (event) {
-    var elementToCopy = event.target.dataset.elementtocopy;
-    var element = document.getElementById(elementToCopy);
+    console.log('event:', event);
+    console.log('event.target:', event.target);
+    console.log('event.target.id:', event.target.id);
+    const elementToCopy = event.target.id;
+    const element = document.getElementById(elementToCopy);
     element.select();
     try {
       document.execCommand('copy');
@@ -20,104 +76,111 @@ class AssetInfo extends React.Component {
     const { asset: { shortId, claimData : { channelName, certificateId, description, name, claimId, fileExt, contentType, thumbnail, host } } } = this.props;
     return (
       <div>
-        {channelName &&
-        <div className='row row--padded row--wide row--no-top'>
-          <div className='column column--2 column--med-10'>
-            <span className='text'>Channel:</span>
-          </div>
-          <div className='column column--8 column--med-10'>
-            <span className='text'><Link to={`/${channelName}:${certificateId}`}>{channelName}</Link></span>
-          </div>
-        </div>
-        }
+        {channelName && (
+          <Row>
+            <RowLabeled
+              label={
+                <Label value={'Channel:'} />
+              }
+              content={
+                <span className='text'>
+                  <Link to={`/${channelName}:${certificateId}`}>{channelName}</Link>
+                </span>
+              }
+            />
+          </Row>
+        )}
 
-        {description &&
-        <div className='row row--padded row--wide row--no-top'>
-          <span className='text'>{description}</span>
-        </div>
-        }
+        <Row>
+          <RowLabeled
+            label={
+              <Label value={'Share:'} />
+            }
+            content={
+              <AssetShareButtons
+                host={host}
+                shortId={shortId}
+              />
+            }
+          />
+        </Row>
 
-        <div id='show-share-buttons' className='row row--padded row--wide row--no-top'>
-          <div className='column column--2 column--med-10'>
-            <span className='text'>Share:</span>
-          </div>
-          <div className='column column--8 column--med-10'>
-            <div
-              className='row row--short row--wide flex-container--row flex-container--space-between-bottom flex-container--wrap'>
-              <a className='link--primary' target='_blank' href={`https://twitter.com/intent/tweet?text=${host}/${shortId}/${name}`}>twitter</a>
-              <a className='link--primary' target='_blank' href={`https://www.facebook.com/sharer/sharer.php?u=${host}/${shortId}/${name}`}>facebook</a>
-              <a className='link--primary' target='_blank' href={`http://tumblr.com/widgets/share/tool?canonicalUrl=${host}/${shortId}/${name}`}>tumblr</a>
-              <a className='link--primary' target='_blank' href={`https://www.reddit.com/submit?url=${host}/${shortId}/${name}&title=${name}`}>reddit</a>
-            </div>
-          </div>
-        </div>
+        <Row>
+          <RowLabeled
+            label={
+              <Label value={'Link:'} />
+            }
+            content={
+              <ClickToCopy
+                id={'short-link'}
+                value={`${host}/${shortId}/${name}.${fileExt}`}
+                copyToClipboard={this.copyToClipboard}
+              />
+            }
+          />
+        </Row>
 
-        <div className='row row--padded row--wide row--no-top'>
-          <div id='show-short-link'>
-            <div className='column column--2 column--med-10'>
-              <span className='text'>Link:</span>
-            </div>
-            <div className='column column--8 column--med-10'>
-              <div className='row row--short row--wide'>
-                <div className='column column--7'>
-                  <div className='input-error' id='input-error-copy-short-link' hidden='true'>error here</div>
-                  <input type='text' id='short-link' className='input-disabled input-text--full-width' readOnly
-                    spellCheck='false'
-                    value={`${host}/${shortId}/${name}.${fileExt}`}
-                    onClick={this.select} />
-                </div>
-                <div className='column column--1' />
-                <div className='column column--2'>
-                  <button className='button--primary button--wide' data-elementtocopy='short-link'
-                    onClick={this.copyToClipboard}>copy
-                  </button>
-                </div>
+        <Row>
+          <RowLabeled
+            label={
+              <Label value={'Embed:'} />
+            }
+            content={
+              <div>
+                {(contentType === 'video/mp4') ? (
+                  <ClickToCopy
+                    id={'embed-text-video'}
+                    value={`<video width="100%" controls poster="${thumbnail}" src="${host}/${claimId}/${name}.${fileExt}"/></video>`}
+                    copyToClipboard={this.copyToClipboard}
+                  />
+                ) : (
+                  <ClickToCopy
+                    id={'embed-text-image'}
+                    value={`<img src="${host}/${claimId}/${name}.${fileExt}"/>`}
+                    copyToClipboard={this.copyToClipboard}
+                  />
+                )}
               </div>
-            </div>
-          </div>
+            }
+          />
+        </Row>
 
-          <div id='show-embed-code'>
-            <div className='column column--2 column--med-10'>
-              <span className='text'>Embed:</span>
-            </div>
-            <div className='column column--8 column--med-10'>
-              <div className='row row--short row--wide'>
-                <div className='column column--7'>
-                  <div className='input-error' id='input-error-copy-embed-text' hidden='true'>error here</div>
-                  {(contentType === 'video/mp4') ? (
-                    <input type='text' id='embed-text' className='input-disabled input-text--full-width' readOnly
-                      onClick={this.select} spellCheck='false'
-                      value={`<video width="100%" controls poster="${thumbnail}" src="${host}/${claimId}/${name}.${fileExt}"/></video>`} />
-                  ) : (
-                    <input type='text' id='embed-text' className='input-disabled input-text--full-width' readOnly
-                      onClick={this.select} spellCheck='false'
-                      value={`<img src="${host}/${claimId}/${name}.${fileExt}"/>`}
-                    />
-                  )}
-                </div>
-                <div className='column column--1' />
-                <div className='column column--2'>
-                  <button className='button--primary button--wide' data-elementtocopy='embed-text'
-                    onClick={this.copyToClipboard}>copy
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <Row>
+          <SpaceBetween>
+            <Link
+              className='link--primary'
+              to={`/${shortId}/${name}.${fileExt}`}
+            >
+              Direct Link
+            </Link>
+            <a
+              className={'link--primary'}
+              href={`${host}/${claimId}/${name}.${fileExt}`}
+              download={name}
+            >
+              Download
+            </a>
+            <a
+              className={'link--primary'}
+              target='_blank'
+              href='https://lbry.io/dmca'
+            >
+              Report
+            </a>
+          </SpaceBetween>
+        </Row>
 
-        <div className='row row--padded row--wide row--no-top'>
-          <div className='flex-container--row flex-container--space-between-bottom'>
-            <Link className='link--primary' to={`/${shortId}/${name}.${fileExt}`}><span
-              className='text'>Direct Link</span></Link>
-            <a className='link--primary' href={`${host}/${claimId}/${name}.${fileExt}`} download={name}>Download</a>
-            <a className='link--primary' target='_blank' href='https://lbry.io/dmca'>Report</a>
-          </div>
-        </div>
+        {description && (
+          <Row>
+            <p>{description}</p>
+          </Row>
+        )}
 
-        <div className='row row--padded row--wide row--no-top'>
-          Hosted via the <a  className='link--primary' href={'https://lbry.io/get'} target={'_blank'}>LBRY blockchain</a>
-        </div>
+        <Row>
+          <p>
+            Hosted via the <a className={'link--primary'} href={'https://lbry.io/get'} target={'_blank'}>LBRY</a> blockchain
+          </p>
+        </Row>
 
       </div>
     );

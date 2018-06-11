@@ -9,6 +9,14 @@ var _react = _interopRequireDefault(require("react"));
 
 var _request = _interopRequireDefault(require("../../utils/request"));
 
+var _FormFeedbackDisplay = _interopRequireDefault(require("@components/FormFeedbackDisplay"));
+
+var _ChannelLoginNameInput = _interopRequireDefault(require("@components/ChannelLoginNameInput"));
+
+var _ChannelLoginPasswordInput = _interopRequireDefault(require("@components/ChannelLoginPasswordInput"));
+
+var _ButtonPrimary = _interopRequireDefault(require("@components/ButtonPrimary"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -105,56 +113,19 @@ function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
-      return _react.default.createElement("form", {
-        id: "channel-login-form"
-      }, _react.default.createElement("div", {
-        className: "row row--wide row--short"
-      }, _react.default.createElement("div", {
-        className: "column column--3 column--sml-10"
-      }, _react.default.createElement("label", {
-        className: "label",
-        htmlFor: "channel-login-name-input"
-      }, "Name:")), _react.default.createElement("div", {
-        className: "column column--6 column--sml-10"
-      }, _react.default.createElement("div", {
-        className: "input-text--primary flex-container--row flex-container--left-bottom"
-      }, _react.default.createElement("span", null, "@"), _react.default.createElement("input", {
-        type: "text",
-        id: "channel-login-name-input",
-        className: "input-text",
-        name: "name",
-        placeholder: "Your Channel Name",
-        value: this.state.channelName,
-        onChange: this.handleInput
-      })))), _react.default.createElement("div", {
-        className: "row row--wide row--short"
-      }, _react.default.createElement("div", {
-        className: "column column--3 column--sml-10"
-      }, _react.default.createElement("label", {
-        className: "label",
-        htmlFor: "channel-login-password-input"
-      }, "Password:")), _react.default.createElement("div", {
-        className: "column column--6 column--sml-10"
-      }, _react.default.createElement("div", {
-        className: "input-text--primary"
-      }, _react.default.createElement("input", {
-        type: "password",
-        id: "channel-login-password-input",
-        name: "password",
-        className: "input-text",
-        placeholder: "",
-        value: this.state.channelPassword,
-        onChange: this.handleInput
-      })))), this.state.error ? _react.default.createElement("p", {
-        className: "info-message--failure"
-      }, this.state.error) : _react.default.createElement("p", {
-        className: "info-message"
-      }, "Enter the name and password for your channel"), _react.default.createElement("div", {
-        className: "row row--wide"
-      }, _react.default.createElement("button", {
-        className: "button--primary",
-        onClick: this.loginToChannel
-      }, "Authenticate")));
+      return _react.default.createElement("div", null, _react.default.createElement(_ChannelLoginNameInput.default, {
+        channelName: this.state.channelName,
+        handleInput: this.handleInput
+      }), _react.default.createElement(_ChannelLoginPasswordInput.default, {
+        channelPassword: this.state.channelPassword,
+        handleInput: this.handleInput
+      }), _react.default.createElement(_FormFeedbackDisplay.default, {
+        errorMessage: this.state.error,
+        defaultMessage: 'Enter the name and password for your channel'
+      }), _react.default.createElement(_ButtonPrimary.default, {
+        value: 'Authenticate',
+        onClickHandler: this.loginToChannel
+      }));
     }
   }]);
 
