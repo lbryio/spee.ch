@@ -15,7 +15,16 @@ class SEO extends React.Component {
     let { pageTitle } = this.props;
     // create page title, tags, and canonical link
     pageTitle = createPageTitle(siteTitle, pageTitle);
-    const metaTags = createMetaTags(siteDescription, siteHost, siteTitle, siteTwitter, asset, channel, defaultDescription, defaultThumbnail);
+    const metaTags = createMetaTags({
+      siteDescription,
+      siteHost,
+      siteTitle,
+      siteTwitter,
+      asset,
+      channel,
+      defaultDescription,
+      defaultThumbnail,
+    });
     const canonicalLink = createCanonicalLink(asset, channel, pageUri, siteHost);
     // render results
     return (

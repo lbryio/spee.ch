@@ -65,7 +65,16 @@ function (_React$Component) {
       var pageTitle = this.props.pageTitle; // create page title, tags, and canonical link
 
       pageTitle = (0, _pageTitle.createPageTitle)(siteTitle, pageTitle);
-      var metaTags = (0, _metaTags.createMetaTags)(siteDescription, siteHost, siteTitle, siteTwitter, asset, channel, defaultDescription, defaultThumbnail);
+      var metaTags = (0, _metaTags.createMetaTags)({
+        siteDescription: siteDescription,
+        siteHost: siteHost,
+        siteTitle: siteTitle,
+        siteTwitter: siteTwitter,
+        asset: asset,
+        channel: channel,
+        defaultDescription: defaultDescription,
+        defaultThumbnail: defaultThumbnail
+      });
       var canonicalLink = (0, _canonicalLink.createCanonicalLink)(asset, channel, pageUri, siteHost); // render results
 
       return _react.default.createElement(_reactHelmet.default, {

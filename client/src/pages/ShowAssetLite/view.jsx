@@ -12,8 +12,8 @@ const AssetLiteFooter = ({ name, claimId }) => {
         <Link className='link--primary' to={`/${claimId}/${name}`}> hosted on spee.ch</Link> via the <a  className='link--primary' href={'https://lbry.io/get'} target={'_blank'}>LBRY</a> blockchain
       </p>
     </SpaceAround>
-  )
-}
+  );
+};
 
 class ShowLite extends React.Component {
   render () {

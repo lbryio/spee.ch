@@ -47,7 +47,9 @@ function (_React$Component) {
         className: 'page-layout'
       }, _react.default.createElement(_SEO.default, {
         pageTitle: this.props.pageTitle,
-        pageUri: this.props.pageUri
+        pageUri: this.props.pageUri,
+        asset: this.props.asset,
+        channel: this.props.channel
       }), _react.default.createElement(_NavBar.default, null), _react.default.createElement("div", {
         className: 'content'
       }, this.props.children));
