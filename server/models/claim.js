@@ -227,7 +227,7 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
       this
         .findAll({
           where: { certificateId: channelClaimId },
-          order: [['height', 'ASC']],
+          order: [['height', 'DESC']],
           raw  : true,  // returns an array of only data, not an array of instances
         })
         .then(channelClaimsArray => {
