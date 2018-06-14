@@ -35,14 +35,13 @@ regeneratorRuntime.mark(getNewClaimsAndUpdateChannel),
 regeneratorRuntime.mark(watchUpdateChannelClaims);
 
 function newChannelRequest(action) {
-  var _action$data, requestType, requestId, channelName, channelId, state, host, longId, shortId, _ref, _ref$data, channelKey, claimsData, _ref2;
+  var _action$data, requestType, requestId, channelName, channelId, claimsData, state, host, longId, shortId, _ref, _ref$data, channelKey, _ref2;
 
   return regeneratorRuntime.wrap(function newChannelRequest$(_context) {
     while (1) {
       switch (_context.prev = _context.next) {
         case 0:
-          _action$data = action.data, requestType = _action$data.requestType, requestId = _action$data.requestId, channelName = _action$data.channelName, channelId = _action$data.channelId; // put an action to update the request in redux
-
+          _action$data = action.data, requestType = _action$data.requestType, requestId = _action$data.requestId, channelName = _action$data.channelName, channelId = _action$data.channelId;
           _context.next = 3;
           return (0, _effects.put)((0, _show.onRequestUpdate)(requestType, requestId));
 
@@ -152,8 +151,6 @@ function watchNewChannelRequest() {
     }
   }, _marked2, this);
 }
-
-;
 
 function getNewClaimsAndUpdateChannel(action) {
   var _action$data2, channelKey, name, longId, page, host, claimsData, _ref3;

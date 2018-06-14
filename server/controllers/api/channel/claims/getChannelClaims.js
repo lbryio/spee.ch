@@ -1,5 +1,4 @@
 const db = require('../../../../models');
-
 const { returnPaginatedChannelClaims } = require('./channelPagination.js');
 
 const getChannelClaims = (channelName, channelClaimId, page) => {

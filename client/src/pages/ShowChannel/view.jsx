@@ -3,6 +3,7 @@ import PageLayout from '@components/PageLayout';
 import ErrorPage from '@pages/ErrorPage';
 import ChannelInfoDisplay from '@components/ChannelInfoDisplay';
 import ChannelClaimsDisplay from '@containers/ChannelClaimsDisplay';
+import Row from '@components/Row';
 
 class ShowChannel extends React.Component {
   render () {
@@ -14,11 +15,13 @@ class ShowChannel extends React.Component {
           pageTitle={name}
           channel={channel}
         >
-          <ChannelInfoDisplay
-            name={name}
-            longId={longId}
-            shortId={shortId}
-          />
+          <Row>
+            <ChannelInfoDisplay
+              name={name}
+              longId={longId}
+              shortId={shortId}
+            />
+          </Row>
           <ChannelClaimsDisplay />
         </PageLayout>
       );

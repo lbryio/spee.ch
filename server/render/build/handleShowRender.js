@@ -57,11 +57,12 @@ module.exports = function (req, res) {
   var sagaMiddleware = (0, _reduxSaga.default)();
   var middleware = (0, _redux.applyMiddleware)(sagaMiddleware); // create a new Redux store instance
 
-  var store = (0, _redux.createStore)(_reducers.default, middleware); // create saga
+  var store = (0, _redux.createStore)(_reducers.default, middleware); // create an action to handle the given url,
+  // and create a the saga needed to handle that action
 
   var action = _actions.default.onHandleShowPageUri(req.params);
 
-  var saga = returnSagaWithParams(_sagas.default.handleShowPageUri, action); // run the saga middleware
+  var saga = returnSagaWithParams(_sagas.default.handleShowPageUri, action); // run the saga middleware with the saga call
 
   sagaMiddleware.run(saga).done.then(function () {
     // render component to a string

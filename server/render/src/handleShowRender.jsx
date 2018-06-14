@@ -30,11 +30,12 @@ module.exports = (req, res) => {
   // create a new Redux store instance
   const store = createStore(Reducers, middleware);
 
-  // create saga
+  // create an action to handle the given url,
+  // and create a the saga needed to handle that action
   const action = Actions.onHandleShowPageUri(req.params);
   const saga = returnSagaWithParams(Sagas.handleShowPageUri, action);
 
-  // run the saga middleware
+  // run the saga middleware with the saga call
   sagaMiddleware
     .run(saga)
     .done

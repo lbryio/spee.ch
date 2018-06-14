@@ -7,6 +7,8 @@ exports.default = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
+var _Row = _interopRequireDefault(require("@components/Row"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -23,49 +25,44 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
 
-function _getPrototypeOf(o) { _getPrototypeOf = Object.getPrototypeOf || function _getPrototypeOf(o) { return o.__proto__; }; return _getPrototypeOf(o); }
-
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
-var PublishTitleInput =
+function _getPrototypeOf(o) { _getPrototypeOf = Object.getPrototypeOf || function _getPrototypeOf(o) { return o.__proto__; }; return _getPrototypeOf(o); }
+
+var HorizontalTriSplit =
 /*#__PURE__*/
 function (_React$Component) {
-  function PublishTitleInput(props) {
-    var _this;
+  function HorizontalTriSplit() {
+    _classCallCheck(this, HorizontalTriSplit);
 
-    _classCallCheck(this, PublishTitleInput);
-
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(PublishTitleInput).call(this, props));
-    _this.handleInput = _this.handleInput.bind(_assertThisInitialized(_assertThisInitialized(_this)));
-    return _this;
+    return _possibleConstructorReturn(this, _getPrototypeOf(HorizontalTriSplit).apply(this, arguments));
   }
 
-  _createClass(PublishTitleInput, [{
-    key: "handleInput",
-    value: function handleInput(e) {
-      var name = e.target.name;
-      var value = e.target.value;
-      this.props.onMetadataChange(name, value);
-    }
-  }, {
+  _createClass(HorizontalTriSplit, [{
     key: "render",
     value: function render() {
-      return _react.default.createElement("input", {
-        type: "text",
-        id: "publish-title",
-        className: 'text--extra-large input--full-width',
-        name: "title",
-        placeholder: "Give your content a title...",
-        onChange: this.handleInput,
-        value: this.props.title
-      });
+      return _react.default.createElement("div", {
+        className: 'horizontal-quad-split'
+      }, _react.default.createElement("div", {
+        className: 'left-side'
+      }, _react.default.createElement("div", {
+        className: 'column-a'
+      }, _react.default.createElement(_Row.default, null, this.props.columnA)), _react.default.createElement("div", {
+        className: 'column-b'
+      }, _react.default.createElement(_Row.default, null, this.props.columnB))), _react.default.createElement("div", {
+        className: 'right-side'
+      }, _react.default.createElement("div", {
+        className: 'column-c'
+      }, _react.default.createElement(_Row.default, null, this.props.columnC)), _react.default.createElement("div", {
+        className: 'column-d'
+      }, _react.default.createElement(_Row.default, null, this.props.columnD))));
     }
   }]);
 
-  _inherits(PublishTitleInput, _React$Component);
+  _inherits(HorizontalTriSplit, _React$Component);
 
-  return PublishTitleInput;
+  return HorizontalTriSplit;
 }(_react.default.Component);
 
-var _default = PublishTitleInput;
+var _default = HorizontalTriSplit;
 exports.default = _default;

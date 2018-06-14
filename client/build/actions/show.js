@@ -31,16 +31,12 @@ function onHandleShowPageUri(params) {
   };
 }
 
-;
-
 function onRequestError(error) {
   return {
     type: actions.REQUEST_ERROR,
     data: error
   };
 }
-
-;
 
 function onNewChannelRequest(channelName, channelId) {
   var requestType = _show_request_types.CHANNEL;
@@ -55,8 +51,6 @@ function onNewChannelRequest(channelName, channelId) {
     }
   };
 }
-
-;
 
 function onNewAssetRequest(name, id, channelName, channelId, extension) {
   var requestType = extension ? _show_request_types.ASSET_LITE : _show_request_types.ASSET_DETAILS;
@@ -78,8 +72,6 @@ function onNewAssetRequest(name, id, channelName, channelId, extension) {
   };
 }
 
-;
-
 function onRequestUpdate(requestType, requestId) {
   return {
     type: actions.REQUEST_UPDATE,
@@ -90,8 +82,6 @@ function onRequestUpdate(requestType, requestId) {
   };
 }
 
-;
-
 function addRequestToRequestList(id, error, key) {
   return {
     type: actions.REQUEST_LIST_ADD,
@@ -101,9 +91,8 @@ function addRequestToRequestList(id, error, key) {
       key: key
     }
   };
-}
+} // asset actions
 
-; // asset actions
 
 function addAssetToAssetList(id, error, name, claimId, shortId, claimData) {
   return {
@@ -133,8 +122,6 @@ function addNewChannelToChannelList(id, name, shortId, longId, claimsData) {
   };
 }
 
-;
-
 function onUpdateChannelClaims(channelKey, name, longId, page) {
   return {
     type: actions.CHANNEL_CLAIMS_UPDATE_ASYNC,
@@ -147,8 +134,6 @@ function onUpdateChannelClaims(channelKey, name, longId, page) {
   };
 }
 
-;
-
 function updateChannelClaims(channelListId, claimsData) {
   return {
     type: actions.CHANNEL_CLAIMS_UPDATE_SUCCESS,
@@ -157,9 +142,8 @@ function updateChannelClaims(channelListId, claimsData) {
       claimsData: claimsData
     }
   };
-}
+} // display a file
 
-; // display a file
 
 function fileRequested(name, claimId) {
   return {
@@ -171,8 +155,6 @@ function fileRequested(name, claimId) {
   };
 }
 
-;
-
 function updateFileAvailability(status) {
   return {
     type: actions.FILE_AVAILABILITY_UPDATE,
@@ -180,13 +162,9 @@ function updateFileAvailability(status) {
   };
 }
 
-;
-
 function updateDisplayAssetError(error) {
   return {
     type: actions.DISPLAY_ASSET_ERROR,
     data: error
   };
 }
-
-;

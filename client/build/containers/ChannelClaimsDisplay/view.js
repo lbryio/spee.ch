@@ -9,6 +9,14 @@ var _react = _interopRequireDefault(require("react"));
 
 var _AssetPreview = _interopRequireDefault(require("@components/AssetPreview"));
 
+var _HorizontalQuadSplit = _interopRequireDefault(require("@components/HorizontalQuadSplit"));
+
+var _Row = _interopRequireDefault(require("@components/Row"));
+
+var _ButtonSecondary = _interopRequireDefault(require("@components/ButtonSecondary"));
+
+var _createGroupedList = _interopRequireDefault(require("../../utils/createGroupedList.js"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -76,21 +84,49 @@ function (_React$Component) {
           currentPage = _this$props2$channel$.currentPage,
           totalPages = _this$props2$channel$.totalPages,
           defaultThumbnail = _this$props2.defaultThumbnail;
-      return _react.default.createElement("div", {
-        className: "row row--tall"
-      }, claims.length > 0 ? _react.default.createElement("div", null, claims.map(function (claim, index) {
-        return _react.default.createElement(_AssetPreview.default, {
-          defaultThumbnail: defaultThumbnail,
-          claimData: claim,
-          key: "".concat(claim.name, "-").concat(index)
-        });
-      }), _react.default.createElement("div", null, currentPage > 1 && _react.default.createElement("button", {
-        className: 'button--secondary',
-        onClick: this.showPreviousResultsPage
-      }, "Previous Page"), currentPage < totalPages && _react.default.createElement("button", {
-        className: 'button--secondary',
-        onClick: this.showNextResultsPage
-      }, "Next Page"))) : _react.default.createElement("p", null, "There are no claims in this channel"));
+      var groupedClaimsList = (0, _createGroupedList.default)(claims, 4);
+
+      if (claims.length > 0) {
+        return _react.default.createElement("div", {
+          className: 'channel-claims-display'
+        }, _react.default.createElement("div", null, groupedClaimsList.map(function (group, index) {
+          var itemA = group[0];
+          var itemB = group[1];
+          var itemC = group[2];
+          var itemD = group[3];
+          return _react.default.createElement(_HorizontalQuadSplit.default, {
+            key: "claims-row-".concat(index),
+            columnA: itemA && _react.default.createElement(_AssetPreview.default, {
+              defaultThumbnail: defaultThumbnail,
+              claimData: itemA,
+              key: "".concat(itemA.name, "-").concat(itemA.id)
+            }),
+            columnB: itemB && _react.default.createElement(_AssetPreview.default, {
+              defaultThumbnail: defaultThumbnail,
+              claimData: itemB,
+              key: "".concat(itemB.name, "-").concat(itemB.id)
+            }),
+            columnC: itemC && _react.default.createElement(_AssetPreview.default, {
+              defaultThumbnail: defaultThumbnail,
+              claimData: itemC,
+              key: "".concat(itemC.name, "-").concat(itemC.id)
+            }),
+            columnD: itemD && _react.default.createElement(_AssetPreview.default, {
+              defaultThumbnail: defaultThumbnail,
+              claimData: itemD,
+              key: "".concat(itemD.name, "-").concat(itemD.id)
+            })
+          });
+        })), _react.default.createElement(_Row.default, null, currentPage > 1 && _react.default.createElement(_ButtonSecondary.default, {
+          value: 'Previous Page',
+          onClickHandler: this.showPreviousResultsPage
+        }), currentPage < totalPages && _react.default.createElement(_ButtonSecondary.default, {
+          value: 'Next Page',
+          onClickHandler: this.showNextResultsPage
+        })));
+      } else {
+        return _react.default.createElement("p", null, "There are no claims in this channel");
+      }
     }
   }]);
 
@@ -99,6 +135,5 @@ function (_React$Component) {
   return ChannelClaimsDisplay;
 }(_react.default.Component);
 
-;
 var _default = ChannelClaimsDisplay;
 exports.default = _default;

@@ -1,5 +1,9 @@
 import React from 'react';
 import AssetPreview from '@components/AssetPreview';
+import HorizontalQuadSplit from '@components/HorizontalQuadSplit';
+import Row from '@components/Row';
+import ButtonSecondary from '@components/ButtonSecondary';
+import createGroupedList from '../../utils/createGroupedList.js';
 
 class ChannelClaimsDisplay extends React.Component {
   constructor (props) {
@@ -22,31 +26,82 @@ class ChannelClaimsDisplay extends React.Component {
     this.props.onUpdateChannelClaims(channelKey, name, longId, page);
   }
   render () {
-    const { channel: { claimsData: { claims, currentPage, totalPages } }, defaultThumbnail } = this.props;
-    return (
-      <div className='row row--tall'>
-        {(claims.length > 0) ? (
+    const {channel: {claimsData: {claims, currentPage, totalPages}}, defaultThumbnail} = this.props;
+    const groupedClaimsList = createGroupedList(claims, 4);
+    if (claims.length > 0) {
+      return (
+        <div className={'channel-claims-display'}>
           <div>
-            {claims.map((claim, index) => <AssetPreview
-              defaultThumbnail={defaultThumbnail}
-              claimData={claim}
-              key={`${claim.name}-${index}`}
-            />)}
-            <div>
-              {(currentPage > 1) &&
-              <button className={'button--secondary'} onClick={this.showPreviousResultsPage}>Previous Page</button>
-              }
-              {(currentPage < totalPages) &&
-              <button className={'button--secondary'} onClick={this.showNextResultsPage}>Next Page</button>
-              }
-            </div>
+            {groupedClaimsList.map((group, index) => {
+              const itemA = group[0];
+              const itemB = group[1];
+              const itemC = group[2];
+              const itemD = group[3];
+              return (
+                <HorizontalQuadSplit
+                  key={`claims-row-${index}`}
+                  columnA={
+                    itemA && (
+                      <AssetPreview
+                        defaultThumbnail={defaultThumbnail}
+                        claimData={itemA}
+                        key={`${itemA.name}-${itemA.id}`}
+                      />
+                    )
+                  }
+                  columnB={
+                    itemB && (
+                      <AssetPreview
+                        defaultThumbnail={defaultThumbnail}
+                        claimData={itemB}
+                        key={`${itemB.name}-${itemB.id}`}
+                      />
+                    )
+                  }
+                  columnC={
+                    itemC && (
+                      <AssetPreview
+                        defaultThumbnail={defaultThumbnail}
+                        claimData={itemC}
+                        key={`${itemC.name}-${itemC.id}`}
+                      />
+                    )
+                  }
+                  columnD={
+                    itemD && (
+                      <AssetPreview
+                        defaultThumbnail={defaultThumbnail}
+                        claimData={itemD}
+                        key={`${itemD.name}-${itemD.id}`}
+                      />
+                    )
+                  }
+                />
+              );
+            })}
           </div>
-        ) : (
-          <p>There are no claims in this channel</p>
-        )}
-      </div>
-    );
+          <Row>
+            {(currentPage > 1) &&
+            <ButtonSecondary
+              value={'Previous Page'}
+              onClickHandler={this.showPreviousResultsPage}
+            />
+            }
+            {(currentPage < totalPages) &&
+            <ButtonSecondary
+              value={'Next Page'}
+              onClickHandler={this.showNextResultsPage}
+            />
+            }
+          </Row>
+        </div>
+      );
+    } else {
+      return (
+        <p>There are no claims in this channel</p>
+      );
+    }
   }
-};
+}
 
 export default ChannelClaimsDisplay;
