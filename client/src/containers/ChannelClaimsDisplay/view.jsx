@@ -3,7 +3,7 @@ import AssetPreview from '@components/AssetPreview';
 import HorizontalQuadSplit from '@components/HorizontalQuadSplit';
 import Row from '@components/Row';
 import ButtonSecondary from '@components/ButtonSecondary';
-import createGroupedList from '../../utils/createGroupedList.js';
+import { createGroupedList } from '../../utils/createGroupedList.js';
 
 class ChannelClaimsDisplay extends React.Component {
   constructor (props) {

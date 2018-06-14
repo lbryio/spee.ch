@@ -15,7 +15,7 @@ var _Row = _interopRequireDefault(require("@components/Row"));
 
 var _ButtonSecondary = _interopRequireDefault(require("@components/ButtonSecondary"));
 
-var _createGroupedList = _interopRequireDefault(require("../../utils/createGroupedList.js"));
+var _createGroupedList = require("../../utils/createGroupedList.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -84,7 +84,7 @@ function (_React$Component) {
           currentPage = _this$props2$channel$.currentPage,
           totalPages = _this$props2$channel$.totalPages,
           defaultThumbnail = _this$props2.defaultThumbnail;
-      var groupedClaimsList = (0, _createGroupedList.default)(claims, 4);
+      var groupedClaimsList = (0, _createGroupedList.createGroupedList)(claims, 4);
 
       if (claims.length > 0) {
         return _react.default.createElement("div", {
