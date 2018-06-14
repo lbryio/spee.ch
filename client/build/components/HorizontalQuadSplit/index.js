@@ -7,6 +7,8 @@ exports.default = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
+var _Row = _interopRequireDefault(require("@components/Row"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -44,16 +46,16 @@ function (_React$Component) {
       }, _react.default.createElement("div", {
         className: 'left-side'
       }, _react.default.createElement("div", {
-        className: 'column'
-      }, this.props.itemA), _react.default.createElement("div", {
-        className: 'column'
-      }, this.props.itemB)), _react.default.createElement("div", {
+        className: 'column-a'
+      }, _react.default.createElement(_Row.default, null, this.props.columnA)), _react.default.createElement("div", {
+        className: 'column-b'
+      }, _react.default.createElement(_Row.default, null, this.props.columnB))), _react.default.createElement("div", {
         className: 'right-side'
       }, _react.default.createElement("div", {
-        className: 'column'
-      }, this.props.itemC), _react.default.createElement("div", {
-        className: 'column'
-      }, this.props.itemD)));
+        className: 'column-c'
+      }, _react.default.createElement(_Row.default, null, this.props.columnC)), _react.default.createElement("div", {
+        className: 'column-d'
+      }, _react.default.createElement(_Row.default, null, this.props.columnD))));
     }
   }]);
 

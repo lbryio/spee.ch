@@ -15,7 +15,7 @@ var _Row = _interopRequireDefault(require("@components/Row"));
 
 var _ButtonSecondary = _interopRequireDefault(require("@components/ButtonSecondary"));
 
-var _createGroupedList = require("../../utils/createGroupedList.js");
+var _createGroupedList = _interopRequireDefault(require("../../utils/createGroupedList.js"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -84,31 +84,38 @@ function (_React$Component) {
           currentPage = _this$props2$channel$.currentPage,
           totalPages = _this$props2$channel$.totalPages,
           defaultThumbnail = _this$props2.defaultThumbnail;
-      var groupedClaimsList = (0, _createGroupedList.createGroupedList)(claims, 4);
+      var groupedClaimsList = (0, _createGroupedList.default)(claims, 4);
 
       if (claims.length > 0) {
-        return _react.default.createElement("div", null, _react.default.createElement(_Row.default, null, groupedClaimsList.map(function (group, index) {
+        return _react.default.createElement("div", {
+          className: 'channel-claims-display'
+        }, _react.default.createElement("div", null, groupedClaimsList.map(function (group, index) {
+          var itemA = group[0];
+          var itemB = group[1];
+          var itemC = group[2];
+          var itemD = group[3];
           return _react.default.createElement(_HorizontalQuadSplit.default, {
-            itemA: group[0] ? _react.default.createElement(_AssetPreview.default, {
+            key: "claims-row-".concat(index),
+            columnA: itemA && _react.default.createElement(_AssetPreview.default, {
               defaultThumbnail: defaultThumbnail,
-              claimData: group[0],
-              key: "".concat(group[0].name, "-").concat(index)
-            }) : null,
-            itemB: group[1] ? _react.default.createElement(_AssetPreview.default, {
+              claimData: itemA,
+              key: "".concat(itemA.name, "-").concat(itemA.id)
+            }),
+            columnB: itemB && _react.default.createElement(_AssetPreview.default, {
               defaultThumbnail: defaultThumbnail,
-              claimData: group[1],
-              key: "".concat(group[1].name, "-").concat(index)
-            }) : null,
-            itemC: group[2] ? _react.default.createElement(_AssetPreview.default, {
+              claimData: itemB,
+              key: "".concat(itemB.name, "-").concat(itemB.id)
+            }),
+            columnC: itemC && _react.default.createElement(_AssetPreview.default, {
               defaultThumbnail: defaultThumbnail,
-              claimData: group[2],
-              key: "".concat(group[2].name, "-").concat(index)
-            }) : null,
-            itemD: group[3] ? _react.default.createElement(_AssetPreview.default, {
+              claimData: itemC,
+              key: "".concat(itemC.name, "-").concat(itemC.id)
+            }),
+            columnD: itemD && _react.default.createElement(_AssetPreview.default, {
               defaultThumbnail: defaultThumbnail,
-              claimData: group[3],
-              key: "".concat(group[3].name, "-").concat(index)
-            }) : null
+              claimData: itemD,
+              key: "".concat(itemD.name, "-").concat(itemD.id)
+            })
           });
         })), _react.default.createElement(_Row.default, null, currentPage > 1 && _react.default.createElement(_ButtonSecondary.default, {
           value: 'Previous Page',

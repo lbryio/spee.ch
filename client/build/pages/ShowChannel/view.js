@@ -15,6 +15,8 @@ var _ChannelInfoDisplay = _interopRequireDefault(require("@components/ChannelInf
 
 var _ChannelClaimsDisplay = _interopRequireDefault(require("@containers/ChannelClaimsDisplay"));
 
+var _Row = _interopRequireDefault(require("@components/Row"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -56,11 +58,11 @@ function (_React$Component) {
         return _react.default.createElement(_PageLayout.default, {
           pageTitle: name,
           channel: channel
-        }, _react.default.createElement(_ChannelInfoDisplay.default, {
+        }, _react.default.createElement(_Row.default, null, _react.default.createElement(_ChannelInfoDisplay.default, {
           name: name,
           longId: longId,
           shortId: shortId
-        }), _react.default.createElement(_ChannelClaimsDisplay.default, null));
+        })), _react.default.createElement(_ChannelClaimsDisplay.default, null));
       }
 
       return _react.default.createElement(_ErrorPage.default, {

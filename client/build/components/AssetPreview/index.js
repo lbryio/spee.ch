@@ -21,9 +21,7 @@ var AssetPreview = function AssetPreview(_ref) {
       thumbnail = _ref$claimData.thumbnail;
   var directSourceLink = "".concat(claimId, "/").concat(name, ".").concat(fileExt);
   var showUrlLink = "/".concat(claimId, "/").concat(name);
-  return _react.default.createElement("div", {
-    className: "asset-preview-holder"
-  }, _react.default.createElement(_reactRouterDom.Link, {
+  return _react.default.createElement(_reactRouterDom.Link, {
     to: showUrlLink
   }, function () {
     switch (contentType) {
@@ -47,7 +45,7 @@ var AssetPreview = function AssetPreview(_ref) {
       default:
         return _react.default.createElement("p", null, "unsupported file type");
     }
-  }()));
+  }());
 };
 
 var _default = AssetPreview;

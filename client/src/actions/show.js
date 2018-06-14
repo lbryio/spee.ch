@@ -7,14 +7,14 @@ export function onHandleShowPageUri (params) {
     type: actions.HANDLE_SHOW_URI,
     data: params,
   };
-};
+}
 
 export function onRequestError (error) {
   return {
     type: actions.REQUEST_ERROR,
     data: error,
   };
-};
+}
 
 export function onNewChannelRequest (channelName, channelId) {
   const requestType = CHANNEL;
@@ -23,7 +23,7 @@ export function onNewChannelRequest (channelName, channelId) {
     type: actions.CHANNEL_REQUEST_NEW,
     data: { requestType, requestId, channelName, channelId },
   };
-};
+}
 
 export function onNewAssetRequest (name, id, channelName, channelId, extension) {
   const requestType = extension ? ASSET_LITE : ASSET_DETAILS;
@@ -43,7 +43,7 @@ export function onNewAssetRequest (name, id, channelName, channelId, extension) 
       },
     },
   };
-};
+}
 
 export function onRequestUpdate (requestType, requestId) {
   return {
@@ -53,14 +53,14 @@ export function onRequestUpdate (requestType, requestId) {
       requestId,
     },
   };
-};
+}
 
 export function addRequestToRequestList (id, error, key) {
   return {
     type: actions.REQUEST_LIST_ADD,
     data: { id, error, key },
   };
-};
+}
 
 // asset actions
 
@@ -76,23 +76,29 @@ export function addAssetToAssetList (id, error, name, claimId, shortId, claimDat
 export function addNewChannelToChannelList (id, name, shortId, longId, claimsData) {
   return {
     type: actions.CHANNEL_ADD,
-    data: { id, name, shortId, longId, claimsData },
+    data: {
+      id,
+      name,
+      shortId,
+      longId,
+      claimsData,
+    },
   };
-};
+}
 
 export function onUpdateChannelClaims (channelKey, name, longId, page) {
   return {
     type: actions.CHANNEL_CLAIMS_UPDATE_ASYNC,
     data: {channelKey, name, longId, page},
   };
-};
+}
 
 export function updateChannelClaims (channelListId, claimsData) {
   return {
     type: actions.CHANNEL_CLAIMS_UPDATE_SUCCESS,
     data: {channelListId, claimsData},
   };
-};
+}
 
 // display a file
 
@@ -101,18 +107,18 @@ export function fileRequested (name, claimId) {
     type: actions.FILE_REQUESTED,
     data: { name, claimId },
   };
-};
+}
 
 export function updateFileAvailability (status) {
   return {
     type: actions.FILE_AVAILABILITY_UPDATE,
     data: status,
   };
-};
+}
 
 export function updateDisplayAssetError (error) {
   return {
     type: actions.DISPLAY_ASSET_ERROR,
     data: error,
   };
-};
+}

@@ -3,8 +3,7 @@ import AssetPreview from '@components/AssetPreview';
 import HorizontalQuadSplit from '@components/HorizontalQuadSplit';
 import Row from '@components/Row';
 import ButtonSecondary from '@components/ButtonSecondary';
-
-import { createGroupedList } from '../../utils/createGroupedList.js';
+import createGroupedList from '../../utils/createGroupedList.js';
 
 class ChannelClaimsDisplay extends React.Component {
   constructor (props) {
@@ -31,59 +30,68 @@ class ChannelClaimsDisplay extends React.Component {
     const groupedClaimsList = createGroupedList(claims, 4);
     if (claims.length > 0) {
       return (
-        <div>
-          <Row>
-            {groupedClaimsList.map((group, index) => <HorizontalQuadSplit
-              itemA={
-                group[0] ? (
-                  <AssetPreview
-                    defaultThumbnail={defaultThumbnail}
-                    claimData={group[0]}
-                    key={`${group[0].name}-${index}`}
-                  />
-                ) : null
-              }
-              itemB={
-                group[1] ? (
-                  <AssetPreview
-                    defaultThumbnail={defaultThumbnail}
-                    claimData={group[1]}
-                    key={`${group[1].name}-${index}`}
-                  />
-                ) : null
-              }
-              itemC={
-                group[2] ? (
-                  <AssetPreview
-                    defaultThumbnail={defaultThumbnail}
-                    claimData={group[2]}
-                    key={`${group[2].name}-${index}`}
-                  />
-                ) : null
-              }
-              itemD={
-                group[3] ? (
-                  <AssetPreview
-                    defaultThumbnail={defaultThumbnail}
-                    claimData={group[3]}
-                    key={`${group[3].name}-${index}`}
-                  />
-                ) : null
-              }
-            />)}
-          </Row>
+        <div className={'channel-claims-display'}>
+          <div>
+            {groupedClaimsList.map((group, index) => {
+              const itemA = group[0];
+              const itemB = group[1];
+              const itemC = group[2];
+              const itemD = group[3];
+              return (
+                <HorizontalQuadSplit
+                  key={`claims-row-${index}`}
+                  columnA={
+                    itemA && (
+                      <AssetPreview
+                        defaultThumbnail={defaultThumbnail}
+                        claimData={itemA}
+                        key={`${itemA.name}-${itemA.id}`}
+                      />
+                    )
+                  }
+                  columnB={
+                    itemB && (
+                      <AssetPreview
+                        defaultThumbnail={defaultThumbnail}
+                        claimData={itemB}
+                        key={`${itemB.name}-${itemB.id}`}
+                      />
+                    )
+                  }
+                  columnC={
+                    itemC && (
+                      <AssetPreview
+                        defaultThumbnail={defaultThumbnail}
+                        claimData={itemC}
+                        key={`${itemC.name}-${itemC.id}`}
+                      />
+                    )
+                  }
+                  columnD={
+                    itemD && (
+                      <AssetPreview
+                        defaultThumbnail={defaultThumbnail}
+                        claimData={itemD}
+                        key={`${itemD.name}-${itemD.id}`}
+                      />
+                    )
+                  }
+                />
+              );
+            })}
+          </div>
           <Row>
             {(currentPage > 1) &&
-              <ButtonSecondary
-                value={'Previous Page'}
-                onClickHandler={this.showPreviousResultsPage}
-              />
+            <ButtonSecondary
+              value={'Previous Page'}
+              onClickHandler={this.showPreviousResultsPage}
+            />
             }
             {(currentPage < totalPages) &&
-              <ButtonSecondary
-                value={'Next Page'}
-                onClickHandler={this.showNextResultsPage}
-              />
+            <ButtonSecondary
+              value={'Next Page'}
+              onClickHandler={this.showNextResultsPage}
+            />
             }
           </Row>
         </div>

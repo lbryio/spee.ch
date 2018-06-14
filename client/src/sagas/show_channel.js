@@ -7,6 +7,7 @@ import { selectSiteHost } from '../selectors/site';
 
 export function * newChannelRequest (action) {
   const { requestType, requestId, channelName, channelId } = action.data;
+  let claimsData;
   // put an action to update the request in redux
   yield put(onRequestUpdate(requestType, requestId));
   // is this an existing request?
@@ -26,27 +27,28 @@ export function * newChannelRequest (action) {
   // store the request in the channel requests list
   const channelKey = `c#${channelName}#${longId}`;
   yield put(addRequestToRequestList(requestId, null, channelKey));
-  // is this an existing channel?
+
   // If this channel is in the channel list, it's already been fetched
   if (state.channelList[channelKey]) {
     return null;
   }
   // get channel claims data
-  let claimsData;
   try {
     ({ data: claimsData } = yield call(getChannelClaims, host, channelName, longId, 1));
   } catch (error) {
     return yield put(onRequestError(error.message));
   }
+
   // store the channel data in the channel list
   yield put(addNewChannelToChannelList(channelKey, channelName, shortId, longId, claimsData));
+
   // clear any request errors
   yield put(onRequestError(null));
 }
 
 export function * watchNewChannelRequest () {
   yield takeLatest(actions.CHANNEL_REQUEST_NEW, newChannelRequest);
-};
+}
 
 function * getNewClaimsAndUpdateChannel (action) {
   const { channelKey, name, longId, page } = action.data;

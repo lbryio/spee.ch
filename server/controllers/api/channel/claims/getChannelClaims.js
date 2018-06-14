@@ -1,5 +1,3 @@
-const logger = require('winston');
-
 const db = require('../../../../models');
 const { returnPaginatedChannelClaims } = require('./channelPagination.js');
 
@@ -16,7 +14,6 @@ const getChannelClaims = (channelName, channelClaimId, page) => {
           .getAllChannelClaims(longChannelClaimId);
       })
       .then(channelClaimsArray => {
-        logger.debug('channel claim array:', channelClaimsArray);
         // 3. format the data for the view, including pagination
         let paginatedChannelViewData = returnPaginatedChannelClaims(channelName, longChannelClaimId, channelClaimsArray, page);
         // 4. return all the channel information and contents

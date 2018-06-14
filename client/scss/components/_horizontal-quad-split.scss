@@ -9,10 +9,13 @@
     flex-direction : row;
     justify-content: space-between;
     align-items    : flex-start;
-    .column {
+    .column-a, .column-b, .column-c, .column-d {
       width: 50%;
-    }
-  }
+    };
+    .column-a, .column-b, .column-c {
+      padding-right: $secondary-padding;
+    };
+  };
 };
 
 
@@ -23,9 +26,12 @@
     flex-direction : column;
     .left-side, .right-side {
       width          : 100%;
-      padding-left: 0;
-      padding-right: 0;
-      padding-bottom: $secondary-padding;
+      .column-a, .column-b, .column-c, .column-d {
+        width: 50%;
+      };
+      .column-b {
+        padding-right: 0;
+      }
     }
   };
 
@@ -37,12 +43,10 @@
     flex-direction : column;
     .left-side, .right-side {
       flex-direction : column;
-      .column {
-        width : 100%;
-        padding-left: 0;
-        padding-right: 0;
-        padding-bottom: $secondary-padding;
-      }
+      .column-a, .column-b, .column-c, .column-d {
+        width: 100%;
+        padding: 0;
+      };
     }
   };
 
