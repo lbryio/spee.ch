@@ -3,6 +3,22 @@ const logger = require('winston');
 const SERVE = 'SERVE';
 const SHOW = 'SHOW';
 
+function headersMatchesSocialBotList (headers) {
+  const socialBotList = [
+    'facebookexternalhit',
+    'Twitterbot',
+  ];
+  const userAgent = headers['user-agent'];
+  for (let i = 0; i < socialBotList.length; i++) {
+    const socialBot = socialBotList[i];
+    if (userAgent.indexOf(socialBot) >= 0) {
+      logger.debug('headers on request matched this bot:', socialBot);
+      return true;
+    }
+  }
+  return false;
+}
+
 function clientAcceptsHtml ({accept}) {
   return accept && accept.match(/text\/html/);
 };
@@ -19,6 +35,12 @@ function clientWantsAsset ({accept, range}) {
 
 const determineResponseType = (hasFileExtension, headers) => {
   let responseType;
+  logger.debug('headers:', headers);
+  // return early with 'show' if headers match the list
+  if (headersMatchesSocialBotList(headers)) {
+    // return SHOW;
+  }
+  // fallback logic if not on the list
   if (hasFileExtension) {
     responseType = SERVE;  // assume a serve request if file extension is present
     if (clientAcceptsHtml(headers)) {  // if the request comes from a browser, change it to a show request

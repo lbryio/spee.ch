@@ -28,7 +28,7 @@ module.exports = (app) => {
   app.get('/api/claim/data/:claimName/:claimId', claimData);
   app.get('/api/claim/get/:name/:claimId', claimGet);
   app.get('/api/claim/list/:name', claimList);
-  app.post('/api/claim/long-id', claimLongId);
+  app.post('/api/claim/long-id', claimLongId); // should be a get
   app.post('/api/claim/publish', multipartMiddleware, claimPublish);
   app.get('/api/claim/resolve/:name/:claimId', claimResolve);
   app.get('/api/claim/short-id/:longId/:name', claimShortId);
