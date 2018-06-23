@@ -1,6 +1,6 @@
 const logger = require('winston');
 
-const { details: { host } } = require('@config/siteConfig');
+const { details: { host }, publishing: { disabled, disabledMessage } } = require('@config/siteConfig');
 
 const { sendGATimingEvent } = require('../../../../utils/googleAnalytics.js');
 
@@ -28,6 +28,13 @@ const claimPublish = ({ body, files, headers, ip, originalUrl, user }, res) => {
     ip,
     body,
   });
+  // check for disabled publishing
+  if (disabled) {
+    return res.status(400).json({
+      success: false,
+      message: disabledMessage
+    });
+  }
   // define variables
   let  channelName, channelId, channelPassword, description, fileName, filePath, fileType, gaStartTime, license, name, nsfw, thumbnail, thumbnailFileName, thumbnailFilePath, thumbnailFileType, title;
   // record the start time of the request
