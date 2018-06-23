@@ -1,3 +1,5 @@
+const logger = require('winston');
+
 const { details: { host } } = require('@config/siteConfig');
 
 const { sendGATimingEvent } = require('../../../../utils/googleAnalytics.js');
@@ -20,6 +22,12 @@ const authenticateUser = require('./authentication.js');
 */
 
 const claimPublish = ({ body, files, headers, ip, originalUrl, user }, res) => {
+  // logging
+  logger.info('PUBLISH REQUEST:', {
+    headers,
+    ip,
+    body,
+  });
   // define variables
   let  channelName, channelId, channelPassword, description, fileName, filePath, fileType, gaStartTime, license, name, nsfw, thumbnail, thumbnailFileName, thumbnailFilePath, thumbnailFileType, title;
   // record the start time of the request
