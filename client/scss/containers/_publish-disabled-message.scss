@@ -1,0 +1,11 @@
+.publish-disabled-message {
+  // fill the parent flex container
+  flex: 1 0 auto;
+  // be a flex container for children
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  .message {
+    text-align: center;
+  }
+}
