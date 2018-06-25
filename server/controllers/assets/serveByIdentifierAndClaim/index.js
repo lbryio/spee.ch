@@ -3,12 +3,12 @@ const handleShowRender = require('../../../render/build/handleShowRender.js');
 
 const lbryUri = require('../utils/lbryUri.js');
 
-const determineResponseType = require('../utils/determineResponseType.js');
+const determineRequestType = require('../utils/determineRequestType.js');
 const getClaimIdAndServeAsset = require('../utils/getClaimIdAndServeAsset.js');
 const flipClaimNameAndId = require('../utils/flipClaimNameAndId.js');
 const logRequestData = require('../utils/logRequestData.js');
 
-const SERVE = 'SERVE';
+const { BROWSER, SOCIAL } = require('../constants/request_types.js');
 
 /*
 
@@ -25,9 +25,12 @@ const serverAssetByIdentifierAndClaim = (req, res) => {
   } catch (error) {
     return res.status(400).json({success: false, message: error.message});
   }
-  let responseType = determineResponseType(hasFileExtension, headers);
-  if (responseType !== SERVE) {
+  let requestType = determineRequestType(hasFileExtension, headers);
+  if (requestType == BROWSER) {
     return handleShowRender(req, res);
+  }
+  if (requestType == SOCIAL) {
+    return handleSocialRequest(req, res);
   }
   // handle serve request
   // send google analytics
@@ -51,7 +54,7 @@ const serverAssetByIdentifierAndClaim = (req, res) => {
     [claimId, claimName] = flipClaimNameAndId(claimId, claimName);
   }
   // log the request data for debugging
-  logRequestData(responseType, claimName, channelName, claimId);
+  logRequestData(requestType, claimName, channelName, claimId);
   // get the claim Id and then serve the asset
   getClaimIdAndServeAsset(channelName, channelClaimId, claimName, claimId, originalUrl, ip, res);
 };

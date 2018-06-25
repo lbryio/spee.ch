@@ -1,7 +1,5 @@
 const logger = require('winston');
-
-const SERVE = 'SERVE';
-const SHOW = 'SHOW';
+const { EMBED, BROWSER, SOCIAL } = require('../constants/request_types.js');
 
 function headersMatchesSocialBotList (headers) {
   const socialBotList = [
@@ -33,27 +31,31 @@ function clientWantsAsset ({accept, range}) {
   return imageIsWanted || videoIsWanted;
 };
 
-const determineResponseType = (hasFileExtension, headers) => {
+const determineRequestType = (hasFileExtension, headers) => {
   let responseType;
   logger.debug('headers:', headers);
   // return early with 'show' if headers match the list
   if (headersMatchesSocialBotList(headers)) {
-    // return SHOW;
+    return SOCIAL;
   }
-  // fallback logic if not on the list
+  // if request is not from a social bot...
   if (hasFileExtension) {
-    responseType = SERVE;  // assume a serve request if file extension is present
-    if (clientAcceptsHtml(headers)) {  // if the request comes from a browser, change it to a show request
-      responseType = SHOW;
+    // assume embed,
+    responseType = EMBED;
+    // but change to browser if client accepts html.
+    if (clientAcceptsHtml(headers)) {
+      responseType = BROWSER;
     }
+  // if request does not have file extentsion...
   } else {
-    responseType = SHOW;
-    if (clientWantsAsset(headers) && requestIsFromBrowser(headers)) {  // this is in case someone embeds a show url
-      logger.debug('Show request came from browser but wants an image/video. Changing response to serve...');
-      responseType = SERVE;
+    // assume browser,
+    responseType = BROWSER;
+    // but change to embed if someone embeded a show url...
+    if (clientWantsAsset(headers) && requestIsFromBrowser(headers)) {
+      responseType = EMBED;
     }
   }
   return responseType;
 };
 
-module.exports = determineResponseType;
+module.exports = determineRequestType;
