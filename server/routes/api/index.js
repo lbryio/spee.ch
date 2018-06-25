@@ -13,6 +13,7 @@ const claimResolve = require('../../controllers/api/claim/resolve');
 const claimShortId = require('../../controllers/api/claim/shortId');
 const fileAvailability = require('../../controllers/api/file/availability');
 const userPassword = require('../../controllers/api/user/password');
+const publishingConfig = require('../../controllers/api/config/site/publishing');
 
 const multipartMiddleware = require('../utils/multipartMiddleware');
 
@@ -36,4 +37,6 @@ module.exports = (app) => {
   app.get('/api/file/availability/:name/:claimId', fileAvailability);
   // user routes
   app.put('/api/user/password/', userPassword);
+  // configs
+  app.get('/api/config/site/publishing', publishingConfig);
 };
