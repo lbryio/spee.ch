@@ -154,7 +154,7 @@ var createAssetMetaTags = function createAssetMetaTags(_ref3) {
     });
     metaTags.push({
       property: 'og:type',
-      content: 'video'
+      content: 'video.other'
     });
     metaTags.push({
       property: 'twitter:card',

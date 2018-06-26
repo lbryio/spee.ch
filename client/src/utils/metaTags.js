@@ -68,7 +68,7 @@ const createAssetMetaTags = ({siteHost, siteTitle, siteTwitter, asset, defaultDe
     metaTags.push({property: 'og:video:type', content: contentType});
     metaTags.push({property: 'og:image', content: ogThumbnail});
     metaTags.push({property: 'og:image:type', content: ogThumbnailContentType});
-    metaTags.push({property: 'og:type', content: 'video'});
+    metaTags.push({property: 'og:type', content: 'video.other'});
     metaTags.push({property: 'twitter:card', content: 'player'});
     metaTags.push({property: 'twitter:player', content: videoEmbedUrl});
     metaTags.push({property: 'twitter:player:width', content: 600});
