@@ -1,7 +1,9 @@
-const serveAssetByClaim = require('../../controllers/assets/serveByClaim');
-const serveAssetByIdentifierAndClaim = require('../../controllers/assets/serveByIdentifierAndClaim');
+const serveByClaim = require('../../controllers/assets/serveByClaim');
+const serveByIdentifierAndClaim = require('../../controllers/assets/serveByIdentifierAndClaim');
+const serveAsset = require('../../controllers/assets/serveAsset');
 
-module.exports = (app, db) => {
-  app.get('/:identifier/:claim', serveAssetByIdentifierAndClaim);
-  app.get('/:claim', serveAssetByClaim);
+module.exports = (app) => {
+  app.get('/asset/:claimName/:claimId/', serveAsset);
+  app.get('/:identifier/:claim', serveByIdentifierAndClaim);
+  app.get('/:claim', serveByClaim);
 };
