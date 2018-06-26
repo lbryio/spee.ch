@@ -5,7 +5,6 @@ const lbryUri = require('../utils/lbryUri.js');
 
 const determineRequestType = require('../utils/determineRequestType.js');
 const getClaimIdAndServeAsset = require('../utils/getClaimIdAndServeAsset.js');
-const logRequestData = require('../utils/logRequestData.js');
 
 const { EMBED } = require('../constants/request_types.js');
 
@@ -38,8 +37,6 @@ const serveByClaim = (req, res) => {
   }
   // send google analytics
   sendGAServeEvent(headers, ip, originalUrl);
-  // log the request data for debugging
-  // logRequestData(requestType, claimName, null, null);
   // get the claim Id and then serve the asset
   getClaimIdAndServeAsset(null, null, claimName, null, originalUrl, ip, res);
 };
