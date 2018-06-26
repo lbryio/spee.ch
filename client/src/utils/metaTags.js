@@ -46,9 +46,9 @@ const createChannelMetaTags = ({siteHost, siteTitle, siteTwitter, channel}) => {
 const createAssetMetaTags = ({siteHost, siteTitle, siteTwitter, asset, defaultDescription, defaultThumbnail}) => {
   const { claimData } = asset;
   const { contentType } = claimData;
-  const embedUrl = `${siteHost}/${claimData.claimId}/${claimData.name}`;
+  const videoEmbedUrl = `${siteHost}/video-embed/${claimData.name}/${claimData.claimId}`;
   const showUrl = `${siteHost}/${claimData.claimId}/${claimData.name}`;
-  const source = `${siteHost}/${claimData.claimId}/${claimData.name}.${claimData.fileExt}`;
+  const source = `${siteHost}/asset/${claimData.name}/${claimData.claimId}}`;
   const ogTitle = claimData.title || claimData.name;
   const ogDescription = claimData.description || defaultDescription;
   const ogThumbnailContentType = determineOgThumbnailContentType(claimData.thumbnail);
@@ -70,7 +70,7 @@ const createAssetMetaTags = ({siteHost, siteTitle, siteTwitter, asset, defaultDe
     metaTags.push({property: 'og:image:type', content: ogThumbnailContentType});
     metaTags.push({property: 'og:type', content: 'video'});
     metaTags.push({property: 'twitter:card', content: 'player'});
-    metaTags.push({property: 'twitter:player', content: embedUrl});
+    metaTags.push({property: 'twitter:player', content: videoEmbedUrl});
     metaTags.push({property: 'twitter:player:width', content: 600});
     metaTags.push({property: 'twitter:text:player_width', content: 600});
     metaTags.push({property: 'twitter:player:height', content: 337});
