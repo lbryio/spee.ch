@@ -12,8 +12,8 @@ const serveAsset = ({ headers, ip, originalUrl, params: { claimName, claimId } }
   // send google analytics
   sendGAServeEvent(headers, ip, originalUrl);
   // log the request data for debugging
-  logRequestData(null, claimName, null, claimId);
-  // get the claim Id and then serdve the asset
+  // logRequestData(null, claimName, null, claimId);
+  // get the claim Id and then serve the asset
   getClaimIdAndServeAsset(null, null, claimName, claimId, originalUrl, ip, res);
 };
 

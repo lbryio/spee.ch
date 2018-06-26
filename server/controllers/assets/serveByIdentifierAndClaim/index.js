@@ -51,7 +51,7 @@ const serverByIdentifierAndClaim = (req, res) => {
   // send google analytics
   sendGAServeEvent(headers, ip, originalUrl);
   // log the request data for debugging
-  logRequestData(requestType, claimName, channelName, claimId);
+  // logRequestData(requestType, claimName, channelName, claimId);
   // get the claim Id and then serve the asset
   getClaimIdAndServeAsset(channelName, channelClaimId, claimName, claimId, originalUrl, ip, res);
 };

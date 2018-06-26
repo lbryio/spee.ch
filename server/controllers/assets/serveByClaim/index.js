@@ -39,7 +39,7 @@ const serveByClaim = (req, res) => {
   // send google analytics
   sendGAServeEvent(headers, ip, originalUrl);
   // log the request data for debugging
-  logRequestData(requestType, claimName, null, null);
+  // logRequestData(requestType, claimName, null, null);
   // get the claim Id and then serve the asset
   getClaimIdAndServeAsset(null, null, claimName, null, originalUrl, ip, res);
 };
