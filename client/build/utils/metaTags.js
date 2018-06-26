@@ -101,9 +101,9 @@ var createAssetMetaTags = function createAssetMetaTags(_ref3) {
       defaultThumbnail = _ref3.defaultThumbnail;
   var claimData = asset.claimData;
   var contentType = claimData.contentType;
-  var embedUrl = "".concat(siteHost, "/").concat(claimData.claimId, "/").concat(claimData.name);
+  var videoEmbedUrl = "".concat(siteHost, "/video-embed/").concat(claimData.name, "/").concat(claimData.claimId);
   var showUrl = "".concat(siteHost, "/").concat(claimData.claimId, "/").concat(claimData.name);
-  var source = "".concat(siteHost, "/").concat(claimData.claimId, "/").concat(claimData.name, ".").concat(claimData.fileExt);
+  var source = "".concat(siteHost, "/asset/").concat(claimData.name, "/").concat(claimData.claimId, "}");
   var ogTitle = claimData.title || claimData.name;
   var ogDescription = claimData.description || defaultDescription;
   var ogThumbnailContentType = determineOgThumbnailContentType(claimData.thumbnail);
@@ -162,7 +162,7 @@ var createAssetMetaTags = function createAssetMetaTags(_ref3) {
     });
     metaTags.push({
       property: 'twitter:player',
-      content: embedUrl
+      content: videoEmbedUrl
     });
     metaTags.push({
       property: 'twitter:player:width',
