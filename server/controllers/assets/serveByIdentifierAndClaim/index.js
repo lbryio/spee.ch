@@ -8,7 +8,7 @@ const getClaimIdAndServeAsset = require('../utils/getClaimIdAndServeAsset.js');
 const flipClaimNameAndId = require('../utils/flipClaimNameAndId.js');
 const logRequestData = require('../utils/logRequestData.js');
 
-const { BROWSER, SOCIAL } = require('../constants/request_types.js');
+const { EMBED } = require('../constants/request_types.js');
 
 /*
 
@@ -16,25 +16,20 @@ const { BROWSER, SOCIAL } = require('../constants/request_types.js');
 
 */
 
-const serverAssetByIdentifierAndClaim = (req, res) => {
+const serverByIdentifierAndClaim = (req, res) => {
   const { headers, ip, originalUrl, params } = req;
-  // decide if this is a show request
+  // parse request
   let hasFileExtension;
   try {
     ({ hasFileExtension } = lbryUri.parseModifier(params.claim));
   } catch (error) {
     return res.status(400).json({success: false, message: error.message});
   }
+  // determine request type
   let requestType = determineRequestType(hasFileExtension, headers);
-  if (requestType == BROWSER) {
+  if (requestType !== EMBED) {
     return handleShowRender(req, res);
   }
-  if (requestType == SOCIAL) {
-    return handleSocialRequest(req, res);
-  }
-  // handle serve request
-  // send google analytics
-  sendGAServeEvent(headers, ip, originalUrl);
   // parse the claim
   let claimName;
   try {
@@ -53,10 +48,12 @@ const serverAssetByIdentifierAndClaim = (req, res) => {
   if (!isChannel) {
     [claimId, claimName] = flipClaimNameAndId(claimId, claimName);
   }
+  // send google analytics
+  sendGAServeEvent(headers, ip, originalUrl);
   // log the request data for debugging
   logRequestData(requestType, claimName, channelName, claimId);
   // get the claim Id and then serve the asset
   getClaimIdAndServeAsset(channelName, channelClaimId, claimName, claimId, originalUrl, ip, res);
 };
 
-module.exports = serverAssetByIdentifierAndClaim;
+module.exports = serverByIdentifierAndClaim;
