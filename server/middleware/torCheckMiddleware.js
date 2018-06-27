@@ -14,9 +14,9 @@ const torCheck = ({ ip, headers, body }, res, next) => {
   if (ipIsInTorList(ip)) {
     return res.status('400').json({
       success: 'false',
-      message: 'Unfortunately this api route is not currently available for tor users.  We are working on a solution that will allow tor users to publish in the future.',
+      message: 'Unfortunately this api route is not currently available for tor users.  We are working on a solution that will allow tor users to use this endpoint in the future.',
     });
-  };
+  }
   return next();
 };
 
