@@ -7,12 +7,7 @@ function headersMatchesSocialBotList (headers) {
     'facebookexternalhit': 1,
     'Twitterbot'         : 1,
   };
-  if (socialBotList[userAgent]) {
-    logger.debug('headers on request matched a social bot.');
-    return true;
-  } else {
-    return false;
-  }
+  return socialBotList[userAgent];
 }
 
 function clientAcceptsHtml ({accept}) {
