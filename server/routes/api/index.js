@@ -15,7 +15,8 @@ const fileAvailability = require('../../controllers/api/file/availability');
 const userPassword = require('../../controllers/api/user/password');
 const publishingConfig = require('../../controllers/api/config/site/publishing');
 
-const multipartMiddleware = require('../utils/multipartMiddleware');
+const multipartMiddleware = require('../../middleware/multipartMiddleware');
+const torCheckMiddleware = require('../../middleware/torCheckMiddleware');
 
 module.exports = (app) => {
   // channel routes
@@ -30,7 +31,7 @@ module.exports = (app) => {
   app.get('/api/claim/get/:name/:claimId', claimGet);
   app.get('/api/claim/list/:name', claimList);
   app.post('/api/claim/long-id', claimLongId); // should be a get
-  app.post('/api/claim/publish', multipartMiddleware, claimPublish);
+  app.post('/api/claim/publish', torCheckMiddleware, multipartMiddleware, claimPublish);
   app.get('/api/claim/resolve/:name/:claimId', claimResolve);
   app.get('/api/claim/short-id/:longId/:name', claimShortId);
   // file routes
