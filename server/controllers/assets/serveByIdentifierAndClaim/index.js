@@ -3,12 +3,11 @@ const handleShowRender = require('../../../render/build/handleShowRender.js');
 
 const lbryUri = require('../utils/lbryUri.js');
 
-const determineResponseType = require('../utils/determineResponseType.js');
+const determineRequestType = require('../utils/determineRequestType.js');
 const getClaimIdAndServeAsset = require('../utils/getClaimIdAndServeAsset.js');
 const flipClaimNameAndId = require('../utils/flipClaimNameAndId.js');
-const logRequestData = require('../utils/logRequestData.js');
 
-const SERVE = 'SERVE';
+const { EMBED } = require('../constants/request_types.js');
 
 /*
 
@@ -16,22 +15,20 @@ const SERVE = 'SERVE';
 
 */
 
-const serverAssetByIdentifierAndClaim = (req, res) => {
+const serverByIdentifierAndClaim = (req, res) => {
   const { headers, ip, originalUrl, params } = req;
-  // decide if this is a show request
+  // parse request
   let hasFileExtension;
   try {
     ({ hasFileExtension } = lbryUri.parseModifier(params.claim));
   } catch (error) {
     return res.status(400).json({success: false, message: error.message});
   }
-  let responseType = determineResponseType(hasFileExtension, headers);
-  if (responseType !== SERVE) {
+  // determine request type
+  let requestType = determineRequestType(hasFileExtension, headers);
+  if (requestType !== EMBED) {
     return handleShowRender(req, res);
   }
-  // handle serve request
-  // send google analytics
-  sendGAServeEvent(headers, ip, originalUrl);
   // parse the claim
   let claimName;
   try {
@@ -50,10 +47,10 @@ const serverAssetByIdentifierAndClaim = (req, res) => {
   if (!isChannel) {
     [claimId, claimName] = flipClaimNameAndId(claimId, claimName);
   }
-  // log the request data for debugging
-  logRequestData(responseType, claimName, channelName, claimId);
+  // send google analytics
+  sendGAServeEvent(headers, ip, originalUrl);
   // get the claim Id and then serve the asset
   getClaimIdAndServeAsset(channelName, channelClaimId, claimName, claimId, originalUrl, ip, res);
 };
 
-module.exports = serverAssetByIdentifierAndClaim;
+module.exports = serverByIdentifierAndClaim;
