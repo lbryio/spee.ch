@@ -1,9 +1,23 @@
 const logger = require('winston');
 
-const torCheck = (req, res, next) => {  // custom logging middleware to log all incoming http requests
-  const { ip } = req;
-  logger.debug(`tor check for ${ip}`);
-  next();
+function ipIsInTorList (ip) {
+  return true;
+}
+
+const torCheck = ({ ip, headers, body }, res, next) => {
+  logger.debug(`tor check for:`, {
+    ip,
+    headers,
+    body,
+  });
+  // check the tor node list
+  if (ipIsInTorList(ip)) {
+    return res.status('400').json({
+      success: 'false',
+      message: 'Unfortunately this api route is not currently available for tor users.  We are working on a solution that will allow tor users to publish in the future.',
+    });
+  };
+  return next();
 };
 
 module.exports = torCheck;
