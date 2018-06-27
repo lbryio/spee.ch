@@ -2,19 +2,17 @@ const logger = require('winston');
 const { EMBED, BROWSER, SOCIAL } = require('../constants/request_types.js');
 
 function headersMatchesSocialBotList (headers) {
-  const socialBotList = [
-    'facebookexternalhit',
-    'Twitterbot',
-  ];
   const userAgent = headers['user-agent'];
-  for (let i = 0; i < socialBotList.length; i++) {
-    const socialBot = socialBotList[i];
-    if (userAgent.indexOf(socialBot) >= 0) {
-      logger.debug('headers on request matched this bot:', socialBot);
-      return true;
-    }
+  const socialBotList = {
+    'facebookexternalhit': 1,
+    'Twitterbot'         : 1,
+  };
+  if (socialBotList[userAgent]) {
+    logger.debug('headers on request matched a social bot.');
+    return true;
+  } else {
+    return false;
   }
-  return false;
 }
 
 function clientAcceptsHtml ({accept}) {
