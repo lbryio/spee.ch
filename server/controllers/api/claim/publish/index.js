@@ -26,6 +26,7 @@ const claimPublish = ({ body, files, headers, ip, originalUrl, user, tor }, res)
   logger.info('Publish request:', {
     ip,
     headers,
+    body,
   });
   // check for disabled publishing
   if (disabled) {
