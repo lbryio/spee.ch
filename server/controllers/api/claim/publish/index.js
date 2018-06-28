@@ -22,6 +22,11 @@ const authenticateUser = require('./authentication.js');
 */
 
 const claimPublish = ({ body, files, headers, ip, originalUrl, user, tor }, res) => {
+  // logging
+  logger.info('Publish request:', {
+    ip,
+    headers,
+  });
   // check for disabled publishing
   if (disabled) {
     return res.status(503).json({
