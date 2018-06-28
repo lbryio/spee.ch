@@ -32,6 +32,7 @@ const claimPublish = ({ body, files, headers, ip, originalUrl, user, tor }, res)
   // check for tor
   logger.debug('tor:', tor);
   if (tor) {
+    logger.info('Tor publish request blocked:', ip);
     const failureResponse = {
       success: 'false',
       message: 'Unfortunately this api route is not currently available for tor users.  We are working on a solution that will allow tor users to use this endpoint in the future.',
