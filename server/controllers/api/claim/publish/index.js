@@ -37,7 +37,7 @@ const claimPublish = ({ body, files, headers, ip, originalUrl, user, tor }, res)
       success: 'false',
       message: 'Unfortunately this api route is not currently available for tor users.  We are working on a solution that will allow tor users to use this endpoint in the future.',
     };
-    return res.status(400).json(failureResponse);
+    return res.status(403).json(failureResponse);
   }
 
   // define variables
