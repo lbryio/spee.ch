@@ -121,8 +121,8 @@ function Server () {
         logger.info(`Updating tor node list`);
         Promise.all([
           getWalletBalance(),
-          updateBlockedList(),
-          updateTorList(),
+          [],
+          db.Tor.refreshTable(),
         ])
       })
       .then(([walletBalance, updatedBlockedList, updatedTorList]) => {
