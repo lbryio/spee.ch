@@ -2,9 +2,13 @@ module.exports = (sequelize, { STRING }) => {
   return sequelize.define(
     'Tor',
     {
-      ip: {
+      address: {
         type     : STRING,
         allowNull: false,
+      },
+      fingerprint: {
+        type     : STRING,
+        allowNull: true,
       },
     },
     {

@@ -14,6 +14,7 @@ const claimShortId = require('../../controllers/api/claim/shortId');
 const fileAvailability = require('../../controllers/api/file/availability');
 const userPassword = require('../../controllers/api/user/password');
 const publishingConfig = require('../../controllers/api/config/site/publishing');
+const getTorList = require('../../controllers/api/tor');
 
 const multipartMiddleware = require('../../middleware/multipartMiddleware');
 const torCheckMiddleware = require('../../middleware/torCheckMiddleware');
@@ -40,4 +41,6 @@ module.exports = (app) => {
   app.put('/api/user/password/', userPassword);
   // configs
   app.get('/api/config/site/publishing', publishingConfig);
+  // tor
+  app.get('/api/tor', getTorList);
 };
