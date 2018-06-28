@@ -107,17 +107,28 @@ function Server () {
     this.initialize();
     this.createApp();
     this.createServer();
-    /* start the server */
-    logger.info('getting LBC balance & syncing database...');
-    Promise.all([
-      this.syncDatabase(),
-      getWalletBalance(),
-    ])
-      .then(([syncResult, walletBalance]) => {
-        logger.info('starting LBC balance:', walletBalance);
+    logger.info(`Syncing database...`);
+    this.syncDatabase()
+      .then(() => {
+        logger.info(`Starting server on ${PORT}...`);
         return this.server.listen(PORT, () => {
           logger.info(`Server is listening on PORT ${PORT}`);
         })
+      })
+      .then(() => {
+        logger.info(`Getting starting balance`);
+        logger.info(`Updating blocked list`);
+        logger.info(`Updating tor node list`);
+        Promise.all([
+          getWalletBalance(),
+          updateBlockedList(),
+          updateTorList(),
+        ])
+      })
+      .then(([walletBalance, updatedBlockedList, updatedTorList]) => {
+        logger.info('Starting LBC balance:', walletBalance);
+        logger.info('Blocked list length:', updatedBlockedList.length);
+        logger.info('Tor list length:', updatedTorList.length);
       })
       .catch(error => {
         if (error.code === 'ECONNREFUSED') {
