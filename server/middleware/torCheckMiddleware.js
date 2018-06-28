@@ -1,7 +1,8 @@
 const logger = require('winston');
 const db = require('../models');
 
-const torCheck = ({ ip, headers, body }, res, next) => {
+const torCheck = (req, res, next) => {
+  const { ip } = req;
   logger.debug(`tor check for: ${ip}`);
   return db.Tor.findAll(
     {
@@ -12,17 +13,8 @@ const torCheck = ({ ip, headers, body }, res, next) => {
     })
     .then(result => {
       logger.debug('tor check results:', result);
-      if (result.length >= 1) {
-        logger.debug('this is a tor ip');
-        const failureResponse = {
-          success: 'false',
-          message: 'Unfortunately this api route is not currently available for tor users.  We are working on a solution that will allow tor users to use this endpoint in the future.',
-        };
-        return res.status(400).json(failureResponse);
-      } else {
-        logger.debug('this is not a tor ip');
-        return next();
-      }
+      req['tor'] = (result.length >= 1); // add this to the req object
+      next();
     })
     .catch(error => {
       logger.error(error);

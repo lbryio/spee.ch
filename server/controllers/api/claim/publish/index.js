@@ -1,3 +1,5 @@
+const logger = require('winston');
+
 const { details: { host }, publishing: { disabled, disabledMessage } } = require('@config/siteConfig');
 
 const { sendGATimingEvent } = require('../../../../utils/googleAnalytics.js');
@@ -19,7 +21,7 @@ const authenticateUser = require('./authentication.js');
 
 */
 
-const claimPublish = ({ body, files, headers, ip, originalUrl, user }, res) => {
+const claimPublish = ({ body, files, headers, ip, originalUrl, user, tor }, res) => {
   // check for disabled publishing
   if (disabled) {
     return res.status(503).json({
@@ -27,6 +29,16 @@ const claimPublish = ({ body, files, headers, ip, originalUrl, user }, res) => {
       message: disabledMessage
     });
   }
+  // check for tor
+  logger.debug('tor:', tor);
+  if (tor) {
+    const failureResponse = {
+      success: 'false',
+      message: 'Unfortunately this api route is not currently available for tor users.  We are working on a solution that will allow tor users to use this endpoint in the future.',
+    };
+    return res.status(400).json(failureResponse);
+  }
+
   // define variables
   let  channelName, channelId, channelPassword, description, fileName, filePath, fileType, gaStartTime, license, name, nsfw, thumbnail, thumbnailFileName, thumbnailFilePath, thumbnailFileType, title;
   // record the start time of the request
