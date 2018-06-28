@@ -97,42 +97,54 @@ function Server () {
     /* create server */
     this.server = http.Server(this.app);
   };
+  this.startServerListening = () => {
+    logger.info(`Starting server on ${PORT}...`);
+    return new Promise((resolve, reject) => {
+      this.server.listen(PORT, () => {
+        logger.info(`Server is listening on PORT ${PORT}`);
+        resolve();
+      })
+    });
+  };
   this.syncDatabase = () => {
+    logger.info(`Syncing database...`);
     return createDatabaseIfNotExists()
       .then(() => {
         db.sequelize.sync();
+      })
+  };
+  this.performChecksAndUpdates = () => {
+    logger.info(`Getting wallet balance and updating resources`);
+    return Promise.all([
+      getWalletBalance(),
+      [],
+      db.Tor.refreshTable(),
+    ])
+      .then(([walletBalance, updatedBlockedList, updatedTorList]) => {
+        logger.info('Starting LBC balance:', walletBalance);
+        logger.info('Blocked list length:', updatedBlockedList.length);
+        logger.info('Tor list length:', updatedTorList.length);
       })
   };
   this.start = () => {
     this.initialize();
     this.createApp();
     this.createServer();
-    logger.info(`Syncing database...`);
     this.syncDatabase()
       .then(() => {
-        logger.info(`Starting server on ${PORT}...`);
-        return this.server.listen(PORT, () => {
-          logger.info(`Server is listening on PORT ${PORT}`);
-        })
+        return this.startServerListening();
       })
       .then(() => {
-        logger.info(`Getting starting balance`);
-        logger.info(`Updating blocked list`);
-        logger.info(`Updating tor node list`);
-        Promise.all([
-          getWalletBalance(),
-          [],
-          db.Tor.refreshTable(),
-        ])
+        return this.performChecksAndUpdates();
       })
-      .then(([walletBalance, updatedBlockedList, updatedTorList]) => {
-        logger.info('Starting LBC balance:', walletBalance);
-        logger.info('Blocked list length:', updatedBlockedList.length);
-        logger.info('Tor list length:', updatedTorList.length);
+      .then(() => {
+        logger.info('Spee.ch startup is complete.');
       })
       .catch(error => {
         if (error.code === 'ECONNREFUSED') {
           return logger.error('Connection refused.  The daemon may not be running.')
+        } else if (error.code === 'EADDRINUSE') {
+          return logger.error('Server could not start listening.  The port is already in use.');
         } else if (error.message) {
           logger.error(error.message);
         }
