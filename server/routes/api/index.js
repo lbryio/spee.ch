@@ -1,9 +1,12 @@
+// middleware
+const multipartMiddleware = require('../../middleware/multipartMiddleware');
+const torCheckMiddleware = require('../../middleware/torCheckMiddleware');
+// route handlers
 const channelAvailability = require('../../controllers/api/channel/availability');
 const channelClaims = require('../../controllers/api/channel/claims');
 const channelData = require('../../controllers/api/channel/data');
 const channelShortId = require('../../controllers/api/channel/shortId');
 const claimAvailability = require('../../controllers/api/claim/availability');
-const claimBlockedList = require('../../controllers/api/claim/blockedList');
 const claimData = require('../../controllers/api/claim/data/');
 const claimGet = require('../../controllers/api/claim/get');
 const claimList = require('../../controllers/api/claim/list');
@@ -15,9 +18,8 @@ const fileAvailability = require('../../controllers/api/file/availability');
 const userPassword = require('../../controllers/api/user/password');
 const publishingConfig = require('../../controllers/api/config/site/publishing');
 const getTorList = require('../../controllers/api/tor');
+const getBlockedList = require('../../controllers/api/blocked');
 
-const multipartMiddleware = require('../../middleware/multipartMiddleware');
-const torCheckMiddleware = require('../../middleware/torCheckMiddleware');
 
 module.exports = (app) => {
   // channel routes
@@ -27,7 +29,6 @@ module.exports = (app) => {
   app.get('/api/channel/claims/:channelName/:channelClaimId/:page', channelClaims);
   // claim routes
   app.get('/api/claim/availability/:name', claimAvailability);
-  app.get('/api/claim/blocked-list/', claimBlockedList);
   app.get('/api/claim/data/:claimName/:claimId', claimData);
   app.get('/api/claim/get/:name/:claimId', claimGet);
   app.get('/api/claim/list/:name', claimList);
@@ -43,4 +44,6 @@ module.exports = (app) => {
   app.get('/api/config/site/publishing', publishingConfig);
   // tor
   app.get('/api/tor', getTorList);
+  // blocked
+  app.get('/api/blocked', getBlockedList);
 };
