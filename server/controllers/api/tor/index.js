@@ -1,7 +1,7 @@
 const logger = require('winston');
 const db = require('../../../models');
 
-const ipAddress = '54.236.53.10';
+const { details: { ipAddress } } = require('@config/siteConfig');
 
 /*
 
