@@ -35,6 +35,10 @@ const speechPassport = require('./server/speechPassport');
 const {
   details: { port: PORT },
   auth: { sessionKey },
+  startup: {
+    performChecks,
+    performUpdates,
+  },
 } = require('@config/siteConfig');
 
 function Server () {
@@ -113,17 +117,30 @@ function Server () {
         db.sequelize.sync();
       })
   };
-  this.performChecksAndUpdates = () => {
-    logger.info(`Getting wallet balance and updating resources`);
+  this.performChecks = () => {
+    if (!performChecks) {
+      return;
+    }
+    logger.info(`Performing checks...`);
     return Promise.all([
       getWalletBalance(),
+    ])
+      .then(([walletBalance]) => {
+        logger.info('Starting LBC balance:', walletBalance);
+      })
+  };
+  this.performUpdates = () => {
+    if (!performUpdates) {
+      return;
+    }
+    logger.info(`Peforming updates...`);
+    return Promise.all([
       [],
       db.Tor.refreshTable(),
     ])
-      .then(([walletBalance, updatedBlockedList, updatedTorList]) => {
-        logger.info('Starting LBC balance:', walletBalance);
-        logger.info('Blocked list length:', updatedBlockedList.length);
-        logger.info('Tor list length:', updatedTorList.length);
+      .then(([updatedBlockedList, updatedTorList]) => {
+        logger.info('Blocked list updated, length:', updatedBlockedList.length);
+        logger.info('Tor list updated, length:', updatedTorList.length);
       })
   };
   this.start = () => {
@@ -135,10 +152,13 @@ function Server () {
         return this.startServerListening();
       })
       .then(() => {
-        return this.performChecksAndUpdates();
+        return Promise.all([
+          this.performChecks(),
+          this.performUpdates(),
+        ])
       })
       .then(() => {
-        logger.info('Spee.ch startup is complete.');
+        logger.info('Spee.ch startup is complete');
       })
       .catch(error => {
         if (error.code === 'ECONNREFUSED') {
