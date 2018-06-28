@@ -32,8 +32,8 @@ const getTorList = (req, res) => {
     .then(() => {
       return db.Tor.findAll({
           attributes: ['address', 'fingerprint'],
-        })
-        .map(el => el.get({ plain: true }));
+          raw: true,
+        });
     })
     .then( result => {
       logger.debug('number of records', result.length);
