@@ -35,17 +35,6 @@ const claimPublish = ({ body, files, headers, ip, originalUrl, user, tor }, res)
       message: disabledMessage
     });
   }
-  // check for tor
-  logger.debug('tor:', tor);
-  if (tor) {
-    logger.info('Tor publish request blocked:', ip);
-    const failureResponse = {
-      success: 'false',
-      message: 'Unfortunately this api route is not currently available for tor users.  We are working on a solution that will allow tor users to use this endpoint in the future.',
-    };
-    return res.status(403).json(failureResponse);
-  }
-
   // define variables
   let  channelName, channelId, channelPassword, description, fileName, filePath, fileType, gaStartTime, license, name, nsfw, thumbnail, thumbnailFileName, thumbnailFilePath, thumbnailFileType, title;
   // record the start time of the request
