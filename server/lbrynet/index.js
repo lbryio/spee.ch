@@ -31,7 +31,7 @@ module.exports = {
       axios
         .post(lbrynetUri, {
           method: 'get',
-          params: { uri, timeout: 20 },
+          params: { uri, timeout: 30 },
         })
         .then(response => {
           sendGATimingEvent('lbrynet', 'getClaim', 'GET', gaStartTime, Date.now());
