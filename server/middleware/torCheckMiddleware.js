@@ -13,8 +13,16 @@ const torCheck = (req, res, next) => {
     })
     .then(result => {
       logger.debug('tor check results:', result);
-      req['tor'] = (result.length >= 1); // add this to the req object
-      next();
+      if (result.length >= 1) {
+        logger.info('Tor request blocked:', ip);
+        const failureResponse = {
+          success: false,
+          message: 'Unfortunately this api route is not currently available for tor users.  We are working on a solution that will allow tor users to use this endpoint in the future.',
+        };
+        res.status(403).json(failureResponse);
+      } else {
+        next();
+      }
     })
     .catch(error => {
       logger.error(error);
