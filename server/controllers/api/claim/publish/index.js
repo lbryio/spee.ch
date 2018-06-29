@@ -21,9 +21,9 @@ const authenticateUser = require('./authentication.js');
 
 */
 
-const claimPublish = ({ body, files, headers, ip, originalUrl, user }, res) => {
+const claimPublish = ({ body, files, headers, ip, originalUrl, user, tor }, res) => {
   // logging
-  logger.info('PUBLISH REQUEST:', {
+  logger.info('Publish request:', {
     ip,
     headers,
     body,

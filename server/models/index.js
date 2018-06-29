@@ -8,6 +8,7 @@ const File = require('./file.js');
 const Request = require('./request.js');
 const User = require('./user.js');
 const Blocked = require('./blocked.js');
+const Tor = require('./tor.js');
 
 const {database, username, password} = require('@config/mysqlConfig');
 if (!database || !username || !password) {
@@ -50,6 +51,7 @@ db['File'] = sequelize.import('File', File);
 db['Request'] = sequelize.import('Request', Request);
 db['User'] = sequelize.import('User', User);
 db['Blocked'] = sequelize.import('Blocked', Blocked);
+db['Tor'] = sequelize.import('Tor', Tor);
 
 // run model.association for each model in the db object that has an association
 logger.info('associating db models...');

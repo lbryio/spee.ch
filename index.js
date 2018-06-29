@@ -35,6 +35,10 @@ const speechPassport = require('./server/speechPassport');
 const {
   details: { port: PORT },
   auth: { sessionKey },
+  startup: {
+    performChecks,
+    performUpdates,
+  },
 } = require('@config/siteConfig');
 
 function Server () {
@@ -97,31 +101,70 @@ function Server () {
     /* create server */
     this.server = http.Server(this.app);
   };
+  this.startServerListening = () => {
+    logger.info(`Starting server on ${PORT}...`);
+    return new Promise((resolve, reject) => {
+      this.server.listen(PORT, () => {
+        logger.info(`Server is listening on PORT ${PORT}`);
+        resolve();
+      })
+    });
+  };
   this.syncDatabase = () => {
+    logger.info(`Syncing database...`);
     return createDatabaseIfNotExists()
       .then(() => {
         db.sequelize.sync();
+      })
+  };
+  this.performChecks = () => {
+    if (!performChecks) {
+      return;
+    }
+    logger.info(`Performing checks...`);
+    return Promise.all([
+      getWalletBalance(),
+    ])
+      .then(([walletBalance]) => {
+        logger.info('Starting LBC balance:', walletBalance);
+      })
+  };
+  this.performUpdates = () => {
+    if (!performUpdates) {
+      return;
+    }
+    logger.info(`Peforming updates...`);
+    return Promise.all([
+      [],
+      db.Tor.refreshTable(),
+    ])
+      .then(([updatedBlockedList, updatedTorList]) => {
+        logger.info('Blocked list updated, length:', updatedBlockedList.length);
+        logger.info('Tor list updated, length:', updatedTorList.length);
       })
   };
   this.start = () => {
     this.initialize();
     this.createApp();
     this.createServer();
-    /* start the server */
-    logger.info('getting LBC balance & syncing database...');
-    Promise.all([
-      this.syncDatabase(),
-      getWalletBalance(),
-    ])
-      .then(([syncResult, walletBalance]) => {
-        logger.info('starting LBC balance:', walletBalance);
-        return this.server.listen(PORT, () => {
-          logger.info(`Server is listening on PORT ${PORT}`);
-        })
+    this.syncDatabase()
+      .then(() => {
+        return this.startServerListening();
+      })
+      .then(() => {
+        return Promise.all([
+          this.performChecks(),
+          this.performUpdates(),
+        ])
+      })
+      .then(() => {
+        logger.info('Spee.ch startup is complete');
       })
       .catch(error => {
         if (error.code === 'ECONNREFUSED') {
           return logger.error('Connection refused.  The daemon may not be running.')
+        } else if (error.code === 'EADDRINUSE') {
+          return logger.error('Server could not start listening.  The port is already in use.');
         } else if (error.message) {
           logger.error(error.message);
         }
