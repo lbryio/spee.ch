@@ -1,8 +1,8 @@
 const logger = require('winston');
-const db = require('../../../../models');
+const db = require('../index.js');
 
-const updateBlockedList = (req, res) => {
-    return fetch('https://api.lbry.io/file/list_blocked')
+const refreshBlockedList = () => {
+  return fetch('https://api.lbry.io/file/list_blocked')
     .then(response => {
       return response.json();
     })
@@ -16,7 +16,6 @@ const updateBlockedList = (req, res) => {
       return jsonResponse.data.outpoints;
     })
     .then(outpoints => {
-      logger.info('number of blocked outpoints:', outpoints.length);
       let updatePromises = [];
       outpoints.forEach(outpoint => {
         // logger.debug('outpoint:', outpoint);
@@ -29,13 +28,12 @@ const updateBlockedList = (req, res) => {
           .then(Claim => {
             if (Claim) {
               const { claimId, name } = Claim;
-              logger.debug(`creating record in Blocked for ${name}#${claimId}`);
               const blocked = {
                 claimId,
                 name,
                 outpoint,
               };
-              return db.upsert(db.Blocked, blocked, blocked, 'Blocked')
+              return db.upsert(db.Blocked, blocked, blocked, 'Blocked');
             }
           })
           .catch(error => {
@@ -45,12 +43,11 @@ const updateBlockedList = (req, res) => {
       return Promise.all(updatePromises);
     })
     .then(() => {
-      logger.info('finished updating blocked content list');
-      res.status(200).json({success: true, message: 'finished updating blocked content list'});
+      return db.Blocked.findAll({raw: true});
     })
-    .catch((error) => {
-      logger.error(error);
+    .catch(error => {
+      throw error;
     });
 };
 
-module.exports = updateBlockedList;
+module.exports = refreshBlockedList;

@@ -31,6 +31,7 @@ const { getWalletBalance } = require('./server/lbrynet');
 const configureLogging = require('./server/utils/configureLogging.js');
 const configureSlack = require('./server/utils/configureSlack.js');
 const speechPassport = require('./server/speechPassport');
+const refreshBlockedList = require('./server/models/utils/refreshBlockedList.js');
 
 const {
   details: { port: PORT },
@@ -135,7 +136,7 @@ function Server () {
     }
     logger.info(`Peforming updates...`);
     return Promise.all([
-      [],
+      refreshBlockedList(),
       db.Tor.refreshTable(),
     ])
       .then(([updatedBlockedList, updatedTorList]) => {
