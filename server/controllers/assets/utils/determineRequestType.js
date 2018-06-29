@@ -3,26 +3,32 @@ const { EMBED, BROWSER, SOCIAL } = require('../constants/request_types.js');
 
 function headersMatchesSocialBotList (headers) {
   const userAgent = headers['user-agent'];
-  const socialBotList = {
-    'facebookexternalhit': 1,
-    'Twitterbot'         : 1,
-  };
-  return socialBotList[userAgent];
+  const socialBotList = [
+    'facebookexternalhit',
+    'Twitterbot',
+  ];
+  for (let i = 0; i < socialBotList.length; i++) {
+    if (userAgent.indexOf(socialBotList[i]) >= 0) {
+      logger.debug('request is from social bot:', socialBotList[i]);
+      return true;
+    }
+  }
+  return false;
 }
 
 function clientAcceptsHtml ({accept}) {
   return accept && accept.match(/text\/html/);
-};
+}
 
 function requestIsFromBrowser (headers) {
   return headers['user-agent'] && headers['user-agent'].match(/Mozilla/);
-};
+}
 
 function clientWantsAsset ({accept, range}) {
   const imageIsWanted = accept && accept.match(/image\/.*/) && !accept.match(/text\/html/) && !accept.match(/text\/\*/);
   const videoIsWanted = accept && range;
   return imageIsWanted || videoIsWanted;
-};
+}
 
 const determineRequestType = (hasFileExtension, headers) => {
   let responseType;

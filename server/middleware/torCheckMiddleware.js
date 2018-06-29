@@ -12,7 +12,6 @@ const torCheck = (req, res, next) => {
       raw: true,
     })
     .then(result => {
-      logger.debug('tor check results:', result);
       if (result.length >= 1) {
         logger.info('Tor request blocked:', ip);
         const failureResponse = {
