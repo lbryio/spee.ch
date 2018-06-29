@@ -8,7 +8,7 @@ function headersMatchesSocialBotList (headers) {
     'Twitterbot',
   ];
   for (let i = 0; i < socialBotList.length; i++) {
-    if (userAgent.indexOf(socialBotList[i]) >= 0) {
+    if (userAgent.includes(socialBotList[i])) {
       logger.debug('request is from social bot:', socialBotList[i]);
       return true;
     }
