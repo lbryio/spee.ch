@@ -16,9 +16,15 @@ const refreshBlockedList = () => {
       return jsonResponse.data.outpoints;
     })
     .then(outpoints => {
+      db.Claim.findAll({
+        where: {
+          outpoint: outpoints,
+        },
+      });
+
       let updatePromises = [];
       outpoints.forEach(outpoint => {
-        // logger.debug('outpoint:', outpoint);
+        logger.debug('blocked outpoint:', outpoint);
         updatePromises.push(db.Claim
           .findOne({
             where: {

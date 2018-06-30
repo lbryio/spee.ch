@@ -6,14 +6,6 @@ module.exports = (sequelize, { STRING }) => {
   const Blocked = sequelize.define(
     'Blocked',
     {
-      claimId: {
-        type     : STRING,
-        allowNull: false,
-      },
-      name: {
-        type     : STRING,
-        allowNull: false,
-      },
       outpoint: {
         type     : STRING,
         allowNull: false,
@@ -24,13 +16,12 @@ module.exports = (sequelize, { STRING }) => {
     }
   );
 
-  Blocked.isNotBlocked = function (claimId, name) {
-    logger.debug(`checking to see if ${name}#${claimId} is not blocked`);
+  Blocked.isNotBlocked = function (outpoint) {
+    logger.debug(`checking to see if ${outpoint} is not blocked`);
     return new Promise((resolve, reject) => {
       this.findOne({
         where: {
-          claimId,
-          name,
+          outpoint,
         },
       })
         .then(result => {
@@ -44,6 +35,43 @@ module.exports = (sequelize, { STRING }) => {
           reject(BLOCKED_CLAIM);
         });
     });
+  };
+
+  Blocked.refreshTable = function () {
+    let blockedList = [];
+    return fetch('https://api.lbry.io/file/list_blocked')
+      .then(response => {
+        return response.json();
+      })
+      .then(jsonResponse => {
+        if (!jsonResponse.data) {
+          throw new Error('no data in list_blocked response');
+        }
+        if (!jsonResponse.data.outpoints) {
+          throw new Error('no outpoints in list_blocked response');
+        }
+        return jsonResponse.data.outpoints;
+      })
+      .then(outpoints => {
+        logger.debug('total outpoints:', outpoints.length);
+        // prep the records
+        for (let i = 0; i < outpoints.length; i++) {
+          blockedList.push({
+            outpoint: outpoints[i],
+          });
+        }
+        // clear the table
+        return this.destroy({
+          truncate: true,
+        });
+      })
+      .then(() => {
+        // fill the table
+        return this.bulkCreate(blockedList);
+      })
+      .catch(error => {
+        throw error;
+      });
   };
 
   return Blocked;

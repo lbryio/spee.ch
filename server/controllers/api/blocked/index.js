@@ -1,8 +1,8 @@
 const logger = require('winston');
-const refreshBlockedList = require('../../../models/utils/refreshBlockedList.js');
+const db = require('../../../models');
 
 const updateBlockedList = (req, res) => {
-  refreshBlockedList()
+  db.Blocked.refreshTable()
     .then(data => {
       logger.info('finished updating blocked content list');
       res.status(200).json({
