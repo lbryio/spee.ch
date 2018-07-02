@@ -20,7 +20,7 @@ const torCheck = (req, res, next) => {
         };
         res.status(403).json(failureResponse);
       } else {
-        next();
+        return next();
       }
     })
     .catch(error => {
