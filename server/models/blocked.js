@@ -68,9 +68,6 @@ module.exports = (sequelize, { STRING }) => {
       .then(() => {
         // fill the table
         return this.bulkCreate(blockedList);
-      })
-      .catch(error => {
-        throw error;
       });
   };
 
