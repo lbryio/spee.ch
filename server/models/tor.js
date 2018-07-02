@@ -1,3 +1,4 @@
+const logger = require('winston');
 const { details: { ipAddress } } = require('@config/siteConfig');
 
 module.exports = (sequelize, { STRING }) => {
@@ -25,6 +26,8 @@ module.exports = (sequelize, { STRING }) => {
         return response.json();
       })
       .then(jsonResponse => {
+        logger.debug('total tor nodes:', jsonResponse.length);
+        // prep the records
         for (let i = 0; i < jsonResponse.length; i++) {
           torList.push({
             address    : jsonResponse[i].Address,
