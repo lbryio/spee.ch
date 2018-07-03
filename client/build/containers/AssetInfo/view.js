@@ -136,6 +136,7 @@ function (_React$Component) {
         }),
         content: _react.default.createElement(AssetShareButtons, {
           host: host,
+          name: name,
           shortId: shortId
         })
       })), _react.default.createElement(_Row.default, null, _react.default.createElement(_RowLabeled.default, {

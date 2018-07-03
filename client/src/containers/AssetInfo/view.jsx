@@ -99,6 +99,7 @@ class AssetInfo extends React.Component {
             content={
               <AssetShareButtons
                 host={host}
+                name={name}
                 shortId={shortId}
               />
             }
