@@ -16,7 +16,6 @@ checkForConfig('siteConfig');
 const express = require('express');
 const bodyParser = require('body-parser');
 const expressHandlebars = require('express-handlebars');
-const Handlebars = require('handlebars');
 const helmet = require('helmet');
 const cookieSession = require('cookie-session');
 const http = require('http');
@@ -81,11 +80,13 @@ function Server () {
     app.use(speechPassport.session());
 
     // configure handlebars & register it with express app
-    const hbs = expressHandlebars.create({
+    const viewsPath = Path.resolve(process.cwd(), 'node_modules/spee.ch/server/views');
+    app.engine('handlebars', expressHandlebars({
       defaultLayout: 'embed',
-      handlebars   : Handlebars,
-    });
-    app.engine('handlebars', hbs.engine);
+      partialsDir: Path.join(viewsPath, '/partials'),
+      layoutsDir: Path.join(viewsPath, '/layouts')
+    }));
+    app.set('views', viewsPath);
     app.set('view engine', 'handlebars');
 
     // set the routes on the app
