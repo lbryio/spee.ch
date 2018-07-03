@@ -6,9 +6,6 @@ class ClickToCopy extends React.Component {
     this.copyToClipboard = this.copyToClipboard.bind(this);
   }
   copyToClipboard (event) {
-    console.log('event:', event);
-    console.log('event.target:', event.target);
-    console.log('event.target.id:', event.target.id);
     const elementToCopy = event.target.id;
     const element = document.getElementById(elementToCopy);
     element.select();

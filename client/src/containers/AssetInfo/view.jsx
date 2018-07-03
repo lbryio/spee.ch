@@ -8,10 +8,6 @@ import AssetShareButtons from '@components/AssetShareButtons';
 import ClickToCopy from '@components/ClickToCopy';
 
 class AssetInfo extends React.Component {
-  constructor (props) {
-    super(props);
-    this.copyToClipboard = this.copyToClipboard.bind(this);
-  }
   render () {
     const { asset: { shortId, claimData : { channelName, certificateId, description, name, claimId, fileExt, contentType, thumbnail, host } } } = this.props;
     return (

@@ -1,4 +1,5 @@
 import React from 'react';
+import SpaceBetween from '@components/SpaceBetween';
 
 const AssetShareButtons = ({ host, name, shortId }) => {
   return (

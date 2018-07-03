@@ -43,9 +43,6 @@ function (_React$Component) {
   _createClass(ClickToCopy, [{
     key: "copyToClipboard",
     value: function copyToClipboard(event) {
-      console.log('event:', event);
-      console.log('event.target:', event.target);
-      console.log('event.target.id:', event.target.id);
       var elementToCopy = event.target.id;
       var element = document.getElementById(elementToCopy);
       element.select();

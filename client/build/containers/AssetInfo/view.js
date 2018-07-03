@@ -37,21 +37,17 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
 
-function _getPrototypeOf(o) { _getPrototypeOf = Object.getPrototypeOf || function _getPrototypeOf(o) { return o.__proto__; }; return _getPrototypeOf(o); }
-
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.getPrototypeOf || function _getPrototypeOf(o) { return o.__proto__; }; return _getPrototypeOf(o); }
 
 var AssetInfo =
 /*#__PURE__*/
 function (_React$Component) {
-  function AssetInfo(props) {
-    var _this;
-
+  function AssetInfo() {
     _classCallCheck(this, AssetInfo);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(AssetInfo).call(this, props));
-    _this.copyToClipboard = _this.copyToClipboard.bind(_assertThisInitialized(_assertThisInitialized(_this)));
-    return _this;
+    return _possibleConstructorReturn(this, _getPrototypeOf(AssetInfo).apply(this, arguments));
   }
 
   _createClass(AssetInfo, [{

@@ -7,13 +7,15 @@ exports.default = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
+var _SpaceBetween = _interopRequireDefault(require("@components/SpaceBetween"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var AssetShareButtons = function AssetShareButtons(_ref) {
   var host = _ref.host,
       name = _ref.name,
       shortId = _ref.shortId;
-  return _react.default.createElement(SpaceBetween, null, _react.default.createElement("a", {
+  return _react.default.createElement(_SpaceBetween.default, null, _react.default.createElement("a", {
     className: "link--primary",
     target: "_blank",
     href: "https://twitter.com/intent/tweet?text=".concat(host, "/").concat(shortId, "/").concat(name)
