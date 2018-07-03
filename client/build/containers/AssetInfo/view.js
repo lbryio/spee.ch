@@ -17,6 +17,8 @@ var _Row = _interopRequireDefault(require("@components/Row"));
 
 var _SpaceBetween = _interopRequireDefault(require("@components/SpaceBetween"));
 
+var _AssetShareButtons = _interopRequireDefault(require("@components/AssetShareButtons"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -37,33 +39,10 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.getPrototypeOf || functio
 
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
-var AssetShareButtons = function AssetShareButtons(_ref) {
-  var host = _ref.host,
-      name = _ref.name,
-      shortId = _ref.shortId;
-  return _react.default.createElement(_SpaceBetween.default, null, _react.default.createElement("a", {
-    className: "link--primary",
-    target: "_blank",
-    href: "https://twitter.com/intent/tweet?text=".concat(host, "/").concat(shortId, "/").concat(name)
-  }, "twitter"), _react.default.createElement("a", {
-    className: "link--primary",
-    target: "_blank",
-    href: "https://www.facebook.com/sharer/sharer.php?u=".concat(host, "/").concat(shortId, "/").concat(name)
-  }, "facebook"), _react.default.createElement("a", {
-    className: "link--primary",
-    target: "_blank",
-    href: "http://tumblr.com/widgets/share/tool?canonicalUrl=".concat(host, "/").concat(shortId, "/").concat(name)
-  }, "tumblr"), _react.default.createElement("a", {
-    className: "link--primary",
-    target: "_blank",
-    href: "https://www.reddit.com/submit?url=".concat(host, "/").concat(shortId, "/").concat(name, "&title=").concat(name)
-  }, "reddit"));
-};
-
-var ClickToCopy = function ClickToCopy(_ref2) {
-  var id = _ref2.id,
-      value = _ref2.value,
-      copyToClipboard = _ref2.copyToClipboard;
+var ClickToCopy = function ClickToCopy(_ref) {
+  var id = _ref.id,
+      value = _ref.value,
+      copyToClipboard = _ref.copyToClipboard;
   return _react.default.createElement("input", {
     id: id,
     value: value,
@@ -134,7 +113,7 @@ function (_React$Component) {
         label: _react.default.createElement(_Label.default, {
           value: 'Share:'
         }),
-        content: _react.default.createElement(AssetShareButtons, {
+        content: _react.default.createElement(_AssetShareButtons.default, {
           host: host,
           name: name,
           shortId: shortId
