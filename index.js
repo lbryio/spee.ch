@@ -82,6 +82,8 @@ function Server () {
     // configure handlebars & register it with express app
     const viewsPath = Path.resolve(process.cwd(), 'node_modules/spee.ch/server/views');
     app.engine('handlebars', expressHandlebars({
+      async: false,
+      dataType: 'text',
       defaultLayout: 'embed',
       partialsDir: Path.join(viewsPath, '/partials'),
       layoutsDir: Path.join(viewsPath, '/layouts')
