@@ -1,7 +1,6 @@
 const logger = require('winston');
 
 const validateFileTypeAndSize = (file) => {
-  logger.debug('FILE:', file);
   // check file type and size
   switch (file.type) {
     case 'image/jpeg':
@@ -26,9 +25,8 @@ const validateFileTypeAndSize = (file) => {
       break;
     default:
       logger.debug('publish > file validation > unrecognized file type');
-      throw new Error('The ' + file.type + ' content type is not supported.  Only, .jpeg, .png, .gif, and .mp4 files are currently supported.');
+      throw new Error('The ' + file.type + ' content type is not supported.  Only, .jpg, .png, .gif, and .mp4 files are currently supported.');
   }
-  // check file name
   return file;
 };
 
