@@ -17,6 +17,10 @@ var _Row = _interopRequireDefault(require("@components/Row"));
 
 var _SpaceBetween = _interopRequireDefault(require("@components/SpaceBetween"));
 
+var _AssetShareButtons = _interopRequireDefault(require("@components/AssetShareButtons"));
+
+var _ClickToCopy = _interopRequireDefault(require("@components/ClickToCopy"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -33,80 +37,20 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
 
-function _getPrototypeOf(o) { _getPrototypeOf = Object.getPrototypeOf || function _getPrototypeOf(o) { return o.__proto__; }; return _getPrototypeOf(o); }
-
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
-var AssetShareButtons = function AssetShareButtons(_ref) {
-  var host = _ref.host,
-      name = _ref.name,
-      shortId = _ref.shortId;
-  return _react.default.createElement(_SpaceBetween.default, null, _react.default.createElement("a", {
-    className: "link--primary",
-    target: "_blank",
-    href: "https://twitter.com/intent/tweet?text=".concat(host, "/").concat(shortId, "/").concat(name)
-  }, "twitter"), _react.default.createElement("a", {
-    className: "link--primary",
-    target: "_blank",
-    href: "https://www.facebook.com/sharer/sharer.php?u=".concat(host, "/").concat(shortId, "/").concat(name)
-  }, "facebook"), _react.default.createElement("a", {
-    className: "link--primary",
-    target: "_blank",
-    href: "http://tumblr.com/widgets/share/tool?canonicalUrl=".concat(host, "/").concat(shortId, "/").concat(name)
-  }, "tumblr"), _react.default.createElement("a", {
-    className: "link--primary",
-    target: "_blank",
-    href: "https://www.reddit.com/submit?url=".concat(host, "/").concat(shortId, "/").concat(name, "&title=").concat(name)
-  }, "reddit"));
-};
-
-var ClickToCopy = function ClickToCopy(_ref2) {
-  var id = _ref2.id,
-      value = _ref2.value,
-      copyToClipboard = _ref2.copyToClipboard;
-  return _react.default.createElement("input", {
-    id: id,
-    value: value,
-    onClick: copyToClipboard,
-    type: "text",
-    className: "click-to-copy",
-    readOnly: true,
-    spellCheck: "false"
-  });
-};
+function _getPrototypeOf(o) { _getPrototypeOf = Object.getPrototypeOf || function _getPrototypeOf(o) { return o.__proto__; }; return _getPrototypeOf(o); }
 
 var AssetInfo =
 /*#__PURE__*/
 function (_React$Component) {
-  function AssetInfo(props) {
-    var _this;
-
+  function AssetInfo() {
     _classCallCheck(this, AssetInfo);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(AssetInfo).call(this, props));
-    _this.copyToClipboard = _this.copyToClipboard.bind(_assertThisInitialized(_assertThisInitialized(_this)));
-    return _this;
+    return _possibleConstructorReturn(this, _getPrototypeOf(AssetInfo).apply(this, arguments));
   }
 
   _createClass(AssetInfo, [{
-    key: "copyToClipboard",
-    value: function copyToClipboard(event) {
-      console.log('event:', event);
-      console.log('event.target:', event.target);
-      console.log('event.target.id:', event.target.id);
-      var elementToCopy = event.target.id;
-      var element = document.getElementById(elementToCopy);
-      element.select();
-
-      try {
-        document.execCommand('copy');
-      } catch (err) {
-        this.setState({
-          error: 'Oops, unable to copy'
-        });
-      }
-    }
-  }, {
     key: "render",
     value: function render() {
       var _this$props$asset = this.props.asset,
@@ -134,31 +78,29 @@ function (_React$Component) {
         label: _react.default.createElement(_Label.default, {
           value: 'Share:'
         }),
-        content: _react.default.createElement(AssetShareButtons, {
+        content: _react.default.createElement(_AssetShareButtons.default, {
           host: host,
+          name: name,
           shortId: shortId
         })
       })), _react.default.createElement(_Row.default, null, _react.default.createElement(_RowLabeled.default, {
         label: _react.default.createElement(_Label.default, {
           value: 'Link:'
         }),
-        content: _react.default.createElement(ClickToCopy, {
+        content: _react.default.createElement(_ClickToCopy.default, {
           id: 'short-link',
-          value: "".concat(host, "/").concat(shortId, "/").concat(name, ".").concat(fileExt),
-          copyToClipboard: this.copyToClipboard
+          value: "".concat(host, "/").concat(shortId, "/").concat(name, ".").concat(fileExt)
         })
       })), _react.default.createElement(_Row.default, null, _react.default.createElement(_RowLabeled.default, {
         label: _react.default.createElement(_Label.default, {
           value: 'Embed:'
         }),
-        content: _react.default.createElement("div", null, contentType === 'video/mp4' ? _react.default.createElement(ClickToCopy, {
+        content: _react.default.createElement("div", null, contentType === 'video/mp4' ? _react.default.createElement(_ClickToCopy.default, {
           id: 'embed-text-video',
-          value: "<video width=\"100%\" controls poster=\"".concat(thumbnail, "\" src=\"").concat(host, "/").concat(claimId, "/").concat(name, ".").concat(fileExt, "\"/></video>"),
-          copyToClipboard: this.copyToClipboard
-        }) : _react.default.createElement(ClickToCopy, {
+          value: "<video width=\"100%\" controls poster=\"".concat(thumbnail, "\" src=\"").concat(host, "/").concat(claimId, "/").concat(name, ".").concat(fileExt, "\"/></video>")
+        }) : _react.default.createElement(_ClickToCopy.default, {
           id: 'embed-text-image',
-          value: "<img src=\"".concat(host, "/").concat(claimId, "/").concat(name, ".").concat(fileExt, "\"/>"),
-          copyToClipboard: this.copyToClipboard
+          value: "<img src=\"".concat(host, "/").concat(claimId, "/").concat(name, ".").concat(fileExt, "\"/>")
         }))
       })), _react.default.createElement(_Row.default, null, _react.default.createElement(_SpaceBetween.default, null, _react.default.createElement(_reactRouterDom.Link, {
         className: "link--primary",

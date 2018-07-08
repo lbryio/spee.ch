@@ -23,39 +23,60 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
 
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
 function _getPrototypeOf(o) { _getPrototypeOf = Object.getPrototypeOf || function _getPrototypeOf(o) { return o.__proto__; }; return _getPrototypeOf(o); }
 
-var PublishDisabledMessage =
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+var ClickToCopy =
 /*#__PURE__*/
 function (_React$Component) {
-  function PublishDisabledMessage() {
-    _classCallCheck(this, PublishDisabledMessage);
+  function ClickToCopy(props) {
+    var _this;
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(PublishDisabledMessage).apply(this, arguments));
+    _classCallCheck(this, ClickToCopy);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(ClickToCopy).call(this, props));
+    _this.copyToClipboard = _this.copyToClipboard.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    return _this;
   }
 
-  _createClass(PublishDisabledMessage, [{
+  _createClass(ClickToCopy, [{
+    key: "copyToClipboard",
+    value: function copyToClipboard(event) {
+      var elementToCopy = event.target.id;
+      var element = document.getElementById(elementToCopy);
+      element.select();
+
+      try {
+        document.execCommand('copy');
+      } catch (err) {
+        this.setState({
+          error: 'Oops, unable to copy'
+        });
+      }
+    }
+  }, {
     key: "render",
     value: function render() {
-      var message = this.props.message;
-      return _react.default.createElement("div", {
-        className: 'publish-disabled-message'
-      }, _react.default.createElement("div", {
-        className: 'message'
-      }, _react.default.createElement("p", {
-        className: 'text--secondary'
-      }, "Publishing is currently disabled."), _react.default.createElement("p", {
-        className: 'text--secondary'
-      }, message)));
+      var _this$props = this.props,
+          id = _this$props.id,
+          value = _this$props.value;
+      return _react.default.createElement("input", {
+        id: id,
+        value: value,
+        onClick: this.copyToClipboard,
+        type: "text",
+        className: "click-to-copy",
+        readOnly: true,
+        spellCheck: "false"
+      });
     }
   }]);
 
-  _inherits(PublishDisabledMessage, _React$Component);
+  _inherits(ClickToCopy, _React$Component);
 
-  return PublishDisabledMessage;
+  return ClickToCopy;
 }(_react.default.Component);
 
-var _default = PublishDisabledMessage;
+var _default = ClickToCopy;
 exports.default = _default;

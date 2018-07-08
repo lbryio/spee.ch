@@ -17,7 +17,12 @@ const getClaimIdAndServeAsset = (channelName, channelClaimId, claimName, claimId
   getClaimId(channelName, channelClaimId, claimName, claimId)
     .then(fullClaimId => {
       claimId = fullClaimId;
-      return db.Blocked.isNotBlocked(fullClaimId, claimName);
+      logger.debug('Full claim id:', fullClaimId);
+      return db.Claim.getOutpoint(claimName, fullClaimId);
+    })
+    .then(outpoint => {
+      logger.debug('Outpoint:', outpoint);
+      return db.Blocked.isNotBlocked(outpoint);
     })
     .then(() => {
       return getLocalFileRecord(claimId, claimName);

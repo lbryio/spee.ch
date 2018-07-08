@@ -378,5 +378,27 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
     });
   };
 
+  Claim.getOutpoint = function (name, claimId) {
+    return this
+      .findAll({
+        where     : { name, claimId },
+        attributes: ['outpoint'],
+      })
+      .then(result => {
+        logger.debug('outpoint result');
+        switch (result.length) {
+          case 0:
+            throw new Error(`no record found for ${name}#${claimId}`);
+          case 1:
+            return result[0].dataValues.outpoint;
+          default:
+            throw new Error(`more than one record found for ${name}#${claimId}`);
+        }
+      })
+      .catch(error => {
+        throw error;
+      });
+  };
+
   return Claim;
 };
