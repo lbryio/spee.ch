@@ -1,8 +1,9 @@
 .asset-display {
   flex: 1 0 auto;
-  display: block;
+  display: flex;
   justify-content: center;
-  align-items: center;
+  /*align-items: center;*/
+  flex-direction: column;
 }
 
 .asset-image, .asset-video {
