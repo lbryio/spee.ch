@@ -39,7 +39,7 @@ class AssetDisplay extends React.Component {
               return (
                 <img
                   className='asset-image'
-                  src={`/${claimId}/${name}.${fileExt}`}
+                  src={`/asset/${name}/${claimId}`}
                   alt={name}
                 />
               );
@@ -49,7 +49,9 @@ class AssetDisplay extends React.Component {
                   className='asset-video'
                   controls poster={thumbnail}
                 >
-                  <source src={`/${claimId}/${name}.${fileExt}`} />
+                  <source
+                    src={`/asset/${name}/${claimId}`}
+                  />
                   <p>Your browser does not support the <code>video</code> element.</p>
                 </video>
               );
