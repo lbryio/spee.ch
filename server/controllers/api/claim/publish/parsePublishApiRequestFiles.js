@@ -12,9 +12,18 @@ const parsePublishApiRequestFiles = ({file, thumbnail}) => {
     throw new Error('no file type found');
   }
   if (!file.size) {
-    throw new Error('no file type found');
+    throw new Error('no file size found');
   }
   // validate the file name
+  if (!file.name) {
+    throw new Error('no file name found');
+  }
+  if (file.name.indexOf('.') < 0) {
+    throw new Error('no file extension found in file name');
+  }
+  if (file.name.indexOf('.') === 0) {
+    throw new Error('file name cannot start with "."');
+  }
   if (/'/.test(file.name)) {
     throw new Error('apostrophes are not allowed in the file name');
   }
