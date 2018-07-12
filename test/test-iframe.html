@@ -6,28 +6,37 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <style>
+        iframe {
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
-    <img src="https://media.giphy.com/media/vwEHGjx71HSytx5mY8/giphy-facebook_s.jpg" alt="test embed"/>
-    <p>no identifier, no ending</p>
-    <img src="https://dev1.spee.ch/typingcat" alt="no identifier, no ending"/>
-    <p>no identifier, yes ending</p>
-    <img src="https://dev1.spee.ch/typingcat.gif" alt="no identifier, yes ending"/>
-    <p>yes identifier, no ending</p>
-    <img src="https://dev1.spee.ch/8/typingcat" alt="yes identifier, no ending"/>
-    <p>yes identifier, yes ending</p>
-    <img src="https://dev1.spee.ch/8/typingcat.gif" alt="yes identifier, yes ending"/>
-    <p>i frame 1:</p>
+    <p>i frame: weather.gov</p>
     <iframe src="http://www.weather.gov/"></iframe>
-    <p>i frame 2:</p>
+
+    <p>i frame: dev1.spee.ch video direct embed page</p>
     <iframe src="https://dev1.spee.ch/video-embed/sn123ow-1/c3cadc36688ca37c7526536cfed4448e31bacf56">
         iframe not supported
     </iframe>
-    <p>i frame 3:</p>
+
+    <p>i frame: dev1.spee.ch image direct asset</p>
+    <iframe src="https://dev1.spee.ch/asset/donut-pla2tter/d8d93f3818f4cb8398637706fb20cc57c441261f">
+        iframe not supported
+    </iframe>
+
+    <p>i frame: image from internet</p>
+    <iframe src="https://c.static-nike.com/a/images/t_PDP_1280_v1/f_auto/kod3bxfy7vx99bca26cb/elite-competition-8p-basketball-721MyM.jpg">
+        iframe not supported
+    </iframe>
+
+    <p>i frame: giphy </p>
     <iframe src="https://media.giphy.com/media/vwEHGjx71HSytx5mY8/giphy-facebook_s.jpg">
         iframe not supported
     </iframe>
-    <p>i frame 4:</p>
+
+    <p>i frame: giphy 2</p>
     <iframe src="https://media.giphy.com/media/vwEHGjx71HSytx5mY8/giphy-facebook_s">
         iframe not supported
     </iframe>
