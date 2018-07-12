@@ -82,7 +82,7 @@ function (_React$Component) {
           case 'image/gif':
             return _react.default.createElement("img", {
               className: "asset-image",
-              src: "/".concat(claimId, "/").concat(name, ".").concat(fileExt),
+              src: "/asset/".concat(name, "/").concat(claimId),
               alt: name
             });
 
@@ -92,7 +92,7 @@ function (_React$Component) {
               controls: true,
               poster: thumbnail
             }, _react.default.createElement("source", {
-              src: "/".concat(claimId, "/").concat(name, ".").concat(fileExt)
+              src: "/asset/".concat(name, "/").concat(claimId)
             }), _react.default.createElement("p", null, "Your browser does not support the ", _react.default.createElement("code", null, "video"), " element."));
 
           default:

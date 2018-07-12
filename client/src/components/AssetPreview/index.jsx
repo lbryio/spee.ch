@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const AssetPreview = ({ defaultThumbnail, claimData: { name, claimId, fileExt, contentType, thumbnail } }) => {
-  const directSourceLink = `${claimId}/${name}.${fileExt}`;
+  const directSourceLink = `asset/${name}/${claimId}`;
   const showUrlLink = `/${claimId}/${name}`;
   return (
     <Link to={showUrlLink} >

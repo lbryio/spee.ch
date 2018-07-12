@@ -1,13 +1,16 @@
 const logger = require('winston');
 
 const serveFile = ({ filePath, fileType }, res) => {
-  logger.verbose(`serving file: ${filePath}`);
+  if (!fileType) {
+    logger.error(`no fileType provided for ${filePath}`);
+  }
   const sendFileOptions = {
     headers: {
       'X-Content-Type-Options': 'nosniff',
-      'Content-Type'          : fileType || 'image/jpeg',
+      'Content-Type'          : fileType,
     },
   };
+  logger.debug(`fileOptions for ${filePath}:`, sendFileOptions);
   res.status(200).sendFile(filePath, sendFileOptions);
 };
 
