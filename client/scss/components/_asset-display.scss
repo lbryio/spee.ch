@@ -2,7 +2,7 @@
   flex: 1 0 auto;
   display: flex;
   justify-content: center;
-  /*align-items: center;*/
+
   flex-direction: column;
 }
 
@@ -15,4 +15,7 @@
   margin: 16px;
   padding: 6px;
   border: 1px solid #d0d0d0;
+}
+.vertical-split .asset-display {
+    height: 90vh;
 }
