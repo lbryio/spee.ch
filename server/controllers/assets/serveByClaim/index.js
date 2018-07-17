@@ -16,6 +16,16 @@ const { SHOW } = require('../constants/request_types.js');
 
 const serveByClaim = (req, res) => {
   const { headers, ip, originalUrl, params } = req;
+  // return early if channel request
+  let isChannel = false;
+  try {
+    ({ isChannel } = lbryUri.parseIdentifier(params.claim));
+  } catch (error) {
+    return res.status(400).json({success: false, message: error.message});
+  }
+  if (isChannel) {
+    return handleShowRender(req, res);
+  }
   // decide if this is a show request
   let hasFileExtension;
   try {

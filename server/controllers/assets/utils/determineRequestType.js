@@ -8,10 +8,13 @@ function clientWantsAsset ({accept, range}) {
 }
 
 const determineRequestType = (hasFileExtension, headers) => {
+  logger.debug('hasFileExtension:', hasFileExtension);
   logger.debug('headers:', headers);
   if (hasFileExtension || clientWantsAsset(headers)) {
+    logger.debug('client wants direct asset');
     return EMBED;
   }
+  logger.debug('client wants show page');
   return SHOW;
 };
 
