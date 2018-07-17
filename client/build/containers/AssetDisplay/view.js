@@ -60,6 +60,7 @@ function (_React$Component) {
           contentType = _this$props$asset$cla2.contentType,
           fileExt = _this$props$asset$cla2.fileExt,
           thumbnail = _this$props$asset$cla2.thumbnail;
+      var sourceUrl = "/".concat(claimId, "/").concat(name, ".").concat(fileExt);
       return _react.default.createElement("div", {
         className: 'asset-display'
       }, status === _asset_display_states.LOCAL_CHECK && _react.default.createElement("div", null, _react.default.createElement("p", null, "Checking to see if Spee.ch has your asset locally...")), status === _asset_display_states.UNAVAILABLE && _react.default.createElement("div", null, _react.default.createElement("p", null, "Sit tight, we're searching the LBRY blockchain for your asset!"), _react.default.createElement(_ProgressBar.default, {
@@ -82,7 +83,7 @@ function (_React$Component) {
           case 'image/gif':
             return _react.default.createElement("img", {
               className: "asset-image",
-              src: "/asset/".concat(name, "/").concat(claimId),
+              src: sourceUrl,
               alt: name
             });
 
@@ -92,11 +93,11 @@ function (_React$Component) {
               controls: true,
               poster: thumbnail
             }, _react.default.createElement("source", {
-              src: "/asset/".concat(name, "/").concat(claimId)
+              src: sourceUrl
             }), _react.default.createElement("p", null, "Your browser does not support the ", _react.default.createElement("code", null, "video"), " element."));
 
           default:
-            return _react.default.createElement("p", null, "Unsupported file type");
+            return _react.default.createElement("p", null, "Unsupported content type");
         }
       }());
     }
