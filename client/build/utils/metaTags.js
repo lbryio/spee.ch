@@ -203,6 +203,7 @@ var createAssetMetaTags = function createAssetMetaTags(_ref3) {
     });
   }
 
+  console.log('metaTags:', metaTags);
   return metaTags;
 };
 

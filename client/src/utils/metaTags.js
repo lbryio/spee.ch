@@ -82,6 +82,7 @@ const createAssetMetaTags = ({siteHost, siteTitle, siteTwitter, asset, defaultDe
     metaTags.push({property: 'og:type', content: 'article'});
     metaTags.push({property: 'twitter:card', content: 'summary_large_image'});
   }
+  console.log('metaTags:', metaTags);
   return metaTags;
 };
 
