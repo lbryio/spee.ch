@@ -1,3 +1,4 @@
+const path = require('path');
 const validateFileTypeAndSize = require('./validateFileTypeAndSize.js');
 
 const parsePublishApiRequestFiles = ({file, thumbnail}) => {
@@ -33,6 +34,7 @@ const parsePublishApiRequestFiles = ({file, thumbnail}) => {
   return {
     fileName         : file.name,
     filePath         : file.path,
+    fileExtension    : path.extname(file.path),
     fileType         : file.type,
     thumbnailFileName: (thumbnail ? thumbnail.name : null),
     thumbnailFilePath: (thumbnail ? thumbnail.path : null),
