@@ -7,7 +7,7 @@ const determineRequestType = require('../utils/determineRequestType.js');
 const getClaimIdAndServeAsset = require('../utils/getClaimIdAndServeAsset.js');
 const flipClaimNameAndId = require('../utils/flipClaimNameAndId.js');
 
-const { EMBED } = require('../constants/request_types.js');
+const { SHOW } = require('../constants/request_types.js');
 
 /*
 
@@ -26,7 +26,7 @@ const serverByIdentifierAndClaim = (req, res) => {
   }
   // determine request type
   let requestType = determineRequestType(hasFileExtension, headers);
-  if (requestType !== EMBED) {
+  if (requestType === SHOW) {
     return handleShowRender(req, res);
   }
   // parse the claim

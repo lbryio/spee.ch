@@ -1,9 +1,7 @@
 const EMBED = 'EMBED';
-const BROWSER = 'BROWSER';
-const SOCIAL = 'SOCIAL';
+const SHOW = 'SHOW';
 
 module.exports = {
   EMBED,
-  BROWSER,
-  SOCIAL,
+  SHOW,
 };
