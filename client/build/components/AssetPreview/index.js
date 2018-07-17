@@ -19,10 +19,10 @@ var AssetPreview = function AssetPreview(_ref) {
       fileExt = _ref$claimData.fileExt,
       contentType = _ref$claimData.contentType,
       thumbnail = _ref$claimData.thumbnail;
-  var directSourceLink = "asset/".concat(name, "/").concat(claimId);
-  var showUrlLink = "/".concat(claimId, "/").concat(name);
+  var embedUrl = "/".concat(claimId, "/").concat(name, ".").concat(fileExt);
+  var showUrl = "/".concat(claimId, "/").concat(name);
   return _react.default.createElement(_reactRouterDom.Link, {
-    to: showUrlLink
+    to: showUrl
   }, function () {
     switch (contentType) {
       case 'image/jpeg':
@@ -31,7 +31,7 @@ var AssetPreview = function AssetPreview(_ref) {
       case 'image/gif':
         return _react.default.createElement("img", {
           className: 'asset-preview-image',
-          src: directSourceLink,
+          src: embedUrl,
           alt: name
         });
 
