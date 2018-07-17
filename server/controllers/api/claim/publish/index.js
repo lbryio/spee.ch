@@ -75,9 +75,10 @@ const claimPublish = ({ body, files, headers, ip, originalUrl, user, tor }, res)
         message: 'publish completed successfully',
         data   : {
           name,
-          claimId: result.claim_id,
-          url    : `${host}/${result.claim_id}/${name}`,
-          lbryTx : result,
+          claimId : result.claim_id,
+          url : `${host}/${result.claim_id}/${name}`,
+          embedUrl: `${host}/asset/${name}/${result.claim_id}`,
+          lbryTx  : result,
         },
       });
       // record the publish end time and send to google analytics
