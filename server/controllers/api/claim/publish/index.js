@@ -76,7 +76,7 @@ const claimPublish = ({ body, files, headers, ip, originalUrl, user, tor }, res)
         data   : {
           name,
           claimId : result.claim_id,
-          showUrl : `${host}/${result.claim_id}/${name}`,
+          url : `${host}/${result.claim_id}/${name}`,
           embedUrl: `${host}/asset/${name}/${result.claim_id}`,
           lbryTx  : result,
         },
