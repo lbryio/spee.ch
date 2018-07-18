@@ -43,10 +43,8 @@ var createBasicMetaTags = function createBasicMetaTags(_ref) {
   }, {
     property: 'twitter:title',
     content: siteTitle
-  }, {
-    property: 'og:url',
-    content: siteHost
-  }, {
+  }, // {property: 'og:url', content: siteHost},
+  {
     property: 'og:site_name',
     content: siteTitle
   }, {
@@ -77,7 +75,8 @@ var createChannelMetaTags = function createChannelMetaTags(_ref2) {
   var siteHost = _ref2.siteHost,
       siteTitle = _ref2.siteTitle,
       siteTwitter = _ref2.siteTwitter,
-      channel = _ref2.channel;
+      channel = _ref2.channel,
+      defaultThumbnail = _ref2.defaultThumbnail;
   var name = channel.name,
       longId = channel.longId;
   return [{
@@ -86,10 +85,8 @@ var createChannelMetaTags = function createChannelMetaTags(_ref2) {
   }, {
     property: 'twitter:title',
     content: "".concat(name, " on ").concat(siteTitle)
-  }, {
-    property: 'og:url',
-    content: "".concat(siteHost, "/").concat(name, ":").concat(longId)
-  }, {
+  }, // {property: 'og:url', content: `${siteHost}/${name}:${longId}`},
+  {
     property: 'og:site_name',
     content: siteTitle
   }, {
@@ -101,6 +98,12 @@ var createChannelMetaTags = function createChannelMetaTags(_ref2) {
   }, {
     property: 'twitter:card',
     content: 'summary'
+  }, {
+    property: 'og:image',
+    content: defaultThumbnail
+  }, {
+    property: 'twitter:image',
+    content: defaultThumbnail
   }];
 };
 
@@ -128,7 +131,7 @@ var createAssetMetaTags = function createAssetMetaTags(_ref3) {
     content: ogTitle
   }, {
     property: 'og:url',
-    content: showUrl
+    content: source
   }, {
     property: 'og:site_name',
     content: siteTitle
@@ -259,7 +262,8 @@ var createMetaTags = function createMetaTags(_ref4) {
       siteHost: siteHost,
       siteTitle: siteTitle,
       siteTwitter: siteTwitter,
-      channel: channel
+      channel: channel,
+      defaultThumbnail: defaultThumbnail
     });
   }
 

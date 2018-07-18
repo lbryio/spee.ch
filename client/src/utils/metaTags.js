@@ -34,7 +34,7 @@ const createBasicMetaTags = ({siteHost, siteDescription, siteTitle, siteTwitter,
   ];
 };
 
-const createChannelMetaTags = ({siteHost, siteTitle, siteTwitter, channel}) => {
+const createChannelMetaTags = ({siteHost, siteTitle, siteTwitter, channel, defaultThumbnail}) => {
   const { name, longId } = channel;
   return [
     {property: 'og:title', content: `${name} on ${siteTitle}`},
@@ -44,6 +44,8 @@ const createChannelMetaTags = ({siteHost, siteTitle, siteTwitter, channel}) => {
     {property: 'og:description', content: `${name}, a channel on ${siteTitle}`},
     {property: 'twitter:site', content: siteTwitter},
     {property: 'twitter:card', content: 'summary'},
+    {property: 'og:image', content: defaultThumbnail},
+    {property: 'twitter:image', content: defaultThumbnail},
   ];
 };
 
@@ -111,6 +113,7 @@ export const createMetaTags = ({ siteDescription, siteHost, siteTitle, siteTwitt
       siteTitle,
       siteTwitter,
       channel,
+      defaultThumbnail,
     });
   }
   return createBasicMetaTags({
