@@ -20,29 +20,25 @@ const serveByClaim = (req, res) => {
   const { headers, ip, originalUrl, params } = req;
 
   try {
-    // return early if channel request
-    const { isChannel } = lbryUri.parseIdentifier(params.claim);
+    let isChannel, hasFileExtension, claimName;
+
+    ({ isChannel } = lbryUri.parseIdentifier(params.claim));
     if (isChannel) {
-      logger.info('channel request:', { headers, ip, originalUrl, params });
+      logger.debug('channel request:', { headers, ip, originalUrl, params });
       return handleShowRender(req, res);
     }
 
-    // decide if this is a show request
-    const { hasFileExtension } = lbryUri.parseModifier(params.claim);
+    ({ hasFileExtension } = lbryUri.parseModifier(params.claim));
     if (determineRequestType(hasFileExtension, headers) === SHOW) {
-      logger.info('show request:', { headers, ip, originalUrl, params });
+      logger.debug('show request:', { headers, ip, originalUrl, params });
       return handleShowRender(req, res);
     }
 
-    // parse the claim
-    const { claimName } = lbryUri.parseClaim(params.claim);
-
-    // send google analytics
-    sendGAServeEvent(headers, ip, originalUrl);
-
-    // get the claim Id and then serve the asset
-    logger.info('serve request:', { headers, ip, originalUrl, params });
+    ({ claimName } = lbryUri.parseClaim(params.claim));
+    logger.debug('serve request:', { headers, ip, originalUrl, params });
     getClaimIdAndServeAsset(null, null, claimName, null, originalUrl, ip, res);
+
+    sendGAServeEvent(headers, ip, originalUrl);
 
   } catch (error) {
     return res.status(400).json({success: false, message: error.message});
