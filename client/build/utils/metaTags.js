@@ -41,6 +41,9 @@ var createBasicMetaTags = function createBasicMetaTags(_ref) {
     property: 'og:title',
     content: siteTitle
   }, {
+    property: 'twitter:title',
+    content: siteTitle
+  }, {
     property: 'og:url',
     content: siteHost
   }, {
@@ -50,6 +53,9 @@ var createBasicMetaTags = function createBasicMetaTags(_ref) {
     property: 'og:description',
     content: siteDescription
   }, {
+    property: 'twitter:description',
+    content: siteDescription
+  }, {
     property: 'twitter:site',
     content: siteTwitter
   }, {
@@ -57,6 +63,9 @@ var createBasicMetaTags = function createBasicMetaTags(_ref) {
     content: 'summary_large_image'
   }, {
     property: 'og:image',
+    content: defaultThumbnail
+  }, {
+    property: 'twitter:image',
     content: defaultThumbnail
   }, {
     property: 'og:image:type',
@@ -73,6 +82,9 @@ var createChannelMetaTags = function createChannelMetaTags(_ref2) {
       longId = channel.longId;
   return [{
     property: 'og:title',
+    content: "".concat(name, " on ").concat(siteTitle)
+  }, {
+    property: 'twitter:title',
     content: "".concat(name, " on ").concat(siteTitle)
   }, {
     property: 'og:url',
@@ -112,6 +124,9 @@ var createAssetMetaTags = function createAssetMetaTags(_ref3) {
     property: 'og:title',
     content: ogTitle
   }, {
+    property: 'twitter:title',
+    content: ogTitle
+  }, {
     property: 'og:url',
     content: showUrl
   }, {
@@ -119,6 +134,9 @@ var createAssetMetaTags = function createAssetMetaTags(_ref3) {
     content: siteTitle
   }, {
     property: 'og:description',
+    content: ogDescription
+  }, {
+    property: 'twitter:description',
     content: ogDescription
   }, {
     property: 'og:image:width',
@@ -146,6 +164,10 @@ var createAssetMetaTags = function createAssetMetaTags(_ref3) {
     });
     metaTags.push({
       property: 'og:image',
+      content: ogThumbnail
+    });
+    metaTags.push({
+      property: 'twitter:image',
       content: ogThumbnail
     });
     metaTags.push({
@@ -187,6 +209,10 @@ var createAssetMetaTags = function createAssetMetaTags(_ref3) {
   } else {
     metaTags.push({
       property: 'og:image',
+      content: source
+    });
+    metaTags.push({
+      property: 'twitter:image',
       content: source
     });
     metaTags.push({
