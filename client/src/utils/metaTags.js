@@ -21,12 +21,15 @@ const determineOgThumbnailContentType = (thumbnail) => {
 const createBasicMetaTags = ({siteHost, siteDescription, siteTitle, siteTwitter, defaultThumbnail}) => {
   return [
     {property: 'og:title', content: siteTitle},
+    {property: 'twitter:title', content: siteTitle},
     {property: 'og:url', content: siteHost},
     {property: 'og:site_name', content: siteTitle},
     {property: 'og:description', content: siteDescription},
+    {property: 'twitter:description', content: siteDescription},
     {property: 'twitter:site', content: siteTwitter},
     {property: 'twitter:card', content: 'summary_large_image'},
     {property: 'og:image', content: defaultThumbnail},
+    {property: 'twitter:image', content: defaultThumbnail},
     {property: 'og:image:type', content: 'image/jpeg'},
   ];
 };
@@ -35,6 +38,7 @@ const createChannelMetaTags = ({siteHost, siteTitle, siteTwitter, channel}) => {
   const { name, longId } = channel;
   return [
     {property: 'og:title', content: `${name} on ${siteTitle}`},
+    {property: 'twitter:title', content: `${name} on ${siteTitle}`},
     {property: 'og:url', content: `${siteHost}/${name}:${longId}`},
     {property: 'og:site_name', content: siteTitle},
     {property: 'og:description', content: `${name}, a channel on ${siteTitle}`},
@@ -55,9 +59,11 @@ const createAssetMetaTags = ({siteHost, siteTitle, siteTwitter, asset, defaultDe
   const ogThumbnail = claimData.thumbnail || defaultThumbnail;
   const metaTags = [
     {property: 'og:title', content: ogTitle},
+    {property: 'twitter:title', content: ogTitle},
     {property: 'og:url', content: showUrl},
     {property: 'og:site_name', content: siteTitle},
     {property: 'og:description', content: ogDescription},
+    {property: 'twitter:description', content: ogDescription},
     {property: 'og:image:width', content: 600},
     {property: 'og:image:height', content: 315},
     {property: 'twitter:site', content: siteTwitter},
@@ -67,6 +73,7 @@ const createAssetMetaTags = ({siteHost, siteTitle, siteTwitter, asset, defaultDe
     metaTags.push({property: 'og:video:secure_url', content: source});
     metaTags.push({property: 'og:video:type', content: contentType});
     metaTags.push({property: 'og:image', content: ogThumbnail});
+    metaTags.push({property: 'twitter:image', content: ogThumbnail});
     metaTags.push({property: 'og:image:type', content: ogThumbnailContentType});
     metaTags.push({property: 'og:type', content: 'video.other'});
     metaTags.push({property: 'twitter:card', content: 'player'});
@@ -78,6 +85,7 @@ const createAssetMetaTags = ({siteHost, siteTitle, siteTwitter, asset, defaultDe
     metaTags.push({property: 'twitter:player:stream:content_type', content: contentType});
   } else {
     metaTags.push({property: 'og:image', content: source});
+    metaTags.push({property: 'twitter:image', content: source});
     metaTags.push({property: 'og:image:type', content: contentType});
     metaTags.push({property: 'og:type', content: 'article'});
     metaTags.push({property: 'twitter:card', content: 'summary_large_image'});
