@@ -41,7 +41,7 @@ const serveByClaim = (req, res) => {
     sendGAServeEvent(headers, ip, originalUrl);
 
     // get the claim Id and then serve the asset
-    logger.info('embed request:', { headers, ip, originalUrl, params });
+    logger.info('serve request:', { headers, ip, originalUrl, params });
     getClaimIdAndServeAsset(null, null, claimName, null, originalUrl, ip, res);
 
   } catch (error) {
