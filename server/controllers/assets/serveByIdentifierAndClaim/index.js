@@ -27,19 +27,7 @@ const serverByIdentifierAndClaim = (req, res) => {
     return res.status(400).json({success: false, message: error.message});
   }
   // determine request type
-  let requestType = determineRequestType(hasFileExtension, headers);
-
-  /* test logging */
-  logger.info('serveByIdentifierAndClaim', {
-    headers,
-    ip,
-    originalUrl,
-    params,
-    response: requestType,
-  });
-  /* end test logging */
-
-  if (requestType === SHOW) {
+  if (determineRequestType(hasFileExtension, headers) === SHOW) {
     return handleShowRender(req, res);
   }
   // parse the claim
