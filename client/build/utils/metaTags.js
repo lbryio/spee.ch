@@ -43,8 +43,10 @@ var createBasicMetaTags = function createBasicMetaTags(_ref) {
   }, {
     property: 'twitter:title',
     content: siteTitle
-  }, // {property: 'og:url', content: siteHost},
-  {
+  }, {
+    property: 'og:url',
+    content: siteHost
+  }, {
     property: 'og:site_name',
     content: siteTitle
   }, {
@@ -85,8 +87,10 @@ var createChannelMetaTags = function createChannelMetaTags(_ref2) {
   }, {
     property: 'twitter:title',
     content: "".concat(name, " on ").concat(siteTitle)
-  }, // {property: 'og:url', content: `${siteHost}/${name}:${longId}`},
-  {
+  }, {
+    property: 'og:url',
+    content: "".concat(siteHost, "/").concat(name, ":").concat(longId)
+  }, {
     property: 'og:site_name',
     content: siteTitle
   }, {
@@ -131,7 +135,7 @@ var createAssetMetaTags = function createAssetMetaTags(_ref3) {
     content: ogTitle
   }, {
     property: 'og:url',
-    content: source
+    content: showUrl
   }, {
     property: 'og:site_name',
     content: siteTitle
@@ -232,7 +236,6 @@ var createAssetMetaTags = function createAssetMetaTags(_ref3) {
     });
   }
 
-  console.log('metaTags:', metaTags);
   return metaTags;
 };
 

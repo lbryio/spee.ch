@@ -1,3 +1,5 @@
+const logger = require('winston');
+
 const { sendGAServeEvent } = require('../../../utils/googleAnalytics');
 const handleShowRender = require('../../../render/build/handleShowRender.js');
 
@@ -26,6 +28,17 @@ const serverByIdentifierAndClaim = (req, res) => {
   }
   // determine request type
   let requestType = determineRequestType(hasFileExtension, headers);
+
+  /* test logging */
+  logger.info('serveByIdentifierAndClaim', {
+    headers,
+    ip,
+    originalUrl,
+    params,
+    response: requestType,
+  });
+  /* end test logging */
+
   if (requestType === SHOW) {
     return handleShowRender(req, res);
   }

@@ -2,19 +2,19 @@ const logger = require('winston');
 const { EMBED, SHOW } = require('../constants/request_types.js');
 
 function clientWantsAsset ({accept, range}) {
-  const imageIsWanted = accept && accept.match(/image\/.*/) && !accept.match(/text\/html/) && !accept.match(/text\/\*/);
-  const videoIsWanted = accept && range;
+  const imageIsWanted = accept && accept.match(/image\/.*/) && !accept.match(/text\/html/);
+  const videoIsWanted = accept && accept.match(/video\/.*/) && !accept.match(/text\/html/);
   return imageIsWanted || videoIsWanted;
 }
 
 const determineRequestType = (hasFileExtension, headers) => {
-  logger.debug('hasFileExtension:', hasFileExtension);
-  logger.debug('headers:', headers);
+  logger.info('determineRequestType', {
+    hasFileExtension,
+    headers,
+  });
   if (hasFileExtension || clientWantsAsset(headers)) {
-    logger.debug('client wants direct asset');
     return EMBED;
   }
-  logger.debug('client wants show page');
   return SHOW;
 };
 
