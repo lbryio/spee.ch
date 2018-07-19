@@ -1,10 +1,14 @@
-const determineOgThumbnailContentType = (thumbnail) => {
+const VIDEO = 'VIDEO';
+const IMAGE = 'IMAGE';
+const GIF = 'GIF';
+
+const determineContentTypeFromExtension = (thumbnail) => {
   if (thumbnail) {
     const fileExt = thumbnail.substring(thumbnail.lastIndexOf('.'));
     switch (fileExt) {
       case 'jpeg':
       case 'jpg':
-        return 'image/jpeg';
+        return 'image/jpg';
       case 'png':
         return 'image/png';
       case 'gif':
@@ -12,10 +16,26 @@ const determineOgThumbnailContentType = (thumbnail) => {
       case 'mp4':
         return 'video/mp4';
       default:
-        return 'image/jpeg';
+        return '';
     }
   }
   return '';
+};
+
+const determineMediaType = (contentType) => {
+  switch (contentType) {
+    case 'image/jpg':
+    case 'image/jpeg':
+    case 'image/png':
+      return IMAGE;
+    case 'image/gif':
+      return GIF;
+    case 'video/mp4':
+    case 'video/webm':
+      return VIDEO;
+    default:
+      return '';
+  }
 };
 
 const createBasicMetaTags = ({siteHost, siteDescription, siteTitle, siteTwitter, defaultThumbnail}) => {
@@ -29,8 +49,11 @@ const createBasicMetaTags = ({siteHost, siteDescription, siteTitle, siteTwitter,
     {property: 'twitter:site', content: siteTwitter},
     {property: 'twitter:card', content: 'summary_large_image'},
     {property: 'og:image', content: defaultThumbnail},
+    {property: 'og:image:width', content: 600},
+    {property: 'og:image:height', content: 315},
+    {property: 'og:image:type', content: determineContentTypeFromExtension(defaultThumbnail)},
     {property: 'twitter:image', content: defaultThumbnail},
-    {property: 'og:image:type', content: 'image/jpeg'},
+    {property: 'twitter:image:alt', content: 'Spee.ch Logo'},
   ];
 };
 
@@ -45,7 +68,11 @@ const createChannelMetaTags = ({siteHost, siteTitle, siteTwitter, channel, defau
     {property: 'twitter:site', content: siteTwitter},
     {property: 'twitter:card', content: 'summary'},
     {property: 'og:image', content: defaultThumbnail},
+    {property: 'og:image:width', content: 600},
+    {property: 'og:image:height', content: 315},
+    {property: 'og:image:type', content: determineContentTypeFromExtension(defaultThumbnail)},
     {property: 'twitter:image', content: defaultThumbnail},
+    {property: 'twitter:image:alt', content: 'Spee.ch Logo'},
   ];
 };
 
@@ -57,7 +84,7 @@ const createAssetMetaTags = ({siteHost, siteTitle, siteTwitter, asset, defaultDe
   const source = `${siteHost}/${claimData.claimId}/${claimData.name}.${claimData.fileExt}`;
   const ogTitle = claimData.title || claimData.name;
   const ogDescription = claimData.description || defaultDescription;
-  const ogThumbnailContentType = determineOgThumbnailContentType(claimData.thumbnail);
+  const ogThumbnailContentType = determineContentTypeFromExtension(claimData.thumbnail);
   const ogThumbnail = claimData.thumbnail || defaultThumbnail;
   const metaTags = [
     {property: 'og:title', content: ogTitle},
@@ -70,13 +97,8 @@ const createAssetMetaTags = ({siteHost, siteTitle, siteTwitter, asset, defaultDe
     {property: 'og:image:height', content: 315},
     {property: 'twitter:site', content: siteTwitter},
   ];
-  if (contentType === 'video/mp4' || contentType === 'video/webm') {
-    metaTags.push({property: 'og:video', content: source});
-    metaTags.push({property: 'og:video:secure_url', content: source});
-    metaTags.push({property: 'og:video:type', content: contentType});
-    metaTags.push({property: 'og:image', content: ogThumbnail});
-    metaTags.push({property: 'twitter:image', content: ogThumbnail});
-    metaTags.push({property: 'og:image:type', content: ogThumbnailContentType});
+  if (determineMediaType(contentType) === VIDEO) {
+    // card type tags
     metaTags.push({property: 'og:type', content: 'video.other'});
     metaTags.push({property: 'twitter:card', content: 'player'});
     metaTags.push({property: 'twitter:player', content: videoEmbedUrl});
@@ -85,12 +107,22 @@ const createAssetMetaTags = ({siteHost, siteTitle, siteTwitter, asset, defaultDe
     metaTags.push({property: 'twitter:player:height', content: 337});
     metaTags.push({property: 'twitter:player:stream', content: source});
     metaTags.push({property: 'twitter:player:stream:content_type', content: contentType});
+    // video tags
+    metaTags.push({property: 'og:video', content: source});
+    metaTags.push({property: 'og:video:secure_url', content: source});
+    metaTags.push({property: 'og:video:type', content: contentType});
+    // image tags
+    metaTags.push({property: 'og:image', content: ogThumbnail});
+    metaTags.push({property: 'og:image:type', content: ogThumbnailContentType});
+    metaTags.push({property: 'twitter:image', content: ogThumbnail});
   } else {
-    metaTags.push({property: 'og:image', content: source});
-    metaTags.push({property: 'twitter:image', content: source});
-    metaTags.push({property: 'og:image:type', content: contentType});
+    // card type tags
     metaTags.push({property: 'og:type', content: 'article'});
     metaTags.push({property: 'twitter:card', content: 'summary_large_image'});
+    // image tags
+    metaTags.push({property: 'og:image', content: source});
+    metaTags.push({property: 'og:image:type', content: contentType});
+    metaTags.push({property: 'twitter:image', content: source});
   }
   return metaTags;
 };
