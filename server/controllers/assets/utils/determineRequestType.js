@@ -1,4 +1,4 @@
-const { EMBED, SHOW } = require('../constants/request_types.js');
+const { SERVE, SHOW } = require('../constants/request_types.js');
 
 function clientWantsAsset ({accept, range}) {
   const imageIsWanted = accept && accept.match(/image\/.*/) && !accept.match(/text\/html/);
@@ -8,7 +8,7 @@ function clientWantsAsset ({accept, range}) {
 
 const determineRequestType = (hasFileExtension, headers) => {
   if (hasFileExtension || clientWantsAsset(headers)) {
-    return EMBED;
+    return SERVE;
   }
   return SHOW;
 };

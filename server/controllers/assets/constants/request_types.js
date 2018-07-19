@@ -1,7 +1,7 @@
-const EMBED = 'EMBED';
+const SERVE = 'SERVE';
 const SHOW = 'SHOW';
 
 module.exports = {
-  EMBED,
+  SERVE,
   SHOW,
 };
