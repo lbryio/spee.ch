@@ -40,6 +40,7 @@ const determineMediaType = (contentType) => {
 
 const createBasicMetaTags = ({siteHost, siteDescription, siteTitle, siteTwitter, defaultThumbnail}) => {
   return [
+    // page details
     {property: 'og:title', content: siteTitle},
     {property: 'twitter:title', content: siteTitle},
     {property: 'og:url', content: siteHost},
@@ -47,7 +48,10 @@ const createBasicMetaTags = ({siteHost, siteDescription, siteTitle, siteTwitter,
     {property: 'og:description', content: siteDescription},
     {property: 'twitter:description', content: siteDescription},
     {property: 'twitter:site', content: siteTwitter},
+    // card type
+    {property: 'og:type', content: 'article'},
     {property: 'twitter:card', content: 'summary_large_image'},
+    // image
     {property: 'og:image', content: defaultThumbnail},
     {property: 'og:image:width', content: 600},
     {property: 'og:image:height', content: 315},
@@ -60,13 +64,17 @@ const createBasicMetaTags = ({siteHost, siteDescription, siteTitle, siteTwitter,
 const createChannelMetaTags = ({siteHost, siteTitle, siteTwitter, channel, defaultThumbnail}) => {
   const { name, longId } = channel;
   return [
+    // page detail tags
     {property: 'og:title', content: `${name} on ${siteTitle}`},
     {property: 'twitter:title', content: `${name} on ${siteTitle}`},
     {property: 'og:url', content: `${siteHost}/${name}:${longId}`},
     {property: 'og:site_name', content: siteTitle},
     {property: 'og:description', content: `${name}, a channel on ${siteTitle}`},
     {property: 'twitter:site', content: siteTwitter},
-    {property: 'twitter:card', content: 'summary'},
+    // card type tags
+    {property: 'og:type', content: 'article'},
+    {property: 'twitter:card', content: 'summary_large_image'},
+    // image tags
     {property: 'og:image', content: defaultThumbnail},
     {property: 'og:image:width', content: 600},
     {property: 'og:image:height', content: 315},
@@ -86,16 +94,15 @@ const createAssetMetaTags = ({siteHost, siteTitle, siteTwitter, asset, defaultDe
   const ogDescription = claimData.description || defaultDescription;
   const ogThumbnailContentType = determineContentTypeFromExtension(claimData.thumbnail);
   const ogThumbnail = claimData.thumbnail || defaultThumbnail;
+  // page details
   const metaTags = [
     {property: 'og:title', content: ogTitle},
     {property: 'twitter:title', content: ogTitle},
     {property: 'og:url', content: showUrl},
     {property: 'og:site_name', content: siteTitle},
+    {property: 'twitter:site', content: siteTwitter},
     {property: 'og:description', content: ogDescription},
     {property: 'twitter:description', content: ogDescription},
-    {property: 'og:image:width', content: 600},
-    {property: 'og:image:height', content: 315},
-    {property: 'twitter:site', content: siteTwitter},
   ];
   if (determineMediaType(contentType) === VIDEO) {
     // card type tags
@@ -104,7 +111,7 @@ const createAssetMetaTags = ({siteHost, siteTitle, siteTwitter, asset, defaultDe
     metaTags.push({property: 'twitter:player', content: videoEmbedUrl});
     metaTags.push({property: 'twitter:player:width', content: 600});
     metaTags.push({property: 'twitter:text:player_width', content: 600});
-    metaTags.push({property: 'twitter:player:height', content: 337});
+    metaTags.push({property: 'twitter:player:height', content: 350});
     metaTags.push({property: 'twitter:player:stream', content: source});
     metaTags.push({property: 'twitter:player:stream:content_type', content: contentType});
     // video tags
@@ -113,6 +120,8 @@ const createAssetMetaTags = ({siteHost, siteTitle, siteTwitter, asset, defaultDe
     metaTags.push({property: 'og:video:type', content: contentType});
     // image tags
     metaTags.push({property: 'og:image', content: ogThumbnail});
+    metaTags.push({property: 'og:image:width', content: 600});
+    metaTags.push({property: 'og:image:height', content: 315});
     metaTags.push({property: 'og:image:type', content: ogThumbnailContentType});
     metaTags.push({property: 'twitter:image', content: ogThumbnail});
   } else {
@@ -121,6 +130,9 @@ const createAssetMetaTags = ({siteHost, siteTitle, siteTwitter, asset, defaultDe
     metaTags.push({property: 'twitter:card', content: 'summary_large_image'});
     // image tags
     metaTags.push({property: 'og:image', content: source});
+    metaTags.push({property: 'og:image', content: source});
+    metaTags.push({property: 'og:image:width', content: 600});
+    metaTags.push({property: 'og:image:height', content: 315});
     metaTags.push({property: 'og:image:type', content: contentType});
     metaTags.push({property: 'twitter:image', content: source});
   }
