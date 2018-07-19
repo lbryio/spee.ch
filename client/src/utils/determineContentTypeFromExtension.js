@@ -18,4 +18,4 @@ const determineContentTypeFromExtension = (thumbnail) => {
   return '';
 };
 
-module.exports = determineContentTypeFromExtension;
+export default determineContentTypeFromExtension;

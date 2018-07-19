@@ -1,6 +1,18 @@
-const determineContentTypeFromExtension = require('determineContentTypeFromExtension.js');
+import siteConfig from '@config/siteConfig.json';
+import determineContentTypeFromExtension from './determineContentTypeFromExtension';
 
-const createChannelMetaTags = ({siteHost, siteTitle, siteTwitter, channel, defaultThumbnail}) => {
+const {
+  details: {
+    host,
+    title: siteTitle,
+    twitter,
+  },
+  assetDefaults: {
+    thumbnail: defaultThumbnail,
+  },
+} = siteConfig;
+
+export const createChannelMetaTags = (channel) => {
   const { name, longId } = channel;
   return [
     // page detail tags
@@ -9,10 +21,10 @@ const createChannelMetaTags = ({siteHost, siteTitle, siteTwitter, channel, defau
     {property: 'og:description', content: `${name}, a channel on ${siteTitle}`},
     {property: 'twitter:description', content: `${name}, a channel on ${siteTitle}`},
     // url
-    {property: 'og:url', content: `${siteHost}/${name}:${longId}`},
+    {property: 'og:url', content: `${host}/${name}:${longId}`},
     // site info
     {property: 'og:site_name', content: siteTitle},
-    {property: 'twitter:site', content: siteTwitter},
+    {property: 'twitter:site', content: twitter},
     {property: 'fb:app_id', content: '1371961932852223'},
     // card type tags
     {property: 'og:type', content: 'article'},
@@ -27,4 +39,4 @@ const createChannelMetaTags = ({siteHost, siteTitle, siteTwitter, channel, defau
   ];
 };
 
-module.exports = createChannelMetaTags;
+export default createChannelMetaTags;

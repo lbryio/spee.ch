@@ -1,4 +1,17 @@
-const determineContentTypeFromExtension = require('determineContentTypeFromExtension.js');
+import siteConfig from '@config/siteConfig.json';
+import determineContentTypeFromExtension from './determineContentTypeFromExtension';
+
+const {
+  details: {
+    host,
+    title: siteTitle,
+    twitter,
+  },
+  assetDefaults: {
+    description: defaultDescription,
+    thumbnail: defaultThumbnail,
+  },
+} = siteConfig;
 
 const VIDEO = 'VIDEO';
 const IMAGE = 'IMAGE';
@@ -20,12 +33,12 @@ const determineMediaType = (contentType) => {
   }
 };
 
-const createAssetMetaTags = ({siteHost, siteTitle, siteTwitter, asset, defaultDescription, defaultThumbnail}) => {
+const createAssetMetaTags = (asset) => {
   const { claimData } = asset;
   const { contentType } = claimData;
-  const videoEmbedUrl = `${siteHost}/video-embed/${claimData.name}/${claimData.claimId}`;
-  const showUrl = `${siteHost}/${claimData.claimId}/${claimData.name}`;
-  const source = `${siteHost}/${claimData.claimId}/${claimData.name}.${claimData.fileExt}`;
+  const videoEmbedUrl = `${host}/video-embed/${claimData.name}/${claimData.claimId}`;
+  const showUrl = `${host}/${claimData.claimId}/${claimData.name}`;
+  const source = `${host}/${claimData.claimId}/${claimData.name}.${claimData.fileExt}`;
   const ogTitle = claimData.title || claimData.name;
   const ogDescription = claimData.description || defaultDescription;
   const ogThumbnailContentType = determineContentTypeFromExtension(claimData.thumbnail);
@@ -40,7 +53,7 @@ const createAssetMetaTags = ({siteHost, siteTitle, siteTwitter, asset, defaultDe
     {property: 'og:url', content: showUrl},
     // site info
     {property: 'og:site_name', content: siteTitle},
-    {property: 'twitter:site', content: siteTwitter},
+    {property: 'twitter:site', content: twitter},
     {property: 'fb:app_id', content: '1371961932852223'},
   ];
   if (determineMediaType(contentType) === VIDEO) {
@@ -78,4 +91,4 @@ const createAssetMetaTags = ({siteHost, siteTitle, siteTwitter, asset, defaultDe
   return metaTags;
 };
 
-module.exports = createAssetMetaTags;
+export default createAssetMetaTags;

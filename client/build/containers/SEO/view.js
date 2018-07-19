@@ -11,11 +11,11 @@ var _reactHelmet = _interopRequireDefault(require("react-helmet"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
 
-var _pageTitle = require("../../utils/pageTitle");
+var _createPageTitle = _interopRequireDefault(require("../../utils/createPageTitle"));
 
-var _metaTags = require("../../utils/metaTags");
+var _createMetaTags = _interopRequireDefault(require("../../utils/createMetaTags"));
 
-var _canonicalLink = require("../../utils/canonicalLink");
+var _createCanonicalLink = _interopRequireDefault(require("../../utils/createCanonicalLink"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -49,33 +49,19 @@ function (_React$Component) {
   _createClass(SEO, [{
     key: "render",
     value: function render() {
-      // props from state
+      // props from parent
       var _this$props = this.props,
-          defaultDescription = _this$props.defaultDescription,
-          defaultThumbnail = _this$props.defaultThumbnail,
-          siteDescription = _this$props.siteDescription,
-          siteHost = _this$props.siteHost,
-          siteTitle = _this$props.siteTitle,
-          siteTwitter = _this$props.siteTwitter; // props from parent
-
-      var _this$props2 = this.props,
-          asset = _this$props2.asset,
-          channel = _this$props2.channel,
-          pageUri = _this$props2.pageUri;
+          asset = _this$props.asset,
+          channel = _this$props.channel,
+          pageUri = _this$props.pageUri;
       var pageTitle = this.props.pageTitle; // create page title, tags, and canonical link
 
-      pageTitle = (0, _pageTitle.createPageTitle)(siteTitle, pageTitle);
-      var metaTags = (0, _metaTags.createMetaTags)({
-        siteDescription: siteDescription,
-        siteHost: siteHost,
-        siteTitle: siteTitle,
-        siteTwitter: siteTwitter,
+      pageTitle = (0, _createPageTitle.default)(pageTitle);
+      var metaTags = (0, _createMetaTags.default)({
         asset: asset,
-        channel: channel,
-        defaultDescription: defaultDescription,
-        defaultThumbnail: defaultThumbnail
+        channel: channel
       });
-      var canonicalLink = (0, _canonicalLink.createCanonicalLink)(asset, channel, pageUri, siteHost); // render results
+      var canonicalLink = (0, _createCanonicalLink.default)(asset, channel, pageUri); // render results
 
       return _react.default.createElement(_reactHelmet.default, {
         title: pageTitle,
