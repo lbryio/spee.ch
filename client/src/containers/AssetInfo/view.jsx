@@ -50,7 +50,7 @@ class AssetInfo extends React.Component {
             content={
               <ClickToCopy
                 id={'short-link'}
-                value={`${host}/${shortId}/${name}.${fileExt}`}
+                value={`${host}/${shortId}/${name}`}
               />
             }
           />
@@ -81,12 +81,12 @@ class AssetInfo extends React.Component {
 
         <Row>
           <SpaceBetween>
-            <Link
+            <a
               className='link--primary'
-              to={`/${shortId}/${name}.${fileExt}`}
+              href={`${host}/${claimId}/${name}.${fileExt}`}
             >
               Direct Link
-            </Link>
+            </a>
             <a
               className={'link--primary'}
               href={`${host}/${claimId}/${name}.${fileExt}`}

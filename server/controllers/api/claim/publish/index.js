@@ -27,6 +27,7 @@ const claimPublish = ({ body, files, headers, ip, originalUrl, user, tor }, res)
     ip,
     headers,
     body,
+    files,
   });
   // check for disabled publishing
   if (disabled) {
@@ -36,14 +37,14 @@ const claimPublish = ({ body, files, headers, ip, originalUrl, user, tor }, res)
     });
   }
   // define variables
-  let  channelName, channelId, channelPassword, description, fileName, filePath, fileType, gaStartTime, license, name, nsfw, thumbnail, thumbnailFileName, thumbnailFilePath, thumbnailFileType, title;
+  let  channelName, channelId, channelPassword, description, fileName, filePath, fileExtension, fileType, gaStartTime, license, name, nsfw, thumbnail, thumbnailFileName, thumbnailFilePath, thumbnailFileType, title;
   // record the start time of the request
   gaStartTime = Date.now();
   // validate the body and files of the request
   try {
     // validateApiPublishRequest(body, files);
     ({name, nsfw, license, title, description, thumbnail} = parsePublishApiRequestBody(body));
-    ({fileName, filePath, fileType, thumbnailFileName, thumbnailFilePath, thumbnailFileType} = parsePublishApiRequestFiles(files));
+    ({fileName, filePath, fileExtension, fileType, thumbnailFileName, thumbnailFilePath, thumbnailFileType} = parsePublishApiRequestFiles(files));
     ({channelName, channelId, channelPassword} = body);
   } catch (error) {
     return res.status(400).json({success: false, message: error.message});
@@ -76,8 +77,9 @@ const claimPublish = ({ body, files, headers, ip, originalUrl, user, tor }, res)
         data   : {
           name,
           claimId : result.claim_id,
-          url : `${host}/${result.claim_id}/${name}`,
-          embedUrl: `${host}/asset/${name}/${result.claim_id}`,
+          url : `${host}/${result.claim_id}/${name}`, // for backwards compatability with app
+          showUrl : `${host}/${result.claim_id}/${name}`,
+          serveUrl: `${host}/${result.claim_id}/${name}${fileExtension}`,
           lbryTx  : result,
         },
       });

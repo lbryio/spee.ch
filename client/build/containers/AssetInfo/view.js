@@ -89,7 +89,7 @@ function (_React$Component) {
         }),
         content: _react.default.createElement(_ClickToCopy.default, {
           id: 'short-link',
-          value: "".concat(host, "/").concat(shortId, "/").concat(name, ".").concat(fileExt)
+          value: "".concat(host, "/").concat(shortId, "/").concat(name)
         })
       })), _react.default.createElement(_Row.default, null, _react.default.createElement(_RowLabeled.default, {
         label: _react.default.createElement(_Label.default, {
@@ -102,9 +102,9 @@ function (_React$Component) {
           id: 'embed-text-image',
           value: "<img src=\"".concat(host, "/").concat(claimId, "/").concat(name, ".").concat(fileExt, "\"/>")
         }))
-      })), _react.default.createElement(_Row.default, null, _react.default.createElement(_SpaceBetween.default, null, _react.default.createElement(_reactRouterDom.Link, {
+      })), _react.default.createElement(_Row.default, null, _react.default.createElement(_SpaceBetween.default, null, _react.default.createElement("a", {
         className: "link--primary",
-        to: "/".concat(shortId, "/").concat(name, ".").concat(fileExt)
+        href: "".concat(host, "/").concat(claimId, "/").concat(name, ".").concat(fileExt)
       }, "Direct Link"), _react.default.createElement("a", {
         className: 'link--primary',
         href: "".concat(host, "/").concat(claimId, "/").concat(name, ".").concat(fileExt),

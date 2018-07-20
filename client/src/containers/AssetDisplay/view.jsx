@@ -9,6 +9,7 @@ class AssetDisplay extends React.Component {
   }
   render () {
     const { status, error, asset: { claimData: { name, claimId, contentType, fileExt, thumbnail } } } = this.props;
+    const sourceUrl = `/${claimId}/${name}.${fileExt}`;
     return (
       <div className={'asset-display'}>
         {(status === LOCAL_CHECK) &&
@@ -39,7 +40,7 @@ class AssetDisplay extends React.Component {
               return (
                 <img
                   className='asset-image'
-                  src={`/asset/${name}/${claimId}`}
+                  src={sourceUrl}
                   alt={name}
                 />
               );
@@ -50,14 +51,14 @@ class AssetDisplay extends React.Component {
                   controls poster={thumbnail}
                 >
                   <source
-                    src={`/asset/${name}/${claimId}`}
+                    src={sourceUrl}
                   />
                   <p>Your browser does not support the <code>video</code> element.</p>
                 </video>
               );
             default:
               return (
-                <p>Unsupported file type</p>
+                <p>Unsupported content type</p>
               );
           }
         })()

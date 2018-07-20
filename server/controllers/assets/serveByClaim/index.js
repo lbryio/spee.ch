@@ -1,3 +1,5 @@
+const logger = require('winston');
+
 const { sendGAServeEvent } = require('../../../utils/googleAnalytics');
 const handleShowRender = require('../../../render/build/handleShowRender.js');
 
@@ -6,7 +8,7 @@ const lbryUri = require('../utils/lbryUri.js');
 const determineRequestType = require('../utils/determineRequestType.js');
 const getClaimIdAndServeAsset = require('../utils/getClaimIdAndServeAsset.js');
 
-const { EMBED } = require('../constants/request_types.js');
+const { SHOW } = require('../constants/request_types.js');
 
 /*
 
@@ -16,29 +18,32 @@ const { EMBED } = require('../constants/request_types.js');
 
 const serveByClaim = (req, res) => {
   const { headers, ip, originalUrl, params } = req;
-  // decide if this is a show request
-  let hasFileExtension;
+
   try {
+    let isChannel, hasFileExtension, claimName;
+
+    ({ isChannel } = lbryUri.parseIdentifier(params.claim));
+    if (isChannel) {
+      logger.debug('channel request:', { headers, ip, originalUrl, params });
+      return handleShowRender(req, res);
+    }
+
     ({ hasFileExtension } = lbryUri.parseModifier(params.claim));
+    if (determineRequestType(hasFileExtension, headers) === SHOW) {
+      logger.debug('show request:', { headers, ip, originalUrl, params });
+      return handleShowRender(req, res);
+    }
+
+    ({ claimName } = lbryUri.parseClaim(params.claim));
+    logger.debug('serve request:', { headers, ip, originalUrl, params });
+    getClaimIdAndServeAsset(null, null, claimName, null, originalUrl, ip, res);
+
+    sendGAServeEvent(headers, ip, originalUrl);
+
   } catch (error) {
     return res.status(400).json({success: false, message: error.message});
   }
-  // determine request type
-  let requestType = determineRequestType(hasFileExtension, headers);
-  if (requestType !== EMBED) {
-    return handleShowRender(req, res);
-  }
-  // parse the claim
-  let claimName;
-  try {
-    ({claimName} = lbryUri.parseClaim(params.claim));
-  } catch (error) {
-    return res.status(400).json({success: false, message: error.message});
-  }
-  // send google analytics
-  sendGAServeEvent(headers, ip, originalUrl);
-  // get the claim Id and then serve the asset
-  getClaimIdAndServeAsset(null, null, claimName, null, originalUrl, ip, res);
+
 };
 
 module.exports = serveByClaim;
