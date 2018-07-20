@@ -1,5 +1,6 @@
 import siteConfig from '@config/siteConfig.json';
 import determineContentTypeFromExtension from './determineContentTypeFromExtension';
+import createMetaTagsArray from './createMetaTagsArray';
 
 const {
   details: {
@@ -36,59 +37,57 @@ const determineMediaType = (contentType) => {
 const createAssetMetaTags = (asset) => {
   const { claimData } = asset;
   const { contentType } = claimData;
-  const videoEmbedUrl = `${host}/video-embed/${claimData.name}/${claimData.claimId}`;
   const showUrl = `${host}/${claimData.claimId}/${claimData.name}`;
-  const source = `${host}/${claimData.claimId}/${claimData.name}.${claimData.fileExt}`;
+  const serveUrl = `${host}/${claimData.claimId}/${claimData.name}.${claimData.fileExt}`;
   const ogTitle = claimData.title || claimData.name;
   const ogDescription = claimData.description || defaultDescription;
   const ogThumbnailContentType = determineContentTypeFromExtension(claimData.thumbnail);
   const ogThumbnail = claimData.thumbnail || defaultThumbnail;
-  const metaTags = [
-    // page details
-    {property: 'og:title', content: ogTitle},
-    {property: 'twitter:title', content: ogTitle},
-    {property: 'og:description', content: ogDescription},
-    {property: 'twitter:description', content: ogDescription},
-    // url
-    {property: 'og:url', content: showUrl},
-    // site info
-    {property: 'og:site_name', content: siteTitle},
-    {property: 'twitter:site', content: twitter},
-    {property: 'fb:app_id', content: '1371961932852223'},
-  ];
+  // {property: 'og:title'] = ogTitle},
+  const metaTags = {
+    'og:title'           : ogTitle,
+    'twitter:title'      : ogTitle,
+    'og:description'     : ogDescription,
+    'twitter:description': ogDescription,
+    'og:url'             : showUrl,
+    'og:site_name'       : siteTitle,
+    'twitter:site'       : twitter,
+    'fb:app_id'          : '1371961932852223',
+  };
   if (determineMediaType(contentType) === VIDEO) {
+    const videoEmbedUrl = `${host}/video-embed/${claimData.name}/${claimData.claimId}`;
     // card type tags
-    metaTags.push({property: 'og:type', content: 'video.other'});
-    metaTags.push({property: 'twitter:card', content: 'player'});
-    metaTags.push({property: 'twitter:player', content: videoEmbedUrl});
-    metaTags.push({property: 'twitter:player:width', content: 600});
-    metaTags.push({property: 'twitter:text:player_width', content: 600});
-    metaTags.push({property: 'twitter:player:height', content: 350});
-    metaTags.push({property: 'twitter:player:stream', content: source});
-    metaTags.push({property: 'twitter:player:stream:content_type', content: contentType});
+    metaTags['og:type'] = 'video.other';
+    metaTags['twitter:card'] = 'player';
+    metaTags['twitter:player'] = videoEmbedUrl;
+    metaTags['twitter:player:width'] = 600;
+    metaTags['twitter:text:player_width'] = 600;
+    metaTags['twitter:player:height'] = 350;
+    metaTags['twitter:player:stream'] = serveUrl;
+    metaTags['twitter:player:stream:content_type'] = contentType;
     // video tags
-    metaTags.push({property: 'og:video', content: source});
-    metaTags.push({property: 'og:video:secure_url', content: source});
-    metaTags.push({property: 'og:video:type', content: contentType});
+    metaTags['og:video'] = serveUrl;
+    metaTags['og:video:secure_url'] = serveUrl;
+    metaTags['og:video:type'] = contentType;
     // image tags
-    metaTags.push({property: 'og:image', content: ogThumbnail});
-    metaTags.push({property: 'og:image:width', content: 600});
-    metaTags.push({property: 'og:image:height', content: 315});
-    metaTags.push({property: 'og:image:type', content: ogThumbnailContentType});
-    metaTags.push({property: 'twitter:image', content: ogThumbnail});
+    metaTags['og:image'] = ogThumbnail;
+    metaTags['og:image:width'] = 600;
+    metaTags['og:image:height'] = 315;
+    metaTags['og:image:type'] = ogThumbnailContentType;
+    metaTags['twitter:image'] = ogThumbnail;
   } else {
     // card type tags
-    metaTags.push({property: 'og:type', content: 'article'});
-    metaTags.push({property: 'twitter:card', content: 'summary_large_image'});
+    metaTags['og:type'] = 'article';
+    metaTags['twitter:card'] = 'summary_large_image';
     // image tags
-    metaTags.push({property: 'og:image', content: source});
-    metaTags.push({property: 'og:image', content: source});
-    metaTags.push({property: 'og:image:width', content: 600});
-    metaTags.push({property: 'og:image:height', content: 315});
-    metaTags.push({property: 'og:image:type', content: contentType});
-    metaTags.push({property: 'twitter:image', content: source});
+    metaTags['og:image'] = serveUrl;
+    metaTags['og:image'] = serveUrl;
+    metaTags['og:image:width'] = 600;
+    metaTags['og:image:height'] = 315;
+    metaTags['og:image:type'] = contentType;
+    metaTags['twitter:image'] = serveUrl;
   }
-  return metaTags;
+  return createMetaTagsArray(metaTags);
 };
 
 export default createAssetMetaTags;

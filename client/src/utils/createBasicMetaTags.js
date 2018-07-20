@@ -1,5 +1,6 @@
 import siteConfig from '@config/siteConfig.json';
 import determineContentTypeFromExtension from './determineContentTypeFromExtension.js';
+import createMetaTagsArray from './createMetaTagsArray';
 
 const {
   details: {
@@ -14,29 +15,30 @@ const {
 } = siteConfig;
 
 const createBasicMetaTags = () => {
-  return [
+  const metaTags = {
     // page details
-    {property: 'og:title', content: title},
-    {property: 'twitter:title', content: title},
-    {property: 'og:description', content: description},
-    {property: 'twitter:description', content: description},
+    'og:title'           : title,
+    'twitter:title'      : title,
+    'og:description'     : description,
+    'twitter:description': description,
     // url
-    {property: 'og:url', content: host},
+    'og:url'             : host,
     // site id
-    {property: 'og:site_name', content: title},
-    {property: 'twitter:site', content: twitter},
-    {property: 'fb:app_id', content: '1371961932852223'},
+    'og:site_name'       : title,
+    'twitter:site'       : twitter,
+    'fb:app_id'          : '1371961932852223',
     // card type
-    {property: 'og:type', content: 'article'},
-    {property: 'twitter:card', content: 'summary_large_image'},
+    'og:type'            : 'article',
+    'twitter:card'       : 'summary_large_image',
     // image
-    {property: 'og:image', content: thumbnail},
-    {property: 'og:image:width', content: 600},
-    {property: 'og:image:height', content: 315},
-    {property: 'og:image:type', content: determineContentTypeFromExtension(thumbnail)},
-    {property: 'twitter:image', content: thumbnail},
-    {property: 'twitter:image:alt', content: 'Spee.ch Logo'},
-  ];
+    'og:image'           : thumbnail,
+    'og:image:width'     : 600,
+    'og:image:height'    : 315,
+    'og:image:type'      : determineContentTypeFromExtension(thumbnail),
+    'twitter:image'      : thumbnail,
+    'twitter:image:alt'  : 'Spee.ch Logo',
+  };
+  return createMetaTagsArray(metaTags);
 };
 
 export default createBasicMetaTags;

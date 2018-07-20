@@ -9,6 +9,8 @@ var _siteConfig = _interopRequireDefault(require("@config/siteConfig.json"));
 
 var _determineContentTypeFromExtension = _interopRequireDefault(require("./determineContentTypeFromExtension"));
 
+var _createMetaTagsArray = _interopRequireDefault(require("./createMetaTagsArray"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var _siteConfig$details = _siteConfig.default.details,
@@ -20,60 +22,30 @@ var _siteConfig$details = _siteConfig.default.details,
 var createChannelMetaTags = function createChannelMetaTags(channel) {
   var name = channel.name,
       longId = channel.longId;
-  return [// page detail tags
-  {
-    property: 'og:title',
-    content: "".concat(name, " on ").concat(siteTitle)
-  }, {
-    property: 'twitter:title',
-    content: "".concat(name, " on ").concat(siteTitle)
-  }, {
-    property: 'og:description',
-    content: "".concat(name, ", a channel on ").concat(siteTitle)
-  }, {
-    property: 'twitter:description',
-    content: "".concat(name, ", a channel on ").concat(siteTitle)
-  }, // url
-  {
-    property: 'og:url',
-    content: "".concat(host, "/").concat(name, ":").concat(longId)
-  }, // site info
-  {
-    property: 'og:site_name',
-    content: siteTitle
-  }, {
-    property: 'twitter:site',
-    content: twitter
-  }, {
-    property: 'fb:app_id',
-    content: '1371961932852223'
-  }, // card type tags
-  {
-    property: 'og:type',
-    content: 'article'
-  }, {
-    property: 'twitter:card',
-    content: 'summary_large_image'
-  }, // image tags
-  {
-    property: 'og:image',
-    content: defaultThumbnail
-  }, {
-    property: 'og:image:width',
-    content: 600
-  }, {
-    property: 'og:image:height',
-    content: 315
-  }, {
-    property: 'og:image:type',
-    content: (0, _determineContentTypeFromExtension.default)(defaultThumbnail)
-  }, {
-    property: 'twitter:image',
-    content: defaultThumbnail
-  }, {
-    property: 'twitter:image:alt',
-    content: 'Spee.ch Logo'
-  }];
+  var metaTags = {
+    // page detail tags
+    'og:title': "".concat(name, " on ").concat(siteTitle),
+    'twitter:title': "".concat(name, " on ").concat(siteTitle),
+    'og:description': "".concat(name, ", a channel on ").concat(siteTitle),
+    'twitter:description': "".concat(name, ", a channel on ").concat(siteTitle),
+    // url
+    'og:url': "".concat(host, "/").concat(name, ":").concat(longId),
+    // site info
+    'og:site_name': siteTitle,
+    'twitter:site': twitter,
+    'fb:app_id': '1371961932852223',
+    // card type tags
+    'og:type': 'article',
+    'twitter:card': 'summary_large_image',
+    // image tags
+    'og:image': defaultThumbnail,
+    'og:image:width': 600,
+    'og:image:height': 315,
+    'og:image:type': (0, _determineContentTypeFromExtension.default)(defaultThumbnail),
+    'twitter:image': defaultThumbnail,
+    'twitter:image:alt': 'Spee.ch Logo'
+  };
+  return (0, _createMetaTagsArray.default)(metaTags);
 };
 
 exports.createChannelMetaTags = createChannelMetaTags;
