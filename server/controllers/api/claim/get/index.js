@@ -1,5 +1,5 @@
 const { getClaim } = require('../../../../lbrynet');
-const createFileData = require('./createFileData.js');
+const { createFileRecordDataAfterGet } = require('../../../../models/utils/createFileRecordData.js');
 const { handleErrorResponse } = require('../../../utils/errorHandlers.js');
 const db = require('../../../../models');
 
@@ -27,7 +27,7 @@ const claimGet = ({ ip, originalUrl, params }, res) => {
       getResult = result;
     })
     .then(() => {
-      const fileData = createFileData(resolveResult, getResult);
+      const fileData = createFileRecordDataAfterGet(resolveResult, getResult);
       const upsertCriteria = { name, claimId};
       return db.upsert(db.File, fileData, upsertCriteria, 'File')
     })

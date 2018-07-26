@@ -1,6 +1,8 @@
 const logger = require('winston');
-const db = require('../../../../models');
 const { publishClaim } = require('../../../../lbrynet');
+const db = require('../../../../models');
+const { createFileRecordDataAfterPublish } = require('../../../../models/utils/createFileRecordData.js');
+const { createClaimRecordDataAfterPublish } = require('../../../../models/utils/createClaimRecordData.js');
 const deleteFile = require('./deleteFile.js');
 
 const publish = (publishParams, fileName, fileType) => {
@@ -35,51 +37,32 @@ const publish = (publishParams, fileName, fileType) => {
         logger.debug(`certificateId: ${certificateId}`);
       })
       .then(() => {
+        const { name, claim_id: claimId } = publishParams;
         // create the File record
-        const fileRecord = {
-          name       : publishParams.name,
-          claimId    : publishResults.claim_id,
-          title      : publishParams.metadata.title,
-          description: publishParams.metadata.description,
-          address    : publishParams.claim_address,
-          outpoint   : `${publishResults.txid}:${publishResults.nout}`,
-          height     : 0,
-          fileName,
-          filePath   : publishParams.file_path,
-          fileType,
-          nsfw       : publishParams.metadata.nsfw,
-        };
+        const fileRecord = createFileRecordDataAfterPublish(fileName, fileType, publishParams, publishResults);
         // create the Claim record
-        const claimRecord = {
-          name       : publishParams.name,
-          claimId    : publishResults.claim_id,
-          title      : publishParams.metadata.title,
-          description: publishParams.metadata.description,
-          address    : publishParams.claim_address,
-          thumbnail  : publishParams.metadata.thumbnail,
-          outpoint   : `${publishResults.txid}:${publishResults.nout}`,
-          height     : 0,
-          contentType: fileType,
-          nsfw       : publishParams.metadata.nsfw,
-          amount     : publishParams.bid,
-          certificateId,
-          channelName,
-        };
-        // upsert criteria
+        const claimRecord = createClaimRecordDataAfterPublish(certificateId, channelName, fileName, fileType, publishParams, publishResults);
         const upsertCriteria = {
-          name   : publishParams.name,
-          claimId: publishResults.claim_id,
+          name,
+          claimId,
         };
         // upsert the records
-        return Promise.all([db.upsert(db.File, fileRecord, upsertCriteria, 'File'), db.upsert(db.Claim, claimRecord, upsertCriteria, 'Claim')]);
+        return Promise.all([
+          db.upsert(db.File, fileRecord, upsertCriteria, 'File'),
+          db.upsert(db.Claim, claimRecord, upsertCriteria, 'Claim'),
+        ]);
       })
       .then(([file, claim]) => {
         logger.debug('File and Claim records successfully created');
-        return Promise.all([file.setClaim(claim), claim.setFile(file)]);
+        return Promise.all([
+          file.setClaim(claim),
+          claim.setFile(file),
+        ]);
       })
       .then(() => {
         logger.debug('File and Claim records successfully associated');
-        resolve(publishResults); // resolve the promise with the result from lbryApi publishClaim;
+        // resolve the promise with the result from lbryApi publishClaim;
+        resolve(publishResults);
       })
       .catch(error => {
         logger.error('PUBLISH ERROR', error);
