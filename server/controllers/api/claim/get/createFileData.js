@@ -1,4 +1,4 @@
-module.exports = ({ name, claimId, outpoint, height, address, nsfw, contentType }) => {
+const createFileData = ({ name, claimId, outpoint, height, address, nsfw, contentType }) => {
   return {
     name,
     claimId,
@@ -11,3 +11,5 @@ module.exports = ({ name, claimId, outpoint, height, address, nsfw, contentType 
     nsfw,
   };
 };
+
+module.exports = createFileData;
