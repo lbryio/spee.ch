@@ -1,8 +1,7 @@
 const logger = require('winston');
 const { details, publishing } = require('@config/siteConfig');
 
-const createBasicPublishParams = (filePath, name, title, description, license, nsfw, thumbnail) => {
-  logger.debug(`Creating Publish Parameters`);
+const createPublishParams = (filePath, name, title, description, license, nsfw, thumbnail, channelName, channelClaimId) => {
   // provide defaults for title
   if (title === null || title.trim() === '') {
     title = name;
@@ -15,7 +14,7 @@ const createBasicPublishParams = (filePath, name, title, description, license, n
   if (license === null || license.trim() === '') {
     license = ' ';  // default to empty string
   }
-  // create the publish params
+  // create the basic publish params
   const publishParams = {
     name,
     file_path: filePath,
@@ -34,8 +33,15 @@ const createBasicPublishParams = (filePath, name, title, description, license, n
   if (thumbnail) {
     publishParams['metadata']['thumbnail'] = thumbnail;
   }
+  // add channel details if publishing to a channel
+  if (channelName && channelClaimId) {
+    publishParams['channel_name'] = channelName;
+    publishParams['channel_id'] = channelClaimId;
+  }
+  // log params
   logger.debug('publish params:', publishParams);
+  // return
   return publishParams;
 };
 
-module.exports = createBasicPublishParams;
+module.exports = createPublishParams;

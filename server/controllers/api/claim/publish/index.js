@@ -9,11 +9,13 @@ const { handleErrorResponse } = require('../../../utils/errorHandlers.js');
 const checkClaimAvailability = require('../availability/checkClaimAvailability.js');
 
 const publish = require('./publish.js');
-const createBasicPublishParams = require('./createBasicPublishParams.js');
+const createPublishParams = require('./createPublishParams.js');
 const createThumbnailPublishParams = require('./createThumbnailPublishParams.js');
 const parsePublishApiRequestBody = require('./parsePublishApiRequestBody.js');
 const parsePublishApiRequestFiles = require('./parsePublishApiRequestFiles.js');
 const authenticateUser = require('./authentication.js');
+
+const CLAIM_TAKEN = 'CLAIM_TAKEN';
 
 /*
 
@@ -50,18 +52,22 @@ const claimPublish = ({ body, files, headers, ip, originalUrl, user, tor }, res)
     return res.status(400).json({success: false, message: error.message});
   }
   // check channel authorization
-  Promise
-    .all([
-      authenticateUser(channelName, channelId, channelPassword, user),
-      checkClaimAvailability(name),
-      createBasicPublishParams(filePath, name, title, description, license, nsfw, thumbnail),
-      createThumbnailPublishParams(thumbnailFilePath, name, license, nsfw),
-    ])
-    .then(([{channelName, channelClaimId}, validatedClaimName, publishParams, thumbnailPublishParams]) => {
+  authenticateUser(channelName, channelId, channelPassword, user)
+    .then(({ channelName, channelClaimId }) => {
       // add channel details to the publish params
-      if (channelName && channelClaimId) {
-        publishParams['channel_name'] = channelName;
-        publishParams['channel_id'] = channelClaimId;
+
+      return Promise.all([
+        checkClaimAvailability(name),
+        createPublishParams(filePath, name, title, description, license, nsfw, thumbnail, channelName, channelClaimId),
+        createThumbnailPublishParams(thumbnailFilePath, name, license, nsfw),
+      ])
+    })
+    .then(([ claimAvailable, publishParams, thumbnailPublishParams ]) => {
+      if (!claimAvailabile) {
+        throw {
+          name: CLAIM_TAKEN,
+          message: 'That claim name is already taken'
+        };
       }
       // publish the thumbnail, if one exists
       if (thumbnailPublishParams) {
@@ -87,6 +93,12 @@ const claimPublish = ({ body, files, headers, ip, originalUrl, user, tor }, res)
       sendGATimingEvent('end-to-end', 'publish', fileType, gaStartTime, Date.now());
     })
     .catch(error => {
+      if (error.name = CLAIM_TAKEN) {
+        res.status(400).json({
+          success: false,
+          message: error.message,
+        });
+      }
       handleErrorResponse(originalUrl, ip, error, res);
     });
 };
