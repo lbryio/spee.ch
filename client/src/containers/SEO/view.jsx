@@ -2,9 +2,13 @@ import React from 'react';
 import Helmet from 'react-helmet';
 import PropTypes from 'prop-types';
 
+import siteConfig from '@config/siteConfig.json';
 import createPageTitle from '../../utils/createPageTitle';
 import createMetaTags from '../../utils/createMetaTags';
+import oEmbed from '../../utils/oEmbed.js';
 import createCanonicalLink from '../../utils/createCanonicalLink';
+
+const { details: { host } } = siteConfig;
 
 class SEO extends React.Component {
   render () {
@@ -17,17 +21,24 @@ class SEO extends React.Component {
       asset,
       channel,
     });
-    const canonicalLink = createCanonicalLink(asset, channel, pageUri);
+    const cannonicalLink = createCanonicalLink(asset, channel, pageUri)
     // render results
     return (
       <Helmet
         title={pageTitle}
         meta={metaTags}
-        link={[{rel: 'canonical', href: canonicalLink}]}
+        link={[
+          {
+            rel : 'canonical',
+            href: cannonicalLink,
+          },
+          oEmbed.json(host, cannonicalLink),
+          oEmbed.xml(host, cannonicalLink),
+        ]}
       />
     );
   }
-};
+}
 
 SEO.propTypes = {
   pageTitle: PropTypes.string,
