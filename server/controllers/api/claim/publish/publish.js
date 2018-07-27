@@ -37,16 +37,18 @@ const publish = (publishParams, fileName, fileType) => {
         logger.debug(`certificateId: ${certificateId}`);
       })
       .then(() => {
-        const { name, claim_id: claimId } = publishParams;
-        // create the File record
-        const fileRecord = createFileRecordDataAfterPublish(fileName, fileType, publishParams, publishResults);
-        // create the Claim record
-        const claimRecord = createClaimRecordDataAfterPublish(certificateId, channelName, fileName, fileType, publishParams, publishResults);
+        return Promise.all([
+          createFileRecordDataAfterPublish(fileName, fileType, publishParams, publishResults),
+          createClaimRecordDataAfterPublish(certificateId, channelName, fileName, fileType, publishParams, publishResults),
+        ]);
+      })
+      .then(([fileRecord, claimRecord]) => {
+        // upsert the records
+        const {name, claim_id: claimId} = publishParams;
         const upsertCriteria = {
           name,
           claimId,
         };
-        // upsert the records
         return Promise.all([
           db.upsert(db.File, fileRecord, upsertCriteria, 'File'),
           db.upsert(db.Claim, claimRecord, upsertCriteria, 'Claim'),

@@ -1,7 +1,8 @@
 const logger = require('winston');
-const sizeOf = require('image-size');
+const sizeOfImage = require('image-size');
+const sizeOfVideo = require('get-video-dimensions');
 
-const getFileDimensions = (fileType, filePath) => {
+async function getFileDimensions (fileType, filePath) {
   let height = 0;
   let width = 0;
   switch (fileType) {
@@ -10,12 +11,16 @@ const getFileDimensions = (fileType, filePath) => {
     case 'image/png':
     case 'image/gif':
       logger.debug('creating File data for an image');
-      const dimensions = sizeOf(filePath);
-      height = dimensions.height;
-      width = dimensions.width;
+      const imageDimensions = sizeOfImage(filePath);
+      height = imageDimensions.height;
+      width = imageDimensions.width;
       break;
     case 'video/mp4':
       logger.debug('creating File data for a video');
+      const videoDimensions = await sizeOfVideo(filePath);
+      logger.debug('video dimensions', videoDimensions);
+      height = videoDimensions.height;
+      width = videoDimensions.width;
       break;
     default:
       logger.error('unable to create File data for unspported file type:', fileType);
@@ -25,9 +30,9 @@ const getFileDimensions = (fileType, filePath) => {
     height,
     width,
   };
-};
+}
 
-const createFileRecordDataAfterGet = (resolveResult, getResult) => {
+async function createFileRecordDataAfterGet (resolveResult, getResult) {
   const {
     name,
     claimId,
@@ -43,7 +48,7 @@ const createFileRecordDataAfterGet = (resolveResult, getResult) => {
   const {
     height: fileHeight,
     width: fileWidth,
-  } = getFileDimensions(fileType, filePath);
+  } = await getFileDimensions(fileType, filePath);
 
   return {
     name,
@@ -57,7 +62,7 @@ const createFileRecordDataAfterGet = (resolveResult, getResult) => {
   };
 };
 
-const createFileRecordDataAfterPublish = (fileName, fileType, publishParams, publishResults) => {
+async function createFileRecordDataAfterPublish (fileName, fileType, publishParams, publishResults) {
   const {
     name,
     file_path: filePath,
@@ -69,7 +74,10 @@ const createFileRecordDataAfterPublish = (fileName, fileType, publishParams, pub
     nout,
   } = publishResults;
 
-  const { height: fileHeight, width: fileWidth } = getFileDimensions(fileType, filePath);
+  const {
+    height: fileHeight,
+    width: fileWidth,
+  } = await getFileDimensions(fileType, filePath);
 
   return {
     name,
@@ -81,7 +89,7 @@ const createFileRecordDataAfterPublish = (fileName, fileType, publishParams, pub
     filePath,
     fileType,
   };
-};
+}
 
 module.exports = {
   createFileRecordDataAfterGet,
