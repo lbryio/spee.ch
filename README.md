@@ -10,9 +10,9 @@ npm install spee.ch --save
 ```
 
 ### Dependenceis
-Install the following programs:
-* [imagemagick](https://www.imagemagick.org/)
-* [ffmpeg](https://www.ffmpeg.org/)
+Make sure the following are installed
+* [imagemagick](https://www.imagemagick.org/script/download.php)
+* [ffmpeg](https://www.ffmpeg.org/download.html)
 
 ## Development 
 * the `server/` folder contains all of the server code
@@ -70,7 +70,13 @@ Issues with spee.ch strong familiarity with the spee.ch code base and how the lb
 Issues with lbry (e.g. the spee.ch wallet, lbrynet configuration, etc.) that require strong familiarity with the lbry daemon and/or network to fix. Generally these issues are best suited for the lbry protocol team but are placed in this repo because of they are part of the spee.ch implementation
 
 ### Stack
-* node
-* mysql
-* react
+* server
+  * [mysql](https://www.mysql.com/)
+  * [express](https://www.npmjs.com/package/express) 
+  * [node](https://nodejs.org/)
+  * [lbry](https://github.com/lbryio/lbry)
+  * [imagemagick](https://www.imagemagick.org/)
+  * [ffmpeg](https://www.ffmpeg.org/)
+* client
+  * [react](https://reactjs.org/)
 
