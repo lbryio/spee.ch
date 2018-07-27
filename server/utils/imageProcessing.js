@@ -1,24 +1,36 @@
 const im = require('imagemagick');
 
 const getImageMetadata = (filePath) => {
-  return im.readMetadata(filePath, (err, metadata) => {
-    if (err) throw err;
-    return metadata;
+  return new Promise((resolve, reject) => {
+    im.readMetadata(filePath, (err, metadata) => {
+      if (err) {
+        reject(err);
+      }
+      resolve(metadata);
+    });
   });
 };
 
 const getImageDetails = (filePath) => {
-  return im.identify(filePath, (err, details) => {
-    if (err) throw err;
-    return details;
+  return new Promise((resolve, reject) => {
+    im.identify(filePath, (err, details) => {
+      if (err) {
+        reject(err);
+      }
+      resolve(details);
+    });
   });
 };
 
 const getImageHeightAndWidth = (filePath) => {
-  return im.identify(filePath, (err, details) => {
-    if (err) throw err;
-    const { height, width } = details;
-    return [height, width];
+  return new Promise((resolve, reject) => {
+    im.identify(filePath, (err, details) => {
+      if (err) {
+        reject(err);
+      }
+      const { height, width } = details;
+      resolve([height, width]);
+    });
   });
 };
 

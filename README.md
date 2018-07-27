@@ -9,6 +9,11 @@ To get started running your own version of spee.ch, visit [lbryio/www.spee.ch](h
 npm install spee.ch --save 
 ```
 
+### Dependenceis
+Install the following programs:
+* [imagemagick](https://www.imagemagick.org/)
+* [ffmpeg](https://www.ffmpeg.org/)
+
 ## Development 
 * the `server/` folder contains all of the server code
   * `index.js` is the entry point for the server.  It creates the [express app](https://expressjs.com/), requires the routes, syncs the database, and starts the server listening on the `PORT` designated in the config file.
@@ -23,21 +28,7 @@ npm install spee.ch --save
   *  To run only tests that do not require LBC, run `npm run test:no-lbc`
 
 ## API
-
-#### GET
-* /api/claim/resolve/:name/:claimId
-  * example: `curl https://spee.ch/api/claim/resolve/doitlive/xyz`
-* /api/claim/list/:name
-  * example: `curl https://spee.ch/api/claim/list/doitlive`
-* /api/claim/availability/:name
-  * returns the name if it is available
-  * example: `curl https://spee.ch/api/claim/availability/doitlive`
-* /api/channel/availability/:name
-  * returns the name if it is available
-  * example: `curl https://spee.ch/api/channel/availability/@CoolChannel`
-
-#### POST
-* /api/claim/publish
+* _(post)_ /api/claim/publish
   * example: `curl -F 'name=MyPictureName' -F 'file=@/path/to/myPicture.jpeg' https://spee.ch/api/claim/publish`
   * Parameters:
     * `name` (required)
@@ -49,6 +40,16 @@ npm install spee.ch --save
     * `thumbnail` url to thumbnail image, for .mp4 uploads only (optional)
     * `channelName`(optional)
     * `channelPassword` (optional,; required if `channelName` is provided)
+* _(get)_ /api/claim/resolve/:name/:claimId
+  * example: `curl https://spee.ch/api/claim/resolve/doitlive/xyz`
+* _(get)_ /api/claim/list/:name
+  * example: `curl https://spee.ch/api/claim/list/doitlive`
+* _(get)_ /api/claim/availability/:name
+  * returns the name if it is available
+  * example: `curl https://spee.ch/api/claim/availability/doitlive`
+* _(get)_ /api/channel/availability/:name
+  * returns the name if it is available
+  * example: `curl https://spee.ch/api/channel/availability/@CoolChannel`
 
 ## Bugs
 If you find a bug or experience a problem, please report your issue here on github and find us in the lbry discord!
@@ -69,4 +70,7 @@ Issues with spee.ch strong familiarity with the spee.ch code base and how the lb
 Issues with lbry (e.g. the spee.ch wallet, lbrynet configuration, etc.) that require strong familiarity with the lbry daemon and/or network to fix. Generally these issues are best suited for the lbry protocol team but are placed in this repo because of they are part of the spee.ch implementation
 
 ### Stack
+* node
+* mysql
+* react
 

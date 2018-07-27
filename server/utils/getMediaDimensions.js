@@ -1,6 +1,6 @@
 const logger = require('winston');
 const { getImageHeightAndWidth } = require('./imageProcessing');
-const { getVideoHeightAndWidth } = require('./utils/videoProcessing');
+const { getVideoHeightAndWidth } = require('./videoProcessing');
 
 async function getMediaDimensions (fileType, filePath) {
   let height = 0;
