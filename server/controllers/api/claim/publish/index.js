@@ -54,8 +54,6 @@ const claimPublish = ({ body, files, headers, ip, originalUrl, user, tor }, res)
   // check channel authorization
   authenticateUser(channelName, channelId, channelPassword, user)
     .then(({ channelName, channelClaimId }) => {
-      // add channel details to the publish params
-
       return Promise.all([
         checkClaimAvailability(name),
         createPublishParams(filePath, name, title, description, license, nsfw, thumbnail, channelName, channelClaimId),
@@ -63,7 +61,7 @@ const claimPublish = ({ body, files, headers, ip, originalUrl, user, tor }, res)
       ])
     })
     .then(([ claimAvailable, publishParams, thumbnailPublishParams ]) => {
-      if (!claimAvailabile) {
+      if (!claimAvailable) {
         throw {
           name: CLAIM_TAKEN,
           message: 'That claim name is already taken'
