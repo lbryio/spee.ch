@@ -19,6 +19,7 @@ const userPassword = require('../../controllers/api/user/password');
 const publishingConfig = require('../../controllers/api/config/site/publishing');
 const getTorList = require('../../controllers/api/tor');
 const getBlockedList = require('../../controllers/api/blocked');
+const getOEmbedData = require('../../controllers/api/oEmbed');
 
 
 module.exports = (app) => {
@@ -46,4 +47,6 @@ module.exports = (app) => {
   app.get('/api/tor', torCheckMiddleware, getTorList);
   // blocked
   app.get('/api/blocked', torCheckMiddleware, getBlockedList);
+  // open embed
+  app.get('/api/oembed', torCheckMiddleware, getOEmbedData)
 };

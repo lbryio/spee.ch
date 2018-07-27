@@ -8,7 +8,7 @@ var rel = 'alternate';
 var title = 'spee.ch oEmbed profile';
 
 var formatUrlForQuery = function formatUrlForQuery(url) {
-  return url.replace(/\/+/, '%2F').replace(/:/, '%3A');
+  return url.replace(/\//g, '%2F').replace(/:/g, '%3A');
 };
 
 var createJsonLinkData = function createJsonLinkData(host, canonicalUrl) {
@@ -24,7 +24,7 @@ var createXmlLinkData = function createXmlLinkData(host, canonicalUrl) {
   return {
     rel: rel,
     type: 'application/xml+oembed',
-    href: "".concat(host, "/api/oembed?").concat(formatUrlForQuery(canonicalUrl), "%2F&format=xml"),
+    href: "".concat(host, "/api/oembed?url=").concat(formatUrlForQuery(canonicalUrl), "%2F&format=xml"),
     title: title
   };
 };
