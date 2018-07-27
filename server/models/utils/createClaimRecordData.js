@@ -1,4 +1,4 @@
-const createClaimRecordDataAfterPublish = (certificateId, channelName, fileType, publishParams, publishResults) => {
+const createClaimRecordDataAfterPublish = (certificateId, channelName, fileName, fileType, publishParams, publishResults) => {
   const {
     name,
     metadata: {
@@ -10,11 +10,13 @@ const createClaimRecordDataAfterPublish = (certificateId, channelName, fileType,
     claim_address: address,
     bid: amount,
   } = publishParams;
+
   const {
     claim_id: claimId,
     txid,
     nout,
   } = publishResults;
+
   return {
     name,
     claimId,

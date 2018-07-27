@@ -28,9 +28,23 @@ const getFileDimensions = (fileType, filePath) => {
 };
 
 const createFileRecordDataAfterGet = (resolveResult, getResult) => {
-  const { name, claimId, outpoint, contentType: fileType } = resolveResult;
-  const { file_name: fileName, download_path: filePath } = getResult;
-  const { height: fileHeight, width: fileWidth } = getFileDimensions(fileType, filePath);
+  const {
+    name,
+    claimId,
+    outpoint,
+    contentType: fileType,
+  } = resolveResult;
+
+  const {
+    file_name: fileName,
+    download_path: filePath,
+  } = getResult;
+
+  const {
+    height: fileHeight,
+    width: fileWidth,
+  } = getFileDimensions(fileType, filePath);
+
   return {
     name,
     claimId,
@@ -44,8 +58,17 @@ const createFileRecordDataAfterGet = (resolveResult, getResult) => {
 };
 
 const createFileRecordDataAfterPublish = (fileName, fileType, publishParams, publishResults) => {
-  const { name, claim_id: claimId, file_path: filePath } = publishParams;
-  const { txid, nout } = publishResults;
+  const {
+    name,
+    file_path: filePath,
+  } = publishParams;
+
+  const {
+    claim_id: claimId,
+    txid,
+    nout,
+  } = publishResults;
+
   const { height: fileHeight, width: fileWidth } = getFileDimensions(fileType, filePath);
 
   return {
