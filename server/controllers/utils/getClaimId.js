@@ -1,6 +1,6 @@
 const logger = require('winston');
 
-const db = require('../../../../models');
+const db = require('../../models/index');
 
 const getClaimIdByChannel = (channelName, channelClaimId, claimName) => {
   return new Promise((resolve, reject) => {

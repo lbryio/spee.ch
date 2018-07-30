@@ -3,7 +3,7 @@ const logger = require('winston');
 const { sendGAServeEvent } = require('../../../utils/googleAnalytics');
 const handleShowRender = require('../../../render/build/handleShowRender.js');
 
-const lbryUri = require('../utils/lbryUri.js');
+const lbryUri = require('../../utils/lbryUri.js');
 
 const determineRequestType = require('../utils/determineRequestType.js');
 const getClaimIdAndServeAsset = require('../utils/getClaimIdAndServeAsset.js');

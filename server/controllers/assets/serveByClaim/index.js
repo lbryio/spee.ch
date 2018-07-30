@@ -3,7 +3,7 @@ const logger = require('winston');
 const { sendGAServeEvent } = require('../../../utils/googleAnalytics');
 const handleShowRender = require('../../../render/build/handleShowRender.js');
 
-const lbryUri = require('../utils/lbryUri.js');
+const lbryUri = require('../../utils/lbryUri.js');
 
 const determineRequestType = require('../utils/determineRequestType.js');
 const getClaimIdAndServeAsset = require('../utils/getClaimIdAndServeAsset.js');
@@ -38,9 +38,15 @@ const serveByClaim = (req, res) => {
     logger.debug('serve request:', { headers, ip, originalUrl, params });
     getClaimIdAndServeAsset(null, null, claimName, null, originalUrl, ip, res);
 
+    // get claim id
+    // serve asset
+
     sendGAServeEvent(headers, ip, originalUrl);
 
   } catch (error) {
+    // check for different bubbled up error messages
+
+    // fallback
     return res.status(400).json({success: false, message: error.message});
   }
 
