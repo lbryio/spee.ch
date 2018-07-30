@@ -13,9 +13,9 @@ const getOEmbedData = (req, res) => {
     '([^:/?#]+:\/\/)'+
     '([^/?#]*)' +
     '(\/)' +
-    '([^?#]*)' +
+    '([^/?#]*)' +
     '(\/)' +
-    '([^?#]*)'
+    '([^/?#]*)'
   );
   const [proto, protocol, domain, slashOne, paramOne, slashTwo, paramTwo] = componentsRegex
     .exec(url)
