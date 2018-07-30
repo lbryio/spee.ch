@@ -1,6 +1,5 @@
 const { getClaim } = require('../../../../lbrynet');
-const addGetResultsToFileData = require('./addGetResultsToFileData.js');
-const createFileData = require('./createFileData.js');
+const { createFileRecordDataAfterGet } = require('../../../../models/utils/createFileRecordData.js');
 const { handleErrorResponse } = require('../../../utils/errorHandlers.js');
 const db = require('../../../../models');
 
@@ -13,23 +12,32 @@ const db = require('../../../../models');
 const claimGet = ({ ip, originalUrl, params }, res) => {
   const name = params.name;
   const claimId = params.claimId;
+  let resolveResult;
+  let getResult;
   // resolve the claim
   db.Claim.resolveClaim(name, claimId)
-    .then(resolveResult => {
-      // make sure a claim actually exists at that uri
-      if (!resolveResult) {
+    .then(result => {
+      if (!result) {
         throw new Error('No matching uri found in Claim table');
       }
-      let fileData = createFileData(resolveResult);
-      // get the claim
-      return Promise.all([fileData, getClaim(`${name}#${claimId}`)]);
+      resolveResult = result;
+      return getClaim(`${name}#${claimId}`);
     })
-    .then(([ fileData, getResult ]) => {
-      fileData = addGetResultsToFileData(fileData, getResult);
-      return Promise.all([db.upsert(db.File, fileData, {name, claimId}, 'File'), getResult]);
+    .then(result => {
+      getResult = result;
     })
-    .then(([ fileRecord, {message, completed} ]) => {
-      res.status(200).json({ success: true, message, completed });
+    .then(() => {
+      const fileData = createFileRecordDataAfterGet(resolveResult, getResult);
+      const upsertCriteria = { name, claimId};
+      return db.upsert(db.File, fileData, upsertCriteria, 'File')
+    })
+    .then(() => {
+      const { message, completed } = getResult;
+      res.status(200).json({
+        success: true,
+        message,
+        completed,
+      });
     })
     .catch(error => {
       handleErrorResponse(originalUrl, ip, error, res);
