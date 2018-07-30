@@ -50,11 +50,14 @@ const getOEmbedData = (req, res) => {
   if (isChannel && !paramTwo) {
     getOEmbedDataForChannel(channelName, channelClaimId)
       .then(data => {
-        return res.status(200).json({
-          success: true,
-          message: 'hello',
-          data,
-        });
+        if (format === 'xml'){
+          return res.status(503).json({
+            success: false,
+            message: 'xml format is not implemented yet',
+          })
+        } else {
+          return res.status(200).json(data);
+        }
       })
       .catch((error) => {
         return res.status(404).json({
@@ -66,11 +69,14 @@ const getOEmbedData = (req, res) => {
   } else {
     getOEmbedDataForAsset(channelName, channelClaimId, claimName, claimId)
       .then(data => {
-        return res.status(200).json({
-          success: true,
-          message: 'hello',
-          data,
-        });
+        if (format === 'xml'){
+          return res.status(503).json({
+            success: false,
+            message: 'xml format is not implemented yet',
+          })
+        } else {
+          return res.status(200).json(data);
+        }
       })
       .catch((error) => {
         return res.status(404).json({
