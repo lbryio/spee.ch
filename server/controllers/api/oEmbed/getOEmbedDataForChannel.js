@@ -1,8 +1,6 @@
-const logger = require('winston');
 const db = require('../../../models');
 
 const getOEmbedDataForChannel = (channelName, channelClaimId) => {
-  logger.debug('get oembed for channel:', `${channelName}:${channelClaimId}`);
   return db.Certificate
     .findOne({
       where: {

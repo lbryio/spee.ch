@@ -3,29 +3,7 @@ const lbryUri = require('../../utils/lbryUri');
 
 const getOEmbedDataForChannel = require('./getOEmbedDataForChannel');
 const getOEmbedDataForAsset = require('./getOEmbedDataForAsset');
-
-
-const parseSpeechUrl = (url) => {
-  // parse the request url
-  const componentsRegex = new RegExp(
-    '([^:/?#]+:\/\/)'+
-    '([^/?#]*)' +
-    '(\/)' +
-    '([^/?#]*)' +
-    '(\/)' +
-    '([^/?#]*)'
-  );
-  const [proto, protocol, domain, slashOne, paramOne, slashTwo, paramTwo] = componentsRegex
-    .exec(url)
-    .map(match => match || null);
-
-  logger.debug(`${protocol}, ${domain}, ${slashOne}, ${paramOne}, ${slashTwo}, ${paramTwo}`);
-
-  return {
-    paramOne,
-    paramTwo,
-  }
-};
+const parseSpeechUrl = require('./parseSpeechUrl');
 
 const getOEmbedData = (req, res) => {
 
