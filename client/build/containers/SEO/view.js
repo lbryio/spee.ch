@@ -11,9 +11,13 @@ var _reactHelmet = _interopRequireDefault(require("react-helmet"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
 
+var _siteConfig = _interopRequireDefault(require("@config/siteConfig.json"));
+
 var _createPageTitle = _interopRequireDefault(require("../../utils/createPageTitle"));
 
 var _createMetaTags = _interopRequireDefault(require("../../utils/createMetaTags"));
+
+var _oEmbed = _interopRequireDefault(require("../../utils/oEmbed.js"));
 
 var _createCanonicalLink = _interopRequireDefault(require("../../utils/createCanonicalLink"));
 
@@ -36,6 +40,8 @@ function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) ===
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.getPrototypeOf || function _getPrototypeOf(o) { return o.__proto__; }; return _getPrototypeOf(o); }
+
+var host = _siteConfig.default.details.host;
 
 var SEO =
 /*#__PURE__*/
@@ -61,15 +67,15 @@ function (_React$Component) {
         asset: asset,
         channel: channel
       });
-      var canonicalLink = (0, _createCanonicalLink.default)(asset, channel, pageUri); // render results
+      var cannonicalLink = (0, _createCanonicalLink.default)(asset, channel, pageUri); // render results
 
       return _react.default.createElement(_reactHelmet.default, {
         title: pageTitle,
         meta: metaTags,
         link: [{
           rel: 'canonical',
-          href: canonicalLink
-        }]
+          href: cannonicalLink
+        }, _oEmbed.default.json(host, cannonicalLink)]
       });
     }
   }]);
@@ -79,7 +85,6 @@ function (_React$Component) {
   return SEO;
 }(_react.default.Component);
 
-;
 SEO.propTypes = {
   pageTitle: _propTypes.default.string,
   pageUri: _propTypes.default.string,

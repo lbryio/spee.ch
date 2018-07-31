@@ -80,3 +80,21 @@ Issues with lbry (e.g. the spee.ch wallet, lbrynet configuration, etc.) that req
 * client
   * [react](https://reactjs.org/)
 
+### URL formats
+Below is a list of all possible urls for the content on spee.ch
+* controlling, free `LBRY` claim
+  * spee.ch/claim (show)
+  * spee.ch/claim.ext (serve)
+* specific `LBRY` claim
+  * spee.ch/claim_id/claim
+  * spee.ch/claim_id/claim.ext
+* all free contents for the controlling `LBRY` channel
+  * spee.ch/@channel
+* a specific `LBRY` channel
+  * spee.ch/@channel:channel_id
+* a specific claim within the controlling `LBRY` channel
+  * spee.ch/@channel/claim (show)
+  * spee.ch/@channel/claim.ext (serve)
+* a specific claim within a specific `LBRY` channel
+  * spee.ch/@channel:channel_id/claim
+  * spee.ch/@channel:channel_id/claim.ext
