@@ -37,6 +37,7 @@ const serverByIdentifierAndClaim = (req, res) => {
     }
 
     logger.debug('serve request:', { headers, ip, originalUrl, params });
+
     getClaimIdAndServeAsset(channelName, channelClaimId, claimName, claimId, originalUrl, ip, res);
 
     sendGAServeEvent(headers, ip, originalUrl);
