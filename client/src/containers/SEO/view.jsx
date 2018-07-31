@@ -21,7 +21,7 @@ class SEO extends React.Component {
       asset,
       channel,
     });
-    const cannonicalLink = createCanonicalLink(asset, channel, pageUri)
+    const cannonicalLink = createCanonicalLink(asset, channel, pageUri);
     // render results
     return (
       <Helmet
@@ -33,7 +33,6 @@ class SEO extends React.Component {
             href: cannonicalLink,
           },
           oEmbed.json(host, cannonicalLink),
-          oEmbed.xml(host, cannonicalLink),
         ]}
       />
     );
