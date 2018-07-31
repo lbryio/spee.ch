@@ -75,7 +75,7 @@ function (_React$Component) {
         link: [{
           rel: 'canonical',
           href: cannonicalLink
-        }, _oEmbed.default.json(host, cannonicalLink), _oEmbed.default.xml(host, cannonicalLink)]
+        }, _oEmbed.default.json(host, cannonicalLink)]
       });
     }
   }]);
