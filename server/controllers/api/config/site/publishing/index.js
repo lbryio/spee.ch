@@ -5,7 +5,7 @@ const { publishing: {
   thumbnailChannelId,
   additionalClaimAddresses,
   disabled,
-  disabledMessage
+  disabledMessage,
 } } = require('@config/siteConfig');
 
 /*
@@ -22,7 +22,7 @@ const publishingConfig = (req, res) => {
     thumbnailChannelId,
     additionalClaimAddresses,
     disabled,
-    disabledMessage
+    disabledMessage,
   });
 };
 

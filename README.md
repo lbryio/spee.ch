@@ -2,15 +2,30 @@
 This repo packages the spee.ch server for use with spee.ch implementations.
 
 ### Quick start
-To get started running your own version of spee.ch, visit [lbryio/www.spee.ch](https://github.com/lbryio/www.spee.ch)
 
-### Install
+Install dependencies
 ```
-npm install spee.ch --save 
+npm install
+```
+create config file
+```
+npm run configure
+```
+build from source code
+```
+npm run transpile
+```
+create client bundle with webpack
+```
+npm run bundle
+```
+start the sever
+```
+npm run start
 ```
 
-### Dependenceis
-Make sure the following are installed
+### System dependencies
+Spee.ch relies on the following programs being installed on your server:
 * [imagemagick](https://www.imagemagick.org/script/download.php)
 * [ffmpeg](https://www.ffmpeg.org/download.html)
 
@@ -19,6 +34,7 @@ Make sure the following are installed
   * `index.js` is the entry point for the server.  It creates the [express app](https://expressjs.com/), requires the routes, syncs the database, and starts the server listening on the `PORT` designated in the config file.
   * the `server/routes` folder contains all of the routes for the express app
   * the `server/models` folder contains all of the models which the app uses to interact with the `mysql` database.  Note: this app uses the [sequelize](http://docs.sequelizejs.com/) ORM.
+* the `client/` folder contains all of the client code
 
 ## Tests
 * This package uses `mocha` with `chai` for testing.

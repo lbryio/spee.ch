@@ -166,7 +166,7 @@ inquirer
   })
   .then(() => {
     console.log('\nYou\'re all done!');
-    console.log('Next step: run "npm run start:dev" to start your server!');
+    console.log('Next step: run "npm run build" to build your server, then "npm run start" to start your server!');
     console.log('If you want to change any settings, you can edit the files in the "/config" folder.');
     process.exit(0);
   })

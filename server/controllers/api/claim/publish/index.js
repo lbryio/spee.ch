@@ -35,7 +35,7 @@ const claimPublish = ({ body, files, headers, ip, originalUrl, user, tor }, res)
   if (disabled) {
     return res.status(503).json({
       success: false,
-      message: disabledMessage
+      message: disabledMessage,
     });
   }
   // define variables
@@ -58,14 +58,15 @@ const claimPublish = ({ body, files, headers, ip, originalUrl, user, tor }, res)
         checkClaimAvailability(name),
         createPublishParams(filePath, name, title, description, license, nsfw, thumbnail, channelName, channelClaimId),
         createThumbnailPublishParams(thumbnailFilePath, name, license, nsfw),
-      ])
+      ]);
     })
     .then(([ claimAvailable, publishParams, thumbnailPublishParams ]) => {
       if (!claimAvailable) {
-        throw {
-          name: CLAIM_TAKEN,
-          message: 'That claim name is already taken'
+        const error = {
+          name   : CLAIM_TAKEN,
+          message: 'That claim name is already taken',
         };
+        throw error;
       }
       // publish the thumbnail, if one exists
       if (thumbnailPublishParams) {
@@ -81,7 +82,7 @@ const claimPublish = ({ body, files, headers, ip, originalUrl, user, tor }, res)
         data   : {
           name,
           claimId : result.claim_id,
-          url : `${host}/${result.claim_id}/${name}`, // for backwards compatability with app
+          url     : `${host}/${result.claim_id}/${name}`, // for backwards compatability with app
           showUrl : `${host}/${result.claim_id}/${name}`,
           serveUrl: `${host}/${result.claim_id}/${name}${fileExtension}`,
           lbryTx  : result,
@@ -91,7 +92,7 @@ const claimPublish = ({ body, files, headers, ip, originalUrl, user, tor }, res)
       sendGATimingEvent('end-to-end', 'publish', fileType, gaStartTime, Date.now());
     })
     .catch(error => {
-      if (error.name = CLAIM_TAKEN) {
+      if (error.name === CLAIM_TAKEN) {
         res.status(400).json({
           success: false,
           message: error.message,

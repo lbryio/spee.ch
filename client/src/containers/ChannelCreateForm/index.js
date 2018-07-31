@@ -4,16 +4,16 @@ import {
   updateChannelAvailability,
   updateChannelCreateName,
   updateChannelCreatePassword,
-  createChannel
+  createChannel,
 } from '../../actions/channelCreate';
 
-const mapStateToProps = ({channelCreate: {name, password, error, status }}) => {
+const mapStateToProps = ({channelCreate: { name, password, error, status }}) => {
   return {
     name,
     password,
     error,
     status,
-  }
+  };
 };
 
 const mapDispatchToProps = {

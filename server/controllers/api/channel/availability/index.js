@@ -9,7 +9,7 @@ const { handleErrorResponse } = require('../../../utils/errorHandlers.js');
 */
 
 function addAtSymbolIfNecessary (name) {
-  if (name.substring(0,1) !== '@') {
+  if (name.substring(0, 1) !== '@') {
     return `@${name}`;
   }
   return name;
@@ -22,12 +22,12 @@ const channelAvailability = ({ ip, originalUrl, params: { name } }, res) => {
     .then(isAvailable => {
       let responseObject = {
         success: true,
-        data: isAvailable,
+        data   : isAvailable,
       };
       if (isAvailable) {
-        responseObject['message'] = `${name} is available`
+        responseObject['message'] = `${name} is available`;
       } else {
-        responseObject['message'] = `${name} is already in use`
+        responseObject['message'] = `${name} is already in use`;
       }
       res.status(200).json(responseObject);
       sendGATimingEvent('end-to-end', 'channel name availability', name, gaStartTime, Date.now());

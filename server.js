@@ -21,9 +21,9 @@ try {
 }
 
 try {
-  const SpeechServer = require('./server');
-  const server = new SpeechServer();
-  server.start();
+  const Server = require('./server/index.js');
+  const speech = new Server();
+  speech.start();
 } catch (error) {
   console.log('server startup error:', error);
   process.exit(1);

@@ -40,11 +40,9 @@ const serveByClaim = (req, res) => {
     getClaimIdAndServeAsset(null, null, claimName, null, originalUrl, ip, res);
 
     sendGAServeEvent(headers, ip, originalUrl);
-
   } catch (error) {
     return res.status(400).json({success: false, message: error.message});
   }
-
 };
 
 module.exports = serveByClaim;

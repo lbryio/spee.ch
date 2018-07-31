@@ -16,4 +16,6 @@ config/siteConfig.json
 
 public/bundle/bundle.js
 public/bundle/bundle.js.map
+public/bundle/Lekton-*
+public/bundle/style.css
 

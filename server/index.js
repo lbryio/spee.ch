@@ -73,8 +73,8 @@ function Server () {
 
     // initialize passport
     app.use(cookieSession({
-      name  : 'session',
-      keys  : [sessionKey],
+      name: 'session',
+      keys: [sessionKey],
     }));
     app.use(speechPassport.initialize());
     app.use(speechPassport.session());
@@ -82,11 +82,11 @@ function Server () {
     // configure handlebars & register it with express app
     const viewsPath = Path.resolve(process.cwd(), 'node_modules/spee.ch/server/views');
     app.engine('handlebars', expressHandlebars({
-      async: false,
-      dataType: 'text',
+      async        : false,
+      dataType     : 'text',
       defaultLayout: 'embed',
-      partialsDir: Path.join(viewsPath, '/partials'),
-      layoutsDir: Path.join(viewsPath, '/layouts')
+      partialsDir  : Path.join(viewsPath, '/partials'),
+      layoutsDir   : Path.join(viewsPath, '/layouts'),
     }));
     app.set('views', viewsPath);
     app.set('view engine', 'handlebars');
@@ -110,7 +110,7 @@ function Server () {
       this.server.listen(PORT, () => {
         logger.info(`Server is listening on PORT ${PORT}`);
         resolve();
-      })
+      });
     });
   };
   this.syncDatabase = () => {
@@ -118,7 +118,7 @@ function Server () {
     return createDatabaseIfNotExists()
       .then(() => {
         db.sequelize.sync();
-      })
+      });
   };
   this.performChecks = () => {
     if (!performChecks) {
@@ -130,7 +130,7 @@ function Server () {
     ])
       .then(([walletBalance]) => {
         logger.info('Starting LBC balance:', walletBalance);
-      })
+      });
   };
   this.performUpdates = () => {
     if (!performUpdates) {
@@ -144,7 +144,7 @@ function Server () {
       .then(([updatedBlockedList, updatedTorList]) => {
         logger.info('Blocked list updated, length:', updatedBlockedList.length);
         logger.info('Tor list updated, length:', updatedTorList.length);
-      })
+      });
   };
   this.start = () => {
     this.initialize();
@@ -158,14 +158,14 @@ function Server () {
         return Promise.all([
           this.performChecks(),
           this.performUpdates(),
-        ])
+        ]);
       })
       .then(() => {
         logger.info('Spee.ch startup is complete');
       })
       .catch(error => {
         if (error.code === 'ECONNREFUSED') {
-          return logger.error('Connection refused.  The daemon may not be running.')
+          return logger.error('Connection refused.  The daemon may not be running.');
         } else if (error.code === 'EADDRINUSE') {
           return logger.error('Server could not start listening.  The port is already in use.');
         } else if (error.message) {

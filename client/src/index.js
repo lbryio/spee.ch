@@ -26,21 +26,21 @@ const reduxMiddleware = window.__REDUX_DEVTOOLS_EXTENSION__ ? compose(middleware
 // create the store
 let store;
 if (preloadedState) {
-    store = createStore(Reducers, preloadedState, reduxMiddleware);
+  store = createStore(Reducers, preloadedState, reduxMiddleware);
 } else {
-    store = createStore(Reducers, reduxMiddleware);
+  store = createStore(Reducers, reduxMiddleware);
 }
 
 sagaMiddleware.run(Sagas.rootSaga);
 
 // render the app
 hydrate(
-    <Provider store={store}>
-        <BrowserRouter>
-            <GAListener>
-                <App />
-            </GAListener>
-        </BrowserRouter>
-    </Provider>,
-    document.getElementById('react-app')
+  <Provider store={store}>
+    <BrowserRouter>
+      <GAListener>
+        <App />
+      </GAListener>
+    </BrowserRouter>
+  </Provider>,
+  document.getElementById('react-app')
 );
