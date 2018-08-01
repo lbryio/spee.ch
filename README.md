@@ -80,8 +80,8 @@ This is not necessary, but highly reccomended.  It will decode the blocks of the
     * `title` (optional)
     * `description` (optional)
     * `thumbnail` url to thumbnail image, for .mp4 uploads only (optional)
-    * `channelName`(optional)
-    * `channelPassword` (optional,; required if `channelName` is provided)
+    * `channelName` channel to publish too (optional)
+    * `channelPassword` password for channel to publish too (optional, but required if `channelName` is provided)
 * _(get)_ /api/claim/resolve/:name/:claimId
   * example: `curl https://spee.ch/api/claim/resolve/doitlive/xyz`
 * _(get)_ /api/claim/list/:name
