@@ -1,12 +1,3 @@
-
-// test configs
-const checkForConfig = require('./utils/checkForConfig.js');
-checkForConfig('siteConfig');
-checkForConfig('mysqlConfig');
-checkForConfig('slackConfig');
-checkForConfig('loggerConfig');
-checkForConfig('siteConfig');
-
 // load modules
 const express = require('express');
 const bodyParser = require('body-parser');
