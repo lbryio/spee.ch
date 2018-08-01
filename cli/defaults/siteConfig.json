@@ -14,6 +14,7 @@
   "details": {
     "port": 3000,
     "title": "My Site",
+    "ipAddress": "",
     "host": "https://www.example.com",
     "description": "A decentralized hosting platform built on LBRY",
     "twitter": false
