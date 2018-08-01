@@ -4,6 +4,8 @@
   "description": "an npm package that exports a customizeable spee.ch server",
   "main": "index.js",
   "scripts": {
+    "build" : "builder run bundle",
+    "prebundle": "npm run transpile",
     "bundle": "webpack --config webpack.config.js",
     "bundle:dev": "webpack --config webpack.config.js --watch",
     "configure": "node cli/configure.js",
