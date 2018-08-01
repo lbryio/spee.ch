@@ -1,8 +1,3 @@
-// set up module aliasing
-// const moduleAlias = require('module-alias');
-// const createModuleAliases = require('./utils/createModuleAliases.js');
-// const customAliases = createModuleAliases();
-// moduleAlias.addAliases(customAliases);
 
 // test configs
 const checkForConfig = require('./utils/checkForConfig.js');
