@@ -1,33 +1,71 @@
 # Spee.ch
 This repo packages the spee.ch server for use with spee.ch implementations.
 
-### Quick start
+## Quick start
 
-Install dependencies
+### Prepare your environment
+Install Node
+  * [link](https://nodejs.org)
+
+Start MySQL
+  * install [mysql](https://dev.mysql.com/doc/refman/8.0/en/installing.html)
+  * create a database
+  * save the `database`, `username`, and `password` someplace handy
+  
+Start LBRY
+  * install the [`lbry`](https://github.com/lbryio/lbry) daemon
+  * start the `lbry` daemon
+  * retrieve an address from the daemon and send your wallet a couple credits (or join us in the [#speech discord channel](https://discord.gg/YjYbwhS) and we will send you a few)
+  
+Install ffmpeg
+  * [link](https://www.ffmpeg.org/download.html)
+  
+Clone this repo
 ```
-npm install
+$ git clone https://github.com/lbryio/spee.ch.git
 ```
+
+### Build and Start the App
+
+Change directory into your project
+```
+$ cd spee.ch
+```
+
+Install node dependencies
+```
+$ npm install
+```
+
 create config file
 ```
-npm run configure
+$ npm run configure
 ```
 build from source code
 ```
-npm run transpile
+$ npm run transpile
 ```
 create client bundle with webpack
 ```
-npm run bundle
+$ npm run bundle
 ```
 start the sever
 ```
-npm run start
+$ npm run start
 ```
 
-### System dependencies
-Spee.ch relies on the following programs being installed on your server:
-* [imagemagick](https://www.imagemagick.org/script/download.php)
-* [ffmpeg](https://www.ffmpeg.org/download.html)
+### View in browser
+visit [localhost:3000](http://localhost:3000) in your browser
+
+### (optional) add custom components and update the styles
+
+  * create custom components by creating React components in `src/views/` (further instructions coming soon)
+  * update the css by changing the files in `public/assets/css/` (further instructions and refactor coming soon) 
+
+### (optional) Syncing the full blockchain
+Start the `spee.ch-sync` tool available at [billbitt/spee.ch-sync](https://github.com/billbitt/spee.ch-sync)
+
+This is not necessary, but highly reccomended.  It will decode the blocks of the `LBRY` blockchain and add the claims information to your database's tables
 
 ## Development 
 * the `server/` folder contains all of the server code
