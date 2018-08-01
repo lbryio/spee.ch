@@ -39,19 +39,18 @@ Install node dependencies
 $ npm install
 ```
 
-create config file
+Create the config files using the built in CLI
 ```
 $ npm run configure
 ```
-build from source code
+
+Build the app
+(transpile source with babel and bundle with webpack)
 ```
-$ npm run transpile
+$ npm run build
 ```
-create client bundle with webpack
-```
-$ npm run bundle
-```
-start the sever
+
+start the app
 ```
 $ npm run start
 ```

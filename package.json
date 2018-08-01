@@ -13,7 +13,7 @@
     "lint": "eslint .",
     "precommit": "eslint .",
     "start": "npm run server",
-    "start:dev": "builder concurrent transpile:dev bundle:dev bundle:dev",
+    "start:dev": "builder concurrent transpile:dev bundle:dev server:dev",
     "server": "node server.js",
     "server:dev": "nodemon server.js",
     "test": "mocha --recursive",
