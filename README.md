@@ -43,6 +43,7 @@ Create the config files using the built in CLI
 ```
 $ npm run configure
 ```
+note: add your ip address in `config/siteConfig.json` after completion
 
 Build the app
 (transpile source with babel and bundle with webpack)
