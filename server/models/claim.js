@@ -368,7 +368,7 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
             case 1:
               return resolve(prepareClaimData(claimArray[0].dataValues));
             default:
-              logger.error(`more than one record matches ${name}#${claimId} in db.Claim`);
+              logger.warn(`more than one record matches ${name}#${claimId} in db.Claim`);
               return resolve(prepareClaimData(claimArray[0].dataValues));
           }
         })
@@ -392,7 +392,8 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
           case 1:
             return result[0].dataValues.outpoint;
           default:
-            throw new Error(`more than one record found for ${name}#${claimId}`);
+            logger.warn(`more than one record matches ${name}#${claimId} in db.Claim`);
+            return result[0].dataValues.outpoint;
         }
       })
       .catch(error => {

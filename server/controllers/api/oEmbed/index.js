@@ -6,7 +6,6 @@ const getOEmbedDataForAsset = require('./getOEmbedDataForAsset');
 const parseSpeechUrl = require('./parseSpeechUrl');
 
 const getOEmbedData = (req, res) => {
-
   const { query: { url, format } } = req;
   logger.debug('req url', url);
   logger.debug('req format', format);
@@ -20,7 +19,7 @@ const getOEmbedData = (req, res) => {
     ({ claimName } = lbryUri.parseClaim(paramTwo));
   } else {
     ({ isChannel, channelName, channelClaimId } = lbryUri.parseIdentifier(paramOne));
-    if (!isChannel ) {
+    if (!isChannel) {
       ({ claimName } = lbryUri.parseClaim(paramOne));
     }
   }
@@ -28,11 +27,11 @@ const getOEmbedData = (req, res) => {
   if (isChannel && !paramTwo) {
     getOEmbedDataForChannel(channelName, channelClaimId)
       .then(data => {
-        if (format === 'xml'){
+        if (format === 'xml') {
           return res.status(503).json({
             success: false,
             message: 'xml format is not implemented yet',
-          })
+          });
         } else {
           return res.status(200).json(data);
         }
@@ -42,16 +41,15 @@ const getOEmbedData = (req, res) => {
           success: false,
           message: error,
         });
-      })
-
+      });
   } else {
     getOEmbedDataForAsset(channelName, channelClaimId, claimName, claimId)
       .then(data => {
-        if (format === 'xml'){
+        if (format === 'xml') {
           return res.status(503).json({
             success: false,
             message: 'xml format is not implemented yet',
-          })
+          });
         } else {
           return res.status(200).json(data);
         }
@@ -61,7 +59,7 @@ const getOEmbedData = (req, res) => {
           success: false,
           message: error,
         });
-      })
+      });
   }
 };
 

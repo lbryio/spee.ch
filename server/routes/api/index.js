@@ -21,7 +21,6 @@ const getTorList = require('../../controllers/api/tor');
 const getBlockedList = require('../../controllers/api/blocked');
 const getOEmbedData = require('../../controllers/api/oEmbed');
 
-
 module.exports = (app) => {
   // channel routes
   app.get('/api/channel/availability/:name', torCheckMiddleware, channelAvailability);
@@ -48,5 +47,5 @@ module.exports = (app) => {
   // blocked
   app.get('/api/blocked', torCheckMiddleware, getBlockedList);
   // open embed
-  app.get('/api/oembed', torCheckMiddleware, getOEmbedData)
+  app.get('/api/oembed', torCheckMiddleware, getOEmbedData);
 };

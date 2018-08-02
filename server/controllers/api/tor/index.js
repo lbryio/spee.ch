@@ -9,7 +9,7 @@ const db = require('../../../models');
 
 const getTorList = (req, res) => {
   db.Tor.refreshTable()
-    .then( result => {
+    .then(result => {
       logger.debug('number of records', result.length);
       res.status(200).json(result);
     })
@@ -18,7 +18,7 @@ const getTorList = (req, res) => {
       res.status(500).json({
         success: false,
         error,
-      })
+      });
     });
 };
 

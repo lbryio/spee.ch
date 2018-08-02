@@ -28,8 +28,8 @@ const claimGet = ({ ip, originalUrl, params }, res) => {
     })
     .then(() => {
       const fileData = createFileRecordDataAfterGet(resolveResult, getResult);
-      const upsertCriteria = { name, claimId};
-      return db.upsert(db.File, fileData, upsertCriteria, 'File')
+      const upsertCriteria = { name, claimId };
+      return db.upsert(db.File, fileData, upsertCriteria, 'File');
     })
     .then(() => {
       const { message, completed } = getResult;

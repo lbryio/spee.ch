@@ -19,10 +19,10 @@ const sequelize = new Sequelize(database, username, password, {
   host          : 'localhost',
   dialect       : 'mysql',
   dialectOptions: {
-    decimalNumbers: true
+    decimalNumbers: true,
   },
-  logging       : false,
-  pool          : {
+  logging: false,
+  pool   : {
     max    : 5,
     min    : 0,
     idle   : 10000,

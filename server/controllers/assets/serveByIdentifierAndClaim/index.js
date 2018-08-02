@@ -41,11 +41,9 @@ const serverByIdentifierAndClaim = (req, res) => {
     getClaimIdAndServeAsset(channelName, channelClaimId, claimName, claimId, originalUrl, ip, res);
 
     sendGAServeEvent(headers, ip, originalUrl);
-
   } catch (error) {
     return res.status(400).json({success: false, message: error.message});
   }
-
 };
 
 module.exports = serverByIdentifierAndClaim;

@@ -14,12 +14,12 @@ const claimAvailability = ({ ip, originalUrl, params: { name } }, res) => {
     .then(isAvailable => {
       let responseObject = {
         success: true,
-        data: isAvailable,
+        data   : isAvailable,
       };
       if (isAvailable) {
-        responseObject['message'] = `That claim name is available`
+        responseObject['message'] = `That claim name is available`;
       } else {
-        responseObject['message'] = `That url is already in use`
+        responseObject['message'] = `That url is already in use`;
       }
       res.status(200).json(responseObject);
       sendGATimingEvent('end-to-end', 'claim name availability', name, gaStartTime, Date.now());
