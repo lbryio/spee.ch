@@ -3,7 +3,7 @@ import * as actions from '../constants/show_action_types';
 import { onRequestError, onNewChannelRequest, onNewAssetRequest } from '../actions/show';
 import { newAssetRequest } from '../sagas/show_asset';
 import { newChannelRequest } from '../sagas/show_channel';
-import lbryUri from '../utils/lbryUri';
+import lbryUri from '../../../utils/lbryUri';
 
 function * parseAndUpdateIdentifierAndClaim (modifier, claim) {
   // this is a request for an asset

@@ -1,5 +1,5 @@
 const logger = require('winston');
-const lbryUri = require('../../utils/lbryUri');
+const lbryUri = require('../../../../utils/lbryUri');
 
 const getOEmbedDataForChannel = require('./getOEmbedDataForChannel');
 const getOEmbedDataForAsset = require('./getOEmbedDataForAsset');
