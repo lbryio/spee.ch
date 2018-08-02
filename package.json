@@ -17,6 +17,7 @@
     "start:build": "builder run start",
     "test": "mocha --recursive",
     "test:no-lbc": "npm test -- --grep @usesLbc --invert",
+    "test:server": "mocha --recursive './server/**/*.test.js'",
     "transpile": "builder concurrent transpile:server transpile:client transpile:client_custom",
     "transpile:dev": "builder concurrent transpile:server:dev transpile:client:dev transpile:client_custom:dev",
     "transpile:server": "babel server/render/src -d server/render/build",

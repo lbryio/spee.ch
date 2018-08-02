@@ -26,6 +26,7 @@ module.exports = () => {
   let moduleAliases = {};
   // aliases for configs
   moduleAliases['@config'] = resolve(`config`);
+  moduleAliases['@devConfig'] = resolve(`devConfig`);
 
   // create specific aliases for locally defined components
   moduleAliases = addAlliasesForFolder('containers', moduleAliases);

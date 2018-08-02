@@ -401,5 +401,10 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
       });
   };
 
+  Claim.getCurrentHeight = function () {
+    return this
+      .max('height');
+  };
+
   return Claim;
 };
