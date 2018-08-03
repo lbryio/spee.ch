@@ -1,3 +1,5 @@
+const db = require('../index.js');
+
 const createClaimRecordDataAfterPublish = (certificateId, channelName, fileName, fileType, publishParams, publishResults) => {
   const {
     name,
@@ -17,21 +19,24 @@ const createClaimRecordDataAfterPublish = (certificateId, channelName, fileName,
     nout,
   } = publishResults;
 
-  return {
-    name,
-    claimId,
-    title,
-    description,
-    address,
-    thumbnail,
-    outpoint   : `${txid}:${nout}`,
-    height     : 0,
-    contentType: fileType,
-    nsfw,
-    amount,
-    certificateId,
-    channelName,
-  };
+  return db.Claim.getCurrentHeight()
+    .then(height => {
+      return {
+        name,
+        claimId,
+        title,
+        description,
+        address,
+        thumbnail,
+        outpoint   : `${txid}:${nout}`,
+        height,
+        contentType: fileType,
+        nsfw,
+        amount,
+        certificateId,
+        channelName,
+      };
+    });
 };
 
 module.exports = {

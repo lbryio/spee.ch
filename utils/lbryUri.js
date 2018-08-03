@@ -1,20 +1,16 @@
-const logger = require('winston');
-
 module.exports = {
   REGEXP_INVALID_CLAIM  : /[^A-Za-z0-9-]/g,
   REGEXP_INVALID_CHANNEL: /[^A-Za-z0-9-@]/g,
   REGEXP_ADDRESS        : /^b(?=[^0OIl]{32,33})[0-9A-Za-z]{32,33}$/,
   CHANNEL_CHAR          : '@',
   parseIdentifier       : function (identifier) {
-    logger.debug('parsing identifier:', identifier);
     const componentsRegex = new RegExp(
       '([^:$#/]*)' + // value (stops at the first separator or end)
       '([:$#]?)([^/]*)' // modifier separator, modifier (stops at the first path separator or end)
     );
-    const [proto, value, modifierSeperator, modifier] = componentsRegex
+    const [, value, modifierSeperator, modifier] = componentsRegex
       .exec(identifier)
       .map(match => match || null);
-    logger.debug(`${proto}, ${value}, ${modifierSeperator}, ${modifier}`);
 
     // Validate and process name
     if (!value) {
@@ -56,15 +52,13 @@ module.exports = {
     };
   },
   parseClaim: function (claim) {
-    logger.debug('parsing name:', claim);
     const componentsRegex = new RegExp(
       '([^:$#/.]*)' + // name (stops at the first modifier)
       '([:$#.]?)([^/]*)' // modifier separator, modifier (stops at the first path separator or end)
     );
-    const [proto, claimName, modifierSeperator, modifier] = componentsRegex
+    const [, claimName, modifierSeperator, modifier] = componentsRegex
       .exec(claim)
       .map(match => match || null);
-    logger.debug(`${proto}, ${claimName}, ${modifierSeperator}, ${modifier}`);
 
     // Validate and process name
     if (!claimName) {
@@ -86,18 +80,18 @@ module.exports = {
     // return results
     return {
       claimName,
+      extension: modifier || null,
     };
   },
   parseModifier: function (claim) {
-    logger.debug('parsing modifier:', claim);
     const componentsRegex = new RegExp(
       '([^:$#/.]*)' + // name (stops at the first modifier)
       '([:$#.]?)([^/]*)' // modifier separator, modifier (stops at the first path separator or end)
     );
-    const [proto, claimName, modifierSeperator, modifier] = componentsRegex
+    const [ , , modifierSeperator ] = componentsRegex
       .exec(claim)
       .map(match => match || null);
-    logger.debug(`${proto}, ${claimName}, ${modifierSeperator}, ${modifier}`);
+
     // Validate and process modifier
     let hasFileExtension = false;
     if (modifierSeperator) {
