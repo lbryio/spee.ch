@@ -24,10 +24,15 @@ const claimGet = ({ ip, originalUrl, params }, res) => {
       return getClaim(`${name}#${claimId}`);
     })
     .then(result => {
+      if (!result) {
+        throw new Error(`Unable to Get ${name}#${claimId}`);
+      }
       getResult = result;
     })
     .then(() => {
-      const fileData = createFileRecordDataAfterGet(resolveResult, getResult);
+      return createFileRecordDataAfterGet(resolveResult, getResult);
+    })
+    .then(fileData => {
       const upsertCriteria = { name, claimId };
       return db.upsert(db.File, fileData, upsertCriteria, 'File');
     })

@@ -61,7 +61,7 @@ const getClaimIdAndServeAsset = (channelName, channelClaimId, claimName, claimId
       }
       if (error === NO_FILE) {
         logger.debug('no file available');
-        return res.status(307).redirect(`/api/claim/get/${name}/${claimId}`);
+        return res.status(307).redirect(`/api/claim/get/${claimName}/${claimId}`);
       }
       handleErrorResponse(originalUrl, ip, error, res);
     });
