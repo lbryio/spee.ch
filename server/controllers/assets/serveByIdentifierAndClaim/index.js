@@ -36,7 +36,16 @@ const serverByIdentifierAndClaim = (req, res) => {
       [claimId, claimName] = flipClaimNameAndId(claimId, claimName);
     }
 
-    logger.debug('serve request:', { headers, ip, originalUrl, params });
+    logger.debug('serve request:', {
+      headers,
+      ip,
+      originalUrl,
+      params,
+      channelName,
+      channelClaimId,
+      claimName,
+      claimId,
+    });
 
     getClaimIdAndServeAsset(channelName, channelClaimId, claimName, claimId, originalUrl, ip, res);
 
