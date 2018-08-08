@@ -260,11 +260,11 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
         .then(result => {
           switch (result.length) {
             case 0:
-              return resolve(null);
+              return reject(NO_CLAIM);
             case 1:
               return resolve(result[0].claimId);
             default:
-              logger.error(`${result.length} records found for "${claimName}" in channel "${channelClaimId}"`);
+              logger.warn(`${result.length} records found for "${claimName}" in channel "${channelClaimId}"`);
               return resolve(result[0].claimId);
           }
         })
@@ -344,7 +344,7 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
   };
 
   Claim.getLongClaimId = function (claimName, claimId) {
-    // logger.debug(`getLongClaimId(${claimName}, ${claimId})`);
+    logger.debug(`getLongClaimId(${claimName}, ${claimId})`);
     if (isLongClaimId(claimId)) {
       return this.validateLongClaimId(claimName, claimId);
     } else if (isShortClaimId(claimId)) {
@@ -379,6 +379,7 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
   };
 
   Claim.getOutpoint = function (name, claimId) {
+    logger.debug(`finding outpoint for ${name}#${claimId}`);
     return this
       .findAll({
         where     : { name, claimId },
