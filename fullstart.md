@@ -96,6 +96,10 @@ $ ~/lbrynet-cli wallet_balance
 	
 You should have **LBC**!
 
+### Install ffmpeg
+
+directions: [here](https://www.ffmpeg.org/download.html)
+
 ## 3.  Set up Spee.ch
 
 ### Clone the spee.ch repo

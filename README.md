@@ -5,23 +5,14 @@ You can create your own custom version of spee.ch by installing this code base a
 
 ## Quick start
 
-_note: this is the quickstart guide, for an in-depth step-by-step overview visit the [fullstart guide](https://github.com/lbryio/speech/fullstart.md)._
+_note: this is the quickstart guide, for an in-depth step-by-step overview visit the [fullstart guide](https://github.com/lbryio/spee.ch/blob/readme-update/fullstart.md)._
 
-Install Node
-  * [link](https://nodejs.org)
-
-Start MySQL
-  * install [mysql](https://dev.mysql.com/doc/refman/8.0/en/installing.html)
-  * create a database
-  * save the `database`, `username`, and `password` someplace handy
-  
-Start LBRY
-  * install the [`lbry`](https://github.com/lbryio/lbry) daemon
-  * start the `lbry` daemon
-  * retrieve an address from the daemon and send your wallet a couple credits (or join us in the [#speech discord channel](https://discord.gg/YjYbwhS) and we will send you a few)
-  
-Install ffmpeg
-  * [link](https://www.ffmpeg.org/download.html)
+Install System Dependencies:
+  * [node](https://nodejs.org)
+  * [mysql](https://dev.mysql.com/doc/refman/8.0/en/installing.html)
+  * [`lbry`](https://github.com/lbryio/lbry) daemon
+    * note: retrieve an address from the daemon and send your wallet a couple credits (or join us in the [#speech discord channel](https://discord.gg/YjYbwhS) and we will send you a few)
+  * [ffmpeg](https://www.ffmpeg.org/download.html)
   
 Clone this repo
 ```
@@ -42,9 +33,12 @@ Create the config files using the built in CLI
 ```
 $ npm run configure
 ```
-_note: add your ip address in `config/siteConfig.json` after completion_
+
+Add your ip address in `config/siteConfig.json` after completion
 
 Build & start the app
+
+_note: make sure lbry is running in the background before proceeding_
 ```
 $ npm run start
 ```
