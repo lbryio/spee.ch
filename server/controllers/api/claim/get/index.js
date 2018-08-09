@@ -14,7 +14,7 @@ const claimGet = ({ ip, originalUrl, params }, res) => {
   const claimId = params.claimId;
   let resolveResult;
   let getResult;
-  // resolve the claim
+
   db.Claim.resolveClaim(name, claimId)
     .then(result => {
       if (!result) {
@@ -28,11 +28,13 @@ const claimGet = ({ ip, originalUrl, params }, res) => {
         throw new Error(`Unable to Get ${name}#${claimId}`);
       }
       getResult = result;
-      return createFileRecordDataAfterGet(resolveResult, getResult);
-    })
-    .then(fileData => {
-      const upsertCriteria = { name, claimId };
-      return db.upsert(db.File, fileData, upsertCriteria, 'File');
+      if (result.completed) {
+        return createFileRecordDataAfterGet(resolveResult, getResult)
+          .then(fileData => {
+            const upsertCriteria = {name, claimId};
+            return db.upsert(db.File, fileData, upsertCriteria, 'File');
+          });
+      }
     })
     .then(() => {
       const { message, completed } = getResult;
