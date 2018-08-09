@@ -28,8 +28,6 @@ const claimGet = ({ ip, originalUrl, params }, res) => {
         throw new Error(`Unable to Get ${name}#${claimId}`);
       }
       getResult = result;
-    })
-    .then(() => {
       return createFileRecordDataAfterGet(resolveResult, getResult);
     })
     .then(fileData => {
