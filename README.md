@@ -5,69 +5,59 @@ You can create your own custom version of spee.ch by installing this code base a
 
 ## Quick start
 
-### Prepare your environment
-Install Node
-  * [link](https://nodejs.org)
+_note: this is the quickstart guide, for an in-depth step-by-step overview visit the [fullstart guide](https://github.com/lbryio/spee.ch/blob/readme-update/fullstart.md)._
 
-Start MySQL
-  * install [mysql](https://dev.mysql.com/doc/refman/8.0/en/installing.html)
-  * create a database
-  * save the `database`, `username`, and `password` someplace handy
+#### Install System Dependencies:
+  * [node](https://nodejs.org)
+  * [mysql](https://dev.mysql.com/doc/refman/8.0/en/installing.html)
+  * [`lbry`](https://github.com/lbryio/lbry) daemon
+    * note: retrieve an address from the daemon and send your wallet a couple credits (or join us in the [#speech discord channel](https://discord.gg/YjYbwhS) and we will send you a few)
+  * [ffmpeg](https://www.ffmpeg.org/download.html)
   
-Start LBRY
-  * install the [`lbry`](https://github.com/lbryio/lbry) daemon
-  * start the `lbry` daemon
-  * retrieve an address from the daemon and send your wallet a couple credits (or join us in the [#speech discord channel](https://discord.gg/YjYbwhS) and we will send you a few)
-  
-Install ffmpeg
-  * [link](https://www.ffmpeg.org/download.html)
-  
-Clone this repo
+#### Clone this repo
 ```
 $ git clone https://github.com/lbryio/spee.ch.git
 ```
 
-### Build and Start the App
-
-Change directory into your project
+####  Change directory into your project
 ```
 $ cd spee.ch
 ```
 
-Install node dependencies
+#### Install node dependencies
 ```
 $ npm install
 ```
 
-Create the config files using the built in CLI
+#### Create the config files using the built in CLI
 ```
 $ npm run configure
 ```
-_note: add your ip address in `config/siteConfig.json` after completion_
 
-Build the app
-(transpile source with babel and bundle with webpack)
-```
-$ npm run build
-```
+Add your ip address in `config/siteConfig.json`
 
-start the app
+#### Build & start the app
+
+_note: make sure lbry is running in the background before proceeding_
 ```
 $ npm run start
 ```
 
-### View in browser
-visit [localhost:3000](http://localhost:3000) in your browser
+#### view in browser
+ *  visit [http://localhost:3000](http://localhost:3000) in your browser
+ 
+#### customize your app
 
-### (optional) add custom components and update the styles
+check out the [customization guide](https://github.com/lbryio/spee.ch/blob/readme-update/customize.md) to change your app's appearance and components
+
+#### (optional) add custom components and update the styles
 
   * create custom components by creating React components in `src/views/` (further instructions coming soon)
   * update the css by changing the files in `public/assets/css/` (further instructions and refactor coming soon) 
 
-### (optional) Syncing the full blockchain
-Start the `spee.ch-sync` tool available at [billbitt/spee.ch-sync](https://github.com/billbitt/spee.ch-sync)
-
-This is not necessary, but highly reccomended.  It will decode the blocks of the `LBRY` blockchain and add the claims information to your database's tables
+#### (optional) Syncing the full blockchain
+ * Start the `spee.ch-sync` tool available at [billbitt/spee.ch-sync](https://github.com/billbitt/spee.ch-sync)
+ * This is not necessary, but highly reccomended.  It will decode the blocks of the `LBRY` blockchain and add the claims information to your database's tables
 
 ## API
 * _(post)_ /api/claim/publish
@@ -108,15 +98,73 @@ Spee.ch also runs a sync tool, which decodes blocks from the `LBRY` blockchain a
   * [ffmpeg](https://www.ffmpeg.org/)
 * client
   * [react](https://reactjs.org/)
+  * redux
+  * sagas
+  * scss
+  * handlebars
  
  
-### Architecture 
-* the `server/` folder contains all of the server code
-  * `index.js` is the entry point for the server.  It creates the [express app](https://expressjs.com/), requires the routes, syncs the database, and starts the server listening on the `PORT` designated in the config file.
-  * the `server/routes` folder contains all of the routes for the express app
-  * the `server/models` folder contains all of the models which the app uses to interact with the `mysql` database.  Note: this app uses the [sequelize](http://docs.sequelizejs.com/) ORM.
-* the `client/` folder contains all of the client code
+### Architecture
+* `cli/` contains the code for the cli tool.  Running the tool will create `.json` config files and place them in the `config/` folder
+  * `configure.js` is the entry point for the cli tool
+  * `cli/defaults/` holds default config files 
+  * `cli/questions/` holds the questions that the cli tool asks to build the config files
+
+* `client/` contains all of the client code
+  * The client side of spee.ch uses `React` and `Redux`
+  * `client/src/index.js` is the entry point for the client side js.  It checks for preloaded state, creates the store, and places the `<App />` component in the document.
+  * `client/src/app.js`  holds the `<App />` component, which contains the routes for `react-router-dom`
+  * `client/src/` contains all of the JSX code for the app. When the app is built, the content of this folder is transpiled into the `client/build/` folder.
+    * The Redux code is broken up into `actions/` `reducers/` and `selectors/`
+    * The React components are broken up into `containers/` (components that pull props directly from the Redux store), `components/` ('dumb' components), and `pages/`
+    * spee.ch also uses sagas which are in the `sagas/` folders and `channels/`
+  * `client/scss/` contains  the css for the project
+    * 
+  
+* `client_custom` is a folder which can be used to override the default components in `client/`
+  * The folder structure mimics that of the `client/` folder
+  * to customize spee.ch, place your own components ans scss in the `client_custom/src/` and `client_custom/scss` folders. 
+  
+* `server/`  contains all of the server code
+  * `index.js` is the entry point for the server.  It creates the [express app](https://expressjs.com/), requires the routes, syncs the database, and starts the server listening on the `PORT` designated in the config files.
+  * `server/routes/` contains all of the routes for the express app
+  * `server/controllers/` contains all of the controllers for all of the routes
+  * `server/models/` contains all of the models which the app uses to interact with the `MySQL` database.  
+    * Spee.ch uses the [sequelize](http://docs.sequelizejs.com/) ORM for communicating with the database.
+   
+* `tests/` holds the end-to-end tests for this project
+  * Spee.ch uses `mocha` with the `chai` assertion library
+  * unit tests are located inside the project in-line with the files being tested and are designtated with a `xxxx.test.js` file name
  
+### Tests
+* This package uses `mocha` with `chai` for testing.
+* Before running tests, create a `testingConfig.js` file in `devConfig/` by copying `testingConfig.example.js`   
+* To run tests:
+  *  To run all tests, including those that require LBC (like publishing), simply run `npm test`
+  *  To run only tests that do not require LBC, run `npm run test:no-lbc`
+
+### URL formats
+Spee.ch has a few types of url formats that return different assets from the LBRY network.  Below is a list of all possible urls for the content on spee.ch
+* retrieve the controlling `LBRY` claim:
+  * https://spee.ch/`claim`
+  * https://spee.ch/`claim`.`ext` (serve)
+* retrieve a specific `LBRY` claim:
+  * https://spee.ch/`claim_id`/`claim`
+  * https://spee.ch/`claim_id`/`claim`.`ext` (serve)
+* retrieve all contents for the controlling `LBRY` channel
+  * https://spee.ch/`@channel`
+* a specific `LBRY` channel
+  * https://spee.ch/`@channel`:`channel_id`
+* retrieve a specific claim within the controlling `LBRY` channel
+  * https://spee.ch/`@channel`/`claim`
+  * https://spee.ch/`@channel`/`claim`.`ext` (serve)
+* retrieve a specific claim within a specific `LBRY` channel
+  * https://spee.ch/`@channel`:`channel_id`/`claim`
+  * https://spee.ch/`@channel`:`channel_id`/`claim`.`ext` (serve)
+  
+### Bugs
+If you find a bug or experience a problem, please report your issue here on github and find us in the lbry discord!
+
 ### Issue tags in this repo
 #### level 1
 Issues that anyone with basic web development can handle; little-to-no experience with the spee.ch codebase is required.
@@ -129,32 +177,3 @@ Familiarity with the spee.ch code base and how the lbry daemon functions is requ
 
 #### level 4
 Issues with lbry (e.g. the spee.ch wallet, lbrynet configuration, etc.) that require strong familiarity with the lbry daemon and/or network to fix. Generally these issues are best suited for the `lbry` `protocol team` but are reported in this repo because of they are part of the spee.ch implementation
-
-### Tests
-* This package uses `mocha` with `chai` for testing.
-* Before running tests, create a `testingConfig.js` file in `devConfig/` by copying `testingConfig.example.js`   
-* To run tests:
-  *  To run all tests, including those that require LBC (like publishing), simply run `npm test`
-  *  To run only tests that do not require LBC, run `npm run test:no-lbc`
-
-### URL formats
-Below is a list of all possible urls for the content on spee.ch
-* controlling, free `LBRY` claim
-  * spee.ch/claim (show)
-  * spee.ch/claim.ext (serve)
-* specific `LBRY` claim
-  * spee.ch/claim_id/claim
-  * spee.ch/claim_id/claim.ext
-* all free contents for the controlling `LBRY` channel
-  * spee.ch/@channel
-* a specific `LBRY` channel
-  * spee.ch/@channel:channel_id
-* a specific claim within the controlling `LBRY` channel
-  * spee.ch/@channel/claim (show)
-  * spee.ch/@channel/claim.ext (serve)
-* a specific claim within a specific `LBRY` channel
-  * spee.ch/@channel:channel_id/claim
-  * spee.ch/@channel:channel_id/claim.ext
-  
-## Bugs
-If you find a bug or experience a problem, please report your issue here on github and find us in the lbry discord!
