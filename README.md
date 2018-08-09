@@ -7,51 +7,51 @@ You can create your own custom version of spee.ch by installing this code base a
 
 _note: this is the quickstart guide, for an in-depth step-by-step overview visit the [fullstart guide](https://github.com/lbryio/spee.ch/blob/readme-update/fullstart.md)._
 
-Install System Dependencies:
+#### Install System Dependencies:
   * [node](https://nodejs.org)
   * [mysql](https://dev.mysql.com/doc/refman/8.0/en/installing.html)
   * [`lbry`](https://github.com/lbryio/lbry) daemon
     * note: retrieve an address from the daemon and send your wallet a couple credits (or join us in the [#speech discord channel](https://discord.gg/YjYbwhS) and we will send you a few)
   * [ffmpeg](https://www.ffmpeg.org/download.html)
   
-Clone this repo
+#### Clone this repo
 ```
 $ git clone https://github.com/lbryio/spee.ch.git
 ```
 
-Change directory into your project
+####  Change directory into your project
 ```
 $ cd spee.ch
 ```
 
-Install node dependencies
+#### Install node dependencies
 ```
 $ npm install
 ```
 
-Create the config files using the built in CLI
+#### Create the config files using the built in CLI
 ```
 $ npm run configure
 ```
 
-Add your ip address in `config/siteConfig.json` after completion
+Add your ip address in `config/siteConfig.json`
 
-Build & start the app
+#### Build & start the app
 
 _note: make sure lbry is running in the background before proceeding_
 ```
 $ npm run start
 ```
 
-view in browser
+#### view in browser
  *  visit [http://localhost:3000](http://localhost:3000) in your browser
 
-(optional) add custom components and update the styles
+#### (optional) add custom components and update the styles
 
   * create custom components by creating React components in `src/views/` (further instructions coming soon)
   * update the css by changing the files in `public/assets/css/` (further instructions and refactor coming soon) 
 
-(optional) Syncing the full blockchain
+#### (optional) Syncing the full blockchain
  * Start the `spee.ch-sync` tool available at [billbitt/spee.ch-sync](https://github.com/billbitt/spee.ch-sync)
  * This is not necessary, but highly reccomended.  It will decode the blocks of the `LBRY` blockchain and add the claims information to your database's tables
 
@@ -94,6 +94,10 @@ Spee.ch also runs a sync tool, which decodes blocks from the `LBRY` blockchain a
   * [ffmpeg](https://www.ffmpeg.org/)
 * client
   * [react](https://reactjs.org/)
+  * redux
+  * sagas
+  * scss
+  * handlebars
  
  
 ### Architecture
