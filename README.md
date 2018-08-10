@@ -100,29 +100,10 @@ response:
 }
 ```
    
-#### /api/claim/resolve/:name/:claimId (get) 
-example: 
-```
-curl https://spee.ch/api/claim/resolve/doitlive/xyz
-```
-
-#### /api/claim/list/:name (get) 
-example: 
-```
-curl https://spee.ch/api/claim/list/doitlive
-```
-
 #### /api/claim/availability/:name (get) 
 example: 
 ```
 curl https://spee.ch/api/claim/availability/doitlive
-```
-returns the name if it is available
-
-#### /api/channel/availability/:name (get) 
-example: 
-```
-curl https://spee.ch/api/channel/availability/@CoolChannel
 ```
 returns the name if it is available
 
