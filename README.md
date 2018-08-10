@@ -105,7 +105,14 @@ example:
 ```
 curl https://spee.ch/api/claim/availability/doitlive
 ```
-returns the name if it is available
+response:
+```
+{
+    "success": <bool>,  // `true` if spee.ch succesfully checked the claim availability
+    "data": <bool>, // `true` if claim is available, false if it is not available
+    "message": <string> // human readable message of whether claim was available or not
+}
+```
 
 ## Contribute
 
