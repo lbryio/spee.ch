@@ -4,4 +4,4 @@ import { onHandleShowPageUri } from './show';
 
 export default {
   onHandleShowPageUri,
-}
+};

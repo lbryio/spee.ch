@@ -18,7 +18,7 @@ const channelData = ({ ip, originalUrl, body, params }, res) => {
     .then(data => {
       res.status(200).json({
         success: true,
-        data
+        data,
       });
     })
     .catch(error => {

@@ -2,40 +2,42 @@ import React from 'react';
 import Helmet from 'react-helmet';
 import PropTypes from 'prop-types';
 
-import { createPageTitle } from '../../utils/pageTitle';
-import { createMetaTags } from '../../utils/metaTags';
-import { createCanonicalLink } from '../../utils/canonicalLink';
+import siteConfig from '@config/siteConfig.json';
+import createPageTitle from '../../utils/createPageTitle';
+import createMetaTags from '../../utils/createMetaTags';
+import oEmbed from '../../utils/oEmbed.js';
+import createCanonicalLink from '../../utils/createCanonicalLink';
+
+const { details: { host } } = siteConfig;
 
 class SEO extends React.Component {
   render () {
-    // props from state
-    const { defaultDescription, defaultThumbnail, siteDescription, siteHost, siteTitle, siteTwitter } = this.props;
     // props from parent
     const { asset, channel, pageUri } = this.props;
     let { pageTitle } = this.props;
     // create page title, tags, and canonical link
-    pageTitle = createPageTitle(siteTitle, pageTitle);
+    pageTitle = createPageTitle(pageTitle);
     const metaTags = createMetaTags({
-      siteDescription,
-      siteHost,
-      siteTitle,
-      siteTwitter,
       asset,
       channel,
-      defaultDescription,
-      defaultThumbnail,
     });
-    const canonicalLink = createCanonicalLink(asset, channel, pageUri, siteHost);
+    const cannonicalLink = createCanonicalLink(asset, channel, pageUri);
     // render results
     return (
       <Helmet
         title={pageTitle}
         meta={metaTags}
-        link={[{rel: 'canonical', href: canonicalLink}]}
+        link={[
+          {
+            rel : 'canonical',
+            href: cannonicalLink,
+          },
+          oEmbed.json(host, cannonicalLink),
+        ]}
       />
     );
   }
-};
+}
 
 SEO.propTypes = {
   pageTitle: PropTypes.string,

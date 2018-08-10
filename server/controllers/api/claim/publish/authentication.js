@@ -47,29 +47,38 @@ const authenticateChannelCredentials = (channelName, channelId, userPassword) =>
 };
 
 const authenticateUser = (channelName, channelId, channelPassword, user) => {
-  // case: no channelName or channel Id are provided (anonymous), regardless of whether user token is provided
-  if (!channelName && !channelId) {
-    return {
-      channelName   : null,
-      channelClaimId: null,
-    };
-  }
-  // case: channelName or channel Id are provided with user token
-  if (user) {
-    if (channelName && channelName !== user.channelName) {
-      throw new Error('the provided channel name does not match user credentials');
+  return new Promise((resolve, reject) => {
+    // case: no channelName or channel Id are provided (anonymous), regardless of whether user token is provided
+    if (!channelName && !channelId) {
+      resolve({
+        channelName   : null,
+        channelClaimId: null,
+      });
+      return;
     }
-    if (channelId && channelId !== user.channelClaimId) {
-      throw new Error('the provided channel id does not match user credentials');
+    // case: channelName or channel Id are provided with user token
+    if (user) {
+      if (channelName && channelName !== user.channelName) {
+        reject(new Error('the provided channel name does not match user credentials'));
+        return;
+      }
+      if (channelId && channelId !== user.channelClaimId) {
+        reject(new Error('the provided channel id does not match user credentials'));
+        return;
+      }
+      resolve({
+        channelName   : user.channelName,
+        channelClaimId: user.channelClaimId,
+      });
+      return;
     }
-    return {
-      channelName   : user.channelName,
-      channelClaimId: user.channelClaimId,
-    };
-  }
-  // case: channelName or channel Id are provided with password instead of user token
-  if (!channelPassword) throw new Error('no channel password provided');
-  return authenticateChannelCredentials(channelName, channelId, channelPassword);
+    // case: channelName or channel Id are provided with password instead of user token
+    if (!channelPassword) {
+      reject(new Error('no channel password provided'));
+      return;
+    }
+    resolve(authenticateChannelCredentials(channelName, channelId, channelPassword));
+  });
 };
 
 module.exports = authenticateUser;

@@ -2,10 +2,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const AssetPreview = ({ defaultThumbnail, claimData: { name, claimId, fileExt, contentType, thumbnail } }) => {
-  const directSourceLink = `${claimId}/${name}.${fileExt}`;
-  const showUrlLink = `/${claimId}/${name}`;
+  const embedUrl = `/${claimId}/${name}.${fileExt}`;
+  const showUrl = `/${claimId}/${name}`;
   return (
-    <Link to={showUrlLink} >
+    <Link to={showUrl} >
       {(() => {
         switch (contentType) {
           case 'image/jpeg':
@@ -15,7 +15,7 @@ const AssetPreview = ({ defaultThumbnail, claimData: { name, claimId, fileExt, c
             return (
               <img
                 className={'asset-preview-image'}
-                src={directSourceLink}
+                src={embedUrl}
                 alt={name}
               />
             );

@@ -2,7 +2,7 @@ const db = require('../../../../models');
 
 const { handleErrorResponse } = require('../../../utils/errorHandlers.js');
 
-const getClaimId = require('./getClaimId.js');
+const getClaimId = require('../../../utils/getClaimId.js');
 
 const NO_CHANNEL = 'NO_CHANNEL';
 const NO_CLAIM = 'NO_CLAIM';

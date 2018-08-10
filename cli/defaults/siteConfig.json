@@ -1,0 +1,35 @@
+{
+  "analytics": {
+    "googleId": null
+  },
+  "assetDefaults": {
+    "title": "Default Content Title",
+    "description": "Default Content Description",
+    "thumbnail": "https://spee.ch/0e5d4e8f4086e13f5b9ca3f9648f518e5f524402/speechflag.png"
+  },
+  "auth": {
+    "sessionKey": "mysecretkeyword",
+    "masterPassword": "myMasterPassword"
+  },
+  "details": {
+    "port": 3000,
+    "title": "My Site",
+    "ipAddress": "",
+    "host": "https://www.example.com",
+    "description": "A decentralized hosting platform built on LBRY",
+    "twitter": false
+  },
+  "publishing": {
+    "primaryClaimAddress": null,
+    "uploadDirectory": "/home/lbry/Uploads",
+    "thumbnailChannel": null,
+    "thumbnailChannelId": null,
+    "additionalClaimAddresses": [],
+    "disabled": false,
+    "disabledMessage": "Default publishing disabled message"
+  },
+  "startup": {
+    "performChecks": true,
+    "performUpdates": true
+  }
+}
