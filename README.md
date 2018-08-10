@@ -60,28 +60,71 @@ check out the [customization guide](https://github.com/lbryio/spee.ch/blob/readm
  * This is not necessary, but highly reccomended.  It will decode the blocks of the `LBRY` blockchain and add the claims information to your database's tables
 
 ## API
-* _(post)_ /api/claim/publish
-  * example: `curl -F 'name=MyPictureName' -F 'file=@/path/to/myPicture.jpeg' https://spee.ch/api/claim/publish`
-  * Parameters:
-    * `name` (required)
-    * `file` (required) (must be type .mp4, .jpeg, .jpg, .gif, or .png)
-    * `nsfw` (optional)
-    * `license` (optional)
-    * `title` (optional)
-    * `description` (optional)
-    * `thumbnail` url to thumbnail image, for .mp4 uploads only (optional)
-    * `channelName` channel to publish too (optional)
-    * `channelPassword` password for channel to publish too (optional, but required if `channelName` is provided)
-* _(get)_ /api/claim/resolve/:name/:claimId
-  * example: `curl https://spee.ch/api/claim/resolve/doitlive/xyz`
-* _(get)_ /api/claim/list/:name
-  * example: `curl https://spee.ch/api/claim/list/doitlive`
-* _(get)_ /api/claim/availability/:name
-  * returns the name if it is available
-  * example: `curl https://spee.ch/api/claim/availability/doitlive`
-* _(get)_ /api/channel/availability/:name
-  * returns the name if it is available
-  * example: `curl https://spee.ch/api/channel/availability/@CoolChannel`
+#### /api/claim/publish (post)
+example:
+```
+curl -F 'name=MyPictureName' -F 'file=@/path/to/myPicture.jpeg' https://spee.ch/api/claim/publish
+```
+Parameters:
+
+  * `name` (required)
+  * `file` (required) (must be type .mp4, .jpeg, .jpg, .gif, or .png)
+  * `nsfw` (optional)
+  * `license` (optional)
+  * `title` (optional)
+  * `description` (optional)
+  * `thumbnail` url to thumbnail image, for .mp4 uploads only (optional)
+  * `channelName` channel to publish too (optional)
+  * `channelPassword` password for channel to publish too (optional, but required if `channelName` is provided)
+
+response:
+```
+{
+    "success": <bool>,
+    "message": <string>,
+    "data": {
+        "name": <string>,
+        "claimId": <string>,
+        "url": <string>,
+        "showUrl": <string>,
+        "serveUrl": <string>,
+        "lbryTx": {
+            "claim_address": <string>,
+            "claim_id": <string>,
+            "fee": <number>,
+            "nout": <number>,
+            "tx": <string>,
+            "value": <number>
+        }
+    }
+}
+```
+   
+#### /api/claim/resolve/:name/:claimId (get) 
+example: 
+```
+curl https://spee.ch/api/claim/resolve/doitlive/xyz
+```
+
+#### /api/claim/list/:name (get) 
+example: 
+```
+curl https://spee.ch/api/claim/list/doitlive
+```
+
+#### /api/claim/availability/:name (get) 
+example: 
+```
+curl https://spee.ch/api/claim/availability/doitlive
+```
+returns the name if it is available
+
+#### /api/channel/availability/:name (get) 
+example: 
+```
+curl https://spee.ch/api/channel/availability/@CoolChannel
+```
+returns the name if it is available
 
 ## Contribute
 
