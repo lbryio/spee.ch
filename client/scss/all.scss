@@ -1,16 +1,16 @@
-@import '_variables';
-@import '_reset';
-@import '_font';
-@import '_html';
+@import '~variables/_variables';
+@import '~reset/_reset';
+@import '~fontStyle/_font';
+@import '~html/_html';
 @import '~body/_body';
-@import '_react-app';
-@import '_text';
+@import '~react-app/_react-app';
+@import '~text/_text';
 
-@import '_link';
-@import '_input';
-@import '_select';
-@import '_textarea';
-@import '_video';
+@import '~link/_link';
+@import '~input/_input';
+@import '~select/_select';
+@import '~textarea/_textarea';
+@import '~video/_video';
 
 @import 'components/_asset-display';
 @import 'components/_asset-preview';
@@ -42,6 +42,6 @@
 @import 'containers/_publish-status';
 @import 'containers/_publish-disabled-message';
 
-@import '_media-queries';
+@import '~media-queries/_media-queries';
 
 
