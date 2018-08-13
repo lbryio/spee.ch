@@ -1,0 +1,11 @@
+body {
+  background-color: yellow;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  word-wrap: break-word;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+}
