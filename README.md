@@ -60,7 +60,10 @@ check out the [customization guide](https://github.com/lbryio/spee.ch/blob/readm
  * This is not necessary, but highly reccomended.  It will decode the blocks of the `LBRY` blockchain and add the claims information to your database's tables
 
 ## API
-#### /api/claim/publish (post)
+#### /api/claim/publish
+
+method: `POST`
+
 example:
 ```
 curl -F 'name=MyPictureName' -F 'file=@/path/to/myPicture.jpeg' https://spee.ch/api/claim/publish
@@ -100,7 +103,9 @@ response:
 }
 ```
    
-#### /api/claim/availability/:name (get) 
+#### /api/claim/availability/:name 
+method: `GET`
+
 example: 
 ```
 curl https://spee.ch/api/claim/availability/doitlive

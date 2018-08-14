@@ -7,6 +7,10 @@ node_modules
 client/build
 
 client_custom/build
+client_custom/scss
+client_custom/src/components
+client_custom/src/containers
+client_custom/src/pages
 
 devConfig/sequelizeCliConfig.js
 devConfig/testingConfig.js
