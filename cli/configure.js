@@ -2,6 +2,7 @@ const inquirer = require('inquirer');
 const fs = require('fs');
 const Path = require('path');
 const axios = require('axios');
+const ip = require('ip');
 
 const mysqlQuestions = require(Path.resolve(__dirname, 'questions/mysqlQuestions.js'));
 const siteQuestions = require(Path.resolve(__dirname, 'questions/siteQuestions.js'));
@@ -158,7 +159,11 @@ inquirer
     siteConfig['details']['port'] = results.port;
     siteConfig['details']['title'] = results.title;
     siteConfig['details']['host'] = results.host;
+    siteConfig['details']['ipAddress'] = ip.address();
     siteConfig['publishing']['uploadDirectory'] = results.uploadDirectory;
+  })
+  .then(() => {
+    // create the siteConfig.json file
     const fileLocation = Path.resolve(__dirname, '../config/siteConfig.json');
     const fileContents = JSON.stringify(siteConfig, null, 2);
     fs.writeFileSync(fileLocation, fileContents, 'utf-8');
@@ -166,7 +171,7 @@ inquirer
   })
   .then(() => {
     console.log('\nYou\'re all done!');
-    console.log('Next step: run "npm run build" to build your server, then "npm run start" to start your server!');
+    console.log('Next step: run "npm run start" to build and start your server!');
     console.log('If you want to change any settings, you can edit the files in the "/config" folder.');
     process.exit(0);
   })
