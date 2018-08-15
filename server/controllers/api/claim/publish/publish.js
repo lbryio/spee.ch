@@ -44,7 +44,8 @@ const publish = (publishParams, fileName, fileType) => {
       })
       .then(([fileRecord, claimRecord]) => {
         // upsert the records
-        const {name, claim_id: claimId} = publishParams;
+        const {name} = publishParams;
+        const {claim_id: claimId} = publishResults;
         const upsertCriteria = {
           name,
           claimId,
