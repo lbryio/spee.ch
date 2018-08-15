@@ -131,7 +131,6 @@ Check your site configs
 $ cd config/
 $ nano siteConfig.json
 ```
-add your ip address in `config/siteConfig.json`
  	
 ### Build & run
 
