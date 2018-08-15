@@ -403,8 +403,19 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
   };
 
   Claim.getCurrentHeight = function () {
-    return this
-      .max('height');
+    return new Promise((resolve, reject) => {
+      return this
+        .max('height')
+        .then(result => {
+          if (result) {
+            return resolve(result);
+          }
+          return resolve(100000);
+        })
+        .catch(error => {
+          return reject(error);
+        });
+    });
   };
 
   return Claim;
