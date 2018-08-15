@@ -12,6 +12,14 @@ let thumbnailChannelDefault = '@thumbnails';
 let thumbnailChannel = '';
 let thumbnailChannelId = '';
 
+const createConfigFile = (fileName, configObject) => {  // siteConfig.json , siteConfig
+  const fileLocation = Path.resolve(__dirname, `../config/${fileName}`);
+  const fileContents = JSON.stringify(configObject, null, 2);
+  fs.writeFileSync(fileLocation, fileContents, 'utf-8');
+  console.log(`Successfully created /config/${fileName}\n`);
+};
+
+// import existing configs or import the defaults
 let mysqlConfig;
 try {
   mysqlConfig = require('../config/mysqlConfig.json');
@@ -37,14 +45,33 @@ const {
   },
 } = siteConfig;
 
+let lbryConfig;
+try {
+  lbryConfig = require('../config/lbryConfig.json');
+} catch (error) {
+  lbryConfig = require('./defaults/lbryConfig.json');
+}
+
+let loggerConfig;
+try {
+  loggerConfig = require('../config/loggerConfig.json');
+} catch (error) {
+  loggerConfig = require('./defaults/loggerConfig.json');
+}
+
+let slackConfig;
+try {
+  slackConfig = require('../config/slackConfig.json');
+} catch (error) {
+  slackConfig = require('./defaults/slackConfig.json');
+}
+
+// ask user questions and create config files
 inquirer
   .prompt(mysqlQuestions(mysqlDatabase, mysqlUsername, mysqlPassword))
   .then(results => {
     console.log('\nCreating mysql config file...');
-    const fileLocation = Path.resolve(__dirname, '../config/mysqlConfig.json');
-    const fileContents = JSON.stringify(results, null, 2);
-    fs.writeFileSync(fileLocation, fileContents, 'utf-8');
-    console.log('Successfully created /config/mysqlConfig.json!\n');
+    createConfigFile('mysqlConfig.json', results);
   })
   .then(() => {
     // check for lbrynet connection & retrieve a default address
@@ -163,11 +190,11 @@ inquirer
     siteConfig['publishing']['uploadDirectory'] = results.uploadDirectory;
   })
   .then(() => {
-    // create the siteConfig.json file
-    const fileLocation = Path.resolve(__dirname, '../config/siteConfig.json');
-    const fileContents = JSON.stringify(siteConfig, null, 2);
-    fs.writeFileSync(fileLocation, fileContents, 'utf-8');
-    console.log('Successfully created /config/siteConfig.json\n');
+    // create the config files
+    createConfigFile('siteConfig.json', siteConfig);
+    createConfigFile('lbryConfig.json', lbryConfig);
+    createConfigFile('loggerConfig.json', loggerConfig);
+    createConfigFile('slackConfig.json', slackConfig);
   })
   .then(() => {
     console.log('\nYou\'re all done!');
