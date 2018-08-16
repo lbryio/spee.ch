@@ -34,8 +34,6 @@ $ npm install
 $ npm run configure
 ```
 
-Add your ip address in `config/siteConfig.json`
-
 #### Build & start the app
 
 _note: make sure lbry is running in the background before proceeding_

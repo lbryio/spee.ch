@@ -15,8 +15,7 @@ client_custom/src/pages
 devConfig/sequelizeCliConfig.js
 devConfig/testingConfig.js
 
-config/mysqlConfig.json
-config/siteConfig.json
+config/
 
 public/bundle/bundle.js
 public/bundle/bundle.js.map
