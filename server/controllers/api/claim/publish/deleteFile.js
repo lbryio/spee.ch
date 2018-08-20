@@ -6,7 +6,7 @@ const deleteFile = (filePath) => {
     if (err) {
       return logger.error(`error deleting temporary file ${filePath}`);
     }
-    logger.debug(`successfully deleted ${filePath}`);
+    logger.info(`successfully deleted ${filePath}`);
   });
 };
 
