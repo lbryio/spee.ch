@@ -1,5 +1,0 @@
-{
-  "slackWebHook": false, // string: url for your webhook
-  "slackErrorChannel": false, // e.g. `#speech-error`
-  "slackInfoChannel": false // e.g. `#speech-info`
-}
