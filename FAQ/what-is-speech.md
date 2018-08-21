@@ -17,7 +17,7 @@ Speech is just the beginning of what will soon be a vibrant ecosystem of LBRY-po
 
 It’s easy. Drag the image or video file of your choice into the center of the spee.ch homepage.
 
-spee.ch is currently best suited for web optimized MP4 video and standard image filetypes (JPEG, GIF). 
+Spee.ch is currently best suited for web optimized MP4 video and standard image filetypes (JPEG, GIF). 
 
 If you want to refer to a piece of content repeatedly, or to build a collection of related content, you could create a channel. Channels work both for private collections and for public repositories. There’s more info about how to do this [on the channel page](https://spee.ch/login).
 
