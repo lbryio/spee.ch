@@ -5,9 +5,7 @@ Spee.ch is a media-hosting site that reads from and publishes content to the [L
 
 ## OK But Why Should I Care?
 
-Spee.ch is a fast and easy way to host your images, videos, and other content. You’ll retain full control and ownership of your content, and you remain as anonymous as you want to be.
-
-What makes this different from other similar sites is that Speech is hosted on the LBRY blockchain. That means it is impossible for your content to be censored via digital means. Even if we took down Speech today, all content would remain immutably stored on the LBRY blockchain.
+Spee.ch is a fast and easy way to host your images, videos, and other content. What makes this different from other similar sites is that Speech is hosted on the LBRY blockchain. That means it is impossible for your content to be censored via digital means. Even if we took down Speech today, all content would remain immutably stored on the LBRY blockchain.
 
 Blockchain technology doesn’t solve [the 5 dollar wrench attack](https://xkcd.com/538/), but it solves just about every other problem in media hosting and distribution.
 
@@ -19,9 +17,11 @@ Speech is just the beginning of what will soon be a vibrant ecosystem of LBRY-po
 
 It’s easy. Drag the image or video file of your choice into the center of the spee.ch homepage.
 
-spee.ch currently supports the following filetypes: TKTKTKTK.
+spee.ch currently supports the common video filetypes (web optimized MP4)and standard image filetypes (JPEG, GIF). 
 
 If you want to refer to a piece of content repeatedly, or to build a collection of related content, you could create a channel. Channels work both for private collections and for public repositories. There’s more info about how to do this [on the channel page](https://spee.ch/login).
+
+Published files will be wiewable and emebdable with any web browser and accesible in the LBRY app. You can also use spee.ch to view free and non-NSFW content published on LBRY network from LBRY app. You just need to replace "lbry://" with "http://spee.ch/" in the URL.
 
 ## How Long Does Content Stay on Speech?
 
