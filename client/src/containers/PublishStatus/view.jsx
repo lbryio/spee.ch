@@ -71,6 +71,13 @@ class PublishStatus extends React.Component {
             </Row>
           </div>
         }
+        {status === publishStates.ABANDONING &&
+          <div className={'status'}>
+            <Row>
+              <p>Your claim is being abandoned.</p>
+            </Row>
+          </div>
+        }
       </div>
     );
   }

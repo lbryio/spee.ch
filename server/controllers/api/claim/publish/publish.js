@@ -1,81 +1,62 @@
 const logger = require('winston');
-const { publishClaim } = require('../../../../lbrynet');
 const db = require('../../../../models');
+const { publishClaim } = require('../../../../lbrynet');
 const { createFileRecordDataAfterPublish } = require('../../../../models/utils/createFileRecordData.js');
 const { createClaimRecordDataAfterPublish } = require('../../../../models/utils/createClaimRecordData.js');
 const deleteFile = require('./deleteFile.js');
 
-const publish = (publishParams, fileName, fileType) => {
-  return new Promise((resolve, reject) => {
-    let publishResults, certificateId, channelName;
-    // publish the file
-    return publishClaim(publishParams)
-      .then(result => {
-        logger.info(`Successfully published ${publishParams.name} ${fileName}`, result);
+const publish = async (publishParams, fileName, fileType) => {
+  let publishResults;
+  let channel;
+  let fileRecord;
+  let filePath = publishParams.file_path;
+  let newFile = Boolean(filePath);
 
-        // Support new daemon, TODO: remove
-        publishResults = result.output && result.output.claim_id ? result.output : result;
+  try {
+    publishResults = await publishClaim(publishParams);
+    logger.info(`Successfully published ${publishParams.name} ${fileName}`, publishResults);
 
-        // get the channel information
-        if (publishParams.channel_name) {
-          logger.debug(`this claim was published in channel: ${publishParams.channel_name}`);
-          return db.Channel.findOne({
-            where: {
-              channelName: publishParams.channel_name,
-            },
-          });
-        } else {
-          logger.debug('this claim was not published in a channel');
-          return null;
-        }
-      })
-      .then(channel => {
-        // set channel information
-        certificateId = null;
-        channelName = null;
-        if (channel) {
-          certificateId = channel.channelClaimId;
-          channelName = channel.channelName;
-        }
-        logger.debug(`certificateId: ${certificateId}`);
-      })
-      .then(() => {
-        return Promise.all([
-          createFileRecordDataAfterPublish(fileName, fileType, publishParams, publishResults),
-          createClaimRecordDataAfterPublish(certificateId, channelName, fileName, fileType, publishParams, publishResults),
-        ]);
-      })
-      .then(([fileRecord, claimRecord]) => {
-        // upsert the records
-        const {name} = publishParams;
-        const {claim_id: claimId} = publishResults;
-        const upsertCriteria = {
-          name,
-          claimId,
-        };
-        return Promise.all([
-          db.upsert(db.File, fileRecord, upsertCriteria, 'File'),
-          db.upsert(db.Claim, claimRecord, upsertCriteria, 'Claim'),
-        ]);
-      })
-      .then(([file, claim]) => {
-        logger.debug('File and Claim records successfully created');
-        return Promise.all([
-          file.setClaim(claim),
-          claim.setFile(file),
-        ]);
-      })
-      .then(() => {
-        logger.debug('File and Claim records successfully associated');
-        // resolve the promise with the result from lbryApi publishClaim;
-        resolve(publishResults);
-      })
-      .catch(error => {
-        logger.error('PUBLISH ERROR', error);
-        deleteFile(publishParams.file_path); // delete the local file
-        reject(error);
+    // get the channel information
+    if (publishParams.channel_name) {
+      logger.debug(`this claim was published in channel: ${publishParams.channel_name}`);
+      channel = await db.Channel.findOne({
+        where: {
+          channelName: publishParams.channel_name,
+        },
       });
-  });
+    } else {
+      channel = null;
+    }
+    const certificateId = channel ? channel.channelClaimId : null;
+    const channelName = channel ? channel.channelName : null;
+
+    const claimRecord = await createClaimRecordDataAfterPublish(certificateId, channelName, fileName, fileType, publishParams, publishResults);
+    const {claimId} = claimRecord;
+    const upsertCriteria = {name: publishParams.name, claimId};
+    if (newFile) {
+      fileRecord = await createFileRecordDataAfterPublish(fileName, fileType, publishParams, publishResults);
+    } else {
+      fileRecord = await db.File.findOne({where: {claimId}});
+    }
+
+    const [file, claim] = await Promise.all([
+      db.upsert(db.File, fileRecord, upsertCriteria, 'File'),
+      db.upsert(db.Claim, claimRecord, upsertCriteria, 'Claim'),
+    ]);
+    logger.info('File and Claim records successfully created');
+
+    await Promise.all([
+      file.setClaim(claim),
+      claim.setFile(file),
+    ]);
+    logger.info('File and Claim records successfully associated');
+
+    return claimRecord;
+  } catch (err) {
+    logger.error('PUBLISH ERROR', err);
+    await deleteFile(filePath);
+    return err;
+  }
 };
 
 module.exports = publish;

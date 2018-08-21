@@ -105,6 +105,13 @@ export function updateAssetViewsInList (id, claimId, claimViews) {
   };
 }
 
+export function removeAsset (data) {
+  return {
+    type: actions.ASSET_REMOVE,
+    data,
+  };
+}
+
 // channel actions
 
 export function addNewChannelToChannelList (id, name, shortId, longId, claimsData) {

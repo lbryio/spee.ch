@@ -3,7 +3,8 @@ import View from './view';
 import { fileRequested } from '../../actions/show';
 import { selectAsset } from '../../selectors/show';
 
-const mapStateToProps = ({ show }) => {
+const mapStateToProps = (props) => {
+  const {show} = props;
   // select error and status
   const error  = show.displayAsset.error;
   const status = show.displayAsset.status;

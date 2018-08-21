@@ -14,7 +14,7 @@ const publish = require('./publish.js');
 const createPublishParams = require('./createPublishParams.js');
 const createThumbnailPublishParams = require('./createThumbnailPublishParams.js');
 const parsePublishApiRequestBody = require('./parsePublishApiRequestBody.js');
-const parsePublishApiRequestFiles = require('./parsePublishApiRequestFiles.js');
+const {parsePublishApiRequestFiles} = require('./parsePublishApiRequestFiles.js');
 const authenticateUser = require('./authentication.js');
 
 const CLAIM_TAKEN = 'CLAIM_TAKEN';
@@ -85,17 +85,18 @@ const claimPublish = ({ body, files, headers, ip, originalUrl, user, tor }, res)
       // publish the asset
       return publish(publishParams, fileName, fileType);
     })
-    .then(result => {
+    .then(claimData => {
+      logger.debug('Publish success >', claimData);
       res.status(200).json({
         success: true,
         message: 'publish completed successfully',
         data   : {
           name,
-          claimId : result.claim_id,
-          url     : `${host}/${result.claim_id}/${name}`, // for backwards compatability with app
-          showUrl : `${host}/${result.claim_id}/${name}`,
-          serveUrl: `${host}/${result.claim_id}/${name}${fileExtension}`,
-          lbryTx  : result,
+          claimId : claimData.claimId,
+          url     : `${host}/${claimData.claimId}/${name}`, // for backwards compatability with app
+          showUrl : `${host}/${claimData.claimId}/${name}`,
+          serveUrl: `${host}/${claimData.claimId}/${name}${fileExtension}`,
+          claimData,
         },
       });
       // record the publish end time and send to google analytics

@@ -1,8 +1,10 @@
 import { connect } from 'react-redux';
+import { setUpdateTrue, updateMetadata, clearFile } from '../../actions/publish';
+import { onHandleShowPageUri } from '../../actions/show';
 import View from './view';
 
 const mapStateToProps = (props) => {
-  const {show} = props;
+  const { show } = props;
   // select request info
   const requestId = show.request.id;
   // select asset info
@@ -13,10 +15,17 @@ const mapStateToProps = (props) => {
     const assetKey = request.key;  // note: just store this in the request
     asset = assetList[assetKey] || null;
   }
-  // return props
   return {
     asset,
+    myChannel: props.channel.loggedInChannel.name,
   };
 };
 
-export default connect(mapStateToProps, null)(View);
+const mapDispatchToProps = {
+  updateMetadata,
+  onHandleShowPageUri,
+  setUpdateTrue,
+  clearFile,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(View);

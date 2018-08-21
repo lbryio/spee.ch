@@ -1,6 +1,5 @@
 import React from 'react';
 import PageLayout from '@components/PageLayout';
-
 import HorizontalSplit from '@components/HorizontalSplit';
 import AssetTitle from '@containers/AssetTitle';
 import AssetDisplay from '@containers/AssetDisplay';

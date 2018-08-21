@@ -15,6 +15,7 @@ module.exports = {
   '/trending': { controller: redirect('/popular') },
   '/popular': { controller: handlePageRequest },
   '/new': { controller: handlePageRequest },
+  '/edit/:claimId': { controller: handlePageRequest },
   '/multisite': { controller: handlePageRequest },
   '/video-embed/:name/:claimId/:config?': { controller: handleVideoEmbedRequest },  // for twitter
 };

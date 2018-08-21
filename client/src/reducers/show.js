@@ -65,6 +65,33 @@ export default function (state = initialState, action) {
           },
         }),
       });
+    case actions.ASSET_REMOVE:
+      const claim = action.data;
+      const newAssetList = state.assetList;
+      delete newAssetList[`a#${claim.name}#${claim.claimId}`];
+
+      const channelId = `c#${claim.channelName}#${claim.certificateId}`;
+      const channelClaims = state.channelList[channelId].claimsData.claims;
+      const newClaimsData = channelClaims.filter(c => c.claimId !== claim.claimId);
+
+      return Object.assign({}, state, {
+        assetList  : newAssetList,
+        channelList: Object.assign({}, state.channelList, {
+          [channelId]: Object.assign({}, state.channelList[channelId], {
+            claimsData: Object.assign({}, state.channelList[channelId].claimsData, {
+              claims: newClaimsData,
+            }),
+          }),
+        }),
+      });
+    case actions.ASSET_UPDATE_CLAIMDATA:
+      return Object.assign({}, state, {
+        assetList: Object.assign({}, state.assetList, {
+          [action.data.id]: Object.assign({}, state.assetList[action.data.id], {
+            claimData: Object.assign({}, state.assetList[action.data.id].claimData, action.data.claimData),
+          }),
+        }),
+      });
     // channel data
     case actions.CHANNEL_ADD:
       return Object.assign({}, state, {

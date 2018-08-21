@@ -14,6 +14,12 @@ export function clearFile () {
   };
 }
 
+export function setUpdateTrue () {
+  return {
+    type: actions.SET_UPDATE_TRUE,
+  };
+}
+
 export function updateMetadata (name, value) {
   return {
     type: actions.METADATA_UPDATE,
@@ -28,6 +34,13 @@ export function updateClaim (value) {
   return {
     type: actions.CLAIM_UPDATE,
     data: value,
+  };
+};
+
+export function abandonClaim (data) {
+  return {
+    type: actions.ABANDON_CLAIM,
+    data,
   };
 };
 

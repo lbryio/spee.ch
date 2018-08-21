@@ -6,6 +6,7 @@ const mapStateToProps = ({ publish }) => {
     disabled: publish.disabled,
     file    : publish.file,
     status  : publish.status.status,
+    isUpdate: publish.isUpdate,
   };
 };
 
