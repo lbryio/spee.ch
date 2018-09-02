@@ -1,19 +1,16 @@
-import React from 'react';
-import PageLayout from '@components/PageLayout';
+import { connect } from 'react-redux';
+import { onHandleShowPageUri } from '../../actions/show';
+import View from './view';
 
-import PublishTool from '@containers/PublishTool';
-
-class HomePage extends React.Component {
-  render () {
-    return (
-      <PageLayout
-        pageTitle={'Speech'}
-        pageUri={''}
-      >
-        <PublishTool />
-      </PageLayout>
-    );
-  }
+const mapStateToProps = ({ show }) => {
+  return {
+    error      : show.request.error,
+    requestType: show.request.type,
+  };
 };
 
-export default HomePage;
+const mapDispatchToProps = {
+  onHandleShowPageUri,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(View);

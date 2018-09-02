@@ -1,5 +1,5 @@
 const logger = require('winston');
-const db = require('../../../../models/index');
+const db = require('../../../../models');
 
 const authenticateChannelCredentials = (channelName, channelId, userPassword) => {
   return new Promise((resolve, reject) => {

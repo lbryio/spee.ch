@@ -9,7 +9,7 @@ const logger = require('winston');
 const Path = require('path');
 
 // load local modules
-const db = require('./models/index');
+const db = require('./models');
 const requestLogger = require('./middleware/requestLogger.js');
 const createDatabaseIfNotExists = require('./models/utils/createDatabaseIfNotExists.js');
 const { getWalletBalance } = require('./lbrynet/index');

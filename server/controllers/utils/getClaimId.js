@@ -1,6 +1,6 @@
 const logger = require('winston');
 
-const db = require('../../models/index');
+const db = require('../../models');
 
 const getClaimIdByChannel = (channelName, channelClaimId, claimName) => {
   logger.debug(`getClaimIdByChannel(${channelName}, ${channelClaimId}, ${claimName})`);
