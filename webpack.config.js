@@ -7,7 +7,7 @@ const customAliases = createModuleAliases();
 
 module.exports = {
   target: 'web',
-  entry : ['babel-polyfill', 'whatwg-fetch', './client/build/index.js'],
+  entry : ['@babel/polyfill', 'whatwg-fetch', './client/build/index.js'],
   output: {
     path      : Path.join(__dirname, 'public/bundle'),
     publicPath: '/bundle/',

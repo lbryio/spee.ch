@@ -1,6 +1,6 @@
 // module imports
 const moduleAlias = require('module-alias');
-require('babel-polyfill');
+require('@babel/polyfill');
 
 // local imports
 const createModuleAliases = require('./utils/createModuleAliases.js');

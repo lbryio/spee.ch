@@ -9,7 +9,12 @@ const User = require('./user.js');
 const Blocked = require('./blocked.js');
 const Tor = require('./tor.js');
 
-const {database, username, password} = require('@config/mysqlConfig');
+const {
+  database,
+  username,
+  password,
+} = require('@config/mysqlConfig');
+
 if (!database || !username || !password) {
   logger.warn('missing database, user, or password from mysqlConfig');
 }
