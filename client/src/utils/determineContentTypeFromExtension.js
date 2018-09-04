@@ -4,7 +4,7 @@ const determineContentTypeFromExtension = (thumbnail) => {
     switch (fileExt) {
       case 'jpeg':
       case 'jpg':
-        return 'image/jpg';
+        return 'image/jpeg';
       case 'png':
         return 'image/png';
       case 'gif':
