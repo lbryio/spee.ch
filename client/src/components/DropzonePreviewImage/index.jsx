@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import ThreeScene from '@components/ThreeScene';
 
 class PublishPreview extends React.Component {
   constructor (props) {
@@ -41,14 +42,8 @@ class PublishPreview extends React.Component {
       this.setState({imgSource: this.state.defaultThumbnail});
     }
   }
-  setPreviewSTLSource (file) {
-    // TODO: fill out
-  }
   setPreviewSource (file) {
-    if (file.isStl) {
-      console.log('nyx nyx nyx');
-      this.setPreviewSTLSource(file);
-    } else {
+    if (!file.isStl) {
       this.setPreviewImageVideoSource(file);
     }
   }
@@ -63,7 +58,7 @@ class PublishPreview extends React.Component {
   }
   renderSTL () {
     return (
-      <span>in render stl</span>
+      <ThreeScene file={this.props.file} />
     );
   }
   render () {
