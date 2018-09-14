@@ -10,7 +10,7 @@ class PublishPreview extends React.Component {
     };
   }
   componentDidMount () {
-    this.setPreviewImageSource(this.props.file);
+    this.setPreviewSource(this.props.file);
   }
   componentWillReceiveProps (newProps) {
     if (newProps.file !== this.props.file) {
@@ -24,24 +24,35 @@ class PublishPreview extends React.Component {
       }
     }
   }
-  setPreviewImageSourceFromFile (file) {
+  setPreviewImageVideoSourceFromFile (file) {
     const previewReader = new FileReader();
     previewReader.readAsDataURL(file);
     previewReader.onloadend = () => {
       this.setState({imgSource: previewReader.result});
     };
   }
-  setPreviewImageSource (file) {
+  setPreviewImageVideoSource (file) {
     if (file.type !== 'video/mp4') {
-      this.setPreviewImageSourceFromFile(file);
+      this.setPreviewImageVideoSourceFromFile(file);
     } else {
       if (this.props.thumbnail) {
-        this.setPreviewImageSourceFromFile(this.props.thumbnail);
+        this.setPreviewImageVideoSourceFromFile(this.props.thumbnail);
       }
       this.setState({imgSource: this.state.defaultThumbnail});
     }
   }
-  render () {
+  setPreviewSTLSource (file) {
+    // TODO: fill out
+  }
+  setPreviewSource (file) {
+    if (file.isStl) {
+      console.log('nyx nyx nyx');
+      this.setPreviewSTLSource(file);
+    } else {
+      this.setPreviewImageVideoSource(file);
+    }
+  }
+  renderImageVideo () {
     return (
       <img
         src={this.state.imgSource}
@@ -49,6 +60,18 @@ class PublishPreview extends React.Component {
         alt='publish preview'
       />
     );
+  }
+  renderSTL () {
+    return (
+      <span>in render stl</span>
+    );
+  }
+  render () {
+    if (this.props.file.isStl) {
+      return this.renderSTL();
+    }
+
+    return this.renderImageVideo();
   }
 };
 
