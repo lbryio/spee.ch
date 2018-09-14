@@ -69,10 +69,10 @@ class Dropzone extends React.Component {
     const fileList = event.target.files;
     this.chooseFile(fileList[0]);
   }
-  chooseFile (file) {
+  async chooseFile (file) {
     if (file) {
       try {
-        validateFile(file); // validate the file's name, type, and size
+        await validateFile(file); // validate the file's name, type, and size
       } catch (error) {
         return this.props.setFileError(error.message);
       }
