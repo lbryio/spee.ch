@@ -7,34 +7,14 @@ const deleteFile = require('./deleteFile.js');
 
 const publish = (publishParams, fileName, fileType) => {
   return new Promise((resolve, reject) => {
-    let publishResults, certificateId, channelName;
+    let publishResults;
+    const certificateId = publishParams.channel_id || null;
+    const channelName = publishParams.channel_name || null;
     // publish the file
     return publishClaim(publishParams)
       .then(tx => {
         logger.info(`Successfully published ${publishParams.name} ${fileName}`, tx);
         publishResults = tx;
-        // get the channel information
-        if (publishParams.channel_name) {
-          logger.debug(`this claim was published in channel: ${publishParams.channel_name}`);
-          return db.Channel.findOne({
-            where: {
-              channelName: publishParams.channel_name,
-            },
-          });
-        } else {
-          logger.debug('this claim was not published in a channel');
-          return null;
-        }
-      })
-      .then(channel => {
-        // set channel information
-        certificateId = null;
-        channelName = null;
-        if (channel) {
-          certificateId = channel.channelClaimId;
-          channelName = channel.channelName;
-        }
-        logger.debug(`certificateId: ${certificateId}`);
       })
       .then(() => {
         return Promise.all([
