@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import * as THREE from 'three';
+const STLLoader = require('three-stl-loader')(THREE);
 
 class ThreeScene extends Component {
   componentDidMount () {
     const width = this.mount.clientWidth;
     const height = this.mount.clientHeight;
-    console.log('width: ' + width);
-    console.log('height: ' + height);
 
     // ADD CAMERA
     this.camera = new THREE.PerspectiveCamera(
@@ -29,7 +28,33 @@ class ThreeScene extends Component {
 
     this.mount.appendChild(this.renderer.domElement);
 
-    this.renderer.render(this.scene, this.camera);
+    // this.renderer.render(this.scene, this.camera);
+
+    // "Material" to use when rendering
+    const material = new THREE.MeshPhongMaterial({
+      color    : '#ffffff',
+      specular : 0x111111,
+      shininess: 200,
+    });
+
+    // Declare a new file to reader to read the file as a data url. Then use that to preview the STL
+    const reader = new FileReader();
+    reader.onloadend = (e) => {
+      const loader = new STLLoader();
+      loader.load(e.target.result, (geometry) => {
+        console.log(geometry);
+        const mesh = new THREE.Mesh(geometry, material);
+        mesh.position.set(0, -0.37, -0.6);
+        mesh.rotation.set(-Math.PI / 2, 0, 0);
+        mesh.scale.set(2, 2, 2);
+        mesh.castShadow = true;
+        mesh.receiveShadow = true;
+        this.scene.add(mesh);
+        console.log('in here');
+        this.renderer.render(this.scene, this.camera);
+      });
+    };
+    reader.readAsDataURL(this.props.file);
   }
 
   componentWillUnmount () {
