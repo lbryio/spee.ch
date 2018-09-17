@@ -11,17 +11,28 @@ const NO_CHANNEL = 'NO_CHANNEL';
 const NO_CLAIM = 'NO_CLAIM';
 const BLOCKED_CLAIM = 'BLOCKED_CLAIM';
 const NO_FILE = 'NO_FILE';
+const UNAPPROVED_CHANNEL = 'UNAPPROVED_CHANNEL';
+
+const { publishing: { serveOnlyApproved, approvedChannels } } = require('@config/siteConfig');
 
 const getClaimIdAndServeAsset = (channelName, channelClaimId, claimName, claimId, originalUrl, ip, res) => {
   getClaimId(channelName, channelClaimId, claimName, claimId)
     .then(fullClaimId => {
       claimId = fullClaimId;
       logger.debug('Full claim id:', fullClaimId);
-      return db.Claim.getOutpoint(claimName, fullClaimId);
+      return db.Claim.findOne({
+        where: {
+          name   : claimName,
+          claimId: fullClaimId,
+        },
+      });
     })
-    .then(outpoint => {
-      logger.debug('Outpoint:', outpoint);
-      return db.Blocked.isNotBlocked(outpoint);
+    .then(claim => {
+      if (serveOnlyApproved && !approvedChannels.includes(claim.dataValues.certificateId)) {
+        throw new Error(UNAPPROVED_CHANNEL);
+      }
+      logger.debug('Outpoint:', claim.dataValues.outpoint);
+      return db.Blocked.isNotBlocked(claim.dataValues.outpoint);
     })
     .then(() => {
       return db.File.findOne({
@@ -50,6 +61,13 @@ const getClaimIdAndServeAsset = (channelName, channelClaimId, claimName, claimId
         return res.status(404).json({
           success: false,
           message: 'No matching channel id could be found for that url',
+        });
+      }
+      if (error === UNAPPROVED_CHANNEL) {
+        logger.debug('unapproved channel');
+        return res.status(400).json({
+          success: false,
+          message: 'This spee.ch instance serves limited content which does not include this asset',
         });
       }
       if (error === BLOCKED_CLAIM) {
