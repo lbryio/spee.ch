@@ -1,15 +1,17 @@
 /**
- * Class to determine if file upload is a valid stl file.
+ * Module to determine if file upload is a valid stl file. Not using ES6 class since server isn't set up to compile
  *
  * Calculations on file format derived from here: https://en.wikipedia.org/wiki/STL_%28file_format%29
- * Parts of class derived from: https://github.com/mrdoob/three.js/blob/master/examples/js/loaders/STLLoader.js
+ * Parts of module derived from: https://github.com/mrdoob/three.js/blob/master/examples/js/loaders/STLLoader.js
  */
-export default class STL {
-  constructor (data) {
+module.exports = {
+  init (data) {
     // TODO: should probably perform validation on data
     this.reader = new DataView(data);
     this.valid = (this.isBinary() || this.isAscii());
-  }
+
+    return this;
+  },
 
   isBinary () {
     const minSize = 84; // Minimum STL size (empty) is 84 bytes;
@@ -22,7 +24,7 @@ export default class STL {
     }
 
     return this.reader.byteLength === expectedByteLength;
-  }
+  },
 
   isAscii () {
     const buffer = new Uint8Array(this.reader.buffer);
@@ -31,5 +33,5 @@ export default class STL {
     // Ascii STL files *MUST* begin with 'solid'
     const regEx = /^solid/;
     return regEx.test(str);
-  }
-}
+  },
+};

@@ -34,7 +34,7 @@ module.exports = {
         return new Promise((resolve, reject) => {
           const loader = new FileReader();
           loader.onloadend = (e) => {
-            const stl = new STL(e.target.result);
+            const stl = STL.init(e.target.result);
             if (stl.valid) {
               file.isStl = true; // this allows us to keep track of the type since file.type == ''
               resolve();

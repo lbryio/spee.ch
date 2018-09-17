@@ -1,7 +1,7 @@
 const path = require('path');
 const validateFileTypeAndSize = require('./validateFileTypeAndSize.js');
 
-const parsePublishApiRequestFiles = ({file, thumbnail}) => {
+const parsePublishApiRequestFiles = async ({file, thumbnail}) => {
   // make sure a file was provided
   if (!file) {
     throw new Error('no file with key of [file] found in request');
@@ -28,8 +28,10 @@ const parsePublishApiRequestFiles = ({file, thumbnail}) => {
   if (/'/.test(file.name)) {
     throw new Error('apostrophes are not allowed in the file name');
   }
+
   // validate the file
-  validateFileTypeAndSize(file);
+  await validateFileTypeAndSize(file);
+
   // return results
   return {
     fileName         : file.name,
