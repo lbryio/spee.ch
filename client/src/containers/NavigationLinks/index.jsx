@@ -2,8 +2,9 @@ import { connect } from 'react-redux';
 import { logOutChannel, checkForLoggedInChannel } from '../../actions/channel';
 import View from './view';
 
-const mapStateToProps = ({ channel: { loggedInChannel: { name, shortId, longId } } }) => {
+const mapStateToProps = ({ site, channel: { loggedInChannel: { name, shortId, longId } } }) => {
   return {
+    site,
     channelName   : name,
     channelShortId: shortId,
     channelLongId : longId,

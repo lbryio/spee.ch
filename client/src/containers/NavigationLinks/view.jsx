@@ -28,16 +28,17 @@ class NavigationLinks extends React.Component {
     }
   }
   render () {
+    const { site, channelLongId, channelName } = this.props;
     return (
       <div className='navigation-links'>
-        <NavLink
+        {(!site.publishOnlyApproved || site.approvedChannels.includes(channelLongId)) && <NavLink
           className='nav-bar-link link--nav'
           activeClassName='link--nav-active'
           to='/'
           exact
         >
           Publish
-        </NavLink>
+        </NavLink>}
         <NavLink
           className='nav-bar-link link--nav'
           activeClassName='link--nav-active'
@@ -45,7 +46,7 @@ class NavigationLinks extends React.Component {
         >
           About
         </NavLink>
-        { this.props.channelName ? (
+        { channelName ? (
           <NavBarChannelOptionsDropdown
             channelName={this.props.channelName}
             handleSelection={this.handleSelection}
@@ -53,7 +54,7 @@ class NavigationLinks extends React.Component {
             VIEW={VIEW}
             LOGOUT={LOGOUT}
           />
-        ) : (
+        ) : !site.closedRegistration && (
           <NavLink
             id='nav-bar-login-link'
             className='nav-bar-link link--nav'
