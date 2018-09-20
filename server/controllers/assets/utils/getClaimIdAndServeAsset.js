@@ -12,7 +12,7 @@ const NO_CHANNEL = 'NO_CHANNEL';
 const NO_CLAIM = 'NO_CLAIM';
 const BLOCKED_CLAIM = 'BLOCKED_CLAIM';
 const NO_FILE = 'NO_FILE';
-const UNAPPROVED_CHANNEL = 'UNAPPROVED_CHANNEL';
+const CONTENT_UNAVAILABLE = 'CONTENT_UNAVAILABLE';
 
 const { publishing: { serveOnlyApproved } } = require('@config/siteConfig');
 
@@ -30,7 +30,7 @@ const getClaimIdAndServeAsset = (channelName, channelClaimId, claimName, claimId
     })
     .then(claim => {
       if (serveOnlyApproved && !isApprovedChannel({ longId: claim.dataValues.certificateId })) {
-        throw new Error(UNAPPROVED_CHANNEL);
+        throw new Error(CONTENT_UNAVAILABLE);
       }
       logger.debug('Outpoint:', claim.dataValues.outpoint);
       return db.Blocked.isNotBlocked(claim.dataValues.outpoint);
@@ -64,11 +64,11 @@ const getClaimIdAndServeAsset = (channelName, channelClaimId, claimName, claimId
           message: 'No matching channel id could be found for that url',
         });
       }
-      if (error === UNAPPROVED_CHANNEL) {
+      if (error === CONTENT_UNAVAILABLE) {
         logger.debug('unapproved channel');
         return res.status(400).json({
           success: false,
-          message: 'This spee.ch instance serves limited content which does not include this asset',
+          message: 'This content is unavailable',
         });
       }
       if (error === BLOCKED_CLAIM) {

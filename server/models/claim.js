@@ -1,11 +1,10 @@
 const logger = require('winston');
 const returnShortId = require('./utils/returnShortId.js');
+const isApprovedChannel = require('../utils/isApprovedChannel');
 const { assetDefaults: { thumbnail: defaultThumbnail }, details: { host } } = require('@config/siteConfig');
 const { publishing: { serveOnlyApproved } } = require('@config/siteConfig');
-const isApprovedChannel = require('../utils/isApprovedChannel');
 
 const NO_CLAIM = 'NO_CLAIM';
-const NOT_ALLOWED = 'NOT_ALLOWED';
 
 function determineFileExtensionFromContentType (contentType) {
   switch (contentType) {
@@ -366,7 +365,7 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
         })
         .then(claimArray => {
           if (serveOnlyApproved && !isApprovedChannel({ longId: claimArray[0].dataValues.certificateId })) {
-            reject(NOT_ALLOWED);
+            reject('This content is unavailable');
           }
           switch (claimArray.length) {
             case 0:

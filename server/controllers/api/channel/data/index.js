@@ -21,7 +21,7 @@ const channelData = ({ ip, originalUrl, body, params }, res) => {
   if (serveOnlyApproved && !isApprovedChannel(chanObj)) {
     return res.status(404).json({
       success: false,
-      message: 'This spee.ch instance serves limited content which does not include this asset',
+      message: 'This content is unavailable',
     });
   }
 
