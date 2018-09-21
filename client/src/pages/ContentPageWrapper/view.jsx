@@ -3,12 +3,14 @@ import ErrorPage from '@pages/ErrorPage';
 import ShowAssetLite from '@pages/ShowAssetLite';
 import ShowAssetDetails from '@pages/ShowAssetDetails';
 import ShowChannel from '@pages/ShowChannel';
+import { withRouter } from 'react-router-dom';
 
 import { CHANNEL, ASSET_LITE, ASSET_DETAILS } from '../../constants/show_request_types';
 
 class ContentPageWrapper extends React.Component {
   componentDidMount () {
-    this.props.onHandleShowPageUri(this.props.match.params);
+    const { onHandleShowPageUri, match, homeChannel } = this.props;
+    onHandleShowPageUri(homeChannel ? { claim: homeChannel } : match.params);
   }
   componentWillReceiveProps (nextProps) {
     if (nextProps.match.params !== this.props.match.params) {
@@ -35,4 +37,4 @@ class ContentPageWrapper extends React.Component {
   }
 };
 
-export default ContentPageWrapper;
+export default withRouter(ContentPageWrapper);
