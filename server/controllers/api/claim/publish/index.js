@@ -3,8 +3,8 @@ const logger = require('winston');
 const { details: { host }, publishing: { disabled, disabledMessage } } = require('@config/siteConfig');
 
 const { sendGATimingEvent } = require('../../../../utils/googleAnalytics.js');
-const isApprovedChannel = require('../../../../utils/isApprovedChannel');
-const { publishing: { publishOnlyApproved } } = require('@config/siteConfig');
+const isApprovedChannel = require('../../../../../utils/isApprovedChannel');
+const { publishing: { publishOnlyApproved, approvedChannels } } = require('@config/siteConfig');
 
 const { handleErrorResponse } = require('../../../utils/errorHandlers.js');
 
@@ -57,7 +57,7 @@ const claimPublish = ({ body, files, headers, ip, originalUrl, user, tor }, res)
   // check channel authorization
   authenticateUser(channelName, channelId, channelPassword, user)
     .then(({ channelName, channelClaimId }) => {
-      if (publishOnlyApproved && !isApprovedChannel({ longId: channelClaimId })) {
+      if (publishOnlyApproved && !isApprovedChannel({ longId: channelClaimId }, approvedChannels)) {
         const error = {
           name   : UNAPPROVED_CHANNEL,
           message: 'This spee.ch instance only allows publishing to approved channels',

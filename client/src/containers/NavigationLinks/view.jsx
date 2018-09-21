@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
 import NavBarChannelOptionsDropdown from '@components/NavBarChannelOptionsDropdown';
-import isApprovedChannel from '../../utils/isApprovedChannel';
+import isApprovedChannel from '../../../../utils/isApprovedChannel';
 
 const VIEW = 'VIEW';
 const LOGOUT = 'LOGOUT';

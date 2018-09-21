@@ -1,7 +1,7 @@
 const logger = require('winston');
 
 const db = require('../../../models');
-const isApprovedChannel = require('../../../utils/isApprovedChannel');
+const isApprovedChannel = require('../../../../utils/isApprovedChannel');
 
 const getClaimId = require('../../utils/getClaimId.js');
 const { handleErrorResponse } = require('../../utils/errorHandlers.js');
@@ -14,7 +14,7 @@ const BLOCKED_CLAIM = 'BLOCKED_CLAIM';
 const NO_FILE = 'NO_FILE';
 const CONTENT_UNAVAILABLE = 'CONTENT_UNAVAILABLE';
 
-const { publishing: { serveOnlyApproved } } = require('@config/siteConfig');
+const { publishing: { serveOnlyApproved, approvedChannels } } = require('@config/siteConfig');
 
 const getClaimIdAndServeAsset = (channelName, channelClaimId, claimName, claimId, originalUrl, ip, res) => {
   getClaimId(channelName, channelClaimId, claimName, claimId)
@@ -29,7 +29,7 @@ const getClaimIdAndServeAsset = (channelName, channelClaimId, claimName, claimId
       });
     })
     .then(claim => {
-      if (serveOnlyApproved && !isApprovedChannel({ longId: claim.dataValues.certificateId })) {
+      if (serveOnlyApproved && !isApprovedChannel({ longId: claim.dataValues.certificateId }, approvedChannels)) {
         throw new Error(CONTENT_UNAVAILABLE);
       }
       logger.debug('Outpoint:', claim.dataValues.outpoint);

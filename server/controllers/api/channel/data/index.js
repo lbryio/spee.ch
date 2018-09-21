@@ -1,7 +1,7 @@
 const { handleErrorResponse } = require('../../../utils/errorHandlers.js');
 const getChannelData = require('./getChannelData.js');
-const isApprovedChannel = require('../../../../utils/isApprovedChannel');
-const { publishing: { serveOnlyApproved } } = require('@config/siteConfig');
+const isApprovedChannel = require('../../../../../utils/isApprovedChannel');
+const { publishing: { serveOnlyApproved, approvedChannels } } = require('@config/siteConfig');
 const NO_CHANNEL = 'NO_CHANNEL';
 
 /*
@@ -18,7 +18,7 @@ const channelData = ({ ip, originalUrl, body, params }, res) => {
   const chanObj = {};
   if (channelName) chanObj.name = channelName;
   if (channelClaimId) chanObj[(channelClaimId.length === 40 ? 'longId' : 'shortId')] = channelClaimId;
-  if (serveOnlyApproved && !isApprovedChannel(chanObj)) {
+  if (serveOnlyApproved && !isApprovedChannel(chanObj, approvedChannels)) {
     return res.status(404).json({
       success: false,
       message: 'This content is unavailable',

@@ -1,8 +1,8 @@
 const logger = require('winston');
 const returnShortId = require('./utils/returnShortId.js');
-const isApprovedChannel = require('../utils/isApprovedChannel');
+const isApprovedChannel = require('../../utils/isApprovedChannel');
 const { assetDefaults: { thumbnail: defaultThumbnail }, details: { host } } = require('@config/siteConfig');
-const { publishing: { serveOnlyApproved } } = require('@config/siteConfig');
+const { publishing: { serveOnlyApproved, approvedChannels } } = require('@config/siteConfig');
 
 const NO_CLAIM = 'NO_CLAIM';
 
@@ -364,7 +364,7 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
           where: { name, claimId },
         })
         .then(claimArray => {
-          if (serveOnlyApproved && !isApprovedChannel({ longId: claimArray[0].dataValues.certificateId })) {
+          if (serveOnlyApproved && !isApprovedChannel({ longId: claimArray[0].dataValues.certificateId }, approvedChannels)) {
             reject('This content is unavailable');
           }
           switch (claimArray.length) {
