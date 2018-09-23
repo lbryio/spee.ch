@@ -42,7 +42,6 @@ class ThreeScene extends Component {
     reader.onloadend = (e) => {
       const loader = new STLLoader();
       loader.load(e.target.result, (geometry) => {
-        console.log(geometry);
         const mesh = new THREE.Mesh(geometry, material);
         mesh.position.set(0, -0.37, -0.6);
         mesh.rotation.set(-Math.PI / 2, 0, 0);
@@ -50,7 +49,6 @@ class ThreeScene extends Component {
         mesh.castShadow = true;
         mesh.receiveShadow = true;
         this.scene.add(mesh);
-        console.log('in here');
         this.renderer.render(this.scene, this.camera);
       });
     };
