@@ -51,6 +51,14 @@ const FileUtil = {
       tmpFileReader.onloadend = (e) => {
         const stl = STL.init(e.target.result);
         if (stl.valid) {
+          if (file.size > 10000000) {
+            reject(new DOMException('Sorry, STL files are limited to 10 megabytes.'));
+          } else if (stl.numFaces > stl.MAX_FACE_COUNT) {
+            reject(new DOMException('Sorry, STL files are limited to a polygon count of 1,000,000.'));
+          } else if (stl.numFaces === 0) {
+            reject(new DOMException('Sorry, the STL file uploaded has a polygon count of 0.'));
+          }
+
           resolve();
         } else {
           reject(new DOMException(fileErrorMsg));
