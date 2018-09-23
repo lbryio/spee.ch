@@ -1,7 +1,7 @@
-const STL = require('../../../../../client/src/utils/stl.js');
+const FileUtil = require('../../../../../client/src/utils/file.js');
 const logger = require('winston');
 
-const validateFileTypeAndSize = (file) => {
+const validateFileTypeAndSize = async (file) => {
   // check file type and size
   switch (file.type) {
     case 'image/jpeg':
@@ -25,24 +25,8 @@ const validateFileTypeAndSize = (file) => {
       }
       break;
     default:
-      // Handle STL check (file.type is empty for STLs and file.type cannot be reassigned)
-      file.isStl = false;
-      return new Promise((resolve, reject) => {
-        const loader = new FileReader();
-        loader.onloadend = (e) => {
-          const stl = new STL(e.target.result);
-          if (stl.valid) {
-            file.isStl = true; // this allows us to keep track of the type since file.type == ''
-            resolve(file);
-          }
-          reject();
-        };
-        loader.readAsArrayBuffer(file);
-      })
-        .catch(() => {
-          logger.debug('publish > file validation > unrecognized file type');
-          throw new Error('The ' + file.type + ' content type is not supported.  Only, image/jpg, image/png, image/gif, and video/mp4 content types are currently supported.');
-        });
+      await FileUtil.readUploadedFile(file);
+      break;
   }
   return file;
 };

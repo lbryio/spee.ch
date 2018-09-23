@@ -1,7 +1,7 @@
-import STL from './stl.js';
+const STL = require('./stl.js');
 
-module.exports = {
-  validateFile (file) {
+const FileUtil = {
+  async validateFile (file) {
     if (!file) {
       throw new Error('no file provided');
     }
@@ -29,23 +29,37 @@ module.exports = {
         }
         break;
       default:
-        // Handle STL check (file.type is empty for STLs and file.type cannot be reassigned)
-        file.isStl = false;
-        return new Promise((resolve, reject) => {
-          const loader = new FileReader();
-          loader.onloadend = (e) => {
-            const stl = STL.init(e.target.result);
-            if (stl.valid) {
-              file.isStl = true; // this allows us to keep track of the type since file.type == ''
-              resolve();
-            }
-            reject();
-          };
-          loader.readAsArrayBuffer(file);
-        })
-          .catch(() => {
-            throw new Error(file.type + ' is not a supported file type. Only, .jpeg, .png, .gif, and .mp4 files are currently supported.');
-          });
+        await FileUtil.readUploadedFile(file);
+        break;
     }
   },
+
+  /**
+   * Reads an uploaded file. Resolves successfully if the file is a valid STL file - rejects otherwise.
+   *
+   * @param {} file
+   */
+  readUploadedFile (file) {
+    const fileErrorMsg = file.type + ' is not a supported file type. Only .jpeg, .png, .gif, .mp4, and .stl files are currently supported';
+    const tmpFileReader = new FileReader();
+    return new Promise((resolve, reject) => {
+      tmpFileReader.onerror = () => {
+        tmpFileReader.abort();
+        reject(new DOMException(fileErrorMsg));
+      };
+
+      tmpFileReader.onloadend = (e) => {
+        const stl = STL.init(e.target.result);
+        if (stl.valid) {
+          resolve();
+        } else {
+          reject(new DOMException(fileErrorMsg));
+        }
+      };
+
+      tmpFileReader.readAsArrayBuffer(file);
+    });
+  },
 };
+
+module.exports = FileUtil;
