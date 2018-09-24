@@ -356,7 +356,7 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
     }
   };
 
-  Claim.resolveClaim = function (name, claimId) {
+  Claim.fetchClaim = function (name, claimId) {
     logger.debug(`Claim.resolveClaim: ${name} ${claimId}`);
     return new Promise((resolve, reject) => {
       this
@@ -364,9 +364,6 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
           where: { name, claimId },
         })
         .then(claimArray => {
-          if (serveOnlyApproved && !isApprovedChannel({ longId: claimArray[0].dataValues.certificateId }, approvedChannels)) {
-            reject('This content is unavailable');
-          }
           switch (claimArray.length) {
             case 0:
               return resolve(null);
@@ -376,6 +373,23 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
               logger.warn(`more than one record matches ${name}#${claimId} in db.Claim`);
               return resolve(prepareClaimData(claimArray[0].dataValues));
           }
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  };
+
+  Claim.resolveClaim = function (name, claimId) {
+    return new Promise((resolve, reject) => {
+      this
+        .fetchClaim(name, claimId)
+        .then(claim => {
+          logger.info('resolveClaim claims:', claim);
+          if (serveOnlyApproved && !isApprovedChannel({ longId: claim.certificateId }, approvedChannels)) {
+            throw new Error('This content is unavailable');
+          }
+          return resolve(claim);
         })
         .catch(error => {
           reject(error);
