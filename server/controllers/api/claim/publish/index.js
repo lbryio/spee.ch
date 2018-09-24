@@ -102,13 +102,7 @@ const claimPublish = ({ body, files, headers, ip, originalUrl, user, tor }, res)
       sendGATimingEvent('end-to-end', 'publish', fileType, gaStartTime, Date.now());
     })
     .catch(error => {
-      if (error.name === CLAIM_TAKEN) {
-        res.status(400).json({
-          success: false,
-          message: error.message,
-        });
-      }
-      if (error.name === UNAPPROVED_CHANNEL) {
+      if ([CLAIM_TAKEN, UNAPPROVED_CHANNEL].includes(error.name)) {
         res.status(400).json({
           success: false,
           message: error.message,
