@@ -36,29 +36,25 @@ function * publishFile (action) {
   }
 
   let publishMetadata, publishFormData, publishChannel;
+  // create metadata
+  publishMetadata = createPublishMetadata(
+    isUpdate ? asset.name : claim,
+    isUpdate ? {type: asset.claimData.contentType} : file,
+    metadata,
+    publishInChannel,
+    selectedChannel
+  );
   if (isUpdate) {
-    publishMetadata = createPublishMetadata(asset.name, {type: asset.claimData.contentType}, metadata, publishInChannel, selectedChannel);
     publishMetadata['channelName'] = asset.claimData.channelName;
-    if (thumbnail) {
-      // add thumbnail to publish metadata
-      publishMetadata['thumbnail'] = createThumbnailUrl(thumbnailChannel, thumbnailChannelId, claim, host);
-    }
-    // create form data for main publish
-    publishFormData = createPublishFormData(file, thumbnail, publishMetadata);
-    // make the publish request
-    publishChannel = yield call(makePublishRequestChannel, publishFormData, true);
-  } else {
-    // create metadata
-    publishMetadata = createPublishMetadata(claim, file, metadata, publishInChannel, selectedChannel);
-    if (thumbnail) {
-      // add thumbnail to publish metadata
-      publishMetadata['thumbnail'] = createThumbnailUrl(thumbnailChannel, thumbnailChannelId, claim, host);
-    }
-    // create form data for main publish
-    publishFormData = createPublishFormData(file, thumbnail, publishMetadata);
-    // make the publish request
-    publishChannel = yield call(makePublishRequestChannel, publishFormData);
   }
+  if (thumbnail) {
+    // add thumbnail to publish metadata
+    publishMetadata['thumbnail'] = createThumbnailUrl(thumbnailChannel, thumbnailChannelId, claim, host);
+  }
+  // create form data for main publish
+  publishFormData = createPublishFormData(file, thumbnail, publishMetadata);
+  // make the publish request
+  publishChannel = yield call(makePublishRequestChannel, publishFormData, isUpdate);
 
   while (true) {
     const {loadStart, progress, load, success, error: publishError} = yield take(publishChannel);
