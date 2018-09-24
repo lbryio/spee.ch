@@ -6,7 +6,7 @@ const { sendGATimingEvent } = require('../../../../utils/googleAnalytics.js');
 const { handleErrorResponse } = require('../../../utils/errorHandlers.js');
 const publish = require('../publish/publish.js');
 const parsePublishApiRequestBody = require('../publish/parsePublishApiRequestBody');
-const {parsePublishApiRequestFile, parsePublishApiRequestThumbnail} = require('../publish/parsePublishApiRequestFiles.js');
+const {parsePublishApiRequestFiles, parsePublishApiRequestThumbnail} = require('../publish/parsePublishApiRequestFiles.js');
 const authenticateUser = require('../publish/authentication.js');
 const createThumbnailPublishParams = require('../publish/createThumbnailPublishParams.js');
 
@@ -67,7 +67,7 @@ const claimUpdate = ({ body, files, headers, ip, originalUrl, user, tor }, res) 
   try {
     ({name, nsfw, license, title, description, thumbnail} = parsePublishApiRequestBody(body));
     if (files.file) {
-      ({fileName, filePath, fileExtension, fileType} = parsePublishApiRequestFile(files));
+      ({fileName, filePath, fileExtension, fileType} = parsePublishApiRequestFiles(files));
       if (files.thumbnail) {
         ({thumbnailFileName, thumbnailFilePath, thumbnailFileType} = parsePublishApiRequestThumbnail(files));
       }
