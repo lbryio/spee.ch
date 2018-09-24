@@ -7,7 +7,7 @@ import { doAbandonClaim } from '../api/assetApi';
 
 function * abandonClaim (action) {
   const { claimData, history } = action.data;
-  const {claimId} = claimData;
+  const { claimId } = claimData;
 
   const confirm = window.confirm('Are you sure you want to abandon this claim? This action cannot be undone.');
   if (!confirm) return;
