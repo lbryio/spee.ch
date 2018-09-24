@@ -1,7 +1,6 @@
 import React from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
 import NavBarChannelOptionsDropdown from '@components/NavBarChannelOptionsDropdown';
-import isApprovedChannel from '../../../../utils/isApprovedChannel';
 
 const VIEW = 'VIEW';
 const LOGOUT = 'LOGOUT';
@@ -29,10 +28,10 @@ class NavigationLinks extends React.Component {
     }
   }
   render () {
-    const { site, channelLongId, channelName } = this.props;
+    const { channelName, showPublish, closedRegistration } = this.props;
     return (
       <div className='navigation-links'>
-        {(!site.publishOnlyApproved || isApprovedChannel({ longId: channelLongId }, site.approvedChannels)) && <NavLink
+        {showPublish && <NavLink
           className='nav-bar-link link--nav'
           activeClassName='link--nav-active'
           to='/'
@@ -55,7 +54,7 @@ class NavigationLinks extends React.Component {
             VIEW={VIEW}
             LOGOUT={LOGOUT}
           />
-        ) : !site.closedRegistration && (
+        ) : !closedRegistration && (
           <NavLink
             id='nav-bar-login-link'
             className='nav-bar-link link--nav'
