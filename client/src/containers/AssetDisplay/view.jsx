@@ -45,6 +45,8 @@ class AssetDisplay extends React.Component {
   }
   render () {
     const { status, error, asset: { name, claimData: { claimId, contentType, fileExt, thumbnail, outpoint } } } = this.props;
+    // the outpoint is added to force the browser to re-download the asset after an update
+    // issue: https://github.com/lbryio/spee.ch/issues/607
     const sourceUrl = `/${claimId}/${name}.${fileExt}?${outpoint}`;
     return (
       <div className={'asset-display'}>
