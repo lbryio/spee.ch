@@ -13,10 +13,11 @@ import createCanonicalLink from '../../../../utils/createCanonicalLink';
 
 class AssetInfo extends React.Component {
   render () {
-    const { asset } = this.props;
-    const { claimViews, claimData: { channelName, channelShortId, description, name, fileExt, contentType, thumbnail, host } } = asset;
+    const { editable, asset } = this.props;
+    const { claimViews, claimData } = asset;
+    const { channelName, claimId, channelShortId, description, name, fileExt, contentType, host } = claimData;
 
-    const canonicalUrl = createCanonicalLink({ asset: { ...asset.claimData, shortId: asset.shortId }});
+    const canonicalUrl = createCanonicalLink({ asset: { ...claimData, shortId: asset.shortId }});
     const assetCanonicalUrl = `${host}${canonicalUrl}`;
 
     let channelCanonicalUrl;
@@ -29,6 +30,15 @@ class AssetInfo extends React.Component {
     }
     return (
       <div>
+        {editable && (
+          <Row>
+            <RowLabeled
+              label={<Label value={'Edit:'} />}
+              content={<Link to={`/edit/${claimId}/${name}`}>{name}</Link>}
+            />
+          </Row>
+        )}
+
         {channelName && (
           <Row>
             <RowLabeled
