@@ -7,6 +7,7 @@ const deleteFile = require('./deleteFile.js');
 
 const publish = async (publishParams, fileName, fileType) => {
   let publishResults;
+  let channel;
   let fileRecord;
   let filePath = publishParams.file_path;
   let newFile = Boolean(filePath);
@@ -15,8 +16,19 @@ const publish = async (publishParams, fileName, fileType) => {
     publishResults = await publishClaim(publishParams);
     logger.info(`Successfully published ${publishParams.name} ${fileName}`, publishResults);
 
-    const certificateId = publishParams.channel_id || null;
-    const channelName = publishParams.channel_name || null;
+    // get the channel information
+    if (publishParams.channel_name) {
+      logger.debug(`this claim was published in channel: ${publishParams.channel_name}`);
+      channel = await db.Channel.findOne({
+        where: {
+          channelName: publishParams.channel_name,
+        },
+      });
+    } else {
+      channel = null;
+    }
+    const certificateId = channel ? channel.channelClaimId : null;
+    const channelName = channel ? channel.channelName : null;
 
     const claimRecord = await createClaimRecordDataAfterPublish(certificateId, channelName, fileName, fileType, publishParams, publishResults);
     const {claimId} = claimRecord;
