@@ -114,7 +114,7 @@ export default function (state = initialState, action) {
           },
         }),
       });
-    case actions.CHANNEL_CLAIMS_UPDATE_SUCCESS:
+    case actions.CHANNEL_CLAIMS_UPDATE_SUCCEEDED:
       return Object.assign({}, state, {
         channelList: Object.assign({}, state.channelList, {
           [action.data.channelListId]: Object.assign({}, state.channelList[action.data.channelListId], {

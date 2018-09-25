@@ -136,7 +136,7 @@ export function onUpdateChannelClaims (channelKey, name, longId, page) {
 
 export function updateChannelClaims (channelListId, claimsData) {
   return {
-    type: actions.CHANNEL_CLAIMS_UPDATE_SUCCESS,
+    type: actions.CHANNEL_CLAIMS_UPDATE_SUCCEEDED,
     data: {channelListId, claimsData},
   };
 }

@@ -42,7 +42,7 @@ class PublishStatus extends React.Component {
             </Row>
           </div>
         }
-        {status === publishStates.SUCCESS &&
+        {status === publishStates.SUCCEEDED &&
           <div className={'status'}>
             <Row>
               <p>Your publish is complete! You are being redirected to it now.</p>
