@@ -9,6 +9,7 @@ const mapStateToProps = (props) => {
   return {
     asset    : selectAsset(show),
     myChannel: props.channel.loggedInChannel.name,
+    isUpdate : props.publish.isUpdate,
   };
 };
 

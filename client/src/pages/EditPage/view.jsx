@@ -5,15 +5,15 @@ import PublishTool from '@containers/PublishTool';
 
 class EditPage extends React.Component {
   componentDidMount () {
-    const {asset, match, onHandleShowPageUri, setUpdateTrue, updateMetadata} = this.props;
-    onHandleShowPageUri(match.params);
-    setUpdateTrue();
-    if (asset) {
-      ['title', 'description', 'license', 'nsfw'].forEach(meta => updateMetadata(meta, asset.claimData[meta]));
+    const {asset, isUpdate, match, onHandleShowPageUri, clearFile, setUpdateTrue, updateMetadata} = this.props;
+    if (!isUpdate) {
+      clearFile();
+      onHandleShowPageUri(match.params);
+      setUpdateTrue();
+      if (asset) {
+        ['title', 'description', 'license', 'nsfw'].forEach(meta => updateMetadata(meta, asset.claimData[meta]));
+      }
     }
-  }
-  componentWillUnmount () {
-    this.props.clearFile();
   }
   render () {
     const { myChannel, asset } = this.props;
