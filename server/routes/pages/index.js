@@ -6,6 +6,7 @@ module.exports = (app) => {
   app.get('/', handlePageRequest);
   app.get('/login', handlePageRequest);
   app.get('/about', handlePageRequest);
+  app.get('/tos', handlePageRequest);
   app.get('/trending', redirect('/popular'));
   app.get('/popular', handlePageRequest);
   app.get('/new', handlePageRequest);
