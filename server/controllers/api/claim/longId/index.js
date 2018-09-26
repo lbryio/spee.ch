@@ -1,4 +1,5 @@
 const db = require('../../../../models');
+const chainquery = require('chainquery');
 
 const { handleErrorResponse } = require('../../../utils/errorHandlers.js');
 
@@ -22,7 +23,13 @@ const claimLongId = ({ ip, originalUrl, body, params }, res) => {
   getClaimId(channelName, channelClaimId, claimName, claimId)
     .then(fullClaimId => {
       claimId = fullClaimId;
-      return db.Claim.getOutpoint(claimName, fullClaimId);
+      return chainquery.claim.queries.getOutpoint(claimName, fullClaimId);
+    })
+    .then(outpointResult => {
+      if (!outpointResult) {
+        return db.Claim.getOutpoint(claimName, fullClaimId);
+      }
+      return outpointResult;
     })
     .then(outpoint => {
       return db.Blocked.isNotBlocked(outpoint);

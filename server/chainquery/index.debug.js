@@ -1,9 +1,6 @@
 console.log('Loading `chainquery`, please wait...')
 
-require('@babel/polyfill');
-require('@babel/register');
-
-const chainquery = require('./');
+import chainquery from './index'
 
 global.chainquery = chainquery.default ? chainquery.default : chainquery;
 

@@ -7,5 +7,5 @@ export default {
 
   associate(db) {
     // associate
-  }
+  },
 }

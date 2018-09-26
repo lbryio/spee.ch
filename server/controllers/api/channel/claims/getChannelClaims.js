@@ -1,28 +1,15 @@
 const db = require('../../../../models');
+const chainquery = require('chainquery');
+const getClaimData = require('server/utils/getClaimData');
 const { returnPaginatedChannelClaims } = require('./channelPagination.js');
 
-const getChannelClaims = (channelName, channelClaimId, page) => {
-  return new Promise((resolve, reject) => {
-    let longChannelClaimId;
-    // 1. get the long channel Id (make sure channel exists)
-    db.Certificate
-      .getLongChannelId(channelName, channelClaimId)
-      .then(result => {
-        longChannelClaimId = result;
-        return db
-          .Claim
-          .getAllChannelClaims(longChannelClaimId);
-      })
-      .then(channelClaimsArray => {
-        // 3. format the data for the view, including pagination
-        let paginatedChannelViewData = returnPaginatedChannelClaims(channelName, longChannelClaimId, channelClaimsArray, page);
-        // 4. return all the channel information and contents
-        resolve(paginatedChannelViewData);
-      })
-      .catch(error => {
-        reject(error);
-      });
-  });
+const getChannelClaims = async (channelName, channelShortId, page) => {
+  const channelId = await chainquery.claim.queries.getLongClaimId(channelName, channelShortId);
+  const channelClaims = await chainquery.claim.queries.getAllChannelClaims(channelId);
+
+  const processedChannelClaims = channelClaims.map((claim) => getClaimData(claim));
+
+  return returnPaginatedChannelClaims(channelName, channelId, processedChannelClaims, page);
 };
 
 module.exports = getChannelClaims;

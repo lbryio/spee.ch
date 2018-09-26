@@ -43,7 +43,7 @@ export default (sequelize, {
   },
   {
     freezeTableName: true,
-    getterMethods,
+    //getterMethods,
     timestamps: false, // don't use default timestamps columns
   }
 );

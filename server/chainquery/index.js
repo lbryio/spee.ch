@@ -3,16 +3,62 @@ const logger = require('winston');
 
 import abnormalClaimTable from './tables/abnormalClaimTable';
 import addressTable from './tables/addressTable';
-import applicationStatusTable from './tables/applicationStatusTable';
 import blockTable from './tables/blockTable';
 import claimTable from './tables/claimTable';
-import gorpMigrationsTable from './tables/gorpMigrationsTable';
 import inputTable from './tables/inputTable';
-import jobStatusTable from './tables/jobStatusTable';
 import outputTable from './tables/outputTable';
 import supportTable from './tables/supportTable';
 import transactionAddressTable from './tables/transactionAddressTable';
 import transactionTable from './tables/transactionTable';
+
+import abnormalClaimQueries from './queries/abnormalClaimQueries';
+import addressQueries from './queries/addressQueries';
+import blockQueries from './queries/blockQueries';
+import claimQueries from './queries/claimQueries';
+import inputQueries from './queries/inputQueries';
+import outputQueries from './queries/outputQueries';
+import supportQueries from './queries/supportQueries';
+import transactionAddressQueries from './queries/transactionAddressQueries';
+import transactionQueries from './queries/transactionQueries';
+
+const DATABASE_STRUCTURE = {
+  'abnormal_claim': {
+    table: abnormalClaimTable,
+    queries: abnormalClaimQueries,
+  },
+  'address': {
+    table: addressTable,
+    queries: addressQueries,
+  },
+  'block': {
+    table: blockTable,
+    queries: blockQueries,
+  },
+  'claim': {
+    table: claimTable,
+    queries: claimQueries,
+  },
+  'input': {
+    table: inputTable,
+    queries: inputQueries,
+  },
+  'output': {
+    table: outputTable,
+    queries: outputQueries,
+  },
+  'support': {
+    table: supportTable,
+    queries: supportQueries,
+  },
+  'transaction_address': {
+    table: transactionAddressTable,
+    queries: transactionAddressQueries,
+  },
+  'transaction': {
+    table: transactionTable,
+    queries: transactionQueries,
+  },
+};
 
 const {
   host,
@@ -45,22 +91,19 @@ const sequelize = new Sequelize(database, username, password, {
 });
 
 const db = {};
-db.abnormal_claim = sequelize.import('abnormal_claim', abnormalClaimTable.createModel);
-db.application_status = sequelize.import('application_status', applicationStatusTable.createModel);
-db.address = sequelize.import('address', addressTable.createModel);
-db.block = sequelize.import('block', blockTable.createModel);
-db.claim = sequelize.import('claim', claimTable.createModel);
-db.gorp_migrations = sequelize.import('gorp_migrations', gorpMigrationsTable.createModel);
-db.input = sequelize.import('input', inputTable.createModel);
-db.job_status = sequelize.import('job_status', jobStatusTable.createModel);
-db.output = sequelize.import('output', outputTable.createModel);
-db.support = sequelize.import('support', supportTable.createModel);
-db.transaction_address = sequelize.import('transaction_address', transactionAddressTable.createModel);
-db.transaction = sequelize.import('transaction', transactionTable.createModel);
+const DATABASE_STRUCTURE_KEYS = Object.keys(DATABASE_STRUCTURE);
+
+for(let i = 0; i < DATABASE_STRUCTURE_KEYS.length; i++) {
+  let dbKey = DATABASE_STRUCTURE_KEYS[i];
+  let currentData = DATABASE_STRUCTURE[dbKey];
+
+  db[dbKey] = currentData.table.createModel(sequelize, Sequelize);
+  db[dbKey].queries = currentData.queries(db, db[dbKey]);
+}
 
 // run model.association for each model in the db object that has an association
 logger.info('associating chainquery db models...');
-Object.keys(db).forEach(modelName => {
+DATABASE_STRUCTURE_KEYS.forEach(modelName => {
   if (db[modelName].associate) {
     logger.info('Associating chainquery model:', modelName);
     db[modelName].associate(db);

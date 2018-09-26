@@ -7,7 +7,7 @@ import { selectSiteHost } from '../selectors/site';
 
 function * retrieveFile (action) {
   const name = action.data.name;
-  const claimId = action.data.claimId;
+  const claimId = action.data.claim_id || action.data.claimId;
   const host = yield select(selectSiteHost);
   // see if the file is available
   let isAvailable;

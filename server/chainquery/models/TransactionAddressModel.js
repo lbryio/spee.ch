@@ -12,7 +12,7 @@ export default (sequelize, {
       type: INTEGER,
       set() { },
     },
-    addess_id: {
+    address_id: {
       primaryKey: true,
       type: INTEGER,
       set() { },
@@ -28,7 +28,7 @@ export default (sequelize, {
   },
   {
     freezeTableName: true,
-    getterMethods,
+    //getterMethods,
     timestamps: false, // don't use default timestamps columns
   }
 );
