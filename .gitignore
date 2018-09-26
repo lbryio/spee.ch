@@ -5,7 +5,6 @@
 node_modules
 
 client/build
-server/chainquery/build
 
 client_custom/build
 client_custom/scss
