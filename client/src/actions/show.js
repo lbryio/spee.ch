@@ -2,10 +2,13 @@ import * as actions from '../constants/show_action_types';
 import { CHANNEL, ASSET_LITE, ASSET_DETAILS } from '../constants/show_request_types';
 
 // basic request parsing
-export function onHandleShowPageUri (params) {
+export function onHandleShowPageUri (params, url) {
   return {
     type: actions.HANDLE_SHOW_URI,
-    data: params,
+    data: {
+      ...params,
+      url,
+    }
   };
 }
 

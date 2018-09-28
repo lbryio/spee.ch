@@ -18,6 +18,8 @@ var _effects = require("redux-saga/effects");
 
 var _reactHelmet = _interopRequireDefault(require("react-helmet"));
 
+var httpContext = _interopRequireWildcard(require("express-http-context"));
+
 var _reducers = _interopRequireDefault(require("@reducers"));
 
 var _GAListener = _interopRequireDefault(require("@components/GAListener"));
@@ -27,6 +29,8 @@ var _app = _interopRequireDefault(require("@app"));
 var _sagas = _interopRequireDefault(require("@sagas"));
 
 var _actions = _interopRequireDefault(require("@actions"));
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -52,19 +56,17 @@ var returnSagaWithParams = function returnSagaWithParams(saga, params) {
 };
 
 module.exports = function (req, res) {
-  var context = {}; // create and apply middleware
+  var context = {};
 
-  var sagaMiddleware = (0, _reduxSaga.default)();
-  var middleware = (0, _redux.applyMiddleware)(sagaMiddleware); // create a new Redux store instance
+  var _httpContext$get = httpContext.get('routeData'),
+      _httpContext$get$acti = _httpContext$get.action,
+      action = _httpContext$get$acti === void 0 ? false : _httpContext$get$acti,
+      _httpContext$get$saga = _httpContext$get.saga,
+      saga = _httpContext$get$saga === void 0 ? false : _httpContext$get$saga;
 
-  var store = (0, _redux.createStore)(_reducers.default, middleware); // create an action to handle the given url,
-  // and create a the saga needed to handle that action
+  var runSaga = action !== false && saga !== false;
 
-  var action = _actions.default.onHandleShowPageUri(req.params);
-
-  var saga = returnSagaWithParams(_sagas.default.handleShowPageUri, action); // run the saga middleware with the saga call
-
-  sagaMiddleware.run(saga).done.then(function () {
+  var renderPage = function renderPage(store) {
     // render component to a string
     var html = (0, _server.renderToString)(_react.default.createElement(_reactRedux.Provider, {
       store: store
@@ -84,5 +86,27 @@ module.exports = function (req, res) {
     var preloadedState = store.getState(); // send the rendered page back to the client
 
     res.send((0, _renderFullPage.default)(helmet, html, preloadedState));
-  });
+  };
+
+  console.log(httpContext.get('routePath'), runSaga, httpContext.get('routeData'), action, saga);
+
+  if (runSaga) {
+    // create and apply middleware
+    var sagaMiddleware = (0, _reduxSaga.default)();
+    var middleware = (0, _redux.applyMiddleware)(sagaMiddleware); // create a new Redux store instance
+
+    var store = (0, _redux.createStore)(_reducers.default, middleware); // create an action to handle the given url,
+    // and create a the saga needed to handle that action
+
+    var boundAction = action(req.params, req.url);
+    var boundSaga = returnSagaWithParams(saga, boundAction); // run the saga middleware with the saga call
+
+    sagaMiddleware.run(boundSaga).done.then(function () {
+      return renderPage(store);
+    });
+  } else {
+    var _store = (0, _redux.createStore)(_reducers.default);
+
+    renderPage(_store);
+  }
 };

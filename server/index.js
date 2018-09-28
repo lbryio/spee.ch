@@ -7,6 +7,7 @@ const cookieSession = require('cookie-session');
 const http = require('http');
 const logger = require('winston');
 const Path = require('path');
+const httpContext = require('express-http-context');
 
 // load local modules
 const db = require('./models');
@@ -26,6 +27,14 @@ const {
   },
 } = require('@config/siteConfig');
 
+function setRouteDataInContextMiddleware(routePath, routeData) {
+  return function (req, res, next) {
+    httpContext.set('routePath', routePath);
+    httpContext.set('routeData', routeData);
+    next();
+  };
+}
+
 function Server () {
   this.initialize = () => {
     // configure logging
@@ -42,6 +51,9 @@ function Server () {
 
     // set HTTP headers to protect against well-known web vulnerabilties
     app.use(helmet());
+
+    // Support per-request http-context
+    app.use(httpContext.middleware);
 
     // 'express.static' to serve static files from public directory
     const publicPath = Path.resolve(process.cwd(), 'public');
@@ -78,11 +90,15 @@ function Server () {
     app.set('view engine', 'handlebars');
 
     // set the routes on the app
-    require('./routes/auth/index')(app);
-    require('./routes/api/index')(app);
-    require('./routes/pages/index')(app);
-    require('./routes/assets/index')(app);
-    require('./routes/fallback/index')(app);
+    const routes = require('./routes');
+
+    Object.keys(routes).map((routePath) => {
+      let routeData = routes[routePath];
+      let routeMethod = routeData.hasOwnProperty('method') ? routeData.method : 'get';
+      let controllers = Array.isArray(routeData.controller) ? routeData.controller : [routeData.controller];
+
+      app[routeMethod](routePath, setRouteDataInContextMiddleware(routePath, routeData), ...controllers);
+    });
 
     this.app = app;
   };
