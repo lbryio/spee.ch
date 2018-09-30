@@ -32,7 +32,7 @@ $ npm install
 #### Create the config files using the built in CLI
 ```
 $ npm run configure
-```
+```PR FOR HACTOBERFEST
 
 #### Build & start the app
 
