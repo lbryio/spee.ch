@@ -103,7 +103,7 @@ const claimUpdate = ({ body, files, headers, ip, originalUrl, user, tor }, res) 
       }, updateMetadata({title, description, nsfw, license}));
       const publishParams = {
         name,
-        bid          : 0.01,
+        bid          : '0.01',
         claim_address: primaryClaimAddress,
         channel_name : channelName,
         channel_id   : channelId,
