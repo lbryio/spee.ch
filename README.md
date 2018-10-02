@@ -3,16 +3,16 @@ Spee.ch is a web app that reads and publishes images and videos to and from the 
 
 You can create your own custom version of spee.ch by installing this code base and then creating your own custom components and styles to override the defaults.  (More details / guide on how to do that coming soon.)
 
-## Quick start
+## Quickstart
 
 _note: this is the quickstart guide, for an in-depth step-by-step overview visit the [fullstart guide](https://github.com/lbryio/spee.ch/blob/readme-update/fullstart.md)._
 
 #### Install System Dependencies:
   * [node](https://nodejs.org)
-  * [mysql](https://dev.mysql.com/doc/refman/8.0/en/installing.html)
+  * [MySQL](https://dev.mysql.com/doc/refman/8.0/en/installing.html)
   * [`lbry`](https://github.com/lbryio/lbry) daemon
     * note: retrieve an address from the daemon and send your wallet a couple credits (or join us in the [#speech discord channel](https://discord.gg/YjYbwhS) and we will send you a few)
-  * [ffmpeg](https://www.ffmpeg.org/download.html)
+  * [FFmpeg](https://www.ffmpeg.org/download.html)
   
 #### Clone this repo
 ```
@@ -29,7 +29,7 @@ $ cd spee.ch
 $ npm install
 ```
 
-#### Create the config files using the built in CLI
+#### Create the config files using the built-in CLI
 ```
 $ npm run configure
 ```
@@ -51,11 +51,11 @@ check out the [customization guide](https://github.com/lbryio/spee.ch/blob/readm
 #### (optional) add custom components and update the styles
 
   * create custom components by creating React components in `src/views/` (further instructions coming soon)
-  * update the css by changing the files in `public/assets/css/` (further instructions and refactor coming soon) 
+  * update the CSS by changing the files in `public/assets/css/` (further instructions and refactor coming soon) 
 
 #### (optional) Syncing the full blockchain
  * Start the `spee.ch-sync` tool available at [billbitt/spee.ch-sync](https://github.com/billbitt/spee.ch-sync)
- * This is not necessary, but highly reccomended.  It will decode the blocks of the `LBRY` blockchain and add the claims information to your database's tables
+ * This is not necessary, but highly recommended.  It will decode the blocks of the `LBRY` blockchain and add the claims information to your database's tables
 
 ## API
 #### /api/claim/publish
@@ -120,16 +120,16 @@ response:
 ## Contribute
 
 ### Stack
-The spee.ch stack is MySQL, Express.js, Node.js, and React.js.  Spee.ch also runs `lbrynet` on its server, and it uses the `lbrynet` api to make requests -- such as `publish`, `create_channel`, and `get` -- on the `LBRY` network.
+The spee.ch stack is MySQL, Express.js, Node.js, and React.js.  Spee.ch also runs `lbrynet` on its server, and it uses the `lbrynet` API to make requests -- such as `publish`, `create_channel`, and `get` -- on the `LBRY` network.
   
-Spee.ch also runs a sync tool, which decodes blocks from the `LBRY` blockchain as they are mined, and stores the information in mysql.  It stores all claims in the `Claims` table, and all channel claims in the `Certificates` table.
+Spee.ch also runs a sync tool, which decodes blocks from the `LBRY` blockchain as they are mined, and stores the information in MySQL.  It stores all claims in the `Claims` table, and all channel claims in the `Certificates` table.
 
 * server
-  * [mysql](https://www.mysql.com/)
+  * [MySQL](https://www.mysql.com/)
   * [express](https://www.npmjs.com/package/express) 
   * [node](https://nodejs.org/)
   * [lbry](https://github.com/lbryio/lbry)
-  * [ffmpeg](https://www.ffmpeg.org/)
+  * [FFmpeg](https://www.ffmpeg.org/)
 * client
   * [react](https://reactjs.org/)
   * redux
@@ -139,10 +139,10 @@ Spee.ch also runs a sync tool, which decodes blocks from the `LBRY` blockchain a
  
  
 ### Architecture
-* `cli/` contains the code for the cli tool.  Running the tool will create `.json` config files and place them in the `config/` folder
-  * `configure.js` is the entry point for the cli tool
+* `cli/` contains the code for the CLI tool.  Running the tool will create `.json` config files and place them in the `config/` folder
+  * `configure.js` is the entry point for the CLI tool
   * `cli/defaults/` holds default config files 
-  * `cli/questions/` holds the questions that the cli tool asks to build the config files
+  * `cli/questions/` holds the questions that the CLI tool asks to build the config files
 
 * `client/` contains all of the client code
   * The client side of spee.ch uses `React` and `Redux`
@@ -152,12 +152,12 @@ Spee.ch also runs a sync tool, which decodes blocks from the `LBRY` blockchain a
     * The Redux code is broken up into `actions/` `reducers/` and `selectors/`
     * The React components are broken up into `containers/` (components that pull props directly from the Redux store), `components/` ('dumb' components), and `pages/`
     * spee.ch also uses sagas which are in the `sagas/` folders and `channels/`
-  * `client/scss/` contains  the css for the project
+  * `client/scss/` contains  the CSS for the project
     * 
   
 * `client_custom` is a folder which can be used to override the default components in `client/`
   * The folder structure mimics that of the `client/` folder
-  * to customize spee.ch, place your own components ans scss in the `client_custom/src/` and `client_custom/scss` folders. 
+  * to customize spee.ch, place your own components and scss in the `client_custom/src/` and `client_custom/scss` folders. 
   
 * `server/`  contains all of the server code
   * `index.js` is the entry point for the server.  It creates the [express app](https://expressjs.com/), requires the routes, syncs the database, and starts the server listening on the `PORT` designated in the config files.
@@ -168,7 +168,7 @@ Spee.ch also runs a sync tool, which decodes blocks from the `LBRY` blockchain a
    
 * `tests/` holds the end-to-end tests for this project
   * Spee.ch uses `mocha` with the `chai` assertion library
-  * unit tests are located inside the project in-line with the files being tested and are designtated with a `xxxx.test.js` file name
+  * unit tests are located inside the project in-line with the files being tested and are designated with a `xxxx.test.js` file name
  
 ### Tests
 * This package uses `mocha` with `chai` for testing.
@@ -178,7 +178,7 @@ Spee.ch also runs a sync tool, which decodes blocks from the `LBRY` blockchain a
   *  To run only tests that do not require LBC, run `npm run test:no-lbc`
 
 ### URL formats
-Spee.ch has a few types of url formats that return different assets from the LBRY network.  Below is a list of all possible urls for the content on spee.ch
+Spee.ch has a few types of URL formats that return different assets from the LBRY network.  Below is a list of all possible URLs for the content on spee.ch
 * retrieve the controlling `LBRY` claim:
   * https://spee.ch/`claim`
   * https://spee.ch/`claim`.`ext` (serve)
@@ -197,7 +197,7 @@ Spee.ch has a few types of url formats that return different assets from the LBR
   * https://spee.ch/`@channel`:`channel_id`/`claim`.`ext` (serve)
   
 ### Bugs
-If you find a bug or experience a problem, please report your issue here on github and find us in the lbry discord!
+If you find a bug or experience a problem, please report your issue here on GitHub and find us in the lbry discord!
 
 ### Issue tags in this repo
 #### level 1
@@ -210,4 +210,4 @@ Familiarity with web apps is required, but little-to-no familiarity with the lbr
 Familiarity with the spee.ch code base and how the lbry daemon functions is required
 
 #### level 4
-Issues with lbry (e.g. the spee.ch wallet, lbrynet configuration, etc.) that require strong familiarity with the lbry daemon and/or network to fix. Generally these issues are best suited for the `lbry` `protocol team` but are reported in this repo because of they are part of the spee.ch implementation
+Issues with lbry (e.g. the spee.ch wallet, lbrynet configuration, etc.) that require strong familiarity with the lbry daemon and/or network to fix. Generally these issues are best suited for the `lbry` `protocol team` but are reported in this repo because they are part of the spee.ch implementation
