@@ -5,11 +5,16 @@ const Certificate = require('./certificate.js');
 const Channel = require('./channel.js');
 const Claim = require('./claim.js');
 const File = require('./file.js');
-const Request = require('./request.js');
 const User = require('./user.js');
 const Blocked = require('./blocked.js');
+const Tor = require('./tor.js');
 
-const {database, username, password} = require('@config/mysqlConfig');
+const {
+  database,
+  username,
+  password,
+} = require('@config/mysqlConfig');
+
 if (!database || !username || !password) {
   logger.warn('missing database, user, or password from mysqlConfig');
 }
@@ -19,10 +24,10 @@ const sequelize = new Sequelize(database, username, password, {
   host          : 'localhost',
   dialect       : 'mysql',
   dialectOptions: {
-    decimalNumbers: true
+    decimalNumbers: true,
   },
-  logging       : false,
-  pool          : {
+  logging: false,
+  pool   : {
     max    : 5,
     min    : 0,
     idle   : 10000,
@@ -47,9 +52,9 @@ db['Certificate'] = sequelize.import('Certificate', Certificate);
 db['Channel'] = sequelize.import('Channel', Channel);
 db['Claim'] = sequelize.import('Claim', Claim);
 db['File'] = sequelize.import('File', File);
-db['Request'] = sequelize.import('Request', Request);
 db['User'] = sequelize.import('User', User);
 db['Blocked'] = sequelize.import('Blocked', Blocked);
+db['Tor'] = sequelize.import('Tor', Tor);
 
 // run model.association for each model in the db object that has an association
 logger.info('associating db models...');

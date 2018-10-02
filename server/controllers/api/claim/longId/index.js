@@ -2,7 +2,7 @@ const db = require('../../../../models');
 
 const { handleErrorResponse } = require('../../../utils/errorHandlers.js');
 
-const getClaimId = require('./getClaimId.js');
+const getClaimId = require('../../../utils/getClaimId.js');
 
 const NO_CHANNEL = 'NO_CHANNEL';
 const NO_CLAIM = 'NO_CLAIM';
@@ -22,7 +22,10 @@ const claimLongId = ({ ip, originalUrl, body, params }, res) => {
   getClaimId(channelName, channelClaimId, claimName, claimId)
     .then(fullClaimId => {
       claimId = fullClaimId;
-      return db.Blocked.isNotBlocked(fullClaimId, claimName);
+      return db.Claim.getOutpoint(claimName, fullClaimId);
+    })
+    .then(outpoint => {
+      return db.Blocked.isNotBlocked(outpoint);
     })
     .then(() => {
       res.status(200).json({success: true, data: claimId});

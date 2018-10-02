@@ -1,6 +1,5 @@
 const { handleErrorResponse } = require('../../../utils/errorHandlers.js');
 const getChannelClaims = require('./getChannelClaims.js');
-const logger = require('winston');
 
 const NO_CHANNEL = 'NO_CHANNEL';
 

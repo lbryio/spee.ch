@@ -32,38 +32,38 @@ const updateUserPassword = ({ ip, originalUrl, body }, res) => {
       userName,
     },
   })
-  .then(user => {
-    userRecord = user;
-    if (!userRecord) {
-      throw new Error('no user found');
-    }
-    if (oldPassword === masterPassword) {
-      logger.debug('master password provided');
-      return true;
-    } else {
-      logger.debug('old password provided');
-      return userRecord.comparePassword(oldPassword);
-    }
-  })
-  .then(isMatch => {
-    if (!isMatch) {
-      throw new Error('Incorrect old password.');
-    }
-    logger.debug('Password was a match, updating password');
-    return userRecord.changePassword(newPassword);
-  })
-  .then(() => {
-    logger.debug('Password successfully updated');
-    return res.status(200).json({
-      success: true,
-      message: 'Password successfully updated',
-      oldPassword,
-      newPassword,
+    .then(user => {
+      userRecord = user;
+      if (!userRecord) {
+        throw new Error('no user found');
+      }
+      if (oldPassword === masterPassword) {
+        logger.debug('master password provided');
+        return true;
+      } else {
+        logger.debug('old password provided');
+        return userRecord.comparePassword(oldPassword);
+      }
+    })
+    .then(isMatch => {
+      if (!isMatch) {
+        throw new Error('Incorrect old password.');
+      }
+      logger.debug('Password was a match, updating password');
+      return userRecord.changePassword(newPassword);
+    })
+    .then(() => {
+      logger.debug('Password successfully updated');
+      return res.status(200).json({
+        success: true,
+        message: 'Password successfully updated',
+        oldPassword,
+        newPassword,
+      });
+    })
+    .catch((error) => {
+      handleErrorResponse(originalUrl, ip, error, res);
     });
-  })
-  .catch((error) => {
-    handleErrorResponse(originalUrl, ip, error, res);
-  });
 };
 
 module.exports = updateUserPassword;

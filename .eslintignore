@@ -1,6 +1,5 @@
-node_modules/
-exports/
-index.js
-test/
-server/render/build
 client/build
+node_modules/
+public/bundle
+server/render/build
+test/

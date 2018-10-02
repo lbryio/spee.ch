@@ -10,15 +10,16 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER }) => {
         type     : STRING,
         allowNull: false,
       },
-      address: {
-        type     : STRING,
-        allowNull: false,
-      },
       outpoint: {
         type     : STRING,
         allowNull: false,
       },
-      height: {
+      fileHeight: {
+        type     : INTEGER,
+        allowNull: false,
+        default  : 0,
+      },
+      fileWidth: {
         type     : INTEGER,
         allowNull: false,
         default  : 0,
@@ -34,16 +35,6 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER }) => {
       fileType: {
         type: STRING,
       },
-      nsfw: {
-        type        : BOOLEAN,
-        allowNull   : false,
-        defaultValue: false,
-      },
-      trendingEligible: {
-        type        : BOOLEAN,
-        allowNull   : false,
-        defaultValue: true,
-      },
     },
     {
       freezeTableName: true,
@@ -51,16 +42,7 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER }) => {
   );
 
   File.associate = db => {
-    File.hasMany(db.Request);
     File.hasOne(db.Claim);
-  };
-
-  File.getRecentClaims = function () {
-    return this.findAll({
-      where: { nsfw: false, trendingEligible: true },
-      order: [['createdAt', 'DESC']],
-      limit: 25,
-    });
   };
 
   return File;

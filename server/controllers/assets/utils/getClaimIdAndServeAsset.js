@@ -2,10 +2,9 @@ const logger = require('winston');
 
 const db = require('../../../models');
 
-const getClaimId = require('../../api/claim/longId/getClaimId.js');
+const getClaimId = require('../../utils/getClaimId.js');
 const { handleErrorResponse } = require('../../utils/errorHandlers.js');
 
-const getLocalFileRecord = require('./getLocalFileRecord.js');
 const serveFile = require('./serveFile.js');
 
 const NO_CHANNEL = 'NO_CHANNEL';
@@ -17,14 +16,26 @@ const getClaimIdAndServeAsset = (channelName, channelClaimId, claimName, claimId
   getClaimId(channelName, channelClaimId, claimName, claimId)
     .then(fullClaimId => {
       claimId = fullClaimId;
-      logger.debug('FULL CLAIM ID:', fullClaimId);
-      return db.Blocked.isNotBlocked(fullClaimId, claimName);
+      logger.debug('Full claim id:', fullClaimId);
+      return db.Claim.getOutpoint(claimName, fullClaimId);
+    })
+    .then(outpoint => {
+      logger.debug('Outpoint:', outpoint);
+      return db.Blocked.isNotBlocked(outpoint);
     })
     .then(() => {
-      return getLocalFileRecord(claimId, claimName);
+      return db.File.findOne({
+        where: {
+          claimId,
+          name: claimName,
+        },
+      });
     })
     .then(fileRecord => {
-      serveFile(fileRecord, res);
+      if (!fileRecord) {
+        throw NO_FILE;
+      }
+      serveFile(fileRecord.dataValues, res);
     })
     .catch(error => {
       if (error === NO_CLAIM) {
@@ -49,8 +60,8 @@ const getClaimIdAndServeAsset = (channelName, channelClaimId, claimName, claimId
         });
       }
       if (error === NO_FILE) {
-        logger.debug('claim was blocked');
-        return res.status(307).redirect(`/api/claim/get/${name}/${claimId}`);
+        logger.debug('no file available');
+        return res.status(307).redirect(`/api/claim/get/${claimName}/${claimId}`);
       }
       handleErrorResponse(originalUrl, ip, error, res);
     });

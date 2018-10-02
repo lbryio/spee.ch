@@ -1,13 +1,15 @@
+const logger = require('winston');
+
 const { sendGAServeEvent } = require('../../../utils/googleAnalytics');
 const handleShowRender = require('../../../render/build/handleShowRender.js');
 
-const lbryUri = require('../utils/lbryUri.js');
+const lbryUri = require('../../../../utils/lbryUri.js');
 
 const determineRequestType = require('../utils/determineRequestType.js');
 const getClaimIdAndServeAsset = require('../utils/getClaimIdAndServeAsset.js');
 const flipClaimNameAndId = require('../utils/flipClaimNameAndId.js');
 
-const { EMBED } = require('../constants/request_types.js');
+const { SHOW } = require('../constants/request_types.js');
 
 /*
 
@@ -17,40 +19,40 @@ const { EMBED } = require('../constants/request_types.js');
 
 const serverByIdentifierAndClaim = (req, res) => {
   const { headers, ip, originalUrl, params } = req;
-  // parse request
-  let hasFileExtension;
+
   try {
+    let hasFileExtension, claimName, isChannel, channelName, channelClaimId, claimId;
+
     ({ hasFileExtension } = lbryUri.parseModifier(params.claim));
-  } catch (error) {
-    return res.status(400).json({success: false, message: error.message});
-  }
-  // determine request type
-  let requestType = determineRequestType(hasFileExtension, headers);
-  if (requestType !== EMBED) {
-    return handleShowRender(req, res);
-  }
-  // parse the claim
-  let claimName;
-  try {
+    if (determineRequestType(hasFileExtension, headers) === SHOW) {
+      logger.debug('show request:', { headers, ip, originalUrl, params });
+      return handleShowRender(req, res);
+    }
+
     ({ claimName } = lbryUri.parseClaim(params.claim));
-  } catch (error) {
-    return res.status(400).json({success: false, message: error.message});
-  }
-  // parse the identifier
-  let isChannel, channelName, channelClaimId, claimId;
-  try {
     ({ isChannel, channelName, channelClaimId, claimId } = lbryUri.parseIdentifier(params.identifier));
+
+    if (!isChannel) {
+      [claimId, claimName] = flipClaimNameAndId(claimId, claimName);
+    }
+
+    logger.debug('serve request:', {
+      headers,
+      ip,
+      originalUrl,
+      params,
+      channelName,
+      channelClaimId,
+      claimName,
+      claimId,
+    });
+
+    getClaimIdAndServeAsset(channelName, channelClaimId, claimName, claimId, originalUrl, ip, res);
+
+    sendGAServeEvent(headers, ip, originalUrl);
   } catch (error) {
     return res.status(400).json({success: false, message: error.message});
   }
-  // for backwards compatability, flip claim name and claim id if necessary
-  if (!isChannel) {
-    [claimId, claimName] = flipClaimNameAndId(claimId, claimName);
-  }
-  // send google analytics
-  sendGAServeEvent(headers, ip, originalUrl);
-  // get the claim Id and then serve the asset
-  getClaimIdAndServeAsset(channelName, channelClaimId, claimName, claimId, originalUrl, ip, res);
 };
 
 module.exports = serverByIdentifierAndClaim;

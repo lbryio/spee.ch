@@ -25,7 +25,7 @@ const validateFileTypeAndSize = (file) => {
       break;
     default:
       logger.debug('publish > file validation > unrecognized file type');
-      throw new Error('The ' + file.type + ' content type is not supported.  Only, .jpeg, .png, .gif, and .mp4 files are currently supported.');
+      throw new Error('The ' + file.type + ' content type is not supported.  Only, image/jpg, image/png, image/gif, and video/mp4 content types are currently supported.');
   }
   return file;
 };

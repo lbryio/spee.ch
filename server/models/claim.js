@@ -8,7 +8,7 @@ function determineFileExtensionFromContentType (contentType) {
   switch (contentType) {
     case 'image/jpeg':
     case 'image/jpg':
-      return 'jpeg';
+      return 'jpg';
     case 'image/png':
       return 'png';
     case 'image/gif':
@@ -16,8 +16,8 @@ function determineFileExtensionFromContentType (contentType) {
     case 'video/mp4':
       return 'mp4';
     default:
-      logger.debug('setting unknown file type as file extension jpeg');
-      return 'jpeg';
+      logger.debug('setting unknown file type as file extension jpg');
+      return 'jpg';
   }
 }
 
@@ -260,11 +260,11 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
         .then(result => {
           switch (result.length) {
             case 0:
-              return resolve(null);
+              return reject(NO_CLAIM);
             case 1:
               return resolve(result[0].claimId);
             default:
-              logger.error(`${result.length} records found for "${claimName}" in channel "${channelClaimId}"`);
+              logger.warn(`${result.length} records found for "${claimName}" in channel "${channelClaimId}"`);
               return resolve(result[0].claimId);
           }
         })
@@ -344,7 +344,7 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
   };
 
   Claim.getLongClaimId = function (claimName, claimId) {
-    // logger.debug(`getLongClaimId(${claimName}, ${claimId})`);
+    logger.debug(`getLongClaimId(${claimName}, ${claimId})`);
     if (isLongClaimId(claimId)) {
       return this.validateLongClaimId(claimName, claimId);
     } else if (isShortClaimId(claimId)) {
@@ -368,12 +368,52 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
             case 1:
               return resolve(prepareClaimData(claimArray[0].dataValues));
             default:
-              logger.error(`more than one record matches ${name}#${claimId} in db.Claim`);
+              logger.warn(`more than one record matches ${name}#${claimId} in db.Claim`);
               return resolve(prepareClaimData(claimArray[0].dataValues));
           }
         })
         .catch(error => {
           reject(error);
+        });
+    });
+  };
+
+  Claim.getOutpoint = function (name, claimId) {
+    logger.debug(`finding outpoint for ${name}#${claimId}`);
+    return this
+      .findAll({
+        where     : { name, claimId },
+        attributes: ['outpoint'],
+      })
+      .then(result => {
+        logger.debug('outpoint result');
+        switch (result.length) {
+          case 0:
+            throw new Error(`no record found for ${name}#${claimId}`);
+          case 1:
+            return result[0].dataValues.outpoint;
+          default:
+            logger.warn(`more than one record matches ${name}#${claimId} in db.Claim`);
+            return result[0].dataValues.outpoint;
+        }
+      })
+      .catch(error => {
+        throw error;
+      });
+  };
+
+  Claim.getCurrentHeight = function () {
+    return new Promise((resolve, reject) => {
+      return this
+        .max('height')
+        .then(result => {
+          if (result) {
+            return resolve(result);
+          }
+          return resolve(100000);
+        })
+        .catch(error => {
+          return reject(error);
         });
     });
   };

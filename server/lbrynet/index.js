@@ -1,6 +1,6 @@
 const axios = require('axios');
 const logger = require('winston');
-const { apiHost, apiPort } = require('@config/lbryConfig');
+const { apiHost, apiPort, getTimeout } = require('@config/lbryConfig');
 const lbrynetUri = 'http://' + apiHost + ':' + apiPort;
 const { chooseGaLbrynetPublishLabel, sendGATimingEvent } = require('../utils/googleAnalytics.js');
 const handleLbrynetResponse = require('./utils/handleLbrynetResponse.js');
@@ -31,7 +31,10 @@ module.exports = {
       axios
         .post(lbrynetUri, {
           method: 'get',
-          params: { uri, timeout: 20 },
+          params: {
+            uri,
+            timeout: getTimeout || 30,
+          },
         })
         .then(response => {
           sendGATimingEvent('lbrynet', 'getClaim', 'GET', gaStartTime, Date.now());

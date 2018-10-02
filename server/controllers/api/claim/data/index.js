@@ -16,12 +16,12 @@ const claimData = ({ ip, originalUrl, body, params }, res) => {
       if (!claimInfo) {
         return res.status(404).json({
           success: false,
-          message: 'No claim could be found'
+          message: 'No claim could be found',
         });
       }
       res.status(200).json({
         success: true,
-        data: claimInfo
+        data   : claimInfo,
       });
     })
     .catch(error => {
