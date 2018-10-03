@@ -32,6 +32,13 @@ const AssetShareButtons = ({ host, name, shortId }) => {
       >
         reddit
       </a>
+      <a
+        className='link--primary'
+        target='_blank'
+        href={`https://sharetomastodon.github.io/?title=${name}&url=${host}/${shortId}/${name}`}
+      >
+        mastodon
+      </a>
     </SpaceBetween>
   );
 };
