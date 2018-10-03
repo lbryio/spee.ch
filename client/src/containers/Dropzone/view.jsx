@@ -81,6 +81,8 @@ class Dropzone extends React.Component {
     }
   }
   render () {
+    const { dragOver, mouseOver, dimPreview } = this.state;
+    const { file, thumbnail, fileError, isUpdate, sourceUrl } = this.props;
     return (
       <div className='dropzone-wrapper'>
         <form>
@@ -95,7 +97,7 @@ class Dropzone extends React.Component {
           />
         </form>
         <div
-          className={'dropzone' + (this.state.dragOver ? ' dropzone--drag-over' : '')}
+          className={'dropzone' + (dragOver ? ' dropzone--drag-over' : '')}
           onDrop={this.handleDrop}
           onDragOver={this.handleDragOver}
           onDragEnd={this.handleDragEnd}
@@ -104,26 +106,34 @@ class Dropzone extends React.Component {
           onMouseEnter={this.handleMouseEnter}
           onMouseLeave={this.handleMouseLeave}
           onClick={this.handleClick}>
-          {this.props.file ? (
+          {file || isUpdate ? (
             <div className={'dropzone-preview-wrapper'}>
-              <DropzonePreviewImage
-                dimPreview={this.state.dimPreview}
-                file={this.props.file}
-                thumbnail={this.props.thumbnail}
-              />
+              {file ? (
+                <DropzonePreviewImage
+                  dimPreview={dimPreview}
+                  file={file}
+                  thumbnail={thumbnail}
+                />
+              ) : (
+                <DropzonePreviewImage
+                  dimPreview
+                  isUpdate
+                  sourceUrl={sourceUrl}
+                />
+              )}
               <div className={'dropzone-preview-overlay'}>
-                { this.state.dragOver ? <DropzoneDropItDisplay /> : null }
-                { this.state.mouseOver ? (
+                { dragOver ? <DropzoneDropItDisplay /> : null }
+                { mouseOver ? (
                   <DropzoneInstructionsDisplay
-                    fileError={this.props.fileError}
+                    fileError={fileError}
                   />
                 ) : null }
               </div>
             </div>
           ) : (
-            this.state.dragOver ? <DropzoneDropItDisplay /> : (
+            dragOver ? <DropzoneDropItDisplay /> : (
               <DropzoneInstructionsDisplay
-                fileError={this.props.fileError}
+                fileError={fileError}
               />
             )
           )}
