@@ -19,7 +19,7 @@ const updateUserPassword = ({ ip, originalUrl, body }, res) => {
       message: 'no master password set in site config',
     });
   }
-
+console.log("Thank you");
   if (!userName || !oldPassword || !newPassword) {
     return res.status(400).json({
       success: false,
