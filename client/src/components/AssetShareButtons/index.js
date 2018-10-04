@@ -1,9 +1,9 @@
 import React from 'react';
-import SpaceBetween from '@components/SpaceBetween';
+import SocialShareLink from '@components/SocialShareLink';
 
 const AssetShareButtons = ({ host, name, shortId }) => {
   return (
-    <SpaceBetween >
+    <SocialShareLink >
       <a
         className='link--primary'
         target='_blank'
@@ -39,7 +39,7 @@ const AssetShareButtons = ({ host, name, shortId }) => {
       >
         mastodon
       </a>
-    </SpaceBetween>
+    </SocialShareLink>
   );
 };
 
