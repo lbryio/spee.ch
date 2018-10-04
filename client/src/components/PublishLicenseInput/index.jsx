@@ -16,7 +16,7 @@ const PublishLicenseInput = ({ handleSelect }) => {
           className='select select--primary'
           onChange={handleSelect}
         >
-          <option value=' '>Unspecified</option>
+          <option value=''>Unspecified</option>
           <option value='Public Domain'>Public Domain</option>
           <option value='Creative Commons'>Creative Commons</option>
         </select>
