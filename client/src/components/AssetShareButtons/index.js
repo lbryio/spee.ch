@@ -39,6 +39,13 @@ const AssetShareButtons = ({ host, name, shortId }) => {
       >
         mastodon
       </a>
+      <a
+        className='link--primary'
+        target='_blank'
+        href={`https://share.diasporafoundation.org/?title=${name}&url=${host}/${shortId}/${name}}
+      >
+        diaspora
+      </a>
     </SocialShareLink>
   );
 };
