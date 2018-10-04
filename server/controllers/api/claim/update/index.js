@@ -123,9 +123,17 @@ const claimUpdate = ({ body, files, headers, ip, originalUrl, user, tor }, res) 
         publishParams['thumbnail'] = `${details.host}/${channelName}:${channelId}/${name}-thumb.jpg`;
       }
 
-      return publish(publishParams, fileName, fileType);
+      const fp = files && files.file && files.file.path ? files.file.path : undefined;
+      return publish(publishParams, fileName, fileType, fp);
     })
     .then(claimData => {
+      // this may need to happen in ../publish/index.js as well
+      if (claimData.error) {
+        res.status(400).json({
+          success: false,
+          message: claimData.message,
+        });
+      }
       const {claimId} = claimData;
       res.status(200).json({
         success: true,

@@ -5,11 +5,10 @@ const { createFileRecordDataAfterPublish } = require('../../../../models/utils/c
 const { createClaimRecordDataAfterPublish } = require('../../../../models/utils/createClaimRecordData.js');
 const deleteFile = require('./deleteFile.js');
 
-const publish = async (publishParams, fileName, fileType) => {
+const publish = async (publishParams, fileName, fileType, filePath) => {
   let publishResults;
   let channel;
   let fileRecord;
-  let filePath = publishParams.file_path;
   let newFile = Boolean(filePath);
 
   try {
@@ -53,9 +52,18 @@ const publish = async (publishParams, fileName, fileType) => {
 
     return claimRecord;
   } catch (err) {
-    logger.error('PUBLISH ERROR', err);
-    await deleteFile(filePath);
-    return err;
+    // parse daemon response when err is a string
+    // this needs work
+    logger.info('publish/publish err:', err);
+    const error = typeof err === 'string' ? JSON.parse(err) : err;
+    if (filePath) {
+      await deleteFile(filePath);
+    }
+    const message = error.error && error.error.message ? error.error.message : 'Unknown publish error';
+    return {
+      error: true,
+      message,
+    };
   }
 };
 

@@ -83,7 +83,7 @@ const claimPublish = ({ body, files, headers, ip, originalUrl, user, tor }, res)
         publish(thumbnailPublishParams, thumbnailFileName, thumbnailFileType);
       }
       // publish the asset
-      return publish(publishParams, fileName, fileType);
+      return publish(publishParams, fileName, fileType, filePath);
     })
     .then(claimData => {
       logger.debug('Publish success >', claimData);

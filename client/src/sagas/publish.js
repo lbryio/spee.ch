@@ -72,7 +72,12 @@ function * publishFile (action) {
           },
         });
       }
-      return history.push(`/${success.data.claimId}/${success.data.name}`);
+      if (success.data.claimId) {
+        return history.push(`/${success.data.claimId}/${success.data.name}`);
+      } else {
+        // this returns to the homepage, needs work
+        return yield put(updatePublishStatus(publishStates.FAILED, 'ERROR'));
+      }
     }
     if (loadStart) {
       yield put(updatePublishStatus(publishStates.LOAD_START, null));
