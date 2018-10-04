@@ -12,6 +12,13 @@ class AssetInfo extends React.Component {
     const { asset: { shortId, claimData : { channelName, certificateId, description, name, claimId, fileExt, contentType, thumbnail, host } } } = this.props;
     return (
       <div>
+
+        {description && (
+          <Row>
+            <p class='asset-description'>{description}</p>
+          </Row>
+        )}
+
         {channelName && (
           <Row>
             <RowLabeled
@@ -103,12 +110,6 @@ class AssetInfo extends React.Component {
             </a>
           </SpaceBetween>
         </Row>
-
-        {description && (
-          <Row>
-            <p>{description}</p>
-          </Row>
-        )}
 
         <Row>
           <p>

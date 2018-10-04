@@ -1,7 +1,7 @@
 import React from 'react';
 import PageLayout from '@components/PageLayout';
 
-import HorizontalSplit from '@components/HorizontalSplit';
+import VerticalSplit from '@components/VerticalSplit';
 import AssetTitle from '@containers/AssetTitle';
 import AssetDisplay from '@containers/AssetDisplay';
 import AssetInfo from '@containers/AssetInfo';
@@ -18,9 +18,9 @@ class ShowAssetDetails extends React.Component {
           asset={asset}
         >
           <AssetTitle />
-          <HorizontalSplit
-            leftSide={<AssetDisplay />}
-            rightSide={<AssetInfo />}
+          <VerticalSplit
+            top={<AssetDisplay />}
+            bottom={<AssetInfo />}
           />
         </PageLayout>
       );
