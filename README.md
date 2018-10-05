@@ -55,7 +55,7 @@ check out the [customization guide](https://github.com/lbryio/spee.ch/blob/readm
 
 #### (optional) Syncing the full blockchain
  * Start the `spee.ch-sync` tool available at [billbitt/spee.ch-sync](https://github.com/billbitt/spee.ch-sync)
- * This is not necessary, but highly reccomended.  It will decode the blocks of the `LBRY` blockchain and add the claims information to your database's tables
+ * This is not necessary, but highly recommended.  It will decode the blocks of the `LBRY` blockchain and add the claims information to your database's tables
 
 ## API
 #### /api/claim/publish
@@ -111,7 +111,7 @@ curl https://spee.ch/api/claim/availability/doitlive
 response:
 ```
 {
-    "success": <bool>,  // `true` if spee.ch succesfully checked the claim availability
+    "success": <bool>,  // `true` if spee.ch successfully checked the claim availability
     "data": <bool>, // `true` if claim is available, false if it is not available
     "message": <string> // human readable message of whether claim was available or not
 }
@@ -168,7 +168,7 @@ Spee.ch also runs a sync tool, which decodes blocks from the `LBRY` blockchain a
    
 * `tests/` holds the end-to-end tests for this project
   * Spee.ch uses `mocha` with the `chai` assertion library
-  * unit tests are located inside the project in-line with the files being tested and are designtated with a `xxxx.test.js` file name
+  * unit tests are located inside the project in-line with the files being tested and are designated with a `xxxx.test.js` file name
  
 ### Tests
 * This package uses `mocha` with `chai` for testing.
