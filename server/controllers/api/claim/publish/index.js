@@ -3,6 +3,8 @@ const logger = require('winston');
 const { details: { host }, publishing: { disabled, disabledMessage } } = require('@config/siteConfig');
 
 const { sendGATimingEvent } = require('../../../../utils/googleAnalytics.js');
+const isApprovedChannel = require('../../../../../utils/isApprovedChannel');
+const { publishing: { publishOnlyApproved, approvedChannels } } = require('@config/siteConfig');
 
 const { handleErrorResponse } = require('../../../utils/errorHandlers.js');
 
@@ -16,6 +18,7 @@ const parsePublishApiRequestFiles = require('./parsePublishApiRequestFiles.js');
 const authenticateUser = require('./authentication.js');
 
 const CLAIM_TAKEN = 'CLAIM_TAKEN';
+const UNAPPROVED_CHANNEL = 'UNAPPROVED_CHANNEL';
 
 /*
 
@@ -54,6 +57,13 @@ const claimPublish = ({ body, files, headers, ip, originalUrl, user, tor }, res)
   // check channel authorization
   authenticateUser(channelName, channelId, channelPassword, user)
     .then(({ channelName, channelClaimId }) => {
+      if (publishOnlyApproved && !isApprovedChannel({ longId: channelClaimId }, approvedChannels)) {
+        const error = {
+          name   : UNAPPROVED_CHANNEL,
+          message: 'This spee.ch instance only allows publishing to approved channels',
+        };
+        throw error;
+      }
       return Promise.all([
         checkClaimAvailability(name),
         createPublishParams(filePath, name, title, description, license, nsfw, thumbnail, channelName, channelClaimId),
@@ -92,7 +102,7 @@ const claimPublish = ({ body, files, headers, ip, originalUrl, user, tor }, res)
       sendGATimingEvent('end-to-end', 'publish', fileType, gaStartTime, Date.now());
     })
     .catch(error => {
-      if (error.name === CLAIM_TAKEN) {
+      if ([CLAIM_TAKEN, UNAPPROVED_CHANNEL].includes(error.name)) {
         res.status(400).json({
           success: false,
           message: error.message,

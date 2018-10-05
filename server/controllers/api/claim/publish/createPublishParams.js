@@ -18,7 +18,7 @@ const createPublishParams = (filePath, name, title, description, license, nsfw, 
   const publishParams = {
     name,
     file_path: filePath,
-    bid      : 0.01,
+    bid      : '0.01',
     metadata : {
       description,
       title,

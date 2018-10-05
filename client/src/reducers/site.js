@@ -1,13 +1,18 @@
 import siteConfig from '@config/siteConfig.json';
 
 let initialState = {
-  description       : 'default description',
-  googleAnalyticsId : 'default google id',
-  host              : 'default host',
-  title             : 'default title',
-  twitter           : 'default twitter',
-  defaultDescription: 'default description',
-  defaultThumbnail  : 'default thumbnail',
+  description        : 'default description',
+  googleAnalyticsId  : 'default google id',
+  host               : 'default host',
+  title              : 'default title',
+  twitter            : 'default twitter',
+  defaultDescription : 'default description',
+  defaultThumbnail   : 'default thumbnail',
+  closedRegistration : false,
+  serveOnlyApproved  : false,
+  publishOnlyApproved: false,
+  approvedChannels   : [],
+
 };
 
 if (siteConfig) {
@@ -25,6 +30,12 @@ if (siteConfig) {
       title,
       twitter,
     },
+    publishing: {
+      closedRegistration,
+      serveOnlyApproved,
+      publishOnlyApproved,
+      approvedChannels,
+    },
   } = siteConfig;
 
   initialState = {
@@ -35,6 +46,10 @@ if (siteConfig) {
     twitter,
     defaultDescription,
     defaultThumbnail,
+    closedRegistration,
+    serveOnlyApproved,
+    publishOnlyApproved,
+    approvedChannels,
   };
 }
 

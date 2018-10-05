@@ -157,7 +157,7 @@ inquirer
         method: 'channel_new',
         params: {
           channel_name: thumbnailChannelDefault,
-          amount      : 0.1,
+          amount      : '0.1',
         },
       })
       .then(response => {
