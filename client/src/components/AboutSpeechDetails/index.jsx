@@ -1,9 +1,15 @@
 import React from 'react';
 import Row from '@components/Row';
+import {Link} from "react-router-dom";
 
 const AboutSpeechDetails = () => {
   return (
     <div>
+      <Row>
+        <p className={'text--large'}>
+          <Link to='/tos'>Terms of Service</Link>
+        </p>
+      </Row>
       <Row>
         <p className={'text--large'}>
           Spee.ch is a media-hosting site that reads from and publishes content to the <a className='link--primary' href='https://lbry.io'>LBRY</a> blockchain.
