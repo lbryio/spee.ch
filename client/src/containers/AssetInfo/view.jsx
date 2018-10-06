@@ -5,19 +5,24 @@ import RowLabeled from '@components/RowLabeled';
 import Row from '@components/Row';
 import SpaceBetween from '@components/SpaceBetween';
 import AssetShareButtons from '@components/AssetShareButtons';
+import HorizontalSplit from '@components/HorizontalSplit';
 import ClickToCopy from '@components/ClickToCopy';
 
 class AssetInfo extends React.Component {
   render () {
     const { asset: { shortId, claimData : { channelName, certificateId, description, name, claimId, fileExt, contentType, thumbnail, host } } } = this.props;
     return (
-      <div>
-
-        {description && (
-          <Row>
-            <p class='asset-description'>{description}</p>
-          </Row>
-        )}
+      <div className='asset-information'>
+        <HorizontalSplit
+          leftSide={
+            <div className='asset-description'>
+              {description && (
+                <p>{description}</p>
+              )}
+            </div>
+          }
+          rightSide={''}
+        />
 
         {channelName && (
           <Row>
