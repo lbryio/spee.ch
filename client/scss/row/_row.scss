@@ -18,6 +18,23 @@
   width: 70%;
 }
 
+.row-labeled-alt {
+  display: column;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+
+  .row-labeled-label {
+    align-self: flex-start;
+    width: 100%;
+  }
+
+  .row-labeled-content {
+    align-self: center;
+    width: 100%;
+  }
+}
+
 
 @media (max-width: $break-point-medium ) {
 

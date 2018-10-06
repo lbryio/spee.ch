@@ -6,6 +6,10 @@ a, a:visited {
   color: $interactive-color;
 }
 
+.link--brand, .link--brand:visited {
+  color: $brand-color;
+}
+
 .link--secondary, .link--secondary:visited {
   margin: 0px;
   padding: 0.3em;
