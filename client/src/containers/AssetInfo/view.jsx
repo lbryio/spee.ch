@@ -15,9 +15,9 @@ class AssetInfo extends React.Component {
       <div className='asset-information-wrap'>
         <HorizontalSplit
           leftSide={
-            <div className='asset-description'>
+            <div>
               {description && (
-                <p>{description}</p>
+                <p className='asset-description'>{description}</p>
               )}
             </div>
           }
