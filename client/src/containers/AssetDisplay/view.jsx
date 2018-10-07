@@ -1,4 +1,5 @@
 import React from 'react';
+import AssetTitle from '@containers/AssetTitle';
 import ProgressBar from '@components/ProgressBar';
 import { LOCAL_CHECK, UNAVAILABLE, ERROR, AVAILABLE } from '../../constants/asset_display_states';
 
@@ -63,7 +64,9 @@ class AssetDisplay extends React.Component {
           }
         })()
         }
+        <AssetTitle />
       </div>
+
     );
   }
 };

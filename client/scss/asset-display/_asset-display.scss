@@ -5,6 +5,18 @@
   justify-content: center;
 }
 
+.asset-title-wrap {
+  margin-top: 90px;
+  .asset-title {
+    font-weight: normal;
+    font-size: 26px;
+    color: #2E2F31;
+    letter-spacing: 0;
+    text-align: center;
+    line-height: 32px;
+  }
+}
+
 .asset-image, .asset-video {
   margin : 0;
   max-width: 100%;

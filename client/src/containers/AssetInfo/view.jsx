@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Label from '@components/Label';
-import RowLabeled from '@components/RowLabeled';
+import RowLabeledAlt from '@components/RowLabeledAlt';
 import Row from '@components/Row';
 import SpaceBetween from '@components/SpaceBetween';
 import AssetShareButtons from '@components/AssetShareButtons';
@@ -25,7 +25,7 @@ class AssetInfo extends React.Component {
             <div className='asset-information'>
               {channelName && (
                 <Row>
-                  <RowLabeled
+                  <RowLabeledAlt
                     label={
                       <Label value={'Channel'} />
                     }
@@ -39,7 +39,7 @@ class AssetInfo extends React.Component {
               )}
 
               <Row>
-                <RowLabeled
+                <RowLabeledAlt
                   label={
                     <Label value={'Share'} />
                   }
@@ -54,7 +54,7 @@ class AssetInfo extends React.Component {
               </Row>
 
               <Row>
-                <RowLabeled
+                <RowLabeledAlt
                   label={
                     <Label value={'Link'} />
                   }
@@ -68,7 +68,7 @@ class AssetInfo extends React.Component {
               </Row>
 
               <Row>
-                <RowLabeled
+                <RowLabeledAlt
                   label={
                     <Label value={'Embed'} />
                   }
