@@ -1,14 +1,24 @@
-.click-to-copy {
-  cursor: pointer;
-  border: none;
-  padding: 0.5em;
-  margin: 0;
-  color: black;
-  background-color: white;
-  width: calc(100% - 1em - 2px);
-  font-size: 14px;
-  color: #2E2F31;
-  letter-spacing: -0.6px;
-  line-height: 20px;
+.click-to-copy-wrap {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  .click-to-copy {
+    cursor: pointer;
+    border: none;
+    padding: 0.5em;
+    margin: 0;
+    color: black;
+    background-color: white;
+    width: calc(100% - 1em - 2px);
+    font-size: 14px;
+    color: #2E2F31;
+    letter-spacing: -0.6px;
+    line-height: 20px;
+    max-width: 200px;
+  }
+  svg {
+    stroke: $brand-color;
 
+  }
 }
+

@@ -125,7 +125,6 @@ class AssetInfo extends React.Component {
           }
         />
 
-
       </div>
     );
   }

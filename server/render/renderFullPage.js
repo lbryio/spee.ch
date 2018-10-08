@@ -15,6 +15,7 @@ module.exports = (helmet, html, preloadedState) => {
             <link rel="stylesheet" href="/bundle/style.css" type="text/css">
             <!--google font-->
             <link href="https://fonts.googleapis.com/css?family=Roboto:300" rel="stylesheet">
+            <link href="https://fonts.googleapis.com/css?family=Lora" rel="stylesheet">
         </head>
         <body>
             <div id="react-app">${html}</div>
@@ -22,6 +23,7 @@ module.exports = (helmet, html, preloadedState) => {
                 window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(/</g, '\\\u003c')}
             </script>
             <script src="/bundle/bundle.js"></script>
+            <script src="/assets/js/feather.min.js"></script>
         </body>
     </html>
   `;

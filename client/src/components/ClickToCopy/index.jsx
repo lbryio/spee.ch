@@ -1,4 +1,5 @@
 import React from 'react';
+import * as Icon from 'react-feather';
 
 class ClickToCopy extends React.Component {
   constructor (props) {
@@ -18,15 +19,18 @@ class ClickToCopy extends React.Component {
   render () {
     const {id, value} = this.props;
     return (
-      <input
-        id={id}
-        value={value}
-        onClick={this.copyToClipboard}
-        type='text'
-        className='click-to-copy'
-        readOnly
-        spellCheck='false'
-      />
+      <div className='click-to-copy-wrap'>
+        <input
+          id={id}
+          value={value}
+          onClick={this.copyToClipboard}
+          type='text'
+          className='click-to-copy'
+          readOnly
+          spellCheck='false'
+        />
+        <Icon.Copy />
+      </div>
     );
   }
 }
