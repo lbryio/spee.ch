@@ -3,7 +3,12 @@ const getterMethods = {
 }
 
 export default (sequelize, {
-  STRING, BOOLEAN, INTEGER, TEXT, DECIMAL
+  BOOLEAN,
+  DATE,
+  DECIMAL,
+  INTEGER,
+  STRING,
+  TEXT,
 }) => sequelize.define(
   'output',
   {
@@ -49,7 +54,7 @@ export default (sequelize, {
       set() { },
     },
     is_spent: {
-      type: INTEGER,
+      type: BOOLEAN,
       set() { },
     },
     spent_by_input_id: {
@@ -57,11 +62,11 @@ export default (sequelize, {
       set() { },
     },
     created_at: {
-      type: INTEGER,
+      type: DATE(6),
       set() { },
     },
     modified_at: {
-      type: INTEGER,
+      type: DATE(6),
       set() { },
     },
     claim_id: {

@@ -3,7 +3,12 @@ const getterMethods = {
 }
 
 export default (sequelize, {
-  STRING, BOOLEAN, INTEGER, TEXT, DECIMAL
+  BOOLEAN,
+  DATE,
+  DECIMAL,
+  INTEGER,
+  STRING,
+  TEXT,
 }) => sequelize.define(
   'abnormal_claim',
   {
@@ -21,7 +26,7 @@ export default (sequelize, {
       set() { },
     },
     is_update: {
-      type: INTEGER,
+      type: BOOLEAN,
       set() { },
     },
     block_hash: {
@@ -49,11 +54,11 @@ export default (sequelize, {
       set() { },
     },
     created_at: {
-      type: INTEGER,
+      type: DATE(6),
       set() { },
     },
     modified_at: {
-      type: INTEGER,
+      type: DATE(6),
       set() { },
     },
   },

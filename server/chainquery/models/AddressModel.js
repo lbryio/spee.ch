@@ -3,7 +3,12 @@ const getterMethods = {
 }
 
 export default (sequelize, {
-  STRING, BOOLEAN, INTEGER, TEXT, DECIMAL
+  BOOLEAN,
+  DATE,
+  DECIMAL,
+  INTEGER,
+  STRING,
+  TEXT,
 }) => sequelize.define(
   'address',
   {
@@ -17,15 +22,15 @@ export default (sequelize, {
       set() { },
     },
     first_seen: {
-      type: INTEGER,
+      type: DATE(6),
       set() { },
     },
     created_at: {
-      type: INTEGER,
+      type: DATE(6),
       set() { },
     },
     modified_at: {
-      type: INTEGER,
+      type: DATE(6),
       set() { },
     },
   },

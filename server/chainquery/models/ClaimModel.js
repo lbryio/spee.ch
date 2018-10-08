@@ -35,7 +35,12 @@ const getterMethods = {
 }
 
 export default (sequelize, {
-  STRING, BOOLEAN, INTEGER, TEXT, DECIMAL
+  BOOLEAN,
+  DATE,
+  DECIMAL,
+  INTEGER,
+  STRING,
+  TEXT,
 }) => sequelize.define(
   'claim',
   {
@@ -121,7 +126,7 @@ export default (sequelize, {
       set() { },
     },
     is_nsfw: {
-      type: INTEGER,
+      type: BOOLEAN,
       set() { },
     },
     language: {
@@ -145,7 +150,7 @@ export default (sequelize, {
       set() { },
     },
     is_filtered: {
-      type: INTEGER,
+      type: BOOLEAN,
       set() { },
     },
     bid_state: {
@@ -153,11 +158,11 @@ export default (sequelize, {
       set() { },
     },
     created_at: {
-      type: INTEGER,
+      type: DATE(6),
       set() { },
     },
     modified_at: {
-      type: INTEGER,
+      type: DATE(6),
       set() { },
     },
     fee_address: {

@@ -88,8 +88,6 @@ module.exports = function (req, res) {
     res.send((0, _renderFullPage.default)(helmet, html, preloadedState));
   };
 
-  console.log(httpContext.get('routePath'), runSaga, httpContext.get('routeData'), action, saga);
-
   if (runSaga) {
     // create and apply middleware
     var sagaMiddleware = (0, _reduxSaga.default)();

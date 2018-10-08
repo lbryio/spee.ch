@@ -3,7 +3,12 @@ const getterMethods = {
 }
 
 export default (sequelize, {
-  STRING, BOOLEAN, INTEGER, TEXT, DECIMAL
+  BOOLEAN,
+  DATE,
+  DECIMAL,
+  INTEGER,
+  STRING,
+  TEXT,
 }) => sequelize.define(
   'transaction_address',
   {

@@ -3,7 +3,12 @@ const getterMethods = {
 }
 
 export default (sequelize, {
-  STRING, BOOLEAN, INTEGER, TEXT, DECIMAL
+  BOOLEAN,
+  DATE,
+  DECIMAL,
+  INTEGER,
+  STRING,
+  TEXT,
 }) => sequelize.define(
   'transaction',
   {
@@ -45,7 +50,7 @@ export default (sequelize, {
       set() { },
     },
     lock_time: {
-      type: INTEGER,
+      type: DATE(6),
       set() { },
     },
     raw: {
@@ -53,15 +58,15 @@ export default (sequelize, {
       set() { },
     },
     created_at: {
-      type: INTEGER,
+      type: DATE(6),
       set() { },
     },
     modified_at: {
-      type: INTEGER,
+      type: DATE(6),
       set() { },
     },
     created_time: {
-      type: INTEGER,
+      type: DATE(6),
       set() {},
     },
   },

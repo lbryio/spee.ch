@@ -3,7 +3,12 @@ const getterMethods = {
 }
 
 export default (sequelize, {
-  STRING, BOOLEAN, INTEGER, TEXT, DECIMAL
+  BOOLEAN,
+  DATE,
+  DECIMAL,
+  INTEGER,
+  STRING,
+  TEXT,
 }) => sequelize.define(
   'input',
   {
@@ -25,7 +30,7 @@ export default (sequelize, {
       set() { },
     },
     is_coinbase: {
-      type: INTEGER,
+      type: BOOLEAN,
       set() { },
     },
     coinbase: {
@@ -37,7 +42,7 @@ export default (sequelize, {
       set() { },
     },
     prevout_n: {
-      type: INTEGER,
+      type: INTEGER.UNSIGNED,
       set() { },
     },
     prevout_spend_updated: {
@@ -61,11 +66,11 @@ export default (sequelize, {
       set() { },
     },
     created: {
-      type: INTEGER,
+      type: DATE(6),
       set() { },
     },
     modified: {
-      type: INTEGER,
+      type: DATE(6),
       set() { },
     },
   },
