@@ -4,7 +4,7 @@ import PageLayout from '@components/PageLayout';
 import HorizontalSplit from '@components/HorizontalSplit';
 
 import ChannelAbout from '@components/ChannelAbout';
-import ChannelTools from '@components/ChannelTools';
+import ChannelTools from '@containers/ChannelTools';
 
 class LoginPage extends React.Component {
   componentWillReceiveProps (newProps) {

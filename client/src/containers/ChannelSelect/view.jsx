@@ -16,9 +16,12 @@ class ChannelSelect extends React.Component {
     this.handleSelection = this.handleSelection.bind(this);
   }
   componentWillMount () {
-    const { loggedInChannelName } = this.props;
+    const { loggedInChannelName, onChannelSelect, publishOnlyApproved, onPublishInChannelChange } = this.props;
     if (loggedInChannelName) {
-      this.props.onChannelSelect(loggedInChannelName);
+      onChannelSelect(loggedInChannelName);
+    }
+    if (publishOnlyApproved) {
+      onPublishInChannelChange(true);
     }
   }
   toggleAnonymousPublish (event) {
@@ -34,7 +37,17 @@ class ChannelSelect extends React.Component {
     this.props.onChannelSelect(selectedOption);
   }
   render () {
-    const { publishInChannel, channelError, selectedChannel, loggedInChannelName } = this.props;
+    const { publishInChannel, channelError, selectedChannel, loggedInChannelName, publishOnlyApproved } = this.props;
+    if (publishOnlyApproved) {
+      return (
+        <div>
+          <RowLabeled
+            label={<Label value={'Channel:'} />}
+            content={<span>{loggedInChannelName}</span>}
+          />
+        </div>
+      );
+    }
     return (
       <div>
         <RowLabeled

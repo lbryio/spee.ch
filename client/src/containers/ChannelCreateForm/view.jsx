@@ -59,7 +59,7 @@ class ChannelCreateForm extends React.Component {
     return (
       <div>
         { !status ? (
-          <div>
+          <form onSubmit={this.handleSubmit}>
             <ChannelCreateNameInput
               value={name.value}
               error={name.error}
@@ -74,10 +74,11 @@ class ChannelCreateForm extends React.Component {
               defaultMessage={'Choose a name and password for your channel'}
             />
             <ButtonPrimary
+              type={'submit'}
               value={'Create Channel'}
               onClickHandler={this.handleSubmit}
             />
-          </div>
+        </form>
         ) : (
           <div>
             <p className={'text--small text--secondary'}>{status}</p>
