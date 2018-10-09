@@ -6,9 +6,10 @@ class ClickToCopy extends React.Component {
     super(props);
     this.copyToClipboard = this.copyToClipboard.bind(this);
   }
-  copyToClipboard (event) {
-    const elementToCopy = event.target.id;
+  copyToClipboard () {
+    const elementToCopy = this.props.id;
     const element = document.getElementById(elementToCopy);
+    console.log(elementToCopy);
     element.select();
     try {
       document.execCommand('copy');
@@ -19,11 +20,13 @@ class ClickToCopy extends React.Component {
   render () {
     const {id, value} = this.props;
     return (
-      <div className='click-to-copy-wrap'>
+      <div
+        className='click-to-copy-wrap'
+        onClick={this.copyToClipboard}
+      >
         <input
           id={id}
           value={value}
-          onClick={this.copyToClipboard}
           type='text'
           className='click-to-copy'
           readOnly

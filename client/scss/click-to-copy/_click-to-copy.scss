@@ -2,8 +2,8 @@
   display: flex;
   width: 100%;
   justify-content: space-between;
+  cursor: pointer;
   .click-to-copy {
-    cursor: pointer;
     border: none;
     padding: 0.5em;
     margin: 0;
