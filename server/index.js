@@ -30,9 +30,12 @@ const {
 function logMetricsMiddleware(req, res, next) {
   res.on('finish', () => {
     const userAgent = req.get('user-agent');
+    const routePath = httpContext.get('routePath');
 
     db.Metrics.create({
       isInternal: /node\-fetch/.test(userAgent),
+      isChannel: res.isChannel,
+      claimId: res.claimId,
       routePath: httpContext.get('routePath'),
       params: JSON.stringify(req.params),
       ip: req.headers['x-forwarded-for'] || req.connection.remoteAddress,
@@ -97,7 +100,7 @@ function Server () {
     app.use(speechPassport.session());
 
     // configure handlebars & register it with express app
-    const viewsPath = Path.resolve(process.cwd(), 'server/views');
+    const viewsPath = Path.resolve(process.cwd(), 'node_modules/spee.ch/server/views');
     app.engine('handlebars', expressHandlebars({
       async        : false,
       dataType     : 'text',

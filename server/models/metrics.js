@@ -1,6 +1,6 @@
 module.exports = (sequelize, { BOOLEAN, DATE, STRING }) => {
-  const RequestMetrics = sequelize.define(
-    'RequestMetrics',
+  const Metrics = sequelize.define(
+    'Metrics',
     {
       time: {
         type: DATE(6),
@@ -8,6 +8,10 @@ module.exports = (sequelize, { BOOLEAN, DATE, STRING }) => {
       },
       isInternal: {
         type: BOOLEAN,
+      },
+      isChannel: {
+        type: BOOLEAN,
+        defaultValue: false,
       },
       claimId: {
         type: STRING,
@@ -43,11 +47,11 @@ module.exports = (sequelize, { BOOLEAN, DATE, STRING }) => {
       timestamps: false, // don't use default timestamps columns
       indexes: [
         {
-          fields: ['isInternal', 'time', 'routePath'],
+          fields: ['isInternal', 'isChannel', 'time', 'claimId', 'routePath'],
         },
       ],
     }
   );
 
-  return RequestMetrics;
+  return Metrics;
 };

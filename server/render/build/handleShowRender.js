@@ -67,7 +67,19 @@ module.exports = function (req, res) {
   var runSaga = action !== false && saga !== false;
 
   var renderPage = function renderPage(store) {
-    // render component to a string
+    // Workaround, remove when a solution for async httpContext exists
+    var showState = store.getState().show;
+    var assetKeys = Object.keys(showState.assetList);
+
+    if (assetKeys.length !== 0) {
+      res.claimId = showState.assetList[assetKeys[0]].claimId;
+    } else {
+      var channelKeys = Object.keys(showState.channelList);
+      res.claimId = showState.channelList[channelKeys[0]].longId;
+      res.isChannel = true;
+    } // render component to a string
+
+
     var html = (0, _server.renderToString)(_react.default.createElement(_reactRedux.Provider, {
       store: store
     }, _react.default.createElement(_reactRouterDom.StaticRouter, {

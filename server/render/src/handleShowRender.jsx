@@ -32,6 +32,18 @@ module.exports = (req, res) => {
   const runSaga = (action !== false && saga !== false);
 
   const renderPage = (store) => {
+
+    // Workaround, remove when a solution for async httpContext exists
+    const showState = store.getState().show;
+    const assetKeys = Object.keys(showState.assetList);
+    if(assetKeys.length !== 0) {
+      res.claimId = showState.assetList[assetKeys[0]].claimId;
+    } else {
+      const channelKeys = Object.keys(showState.channelList);
+      res.claimId = showState.channelList[channelKeys[0]].longId;
+      res.isChannel = true;
+    }
+
     // render component to a string
     const html = renderToString(
       <Provider store={store}>
