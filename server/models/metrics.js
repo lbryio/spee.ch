@@ -43,7 +43,7 @@ module.exports = (sequelize, { BOOLEAN, DATE, STRING }) => {
       timestamps: false, // don't use default timestamps columns
       indexes: [
         {
-          fields: ['isInternal', 'isChannel', 'time', 'claimId', 'routePath'],
+          fields: ['isInternal', 'time', 'claimId', 'routePath'],
         },
       ],
     }
