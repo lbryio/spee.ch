@@ -1,7 +1,12 @@
 'use strict';
 
 var AbnormalClaimModel = (sequelize, {
-  STRING, BOOLEAN, INTEGER, TEXT, DECIMAL
+  BOOLEAN,
+  DATE,
+  DECIMAL,
+  INTEGER,
+  STRING,
+  TEXT,
 }) => sequelize.define(
   'abnormal_claim',
   {
@@ -19,7 +24,7 @@ var AbnormalClaimModel = (sequelize, {
       set() { },
     },
     is_update: {
-      type: INTEGER,
+      type: BOOLEAN,
       set() { },
     },
     block_hash: {
@@ -47,11 +52,11 @@ var AbnormalClaimModel = (sequelize, {
       set() { },
     },
     created_at: {
-      type: INTEGER,
+      type: DATE(6),
       set() { },
     },
     modified_at: {
-      type: INTEGER,
+      type: DATE(6),
       set() { },
     },
   },
@@ -73,7 +78,12 @@ var abnormalClaimTable = {
 };
 
 var AddressModel = (sequelize, {
-  STRING, BOOLEAN, INTEGER, TEXT, DECIMAL
+  BOOLEAN,
+  DATE,
+  DECIMAL,
+  INTEGER,
+  STRING,
+  TEXT,
 }) => sequelize.define(
   'address',
   {
@@ -87,15 +97,15 @@ var AddressModel = (sequelize, {
       set() { },
     },
     first_seen: {
-      type: INTEGER,
+      type: DATE(6),
       set() { },
     },
     created_at: {
-      type: INTEGER,
+      type: DATE(6),
       set() { },
     },
     modified_at: {
-      type: INTEGER,
+      type: DATE(6),
       set() { },
     },
   },
@@ -117,7 +127,12 @@ var addressTable = {
 };
 
 var BlockModel = (sequelize, {
-  STRING, BOOLEAN, INTEGER, TEXT, DECIMAL
+  BOOLEAN,
+  DATE,
+  DECIMAL,
+  INTEGER,
+  STRING,
+  TEXT,
 }) => sequelize.define(
   'block',
   {
@@ -195,11 +210,11 @@ var BlockModel = (sequelize, {
       set() { },
     },
     created_at: {
-      type: INTEGER,
+      type: DATE(6),
       set() { },
     },
     modified_at: {
-      type: INTEGER,
+      type: DATE(6),
       set() { },
     },
   },
@@ -257,7 +272,12 @@ const getterMethods$3 = {
 };
 
 var ClaimModel = (sequelize, {
-  STRING, BOOLEAN, INTEGER, TEXT, DECIMAL
+  BOOLEAN,
+  DATE,
+  DECIMAL,
+  INTEGER,
+  STRING,
+  TEXT,
 }) => sequelize.define(
   'claim',
   {
@@ -310,14 +330,6 @@ var ClaimModel = (sequelize, {
       type: STRING,
       set() { },
     },
-    value_as_hex: {
-      type: STRING,
-      set() { },
-    },
-    value_as_json: {
-      type: STRING,
-      set() { },
-    },
     valid_at_height: {
       type: INTEGER,
       set() { },
@@ -343,7 +355,7 @@ var ClaimModel = (sequelize, {
       set() { },
     },
     is_nsfw: {
-      type: INTEGER,
+      type: BOOLEAN,
       set() { },
     },
     language: {
@@ -367,7 +379,7 @@ var ClaimModel = (sequelize, {
       set() { },
     },
     is_filtered: {
-      type: INTEGER,
+      type: BOOLEAN,
       set() { },
     },
     bid_state: {
@@ -375,11 +387,11 @@ var ClaimModel = (sequelize, {
       set() { },
     },
     created_at: {
-      type: INTEGER,
+      type: DATE(6),
       set() { },
     },
     modified_at: {
-      type: INTEGER,
+      type: DATE(6),
       set() { },
     },
     fee_address: {
@@ -409,7 +421,12 @@ var claimTable = {
 };
 
 var InputModel = (sequelize, {
-  STRING, BOOLEAN, INTEGER, TEXT, DECIMAL
+  BOOLEAN,
+  DATE,
+  DECIMAL,
+  INTEGER,
+  STRING,
+  TEXT,
 }) => sequelize.define(
   'input',
   {
@@ -431,7 +448,7 @@ var InputModel = (sequelize, {
       set() { },
     },
     is_coinbase: {
-      type: INTEGER,
+      type: BOOLEAN,
       set() { },
     },
     coinbase: {
@@ -443,7 +460,7 @@ var InputModel = (sequelize, {
       set() { },
     },
     prevout_n: {
-      type: INTEGER,
+      type: INTEGER.UNSIGNED,
       set() { },
     },
     prevout_spend_updated: {
@@ -467,11 +484,11 @@ var InputModel = (sequelize, {
       set() { },
     },
     created: {
-      type: INTEGER,
+      type: DATE(6),
       set() { },
     },
     modified: {
-      type: INTEGER,
+      type: DATE(6),
       set() { },
     },
   },
@@ -493,7 +510,12 @@ var inputTable = {
 };
 
 var OutputModel = (sequelize, {
-  STRING, BOOLEAN, INTEGER, TEXT, DECIMAL
+  BOOLEAN,
+  DATE,
+  DECIMAL,
+  INTEGER,
+  STRING,
+  TEXT,
 }) => sequelize.define(
   'output',
   {
@@ -539,7 +561,7 @@ var OutputModel = (sequelize, {
       set() { },
     },
     is_spent: {
-      type: INTEGER,
+      type: BOOLEAN,
       set() { },
     },
     spent_by_input_id: {
@@ -547,11 +569,11 @@ var OutputModel = (sequelize, {
       set() { },
     },
     created_at: {
-      type: INTEGER,
+      type: DATE(6),
       set() { },
     },
     modified_at: {
-      type: INTEGER,
+      type: DATE(6),
       set() { },
     },
     claim_id: {
@@ -577,7 +599,12 @@ var outputTable = {
 };
 
 var SupportModel = (sequelize, {
-  STRING, BOOLEAN, INTEGER, TEXT, DECIMAL
+  BOOLEAN,
+  DATE,
+  DECIMAL,
+  INTEGER,
+  STRING,
+  TEXT,
 }) => sequelize.define(
   'support',
   {
@@ -607,11 +634,11 @@ var SupportModel = (sequelize, {
       set() { },
     },
     created_at: {
-      type: INTEGER,
+      type: DATE(6),
       set() { },
     },
     modified_at: {
-      type: INTEGER,
+      type: DATE(6),
       set() { },
     },
   },
@@ -633,7 +660,12 @@ var supportTable = {
 };
 
 var TransactionAddressModel = (sequelize, {
-  STRING, BOOLEAN, INTEGER, TEXT, DECIMAL
+  BOOLEAN,
+  DATE,
+  DECIMAL,
+  INTEGER,
+  STRING,
+  TEXT,
 }) => sequelize.define(
   'transaction_address',
   {
@@ -674,7 +706,12 @@ var transactionAddressTable = {
 };
 
 var TransactionModel = (sequelize, {
-  STRING, BOOLEAN, INTEGER, TEXT, DECIMAL
+  BOOLEAN,
+  DATE,
+  DECIMAL,
+  INTEGER,
+  STRING,
+  TEXT,
 }) => sequelize.define(
   'transaction',
   {
@@ -716,7 +753,7 @@ var TransactionModel = (sequelize, {
       set() { },
     },
     lock_time: {
-      type: INTEGER,
+      type: DATE(6),
       set() { },
     },
     raw: {
@@ -724,15 +761,15 @@ var TransactionModel = (sequelize, {
       set() { },
     },
     created_at: {
-      type: INTEGER,
+      type: DATE(6),
       set() { },
     },
     modified_at: {
-      type: INTEGER,
+      type: DATE(6),
       set() { },
     },
     created_time: {
-      type: INTEGER,
+      type: DATE(6),
       set() {},
     },
   },
@@ -820,7 +857,7 @@ var claimQueries = (db, table) => ({
     return await table.findAll({
       where: { publisher_id: channelClaimId },
       order: [['height', 'DESC']],
-      raw  : true,  // returns an array of only data, not an array of instances
+      raw  : false,  // returns an array of only data, not an array of instances
     })
     .then(channelClaimsArray => {
       if(channelClaimsArray.length === 0) {

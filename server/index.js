@@ -27,6 +27,25 @@ const {
   },
 } = require('@config/siteConfig');
 
+function logMetricsMiddleware(req, res, next) {
+  res.on('finish', () => {
+    const userAgent = req.get('user-agent');
+
+    db.RequestMetrics.create({
+      isInternal: /node\-fetch/.test(userAgent),
+      routePath: httpContext.get('routePath'),
+      params: JSON.stringify(req.params),
+      ip: req.headers['x-forwarded-for'] || req.connection.remoteAddress,
+      request: req.url,
+      routeData: JSON.stringify(httpContext.get('routeData')),
+      referrer: req.get('referrer'),
+      userAgent,
+    });
+  });
+
+  next();
+}
+
 function setRouteDataInContextMiddleware(routePath, routeData) {
   return function (req, res, next) {
     httpContext.set('routePath', routePath);
@@ -97,7 +116,12 @@ function Server () {
       let routeMethod = routeData.hasOwnProperty('method') ? routeData.method : 'get';
       let controllers = Array.isArray(routeData.controller) ? routeData.controller : [routeData.controller];
 
-      app[routeMethod](routePath, setRouteDataInContextMiddleware(routePath, routeData), ...controllers);
+      app[routeMethod](
+        routePath,
+        logMetricsMiddleware,
+        setRouteDataInContextMiddleware(routePath, routeData),
+        ...controllers,
+      );
     });
 
     this.app = app;

@@ -1,5 +1,5 @@
 import { all } from 'redux-saga/effects';
-import { watchHandleShowPageUri } from './show_uri';
+import { watchHandleShowPageUri, watchHandleShowHomepage } from './show_uri';
 import { watchNewAssetRequest } from './show_asset';
 import { watchNewChannelRequest, watchUpdateChannelClaims } from './show_channel';
 import { watchFileIsRequested } from './file';
@@ -13,6 +13,7 @@ import { watchChannelLogout } from './logoutChannel';
 export function * rootSaga () {
   yield all([
     watchHandleShowPageUri(),
+    watchHandleShowHomepage(),
     watchNewAssetRequest(),
     watchNewChannelRequest(),
     watchUpdateChannelClaims(),

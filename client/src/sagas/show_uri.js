@@ -56,6 +56,19 @@ export function * handleShowPageUri (action) {
   }
 };
 
+export function * handleShowPageHomepage (action) {
+  const { identifier, claim } = action.data;
+  if (identifier) {
+    return yield call(parseAndUpdateIdentifierAndClaim, identifier, claim);
+  } else if (claim) {
+    yield call(parseAndUpdateClaimOnly, claim);
+  }
+};
+
 export function * watchHandleShowPageUri () {
   yield takeLatest(actions.HANDLE_SHOW_URI, handleShowPageUri);
+};
+
+export function * watchHandleShowHomepage () {
+  yield takeLatest(actions.HANDLE_SHOW_HOMEPAGE, handleShowPageHomepage);
 };

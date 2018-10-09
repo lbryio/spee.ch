@@ -22,9 +22,13 @@ const getBlockedList = require('../../controllers/api/blocked');
 const getOEmbedData = require('../../controllers/api/oEmbed');
 
 module.exports = {
+  // homepage routes
+  '/api/homepage/data/channels': { controller: [ torCheckMiddleware, channelData ] },
+
   // channel routes
   '/api/channel/availability/:name': { controller: [ torCheckMiddleware, channelAvailability ] },
   '/api/channel/short-id/:longId/:name': { controller: [ torCheckMiddleware, channelShortId ] },
+  '/api/channel/data/:channelName/:channelClaimId': { controller: [ torCheckMiddleware, channelData ] },
   '/api/channel/data/:channelName/:channelClaimId': { controller: [ torCheckMiddleware, channelData ] },
   '/api/channel/claims/:channelName/:channelClaimId/:page': { controller: [ torCheckMiddleware, channelClaims ] },
   // claim routes

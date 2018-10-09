@@ -1,13 +1,14 @@
 const Sequelize = require('sequelize');
 const logger = require('winston');
 
-const Certificate = require('./certificate.js');
-const Channel = require('./channel.js');
-const Claim = require('./claim.js');
-const File = require('./file.js');
-const User = require('./user.js');
-const Blocked = require('./blocked.js');
-const Tor = require('./tor.js');
+const Blocked = require('./blocked');
+const Certificate = require('./certificate');
+const Channel = require('./channel');
+const Claim = require('./claim');
+const File = require('./file');
+const Metrics = require('./metrics');
+const Tor = require('./tor');
+const User = require('./user');
 
 const {
   database,
@@ -48,13 +49,14 @@ sequelize
 
 // manually add each model to the db object (note: make this dynamic)
 const db = {};
+db['Blocked'] = sequelize.import('Blocked', Blocked);
 db['Certificate'] = sequelize.import('Certificate', Certificate);
 db['Channel'] = sequelize.import('Channel', Channel);
 db['Claim'] = sequelize.import('Claim', Claim);
 db['File'] = sequelize.import('File', File);
-db['User'] = sequelize.import('User', User);
-db['Blocked'] = sequelize.import('Blocked', Blocked);
+db['Metrics'] = sequelize.import('Metrics', Metrics);
 db['Tor'] = sequelize.import('Tor', Tor);
+db['User'] = sequelize.import('User', User);
 
 // run model.association for each model in the db object that has an association
 logger.info('associating db models...');

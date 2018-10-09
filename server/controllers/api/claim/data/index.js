@@ -13,7 +13,7 @@ const claimData = ({ ip, originalUrl, body, params }, res) => {
   const claimName = params.claimName;
   let claimId = params.claimId;
   if (claimId === 'none') claimId = null;
-  chainquery.claim.queries.resolveClaim(claimName, claimId)
+  chainquery.claim.queries.resolveClaim(claimName, claimId).catch(() => {})
     .then(claimInfo => {
       if (!claimInfo) {
         // Not found remote, try local
@@ -28,6 +28,7 @@ const claimData = ({ ip, originalUrl, body, params }, res) => {
           message: 'No claim could be found',
         });
       }
+
       res.status(200).json({
         success: true,
         data   : getClaimData(claimInfo),

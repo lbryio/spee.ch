@@ -1,5 +1,6 @@
 // request actions
 export const HANDLE_SHOW_URI = 'HANDLE_SHOW_URI';
+export const HANDLE_SHOW_HOMEPAGE = 'HANDLE_SHOW_HOMEPAGE';
 export const REQUEST_ERROR = 'REQUEST_ERROR';
 export const REQUEST_UPDATE = 'REQUEST_UPDATE';
 export const ASSET_REQUEST_NEW = 'ASSET_REQUEST_NEW';

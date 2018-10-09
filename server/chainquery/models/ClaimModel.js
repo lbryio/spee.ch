@@ -93,14 +93,6 @@ export default (sequelize, {
       type: STRING,
       set() { },
     },
-    value_as_hex: {
-      type: STRING,
-      set() { },
-    },
-    value_as_json: {
-      type: STRING,
-      set() { },
-    },
     valid_at_height: {
       type: INTEGER,
       set() { },

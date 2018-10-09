@@ -98,7 +98,7 @@ for(let i = 0; i < DATABASE_STRUCTURE_KEYS.length; i++) {
   let currentData = DATABASE_STRUCTURE[dbKey];
 
   db[dbKey] = currentData.table.createModel(sequelize, Sequelize);
-  db[dbKey].queries = currentData.queries(db, db[dbKey]);
+  db[dbKey].queries = currentData.queries(db, db[dbKey], sequelize);
 }
 
 // run model.association for each model in the db object that has an association

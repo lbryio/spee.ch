@@ -1,5 +1,6 @@
 const { handleErrorResponse } = require('../../../utils/errorHandlers.js');
 const db = require('../../../../models');
+const chainquery = require('chainquery');
 
 /*
 
@@ -7,14 +8,18 @@ const db = require('../../../../models');
 
 */
 
-const claimShortId = ({ ip, originalUrl, body, params }, res) => {
-  db.Claim.getShortClaimIdFromLongClaimId(params.longId, params.name)
-    .then(shortId => {
-      res.status(200).json({success: true, data: shortId});
-    })
-    .catch(error => {
-      handleErrorResponse(originalUrl, ip, error, res);
-    });
+const claimShortId = async ({ ip, originalUrl, body, params }, res) => {
+  try {
+    let shortId = await chainquery.claim.queries.getShortClaimIdFromLongClaimId(params.longId, params.name);
+
+    if(shortId === null) {
+      shortId = await db.Claim.getShortClaimIdFromLongClaimId(params.longId, params.name);
+    }
+
+    res.status(200).json({success: true, data: shortId});
+  } catch(error) {
+    handleErrorResponse(originalUrl, ip, error, res);
+  }
 };
 
 module.exports = claimShortId;

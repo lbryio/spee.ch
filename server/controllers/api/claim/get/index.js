@@ -4,6 +4,7 @@ const { handleErrorResponse } = require('../../../utils/errorHandlers.js');
 const getClaimData = require('server/utils/getClaimData');
 const chainquery = require('chainquery');
 const db = require('../../../../models');
+const waitOn = require('wait-on');
 
 /*
 
@@ -11,60 +12,46 @@ const db = require('../../../../models');
 
 */
 
-const claimGet = ({ ip, originalUrl, params }, res) => {
+const claimGet = async ({ ip, originalUrl, params }, res) => {
   const name = params.name;
   const claimId = params.claimId;
-  let resolveResult;
-  let getResult;
 
+  try {
+    let claimData = await chainquery.claim.queries.resolveClaim(name, claimId).catch(() => {});
+    if(!claimData) {
+      claimData = await db.Claim.resolveClaim(name, claimId);
+    }
 
+    if(!claimData) {
+      throw new Error('No matching uri found in Claim table');
+    }
 
-  chainquery.claim.queries.resolveClaim(name, claimId)
-    .then(result => {
-      if (!result) {
-        // could not find remote, return false to try local
-        return false;
-      }
-      return resolveResult = result;
-    })
-    .then(result => {
-      if (result === false) {
-        // Could not find remote, try local
-        return db.Claim.resolveClaim(name, claimId);
-      }
-      return result;
-    })
-    .then(result => {
-      if (!result) {
-        throw new Error('No matching uri found in Claim table');
-      }
-      return resolveResult = result;
-    })
-    .then(result => getClaim(`${name}#${claimId}`))
-    .then(result => {
-      if (!result) {
-        throw new Error(`Unable to Get ${name}#${claimId}`);
-      }
-      getResult = result;
-      if (result.completed) {
-        return createFileRecordDataAfterGet(getClaimData(resolveResult), getResult)
-          .then(fileData => {
-            const upsertCriteria = {name, claimId};
-            return db.upsert(db.File, fileData, upsertCriteria, 'File');
-          });
-      }
-    })
-    .then(() => {
-      const { message, completed } = getResult;
-      res.status(200).json({
-        success: true,
-        message,
-        completed,
+    let lbrynetResult = await getClaim(`${name}#${claimId}`);
+    if(!lbrynetResult) {
+      throw new Error(`Unable to Get ${name}#${claimId}`);
+    }
+
+    let fileData = await createFileRecordDataAfterGet(getClaimData(claimData), lbrynetResult);
+    const upsertCriteria = { name, claimId };
+    await db.upsert(db.File, fileData, upsertCriteria, 'File');
+
+    try {
+      await waitOn({
+        resources: [ lbrynetResult.file_name ],
+        delay: 100,
+        timeout: 10000, // 10 seconds
       });
-    })
-    .catch(error => {
-      handleErrorResponse(originalUrl, ip, error, res);
+    } catch (e) {}
+
+    const { message, completed } = lbrynetResult;
+    res.status(200).json({
+      success: true,
+      message,
+      completed,
     });
+  } catch(error) {
+    handleErrorResponse(originalUrl, ip, error, res);
+  }
 };
 
 module.exports = claimGet;

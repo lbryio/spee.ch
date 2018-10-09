@@ -1,6 +1,7 @@
 const logger = require('winston');
 
 const db = require('../../../models');
+const chainquery = require('chainquery');
 
 const getClaimId = require('../../utils/getClaimId.js');
 const { handleErrorResponse } = require('../../utils/errorHandlers.js');
@@ -16,8 +17,13 @@ const getClaimIdAndServeAsset = (channelName, channelClaimId, claimName, claimId
   getClaimId(channelName, channelClaimId, claimName, claimId)
     .then(fullClaimId => {
       claimId = fullClaimId;
-      logger.debug('Full claim id:', fullClaimId);
-      return db.Claim.getOutpoint(claimName, fullClaimId);
+      return chainquery.claim.queries.getOutpoint(claimName, fullClaimId).catch(() => {});
+    })
+    .then(outpointResult => {
+      if (!outpointResult) {
+        return db.Claim.getOutpoint(claimName, claimId);
+      }
+      return outpointResult;
     })
     .then(outpoint => {
       logger.debug('Outpoint:', outpoint);

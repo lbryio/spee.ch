@@ -20,14 +20,15 @@ const claimLongId = ({ ip, originalUrl, body, params }, res) => {
   const channelClaimId = body.channelClaimId;
   const claimName = body.claimName;
   let claimId = body.claimId;
+
   getClaimId(channelName, channelClaimId, claimName, claimId)
     .then(fullClaimId => {
       claimId = fullClaimId;
-      return chainquery.claim.queries.getOutpoint(claimName, fullClaimId);
+      return chainquery.claim.queries.getOutpoint(claimName, fullClaimId).catch(() => {});
     })
     .then(outpointResult => {
       if (!outpointResult) {
-        return db.Claim.getOutpoint(claimName, fullClaimId);
+        return db.Claim.getOutpoint(claimName, claimId);
       }
       return outpointResult;
     })

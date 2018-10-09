@@ -32,7 +32,7 @@ const isShortClaimId = (claimId) => {
   return (claimId && (claimId.length < 40));
 }
 
-export default (db, table) => ({
+export default (db, table, sequelize) => ({
 
   getShortClaimIdFromLongClaimId: async (claimId, claimName) => {
     logger.debug(`claim.getShortClaimIdFromLongClaimId for ${claimName}#${claimId}`);
@@ -53,7 +53,6 @@ export default (db, table) => ({
     return await table.findAll({
       where: { publisher_id: channelClaimId },
       order: [['height', 'DESC']],
-      raw  : true,  // returns an array of only data, not an array of instances
     })
     .then(channelClaimsArray => {
       if(channelClaimsArray.length === 0) {

@@ -12,6 +12,16 @@ export function onHandleShowPageUri (params, url) {
   };
 }
 
+export function onHandleShowHomepage (params, url) {
+  return {
+    type: actions.HANDLE_SHOW_HOMEPAGE,
+    data: {
+      ...params,
+      url,
+    }
+  };
+}
+
 export function onRequestError (error) {
   return {
     type: actions.REQUEST_ERROR,

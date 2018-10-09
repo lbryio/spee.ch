@@ -122,6 +122,7 @@
     "sass-loader": "^7.1.0",
     "sequelize-cli": "^4.0.0",
     "style-loader": "^0.21.0",
-    "url-loader": "^1.0.1"
+    "url-loader": "^1.0.1",
+    "wait-on": "^3.1.0"
   }
 }
