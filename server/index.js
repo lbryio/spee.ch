@@ -31,7 +31,7 @@ function logMetricsMiddleware(req, res, next) {
   res.on('finish', () => {
     const userAgent = req.get('user-agent');
 
-    db.RequestMetrics.create({
+    db.Metrics.create({
       isInternal: /node\-fetch/.test(userAgent),
       routePath: httpContext.get('routePath'),
       params: JSON.stringify(req.params),
