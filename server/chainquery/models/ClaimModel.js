@@ -141,10 +141,6 @@ export default (sequelize, {
       type: STRING,
       set() { },
     },
-    is_filtered: {
-      type: BOOLEAN,
-      set() { },
-    },
     bid_state: {
       type: STRING,
       set() { },
