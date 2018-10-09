@@ -38,6 +38,7 @@ export default (sequelize, {
   BOOLEAN,
   DATE,
   DECIMAL,
+  ENUM,
   INTEGER,
   STRING,
   TEXT,
@@ -142,7 +143,7 @@ export default (sequelize, {
       set() { },
     },
     bid_state: {
-      type: STRING,
+      type: ENUM('Active', 'Expired', 'Controlling', 'Spent', 'Accepted'),
       set() { },
     },
     created_at: {

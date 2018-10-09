@@ -275,6 +275,7 @@ var ClaimModel = (sequelize, {
   BOOLEAN,
   DATE,
   DECIMAL,
+  ENUM,
   INTEGER,
   STRING,
   TEXT,
@@ -378,12 +379,8 @@ var ClaimModel = (sequelize, {
       type: STRING,
       set() { },
     },
-    is_filtered: {
-      type: BOOLEAN,
-      set() { },
-    },
     bid_state: {
-      type: STRING,
+      type: ENUM('Active', 'Expired', 'Controlling', 'Spent', 'Accepted'),
       set() { },
     },
     created_at: {
