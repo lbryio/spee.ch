@@ -1,4 +1,5 @@
 import React from 'react';
+import Row from '@components/Row';
 import ProgressBar from '@components/ProgressBar';
 import { LOCAL_CHECK, UNAVAILABLE, ERROR, AVAILABLE } from '../../constants/asset_display_states';
 
@@ -26,8 +27,12 @@ class AssetDisplay extends React.Component {
         }
         {(status === ERROR) &&
         <div>
-          <p>Unfortunately, we couldn't download your asset from LBRY.  You can help us out by sharing the below error message in the <a className='link--primary' href='https://chat.lbry.io' target='_blank'>LBRY discord</a>.</p>
-          <i><p id='error-message'>{error}</p></i>
+          <Row>
+            <p>Unfortunately, we couldn't download your asset from LBRY.  You can help us out by sharing the following error message in the <a className='link--primary' href='https://chat.lbry.io' target='_blank'>LBRY discord</a>.</p>
+          </Row>
+          <Row>
+            <p id='error-message'><i>{error}</i></p>
+          </Row>
         </div>
         }
         {(status === AVAILABLE) &&

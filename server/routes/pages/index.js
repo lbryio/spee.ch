@@ -10,6 +10,7 @@ module.exports = {
   '/': { controller: handlePageRequest, action: Actions.onHandleShowHomepage, saga: Sagas.handleShowHomepage  },
   '/login': { controller: handlePageRequest },
   '/about': { controller: handlePageRequest },
+  '/tos': { controller: handlePageRequest },
   '/trending': { controller: redirect('/popular') },
   '/popular': { controller: handlePageRequest },
   '/new': { controller: handlePageRequest },

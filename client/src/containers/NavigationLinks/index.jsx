@@ -1,12 +1,15 @@
 import { connect } from 'react-redux';
 import { logOutChannel, checkForLoggedInChannel } from '../../actions/channel';
+import isApprovedChannel from '../../../../utils/isApprovedChannel';
 import View from './view';
 
-const mapStateToProps = ({ channel: { loggedInChannel: { name, shortId, longId } } }) => {
+const mapStateToProps = ({ site, channel: { loggedInChannel: { name, shortId, longId } } }) => {
   return {
-    channelName   : name,
-    channelShortId: shortId,
-    channelLongId : longId,
+    showPublish       : (!site.publishOnlyApproved || isApprovedChannel({ longId }, site.approvedChannels)),
+    closedRegistration: site.closedRegistration,
+    channelName       : name,
+    channelShortId    : shortId,
+    channelLongId     : longId,
   };
 };
 

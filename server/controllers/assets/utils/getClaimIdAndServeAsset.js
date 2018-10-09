@@ -2,6 +2,7 @@ const logger = require('winston');
 
 const db = require('../../../models');
 const chainquery = require('chainquery');
+const isApprovedChannel = require('../../../../utils/isApprovedChannel');
 
 const getClaimId = require('../../utils/getClaimId.js');
 const { handleErrorResponse } = require('../../utils/errorHandlers.js');
@@ -12,22 +13,35 @@ const NO_CHANNEL = 'NO_CHANNEL';
 const NO_CLAIM = 'NO_CLAIM';
 const BLOCKED_CLAIM = 'BLOCKED_CLAIM';
 const NO_FILE = 'NO_FILE';
+const CONTENT_UNAVAILABLE = 'CONTENT_UNAVAILABLE';
+
+const { publishing: { serveOnlyApproved, approvedChannels } } = require('@config/siteConfig');
 
 const getClaimIdAndServeAsset = (channelName, channelClaimId, claimName, claimId, originalUrl, ip, res) => {
   getClaimId(channelName, channelClaimId, claimName, claimId)
     .then(fullClaimId => {
       claimId = fullClaimId;
-      return chainquery.claim.queries.getOutpoint(claimName, fullClaimId).catch(() => {});
+      return chainquery.claim.queries.resolveClaim(claimName, fullClaimId).catch(() => {});
     })
-    .then(outpointResult => {
-      if (!outpointResult) {
-        return db.Claim.getOutpoint(claimName, claimId);
+    .then(claim => {
+      if (!claim) {
+        logger.debug('Full claim id:', fullClaimId);
+        return db.Claim.findOne({
+          where: {
+            name   : claimName,
+            claimId: fullClaimId,
+          },
+        });
       }
-      return outpointResult;
+
+      return claim;
     })
-    .then(outpoint => {
-      logger.debug('Outpoint:', outpoint);
-      return db.Blocked.isNotBlocked(outpoint);
+    .then(claim => {
+      if (serveOnlyApproved && !isApprovedChannel({ longId: claim.dataValues.certificateId }, approvedChannels)) {
+        throw new Error(CONTENT_UNAVAILABLE);
+      }
+      logger.debug('Outpoint:', claim.dataValues.outpoint);
+      return db.Blocked.isNotBlocked(claim.dataValues.outpoint);
     })
     .then(() => {
       return db.File.findOne({
@@ -56,6 +70,13 @@ const getClaimIdAndServeAsset = (channelName, channelClaimId, claimName, claimId
         return res.status(404).json({
           success: false,
           message: 'No matching channel id could be found for that url',
+        });
+      }
+      if (error === CONTENT_UNAVAILABLE) {
+        logger.debug('unapproved channel');
+        return res.status(400).json({
+          success: false,
+          message: 'This content is unavailable',
         });
       }
       if (error === BLOCKED_CLAIM) {

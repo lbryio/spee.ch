@@ -2,6 +2,7 @@ const PassportLocalStrategy = require('passport-local').Strategy;
 const { createChannel } = require('../../lbrynet');
 const logger = require('winston');
 const db = require('../../models');
+const { publishing: { closedRegistration } } = require('@config/siteConfig');
 
 module.exports = new PassportLocalStrategy(
   {
@@ -9,10 +10,13 @@ module.exports = new PassportLocalStrategy(
     passwordField: 'password',
   },
   (username, password, done) => {
+    if (closedRegistration) {
+      return done('Registration is disabled');
+    }
+
     logger.verbose(`new channel signup request. user: ${username} pass: ${password} .`);
     let userInfo = {};
     // server-side validaton of inputs (username, password)
-
     // create the channel and retrieve the metadata
     return createChannel(`@${username}`)
       .then(tx => {

@@ -26,7 +26,11 @@
     "thumbnailChannelId": null,
     "additionalClaimAddresses": [],
     "disabled": false,
-    "disabledMessage": "Default publishing disabled message"
+    "disabledMessage": "Default publishing disabled message",
+    "closedRegistration": false,
+    "serveOnlyApproved": false,
+    "publishOnlyApproved": false,
+    "approvedChannels": []
   },
   "startup": {
     "performChecks": true,
