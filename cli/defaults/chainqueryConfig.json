@@ -1,0 +1,8 @@
+{
+  "host": "localhost",
+  "port": "3306",
+  "timeout": 30,
+  "database": "chainquery",
+  "username": "lbry",
+  "password": "root"
+}

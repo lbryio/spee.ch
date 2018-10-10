@@ -1,6 +1,7 @@
 const logger = require('winston');
 
 const db = require('../../../models');
+const chainquery = require('chainquery');
 const isApprovedChannel = require('../../../../utils/isApprovedChannel');
 
 const getClaimId = require('../../utils/getClaimId.js');
@@ -20,13 +21,20 @@ const getClaimIdAndServeAsset = (channelName, channelClaimId, claimName, claimId
   getClaimId(channelName, channelClaimId, claimName, claimId)
     .then(fullClaimId => {
       claimId = fullClaimId;
-      logger.debug('Full claim id:', fullClaimId);
-      return db.Claim.findOne({
-        where: {
-          name   : claimName,
-          claimId: fullClaimId,
-        },
-      });
+      return chainquery.claim.queries.resolveClaim(claimName, fullClaimId).catch(() => {});
+    })
+    .then(claim => {
+      if (!claim) {
+        logger.debug('Full claim id:', fullClaimId);
+        return db.Claim.findOne({
+          where: {
+            name   : claimName,
+            claimId: fullClaimId,
+          },
+        });
+      }
+
+      return claim;
     })
     .then(claim => {
       if (serveOnlyApproved && !isApprovedChannel({ longId: claim.dataValues.certificateId }, approvedChannels)) {

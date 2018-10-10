@@ -36,9 +36,13 @@ const addAlliasesForSCSS = (aliasObject) => { // scss
 
 module.exports = () => {
   let moduleAliases = {};
+
+  moduleAliases['chainquery'] = resolve('./server/chainquery/bundle');
+  moduleAliases['server'] = resolve('./server');
+
   // aliases for configs
-  moduleAliases['@config'] = resolve(`config`);
-  moduleAliases['@devConfig'] = resolve(`devConfig`);
+  moduleAliases['@config'] = resolve('config');
+  moduleAliases['@devConfig'] = resolve('devConfig');
 
   // create specific aliases for locally defined components in the following folders
   moduleAliases = addAliasesForCustomComponentFolder('containers', moduleAliases);

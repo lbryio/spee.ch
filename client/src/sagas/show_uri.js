@@ -22,6 +22,7 @@ function * parseAndUpdateIdentifierAndClaim (modifier, claim) {
   };
   yield call(newAssetRequest, onNewAssetRequest(claimName, claimId, null, null, extension));
 }
+
 function * parseAndUpdateClaimOnly (claim) {
   // this could be a request for an asset or a channel page
   // claim could be an asset claim or a channel claim
@@ -50,10 +51,24 @@ export function * handleShowPageUri (action) {
   const { identifier, claim } = action.data;
   if (identifier) {
     return yield call(parseAndUpdateIdentifierAndClaim, identifier, claim);
+  } else if (claim) {
+    yield call(parseAndUpdateClaimOnly, claim);
   }
-  yield call(parseAndUpdateClaimOnly, claim);
+};
+
+export function * handleShowPageHomepage (action) {
+  const { identifier, claim } = action.data;
+  if (identifier) {
+    return yield call(parseAndUpdateIdentifierAndClaim, identifier, claim);
+  } else if (claim) {
+    yield call(parseAndUpdateClaimOnly, claim);
+  }
 };
 
 export function * watchHandleShowPageUri () {
   yield takeLatest(actions.HANDLE_SHOW_URI, handleShowPageUri);
+};
+
+export function * watchHandleShowHomepage () {
+  yield takeLatest(actions.HANDLE_SHOW_HOMEPAGE, handleShowPageHomepage);
 };

@@ -1,7 +1,7 @@
-const handlePageRender = require('../../render/build/handlePageRender.js');
+const handleShowRender = require('../../render/build/handleShowRender.js');
 
 const sendReactApp = (req, res) => {
-  handlePageRender(req, res);
+  handleShowRender(req, res);
 };
 
 module.exports = sendReactApp;

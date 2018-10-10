@@ -15,6 +15,10 @@
     "prestart": "builder run bundle",
     "start": "node server.js",
     "start:build": "builder run start",
+    "chainquery:build": "rollup ./server/chainquery/index.js --file ./server/chainquery/bundle.js --format cjs",
+    "devtools:server": "ndb server.js",
+    "devtools:chainquery": "npm run devtools:chainquery:build && ndb ./server/chainquery/bundle.debug.js",
+    "devtools:chainquery:build": "rollup ./server/chainquery/index.debug.js --file ./server/chainquery/bundle.debug.js --format cjs",
     "test": "mocha --recursive",
     "test:no-lbc": "npm test -- --grep @usesLbc --invert",
     "test:server": "mocha --recursive './server/**/*.test.js'",
@@ -50,6 +54,7 @@
     "cookie-session": "^2.0.0-beta.3",
     "express": "^4.15.2",
     "express-handlebars": "^3.0.0",
+    "express-http-context": "^1.1.0",
     "get-video-dimensions": "^1.0.0",
     "helmet": "^3.13.0",
     "image-size": "^0.6.3",
@@ -108,13 +113,16 @@
     "file-loader": "^1.1.11",
     "husky": "^0.14.3",
     "mocha": "^5.2.0",
+    "ndb": "^1.0.24",
     "node-sass": "^4.9.3",
     "nodemon": "^1.17.5",
     "redux-devtools": "^3.4.1",
     "regenerator-transform": "^0.13.0",
+    "rollup": "^0.66.2",
     "sass-loader": "^7.1.0",
     "sequelize-cli": "^4.0.0",
     "style-loader": "^0.21.0",
-    "url-loader": "^1.0.1"
+    "url-loader": "^1.0.1",
+    "wait-on": "^3.1.0"
   }
 }

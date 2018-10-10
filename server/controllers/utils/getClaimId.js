@@ -1,22 +1,38 @@
 const logger = require('winston');
 
 const db = require('../../models');
+const chainquery = require('chainquery');
 
-const getClaimIdByChannel = (channelName, channelClaimId, claimName) => {
+const getClaimIdByChannel = async (channelName, channelClaimId, claimName) => {
   logger.debug(`getClaimIdByChannel(${channelName}, ${channelClaimId}, ${claimName})`);
-  return db.Certificate
-    .getLongChannelId(channelName, channelClaimId)
-    .then(longChannelId => {
-      return db.Claim.getClaimIdByLongChannelId(longChannelId, claimName);
-    });
+
+  let channelId = await chainquery.claim.queries.getLongClaimIdFromShortClaimId(channelName, channelClaimId);
+
+  if(channelId === null) {
+    channelId = await db.Certificate.getLongChannelId(channelName, channelClaimId);
+  }
+
+  let claimId = await chainquery.claim.queries.getClaimIdByLongChannelId(channelId, claimName);
+
+  if(claimId === null) {
+    claimId = db.Claim.getClaimIdByLongChannelId(longChannelId, claimName);
+  }
+
+  return claimId;
 };
 
-const getClaimId = (channelName, channelClaimId, name, claimId) => {
+const getClaimId = async (channelName, channelClaimId, name, claimId) => {
   logger.debug(`getClaimId: ${channelName}, ${channelClaimId}, ${name}, ${claimId})`);
   if (channelName) {
-    return getClaimIdByChannel(channelName, channelClaimId, name);
+    return await getClaimIdByChannel(channelName, channelClaimId, name);
   } else {
-    return db.Claim.getLongClaimId(name, claimId);
+    let claimIdResult = await chainquery.claim.queries.getLongClaimId(name, claimId);
+
+    if(claimIdResult === null) {
+      claimIdResult = await db.Claim.getLongClaimId(name, claimId);
+    }
+
+    return claimIdResult;
   }
 };
 

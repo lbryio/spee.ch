@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { onHandleShowPageUri } from '../../actions/show';
+import { onHandleShowHomepage } from '../../actions/show';
 import View from './view';
 
 const mapStateToProps = ({ show, site, channel }) => {
@@ -11,7 +11,7 @@ const mapStateToProps = ({ show, site, channel }) => {
 };
 
 const mapDispatchToProps = {
-  onHandleShowPageUri,
+  onHandleShowHomepage,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(View);

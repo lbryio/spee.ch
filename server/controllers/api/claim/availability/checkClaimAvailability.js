@@ -1,18 +1,18 @@
-const db = require('../../../../models');
+const chainquery = require('chainquery');
 const { publishing: { primaryClaimAddress, additionalClaimAddresses } } = require('@config/siteConfig');
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 
-const claimAvailability = (name) => {
+const claimAvailability = async (name) => {
   const claimAddresses = additionalClaimAddresses || [];
   claimAddresses.push(primaryClaimAddress);
   // find any records where the name is used
-  return db.Claim
+  return await chainquery.claim
     .findAll({
-      attributes: ['address'],
+      attributes: ['claim_address'],
       where     : {
         name,
-        address: {
+        claim_address: {
           [Op.or]: claimAddresses,
         },
       },
