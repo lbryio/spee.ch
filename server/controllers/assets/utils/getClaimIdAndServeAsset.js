@@ -25,11 +25,11 @@ const getClaimIdAndServeAsset = (channelName, channelClaimId, claimName, claimId
     })
     .then(claim => {
       if (!claim) {
-        logger.debug('Full claim id:', fullClaimId);
+        logger.debug('Full claim id:', claimId);
         return db.Claim.findOne({
           where: {
             name   : claimName,
-            claimId: fullClaimId,
+            claimId,
           },
         });
       }
