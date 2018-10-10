@@ -21,7 +21,7 @@ const AssetShareButtons = ({ host, name, shortId }) => {
       <a
         className='link--primary'
         target='_blank'
-        href={`http://tumblr.com/widgets/share/tool?canonicalUrl=${host}/${shortId}/${name}`}
+        href={`https://tumblr.com/widgets/share/tool?canonicalUrl=${host}/${shortId}/${name}`}
       >
         tumblr
       </a>
