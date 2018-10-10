@@ -275,6 +275,7 @@ var ClaimModel = (sequelize, {
   BOOLEAN,
   DATE,
   DECIMAL,
+  ENUM,
   INTEGER,
   STRING,
   TEXT,
@@ -378,12 +379,8 @@ var ClaimModel = (sequelize, {
       type: STRING,
       set() { },
     },
-    is_filtered: {
-      type: BOOLEAN,
-      set() { },
-    },
     bid_state: {
-      type: STRING,
+      type: ENUM('Active', 'Expired', 'Controlling', 'Spent', 'Accepted'),
       set() { },
     },
     created_at: {
@@ -836,7 +833,22 @@ const isShortClaimId = (claimId) => {
   return (claimId && (claimId.length < 40));
 };
 
-var claimQueries = (db, table) => ({
+var claimQueries = (db, table, sequelize) => ({
+
+  getClaimChannelName: async (publisher_id) => {
+    return await table.findAll({
+      where     : { claim_id: publisher_id },
+      attributes: ['name'],
+    }).then(result => {
+      if(result.length === 0) {
+        throw new Error(`no record found for ${claimId}`);
+      } else if(result.length !== 1) {
+        logger$1.warn(`more than one record matches ${claimId} in db.Claim`);
+      }
+
+      return result[0].name;
+    });
+  },
 
   getShortClaimIdFromLongClaimId: async (claimId, claimName) => {
     logger$1.debug(`claim.getShortClaimIdFromLongClaimId for ${claimName}#${claimId}`);
@@ -857,7 +869,6 @@ var claimQueries = (db, table) => ({
     return await table.findAll({
       where: { publisher_id: channelClaimId },
       order: [['height', 'DESC']],
-      raw  : false,  // returns an array of only data, not an array of instances
     })
     .then(channelClaimsArray => {
       if(channelClaimsArray.length === 0) {
@@ -1062,7 +1073,7 @@ if (!database || !username || !password) {
 }
 
 // set sequelize options
-const sequelize$1 = new Sequelize(database, username, password, {
+const sequelize = new Sequelize(database, username, password, {
   host          : host$1,
   import        : port,
   dialect       : 'mysql',
@@ -1086,8 +1097,8 @@ for(let i = 0; i < DATABASE_STRUCTURE_KEYS.length; i++) {
   let dbKey = DATABASE_STRUCTURE_KEYS[i];
   let currentData = DATABASE_STRUCTURE[dbKey];
 
-  db[dbKey] = currentData.table.createModel(sequelize$1, Sequelize);
-  db[dbKey].queries = currentData.queries(db, db[dbKey]);
+  db[dbKey] = currentData.table.createModel(sequelize, Sequelize);
+  db[dbKey].queries = currentData.queries(db, db[dbKey], sequelize);
 }
 
 // run model.association for each model in the db object that has an association
@@ -1100,7 +1111,7 @@ DATABASE_STRUCTURE_KEYS.forEach(modelName => {
 });
 
 // establish mysql connection
-sequelize$1
+sequelize
   .authenticate()
   .then(() => {
     logger$2.info('Sequelize has established mysql connection for chainquery successfully.');
