@@ -9,34 +9,32 @@ const db = require('../../../../models');
 
 */
 
-const claimData = ({ ip, originalUrl, body, params }, res) => {
+const claimData = async ({ ip, originalUrl, body, params }, res) => {
   const claimName = params.claimName;
   let claimId = params.claimId;
   if (claimId === 'none') claimId = null;
-  chainquery.claim.queries.resolveClaim(claimName, claimId).catch(() => {})
-    .then(claimInfo => {
-      if (!claimInfo) {
-        // Not found remote, try local
-        return db.Claim.resolveClaim(claimName, claimId)
-      }
-      return claimInfo
-    })
-    .then(claimInfo => {
-      if (!claimInfo) {
-        return res.status(404).json({
-          success: false,
-          message: 'No claim could be found',
-        });
-      }
 
-      res.status(200).json({
-        success: true,
-        data   : getClaimData(claimInfo),
+  try {
+    let resolvedClaim = await chainquery.claim.queries.resolveClaim(claimName, claimId).catch(() => {});
+
+    if(!resolvedClaim) {
+      resolvedClaim = await db.Claim.resolveClaim(claimName, claimId);
+    }
+
+    if (!resolvedClaim) {
+      return res.status(404).json({
+        success: false,
+        message: 'No claim could be found',
       });
-    })
-    .catch(error => {
-      handleErrorResponse(originalUrl, ip, error, res);
+    }
+
+    res.status(200).json({
+      success: true,
+      data   : await getClaimData(resolvedClaim),
     });
+  } catch(error) {
+    handleErrorResponse(originalUrl, ip, error, res);
+  }
 };
 
 module.exports = claimData;

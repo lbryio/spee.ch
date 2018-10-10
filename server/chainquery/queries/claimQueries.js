@@ -34,6 +34,21 @@ const isShortClaimId = (claimId) => {
 
 export default (db, table, sequelize) => ({
 
+  getClaimChannelName: async (publisher_id) => {
+    return await table.findAll({
+      where     : { claim_id: publisher_id },
+      attributes: ['name'],
+    }).then(result => {
+      if(result.length === 0) {
+        throw new Error(`no record found for ${claimId}`);
+      } else if(result.length !== 1) {
+        logger.warn(`more than one record matches ${claimId} in db.Claim`);
+      }
+
+      return result[0].name;
+    });
+  },
+
   getShortClaimIdFromLongClaimId: async (claimId, claimName) => {
     logger.debug(`claim.getShortClaimIdFromLongClaimId for ${claimName}#${claimId}`);
     return await table.findAll({

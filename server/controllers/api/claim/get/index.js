@@ -31,7 +31,7 @@ const claimGet = async ({ ip, originalUrl, params }, res) => {
       throw new Error(`Unable to Get ${name}#${claimId}`);
     }
 
-    let fileData = await createFileRecordDataAfterGet(getClaimData(claimData), lbrynetResult);
+    let fileData = await createFileRecordDataAfterGet(await getClaimData(claimData), lbrynetResult);
     const upsertCriteria = { name, claimId };
     await db.upsert(db.File, fileData, upsertCriteria, 'File');
 
