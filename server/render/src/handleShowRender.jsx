@@ -40,8 +40,11 @@ module.exports = (req, res) => {
       res.claimId = showState.assetList[assetKeys[0]].claimId;
     } else {
       const channelKeys = Object.keys(showState.channelList);
-      res.claimId = showState.channelList[channelKeys[0]].longId;
-      res.isChannel = true;
+
+      if(channelKeys.length !== 0) {
+        res.claimId = showState.channelList[channelKeys[0]].longId;
+        res.isChannel = true;
+        }
     }
 
     // render component to a string

@@ -16,7 +16,7 @@ const claimData = async ({ ip, originalUrl, body, params }, res) => {
 
   try {
     let resolvedClaim = await chainquery.claim.queries.resolveClaim(claimName, claimId).catch(() => {});
-
+    
     if(!resolvedClaim) {
       resolvedClaim = await db.Claim.resolveClaim(claimName, claimId);
     }

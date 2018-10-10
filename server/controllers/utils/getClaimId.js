@@ -28,7 +28,7 @@ const getClaimId = async (channelName, channelClaimId, name, claimId) => {
   } else {
     let claimIdResult = await chainquery.claim.queries.getLongClaimId(name, claimId);
 
-    if(claimIdResult === null) {
+    if(!claimIdResult) {
       claimIdResult = await db.Claim.getLongClaimId(name, claimId);
     }
 
