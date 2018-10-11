@@ -61,15 +61,14 @@
 
 .asset-information-wrap {
   max-width: 800px;
-
   p.asset-description {
     white-space: pre-line;
     font-size: 14px;
     color: #2E2F31;
     letter-spacing: 0;
     line-height: 18px;
+    width: 360px;
   }
-
   .asset-information {
     width: 320px;
   }

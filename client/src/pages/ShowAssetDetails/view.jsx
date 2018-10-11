@@ -19,6 +19,7 @@ class ShowAssetDetails extends React.Component {
           asset={asset}
         >
           <VerticalCollapsibleSplit
+            name={'asset-display-collapse'}
             top={<AssetDisplay />}
             bottom={<AssetInfo />}
           />

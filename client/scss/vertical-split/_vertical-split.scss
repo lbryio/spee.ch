@@ -5,3 +5,20 @@
   justify-content: space-between;
   align-items    : center;
 };
+
+.collapse-content.hidden{
+  display: none;
+}
+
+.collapse-button {
+  outline: none;
+  background: none;
+  border: none;
+  display: block;
+  margin: 15px auto 0;
+  width: 24px;
+  height: 24px;
+  svg {
+    stroke: $brand-color;
+  }
+}
