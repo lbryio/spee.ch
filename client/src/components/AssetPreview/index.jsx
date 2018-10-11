@@ -14,23 +14,23 @@ const AssetPreview = ({ defaultThumbnail, claimData: { name, claimId, fileExt, c
           case 'image/gif':
             return (
               <div>
-                <h6 class='list-title'>{title}</h6>
                 <img
                   className={'asset-preview-image'}
                   src={embedUrl}
                   alt={name}
                 />
+                <h3 className='list-title'>{title}</h3>
               </div>
             );
           case 'video/mp4':
             return (
               <div>
-                <h6 class='list-title'>{title}</h6>
                 <img
                   className={'asset-preview-video'}
                   src={thumbnail || defaultThumbnail}
                   alt={name}
                 />
+                <h3 className='list-title'>{title}</h3>
               </div>
             );
           default:
