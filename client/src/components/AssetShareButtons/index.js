@@ -46,6 +46,20 @@ const AssetShareButtons = ({ host, name, shortId }) => {
       >
         diaspora
       </a>
+      <a
+        className='link--primary'
+        target='_blank'
+        href={`http://sharetomastodon.github.io/?title=${name}&url=${host}/${shortId}/${name}`}
+      >
+        pleroma
+      </a>
+      <a
+        className='link--primary'
+        target='_blank'
+        href={`http://sharetodiaspora.github.io/?title=${name}&url=${host}/${shortId}/${name}`}
+      >
+        friendica
+      </a>
     </SocialShareLink>
   );
 };
