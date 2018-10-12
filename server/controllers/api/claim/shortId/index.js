@@ -12,7 +12,7 @@ const claimShortId = async ({ ip, originalUrl, body, params }, res) => {
   try {
     let shortId = await chainquery.claim.queries.getShortClaimIdFromLongClaimId(params.longId, params.name).catch(() => {});
 
-    if(shortId === null) {
+    if(!shortId) {
       shortId = await db.Claim.getShortClaimIdFromLongClaimId(params.longId, params.name);
     }
 
