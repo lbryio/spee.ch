@@ -10,9 +10,12 @@ const publish = (publishParams, fileName, fileType) => {
     let publishResults, certificateId, channelName;
     // publish the file
     return publishClaim(publishParams)
-      .then(tx => {
-        logger.info(`Successfully published ${publishParams.name} ${fileName}`, tx);
-        publishResults = tx;
+      .then(result => {
+        logger.info(`Successfully published ${publishParams.name} ${fileName}`, result);
+
+        // Support new daemon, TODO: remove
+        publishResults = result.output && result.output.claim_id ? result.output : result;
+
         // get the channel information
         if (publishParams.channel_name) {
           logger.debug(`this claim was published in channel: ${publishParams.channel_name}`);
