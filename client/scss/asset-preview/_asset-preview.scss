@@ -1,16 +1,16 @@
 .asset-preview-image {
   width  : 100%;
-  padding: 0px;
-  margin : 0px
+  padding: 0;
+  margin : 0;
 }
 
 .asset-preview-video {
   cursor: pointer;
   background-color: #ffffff;
-  width: calc(100% - 12px - 12px - 2px);
+  width: 100%;
 }
 
-h3.list-title {
+h6.list-title {
   margin: 0;
   text-overflow: ellipsis;
   word-wrap: break-word;

@@ -5,7 +5,7 @@ const AssetPreview = ({ defaultThumbnail, claimData: { name, claimId, fileExt, c
   const embedUrl = `/${claimId}/${name}.${fileExt}`;
   const showUrl = `/${claimId}/${name}`;
   return (
-    <Link to={showUrl} >
+    <Link to={showUrl} className='asset-preview'>
       {(() => {
         switch (contentType) {
           case 'image/jpeg':
