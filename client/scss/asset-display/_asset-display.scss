@@ -57,10 +57,29 @@
 .visible-content {
   width: 100%;
   margin: 0 0 40px;
+  padding-bottom: 25px;
+  box-shadow: 0 1px 3px 2px rgba(169, 173, 186, 0.2);
+  &.closed {
+    box-shadow: none;
+  }
 }
 
 .asset-information-wrap {
   max-width: 800px;
+
+  .horizontal-split {
+    justify-content: center;
+    .column {
+      &:first-child {
+        padding-right: 40px;
+      }
+      &:last-child {
+        padding-left: 40px;
+        border-left: 1px solid #A9ADBA;
+      }
+    }
+  }
+
   p.asset-description {
     white-space: pre-line;
     font-size: 14px;
@@ -70,7 +89,7 @@
     width: 360px;
   }
   .asset-information {
-    width: 320px;
+    width: 341px;
   }
 
 }
