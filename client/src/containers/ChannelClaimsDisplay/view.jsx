@@ -29,14 +29,18 @@ class ChannelClaimsDisplay extends React.Component {
     const {channel: {claimsData: {claims, currentPage, totalPages}}, defaultThumbnail} = this.props;
     if (claims.length > 0) {
       return (
-        <div className={'channel-claims-display'}>
-          {claims.map(claim => (
-            <AssetPreview
-              defaultThumbnail={defaultThumbnail}
-              claimData={claim}
-              key={`${claim.name}-${claim.id}`}
-            />
-          ))}
+        <div>
+          <div>
+            <div className={'channel-claims-display'}>
+              {claims.map(claim => (
+                <AssetPreview
+                  defaultThumbnail={defaultThumbnail}
+                  claimData={claim}
+                  key={`${claim.name}-${claim.id}`}
+                />
+              ))}
+            </div>
+          </div>
           <Row>
             {(currentPage > 1) &&
             <ButtonSecondary

@@ -1,10 +1,7 @@
 .channel-claims-display {
+  width: 100%;
   display: grid;
   grid-gap: 16px;
-
-  .button--secondary {
-    margin-right: $secondary-padding;
-  }
 }
 
 @media (min-width: 1040px) {

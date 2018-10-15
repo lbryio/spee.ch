@@ -24,7 +24,9 @@ class ShowChannel extends React.Component {
               />
             </Row>
           )}
-          <ChannelClaimsDisplay />
+          <Row>
+            <ChannelClaimsDisplay />
+          </Row>
         </PageLayout>
       );
     }
