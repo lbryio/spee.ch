@@ -1,5 +1,23 @@
 .channel-claims-display {
-  .button--secondary {
-    margin-right: $secondary-padding;
+  width: 100%;
+  display: grid;
+  grid-gap: 16px;
+}
+
+@media (min-width: 1040px) {
+  .channel-claims-display {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1039px) {
+  .channel-claims-display {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 767px) {
+  .channel-claims-display {
+    grid-template-columns: 1fr;
   }
 }

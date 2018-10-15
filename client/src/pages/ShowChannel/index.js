@@ -1,19 +1,20 @@
 import { connect } from 'react-redux';
 import View from './view';
 
-const mapStateToProps = ({ show }) => {
+const mapStateToProps = ({ show, site, channel }) => {
   // select request info
   const requestId = show.request.id;
   // select request
   const previousRequest = show.requestList[requestId] || null;
   // select channel
-  let channel;
+  let thisChannel;
   if (previousRequest) {
     const channelKey = previousRequest.key;
-    channel = show.channelList[channelKey] || null;
+    thisChannel = show.channelList[channelKey] || null;
   }
   return {
-    channel,
+    channel    : thisChannel,
+    homeChannel: site.publishOnlyApproved && !channel.loggedInChannel.name ? `${site.approvedChannels[0].name}:${site.approvedChannels[0].longId}` : null,
   };
 };
 

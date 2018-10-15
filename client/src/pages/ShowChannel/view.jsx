@@ -7,7 +7,7 @@ import Row from '@components/Row';
 
 class ShowChannel extends React.Component {
   render () {
-    const { channel } = this.props;
+    const { channel, homeChannel } = this.props;
     if (channel) {
       const { name, longId, shortId } = channel;
       return (
@@ -15,14 +15,18 @@ class ShowChannel extends React.Component {
           pageTitle={name}
           channel={channel}
         >
+          {!homeChannel && (
+            <Row>
+              <ChannelInfoDisplay
+                name={name}
+                longId={longId}
+                shortId={shortId}
+              />
+            </Row>
+          )}
           <Row>
-            <ChannelInfoDisplay
-              name={name}
-              longId={longId}
-              shortId={shortId}
-            />
+            <ChannelClaimsDisplay />
           </Row>
-          <ChannelClaimsDisplay />
         </PageLayout>
       );
     }

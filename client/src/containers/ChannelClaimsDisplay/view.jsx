@@ -27,58 +27,19 @@ class ChannelClaimsDisplay extends React.Component {
   }
   render () {
     const {channel: {claimsData: {claims, currentPage, totalPages}}, defaultThumbnail} = this.props;
-    const groupedClaimsList = createGroupedList(claims, 4);
     if (claims.length > 0) {
       return (
-        <div className={'channel-claims-display'}>
+        <div>
           <div>
-            {groupedClaimsList.map((group, index) => {
-              const itemA = group[0];
-              const itemB = group[1];
-              const itemC = group[2];
-              const itemD = group[3];
-              return (
-                <HorizontalQuadSplit
-                  key={`claims-row-${index}`}
-                  columnA={
-                    itemA && (
-                      <AssetPreview
-                        defaultThumbnail={defaultThumbnail}
-                        claimData={itemA}
-                        key={`${itemA.name}-${itemA.id}`}
-                      />
-                    )
-                  }
-                  columnB={
-                    itemB && (
-                      <AssetPreview
-                        defaultThumbnail={defaultThumbnail}
-                        claimData={itemB}
-                        key={`${itemB.name}-${itemB.id}`}
-                      />
-                    )
-                  }
-                  columnC={
-                    itemC && (
-                      <AssetPreview
-                        defaultThumbnail={defaultThumbnail}
-                        claimData={itemC}
-                        key={`${itemC.name}-${itemC.id}`}
-                      />
-                    )
-                  }
-                  columnD={
-                    itemD && (
-                      <AssetPreview
-                        defaultThumbnail={defaultThumbnail}
-                        claimData={itemD}
-                        key={`${itemD.name}-${itemD.id}`}
-                      />
-                    )
-                  }
+            <div className={'channel-claims-display'}>
+              {claims.map(claim => (
+                <AssetPreview
+                  defaultThumbnail={defaultThumbnail}
+                  claimData={claim}
+                  key={`${claim.name}-${claim.id}`}
                 />
-              );
-            })}
+              ))}
+            </div>
           </div>
           <Row>
             {(currentPage > 1) &&
