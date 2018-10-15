@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import { onHandleShowHomepage } from '../../actions/show';
+import { clearFile } from '../../actions/publish';
 import View from './view';
 
 const mapStateToProps = ({ show, site, channel, publish }) => {
@@ -13,6 +14,7 @@ const mapStateToProps = ({ show, site, channel, publish }) => {
 
 const mapDispatchToProps = {
   onHandleShowHomepage,
+  clearFile,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(View);

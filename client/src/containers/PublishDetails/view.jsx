@@ -12,12 +12,14 @@ import ButtonTertiary from '@components/ButtonTertiary';
 import ButtonSecondary from '@components/ButtonSecondary';
 import SpaceAround from '@components/SpaceAround';
 import PublishFinePrint from '@components/PublishFinePrint';
+import { SAVE } from '../../constants/confirmation_messages';
 
 class PublishDetails extends React.Component {
   constructor (props) {
     super(props);
     this.onPublishSubmit = this.onPublishSubmit.bind(this);
     this.abandonClaim = this.abandonClaim.bind(this);
+    this.onCancel = this.onCancel.bind(this);
   }
   onPublishSubmit () {
     this.props.startPublish(this.props.history);
@@ -27,6 +29,16 @@ class PublishDetails extends React.Component {
     if (asset) {
       const {claimData} = asset;
       this.props.abandonClaim({claimData, history});
+    }
+  }
+  onCancel () {
+    const { isUpdate, clearFile, history } = this.props;
+    if (isUpdate) {
+      history.push('/');
+    } else {
+      if (confirm(SAVE)) {
+        clearFile();
+      }
     }
   }
   render () {
@@ -104,7 +116,7 @@ class PublishDetails extends React.Component {
           <SpaceAround>
             <ButtonTertiary
               value={'Cancel'}
-              onClickHandler={this.props.clearFile}
+              onClickHandler={this.onCancel}
             />
           </SpaceAround>
         </Row>
