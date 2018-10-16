@@ -12,7 +12,7 @@ class PublishStatus extends React.Component {
         {status === publishStates.LOAD_START &&
           <div className={'status'}>
             <Row>
-              <p>le is loading to server</p>
+              <p>File is loading to server</p>
             </Row>
             <Row>
               <p className={'text--secondary'}>0%</p>
