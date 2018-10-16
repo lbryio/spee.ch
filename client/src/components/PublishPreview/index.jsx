@@ -7,9 +7,11 @@ import Row from '@components/Row';
 
 class PublishPreview extends React.Component {
   render () {
+    const { isUpdate, uri } = this.props;
     return (
       <div>
         <Row>
+          {isUpdate && uri && (<p className='text--extra-small'>{`Editing ${uri}`}</p>)}
           <PublishTitleInput />
         </Row>
         <HorizontalSplit
