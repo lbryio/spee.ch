@@ -82,7 +82,7 @@ class PublishDetails extends React.Component {
 
         <Row>
           <ButtonPrimaryJumbo
-            value={'Publish'}
+            value={isUpdate ? 'Update' : 'Publish'}
             onClickHandler={this.onPublishSubmit}
           />
         </Row>
