@@ -6,7 +6,12 @@ const mapStateToProps = (props) => {
   const {show} = props;
   // select asset
   const asset = selectAsset(show);
-  const editable = Boolean(props.channel.loggedInChannel.name === asset.claimData.channelName);
+  const editable = Boolean(
+    asset &&
+    asset.claimData &&
+    asset.claimData.channelName &&
+    props.channel.loggedInChannel.name === asset.claimData.channelName
+  );
   //  return props
   return {
     asset,
