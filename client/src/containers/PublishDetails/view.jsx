@@ -46,32 +46,18 @@ class PublishDetails extends React.Component {
     return (
       <div>
         {isUpdate ? (asset && (
-          <React.Fragment>
-            <Row>
-              <RowLabeled
-                label={
-                  <Label value={'Channel:'} />
-                }
-                content={
-                  <span className='text'>
-                    {asset.claimData.channelName}
-                  </span>
-                }
-              />
-            </Row>
-            <Row>
-              <RowLabeled
-                label={
-                  <Label value={'Asset:'} />
-                }
-                content={
-                  <span className='text'>
-                    {asset.name}
-                  </span>
-                }
-              />
-            </Row>
-          </React.Fragment>
+          <Row>
+            <RowLabeled
+              label={
+                <Label value={'Channel:'} />
+              }
+              content={
+                <span className='text'>
+                  {asset.claimData.channelName}
+                </span>
+              }
+            />
+          </Row>
         )) : (
           <React.Fragment>
             <Row>
