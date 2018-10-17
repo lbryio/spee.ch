@@ -2,6 +2,9 @@ import { connect } from 'react-redux';
 import { selectFile, updateError, clearFile } from '../../actions/publish';
 import { selectAsset } from '../../selectors/show';
 import View from './view';
+import siteConfig from '@config/siteConfig.json';
+
+const { assetDefaults: { thumbnail: defaultThumbnail } } = siteConfig;
 
 const mapStateToProps = ({ show, publish: { file, thumbnail, fileError, isUpdate } }) => {
   const obj = { file, thumbnail, fileError, isUpdate };
@@ -9,11 +12,12 @@ const mapStateToProps = ({ show, publish: { file, thumbnail, fileError, isUpdate
   if (isUpdate) {
     asset = selectAsset(show);
     if (asset) {
-      ({name, claimData: {claimId, fileExt, outpoint}} = asset);
-      sourceUrl = `/${claimId}/${name}.${fileExt}?${outpoint}`;
-    }
-    if (sourceUrl) {
-      obj.sourceUrl = sourceUrl;
+      if (asset.claimData.fileExt === 'mp4') {
+        obj.sourceUrl = asset.claimData.thumbnail ? asset.claimData.thumbnail : defaultThumbnail;
+      } else {
+        ({name, claimData: {claimId, fileExt, outpoint}} = asset);
+        obj.sourceUrl = `/${claimId}/${name}.${fileExt}?${outpoint}`;
+      }
     }
   }
   return obj;
