@@ -15,7 +15,7 @@ const getClaimIdByChannel = async (channelName, channelClaimId, claimName) => {
   let claimId = await chainquery.claim.queries.getClaimIdByLongChannelId(channelId, claimName);
 
   if(claimId === null) {
-    claimId = db.Claim.getClaimIdByLongChannelId(longChannelId, claimName);
+    claimId = db.Claim.getClaimIdByLongChannelId(channelId, claimName);
   }
 
   return claimId;
