@@ -14,7 +14,7 @@ const publish = require('./publish.js');
 const createPublishParams = require('./createPublishParams.js');
 const createThumbnailPublishParams = require('./createThumbnailPublishParams.js');
 const parsePublishApiRequestBody = require('./parsePublishApiRequestBody.js');
-const {parsePublishApiRequestFiles} = require('./parsePublishApiRequestFiles.js');
+const parsePublishApiRequestFiles = require('./parsePublishApiRequestFiles.js');
 const authenticateUser = require('./authentication.js');
 
 const CLAIM_TAKEN = 'CLAIM_TAKEN';

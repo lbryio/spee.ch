@@ -1,7 +1,7 @@
 const path = require('path');
 const validateFileTypeAndSize = require('./validateFileTypeAndSize.js');
 
-const parsePublishApiRequestFiles = ({file}, isUpdate) => {
+const parsePublishApiRequestFiles = ({file, thumbnail}, isUpdate) => {
   // make sure a file was provided
   if (!file && !isUpdate) {
     throw new Error('no file with key of [file] found in request');
@@ -32,26 +32,20 @@ const parsePublishApiRequestFiles = ({file}, isUpdate) => {
   // validate the file
   if (file) validateFileTypeAndSize(file);
   // return results
-  return {
+  const obj = {
     fileName     : file.name,
     filePath     : file.path,
     fileExtension: path.extname(file.path),
     fileType     : file.type,
   };
-};
 
-const parsePublishApiRequestThumbnail = ({thumbnail}) => {
-  if (!thumbnail) {
-    return;
+  if (thumbnail) {
+    obj.thumbnailFileName = thumbnail.name;
+    obj.thumbnailFilePath = thumbnail.path;
+    obj.thumbnailFileType = thumbnail.type;
   }
-  return {
-    thumbnailFileName: thumbnail.name,
-    thumbnailFilePath: thumbnail.path,
-    thumbnailFileType: thumbnail.type,
-  };
+
+  return obj;
 };
 
-module.exports = {
-  parsePublishApiRequestFiles,
-  parsePublishApiRequestThumbnail,
-};
+module.exports = parsePublishApiRequestFiles;
