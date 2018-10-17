@@ -11,6 +11,7 @@ module.exports = {
   '/login': { controller: handlePageRequest },
   '/about': { controller: handlePageRequest },
   '/tos': { controller: handlePageRequest },
+  '/faq': { controller: handlePageRequest },
   '/trending': { controller: redirect('/popular') },
   '/popular': { controller: handlePageRequest },
   '/new': { controller: handlePageRequest },
