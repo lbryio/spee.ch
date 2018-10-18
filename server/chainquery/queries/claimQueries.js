@@ -66,7 +66,7 @@ export default (db, table, sequelize) => ({
   getAllChannelClaims: async (channelClaimId) => {
     logger.debug(`claim.getAllChannelClaims for ${channelClaimId}`);
     return await table.findAll({
-      where: { publisher_id: channelClaimId },
+      where: { publisher_id: channelClaimId, bid_state: 'Controlling' },
       order: [['height', 'DESC']],
     })
     .then(channelClaimsArray => {
