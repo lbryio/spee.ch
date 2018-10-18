@@ -21,6 +21,39 @@ const getTorList = require('../../controllers/api/tor');
 const getBlockedList = require('../../controllers/api/blocked');
 const getOEmbedData = require('../../controllers/api/oEmbed');
 
+const forbiddenMessage = '<h1>Forbidden</h1>If you are seeing this by mistake, please contact us using <a href="https://chat.lbry.io/">https://chat.lbry.io/</a>';
+
+let ipCounts = {};
+let blockedAddresses = [];
+
+const autoblockPublishMiddleware = (req, res, next) => {
+  let ip = (req.headers['x-forwarded-for'] || req.connection.remoteAddress).split(/,\s?/);
+
+  if(blockedAddresses.indexOf(ip) !== -1) {
+    res.status(403).send(forbiddenMessage);
+    res.end();
+
+    return;
+  }
+
+  let count = ipCounts[ip] = (ipCounts[ip] || 0) + 1;
+
+  setTimeout(() => {
+    ipCounts[ip]--;
+    if(ipCounts[ip] === 0) {
+      delete ipCounts[ip];
+    }
+  }, 600000 /* 10 minute retainer */)
+
+  if(count === 10) {
+    blockedAddresses.push(ip);
+    res.status(403).send(forbiddenMessage);
+    res.end();
+  } else {
+    next();
+  }
+}
+
 module.exports = {
   // homepage routes
   '/api/homepage/data/channels': { controller: [ torCheckMiddleware, channelData ] },
@@ -37,7 +70,7 @@ module.exports = {
   '/api/claim/get/:name/:claimId': { controller: [ torCheckMiddleware, claimGet ] },
   '/api/claim/list/:name': { controller: [ torCheckMiddleware, claimList ] },
   '/api/claim/long-id': { method: 'post', controller: [ torCheckMiddleware, claimLongId ] }, // note: should be a 'get'
-  '/api/claim/publish': { method: 'post', controller: [ torCheckMiddleware, multipartMiddleware, claimPublish ] },
+  '/api/claim/publish': { method: 'post', controller: [ torCheckMiddleware, autoblockPublishMiddleware, multipartMiddleware, claimPublish ] },
   '/api/claim/resolve/:name/:claimId': { controller: [ torCheckMiddleware, claimResolve ] },
   '/api/claim/short-id/:longId/:name': { controller: [ torCheckMiddleware, claimShortId ] },
   // file routes
