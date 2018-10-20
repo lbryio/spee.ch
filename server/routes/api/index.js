@@ -24,7 +24,7 @@ const getBlockedList = require('../../controllers/api/blocked');
 const getOEmbedData = require('../../controllers/api/oEmbed');
 
 const logger = require('winston');
-const ipBanFile = '../../../config/ipBan.txt';
+const ipBanFile = './config/ipBan.txt';
 const forbiddenMessage = '<h1>Forbidden</h1>If you are seeing this by mistake, please contact us using <a href="https://chat.lbry.io/">https://chat.lbry.io/</a>';
 
 let ipCounts = {};
