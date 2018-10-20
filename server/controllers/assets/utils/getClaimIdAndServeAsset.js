@@ -37,7 +37,7 @@ const getClaimIdAndServeAsset = (channelName, channelClaimId, claimName, claimId
       return claim;
     })
     .then(claim => {
-      if (serveOnlyApproved && !isApprovedChannel({ longId: claim.dataValues.certificateId }, approvedChannels)) {
+      if (serveOnlyApproved && !isApprovedChannel({ longId: claim.dataValues.publisher_id }, approvedChannels)) {
         throw new Error(CONTENT_UNAVAILABLE);
       }
       logger.debug('Outpoint:', claim.dataValues.outpoint);
