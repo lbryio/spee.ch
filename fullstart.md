@@ -23,7 +23,7 @@ $ npm update
   * Insert directions for certbot before installing.
   * Install [Nginx](http://nginx.org/en/docs/install.html).
   * Create a config file called `spee.ch` in */etc/nginx/sites-available*
-  * see example: [config file](https://github.com/lbryio/spee.ch/nginx_example_config).
+  * see example: [config file](https://github.com/lbryio/spee.ch/blob/master/nginx_example_config).
   * Rename all mentions of *sub.domain.com* with your subdomain name.
   * Run this command to link the sites-available. 
 
