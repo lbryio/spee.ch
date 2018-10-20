@@ -46,6 +46,7 @@ const autoblockPublishMiddleware = (req, res, next) => {
   let ip = (req.headers['x-forwarded-for'] || req.connection.remoteAddress).split(/,\s?/)[0];
 
   if(blockedAddresses.indexOf(ip) !== -1) {
+    logger.warn(`Banned IP publish attempt: ${ip}`);
     res.status(403).send(forbiddenMessage);
     res.end();
 
