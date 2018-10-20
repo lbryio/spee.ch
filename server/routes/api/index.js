@@ -24,7 +24,7 @@ const getBlockedList = require('../../controllers/api/blocked');
 const getOEmbedData = require('../../controllers/api/oEmbed');
 
 const logger = require('winston');
-const ipBanFile = '../../../config/ipBan.txt';
+const ipBanFile = './config/ipBan.txt';
 const forbiddenMessage = '<h1>Forbidden</h1>If you are seeing this by mistake, please contact us using <a href="https://chat.lbry.io/">https://chat.lbry.io/</a>';
 
 let ipCounts = {};
@@ -46,7 +46,6 @@ const autoblockPublishMiddleware = (req, res, next) => {
   let ip = (req.headers['x-forwarded-for'] || req.connection.remoteAddress).split(/,\s?/)[0];
 
   if(blockedAddresses.indexOf(ip) !== -1) {
-    logger.warn(`Banned IP publish attempt: ${ip}`);
     res.status(403).send(forbiddenMessage);
     res.end();
 
