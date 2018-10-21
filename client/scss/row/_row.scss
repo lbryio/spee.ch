@@ -28,7 +28,12 @@
     align-self: flex-start;
     width: 100%;
     color: $grey;
-    font-size: 12px;
+    .label {
+      text-transform: uppercase;
+      font-size: 18px;
+      letter-spacing: 0.4px;
+      line-height: 18px;
+    }
   }
 
   .row-labeled-content {
