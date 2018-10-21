@@ -32,7 +32,9 @@ class ClickToCopy extends React.Component {
           readOnly
           spellCheck='false'
         />
-        <Icon.Copy />
+        <div className='icon-wrap'>
+          <Icon.Copy />
+        </div>
       </div>
     );
   }

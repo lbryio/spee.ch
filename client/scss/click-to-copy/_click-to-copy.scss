@@ -2,25 +2,37 @@
   display: flex;
   width: 100%;
   justify-content: space-between;
+  align-items: center;
   cursor: pointer;
+  border: 1px solid $grey-alt;
+  border-radius: 6px;
+  max-width: 280px;
   .click-to-copy {
     border: none;
-    padding: 0.5em;
+    padding: 0.36em 0.5em;
     margin: 0;
     color: black;
-    background-color: white;
+    background-color: transparent;
     width: calc(100% - 1em - 2px);
     font-size: 14px;
     color: #2E2F31;
     letter-spacing: -0.6px;
     line-height: 20px;
-    max-width: 200px;
+    max-width: 236px;
     letter-spacing: 0;
     font-family: monospace;
+    border-right: 1px solid #9095a54d;
   }
-  svg {
-    stroke: $brand-color;
-
+  .icon-wrap {
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    svg {
+      stroke: $brand-color;
+      width: 12px;
+      height: 12px;
+    }
   }
 }
 
