@@ -20,5 +20,15 @@
   height: 24px;
   svg {
     stroke: $brand-color;
+    &.plus-icon {
+      transform: rotate(0);
+      transition: all 0.4s ease;
+    }
+  }
+
+  &:hover {
+    .plus-icon {
+      transform: rotate(-180deg);
+    }
   }
 }
