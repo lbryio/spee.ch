@@ -29,3 +29,34 @@ a, a:visited {
   color: $interactive-color;
   border-bottom: 2px solid $interactive-color;
 }
+
+
+.link--icon, .link--icon:visited {
+  display: flex;
+  .link-text {
+    padding-bottom: 2px;
+    border-bottom: 1px solid transparent;
+    transition: all 0.2s ease;
+  }
+  .icon-wrap {
+    margin-left: 5px;
+    padding-top: 3px;
+    align-items: center;
+    svg {
+      width: 16px;
+      height: 16px;
+      stroke-width: 1.2px;
+      stroke: $grey-alt;
+      transition: all 0.2s ease;
+    }
+  }
+  &:hover {
+    .link-text {
+      border-bottom: 1px solid $brand-color;
+    }
+    svg {
+      stroke: $brand-color;
+    }
+  }
+}
+

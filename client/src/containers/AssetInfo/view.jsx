@@ -7,6 +7,7 @@ import SpaceBetween from '@components/SpaceBetween';
 import AssetShareButtons from '@components/AssetShareButtons';
 import HorizontalSplit from '@components/HorizontalSplit';
 import ClickToCopy from '@components/ClickToCopy';
+import * as Icon from 'react-feather';
 
 class AssetInfo extends React.Component {
   render () {
@@ -93,33 +94,55 @@ class AssetInfo extends React.Component {
               <Row>
                 <SpaceBetween>
                   <a
-                    className='link--brand'
+                    className={'link--brand link--icon direct'}
                     href={`${host}/${claimId}/${name}.${fileExt}`}
                   >
-                    Direct Link
+                    <div className='link-text'>Direct Link</div>
+                    <div className='icon-wrap'>
+                      <Icon.ArrowRightCircle />
+                    </div>
+
                   </a>
                   <a
-                    className={'link--brand'}
+                    className={'link--brand link--icon download'}
                     href={`${host}/${claimId}/${name}.${fileExt}`}
                     download={name}
                   >
-                    Download
+                    <div className='link-text'>Download</div>
+                    <div className='icon-wrap'>
+                      <Icon.ArrowDownCircle />
+                    </div>
                   </a>
                   <a
-                    className={'link--brand'}
+                    className={'link--brand link--icon report'}
                     target='_blank'
                     href='https://lbry.io/dmca'
                   >
-                    Report
+                    <div className='link-text'>Report</div>
+                    <div className='icon-wrap'>
+                      <Icon.AlertCircle />
+                    </div>
                   </a>
                 </SpaceBetween>
               </Row>
 
-              <Row>
-                <p>
-                  Hosted via the <a className={'link--brand'} href={'https://lbry.io/get'} target={'_blank'}>LBRY</a> blockchain
-                </p>
-              </Row>
+              <div className='asset-footer'>
+                <Row>
+                  <p>
+                    Hosted via the <a className={'link--brand'} href={'https://lbry.io/get'} target={'_blank'}>LBRY</a> blockchain
+                  </p>
+                </Row>
+                <div className='claim-address'>
+                  <RowLabeledAlt
+                    label={
+                      <Label value={'Claim Address'} />
+                    }
+                    content={
+                      <a className={'link--brand'} href={'https://lbry.io/get'} target={'_blank'}>Place Claim Address Here</a>
+                    }
+                  />
+                </div>
+              </div>
 
             </div>
           }

@@ -26,20 +26,19 @@
 
 }
 
-
-  .asset-title {
-    margin-top: 40px;
-    font-weight: normal;
-    font-size: 26px;
-    color: #2E2F31;
-    letter-spacing: 0;
-    text-align: center;
-    line-height: 32px;
-  }
+.asset-title {
+  margin-top: 40px;
+  font-weight: normal;
+  font-size: 26px;
+  color: #2E2F31;
+  letter-spacing: 0;
+  text-align: center;
+  line-height: 32px;
+}
 
 .asset-image, .asset-video {
-  margin : 60px 0;
-  max-width: 100%;
+  margin: 60px auto;
+  max-width: 60vh;
   max-height: 100%;
   object-fit: contain;
   object-position: center;
@@ -92,4 +91,9 @@
     width: 341px;
   }
 
+}
+
+.asset-footer {
+  padding-top: 30px;
+  border-top: 1px solid $grey-alt;
 }
