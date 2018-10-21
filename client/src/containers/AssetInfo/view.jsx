@@ -32,7 +32,7 @@ class AssetInfo extends React.Component {
                     }
                     content={
                       <span className='text'>
-                        <Link className='link--brand' to={`/${channelName}:${certificateId}`}>{channelName}</Link>
+                        <Link className='link--brand link--hover' to={`/${channelName}:${certificateId}`}>{channelName}</Link>
                       </span>
                     }
                   />
@@ -129,7 +129,7 @@ class AssetInfo extends React.Component {
               <div className='asset-footer'>
                 <Row>
                   <p>
-                    Hosted via the <a className={'link--brand'} href={'https://lbry.io/get'} target={'_blank'}>LBRY</a> blockchain
+                    Hosted via the <a className={'link--brand link--hover'} href={'https://lbry.io/get'} target={'_blank'}>LBRY</a> blockchain
                   </p>
                 </Row>
                 <div className='claim-address'>
@@ -138,7 +138,7 @@ class AssetInfo extends React.Component {
                       <Label value={'Claim Address'} />
                     }
                     content={
-                      <a className={'link--brand'} href={'https://lbry.io/get'} target={'_blank'}>Place Claim Address Here</a>
+                      <a className={'link--brand link--hover'} href={'https://lbry.io/get'} target={'_blank'}>Place Claim Address Here</a>
                     }
                   />
                 </div>

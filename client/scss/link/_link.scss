@@ -59,3 +59,14 @@ a, a:visited {
   }
 }
 
+
+.link--hover {
+  display: inline-block;
+  padding-bottom: 2px;
+  border-bottom: 1px solid transparent;
+  transition: all 0.2s ease;
+  &:hover {
+    border-bottom: 1px solid $brand-color;
+  }
+}
+
