@@ -10,13 +10,6 @@
   display: none;
 }
 
-.collapse-content {
-  padding-bottom: 80px;
-  @media (max-width: $break-point-medium) {
-    padding-bottom: 60px;
-  }
-}
-
 .collapse-button {
   outline: none;
   background: none;

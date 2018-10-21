@@ -4,6 +4,35 @@
     margin: 0 -7px;
     a {
         display: block;
+        width: 30px;
+        height: 30px;
         margin: 0 7px;
+        border-radius: 100%;
+        line-height: 30px;
+        text-align: center;
+        &.twitter {
+            background:#4DC2FE
+        }
+
+        &.facebook {
+            background: #5487DE;
+            img {
+                margin-top: 6px;
+            }
+        }
+
+        &.tumblr {
+            background: #274061;
+            img {
+                margin-top: 7px;
+            }
+        }
+
+        &.reddit {
+            background: #FF4500;
+            img {
+                margin-top: 7px;
+            }
+        }
     }
 }

@@ -55,7 +55,7 @@
 
 .visible-content {
   width: 100%;
-  margin: 0 0 40px;
+  margin: 0;
   padding-bottom: 25px;
   box-shadow: 0 1px 3px 2px rgba(169, 173, 186, 0.2);
   &.closed {
@@ -69,12 +69,15 @@
   .horizontal-split {
     justify-content: center;
     .column {
+      padding-top: 40px;
       &:first-child {
         padding-right: 40px;
+        margin-right: -1px;
+        border-right: 1px solid $grey-alt;
       }
       &:last-child {
         padding-left: 60px;
-        border-left: 1px solid #9095a54d;
+        border-left: 1px solid $grey-alt;
       }
     }
   }
@@ -86,6 +89,10 @@
     letter-spacing: 0;
     line-height: 18px;
     width: 360px;
+    padding-bottom: 80px;
+    @media (max-width: $break-point-medium) {
+      padding-bottom: 60px;
+    }
   }
   .asset-information {
     width: 320px;
@@ -96,4 +103,8 @@
 .asset-footer {
   padding-top: 30px;
   border-top: 1px solid $grey-alt;
+  padding-bottom: 80px;
+  @media (max-width: $break-point-medium) {
+    padding-bottom: 60px;
+  }
 }
