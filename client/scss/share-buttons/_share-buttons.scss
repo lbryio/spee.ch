@@ -10,8 +10,13 @@
         border-radius: 100%;
         line-height: 30px;
         text-align: center;
+        transition: all 0.2s ease;
         &.twitter {
-            background:#4DC2FE
+            background:#4DC2FE;
+            img {
+                margin-top: 8px;
+                margin-left: 2px;
+            }
         }
 
         &.facebook {
@@ -33,6 +38,10 @@
             img {
                 margin-top: 7px;
             }
+        }
+
+        &:hover {
+            background: $brand-color;
         }
     }
 }
