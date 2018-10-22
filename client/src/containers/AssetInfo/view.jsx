@@ -24,72 +24,75 @@ class AssetInfo extends React.Component {
           }
           rightSide={
             <div className='asset-information'>
-              {channelName && (
+              <div className='tablet-inline-row'>
+                {channelName && (
+                  <Row>
+                    <RowLabeledAlt
+                      label={
+                        <Label value={'Channel'} />
+                      }
+                      content={
+                        <span className='text'>
+                          <Link className='link--brand link--hover' to={`/${channelName}:${certificateId}`}>{channelName}</Link>
+                        </span>
+                      }
+                    />
+                  </Row>
+                )}
+
                 <Row>
                   <RowLabeledAlt
                     label={
-                      <Label value={'Channel'} />
+                      <Label value={'Share'} />
                     }
                     content={
-                      <span className='text'>
-                        <Link className='link--brand link--hover' to={`/${channelName}:${certificateId}`}>{channelName}</Link>
-                      </span>
+                      <AssetShareButtons
+                        host={host}
+                        name={name}
+                        shortId={shortId}
+                      />
                     }
                   />
                 </Row>
-              )}
+              </div>
+              <div className='tablet-inline-row'>
+                <Row>
+                  <RowLabeledAlt
+                    label={
+                      <Label value={'Link'} />
+                    }
+                    content={
+                      <ClickToCopy
+                        id={'short-link'}
+                        value={`${host}/${shortId}/${name}`}
+                      />
+                    }
+                  />
+                </Row>
 
-              <Row>
-                <RowLabeledAlt
-                  label={
-                    <Label value={'Share'} />
-                  }
-                  content={
-                    <AssetShareButtons
-                      host={host}
-                      name={name}
-                      shortId={shortId}
-                    />
-                  }
-                />
-              </Row>
-
-              <Row>
-                <RowLabeledAlt
-                  label={
-                    <Label value={'Link'} />
-                  }
-                  content={
-                    <ClickToCopy
-                      id={'short-link'}
-                      value={`${host}/${shortId}/${name}`}
-                    />
-                  }
-                />
-              </Row>
-
-              <Row>
-                <RowLabeledAlt
-                  label={
-                    <Label value={'Embed'} />
-                  }
-                  content={
-                    <div>
-                      {(contentType === 'video/mp4') ? (
-                        <ClickToCopy
-                          id={'embed-text-video'}
-                          value={`<video width="100%" controls poster="${thumbnail}" src="${host}/${claimId}/${name}.${fileExt}"/></video>`}
-                        />
-                      ) : (
-                        <ClickToCopy
-                          id={'embed-text-image'}
-                          value={`<img src="${host}/${claimId}/${name}.${fileExt}"/>`}
-                        />
-                      )}
-                    </div>
-                  }
-                />
-              </Row>
+                <Row>
+                  <RowLabeledAlt
+                    label={
+                      <Label value={'Embed'} />
+                    }
+                    content={
+                      <div>
+                        {(contentType === 'video/mp4') ? (
+                          <ClickToCopy
+                            id={'embed-text-video'}
+                            value={`<video width="100%" controls poster="${thumbnail}" src="${host}/${claimId}/${name}.${fileExt}"/></video>`}
+                          />
+                        ) : (
+                          <ClickToCopy
+                            id={'embed-text-image'}
+                            value={`<img src="${host}/${claimId}/${name}.${fileExt}"/>`}
+                          />
+                        )}
+                      </div>
+                    }
+                  />
+                </Row>
+              </div>
 
               <Row>
                 <SpaceBetween>

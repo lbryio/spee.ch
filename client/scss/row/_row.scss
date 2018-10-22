@@ -58,3 +58,25 @@
   }
 
 }
+
+
+@media (max-width: $break-point-tablet) and (min-width: $break-point-phone) {
+  .tablet-inline-row {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+
+    >.row {
+      flex: 1;
+      margin: 0 15px;
+
+      &:first-child {
+        margin-left: 0;
+      }
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+}
