@@ -19,7 +19,7 @@ class VerticalCollapsibleSplit extends React.Component {
         <div className='visible-content' data-name={this.props.name}>
           {this.props.top}
           <button className='collapse-button' onClick={this.collapse}>
-            {this.state.closed ? <Icon.MinusCircle /> : <Icon.PlusCircle className='plus-icon' /> }
+            {this.state.closed ? <Icon.PlusCircle className='plus-icon' />  : <Icon.MinusCircle /> }
           </button>
         </div>
         <div className='collapse-content' data-name={this.props.name}>

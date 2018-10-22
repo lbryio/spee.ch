@@ -11,7 +11,7 @@ import * as Icon from 'react-feather';
 
 class AssetInfo extends React.Component {
   render () {
-    const { asset: { shortId, claimData : { channelName, certificateId, description, name, claimId, fileExt, contentType, thumbnail, host } } } = this.props;
+    const { asset: { shortId, claimData: { channelName, certificateId, description, name, claimId, fileExt, contentType, thumbnail, host } } } = this.props;
     return (
       <div className='asset-information-wrap'>
         <HorizontalSplit
