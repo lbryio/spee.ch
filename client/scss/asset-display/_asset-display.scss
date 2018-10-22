@@ -115,9 +115,12 @@
     width: 360px;
     padding-bottom: 80px;
     @media (max-width: $break-point-tablet) {
-      padding: 0;
+      padding: 22px 0 0;
       width: 100%;
+      max-width: 600px;
+      margin: 0px auto 60px;
       margin-bottom: 60px;
+      border-top: 1px solid $grey-alt;
     }
   }
   .asset-information {
@@ -125,7 +128,7 @@
     @media (max-width: $break-point-tablet) {
       min-width: 100%;
       width: 100%;
-      margin-bottom: 60px;
+      margin-bottom: 30px;
     }
 
   }
@@ -137,6 +140,7 @@
   border-top: 1px solid $grey-alt;
   padding-bottom: 80px;
   @media (max-width: $break-point-tablet) {
+    padding-top: 22px;
     padding-bottom: 0;
   }
 }
