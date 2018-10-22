@@ -6,7 +6,7 @@ const { sendGATimingEvent } = require('../../../../utils/googleAnalytics.js');
 const { handleErrorResponse } = require('../../../utils/errorHandlers.js');
 const publish = require('../publish/publish.js');
 const parsePublishApiRequestBody = require('../publish/parsePublishApiRequestBody');
-const {parsePublishApiRequestFiles, parsePublishApiRequestThumbnail} = require('../publish/parsePublishApiRequestFiles.js');
+const parsePublishApiRequestFiles = require('../publish/parsePublishApiRequestFiles.js');
 const authenticateUser = require('../publish/authentication.js');
 const createThumbnailPublishParams = require('../publish/createThumbnailPublishParams.js');
 
@@ -66,12 +66,7 @@ const claimUpdate = ({ body, files, headers, ip, originalUrl, user, tor }, res) 
 
   try {
     ({name, nsfw, license, title, description, thumbnail} = parsePublishApiRequestBody(body));
-    if (files.file) {
-      ({fileName, filePath, fileExtension, fileType} = parsePublishApiRequestFiles(files));
-      if (files.thumbnail) {
-        ({thumbnailFileName, thumbnailFilePath, thumbnailFileType} = parsePublishApiRequestThumbnail(files));
-      }
-    }
+    ({fileName, filePath, fileExtension, fileType, thumbnailFileName, thumbnailFilePath, thumbnailFileType} = parsePublishApiRequestFiles(files));
     ({channelName, channelId, channelPassword} = body);
   } catch (error) {
     return res.status(400).json({success: false, message: error.message});
