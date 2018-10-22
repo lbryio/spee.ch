@@ -61,6 +61,10 @@
 
 
 @media (max-width: $break-point-tablet) and (min-width: $break-point-phone) {
+  .row {
+    margin-bottom: 1.4em;
+  }
+
   .tablet-inline-row {
     display: flex;
     justify-content: space-between;
@@ -68,7 +72,7 @@
 
     >.row {
       flex: 1;
-      margin: 0 15px;
+      margin: 0 15px 1.4em;
 
       &:first-child {
         margin-left: 0;
