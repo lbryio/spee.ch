@@ -34,6 +34,10 @@
   letter-spacing: 0;
   text-align: center;
   line-height: 32px;
+
+  @media (max-width: $break-point-tablet) {
+    padding: 0 20px;
+  }
 }
 
 .asset-image, .asset-video {
@@ -51,10 +55,6 @@
   margin: 16px;
   padding: 6px;
 }
-
-// .vertical-split .asset-display {
-//     height: 90vh;
-// }
 
 .visible-content {
   width: 100%;
@@ -137,6 +137,6 @@
   border-top: 1px solid $grey-alt;
   padding-bottom: 80px;
   @media (max-width: $break-point-tablet) {
-    padding: 0;
+    padding-bottom: 0;
   }
 }

@@ -23,7 +23,6 @@ module.exports = (helmet, html, preloadedState) => {
                 window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(/</g, '\\\u003c')}
             </script>
             <script src="/bundle/bundle.js"></script>
-            <script src="/assets/js/feather.min.js"></script>
         </body>
     </html>
   `;
