@@ -63,19 +63,22 @@ export default (db, table, sequelize) => ({
     });
   },
 
-  getAllChannelClaims: async (channelClaimId) => {
+  getAllChannelClaims: async (channelClaimId, bidState = 'Controlling') => {
     logger.debug(`claim.getAllChannelClaims for ${channelClaimId}`);
+    const selectWhere = {publisher_id: channelClaimId};
+    if (bidState) {
+      selectWhere.bid_state = bidState;
+    }
     return await table.findAll({
-      where: { publisher_id: channelClaimId },
+      where: selectWhere,
       order: [['height', 'DESC']],
     })
-    .then(channelClaimsArray => {
-      if(channelClaimsArray.length === 0) {
-        return null;
-      }
-
-      return channelClaimsArray;
-    })
+      .then(channelClaimsArray => {
+        if (channelClaimsArray.length === 0) {
+          return null;
+        }
+        return channelClaimsArray;
+      });
   },
 
   getClaimIdByLongChannelId: async (channelClaimId, claimName) => {
