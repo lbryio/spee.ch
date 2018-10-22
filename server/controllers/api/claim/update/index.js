@@ -66,7 +66,7 @@ const claimUpdate = ({ body, files, headers, ip, originalUrl, user, tor }, res) 
 
   try {
     ({name, nsfw, license, title, description, thumbnail} = parsePublishApiRequestBody(body));
-    ({fileName, filePath, fileExtension, fileType, thumbnailFileName, thumbnailFilePath, thumbnailFileType} = parsePublishApiRequestFiles(files));
+    ({fileName, filePath, fileExtension, fileType, thumbnailFileName, thumbnailFilePath, thumbnailFileType} = parsePublishApiRequestFiles(files, true));
     ({channelName, channelId, channelPassword} = body);
   } catch (error) {
     return res.status(400).json({success: false, message: error.message});
