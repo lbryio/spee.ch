@@ -4,12 +4,14 @@
   // border-bottom: 0.5px solid $tertiary-color;
   .select--arrow {
     padding: 0 1.5em 0 $input-padding;
+    font-size: 14px;
   }
 }
 
 .nav-bar-link {
   padding: calc(1em - 2px);
   display: inline-block;
+  font-size: 14px;
 }
 
 .nav-bar-logo {
