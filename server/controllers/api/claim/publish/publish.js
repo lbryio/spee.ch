@@ -14,7 +14,7 @@ const publish = async (publishParams, fileName, fileType, filePath) => {
   try {
     publishResults = await publishClaim(publishParams);
     logger.info(`Successfully published ${publishParams.name} ${fileName}`, publishResults);
-
+    const outpoint = `${publishResults.output.txid}:${publishResults.output.nout}`;
     // get the channel information
     if (publishParams.channel_name) {
       logger.debug(`this claim was published in channel: ${publishParams.channel_name}`);
@@ -50,7 +50,7 @@ const publish = async (publishParams, fileName, fileType, filePath) => {
     ]);
     logger.info('File and Claim records successfully associated');
 
-    return claimRecord;
+    return Object.assign({}, claimRecord, {outpoint});
   } catch (err) {
     // parse daemon response when err is a string
     // this needs work
