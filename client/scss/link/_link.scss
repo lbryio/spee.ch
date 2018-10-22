@@ -48,6 +48,10 @@ a, a:visited {
       stroke: $grey;
       transition: all 0.2s ease;
     }
+
+    @media (max-width: $break-point-x-small) {
+      padding-top: 0;
+    }
   }
   &:hover {
     .link-text {
