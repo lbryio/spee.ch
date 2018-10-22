@@ -6,6 +6,13 @@
   align-items    : center;
 };
 
+.collapse-content {
+  @media (max-width: $break-point-tablet) {
+    max-width: 100%;
+    width: 100%;
+  }
+}
+
 .collapse-content.closed{
   display: none;
 }

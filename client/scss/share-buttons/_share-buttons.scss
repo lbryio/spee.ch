@@ -1,7 +1,6 @@
 .share-buttons {
     display: flex;
     align-items: center;
-    margin: 0 -7px;
     a {
         display: block;
         width: 30px;
@@ -38,6 +37,10 @@
             img {
                 margin-top: 7px;
             }
+        }
+
+        &:first-child{
+            margin-left: 0px;
         }
 
         &:hover {
