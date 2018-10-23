@@ -11,7 +11,7 @@ import * as Icon from 'react-feather';
 
 class AssetInfo extends React.Component {
   render () {
-    const { asset: { shortId, claimData: { channelName, certificateId, description, name, claimId, fileExt, contentType, thumbnail, host } } } = this.props;
+    const { asset: { shortId, claimData: { channelName, certificateId, description, name, address, claimId, fileExt, contentType, thumbnail, host } } } = this.props;
     return (
       <div className='asset-information-wrap'>
         <HorizontalSplit
@@ -135,16 +135,18 @@ class AssetInfo extends React.Component {
                     Hosted via the <a className={'link--brand link--hover'} href={'https://lbry.io/get'} target={'_blank'}>LBRY</a> blockchain
                   </p>
                 </Row>
-                <div className='claim-address'>
-                  <RowLabeledAlt
-                    label={
-                      <Label value={'Claim Address'} />
-                    }
-                    content={
-                      <a className={'link--brand link--hover'} href={'https://lbry.io/get'} target={'_blank'}>Place Claim Address Here</a>
-                    }
-                  />
-                </div>
+                {address && (
+                  <div className='claim-address'>
+                    <RowLabeledAlt
+                      label={
+                        <Label value={'Claim Address'} />
+                      }
+                      content={
+                        <a className={'link--brand link--hover'} href={'https://lbry.io/get'} target={'_blank'}>{address}</a>
+                      }
+                    />
+                  </div>
+                )}
               </div>
 
             </div>

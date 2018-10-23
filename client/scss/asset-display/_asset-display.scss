@@ -150,7 +150,6 @@
       padding-bottom: 30px;
       border-bottom: 1px solid $grey-alt;
     }
-
   }
 
 }
@@ -163,4 +162,13 @@
     padding-top: 22px;
     padding-bottom: 0;
   }
+
+    .claim-address {
+      .link--brand {
+        font-size: 12px;
+        font-weight: 300;
+        line-height: 18px;
+      }
+    }
+
 }
