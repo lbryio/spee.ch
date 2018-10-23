@@ -7,7 +7,6 @@
   background: #F6F6F6;
   width: 100%;
   position: relative;
-  &:before,
   &:after {
     content: '';
     position: absolute;
@@ -16,14 +15,9 @@
     height: 1px;
     background: transparent;
     left: 0;
-    top: 0;
-  }
-
-  &:after {
     top: auto;
     bottom: 0;
   }
-
 }
 
 .asset-title {
@@ -165,7 +159,7 @@
 
     .claim-address {
       .link--brand {
-        font-size: 12px;
+        font-size: 14px;
         font-weight: 300;
         line-height: 18px;
       }

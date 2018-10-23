@@ -11,6 +11,7 @@
   .select--arrow {
     padding: 0 1.5em 0 $input-padding;
     font-size: 14px;
+    letter-spacing: 0.4px;
     text-transform: uppercase;
   }
 }
@@ -19,6 +20,7 @@
   padding: calc(1em - 2px);
   display: inline-block;
   font-size: 14px;
+  letter-spacing: 0.4px;
   text-transform: uppercase;
 }
 
