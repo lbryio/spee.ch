@@ -8,6 +8,8 @@ const AboutSpeechDetails = () => {
       <Row>
         <p className={'text--large'}>
           <Link to='/tos'>Terms of Service</Link>
+          <br />
+          <Link to='/faq'>Frequently Asked Questions</Link>
         </p>
       </Row>
       <Row>
