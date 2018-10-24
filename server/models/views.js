@@ -48,7 +48,7 @@ module.exports = (sequelize, { BOOLEAN, DATE, STRING }) => {
     const groupString = 'claimId, publisherId, isChannel';
 
     return sequelize.query(
-      `SELECT ${selectString} FROM views where time > '${sqlTime}' GROUP BY ${groupString}`,
+      `SELECT ${selectString} FROM Views WHERE time > '${sqlTime}' GROUP BY ${groupString}`,
       { type: sequelize.QueryTypes.SELECT }
     );
   }

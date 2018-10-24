@@ -65,7 +65,7 @@ module.exports = (sequelize, { BOOLEAN, DATE, FLOAT, INTEGER, STRING }) => {
 
     const selectString = 'DISTINCT(claimId), weight';
     const whereString = `isChannel = false and time > '${sqlTime}'`;
-    const query = `SELECT ${selectString} FROM trending WHERE ${whereString} ORDER BY weight DESC LIMIT ${limit}`
+    const query = `SELECT ${selectString} FROM Trending WHERE ${whereString} ORDER BY weight DESC LIMIT ${limit}`
 
     return await sequelize.query(query, { type: sequelize.QueryTypes.SELECT });
   };
