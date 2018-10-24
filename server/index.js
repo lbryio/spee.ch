@@ -177,7 +177,7 @@ function Server () {
       .then(() => {
         logger.info('Spee.ch startup is complete');
 
-        setInterval(processTrending, .2 * 60000) // 30 minutes
+        setInterval(processTrending, 30 * 60000) // 30 minutes
       })
       .catch(error => {
         if (error.code === 'ECONNREFUSED') {
