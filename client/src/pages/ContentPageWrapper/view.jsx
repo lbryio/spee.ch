@@ -5,7 +5,12 @@ import ShowAssetDetails from '@pages/ShowAssetDetails';
 import ShowChannel from '@pages/ShowChannel';
 import { withRouter } from 'react-router-dom';
 
-import { CHANNEL, ASSET_LITE, ASSET_DETAILS } from '../../constants/show_request_types';
+import {
+  CHANNEL,
+  ASSET_LITE,
+  ASSET_DETAILS,
+  SPECIAL_ASSET,
+} from '../../constants/show_request_types';
 
 class ContentPageWrapper extends React.Component {
   componentDidMount () {
@@ -31,6 +36,8 @@ class ContentPageWrapper extends React.Component {
         return <ShowAssetLite />;
       case ASSET_DETAILS:
         return <ShowAssetDetails />;
+      case SPECIAL_ASSET:
+        return <ShowChannel />;
       default:
         return <p>loading...</p>;
     }

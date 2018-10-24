@@ -11,12 +11,18 @@ const httpContext = require('express-http-context');
 
 // load local modules
 const db = require('./models');
-const requestLogger = require('./middleware/requestLogger.js');
-const createDatabaseIfNotExists = require('./models/utils/createDatabaseIfNotExists.js');
+const requestLogger = require('./middleware/requestLogger');
+const createDatabaseIfNotExists = require('./models/utils/createDatabaseIfNotExists');
 const { getWalletBalance } = require('./lbrynet/index');
-const configureLogging = require('./utils/configureLogging.js');
-const configureSlack = require('./utils/configureSlack.js');
-const speechPassport = require('./speechPassport/index');
+const configureLogging = require('./utils/configureLogging');
+const configureSlack = require('./utils/configureSlack');
+const speechPassport = require('./speechPassport');
+const processTrending = require('./utils/processTrending');
+
+const {
+  logMetricsMiddleware,
+  setRouteDataInContextMiddleware,
+} = require('./middleware/logMetricsMiddleware');
 
 const {
   details: { port: PORT },
@@ -26,36 +32,6 @@ const {
     performUpdates,
   },
 } = require('@config/siteConfig');
-
-function logMetricsMiddleware(req, res, next) {
-  res.on('finish', () => {
-    const userAgent = req.get('user-agent');
-    const routePath = httpContext.get('routePath');
-
-    db.Metrics.create({
-      isInternal: /node\-fetch/.test(userAgent),
-      isChannel: res.isChannel,
-      claimId: res.claimId,
-      routePath: httpContext.get('routePath'),
-      params: JSON.stringify(req.params),
-      ip: req.headers['x-forwarded-for'] || req.connection.remoteAddress,
-      request: req.url,
-      routeData: JSON.stringify(httpContext.get('routeData')),
-      referrer: req.get('referrer'),
-      userAgent,
-    });
-  });
-
-  next();
-}
-
-function setRouteDataInContextMiddleware(routePath, routeData) {
-  return function (req, res, next) {
-    httpContext.set('routePath', routePath);
-    httpContext.set('routeData', routeData);
-    next();
-  };
-}
 
 function Server () {
   this.initialize = () => {
@@ -200,6 +176,8 @@ function Server () {
       })
       .then(() => {
         logger.info('Spee.ch startup is complete');
+
+        setInterval(processTrending, 30 * 60000) // 30 minutes
       })
       .catch(error => {
         if (error.code === 'ECONNREFUSED') {

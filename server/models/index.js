@@ -8,7 +8,9 @@ const Claim = require('./claim');
 const File = require('./file');
 const Metrics = require('./metrics');
 const Tor = require('./tor');
+const Trending = require('./trending');
 const User = require('./user');
+const Views = require('./views');
 
 const {
   database,
@@ -56,7 +58,9 @@ db['Claim'] = sequelize.import('Claim', Claim);
 db['File'] = sequelize.import('File', File);
 db['Metrics'] = sequelize.import('Metrics', Metrics);
 db['Tor'] = sequelize.import('Tor', Tor);
+db['Trending'] = sequelize.import('Trending', Trending);
 db['User'] = sequelize.import('User', User);
+db['Views'] = sequelize.import('Views', Views);
 
 // run model.association for each model in the db object that has an association
 logger.info('associating db models...');

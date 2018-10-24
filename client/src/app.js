@@ -9,6 +9,7 @@ import LoginPage from '@pages/LoginPage';
 import ContentPageWrapper from '@pages/ContentPageWrapper';
 import FourOhFourPage from '@pages/FourOhFourPage';
 import MultisitePage from '@pages/MultisitePage';
+import PopularPage from '@pages/PopularPage';
 
 const App = () => {
   return (
@@ -19,6 +20,7 @@ const App = () => {
       <Route exact path='/faq' component={FaqPage} />
       <Route exact path='/login' component={LoginPage} />
       <Route exact path='/multisite' component={MultisitePage} />
+      <Route exact path='/popular' component={PopularPage} />
       <Route exact path='/:identifier/:claim' component={ContentPageWrapper} />
       <Route exact path='/:claim' component={ContentPageWrapper} />
       <Route component={FourOhFourPage} />

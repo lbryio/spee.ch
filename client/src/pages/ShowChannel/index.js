@@ -6,6 +6,7 @@ const mapStateToProps = ({ show, site, channel }) => {
   const requestId = show.request.id;
   // select request
   const previousRequest = show.requestList[requestId] || null;
+
   // select channel
   let thisChannel;
   if (previousRequest) {

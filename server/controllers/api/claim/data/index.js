@@ -1,7 +1,7 @@
 const { handleErrorResponse } = require('../../../utils/errorHandlers.js');
 const getClaimData = require('server/utils/getClaimData');
 const chainquery = require('chainquery');
-const db = require('../../../../models');
+const db = require('server/models');
 
 /*
 
@@ -16,7 +16,7 @@ const claimData = async ({ ip, originalUrl, body, params }, res) => {
 
   try {
     let resolvedClaim = await chainquery.claim.queries.resolveClaim(claimName, claimId).catch(() => {});
-    
+
     if(!resolvedClaim) {
       resolvedClaim = await db.Claim.resolveClaim(claimName, claimId);
     }

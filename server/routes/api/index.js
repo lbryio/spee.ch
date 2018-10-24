@@ -17,6 +17,7 @@ const claimPublish = require('../../controllers/api/claim/publish');
 const claimResolve = require('../../controllers/api/claim/resolve');
 const claimShortId = require('../../controllers/api/claim/shortId');
 const fileAvailability = require('../../controllers/api/file/availability');
+const specialClaims = require('../../controllers/api/special/claims');
 const userPassword = require('../../controllers/api/user/password');
 const publishingConfig = require('../../controllers/api/config/site/publishing');
 const getTorList = require('../../controllers/api/tor');
@@ -83,6 +84,10 @@ module.exports = {
   '/api/channel/data/:channelName/:channelClaimId': { controller: [ torCheckMiddleware, channelData ] },
   '/api/channel/data/:channelName/:channelClaimId': { controller: [ torCheckMiddleware, channelData ] },
   '/api/channel/claims/:channelName/:channelClaimId/:page': { controller: [ torCheckMiddleware, channelClaims ] },
+
+  // sepcial routes
+  '/api/special/:name/:page': { controller: [ torCheckMiddleware, specialClaims ] },
+
   // claim routes
   '/api/claim/availability/:name': { controller: [ torCheckMiddleware, claimAvailability ] },
   '/api/claim/data/:claimName/:claimId': { controller: [ torCheckMiddleware, claimData ] },
