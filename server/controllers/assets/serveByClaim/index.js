@@ -37,7 +37,7 @@ const serveByClaim = (req, res) => {
     ({ claimName } = lbryUri.parseClaim(params.claim));
     logger.debug('serve request:', { headers, ip, originalUrl, params });
 
-    getClaimIdAndServeAsset(null, null, claimName, null, originalUrl, ip, res);
+    getClaimIdAndServeAsset(null, null, claimName, null, originalUrl, ip, res, headers);
 
     sendGAServeEvent(headers, ip, originalUrl);
   } catch (error) {

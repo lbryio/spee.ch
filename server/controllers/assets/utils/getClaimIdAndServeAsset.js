@@ -17,7 +17,7 @@ const CONTENT_UNAVAILABLE = 'CONTENT_UNAVAILABLE';
 
 const { publishing: { serveOnlyApproved, approvedChannels } } = require('@config/siteConfig');
 
-const getClaimIdAndServeAsset = (channelName, channelClaimId, claimName, claimId, originalUrl, ip, res) => {
+const getClaimIdAndServeAsset = (channelName, channelClaimId, claimName, claimId, originalUrl, ip, res, headers) => {
   getClaimId(channelName, channelClaimId, claimName, claimId)
     .then(fullClaimId => {
       claimId = fullClaimId;
@@ -47,13 +47,15 @@ const getClaimIdAndServeAsset = (channelName, channelClaimId, claimName, claimId
       logger.debug('Outpoint:', outpoint);
       return db.Blocked.isNotBlocked(outpoint).then(() => {
         // If content was found, is approved, and not blocked - log a view.
-        db.Views.create({
-          time: Date.now(),
-          isChannel: false,
-          claimId: claimDataValues.claim_id || claimDataValues.claimId,
-          publisherId: claimDataValues.publisher_id || claimDataValues.certificateId,
-          ip,
-        });
+        if(headers && headers['user-agent'] && /LBRY/.test(headers['user-agent']) === false) {
+          db.Views.create({
+            time: Date.now(),
+            isChannel: false,
+            claimId: claimDataValues.claim_id || claimDataValues.claimId,
+            publisherId: claimDataValues.publisher_id || claimDataValues.certificateId,
+            ip,
+          });
+        }
 
         return;
       });
