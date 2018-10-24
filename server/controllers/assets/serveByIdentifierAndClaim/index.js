@@ -47,7 +47,7 @@ const serverByIdentifierAndClaim = (req, res) => {
       claimId,
     });
 
-    getClaimIdAndServeAsset(channelName, channelClaimId, claimName, claimId, originalUrl, ip, res);
+    getClaimIdAndServeAsset(channelName, channelClaimId, claimName, claimId, originalUrl, ip, res, headers);
 
     sendGAServeEvent(headers, ip, originalUrl);
   } catch (error) {
