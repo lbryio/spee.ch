@@ -37,11 +37,26 @@ const getClaimIdAndServeAsset = (channelName, channelClaimId, claimName, claimId
       return claim;
     })
     .then(claim => {
-      if (serveOnlyApproved && !isApprovedChannel({ longId: claim.dataValues.publisher_id }, approvedChannels)) {
+      let claimDataValues = claim.dataValues;
+
+      if (serveOnlyApproved && !isApprovedChannel({ longId: claimDataValues.publisher_id || claimDataValues.certificateId }, approvedChannels)) {
         throw new Error(CONTENT_UNAVAILABLE);
       }
-      logger.debug('Outpoint:', claim.dataValues.outpoint);
-      return db.Blocked.isNotBlocked(claim.dataValues.outpoint);
+
+      let outpoint = claimDataValues.outpoint || `${claimDataValues.transaction_hash_id}:${claimDataValues.vout}`;
+      logger.debug('Outpoint:', outpoint);
+      return db.Blocked.isNotBlocked(outpoint).then(() => {
+        // If content was found, is approved, and not blocked - log a view.
+        db.Views.create({
+          time: Date.now(),
+          isChannel: false,
+          claimId: claimDataValues.claim_id || claimDataValues.claimId,
+          publisherId: claimDataValues.publisher_id || claimDataValues.certificateId,
+          ip,
+        });
+
+        return;
+      });
     })
     .then(() => {
       return db.File.findOne({

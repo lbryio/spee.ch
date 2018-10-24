@@ -1,5 +1,10 @@
 import * as actions from '../constants/show_action_types';
-import { CHANNEL, ASSET_LITE, ASSET_DETAILS } from '../constants/show_request_types';
+import {
+  ASSET_DETAILS,
+  ASSET_LITE,
+  CHANNEL,
+  SPECIAL_ASSET,
+} from '../constants/show_request_types';
 
 // basic request parsing
 export function onHandleShowPageUri (params, url) {
@@ -35,6 +40,15 @@ export function onNewChannelRequest (channelName, channelId) {
   return {
     type: actions.CHANNEL_REQUEST_NEW,
     data: { requestType, requestId, channelName, channelId },
+  };
+}
+
+export function onNewSpecialAssetRequest (name) {
+  const requestType = SPECIAL_ASSET;
+  const requestId = `sar#${name}`;
+  return {
+    type: actions.SPECIAL_ASSET_REQUEST_NEW,
+    data: { requestType, requestId, name, channelName: name, channelId: name },
   };
 }
 

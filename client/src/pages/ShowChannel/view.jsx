@@ -7,6 +7,9 @@ import Row from '@components/Row';
 
 class ShowChannel extends React.Component {
   render () {
+    console.log({
+      props: this.props
+    })
     const { channel, homeChannel } = this.props;
     if (channel) {
       const { name, longId, shortId } = channel;
