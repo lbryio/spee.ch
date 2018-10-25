@@ -14,6 +14,12 @@ class VerticalCollapsibleSplit extends React.Component {
   }
 
   render () {
+    let {
+      props,
+      state,
+      collapse,
+    } = this;
+
     return (
       <div className={'vertical-split'}>
         <div className='visible-content' data-name={this.props.name}>
