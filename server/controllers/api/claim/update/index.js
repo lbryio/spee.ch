@@ -42,25 +42,7 @@ const claimUpdate = ({ body, files, headers, ip, originalUrl, user, tor }, res) 
   }
 
   // define variables
-  let channelName;
-  let channelId;
-  let channelPassword;
-  let description;
-  let fileName;
-  let filePath;
-  let fileType;
-  let gaStartTime;
-  let thumbnail;
-  let fileExtension;
-  let license;
-  let name;
-  let nsfw;
-  let thumbnailFileName;
-  let thumbnailFilePath;
-  let thumbnailFileType;
-  let title;
-  let claimRecord;
-  let metadata;
+  let channelName, channelId, channelPassword, description, fileName, filePath, fileType, gaStartTime, thumbnail, fileExtension, license, name, nsfw, thumbnailFileName, thumbnailFilePath, thumbnailFileType, title, claimRecord, metadata;
   // record the start time of the request
   gaStartTime = Date.now();
 
