@@ -40,6 +40,7 @@
   max-height: 100%;
   object-fit: contain;
   object-position: center;
+
   @media (max-width: $break-point-small) {
     max-width: calc(100% - 30px);
   }
@@ -55,12 +56,15 @@
   margin: 0;
   padding-bottom: 30px;
   position: relative;
+
   &.closed {
     box-shadow: none;
+
     &:after {
       box-shadow: none;
     }
   }
+
   &:before{
     content: '';
     width: 100%;
@@ -69,6 +73,7 @@
     z-index: 100;
     box-shadow: inset 2px 3px 3px 2px rgba(169, 173, 186, 0.2);
   }
+
   &:after {
     content: '';
     width: 100%;
@@ -78,11 +83,11 @@
     z-index: 100;
     box-shadow: 0px 2px 3px 2px rgba(169, 173, 186, 0.2);
   }
-
 }
 
 .asset-information-wrap {
   max-width: 800px;
+
   @media (max-width: $break-point-tablet) {
     max-width: 100%;
     margin: 0px auto;
@@ -95,12 +100,15 @@
 
   .horizontal-split {
     justify-content: center;
+
     .column {
       padding-top: 40px;
+
       &:first-child {
         padding-right: 40px;
         margin-right: -1px;
         border-right: 1px solid $grey-alt;
+
         @media (max-width: $break-point-tablet) {
           order: 2;
           border: none;
@@ -108,16 +116,17 @@
           margin: 0;
         }
       }
+
       &:last-child {
         padding-left: 60px;
         border-left: 1px solid $grey-alt;
+
         @media (max-width: $break-point-tablet) {
           border: none;
           padding: 40px 0 0 0;
           margin: 0;
         }
       }
-
     }
   }
 
@@ -129,6 +138,7 @@
     line-height: 18px;
     width: 360px;
     padding-bottom: 80px;
+
     @media (max-width: $break-point-tablet) {
       padding: 0;
       width: 100%;
@@ -136,8 +146,10 @@
       margin: 22px 0 60px;
     }
   }
+  
   .asset-information {
     width: 320px;
+
     @media (max-width: $break-point-tablet) {
       min-width: 100%;
       width: 100%;
@@ -152,12 +164,14 @@
   padding-top: 30px;
   border-top: 1px solid $grey-alt;
   padding-bottom: 80px;
+
   @media (max-width: $break-point-tablet) {
     padding-top: 22px;
     padding-bottom: 0;
   }
 
     .claim-address {
+
       .link--brand {
         font-size: 14px;
         font-weight: 300;
