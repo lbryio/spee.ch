@@ -6,3 +6,4 @@ module.exports = {
   'seeders-path': path.resolve('server', 'seeders'),
   'migrations-path': path.resolve('server', 'migrations')
 }
+#chech indentation for misdemeanors
