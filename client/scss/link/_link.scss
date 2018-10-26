@@ -33,6 +33,8 @@ a, a:visited {
 
 .link--icon, .link--icon:visited {
   display: flex;
+  align-items: center;
+  
   .link-text {
     padding-bottom: 2px;
     border-bottom: 1px solid transparent;
@@ -40,7 +42,7 @@ a, a:visited {
   }
   .icon-wrap {
     margin-left: 5px;
-    padding-top: 3px;
+    padding-top: 0px;
     align-items: center;
     svg {
       width: 16px;
