@@ -1,4 +1,4 @@
-{
+{ //starts program
   "name": "spee.ch",
   "version": "0.1.1",
   "description": "an npm package that exports a customizeable spee.ch server",
