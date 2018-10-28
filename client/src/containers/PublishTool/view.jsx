@@ -24,7 +24,7 @@ class PublishTool extends React.Component {
             <React.Fragment>
               <Prompt
                 when={hasChanged}
-                message={SAVE}
+                message={(location) => location.pathname === '/' ? true : SAVE}
               />
               <PublishPreview isUpdate={isUpdate} uri={uri} />
             </React.Fragment>
