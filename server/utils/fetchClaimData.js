@@ -2,8 +2,7 @@ const chainquery = require('chainquery');
 const db = require('server/models');
 
 const fetchClaimData = async (params) => {
-  const name = params.claimName;
-  let claimId = params.claimId;
+  let { claimId, claimName: name } = params;
   if (claimId === 'none') claimId = null;
 
   const [cq, local] = await Promise.all([
@@ -12,8 +11,8 @@ const fetchClaimData = async (params) => {
   ]);
 
   if (!cq && !local) return null;
-  if (cq.name === name && !local) return cq;
-  if (local.name === name && !cq) return local;
+  if (cq && cq.name === name && !local) return cq;
+  if (local && local.name === name && !cq) return local;
   return local.updatedAt > cq.modified_at ? local : cq;
 };
 
