@@ -32,8 +32,8 @@ class PublishDetails extends React.Component {
     }
   }
   onCancel () {
-    const { isUpdate, clearFile, history } = this.props;
-    if (isUpdate) {
+    const { isUpdate, hasChanged, clearFile, history } = this.props;
+    if (isUpdate || !hasChanged) {
       history.push('/');
     } else {
       if (confirm(SAVE)) {

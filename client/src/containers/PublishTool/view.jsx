@@ -8,7 +8,7 @@ import { SAVE } from '../../constants/confirmation_messages';
 
 class PublishTool extends React.Component {
   render () {
-    const {disabled, file, isUpdate, uri, status} = this.props;
+    const {disabled, file, isUpdate, hasChanged, uri, status} = this.props;
     if (disabled) {
       return (
         <PublishDisabledMessage />
@@ -23,6 +23,7 @@ class PublishTool extends React.Component {
           return (
             <React.Fragment>
               <Prompt
+                when={hasChanged}
                 message={SAVE}
               />
               <PublishPreview isUpdate={isUpdate} uri={uri} />

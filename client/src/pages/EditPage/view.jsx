@@ -5,12 +5,13 @@ import PublishTool from '@containers/PublishTool';
 
 class EditPage extends React.Component {
   componentDidMount () {
-    const {asset, match, onHandleShowPageUri, clearFile, setUpdateTrue, updateMetadata} = this.props;
+    const {asset, match, onHandleShowPageUri, setUpdateTrue, setHasChanged, updateMetadata} = this.props;
     onHandleShowPageUri(match.params);
     setUpdateTrue();
     if (asset) {
       ['title', 'description', 'license', 'nsfw'].forEach(meta => updateMetadata(meta, asset.claimData[meta]));
     }
+    setHasChanged(false);
   }
   componentWillUnmount () {
     this.props.clearFile();

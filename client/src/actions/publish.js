@@ -20,6 +20,13 @@ export function setUpdateTrue () {
   };
 }
 
+export function setHasChanged (status) {
+  return {
+    type: actions.SET_HAS_CHANGED,
+    data: status,
+  };
+}
+
 export function updateMetadata (name, value) {
   return {
     type: actions.METADATA_UPDATE,

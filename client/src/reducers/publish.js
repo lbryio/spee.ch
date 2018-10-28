@@ -41,7 +41,8 @@ const initialState = {
     license    : '',
     nsfw       : false,
   },
-  isUpdate : false,
+  isUpdate: false,
+  hasChanged: false,
   thumbnail: null,
   thumbnailChannel,
   thumbnailChannelId,
@@ -52,6 +53,7 @@ export default function (state = initialState, action) {
     case actions.FILE_SELECTED:
       return Object.assign({}, state.isUpdate ? state : initialState, {  // note: clears to initial state
         file: action.data,
+        hasChanged: true,
       });
     case actions.FILE_CLEAR:
       return initialState;
@@ -60,14 +62,17 @@ export default function (state = initialState, action) {
         metadata: Object.assign({}, state.metadata, {
           [action.data.name]: action.data.value,
         }),
+        hasChanged: true,
       });
     case actions.CLAIM_UPDATE:
       return Object.assign({}, state, {
         claim: action.data,
+        hasChanged: true,
       });
     case actions.SET_PUBLISH_IN_CHANNEL:
       return Object.assign({}, state, {
         publishInChannel: action.channel,
+        hasChanged: true,
       });
     case actions.PUBLISH_STATUS_UPDATE:
       return Object.assign({}, state, {
@@ -84,17 +89,26 @@ export default function (state = initialState, action) {
         selectedChannel: action.data,
       });
     case actions.TOGGLE_METADATA_INPUTS:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         showMetadataInputs: action.data,
-      });
+      };
     case actions.THUMBNAIL_NEW:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         thumbnail: action.data,
-      });
+        hasChanged: true,
+      };
     case actions.SET_UPDATE_TRUE:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         isUpdate: true,
-      });
+      };
+    case actions.SET_HAS_CHANGED:
+      return {
+        ...state,
+        hasChanged: action.data,
+      };
     default:
       return state;
   }

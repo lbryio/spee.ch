@@ -12,9 +12,10 @@ const mapStateToProps = props => {
   }
   return {
     disabled: publish.disabled,
-    file    : publish.file,
-    status  : publish.status.status,
+    file: publish.file,
+    status: publish.status.status,
     isUpdate: publish.isUpdate,
+    hasChanged: publish.hasChanged,
     uri,
   };
 };

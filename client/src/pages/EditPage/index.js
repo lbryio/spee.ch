@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { setUpdateTrue, updateMetadata, clearFile } from '../../actions/publish';
+import { setUpdateTrue, setHasChanged, updateMetadata, clearFile } from '../../actions/publish';
 import { onHandleShowPageUri } from '../../actions/show';
 import { selectAsset } from '../../selectors/show';
 import View from './view';
@@ -17,6 +17,7 @@ const mapDispatchToProps = {
   updateMetadata,
   onHandleShowPageUri,
   setUpdateTrue,
+  setHasChanged,
   clearFile,
 };
 
