@@ -58,7 +58,7 @@ const createAssetMetaTags = (asset) => {
     'fb:app_id'          : '1371961932852223',
   };
   if (determineMediaType(contentType) === VIDEO) {
-    const videoEmbedUrl = `${host}/video-embed/${canonicalLink}`;
+    const videoEmbedUrl = `${host}/video-embed${canonicalLink}`;
     // card type tags
     metaTags['og:type'] = 'video.other';
     metaTags['twitter:card'] = 'player';
