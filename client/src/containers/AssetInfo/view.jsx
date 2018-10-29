@@ -36,7 +36,7 @@ class AssetInfo extends React.Component {
           </Row>
         )}
 
-        {claimViews && (
+        {claimViews ? (
           <Row>
             <RowLabeled
               label={
@@ -49,7 +49,7 @@ class AssetInfo extends React.Component {
               }
             />
           </Row>
-        )}
+        ) : null}
 
         <Row>
           <RowLabeled

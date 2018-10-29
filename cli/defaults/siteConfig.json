@@ -30,7 +30,8 @@
     "closedRegistration": false,
     "serveOnlyApproved": false,
     "publishOnlyApproved": false,
-    "approvedChannels": []
+    "approvedChannels": [],
+    "publishingChannelWhitelist": []
   },
   "startup": {
     "performChecks": true,
