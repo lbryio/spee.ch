@@ -16,6 +16,7 @@ const claimLongId = require('../../controllers/api/claim/longId');
 const claimPublish = require('../../controllers/api/claim/publish');
 const claimResolve = require('../../controllers/api/claim/resolve');
 const claimShortId = require('../../controllers/api/claim/shortId');
+const claimViews = require('../../controllers/api/claim/views');
 const fileAvailability = require('../../controllers/api/file/availability');
 const specialClaims = require('../../controllers/api/special/claims');
 const userPassword = require('../../controllers/api/user/password');
@@ -97,6 +98,7 @@ module.exports = {
   '/api/claim/publish': { method: 'post', controller: [ torCheckMiddleware, autoblockPublishMiddleware, multipartMiddleware, claimPublish ] },
   '/api/claim/resolve/:name/:claimId': { controller: [ torCheckMiddleware, claimResolve ] },
   '/api/claim/short-id/:longId/:name': { controller: [ torCheckMiddleware, claimShortId ] },
+  '/api/claim/views/:claimId': { controller: [ torCheckMiddleware, claimViews ] },
   // file routes
   '/api/file/availability/:name/:claimId': { controller: [ torCheckMiddleware, fileAvailability ] },
   // user routes

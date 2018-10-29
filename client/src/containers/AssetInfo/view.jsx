@@ -9,7 +9,16 @@ import ClickToCopy from '@components/ClickToCopy';
 
 class AssetInfo extends React.Component {
   render () {
-    const { asset: { shortId, claimData : { channelName, certificateId, description, name, claimId, fileExt, contentType, thumbnail, host } } } = this.props;
+    const {
+      asset: {
+        shortId,
+        claimData : {
+          channelName, certificateId, description, name, claimId, fileExt, contentType, thumbnail, host
+        },
+        claimViews,
+      }
+    } = this.props;
+
     return (
       <div>
         {channelName && (
@@ -21,6 +30,21 @@ class AssetInfo extends React.Component {
               content={
                 <span className='text'>
                   <Link to={`/${channelName}:${certificateId}`}>{channelName}</Link>
+                </span>
+              }
+            />
+          </Row>
+        )}
+
+        {claimViews && (
+          <Row>
+            <RowLabeled
+              label={
+                <Label value={'Views:'} />
+              }
+              content={
+                <span className='text'>
+                  {claimViews}
                 </span>
               }
             />

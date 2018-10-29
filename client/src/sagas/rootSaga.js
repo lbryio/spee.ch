@@ -1,6 +1,6 @@
 import { all } from 'redux-saga/effects';
 import { watchHandleShowPageUri, watchHandleShowHomepage } from './show_uri';
-import { watchNewAssetRequest } from './show_asset';
+import { watchNewAssetRequest, watchUpdateAssetViews } from './show_asset';
 import { watchNewChannelRequest, watchUpdateChannelClaims } from './show_channel';
 import { watchNewSpecialAssetRequest } from './show_special';
 import { watchFileIsRequested } from './file';
@@ -26,5 +26,6 @@ export function * rootSaga () {
     watchChannelCreate(),
     watchChannelLoginCheck(),
     watchChannelLogout(),
+    watchUpdateAssetViews(),
   ]);
 }
