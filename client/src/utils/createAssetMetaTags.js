@@ -1,6 +1,7 @@
 import siteConfig from '@config/siteConfig.json';
 import determineContentTypeFromExtension from './determineContentTypeFromExtension';
 import createMetaTagsArray from './createMetaTagsArray';
+import createCanonicalLink from '../../../utils/createCanonicalLink';
 
 const {
   details: {
@@ -37,8 +38,10 @@ const determineMediaType = (contentType) => {
 const createAssetMetaTags = (asset) => {
   const { claimData } = asset;
   const { contentType } = claimData;
-  const showUrl = `${host}/${claimData.claimId}/${claimData.name}`;
-  const serveUrl = `${host}/${claimData.claimId}/${claimData.name}.${claimData.fileExt}`;
+  const canonicalLink = createCanonicalLink({asset});
+  const showUrl = `${host}${canonicalLink}`;
+  const serveUrl = `${showUrl}.${claimData.fileExt}`;
+
   const ogTitle = claimData.title || claimData.name;
   const ogDescription = claimData.description || defaultDescription;
   const ogThumbnailContentType = determineContentTypeFromExtension(claimData.thumbnail);
@@ -55,7 +58,7 @@ const createAssetMetaTags = (asset) => {
     'fb:app_id'          : '1371961932852223',
   };
   if (determineMediaType(contentType) === VIDEO) {
-    const videoEmbedUrl = `${host}/video-embed/${claimData.name}/${claimData.claimId}`;
+    const videoEmbedUrl = `${host}/video-embed/${canonicalLink}`;
     // card type tags
     metaTags['og:type'] = 'video.other';
     metaTags['twitter:card'] = 'player';
