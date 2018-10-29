@@ -1,6 +1,5 @@
-const fs = require('fs');
-
 // middleware
+const { autoblockPublishMiddleware, autoblockPublishBodyMiddleware } = require('../../middleware/autoblockPublishMiddleware');
 const multipartMiddleware = require('../../middleware/multipartMiddleware');
 const torCheckMiddleware = require('../../middleware/torCheckMiddleware');
 // route handlers
@@ -25,55 +24,7 @@ const getTorList = require('../../controllers/api/tor');
 const getBlockedList = require('../../controllers/api/blocked');
 const getOEmbedData = require('../../controllers/api/oEmbed');
 
-const logger = require('winston');
-const ipBanFile = './config/ipBan.txt';
-const forbiddenMessage = '<h1>Forbidden</h1>If you are seeing this by mistake, please contact us using <a href="https://chat.lbry.io/">https://chat.lbry.io/</a>';
 
-let ipCounts = {};
-let blockedAddresses = [];
-
-if(fs.existsSync(ipBanFile)) {
-  const lineReader = require('readline').createInterface({
-    input: require('fs').createReadStream(ipBanFile),
-  });
-
-  lineReader.on('line', (line) => {
-    if(line && line !== '') {
-      blockedAddresses.push(line);
-    }
-  });
-}
-
-const autoblockPublishMiddleware = (req, res, next) => {
-  let ip = (req.headers['x-forwarded-for'] || req.connection.remoteAddress).split(/,\s?/)[0];
-
-  if(blockedAddresses.indexOf(ip) !== -1) {
-    res.status(403).send(forbiddenMessage);
-    res.end();
-
-    return;
-  }
-
-  let count = ipCounts[ip] = (ipCounts[ip] || 0) + 1;
-
-  setTimeout(() => {
-    ipCounts[ip]--;
-    if(ipCounts[ip] === 0) {
-      delete ipCounts[ip];
-    }
-  }, 600000 /* 10 minute retainer */)
-
-  if(count === 10) {
-    logger.error(`Banning IP: ${ip}`);
-    blockedAddresses.push(ip);
-    res.status(403).send(forbiddenMessage);
-    res.end();
-
-    fs.appendFile(ipBanFile, ip + '\n', () => {});
-  } else {
-    next();
-  }
-}
 
 module.exports = {
   // homepage routes
@@ -95,7 +46,7 @@ module.exports = {
   '/api/claim/get/:name/:claimId': { controller: [ torCheckMiddleware, claimGet ] },
   '/api/claim/list/:name': { controller: [ torCheckMiddleware, claimList ] },
   '/api/claim/long-id': { method: 'post', controller: [ torCheckMiddleware, claimLongId ] }, // note: should be a 'get'
-  '/api/claim/publish': { method: 'post', controller: [ torCheckMiddleware, autoblockPublishMiddleware, multipartMiddleware, claimPublish ] },
+  '/api/claim/publish': { method: 'post', controller: [ torCheckMiddleware, autoblockPublishMiddleware, multipartMiddleware, autoblockPublishBodyMiddleware, claimPublish ] },
   '/api/claim/resolve/:name/:claimId': { controller: [ torCheckMiddleware, claimResolve ] },
   '/api/claim/short-id/:longId/:name': { controller: [ torCheckMiddleware, claimShortId ] },
   '/api/claim/views/:claimId': { controller: [ torCheckMiddleware, claimViews ] },
