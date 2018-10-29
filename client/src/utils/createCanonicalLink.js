@@ -11,12 +11,12 @@ const createBasicCanonicalLink = (page) => {
 };
 
 const createAssetCanonicalLink = (asset) => {
-  let channelName, certificateId, name, claimId;
+  let channelName, channelShortId, name, claimId;
   if (asset.claimData) {
-    ({ channelName, certificateId, name, claimId } = asset.claimData);
+    ({ channelName, channelShortId, name, claimId } = asset.claimData);
   }
   if (channelName) {
-    return `${host}/${channelName}:${certificateId}/${name}`;
+    return `${host}/${channelName}:${channelShortId}/${name}`;
   }
   return `${host}/${claimId}/${name}`;
 };
