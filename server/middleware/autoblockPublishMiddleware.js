@@ -54,15 +54,11 @@ const autoblockPublishMiddleware = (req, res, next) => {
 }
 
 const autoblockPublishBodyMiddleware = (req, res, next) => {
-  console.log('REQUEST BODY', req.body)
   if(req.body && publishingChannelWhitelist) {
     let ip = (req.headers['x-forwarded-for'] || req.connection.remoteAddress).split(/,\s?/)[0];
-
     const { channelName } = req.body;
 
-    console.log(channelName, publishingChannelWhitelist.indexOf(channelName) !== -1)
     if(channelName && publishingChannelWhitelist.indexOf(channelName) !== -1) {
-      console.log('whitelisted channelName')
       delete ipCounts[ip];
     }
   }
