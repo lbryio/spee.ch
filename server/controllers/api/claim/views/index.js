@@ -8,7 +8,6 @@ const db = require('server/models');
 */
 
 const claimViews = async ({ ip, originalUrl, body, params }, res) => {
-  const claimName = params.claimName;
   let claimId = params.claimId;
   if (claimId === 'none') claimId = null;
 
