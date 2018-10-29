@@ -51,7 +51,17 @@ module.exports = (sequelize, { BOOLEAN, DATE, STRING }) => {
       `SELECT ${selectString} FROM Views WHERE time > '${sqlTime}' GROUP BY ${groupString}`,
       { type: sequelize.QueryTypes.SELECT }
     );
-  }
+  };
+
+  Views.getGetUniqueViewsbByClaimId = (claimId) => {
+    return Views.count({
+      where: {
+        claimId,
+      },
+      distinct: true,
+      col: 'ip'
+    })
+  };
 
   return Views;
 };

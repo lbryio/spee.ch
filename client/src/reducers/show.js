@@ -47,11 +47,21 @@ export default function (state = initialState, action) {
       return Object.assign({}, state, {
         assetList: Object.assign({}, state.assetList, {
           [action.data.id]: {
-            error    : action.data.error,
-            name     : action.data.name,
-            claimId  : action.data.claimId,
-            shortId  : action.data.shortId,
-            claimData: action.data.claimData,
+            error     : action.data.error,
+            name      : action.data.name,
+            claimId   : action.data.claimId,
+            shortId   : action.data.shortId,
+            claimData : action.data.claimData,
+            claimViews: action.data.claimViews,
+          },
+        }),
+      });
+    case actions.ASSET_VIEWS_UPDATE:
+      return Object.assign({}, state, {
+        assetList: Object.assign({}, state.assetList, {
+          [action.data.id]: {
+            ...state.assetList[action.data.id],
+            claimViews: action.data.claimViews,
           },
         }),
       });

@@ -37,3 +37,8 @@ export function checkClaimAvailability (claim) {
   const url = `/api/claim/availability/${claim}`;
   return Request(url);
 }
+
+export function getClaimViews (claimId) {
+  const url = `/api/claim/views/${claimId}`;
+  return Request(url);
+}

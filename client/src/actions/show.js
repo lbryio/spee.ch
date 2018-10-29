@@ -91,10 +91,17 @@ export function addRequestToRequestList (id, error, key) {
 
 // asset actions
 
-export function addAssetToAssetList (id, error, name, claimId, shortId, claimData) {
+export function addAssetToAssetList (id, error, name, claimId, shortId, claimData, claimViews) {
   return {
     type: actions.ASSET_ADD,
-    data: { id, error, name, claimId, shortId, claimData },
+    data: { id, error, name, claimId, shortId, claimData, claimViews },
+  };
+}
+
+export function updateAssetViewsInList (id, claimId, claimViews) {
+  return {
+    type: actions.ASSET_VIEWS_UPDATE,
+    data: { id, claimId, claimViews },
   };
 }
 
