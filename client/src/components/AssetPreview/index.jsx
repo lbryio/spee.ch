@@ -1,9 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import createCanonicalLink from '../../../../utils/createCanonicalLink';
 
-const AssetPreview = ({ defaultThumbnail, claimData: { name, claimId, fileExt, contentType, thumbnail, title } }) => {
-  const embedUrl = `/${claimId}/${name}.${fileExt}`;
-  const showUrl = `/${claimId}/${name}`;
+const AssetPreview = ({ defaultThumbnail, claimData }) => {
+  const { name, fileExt, contentType, thumbnail, title } = claimData;
+  const showUrl = createCanonicalLink({ asset: { claimData } });
+  const embedUrl = `${showUrl}.${fileExt}`;
   return (
     <Link to={showUrl} className='asset-preview'>
       {(() => {
