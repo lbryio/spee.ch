@@ -6,19 +6,23 @@ import Row from '@components/Row';
 import SpaceBetween from '@components/SpaceBetween';
 import AssetShareButtons from '@components/AssetShareButtons';
 import ClickToCopy from '@components/ClickToCopy';
+import createCanonicalLink from '../../utils/createCanonicalLink';
 
 class AssetInfo extends React.Component {
   render () {
-    const {
-      asset: {
-        shortId,
-        claimData : {
-          channelName, certificateId, description, name, claimId, fileExt, contentType, thumbnail, host
-        },
-        claimViews,
-      }
-    } = this.props;
+    const { asset } = this.props;
+    const { shortId, claimData: { channelName, channelShortId, certificateId, description, name, claimId, fileExt, contentType, thumbnail, host } } = asset;
 
+    const assetCanonicalUrl = createCanonicalLink({asset});
+
+    let channelCanonicalUrl;
+    if (channelName) {
+      const channel = {
+        name: channelName,
+        shortId: channelShortId,
+      };
+      channelCanonicalUrl = createCanonicalLink({channel});
+    }
     return (
       <div>
         {channelName && (
@@ -29,7 +33,7 @@ class AssetInfo extends React.Component {
               }
               content={
                 <span className='text'>
-                  <Link to={`/${channelName}:${certificateId}`}>{channelName}</Link>
+                  <Link to={channelCanonicalUrl}>{channelName}</Link>
                 </span>
               }
             />

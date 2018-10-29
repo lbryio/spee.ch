@@ -6,34 +6,34 @@ const {
   },
 } = siteConfig;
 
-const createBasicCanonicalLink = (page) => {
-  return `${host}/${page}`;
+const createBasicCanonicalLink = (absolute, page) => {
+  return `${absolute ? host : ''}/${page}`;
 };
 
-const createAssetCanonicalLink = (asset) => {
+const createAssetCanonicalLink = (absolute, asset) => {
   let channelName, channelShortId, name, claimId;
   if (asset.claimData) {
     ({ channelName, channelShortId, name, claimId } = asset.claimData);
   }
   if (channelName) {
-    return `${host}/${channelName}:${channelShortId}/${name}`;
+    return `${absolute ? host : ''}/${channelName}:${channelShortId}/${name}`;
   }
-  return `${host}/${claimId}/${name}`;
+  return `${absolute ? host : ''}/${claimId}/${name}`;
 };
 
-const createChannelCanonicalLink = (channel) => {
-  const { name, longId } = channel;
-  return `${host}/${name}:${longId}`;
+const createChannelCanonicalLink = (absolute, channel) => {
+  const { name, longId, shortId } = channel;
+  return `${absolute ? host : ''}/${name}:${shortId ? shortId : longId}`;
 };
 
-const createCanonicalLink = (asset, channel, page) => {
+const createCanonicalLink = ({asset, channel, page, absolute = false}) => {
   if (asset) {
-    return createAssetCanonicalLink(asset);
+    return createAssetCanonicalLink(absolute, asset);
   }
   if (channel) {
-    return createChannelCanonicalLink(channel);
+    return createChannelCanonicalLink(absolute, channel);
   }
-  return createBasicCanonicalLink(page);
+  return createBasicCanonicalLink(absolute, page);
 };
 
 export default createCanonicalLink;

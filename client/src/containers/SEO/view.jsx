@@ -21,7 +21,12 @@ class SEO extends React.Component {
       asset,
       channel,
     });
-    const canonicalLink = createCanonicalLink(asset, channel, pageUri);
+    const canonicalLink = createCanonicalLink({
+      asset,
+      channel,
+      page: pageUri,
+      absolute: true,
+    });
     // render results
     return (
       <Helmet
