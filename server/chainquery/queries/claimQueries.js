@@ -63,12 +63,19 @@ export default (db, table, sequelize) => ({
     });
   },
 
-  getAllChannelClaims: async (channelClaimId, bidState = 'Controlling') => {
+  getAllChannelClaims: async (channelClaimId, bidState) => {
     logger.debug(`claim.getAllChannelClaims for ${channelClaimId}`);
-    const selectWhere = {publisher_id: channelClaimId};
-    if (bidState) {
-      selectWhere.bid_state = bidState;
-    }
+    const whereClause = bidState || {
+      [sequelize.Op.or]: [
+        { bid_state: 'Controlling' },
+        { bid_state: 'Active' },
+        { bid_state: 'Accepted' },
+      ],
+    };
+    const selectWhere = {
+      ...whereClause,
+      publisher_id: channelClaimId,
+    };
     return await table.findAll({
       where: selectWhere,
       order: [['height', 'DESC']],
