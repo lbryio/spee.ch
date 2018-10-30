@@ -1,9 +1,9 @@
-const db = require('../../../../models');
+const db = require('server/models');
 const chainquery = require('chainquery');
 
-const { handleErrorResponse } = require('../../../utils/errorHandlers.js');
+const { handleErrorResponse } = require('server/controllers/utils/errorHandlers.js');
 
-const getClaimId = require('../../../utils/getClaimId.js');
+const getClaimId = require('server/controllers/utils/getClaimId.js');
 
 const NO_CHANNEL = 'NO_CHANNEL';
 const NO_CLAIM = 'NO_CLAIM';
