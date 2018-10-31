@@ -6,7 +6,7 @@ const chainquery = require('chainquery');
 const getClaimIdByChannel = async (channelName, channelClaimId, claimName) => {
   logger.debug(`getClaimIdByChannel(${channelName}, ${channelClaimId}, ${claimName})`);
 
-  let channelId = await chainquery.claim.queries.getLongClaimIdFromShortClaimId(channelName, channelClaimId);
+  let channelId = await chainquery.claim.queries.getLongClaimId(channelName, channelClaimId);
 
   if(channelId === null) {
     channelId = await db.Certificate.getLongChannelId(channelName, channelClaimId);
