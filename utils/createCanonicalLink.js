@@ -10,7 +10,7 @@ const createAssetCanonicalLink = (asset) => {
   if (channelName) {
     return `/${channelName}:${channelShortId}/${name}`;
   }
-  return `/${claimId}/${name}`;
+  return `/${asset.shortId || claimId}/${name}`;
 };
 
 const createChannelCanonicalLink = (channel) => {
