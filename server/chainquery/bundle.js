@@ -864,19 +864,29 @@ var claimQueries = (db, table, sequelize) => ({
     });
   },
 
-  getAllChannelClaims: async (channelClaimId) => {
+  getAllChannelClaims: async (channelClaimId, bidState) => {
     logger$1.debug(`claim.getAllChannelClaims for ${channelClaimId}`);
+    const whereClause = bidState || {
+      [sequelize.Op.or]: [
+        { bid_state: 'Controlling' },
+        { bid_state: 'Active' },
+        { bid_state: 'Accepted' },
+      ],
+    };
+    const selectWhere = {
+      ...whereClause,
+      publisher_id: channelClaimId,
+    };
     return await table.findAll({
-      where: { publisher_id: channelClaimId },
+      where: selectWhere,
       order: [['height', 'DESC']],
     })
-    .then(channelClaimsArray => {
-      if(channelClaimsArray.length === 0) {
-        return null;
-      }
-
-      return channelClaimsArray;
-    })
+      .then(channelClaimsArray => {
+        if (channelClaimsArray.length === 0) {
+          return null;
+        }
+        return channelClaimsArray;
+      });
   },
 
   getClaimIdByLongChannelId: async (channelClaimId, claimName) => {
