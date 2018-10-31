@@ -14,12 +14,9 @@ import createCanonicalLink from '../../../../utils/createCanonicalLink';
 class AssetInfo extends React.Component {
   render () {
     const { asset } = this.props;
-    const { shortId, claimData: { channelName, channelShortId, certificateId, description, name, claimId, fileExt, contentType, thumbnail, host } } = asset;
+    const { claimViews, claimData: { channelName, channelShortId, description, name, fileExt, contentType, thumbnail, host } } = asset;
 
-    const assetCanonicalUrl = `${host}${createCanonicalLink({
-      asset,
-      absolute: true,
-    })}`;
+    const assetCanonicalUrl = `${host}${createCanonicalLink({asset})}`;
 
     let channelCanonicalUrl;
     if (channelName) {
