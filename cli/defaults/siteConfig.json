@@ -31,7 +31,9 @@
     "serveOnlyApproved": false,
     "publishOnlyApproved": false,
     "approvedChannels": [],
-    "publishingChannelWhitelist": []
+    "publishingChannelWhitelist": [],
+    "channelClaimBidAmount": "0.1",
+    "fileClaimBidAmount": "0.01"
   },
   "startup": {
     "performChecks": true,

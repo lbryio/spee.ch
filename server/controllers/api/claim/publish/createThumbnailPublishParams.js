@@ -10,7 +10,7 @@ const createThumbnailPublishParams = (thumbnailFilePath, claimName, license, nsf
   return {
     name     : `${claimName}-thumb`,
     file_path: thumbnailFilePath,
-    bid      : '0.01',
+    bid      : publishing.fileClaimBidAmount,
     metadata : {
       title      : `${claimName} thumbnail`,
       description: `a thumbnail for ${claimName}`,
