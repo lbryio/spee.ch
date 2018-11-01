@@ -34,6 +34,28 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var createCanonicalLink = require('../../../utils/createCanonicalLink');
+
+var getCanonicalUrlFromShow = function getCanonicalUrlFromShow(show) {
+  var requestId = show.requestList[show.request.id];
+  var requestType = show.request.type;
+
+  switch (requestType) {
+    case 'ASSET_DETAILS':
+      return createCanonicalLink({
+        asset: show.assetList[requestId.key]
+      });
+
+    case 'CHANNEL':
+      return createCanonicalLink({
+        channel: show.channelList[requestId.key]
+      });
+
+    default:
+      return null;
+  }
+};
+
 var returnSagaWithParams = function returnSagaWithParams(saga, params) {
   return (
     /*#__PURE__*/
@@ -115,6 +137,14 @@ module.exports = function (req, res) {
     var boundSaga = returnSagaWithParams(saga, boundAction); // run the saga middleware with the saga call
 
     sagaMiddleware.run(boundSaga).done.then(function () {
+      // redirect if request does not use canonical url
+      var canonicalUrl = getCanonicalUrlFromShow(store.getState().show);
+
+      if (canonicalUrl && canonicalUrl !== req.originalUrl) {
+        console.log("redirecting ".concat(req.originalUrl, " to ").concat(canonicalUrl));
+        res.redirect(canonicalUrl);
+      }
+
       return renderPage(store);
     });
   } else {
