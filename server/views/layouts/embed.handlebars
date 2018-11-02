@@ -1,16 +1,40 @@
 <!DOCTYPE html>
 <html>
+<head>
+  <style type="text/css">
+  body {
+    margin:0;
+  }
+
+  .container {
+    height: 100vh;
+  }
+
+  video {
+    width: 100%;
+    height: 100%;
+  }
+
+  .logoLink {
+    margin-bottom: 80px; /* don't cover controls */
+    padding: 5px;
+    position: absolute;
+    z-index: 1;
+  }
+
+  .logo {
+    max-height: 128px;
+    max-width: 64px;
+  }
+
+  .bottom { bottom: 0 }
+  .right { right: 0 }
+  .padSmall { padding: 10px }
+  .padMedium { padding: 20px }
+  .padLarge { padding: 30px }
+  </style>
+</head>
 <body>
-
-<style type="text/css">
-    video {
-        width:100%;
-        max-width:600px;
-        height:auto;
-    }
-</style>
-
-{{{ body }}}
-
+  {{{ body }}}
 </body>
 </html>
