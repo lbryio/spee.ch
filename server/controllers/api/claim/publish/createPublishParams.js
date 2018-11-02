@@ -1,6 +1,5 @@
 const logger = require('winston');
 const { details, publishing } = require('@config/siteConfig');
-
 const createPublishParams = (filePath, name, title, description, license, nsfw, thumbnail, channelName, channelClaimId) => {
   // provide defaults for title
   if (title === null || title.trim() === '') {
@@ -18,7 +17,7 @@ const createPublishParams = (filePath, name, title, description, license, nsfw, 
   const publishParams = {
     name,
     file_path: filePath,
-    bid      : '0.01',
+    bid      : publishing.fileClaimBidAmount,
     metadata : {
       description,
       title,

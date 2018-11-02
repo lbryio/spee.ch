@@ -4,6 +4,7 @@ const { apiHost, apiPort, getTimeout } = require('@config/lbryConfig');
 const lbrynetUri = 'http://' + apiHost + ':' + apiPort;
 const { chooseGaLbrynetPublishLabel, sendGATimingEvent } = require('../utils/googleAnalytics.js');
 const handleLbrynetResponse = require('./utils/handleLbrynetResponse.js');
+const { publishing } = require('@config/siteConfig');
 
 module.exports = {
   publishClaim (publishParams) {
@@ -116,7 +117,7 @@ module.exports = {
           method: 'channel_new',
           params: {
             channel_name: name,
-            amount      : '0.1',
+            amount      : publishing.channelClaimBidAmount,
           },
         })
         .then(response => {

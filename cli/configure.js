@@ -39,6 +39,7 @@ const {
     port,
     title,
     host,
+    channelClaimBidAmount: channelBid,
   },
   publishing: {
     uploadDirectory,
@@ -157,7 +158,7 @@ inquirer
         method: 'channel_new',
         params: {
           channel_name: thumbnailChannelDefault,
-          amount      : '0.1',
+          amount      : channelBid,
         },
       })
       .then(response => {
