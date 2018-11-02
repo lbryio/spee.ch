@@ -1,0 +1,5 @@
+{{#if logoConfig}}
+  <a class="{{logoConfig.classNames}}" href="{{#if logoConfig.logoLink}}{{logoConfig.logoLink}}{{else}}{{host}}/{{claimId}}/{{name}}{{/if}}">
+    <img class="logo" src="{{logoConfig.logoUrl}}" />
+  </a>
+{{/if}}

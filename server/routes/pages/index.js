@@ -16,5 +16,5 @@ module.exports = {
   '/popular': { controller: handlePageRequest },
   '/new': { controller: handlePageRequest },
   '/multisite': { controller: handlePageRequest },
-  '/video-embed/:name/:claimId': { controller: handleVideoEmbedRequest },  // for twitter
+  '/video-embed/:name/:claimId/:config?': { controller: handleVideoEmbedRequest },  // for twitter
 };
