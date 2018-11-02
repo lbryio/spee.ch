@@ -16,7 +16,7 @@ class AssetInfo extends React.Component {
     const { asset } = this.props;
     const { claimViews, claimData: { channelName, channelShortId, description, name, fileExt, contentType, thumbnail, host } } = asset;
 
-    const assetCanonicalUrl = `${host}${createCanonicalLink({asset})}`;
+    const assetCanonicalUrl = `${host}${createCanonicalLink({ asset: { ...asset.claimData, shortId: asset.shortId }})}`;
 
     let channelCanonicalUrl;
     if (channelName) {

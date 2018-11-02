@@ -38,7 +38,7 @@ const determineMediaType = (contentType) => {
 const createAssetMetaTags = (asset) => {
   const { claimData } = asset;
   const { contentType } = claimData;
-  const canonicalLink = createCanonicalLink({asset});
+  const canonicalLink = createCanonicalLink({ asset: { ...asset.claimData, shortId: asset.shortId }});
   const showUrl = `${host}${canonicalLink}`;
   const serveUrl = `${showUrl}.${claimData.fileExt}`;
 

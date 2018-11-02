@@ -3,14 +3,8 @@ const createBasicCanonicalLink = (page) => {
 };
 
 const createAssetCanonicalLink = (asset) => {
-  let channelName, channelShortId, name, claimId;
-  if (asset.claimData) {
-    ({ channelName, channelShortId, name, claimId } = asset.claimData);
-  }
-  if (channelName) {
-    return `/${channelName}:${channelShortId}/${name}`;
-  }
-  return `/${asset.shortId || claimId}/${name}`;
+  const { channelName, channelShortId, name, claimId, shortId } = asset;
+  return channelName ? `/${channelName}:${channelShortId}/${name}` : `/${shortId || claimId}/${name}`;
 };
 
 const createChannelCanonicalLink = (channel) => {

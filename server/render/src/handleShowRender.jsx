@@ -22,7 +22,8 @@ const getCanonicalUrlFromShow = show => {
   const requestType = show.request.type;
   switch (requestType) {
     case 'ASSET_DETAILS':
-      return createCanonicalLink({ asset: show.assetList[requestId.key] });
+      const asset = show.assetList[requestId.key];
+      return createCanonicalLink({ asset: { ...asset.claimData, shortId: asset.shortId }});
     case 'CHANNEL':
       return createCanonicalLink({ channel: show.channelList[requestId.key] });
     default:

@@ -4,7 +4,7 @@ import createCanonicalLink from '../../../../utils/createCanonicalLink';
 
 const AssetPreview = ({ defaultThumbnail, claimData }) => {
   const { name, fileExt, contentType, thumbnail, title } = claimData;
-  const showUrl = createCanonicalLink({ asset: { claimData } });
+  const showUrl = createCanonicalLink({ asset: { ...claimData }});
   const embedUrl = `${showUrl}.${fileExt}`;
   return (
     <Link to={showUrl} className='asset-preview'>

@@ -22,7 +22,7 @@ class SEO extends React.Component {
       channel,
     });
     const canonicalLink = `${host}${createCanonicalLink({
-      asset,
+      asset: asset ? { ...asset.claimData, shortId: asset.shortId } : undefined,
       channel,
       page: pageUri,
     })}`;
