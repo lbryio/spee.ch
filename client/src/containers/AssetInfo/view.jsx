@@ -16,7 +16,8 @@ class AssetInfo extends React.Component {
     const { asset } = this.props;
     const { claimViews, claimData: { channelName, channelShortId, description, name, fileExt, contentType, thumbnail, host } } = asset;
 
-    const assetCanonicalUrl = `${host}${createCanonicalLink({ asset: { ...asset.claimData, shortId: asset.shortId }})}`;
+    const canonicalUrl = createCanonicalLink({ asset: { ...asset.claimData, shortId: asset.shortId }});
+    const assetCanonicalUrl = `${host}${canonicalUrl}`;
 
     let channelCanonicalUrl;
     if (channelName) {
@@ -96,7 +97,7 @@ class AssetInfo extends React.Component {
                 {(contentType === 'video/mp4') ? (
                   <ClickToCopy
                     id={'embed-text-video'}
-                    value={`<iframe src="${host}/video-embed${assetCanonicalUrl}" allowfullscreen="true" style="border:0" /></iframe>`}
+                    value={`<iframe src="${host}/video-embed${canonicalUrl}" allowfullscreen="true" style="border:0" /></iframe>`}
                   />
                 ) : (
                   <ClickToCopy

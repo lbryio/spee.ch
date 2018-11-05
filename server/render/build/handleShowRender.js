@@ -34,6 +34,10 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 var createCanonicalLink = require('../../../utils/createCanonicalLink');
 
 var getCanonicalUrlFromShow = function getCanonicalUrlFromShow(show) {
@@ -42,8 +46,11 @@ var getCanonicalUrlFromShow = function getCanonicalUrlFromShow(show) {
 
   switch (requestType) {
     case 'ASSET_DETAILS':
+      var asset = show.assetList[requestId.key];
       return createCanonicalLink({
-        asset: show.assetList[requestId.key]
+        asset: _objectSpread({}, asset.claimData, {
+          shortId: asset.shortId
+        })
       });
 
     case 'CHANNEL':
