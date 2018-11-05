@@ -34,7 +34,7 @@ class AssetInfo extends React.Component {
           <Row>
             <RowLabeled
               label={<Label value={'Edit:'} />}
-              content={<Link to={`/edit/${claimId}/${name}`}>{name}</Link>}
+              content={<Link to={`/edit${canonicalUrl}`}>{name}</Link>}
             />
           </Row>
         )}
