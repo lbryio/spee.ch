@@ -15,12 +15,27 @@ import App from '@app';
 import Sagas from '@sagas';
 import Actions from '@actions';
 
+const createCanonicalLink = require('../../../utils/createCanonicalLink');
+
+const getCanonicalUrlFromShow = show => {
+  const requestId = show.requestList[show.request.id];
+  const requestType = show.request.type;
+  switch (requestType) {
+    case 'ASSET_DETAILS':
+      const asset = show.assetList[requestId.key];
+      return createCanonicalLink({ asset: { ...asset.claimData, shortId: asset.shortId }});
+    case 'CHANNEL':
+      return createCanonicalLink({ channel: show.channelList[requestId.key] });
+    default:
+      return null;
+  }
+};
+
 const returnSagaWithParams = (saga, params) => {
   return function * () {
     yield call(saga, params);
   };
 };
-
 module.exports = (req, res) => {
   let context = {};
 
@@ -90,7 +105,15 @@ module.exports = (req, res) => {
     sagaMiddleware
       .run(boundSaga)
       .done
-      .then(() => renderPage(store) );
+      .then(() => {
+        // redirect if request does not use canonical url
+        const canonicalUrl = getCanonicalUrlFromShow(store.getState().show);
+        if (canonicalUrl && canonicalUrl !== req.originalUrl) {
+          console.log(`redirecting ${req.originalUrl} to ${canonicalUrl}`);
+          res.redirect(canonicalUrl);
+        }
+        return renderPage(store)
+      });
   } else {
     const store = createStore(Reducers);
     renderPage(store);

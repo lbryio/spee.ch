@@ -69,11 +69,18 @@ const parseLogoConfigParam = async (rawConfig) => {
 }
 
 const sendVideoEmbedPage = async ({ params }, res) => {
-  const {
+  let {
     claimId,
     config,
     name,
   } = params;
+
+  // if channel then swap name and claimId for order
+  if (name[0] === '@' && name.includes(':')) {
+    const temp = name;
+    name = claimId;
+    claimId = temp;
+  }
 
   const logoConfig = await parseLogoConfigParam(config);
 

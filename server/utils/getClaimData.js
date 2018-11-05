@@ -10,11 +10,17 @@ module.exports = async (data) => {
     channelName = await chainquery.claim.queries.getClaimChannelName(certificateId).catch(()=>{});
   }
 
+  let channelShortId = null;
+  if (certificateId && channelName) {
+    channelShortId = await chainquery.claim.queries.getShortClaimIdFromLongClaimId(certificateId, channelName).catch(() => null);
+  }
+
   return ({
     name: data.name,
     title: data.title,
     certificateId,
     channelName,
+    channelShortId,
     contentType: data.content_type || data.contentType,
     claimId: data.claim_id || data.claimId,
     fileExt: data.generated_extension || data.fileExt,

@@ -2,12 +2,12 @@ import React from 'react';
 import Helmet from 'react-helmet';
 import PropTypes from 'prop-types';
 
-import siteConfig from '@config/siteConfig.json';
 import createPageTitle from '../../utils/createPageTitle';
 import createMetaTags from '../../utils/createMetaTags';
 import oEmbed from '../../utils/oEmbed.js';
-import createCanonicalLink from '../../utils/createCanonicalLink';
+import createCanonicalLink from '../../../../utils/createCanonicalLink';
 
+import siteConfig from '@config/siteConfig.json';
 const { details: { host } } = siteConfig;
 
 class SEO extends React.Component {
@@ -21,7 +21,11 @@ class SEO extends React.Component {
       asset,
       channel,
     });
-    const cannonicalLink = createCanonicalLink(asset, channel, pageUri);
+    const canonicalLink = `${host}${createCanonicalLink({
+      asset: asset ? { ...asset.claimData, shortId: asset.shortId } : undefined,
+      channel,
+      page: pageUri,
+    })}`;
     // render results
     return (
       <Helmet
@@ -30,9 +34,9 @@ class SEO extends React.Component {
         link={[
           {
             rel : 'canonical',
-            href: cannonicalLink,
+            href: canonicalLink,
           },
-          oEmbed.json(host, cannonicalLink),
+          oEmbed.json(host, canonicalLink),
         ]}
       />
     );

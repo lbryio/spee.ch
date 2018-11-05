@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
 import NavBarChannelOptionsDropdown from '@components/NavBarChannelOptionsDropdown';
+import createCanonicalLink from '../../../../utils/createCanonicalLink';
 
 const VIEW = 'VIEW';
 const LOGOUT = 'LOGOUT';
@@ -14,6 +15,7 @@ class NavigationLinks extends React.Component {
     this.props.checkForLoggedInChannel();
   }
   handleSelection (event) {
+    const { history, channelName: name, channelShortId: shortId } = this.props;
     const value = event.target.selectedOptions[0].value;
     switch (value) {
       case LOGOUT:
@@ -21,7 +23,7 @@ class NavigationLinks extends React.Component {
         break;
       case VIEW:
         // redirect to channel page
-        this.props.history.push(`/${this.props.channelName}:${this.props.channelLongId}`);
+        history.push(createCanonicalLink({ channel: { name, shortId } }));
         break;
       default:
         break;

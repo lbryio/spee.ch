@@ -1,6 +1,7 @@
 import siteConfig from '@config/siteConfig.json';
 import determineContentTypeFromExtension from './determineContentTypeFromExtension';
 import createMetaTagsArray from './createMetaTagsArray';
+import createCanonicalLink from '../../../utils/createCanonicalLink';
 
 const {
   details: {
@@ -14,7 +15,7 @@ const {
 } = siteConfig;
 
 export const createChannelMetaTags = (channel) => {
-  const { name, longId } = channel;
+  const { name, shortId } = channel;
   const metaTags = {
     // page detail tags
     'og:title'           : `${name} on ${siteTitle}`,
@@ -22,7 +23,7 @@ export const createChannelMetaTags = (channel) => {
     'og:description'     : `${name}, a channel on ${siteTitle}`,
     'twitter:description': `${name}, a channel on ${siteTitle}`,
     // url
-    'og:url'             : `${host}/${name}:${longId}`,
+    'og:url'             : `${host}/${createCanonicalLink({ channel })}`,
     // site info
     'og:site_name'       : siteTitle,
     'twitter:site'       : twitter,
