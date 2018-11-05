@@ -3,6 +3,7 @@ import { selectFile, updateError, clearFile } from '../../actions/publish';
 import { selectAsset } from '../../selectors/show';
 import View from './view';
 import siteConfig from '@config/siteConfig.json';
+import createCanonicalLink from '../../../../utils/createCanonicalLink';
 
 const { assetDefaults: { thumbnail: defaultThumbnail } } = siteConfig;
 
@@ -15,8 +16,8 @@ const mapStateToProps = ({ show, publish: { file, thumbnail, fileError, isUpdate
       if (asset.claimData.fileExt === 'mp4') {
         obj.sourceUrl = asset.claimData.thumbnail ? asset.claimData.thumbnail : defaultThumbnail;
       } else {
-        ({name, claimData: {claimId, fileExt, outpoint}} = asset);
-        obj.sourceUrl = `/${claimId}/${name}.${fileExt}?${outpoint}`;
+        ({claimData: {fileExt, outpoint}} = asset);
+        obj.sourceUrl = `${createCanonicalLink({ asset: asset.claimData })}.${fileExt}?${outpoint}`;
       }
     }
   }
