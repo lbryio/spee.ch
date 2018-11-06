@@ -17,6 +17,9 @@ const parsePublishApiRequestBody = require('./parsePublishApiRequestBody.js');
 const parsePublishApiRequestFiles = require('./parsePublishApiRequestFiles.js');
 const authenticateUser = require('./authentication.js');
 
+const chainquery = require('chainquery');
+const createCanonicalLink = require('../../../../../utils/createCanonicalLink');
+
 const CLAIM_TAKEN = 'CLAIM_TAKEN';
 const UNAPPROVED_CHANNEL = 'UNAPPROVED_CHANNEL';
 
@@ -42,7 +45,25 @@ const claimPublish = ({ body, files, headers, ip, originalUrl, user, tor }, res)
     });
   }
   // define variables
-  let  channelName, channelId, channelPassword, description, fileName, filePath, fileExtension, fileType, gaStartTime, license, name, nsfw, thumbnail, thumbnailFileName, thumbnailFilePath, thumbnailFileType, title;
+  let channelName,
+    channelId,
+    channelPassword,
+    description,
+    fileName,
+    filePath,
+    fileExtension,
+    fileType,
+    gaStartTime,
+    license,
+    name,
+    nsfw,
+    thumbnail,
+    thumbnailFileName,
+    thumbnailFilePath,
+    thumbnailFileType,
+    title,
+    claimData,
+    claimId;
   // record the start time of the request
   gaStartTime = Date.now();
   // validate the body and files of the request
@@ -64,6 +85,7 @@ const claimPublish = ({ body, files, headers, ip, originalUrl, user, tor }, res)
         };
         throw error;
       }
+
       return Promise.all([
         checkClaimAvailability(name),
         createPublishParams(filePath, name, title, description, license, nsfw, thumbnail, channelName, channelClaimId),
@@ -85,17 +107,37 @@ const claimPublish = ({ body, files, headers, ip, originalUrl, user, tor }, res)
       // publish the asset
       return publish(publishParams, fileName, fileType, filePath);
     })
-    .then(claimData => {
-      logger.debug('Publish success >', claimData);
+    .then(publishResults => {
+      logger.info('Publish success >', publishResults);
+      claimData = publishResults;
+      ({claimId} = claimData);
+
+      if (channelName) {
+        return chainquery.claim.queries.getShortClaimIdFromLongClaimId(claimData.certificateId, channelName);
+      } else {
+        return chainquery.claim.queries.getShortClaimIdFromLongClaimId(claimId, name, claimData).catch(error => {
+          return claimId.slice(0, 1);
+        });
+      }
+    })
+    .then(shortId => {
+      let canonicalUrl;
+      if (channelName) {
+        canonicalUrl = createCanonicalLink({ asset: { ...claimData, channelShortId: shortId } });
+      } else {
+        canonicalUrl = createCanonicalLink({ asset: { ...claimData, shortId } })
+      }
+
       res.status(200).json({
         success: true,
         message: 'publish completed successfully',
         data   : {
           name,
-          claimId : claimData.claimId,
-          url     : `${host}/${claimData.claimId}/${name}`, // for backwards compatability with app
-          showUrl : `${host}/${claimData.claimId}/${name}`,
-          serveUrl: `${host}/${claimData.claimId}/${name}${fileExtension}`,
+          claimId,
+          url     : `${host}${canonicalUrl}`, // for backwards compatability with app
+          showUrl : `${host}${canonicalUrl}`,
+          serveUrl: `${host}${canonicalUrl}${fileExtension}`,
+          pushTo  : canonicalUrl,
           claimData,
         },
       });

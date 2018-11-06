@@ -9,6 +9,8 @@ const parsePublishApiRequestBody = require('../publish/parsePublishApiRequestBod
 const parsePublishApiRequestFiles = require('../publish/parsePublishApiRequestFiles.js');
 const authenticateUser = require('../publish/authentication.js');
 const createThumbnailPublishParams = require('../publish/createThumbnailPublishParams.js');
+const chainquery = require('chainquery');
+const createCanonicalLink = require('../../../../../utils/createCanonicalLink');
 
 /*
   route to update a claim through the daemon
@@ -42,7 +44,7 @@ const claimUpdate = ({ body, files, headers, ip, originalUrl, user, tor }, res) 
   }
 
   // define variables
-  let channelName, channelId, channelPassword, description, fileName, filePath, fileType, gaStartTime, thumbnail, fileExtension, license, name, nsfw, thumbnailFileName, thumbnailFilePath, thumbnailFileType, title, claimRecord, metadata;
+  let channelName, channelId, channelPassword, description, fileName, filePath, fileType, gaStartTime, thumbnail, fileExtension, license, name, nsfw, thumbnailFileName, thumbnailFilePath, thumbnailFileType, title, claimRecord, metadata, publishResult;
   // record the start time of the request
   gaStartTime = Date.now();
 
@@ -57,19 +59,22 @@ const claimUpdate = ({ body, files, headers, ip, originalUrl, user, tor }, res) 
   // check channel authorization
   authenticateUser(channelName, channelId, channelPassword, user)
     .then(({ channelName, channelClaimId }) => {
-      return db.Claim.findOne({
-        where: {
-          name,
-          channelName,
-        },
-      });
+      return chainquery.claim.queries.resolveClaimInChannel(name, channelClaimId).then(claim => claim.dataValues);
     })
     .then(claim => {
-      return resolveUri(`${claim.name}#${claim.claimId}`);
+      claimRecord = claim;
+
+      if (!files.file) {
+        return Promise.all([
+          db.File.findOne({ where: { name, claimId: claim.claim_id } }),
+          resolveUri(`${claim.name}#${claim.claim_id}`),
+        ]);
+      }
+
+      return [null, null];
     })
-    .then(fullClaim => {
-      claimRecord = fullClaim;
-      logger.info('fullClaim', fullClaim);
+    .then(([fileResult, resolution]) => {
+
       metadata = Object.assign({}, {
         title      : claimRecord.title,
         description: claimRecord.description,
@@ -89,9 +94,9 @@ const claimUpdate = ({ body, files, headers, ip, originalUrl, user, tor }, res) 
       if (files.file) {
         publishParams['file_path'] = filePath;
       } else {
-        fileName = fullClaim.file_name;
-        fileType = fullClaim.mime_type;
-        publishParams['sources'] = fullClaim.claim.value.stream.source;
+        fileName = fileResult.fileName;
+        fileType = fileResult.fileType;
+        publishParams['sources'] = resolution.claim.value.stream.source;
       }
       // publish the thumbnail, if one exists
       if (thumbnailFileName) {
@@ -103,26 +108,44 @@ const claimUpdate = ({ body, files, headers, ip, originalUrl, user, tor }, res) 
       const fp = files && files.file && files.file.path ? files.file.path : undefined;
       return publish(publishParams, fileName, fileType, fp);
     })
-    .then(claimData => {
-      // this may need to happen in ../publish/index.js as well
-      if (claimData.error) {
-        res.status(400).json({
-          success: false,
-          message: claimData.message,
+    .then(result => {
+      publishResult = result;
+
+      if (channelName) {
+        return chainquery.claim.queries.getShortClaimIdFromLongClaimId(result.certificateId, channelName);
+      } else {
+        return chainquery.claim.queries.getShortClaimIdFromLongClaimId(result.claimId, name, result).catch(error => {
+          return result.claimId.slice(0, 1);
         });
       }
-      const {claimId} = claimData;
+    })
+    .then(shortId => {
+      let canonicalUrl;
+      if (channelName) {
+        canonicalUrl = createCanonicalLink({ asset: { ...publishResult, channelShortId: shortId } });
+      } else {
+        canonicalUrl = createCanonicalLink({ asset: { ...publishResult, shortId } })
+      }
+
+      if (publishResult.error) {
+        res.status(400).json({
+          success: false,
+          message: publishResult.message,
+        });
+      }
+
+      const {claimId} = publishResult;
       res.status(200).json({
         success: true,
         message: 'update successful',
         data   : {
           name,
-          channelName,
-          channelId: claimData.certificateId,
           claimId,
-          url      : `${details.host}/${claimId}/${name}`, // for backwards compatability with app
-          showUrl  : `${details.host}/${claimId}/${name}`,
-          claimData,
+          url     : `${details.host}${canonicalUrl}`, // for backwards compatability with app
+          showUrl : `${details.host}${canonicalUrl}`,
+          serveUrl: `${details.host}${canonicalUrl}${fileExtension}`,
+          pushTo  : canonicalUrl,
+          claimData: publishResult,
         },
       });
       // record the publish end time and send to google analytics

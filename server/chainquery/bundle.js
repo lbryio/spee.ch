@@ -850,7 +850,7 @@ var claimQueries = (db, table, sequelize) => ({
     });
   },
 
-  getShortClaimIdFromLongClaimId: async (claimId, claimName) => {
+  getShortClaimIdFromLongClaimId: async (claimId, claimName, pendingClaim) => {
     logger$1.debug(`claim.getShortClaimIdFromLongClaimId for ${claimName}#${claimId}`);
     return await table.findAll({
       where: { name: claimName },
@@ -860,7 +860,12 @@ var claimQueries = (db, table, sequelize) => ({
         throw new Error('No claim(s) found with that claim name');
       }
 
-      return returnShortId(result, claimId);
+      let list = result.map(claim => claim.dataValues);
+      if (pendingClaim) {
+        list = list.concat(pendingClaim);
+      }
+
+      return returnShortId(list, claimId);
     });
   },
 
@@ -975,6 +980,24 @@ var claimQueries = (db, table, sequelize) => ({
         return null;
       } else if(claimArray.length !== 1) {
         logger$1.warn(`more than one record matches ${name}#${claimId} in db.Claim`);
+      }
+
+      return claimArray[0];
+    });
+  },
+
+  resolveClaimInChannel: async (claimName, channelId) => {
+    logger$1.debug(`Claim.resolveClaimByNames: ${claimName} in ${channelId}`);
+    return table.findAll({
+      where: {
+        name: claimName,
+        publisher_id: channelId,
+      },
+    }).then(claimArray => {
+      if (claimArray.length === 0) {
+        return null;
+      } else if (claimArray.length !== 1) {
+        logger$1.warn(`more than one record matches ${claimName} in ${channelId}`);
       }
 
       return claimArray[0];

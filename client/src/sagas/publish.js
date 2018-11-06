@@ -73,7 +73,7 @@ function * publishFile (action) {
         });
       }
       if (success.data.claimId) {
-        return history.push(`/${success.data.claimId}/${success.data.name}`);
+        return history.push(success.data.pushTo);
       } else {
         // this returns to the homepage, needs work
         return yield put(updatePublishStatus(publishStates.FAILED, 'ERROR'));
