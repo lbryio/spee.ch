@@ -1,8 +1,8 @@
 const { statSync, existsSync, readdirSync } = require('fs');
 const { join, resolve } = require('path');
 const DEFAULT_ROOT = 'client/build';
-const CUSTOM_ROOT = 'client_custom/build';
-const CUSTOM_SCSS_ROOT = 'client_custom/scss';
+const CUSTOM_ROOT = 'config/client_custom/build';
+const CUSTOM_SCSS_ROOT = 'config/client_custom/scss';
 
 const getFolders = path => {
   if (existsSync(path)) {
