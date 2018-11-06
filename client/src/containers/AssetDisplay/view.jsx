@@ -2,6 +2,7 @@ import React from 'react';
 import Row from '@components/Row';
 import ProgressBar from '@components/ProgressBar';
 import { LOCAL_CHECK, UNAVAILABLE, ERROR, AVAILABLE } from '../../constants/asset_display_states';
+import createCanonicalLink from '../../../../utils/createCanonicalLink';
 
 class AvailableContent extends React.Component {
   render () {
@@ -44,10 +45,15 @@ class AssetDisplay extends React.Component {
     this.props.onFileRequest(name, claimId);
   }
   render () {
-    const { status, error, asset: { name, claimData: { claimId, contentType, fileExt, thumbnail, outpoint } } } = this.props;
+    const { status, error, asset } = this.props;
+    const { name, claimData: { claimId, contentType, thumbnail, outpoint } } = asset;
     // the outpoint is added to force the browser to re-download the asset after an update
     // issue: https://github.com/lbryio/spee.ch/issues/607
-    const sourceUrl = `/${claimId}/${name}.${fileExt}?${outpoint}`;
+    let fileExt;
+    if (typeof contentType === 'string') {
+      fileExt = contentType.split('/')[1] || 'jpg';
+    }
+    const sourceUrl = `${createCanonicalLink({ asset: asset.claimData })}.${fileExt}?${outpoint}`;
     return (
       <div className={'asset-display'}>
         {(status === LOCAL_CHECK) &&
