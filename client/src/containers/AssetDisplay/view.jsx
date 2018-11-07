@@ -71,8 +71,8 @@ class AssetDisplay extends React.Component {
             }
           })()
           }
-          <AssetTitle />
         </div>
+        <AssetTitle />
       </div>
     );
   }
