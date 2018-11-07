@@ -13,16 +13,16 @@ let thumbnailChannel = '';
 let thumbnailChannelId = '';
 
 const createConfigFile = (fileName, configObject) => {  // siteConfig.json , siteConfig
-  const fileLocation = Path.resolve(__dirname, `../config/${fileName}`);
+  const fileLocation = Path.resolve(__dirname, `../site/config/${fileName}`);
   const fileContents = JSON.stringify(configObject, null, 2);
   fs.writeFileSync(fileLocation, fileContents, 'utf-8');
-  console.log(`Successfully created /config/${fileName}\n`);
+  console.log(`Successfully created ./site/config/${fileName}\n`);
 };
 
 // import existing configs or import the defaults
 let mysqlConfig;
 try {
-  mysqlConfig = require('../config/mysqlConfig.json');
+  mysqlConfig = require('../site/config/mysqlConfig.json');
 } catch (error) {
   mysqlConfig = require('./defaults/mysqlConfig.json');
 }
@@ -30,7 +30,7 @@ const { database: mysqlDatabase, username: mysqlUsername, password: mysqlPasswor
 
 let siteConfig;
 try {
-  siteConfig = require('../config/siteConfig.json');
+  siteConfig = require('../site/config/siteConfig.json');
 } catch (error) {
   siteConfig = require('./defaults/siteConfig.json');
 }
@@ -48,21 +48,21 @@ const {
 
 let lbryConfig;
 try {
-  lbryConfig = require('../config/lbryConfig.json');
+  lbryConfig = require('../site/config/lbryConfig.json');
 } catch (error) {
   lbryConfig = require('./defaults/lbryConfig.json');
 }
 
 let loggerConfig;
 try {
-  loggerConfig = require('../config/loggerConfig.json');
+  loggerConfig = require('../site/config/loggerConfig.json');
 } catch (error) {
   loggerConfig = require('./defaults/loggerConfig.json');
 }
 
 let slackConfig;
 try {
-  slackConfig = require('../config/slackConfig.json');
+  slackConfig = require('../site/config/slackConfig.json');
 } catch (error) {
   slackConfig = require('./defaults/slackConfig.json');
 }
