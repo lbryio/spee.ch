@@ -25,6 +25,13 @@ const updateMetadata = ({nsfw, license, title, description}) => {
   return update;
 };
 
+const rando = () => {
+  let text = '';
+  const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  for (let i = 0; i < 6; i += 1) text += possible.charAt(Math.floor(Math.random() * 62));
+  return text;
+};
+
 const claimUpdate = ({ body, files, headers, ip, originalUrl, user, tor }, res) => {
   // logging
   logger.info('Claim update request:', {
@@ -44,7 +51,27 @@ const claimUpdate = ({ body, files, headers, ip, originalUrl, user, tor }, res) 
   }
 
   // define variables
-  let channelName, channelId, channelPassword, description, fileName, filePath, fileType, gaStartTime, thumbnail, fileExtension, license, name, nsfw, thumbnailFileName, thumbnailFilePath, thumbnailFileType, title, claimRecord, metadata, publishResult;
+  let channelName,
+    channelId,
+    channelPassword,
+    description,
+    fileName,
+    filePath,
+    fileType,
+    gaStartTime,
+    thumbnail,
+    fileExtension,
+    license,
+    name,
+    nsfw,
+    thumbnailFileName,
+    thumbnailFilePath,
+    thumbnailFileType,
+    title,
+    claimRecord,
+    metadata,
+    publishResult,
+    thumbnailUpdate = false;
   // record the start time of the request
   gaStartTime = Date.now();
 
@@ -59,12 +86,19 @@ const claimUpdate = ({ body, files, headers, ip, originalUrl, user, tor }, res) 
   // check channel authorization
   authenticateUser(channelName, channelId, channelPassword, user)
     .then(({ channelName, channelClaimId }) => {
+      if (!channelId) {
+        channelId = channelClaimId;
+      }
       return chainquery.claim.queries.resolveClaimInChannel(name, channelClaimId).then(claim => claim.dataValues);
     })
     .then(claim => {
       claimRecord = claim;
+      if (claimRecord.content_type === 'video/mp4' && files.file) {
+        thumbnailUpdate = true;
+      }
+      logger.info('claimRecord:', claimRecord);
 
-      if (!files.file) {
+      if (!files.file || thumbnailUpdate) {
         return Promise.all([
           db.File.findOne({ where: { name, claimId: claim.claim_id } }),
           resolveUri(`${claim.name}#${claim.claim_id}`),
@@ -91,18 +125,26 @@ const claimUpdate = ({ body, files, headers, ip, originalUrl, user, tor }, res) 
         channel_id   : channelId,
         metadata,
       };
+
       if (files.file) {
-        publishParams['file_path'] = filePath;
+        if (thumbnailUpdate) {
+          // publish new thumbnail
+          const newThumbnailName = `${name}-${rando()}`;
+          const newThumbnailParams = createThumbnailPublishParams(filePath, newThumbnailName, license, nsfw);
+          newThumbnailParams['file_path'] = filePath;
+          logger.info('newThumbnailParams:', newThumbnailParams);
+          publish(newThumbnailParams, fileName, fileType);
+
+          publishParams['sources'] = resolution.claim.value.stream.source;
+          publishParams['thumbnail'] = `${details.host}/${newThumbnailParams.channel_name}:${newThumbnailParams.channel_id}/${newThumbnailName}-thumb.jpg`;
+        } else {
+          publishParams['file_path'] = filePath;
+        }
       } else {
         fileName = fileResult.fileName;
         fileType = fileResult.fileType;
         publishParams['sources'] = resolution.claim.value.stream.source;
-      }
-      // publish the thumbnail, if one exists
-      if (thumbnailFileName) {
-        const thumbnailPublishParams = createThumbnailPublishParams(thumbnailFilePath, name, license, nsfw);
-        publish(thumbnailPublishParams, thumbnailFileName, thumbnailFileType);
-        publishParams['thumbnail'] = `${details.host}/${channelName}:${channelId}/${name}-thumb.jpg`;
+        publishParams['thumbnail'] = claimRecord.thumbnail_url;
       }
 
       const fp = files && files.file && files.file.path ? files.file.path : undefined;

@@ -47,7 +47,7 @@ async function createFileRecordDataAfterPublish (fileName, fileType, publishPara
     width: fileWidth,
   } = await getMediaDimensions(fileType, filePath);
 
-  return {
+  const obj = {
     name,
     claimId,
     outpoint: `${txid}:${nout}`,
@@ -57,6 +57,10 @@ async function createFileRecordDataAfterPublish (fileName, fileType, publishPara
     filePath,
     fileType,
   };
+
+  console.log('createFileRecordDataAfterPublish return:', obj);
+
+  return obj;
 }
 
 module.exports = {

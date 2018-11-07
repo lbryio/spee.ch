@@ -82,61 +82,65 @@ class Dropzone extends React.Component {
   }
   render () {
     const { dragOver, mouseOver, dimPreview } = this.state;
-    const { file, thumbnail, fileError, isUpdate, sourceUrl } = this.props;
+    const { file, thumbnail, fileError, isUpdate, sourceUrl, fileExt } = this.props;
     return (
-      <div className='dropzone-wrapper'>
-        <form>
-          <input
-            className='input-file'
-            type='file'
-            id='file_input'
-            name='file_input'
-            accept='video/*,image/*'
-            onChange={this.handleFileInput}
-            encType='multipart/form-data'
-          />
-        </form>
-        <div
-          className={'dropzone' + (dragOver ? ' dropzone--drag-over' : '')}
-          onDrop={this.handleDrop}
-          onDragOver={this.handleDragOver}
-          onDragEnd={this.handleDragEnd}
-          onDragEnter={this.handleDragEnter}
-          onDragLeave={this.handleDragLeave}
-          onMouseEnter={this.handleMouseEnter}
-          onMouseLeave={this.handleMouseLeave}
-          onClick={this.handleClick}>
-          {file || isUpdate ? (
-            <div className={'dropzone-preview-wrapper'}>
-              {file ? (
-                <DropzonePreviewImage
-                  dimPreview={dimPreview}
-                  file={file}
-                  thumbnail={thumbnail}
-                />
-              ) : (
-                <DropzonePreviewImage
-                  dimPreview
-                  isUpdate
-                  sourceUrl={sourceUrl}
-                />
-              )}
-              <div className={'dropzone-preview-overlay'}>
-                { dragOver ? <DropzoneDropItDisplay /> : null }
-                { mouseOver ? (
-                  <DropzoneInstructionsDisplay
-                    fileError={fileError}
+      <div>
+        {isUpdate && fileExt === 'mp4' && (<p>Video thumbnail:</p>)}
+        <div className='dropzone-wrapper'>
+          <form>
+            <input
+              className='input-file'
+              type='file'
+              id='file_input'
+              name='file_input'
+              accept='video/*,image/*'
+              onChange={this.handleFileInput}
+              encType='multipart/form-data'
+            />
+          </form>
+          <div
+            className={'dropzone' + (dragOver ? ' dropzone--drag-over' : '')}
+            onDrop={this.handleDrop}
+            onDragOver={this.handleDragOver}
+            onDragEnd={this.handleDragEnd}
+            onDragEnter={this.handleDragEnter}
+            onDragLeave={this.handleDragLeave}
+            onMouseEnter={this.handleMouseEnter}
+            onMouseLeave={this.handleMouseLeave}
+            onClick={this.handleClick}>
+            {file || isUpdate ? (
+              <div className={'dropzone-preview-wrapper'}>
+                {file ? (
+                  <DropzonePreviewImage
+                    dimPreview={dimPreview}
+                    file={file}
+                    thumbnail={thumbnail}
                   />
-                ) : null }
+                ) : (
+                  <DropzonePreviewImage
+                    dimPreview
+                    isUpdate
+                    sourceUrl={sourceUrl}
+                  />
+                )}
+                <div className={'dropzone-preview-overlay'}>
+                  { dragOver ? <DropzoneDropItDisplay /> : null }
+                  { mouseOver ? (
+                    <DropzoneInstructionsDisplay
+                      fileError={fileError}
+                      message={fileExt === 'mp4' ? 'Drag & drop new thumbnail' : null}
+                    />
+                  ) : null }
+                </div>
               </div>
-            </div>
-          ) : (
-            dragOver ? <DropzoneDropItDisplay /> : (
-              <DropzoneInstructionsDisplay
-                fileError={fileError}
-              />
-            )
-          )}
+            ) : (
+              dragOver ? <DropzoneDropItDisplay /> : (
+                <DropzoneInstructionsDisplay
+                  fileError={fileError}
+                />
+              )
+            )}
+          </div>
         </div>
       </div>
     );

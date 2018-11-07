@@ -5,11 +5,11 @@ const { createFileRecordDataAfterPublish } = require('../../../../models/utils/c
 const { createClaimRecordDataAfterPublish } = require('../../../../models/utils/createClaimRecordData.js');
 const deleteFile = require('./deleteFile.js');
 
-const publish = async (publishParams, fileName, fileType, filePath) => {
+const publish = async (publishParams, fileName, fileType) => {
   let publishResults;
   let channel;
   let fileRecord;
-  let newFile = Boolean(filePath);
+  let newFile = Boolean(publishParams.file_path);
 
   try {
     publishResults = await publishClaim(publishParams);
@@ -33,22 +33,28 @@ const publish = async (publishParams, fileName, fileType, filePath) => {
     const {claimId} = claimRecord;
     const upsertCriteria = {name: publishParams.name, claimId};
     if (newFile) {
+      // this is the problem
+      //
       fileRecord = await createFileRecordDataAfterPublish(fileName, fileType, publishParams, publishResults);
     } else {
-      fileRecord = await db.File.findOne({where: {claimId}});
+      fileRecord = await db.File.findOne({where: {claimId}}).then(result => result.dataValues);
     }
+
+    logger.info('fileRecord:', fileRecord);
+    logger.info('claimRecord:', claimRecord);
+    logger.info('upsertCriteria:', upsertCriteria);
 
     const [file, claim] = await Promise.all([
       db.upsert(db.File, fileRecord, upsertCriteria, 'File'),
       db.upsert(db.Claim, claimRecord, upsertCriteria, 'Claim'),
     ]);
-    logger.info('File and Claim records successfully created');
+    logger.info(`File and Claim records successfully created (${publishParams.name})`);
 
     await Promise.all([
       file.setClaim(claim),
       claim.setFile(file),
     ]);
-    logger.info('File and Claim records successfully associated');
+    logger.info(`File and Claim records successfully associated (${publishParams.name})`);
 
     return Object.assign({}, claimRecord, {outpoint});
   } catch (err) {
@@ -56,8 +62,8 @@ const publish = async (publishParams, fileName, fileType, filePath) => {
     // this needs work
     logger.info('publish/publish err:', err);
     const error = typeof err === 'string' ? JSON.parse(err) : err;
-    if (filePath) {
-      await deleteFile(filePath);
+    if (publishParams.file_path) {
+      await deleteFile(publishParams.file_path);
     }
     const message = error.error && error.error.message ? error.error.message : 'Unknown publish error';
     return {

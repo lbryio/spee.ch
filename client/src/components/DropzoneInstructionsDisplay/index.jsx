@@ -2,11 +2,14 @@ import React from 'react';
 import FormFeedbackDisplay from '@components/FormFeedbackDisplay';
 import Row from '@components/Row';
 
-const DropzoneInstructionsDisplay = ({fileError}) => {
+const DropzoneInstructionsDisplay = ({fileError, message}) => {
+  if (!message) {
+    message = 'Drag & drop image or video here to publish';
+  }
   return (
     <div className={'dropzone-instructions-display'}>
       <Row>
-        <p className={'text--large'}>Drag & drop image or video here to publish</p>
+        <p className={'text--large'}>{message}</p>
       </Row>
       <Row>
         <p className={'text--small'}>OR</p>

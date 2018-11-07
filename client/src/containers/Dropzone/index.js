@@ -13,7 +13,8 @@ const mapStateToProps = ({ show, publish: { file, thumbnail, fileError, isUpdate
   if (isUpdate) {
     asset = selectAsset(show);
     if (asset) {
-      if (asset.claimData.fileExt === 'mp4') {
+      obj.fileExt = asset.claimData.contentType.split('/')[1];
+      if (obj.fileExt === 'mp4') {
         obj.sourceUrl = asset.claimData.thumbnail ? asset.claimData.thumbnail : defaultThumbnail;
       } else {
         ({claimData: {fileExt, outpoint}} = asset);
