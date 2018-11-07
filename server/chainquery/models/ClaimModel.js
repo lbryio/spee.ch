@@ -3,7 +3,7 @@ const logger = require('winston');
 const {
   assetDefaults: { thumbnail: defaultThumbnail },
   details: { host }
-} = require('../../config/siteConfig'); // TODO: Fix paths for rollup
+} = require('../../site/config/siteConfig'); // TODO: Fix paths for rollup
 
 const getterMethods = {
   generated_extension() {
