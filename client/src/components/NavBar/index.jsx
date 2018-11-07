@@ -10,7 +10,6 @@ class NavBar extends React.Component {
       <div className={'nav-bar'}>
         <SpaceBetween >
           <Logo />
-          <SiteDescription />
           <NavigationLinks />
         </SpaceBetween>
       </div>

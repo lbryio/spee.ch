@@ -1,15 +1,27 @@
 .nav-bar {
   padding-left: $primary-padding;
   padding-right: $primary-padding;
-  border-bottom: 0.5px solid $tertiary-color;
+  
+  @media (max-width: $break-point-phone) {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  // border-bottom: 0.5px solid $tertiary-color;
   .select--arrow {
     padding: 0 1.5em 0 $input-padding;
+    font-size: 14px;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
   }
 }
 
 .nav-bar-link {
   padding: calc(1em - 2px);
   display: inline-block;
+  font-size: 14px;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
 }
 
 .nav-bar-logo {
@@ -23,6 +35,7 @@
     padding-bottom: calc(1em - 2px);
     padding-left: 1em;
   }
+  
 }
 
 @media (max-width: $break-point-small ) {
@@ -33,3 +46,5 @@
     padding-left: 0.5em;
   }
 }
+
+

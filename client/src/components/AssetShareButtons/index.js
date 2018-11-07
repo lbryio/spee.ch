@@ -5,32 +5,32 @@ const AssetShareButtons = ({ assetUrl, name }) => {
   return (
     <SocialShareLink >
       <a
-        className='link--primary'
+        className='link--primary twitter'
         target='_blank'
         href={`https://twitter.com/intent/tweet?text=${assetUrl}`}
       >
-        twitter
+        <img src='/assets/img/twitter.svg' />
       </a>
       <a
-        className='link--primary'
+        className='link--primary facebook'
         target='_blank'
         href={`https://www.facebook.com/sharer/sharer.php?u=${assetUrl}`}
       >
-        facebook
+        <img src='/assets/img/facebook.svg' />
       </a>
       <a
-        className='link--primary'
+        className='link--primary tumblr'
         target='_blank'
         href={`https://tumblr.com/widgets/share/tool?canonicalUrl=${assetUrl}`}
       >
-        tumblr
+        <img src='/assets/img/tumblr.svg' />
       </a>
       <a
-        className='link--primary'
+        className='link--primary reddit'
         target='_blank'
         href={`https://www.reddit.com/submit?url=${assetUrl}&title=${name}`}
       >
-        reddit
+        <img src='/assets/img/reddit.svg' />
       </a>
       <a
         className='link--primary'

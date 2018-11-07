@@ -5,6 +5,11 @@ $tertiary-color: #ccccc0;
 $interactive-color: blue;
 $success-color: green;
 $failure-color: red;
+// $brand-color: #ff725d;
+$brand-color: #1944F9;
+$grey: #9095A5;
+$grey-alt: #DDDFE4;
+$shadow-color: rgba(169, 173, 186, 0.2);
 
 $primary-padding: 3em;
 $secondary-padding: 2em;
@@ -32,7 +37,9 @@ $text-x-small: small;
 $break-point-xx-large: 1400px;
 $break-point-x-large: 1290px;
 $break-point-large: 1000px;
+$break-point-tablet: 900px;
 $break-point-medium: 800px;
+$break-point-phone: 640px;
 $break-point-small: 500px;
 $break-point-x-small: 400px;
 

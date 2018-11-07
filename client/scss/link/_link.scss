@@ -6,6 +6,10 @@ a, a:visited {
   color: $interactive-color;
 }
 
+.link--brand, .link--brand:visited {
+  color: $brand-color;
+}
+
 .link--secondary, .link--secondary:visited {
   margin: 0px;
   padding: 0.3em;
@@ -25,3 +29,50 @@ a, a:visited {
   color: $interactive-color;
   border-bottom: 2px solid $interactive-color;
 }
+
+
+.link--icon, .link--icon:visited {
+  display: flex;
+  align-items: center;
+  
+  .link-text {
+    padding-bottom: 2px;
+    border-bottom: 1px solid transparent;
+    transition: all 0.2s ease;
+  }
+  .icon-wrap {
+    margin-left: 5px;
+    padding-top: 0px;
+    align-items: center;
+    svg {
+      width: 16px;
+      height: 16px;
+      stroke: $grey;
+      transition: all 0.2s ease;
+    }
+
+    @media (max-width: $break-point-x-small) {
+      padding-top: 0;
+    }
+  }
+  &:hover {
+    .link-text {
+      border-bottom: 1px solid $brand-color;
+    }
+    svg {
+      stroke: $brand-color;
+    }
+  }
+}
+
+
+.link--hover {
+  display: inline-block;
+  padding-bottom: 2px;
+  border-bottom: 1px solid transparent;
+  transition: all 0.2s ease;
+  &:hover {
+    border-bottom: 1px solid $brand-color;
+  }
+}
+

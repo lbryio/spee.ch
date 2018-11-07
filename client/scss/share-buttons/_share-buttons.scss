@@ -1,0 +1,51 @@
+.share-buttons {
+  display: flex;
+  align-items: center;
+  
+  a {
+    display: block;
+    width: 30px;
+    height: 30px;
+    margin: 0 7px;
+    border-radius: 100%;
+    line-height: 30px;
+    text-align: center;
+    transition: all 0.2s ease;
+    &.twitter {
+      background:#4DC2FE;
+      img {
+        margin-top: 8px;
+        margin-left: 2px;
+      }
+    }
+    
+    &.facebook {
+      background: #5487DE;
+      img {
+        margin-top: 6px;
+      }
+    }
+    
+    &.tumblr {
+      background: #274061;
+      img {
+        margin-top: 7px;
+      }
+    }
+    
+    &.reddit {
+      background: #FF4500;
+      img {
+        margin-top: 7px;
+      }
+    }
+    
+    &:first-child{
+      margin-left: 0px;
+    }
+    
+    &:hover {
+      background: $brand-color;
+    }
+  }
+}
