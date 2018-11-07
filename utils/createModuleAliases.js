@@ -1,8 +1,8 @@
 const { statSync, existsSync, readdirSync } = require('fs');
 const { join, resolve } = require('path');
 const DEFAULT_ROOT = 'client/build';
-const CUSTOM_ROOT = 'client_custom/build';
-const CUSTOM_SCSS_ROOT = 'client_custom/scss';
+const CUSTOM_ROOT = 'site/client_custom/build';
+const CUSTOM_SCSS_ROOT = 'site/client_custom/scss';
 
 const getFolders = path => {
   if (existsSync(path)) {
@@ -41,8 +41,7 @@ module.exports = () => {
   moduleAliases['server'] = resolve('./server');
 
   // aliases for configs
-  moduleAliases['@config'] = resolve('config');
-  moduleAliases['@devConfig'] = resolve('devConfig');
+  moduleAliases['@config'] = resolve('site/config');
 
   // create specific aliases for locally defined components in the following folders
   moduleAliases = addAliasesForCustomComponentFolder('containers', moduleAliases);

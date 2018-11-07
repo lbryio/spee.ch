@@ -28,8 +28,8 @@
     "transpile:server:dev": "babel server/render/src -w -d server/render/build",
     "transpile:client": "babel client/src -d client/build",
     "transpile:client:dev": "babel client/src -w -d client/build",
-    "transpile:client_custom": "babel client_custom/src -d client_custom/build",
-    "transpile:client_custom:dev": "babel client_custom/src -w -d client_custom/build"
+    "transpile:client_custom": "babel site/client_custom/src -d site/client_custom/build",
+    "transpile:client_custom:dev": "babel site/client_custom/src -w -d site/client_custom/build"
   },
   "repository": {
     "type": "git",

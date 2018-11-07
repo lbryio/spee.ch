@@ -240,7 +240,7 @@ const logger = require('winston');
 const {
   assetDefaults: { thumbnail: defaultThumbnail },
   details: { host }
-} = require('../../config/siteConfig'); // TODO: Fix paths for rollup
+} = require('../../site/config/siteConfig'); // TODO: Fix paths for rollup
 
 const getterMethods$3 = {
   generated_extension() {
@@ -1066,7 +1066,7 @@ const {
   database,
   username,
   password,
-} = require('../../config/chainqueryConfig'); // TODO: Make '@config/siteConfig' work outside Webpack for testing/dev
+} = require('../../site/config/chainqueryConfig'); // TODO: Make '@config/siteConfig' work outside Webpack for testing/dev
 
 if (!database || !username || !password) {
   logger$2.warn('missing database, user, or password from chainqueryConfig');
