@@ -39,10 +39,10 @@ const {
     port,
     title,
     host,
-    channelClaimBidAmount: channelBid,
   },
   publishing: {
     uploadDirectory,
+    channelClaimBidAmount: channelBid,
   },
 } = siteConfig;
 
