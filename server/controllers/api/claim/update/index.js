@@ -96,7 +96,6 @@ const claimUpdate = ({ body, files, headers, ip, originalUrl, user, tor }, res) 
       if (claimRecord.content_type === 'video/mp4' && files.file) {
         thumbnailUpdate = true;
       }
-      logger.info('claimRecord:', claimRecord);
 
       if (!files.file || thumbnailUpdate) {
         return Promise.all([
@@ -132,7 +131,6 @@ const claimUpdate = ({ body, files, headers, ip, originalUrl, user, tor }, res) 
           const newThumbnailName = `${name}-${rando()}`;
           const newThumbnailParams = createThumbnailPublishParams(filePath, newThumbnailName, license, nsfw);
           newThumbnailParams['file_path'] = filePath;
-          logger.info('newThumbnailParams:', newThumbnailParams);
           publish(newThumbnailParams, fileName, fileType);
 
           publishParams['sources'] = resolution.claim.value.stream.source;

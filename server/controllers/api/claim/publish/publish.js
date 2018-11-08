@@ -40,10 +40,6 @@ const publish = async (publishParams, fileName, fileType) => {
       fileRecord = await db.File.findOne({where: {claimId}}).then(result => result.dataValues);
     }
 
-    logger.info('fileRecord:', fileRecord);
-    logger.info('claimRecord:', claimRecord);
-    logger.info('upsertCriteria:', upsertCriteria);
-
     const [file, claim] = await Promise.all([
       db.upsert(db.File, fileRecord, upsertCriteria, 'File'),
       db.upsert(db.Claim, claimRecord, upsertCriteria, 'Claim'),

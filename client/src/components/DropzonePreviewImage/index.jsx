@@ -12,7 +12,6 @@ class PublishPreview extends React.Component {
   componentDidMount () {
     const { isUpdate, sourceUrl, file } = this.props;
     if (isUpdate && sourceUrl) {
-      console.log('setting sourceUrl:', sourceUrl);
       this.setState({ imgSource: sourceUrl });
     } else {
       this.setPreviewImageSource(file);
