@@ -26,27 +26,30 @@ class PublishMetadataInputs extends React.Component {
     this.props.onMetadataChange(name, selectedOption);
   }
   render () {
+    const { showMetadataInputs, description, isUpdate, nsfw } = this.props;
     return (
       <div>
-        {this.props.showMetadataInputs && (
+        {(showMetadataInputs || isUpdate) && (
           <div>
             <PublishDescriptionInput
-              description={this.props.description}
+              description={description}
               handleInput={this.handleInput}
             />
             <PublishLicenseInput
               handleSelect={this.handleSelect}
             />
             <PublishNsfwInput
-              nsfw={this.props.nsfw}
+              nsfw={nsfw}
               handleInput={this.handleInput}
             />
           </div>
         )}
-        <ButtonSecondary
-          value={this.props.showMetadataInputs ? 'less' : 'more'}
-          onClickHandler={this.toggleShowInputs}
-        />
+        {!isUpdate && (
+          <ButtonSecondary
+            value={showMetadataInputs ? 'less' : 'more'}
+            onClickHandler={this.toggleShowInputs}
+          />
+        )}
       </div>
     );
   }

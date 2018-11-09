@@ -8,6 +8,7 @@ const mapStateToProps = ({ publish }) => {
     description       : publish.metadata.description,
     license           : publish.metadata.license,
     nsfw              : publish.metadata.nsfw,
+    isUpdate          : publish.isUpdate,
   };
 };
 

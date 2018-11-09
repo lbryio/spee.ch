@@ -12,7 +12,7 @@ class PublishStatus extends React.Component {
         {status === publishStates.LOAD_START &&
           <div className={'status'}>
             <Row>
-              <p>le is loading to server</p>
+              <p>File is loading to server</p>
             </Row>
             <Row>
               <p className={'text--secondary'}>0%</p>
@@ -42,7 +42,7 @@ class PublishStatus extends React.Component {
             </Row>
           </div>
         }
-        {status === publishStates.SUCCESS &&
+        {status === publishStates.SUCCEEDED &&
           <div className={'status'}>
             <Row>
               <p>Your publish is complete! You are being redirected to it now.</p>
@@ -68,6 +68,13 @@ class PublishStatus extends React.Component {
                 value={'Reset'}
                 onClickHandler={clearFile}
               />
+            </Row>
+          </div>
+        }
+        {status === publishStates.ABANDONING &&
+          <div className={'status'}>
+            <Row>
+              <p>Your claim is being abandoned.</p>
             </Row>
           </div>
         }
