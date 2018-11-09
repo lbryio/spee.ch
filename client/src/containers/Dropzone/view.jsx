@@ -84,7 +84,7 @@ class Dropzone extends React.Component {
     const { dragOver, mouseOver, dimPreview } = this.state;
     const { file, thumbnail, fileError, isUpdate, sourceUrl, fileExt } = this.props;
     return (
-      <div>
+      <div className="dropzone-wrapper">
         {isUpdate && fileExt === 'mp4' ? (
           <p>Video updates are currently disabled. This feature will be available soon. You can edit metadata.</p>
         ) : (
