@@ -1,4 +1,5 @@
 import React from 'react';
+import { withRouter } from 'react-router';
 import PageLayout from '@components/PageLayout';
 import HorizontalSplit from '@components/HorizontalSplit';
 import AboutSpeechOverview from '@components/AboutSpeechOverview';
@@ -20,4 +21,4 @@ class AboutPage extends React.Component {
   }
 }
 
-export default AboutPage;
+export default withRouter(AboutPage);

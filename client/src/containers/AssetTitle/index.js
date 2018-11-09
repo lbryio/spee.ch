@@ -2,8 +2,8 @@ import { connect } from 'react-redux';
 import View from './view';
 import { selectAsset } from '../../selectors/show';
 
-const mapStateToProps = ({ show }) => {
-  const { claimData: { title } } = selectAsset(show);
+const mapStateToProps = (props) => {
+  const { claimData: { title } } = selectAsset(props.show);
   return {
     title,
   };

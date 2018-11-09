@@ -1,23 +1,34 @@
 import React from 'react';
+import { withRouter, Prompt } from 'react-router';
 import Dropzone from '@containers/Dropzone';
 import PublishPreview from '@components/PublishPreview';
 import PublishStatus from '@containers/PublishStatus';
 import PublishDisabledMessage from '@containers/PublishDisabledMessage';
+import { SAVE } from '../../constants/confirmation_messages';
 
 class PublishTool extends React.Component {
   render () {
-    if (this.props.disabled) {
+    const {disabled, file, isUpdate, hasChanged, uri, status, location: currentLocation} = this.props;
+    if (disabled) {
       return (
         <PublishDisabledMessage />
       );
     } else {
-      if (this.props.file) {
-        if (this.props.status) {
+      if (file || isUpdate) {
+        if (status) {
           return (
             <PublishStatus />
           );
         } else {
-          return <PublishPreview />;
+          return (
+            <React.Fragment>
+              <Prompt
+                when={hasChanged}
+                message={(location) => location.pathname === currentLocation.pathname ? false : SAVE}
+              />
+              <PublishPreview isUpdate={isUpdate} uri={uri} />
+            </React.Fragment>
+          );
         }
       }
       return <Dropzone />;
@@ -25,4 +36,4 @@ class PublishTool extends React.Component {
   }
 };
 
-export default PublishTool;
+export default withRouter(PublishTool);

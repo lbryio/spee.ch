@@ -5,7 +5,11 @@ const { returnPaginatedChannelClaims } = require('./channelPagination.js');
 
 const getChannelClaims = async (channelName, channelShortId, page) => {
   const channelId = await chainquery.claim.queries.getLongClaimId(channelName, channelShortId);
-  const channelClaims = await chainquery.claim.queries.getAllChannelClaims(channelId);
+
+  let channelClaims;
+  if (channelId) {
+    channelClaims = await chainquery.claim.queries.getAllChannelClaims(channelId);
+  }
 
   const processingChannelClaims = channelClaims ? channelClaims.map((claim) => getClaimData(claim)) : [];
   const processedChannelClaims = await Promise.all(processingChannelClaims);

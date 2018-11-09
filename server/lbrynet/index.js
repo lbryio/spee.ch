@@ -2,6 +2,7 @@ const axios = require('axios');
 const logger = require('winston');
 const { apiHost, apiPort, getTimeout } = require('@config/lbryConfig');
 const lbrynetUri = 'http://' + apiHost + ':' + apiPort;
+const db = require('../models');
 const { chooseGaLbrynetPublishLabel, sendGATimingEvent } = require('../utils/googleAnalytics.js');
 const handleLbrynetResponse = require('./utils/handleLbrynetResponse.js');
 const { publishing } = require('@config/siteConfig');
@@ -46,6 +47,21 @@ module.exports = {
         });
     });
   },
+  async abandonClaim ({claimId}) {
+    logger.debug(`lbryApi >> Abandon claim "${claimId}"`);
+    const gaStartTime = Date.now();
+    try {
+      const abandon = await axios.post(lbrynetUri, {
+        method: 'claim_abandon',
+        params: { claim_id: claimId },
+      });
+      sendGATimingEvent('lbrynet', 'abandonClaim', 'ABANDON_CLAIM', gaStartTime, Date.now());
+      return abandon.data;
+    } catch (error) {
+      logger.error(error);
+      return error;
+    }
+  },
   getClaimList (claimName) {
     logger.debug(`lbryApi >> Getting claim_list for "${claimName}"`);
     const gaStartTime = Date.now();
@@ -75,7 +91,13 @@ module.exports = {
         })
         .then(({ data }) => {
           sendGATimingEvent('lbrynet', 'resolveUri', 'RESOLVE', gaStartTime, Date.now());
-          if (data.result[uri].error) {  // check for errors
+          if (Object.keys(data.result).length === 0 && data.result.constructor === Object) {
+            // workaround for daemon returning empty result object
+            // https://github.com/lbryio/lbry/issues/1485
+            db.Claim.findOne({ where: { claimId: uri.split('#')[1] } })
+              .then(() => reject('This claim has not yet been confirmed on the LBRY blockchain'))
+              .catch(() => reject(`Claim ${uri} does not exist`));
+          } else if (data.result[uri].error) {  // check for errors
             reject(data.result[uri].error);
           } else {  // if no errors, resolve
             resolve(data.result[uri]);

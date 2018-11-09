@@ -36,7 +36,7 @@ class ChannelClaimsDisplay extends React.Component {
                 <AssetPreview
                   defaultThumbnail={defaultThumbnail}
                   claimData={claim}
-                  key={`${claim.name}-${claim.id}`}
+                  key={claim.claimId}
                 />
               ))}
             </div>

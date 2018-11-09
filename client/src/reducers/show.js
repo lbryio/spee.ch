@@ -65,6 +65,43 @@ export default function (state = initialState, action) {
           },
         }),
       });
+    case actions.ASSET_REMOVE:
+      const claim = action.data;
+      const newAssetList = state.assetList;
+      delete newAssetList[`a#${claim.name}#${claim.claimId}`];
+
+      const channelId = `c#${claim.channelName}#${claim.certificateId}`;
+      const channelClaims = state.channelList[channelId].claimsData.claims;
+      const newClaimsData = channelClaims.filter(c => c.claimId !== claim.claimId);
+
+      return {
+        ...state,
+        assetList  : newAssetList,
+        channelList: {
+          ...state.channelList,
+          [channelId]: {
+            ...state.channelList[channelId],
+            claimsData: {
+              ...state.channelList[channelId].claimsData,
+              claims: newClaimsData,
+            },
+          },
+        },
+      };
+    case actions.ASSET_UPDATE_CLAIMDATA:
+      return {
+        ...state,
+        assetList: {
+          ...state.assetList,
+          [action.data.id]: {
+            ...state.assetList[action.data.id],
+            claimData: {
+              ...state.assetList[action.data.id].claimData,
+              ...action.data.claimData,
+            },
+          },
+        },
+      };
     // channel data
     case actions.CHANNEL_ADD:
       return Object.assign({}, state, {
@@ -77,7 +114,7 @@ export default function (state = initialState, action) {
           },
         }),
       });
-    case actions.CHANNEL_CLAIMS_UPDATE_SUCCESS:
+    case actions.CHANNEL_CLAIMS_UPDATE_SUCCEEDED:
       return Object.assign({}, state, {
         channelList: Object.assign({}, state.channelList, {
           [action.data.channelListId]: Object.assign({}, state.channelList[action.data.channelListId], {

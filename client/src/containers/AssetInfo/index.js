@@ -2,12 +2,20 @@ import { connect } from 'react-redux';
 import View from './view';
 import { selectAsset } from '../../selectors/show';
 
-const mapStateToProps = ({ show }) => {
+const mapStateToProps = (props) => {
+  const {show} = props;
   // select asset
   const asset = selectAsset(show);
+  const editable = Boolean(
+    asset &&
+    asset.claimData &&
+    asset.claimData.channelName &&
+    props.channel.loggedInChannel.name === asset.claimData.channelName
+  );
   //  return props
   return {
     asset,
+    editable,
   };
 };
 

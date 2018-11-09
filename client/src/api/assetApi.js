@@ -42,3 +42,15 @@ export function getClaimViews (claimId) {
   const url = `/api/claim/views/${claimId}`;
   return Request(url);
 }
+
+export function doAbandonClaim (claimId) {
+  const params = {
+    method : 'POST',
+    body   : JSON.stringify({claimId}),
+    headers: new Headers({
+      'Content-Type': 'application/json',
+    }),
+    credentials: 'include',
+  };
+  return Request('/api/claim/abandon', params);
+}
