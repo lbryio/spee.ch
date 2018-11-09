@@ -89,6 +89,7 @@ class AssetDisplay extends React.Component {
               thumbnail={thumbnail}
             />
             }
+          </div>
         </div>
         <AssetTitle />
       </div>
