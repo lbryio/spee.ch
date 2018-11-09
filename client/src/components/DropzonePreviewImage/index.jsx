@@ -10,7 +10,12 @@ class PublishPreview extends React.Component {
     };
   }
   componentDidMount () {
-    this.setPreviewImageSource(this.props.file);
+    const { isUpdate, sourceUrl, file } = this.props;
+    if (isUpdate && sourceUrl) {
+      this.setState({ imgSource: sourceUrl });
+    } else {
+      this.setPreviewImageSource(file);
+    }
   }
   componentWillReceiveProps (newProps) {
     if (newProps.file !== this.props.file) {
@@ -54,8 +59,10 @@ class PublishPreview extends React.Component {
 
 PublishPreview.propTypes = {
   dimPreview: PropTypes.bool.isRequired,
-  file      : PropTypes.object.isRequired,
+  file      : PropTypes.object,
   thumbnail : PropTypes.object,
+  isUpdate  : PropTypes.bool,
+  sourceUrl : PropTypes.string,
 };
 
 export default PublishPreview;
