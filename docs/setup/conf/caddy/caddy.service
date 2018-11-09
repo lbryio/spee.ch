@@ -1,0 +1,14 @@
+[Unit]
+Description=Caddy HTTP/2 web server
+
+[Service]
+User=www-data
+Group=www-data
+Environment=CADDYPATH=/opt/caddy/store
+ExecStart=/usr/local/bin/caddy -agree=true -log=/opt/caddy/logs/caddy.log -conf=/opt/caddy/Caddyfile -root=/dev/null
+ExecReload=/bin/kill -USR1 $MAINPID
+LimitNOFILE=1048576
+LimitNPROC=64
+
+[Install]
+WantedBy=multi-user.target

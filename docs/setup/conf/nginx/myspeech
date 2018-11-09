@@ -1,0 +1,51 @@
+#/etc/nginx/sites-available/myspeech
+
+server {
+  listen 80;
+  listen [::]:80;
+
+  server_name {{DOMAIN_NAME}} {{WWW_DOMAIN_NAME}}
+  include snippets/letsencrypt.conf;
+  return 301 https://$host$request_uri;
+}
+
+server {
+  listen 443 ssl http2;
+  server_name {{WWW_DOMAIN_NAME}};
+  ssl_certificate /etc/letsencrypt/live/{{DOMAIN_NAME}}/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/{{DOMAIN_NAME}}/privkey.pem;
+  ssl_trusted_certificate /etc/letsencrypt/live/{{DOMAIN_NAME}}/chain.pem;
+  include snippets/ssl.conf;
+  include snippets/letsencrypt.conf;
+
+  access_log /var/log/nginx/www-myspeech.access.log;
+  error_log /var/log/nginx/www-myspeech.error.log;
+
+  return 301 https://{{DOMAIN_NAME}}$request_uri;
+}
+
+server {
+  #YOUR SITE HERE
+  listen 443 ssl http2;
+  server_name {{DOMAIN_NAME}};
+
+  ssl_certificate /etc/letsencrypt/live/{{DOMAIN_NAME}}/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/{{DOMAIN_NAME}}/privkey.pem;
+  ssl_trusted_certificate /etc/letsencrypt/live/{{DOMAIN_NAME}}/chain.pem;
+  include snippets/ssl.conf;
+  include snippets/letsencrypt.conf;
+
+  access_log /var/log/nginx/myspeech.access.log;
+  error_log /var/log/nginx/myspeech.error.log;
+
+  location / {
+    proxy_read_timeout 5m;
+    proxy_pass http://localhost:3000;
+    proxy_set_header X-Real-IP  $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_set_header X-Forwarded-Port $server_port;
+    proxy_set_header Host $host;
+    proxy_pass_header Server;
+  }
+}
