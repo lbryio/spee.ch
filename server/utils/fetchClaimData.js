@@ -10,9 +10,15 @@ const fetchClaimData = async (params) => {
     db.Claim.resolveClaim(name, claimId).catch(() => {}),
   ]);
 
-  if (!cq && !local) return null;
-  if (cq && cq.name === name && !local) return cq;
-  if (local && local.name === name && !cq) return local;
+  if (!cq && !local) {
+    return null;
+  }
+  if (cq && cq.name === name && !local) {
+    return cq;
+  }
+  if (local && local.name === name && !cq) {
+    return local;
+  }
   return local.updatedAt > cq.modified_at ? local : cq;
 };
 

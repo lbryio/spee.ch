@@ -12,13 +12,14 @@ const mapStateToProps = ({ show, publish: { file, thumbnail, fileError, isUpdate
   let asset, name, claimId, fileExt, outpoint, sourceUrl;
   if (isUpdate) {
     asset = selectAsset(show);
+    const { claimData } = asset;
     if (asset) {
-      obj.fileExt = asset.claimData.contentType.split('/')[1];
+      obj.fileExt = claimData.contentType.split('/')[1];
       if (obj.fileExt === 'mp4') {
-        obj.sourceUrl = asset.claimData.thumbnail ? asset.claimData.thumbnail : defaultThumbnail;
+        obj.sourceUrl = claimData.thumbnail ? claimData.thumbnail : defaultThumbnail;
       } else {
-        ({claimData: {fileExt, outpoint}} = asset);
-        obj.sourceUrl = `${createCanonicalLink({ asset: asset.claimData })}.${fileExt}?${outpoint}`;
+        ({fileExt, outpoint} = claimData);
+        obj.sourceUrl = `${createCanonicalLink({ asset: claimData })}.${fileExt}?${outpoint}`;
       }
     }
   }

@@ -1,6 +1,6 @@
 const logger = require('winston');
-const db = require('../../../../models');
-const { abandonClaim } = require('../../../../lbrynet');
+const db = require('server/models');
+const { abandonClaim } = require('server/lbrynet');
 const deleteFile = require('../publish/deleteFile.js');
 const authenticateUser = require('../publish/authentication.js');
 

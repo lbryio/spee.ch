@@ -1,7 +1,7 @@
 const logger = require('winston');
-const db = require('../../../../models');
+const db = require('server/models');
 const { details, publishing: { disabled, disabledMessage, primaryClaimAddress } } = require('@config/siteConfig');
-const { resolveUri } = require('../../../../lbrynet');
+const { resolveUri } = require('server/lbrynet');
 const { sendGATimingEvent } = require('../../../../utils/googleAnalytics.js');
 const { handleErrorResponse } = require('../../../utils/errorHandlers.js');
 const publish = require('../publish/publish.js');
