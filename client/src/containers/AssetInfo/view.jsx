@@ -11,6 +11,7 @@ import HorizontalSplit from '@components/HorizontalSplit';
 import siteConfig from '@config/siteConfig.json';
 const { details: { host } } = siteConfig;
 import createCanonicalLink from '../../../../utils/createCanonicalLink';
+import AssetInfoFooter from '../../components/AssetInfoFooter/index';
 
 class AssetInfo extends React.Component {
   render () {
@@ -29,129 +30,111 @@ class AssetInfo extends React.Component {
       channelCanonicalUrl = `${createCanonicalLink({channel})}`;
     }
     return (
-      <div className='asset-information-wrap'>
+      <div className='asset-info'>
         <HorizontalSplit
           leftSide={
             description && (
-              <Row>
-                <p>{description}</p>
-              </Row>
+              <p className='asset-info__description'>{description}</p>
             )
           }
           rightSide={
             <div>
               {channelName && (
-                <Row>
-                  <RowLabeled
-                    label={
-                      <Label value={'Channel:'} />
-                    }
-                    content={
-                      <span className='text'>
-                        <Link to={channelCanonicalUrl}>{channelName}</Link>
-                      </span>
-                    }
-                  />
-                </Row>
+                <RowLabeled
+                  label={
+                    <Label value={'Channel'} />
+                  }
+                  content={
+                    <span className='text'>
+                      <Link className='link--primary' to={channelCanonicalUrl}>{channelName}</Link>
+                    </span>
+                  }
+                />
               )}
 
               {claimViews ? (
-                <Row>
-                  <RowLabeled
-                    label={
-                      <Label value={'Views:'} />
-                    }
-                    content={
-                      <span className='text'>
-                        {claimViews}
-                      </span>
-                    }
-                  />
-                </Row>
+                <RowLabeled
+                  label={
+                    <Label value={'Views'} />
+                  }
+                  content={
+                    <span className='text'>
+                      {claimViews}
+                    </span>
+                  }
+                />
               ) : null}
 
-              <Row>
-                <RowLabeled
-                  label={
-                    <Label value={'Share:'} />
-                  }
-                  content={
-                    <AssetShareButtons
-                      name={name}
-                      assetUrl={assetCanonicalUrl}
-                    />
-                  }
-                />
-              </Row>
+              <RowLabeled
+                label={
+                  <Label value={'Share'} />
+                }
+                content={
+                  <AssetShareButtons
+                    name={name}
+                    assetUrl={assetCanonicalUrl}
+                  />
+                }
+              />
 
-              <Row>
-                <RowLabeled
-                  label={
-                    <Label value={'Link:'} />
-                  }
-                  content={
-                    <ClickToCopy
-                      id={'short-link'}
-                      value={assetCanonicalUrl}
-                    />
-                  }
-                />
-              </Row>
+              <RowLabeled
+                label={
+                  <Label value={'Link'} />
+                }
+                content={
+                  <ClickToCopy
+                    id={'short-link'}
+                    value={assetCanonicalUrl}
+                  />
+                }
+              />
 
-              <Row>
-                <RowLabeled
-                  label={
-                    <Label value={'Embed:'} />
-                  }
-                  content={
-                    <div>
-                      {(contentType === 'video/mp4') ? (
-                        <ClickToCopy
-                          id={'embed-text-video'}
-                          value={`<iframe src="${host}/video-embed${canonicalUrl}" allowfullscreen="true" style="border:0" /></iframe>`}
-                        />
-                      ) : (
-                        <ClickToCopy
-                          id={'embed-text-image'}
-                          value={`<img src="${assetCanonicalUrl}.${fileExt}"/>`}
-                        />
-                      )}
-                    </div>
-                  }
-                />
-              </Row>
+              <RowLabeled
+                label={
+                  <Label value={'Embed'} />
+                }
+                content={
+                  <div>
+                    {(contentType === 'video/mp4') ? (
+                      <ClickToCopy
+                        id={'embed-text-video'}
+                        value={`<iframe src="${host}/video-embed${canonicalUrl}" allowfullscreen="true" style="border:0" /></iframe>`}
+                      />
+                    ) : (
+                      <ClickToCopy
+                        id={'embed-text-image'}
+                        value={`<img src="${assetCanonicalUrl}.${fileExt}"/>`}
+                      />
+                    )}
+                  </div>
+                }
+              />
 
-              <Row>
-                <SpaceBetween>
-                  <a
-                    className='link--primary'
-                    href={`${assetCanonicalUrl}.${fileExt}`}
-                  >
-                    Direct Link
-                  </a>
-                  <a
-                    className={'link--primary'}
-                    href={`${assetCanonicalUrl}.${fileExt}`}
-                    download={name}
-                  >
-                    Download
-                  </a>
-                  <a
-                    className={'link--primary'}
-                    target='_blank'
-                    href='https://lbry.io/dmca'
-                  >
-                    Report
-                  </a>
-                </SpaceBetween>
-              </Row>
+              <SpaceBetween>
+                <a
+                  className='link--primary'
+                  href={`${assetCanonicalUrl}.${fileExt}`}
+                >
+                  Direct Link
+                </a>
+                <a
+                  className={'link--primary'}
+                  href={`${assetCanonicalUrl}.${fileExt}`}
+                  download={name}
+                >
+                  Download
+                </a>
+                <a
+                  className={'link--primary'}
+                  target='_blank'
+                  href='https://lbry.io/dmca'
+                >
+                  Report
+                </a>
+              </SpaceBetween>
             </div>
           } />
-        <Row>
-          <p>
-            Hosted via the <a className={'link--primary'} href={'https://lbry.io/get'} target={'_blank'}>LBRY</a> blockchain
-          </p>
-        </Row>
+        <AssetInfoFooter/>
       </div>
     );
   }

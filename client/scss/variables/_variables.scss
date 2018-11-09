@@ -1,14 +1,11 @@
 $base-color: white;
-$primary-color: black;
-$secondary-color: #9b9b9b;
-$tertiary-color: #ccccc0;
-$interactive-color: blue;
+$primary-color: #005da0;
+$secondary-color: $primary-color;
 $success-color: green;
 $failure-color: red;
-// $brand-color: #ff725d;
-$brand-color: #1944F9;
 $grey: #9095A5;
-$grey-alt: #DDDFE4;
+$help-color: $grey;
+$grey-border: #DDDFE4;
 $shadow-color: rgba(169, 173, 186, 0.2);
 
 $primary-padding: 3em;
@@ -17,8 +14,10 @@ $tertiary-padding: 1em;
 $thin-padding: 0.3em;
 $full-width-thin-padding: calc(100% - 0.6em);
 
+$width-content-constrained: 1000px;
+
 $background-color: $base-color;
-$font-color: $primary-color;
+$text-color: #333;
 
 $button-border-width: 1px;
 $button-border-strength: solid;
@@ -28,18 +27,14 @@ $input-padding: 0.3em;
 $input-full-width: calc(100% - 0.6em);
 
 $text-xx-large: 2.5em;
-$text-x-large: xx-large;
-$text-large: x-large;
-$text-medium: large;
-$text-small: medium;
+$text-x-large: x-large;
+$text-large: large;
+$text-medium: medium;
+$text-small: small;
 $text-x-small: small;
 
 $break-point-xx-large: 1400px;
 $break-point-x-large: 1290px;
 $break-point-large: 1000px;
-$break-point-tablet: 900px;
-$break-point-medium: 800px;
-$break-point-phone: 640px;
-$break-point-small: 500px;
-$break-point-x-small: 400px;
-
+$break-point-tablet: 800px;
+$break-point-mobile: 500px;

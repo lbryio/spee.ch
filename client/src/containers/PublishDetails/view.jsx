@@ -6,7 +6,7 @@ import PublishMetadataInputs from '@containers/PublishMetadataInputs';
 import ChannelSelect from '@containers/ChannelSelect';
 import Row from '@components/Row';
 import ButtonPrimaryJumbo from '@components/ButtonPrimaryJumbo';
-import ButtonTertiary from '@components/ButtonTertiary';
+import ButtonSecondary from '@components/ButtonSecondary';
 import SpaceAround from '@components/SpaceAround';
 import PublishFinePrint from '@components/PublishFinePrint';
 
@@ -48,7 +48,7 @@ class PublishDetails extends React.Component {
 
         <Row>
           <SpaceAround>
-            <ButtonTertiary
+            <ButtonSecondary
               value={'Cancel'}
               onClickHandler={this.props.clearFile}
             />

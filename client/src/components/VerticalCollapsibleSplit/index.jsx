@@ -5,11 +5,18 @@ class VerticalCollapsibleSplit extends React.Component {
   constructor (props) {
     super(props);
     this.collapse = this.collapse.bind(this);
-    this.state = { closed: false };
+    this.storageKey = 'vert-split-state-' + this.props.name;
+    // const closed = window && window.localStorage
+    //   ? !!window.localStorage.getItem(this.storageKey) : false;
+    const closed = false;
+    this.state = { closed: closed };
   }
 
   collapse () {
     this.setState({ closed: !this.state.closed });
+    // if (window && window.localStorage) {
+    //   window.localStorage.setItem(this.storageKey, !this.state.closed);
+    // }
     document.querySelectorAll(`[data-name='${this.props.name}']`).forEach(el => el.classList.toggle('closed'));
   }
 

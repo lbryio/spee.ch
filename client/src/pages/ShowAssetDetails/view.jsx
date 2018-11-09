@@ -6,6 +6,16 @@ import AssetDisplay from '@containers/AssetDisplay';
 import AssetInfo from '@containers/AssetInfo';
 import ErrorPage from '@pages/ErrorPage';
 
+/*
+
+          <VerticalCollapsibleSplit
+            name={'asset-display-collapse'}
+            top={}
+            bottom={<AssetInfo />}
+          />
+
+ */
+
 class ShowAssetDetails extends React.Component {
   render () {
     const { asset } = this.props;
@@ -16,11 +26,8 @@ class ShowAssetDetails extends React.Component {
           pageTitle={`${name} - details`}
           asset={asset}
         >
-          <VerticalCollapsibleSplit
-            name={'asset-display-collapse'}
-            top={<AssetDisplay />}
-            bottom={<AssetInfo />}
-          />
+          <AssetDisplay />
+
         </PageLayout>
       );
     }

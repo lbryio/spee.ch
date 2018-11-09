@@ -4,6 +4,12 @@ h1, h2, h3, h4, p {
   margin: 0;
 }
 
+body {
+  color: $text-color;
+  font-family: 'Circular', serif;
+  font-size: 16px;
+}
+
 h1 {
  font-size: $text-xx-large;
 }
@@ -14,12 +20,6 @@ h2 {
 
 h3 {
   font-size: $text-large;
-  font-weight: bold;
-}
-
-p, body, button, input, textarea, label, select, option {
-  font-family: 'Circular', serif;
-  font-size: 16px;
 }
 
 .text--extra-large {
@@ -42,24 +42,12 @@ p, body, button, input, textarea, label, select, option {
   font-size: $text-x-small;
 }
 
-.text--underline {
-  text-decoration: underline;
-}
-
-.text--primary {
-  color: $primary-color;
-}
-
 .text--secondary {
-  color: $secondary-color;
-}
-
-.text--tertiary {
-  color: $tertiary-color;
+  color: $help-color;
 }
 
 .text--interactive {
-  color: $interactive-color;
+  color: $primary-color;
 }
 
 .text--failure {
@@ -101,7 +89,7 @@ p, body, button, input, textarea, label, select, option {
 
 }
 
-@media (max-width: $break-point-medium) {
+@media (max-width: $break-point-tablet) {
 
   h1 {
     font-size: $text-large;
@@ -134,7 +122,7 @@ p, body, button, input, textarea, label, select, option {
 
 }
 
-@media (max-width: $break-point-x-small) {
+@media (max-width: $break-point-mobile) {
 
   h1 {
     font-size: $text-medium;

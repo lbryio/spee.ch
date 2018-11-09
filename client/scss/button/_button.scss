@@ -1,3 +1,21 @@
 button {
   cursor: pointer;
+  &:active
+  {
+    outline: 0;
+  }
+}
+
+.button--primary, .button--secondary
+{
+  border-width: $button-border-width;
+  border-style: $button-border-strength;
+  border-color: transparent;
+  padding: $thin-padding;
+}
+
+
+.button--jumbo, .button--jumbo:focus, .button--jumbo:active {
+  width: $button-full-width;
+  font-size: x-large;
 }

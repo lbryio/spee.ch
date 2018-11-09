@@ -1,13 +1,12 @@
 .nav-bar {
-  padding-left: $primary-padding;
-  padding-right: $primary-padding;
+  margin-left: $primary-padding;
+  margin-right: $primary-padding;
   
-  @media (max-width: $break-point-phone) {
-    padding-left: 15px;
-    padding-right: 15px;
+  @media (max-width: $break-point-mobile) {
+    margin-left: 15px;
+    margin-right: 15px;
   }
 
-  // border-bottom: 0.5px solid $tertiary-color;
   .select--arrow {
     padding: 0 1.5em 0 $input-padding;
     font-size: 14px;
@@ -28,7 +27,7 @@
   cursor: pointer;
 }
 
-@media (max-width: $break-point-medium ) {
+@media (max-width: $break-point-tablet ) {
   .nav-bar-link {
     padding-top: calc(1em - 2px);
     padding-right: 1em;
@@ -38,7 +37,7 @@
   
 }
 
-@media (max-width: $break-point-small ) {
+@media (max-width: $break-point-mobile ) {
   .nav-bar-link {
     padding-top: calc(0.5em - 2px);
     padding-right: 0.5em;

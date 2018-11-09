@@ -1,57 +1,39 @@
 .asset-display {
-  background: #F6F6F6;
   display: flex;
   flex-direction: column;
   flex: 1 0 auto;
   justify-content: center;
   position: relative;
   width: 100%;
-
-  &:after {
-    background: transparent;
-    bottom: 0;
-    box-shadow: inset 0 1px 2px 2px $shadow-color;
-    content: '';
-    height: 1px;
-    left: 0;
-    position: absolute;
-    top: auto;
-    width: 100%;
-  }
+  $height-delta: 43 / 16 + ($primary-padding * 2); //fix 43!!! nav height
+  //max-height: calc(100vh - #{$height-delta});
+  height: calc(100vh - #{$height-delta});
+  overflow: hidden;
 }
 
 .asset-title {
   color: #2E2F31;
-  font-size: 26px;
+  font-size: $text-x-large;
   font-weight: normal;
   letter-spacing: 0;
-  line-height: 32px;
-  margin-top: 40px;
+  margin-top: $primary-padding;
   text-align: center;
 
   @media (max-width: $break-point-tablet) {
-    padding: 0 20px;
+    padding: 0 $tertiary-padding;
   }
 }
 
 .asset-image, .asset-video {
-  margin: 60px auto;
   max-height: 100%;
-  max-width: 60vh;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
   object-fit: contain;
   object-position: center;
-
-  @media (max-width: $break-point-small) {
-    max-width: calc(100% - 30px);
-  }
 }
 
-.asset-video {
-  border: none;
-  margin: 0px auto;
-  width: 100%;
-  padding: 6px;
-}
+/*below must die if this is intended to be shareable component! it also probably doesn't need to be*/
 
 .visible-content {
   margin: 0;
@@ -67,15 +49,6 @@
     }
   }
 
-  &:before{
-    box-shadow: inset 2px 3px 3px 2px $shadow-color;
-    content: '';
-    height: 100px;
-    position: absolute;
-    width: 100%;
-    z-index: 100;
-  }
-
   &:after {
     box-shadow: 0px 2px 3px 2px $shadow-color;
     content: '';
@@ -87,16 +60,17 @@
   }
 }
 
-.asset-information-wrap {
-  max-width: 800px;
+.asset-info {
+  $asset-info-width: 1000px;
+  max-width: $asset-info-width;
 
-  @media (max-width: $break-point-tablet) {
+  @media (max-width: $asset-info-width) {
     margin: 0px auto;
     max-width: 100%;
     width: calc(100% - 80px);
   }
 
-  @media (max-width: $break-point-phone) {
+  @media (max-width: $break-point-tablet) {
     width: calc(100% - 30px);
   }
 
@@ -104,10 +78,17 @@
     justify-content: center;
 
     .column {
-      padding-top: 40px;
+      padding-top: $primary-padding;
+      padding-bottom: $primary-padding;
+
+      .row-labeled
+      {
+        margin-bottom: $secondary-padding;
+        &:last-child { margin-bottom: 0; }
+      }
 
       &:first-child {
-        border-right: 1px solid $grey-alt;
+        border-right: 1px solid $grey-border;
         margin-right: -1px;
         padding-right: 40px;
 
@@ -120,7 +101,7 @@
       }
 
       &:last-child {
-        border-left: 1px solid $grey-alt;
+        border-left: 1px solid $grey-border;
         padding-left: 60px;
 
         @media (max-width: $break-point-tablet) {
@@ -153,7 +134,7 @@
     width: 320px;
 
     @media (max-width: $break-point-tablet) {
-      border-bottom: 1px solid $grey-alt;
+      border-bottom: 1px solid $grey-border;
       min-width: 100%;
       padding-bottom: 30px;
       width: 100%;
@@ -163,22 +144,7 @@
 }
 
 .asset-footer {
-  border-top: 1px solid $grey-alt;
-  padding-bottom: 80px;
-  padding-top: 30px;
-
-  @media (max-width: $break-point-tablet) {
-    padding-top: 22px;
-    padding-bottom: 0;
-  }
-
-    .claim-address {
-
-      .link--brand {
-        font-size: 14px;
-        font-weight: 300;
-        line-height: 18px;
-      }
-    }
-
+  border-top: 1px solid $grey-border;
+  padding: $tertiary-padding $primary-padding;
+  color: $grey;
 }

@@ -1,5 +1,5 @@
 .row {
-  padding-bottom: 1.2em;
+  margin-bottom: 1.2em;
 }
 
 .row-labeled {
@@ -10,77 +10,26 @@
 }
 
 .row-labeled-label {
-  align-self: flex-start;
   width: 30%;
+  display: flex;
+  align-items: center;
+  flex: 1;
+  //bad, fix this
+  .label { padding-top: 0; padding-bottom: 0; }
 }
 .row-labeled-content {
   align-self: center;
   width: 70%;
 }
 
-.row-labeled-alt {
-  display: column;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  justify-content: flex-start;
-
-  .row-labeled-label {
-    align-self: flex-start;
-    width: 100%;
-    color: $grey;
-    .label {
-      font-weight: bold;
-      text-transform: uppercase;
-      font-size: 13px;
-      letter-spacing: 0.4px;
-      line-height: 18px;
-    }
-  }
-
-  .row-labeled-content {
-    align-self: center;
-    width: 100%;
-  }
-}
-
-
-@media (max-width: $break-point-medium ) {
-
+@media (max-width: $break-point-tablet ) {
   .row-labeled {
     flex-direction: column;
   }
-
   .row-labeled-label {
     width: 100%;
   }
   .row-labeled-content {
     width: 100%;
-  }
-
-}
-
-
-@media (max-width: $break-point-tablet) and (min-width: $break-point-phone) {
-  .row {
-    margin-bottom: 1.4em;
-  }
-
-  .tablet-inline-row {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-
-    >.row {
-      flex: 1;
-      margin: 0 15px 1.4em;
-
-      &:first-child {
-        margin-left: 0;
-      }
-
-      &:last-child {
-        margin-right: 0;
-      }
-    }
   }
 }

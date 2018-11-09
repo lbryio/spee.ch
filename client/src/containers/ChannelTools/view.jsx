@@ -8,11 +8,11 @@ class ChannelTools extends React.Component {
     return (
       <div>
         <Row>
-          <h3>Log in to an existing channel:</h3>
+          <h3>Log in to existing channel</h3>
           <ChannelLoginForm />
         </Row>
         {!this.props.closedRegistration && (<Row>
-          <h3>Create a brand new channel:</h3>
+          <h3>Create new channel</h3>
           <ChannelCreateForm />
         </Row>)}
       </div>

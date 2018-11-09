@@ -16,6 +16,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  user-select: none;
 }
 
 .dropzone:hover, .dropzone--active {
@@ -26,6 +27,11 @@
 .dropzone-dropit-display, .dropzone-instructions-display {
   padding: 1em;
   text-align: center;
+}
+
+.dropzone-dropit-display
+{
+  color: $primary-color;
 }
 
 .dropzone-preview-wrapper {
@@ -48,4 +54,8 @@
   display: block;
   padding: 1em;
   width: calc(100% - 2em);
+}
+
+.dropzone-instructions-display__chooser-label {
+  text-decoration: underline;
 }

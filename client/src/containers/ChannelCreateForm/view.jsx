@@ -81,7 +81,7 @@ class ChannelCreateForm extends React.Component {
         </form>
         ) : (
           <div>
-            <p className={'text--small text--secondary'}>{status}</p>
+            <span className={'text--small text--secondary'}>{status}</span>
             <ProgressBar size={12} />
           </div>
         )}

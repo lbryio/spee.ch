@@ -1,4 +1,4 @@
-.vertical-split {
+.vertical-split, .visible-content {
   flex           : 1 0 auto;
   display        : flex;
   flex-direction : column;
@@ -6,7 +6,13 @@
   align-items    : center;
 };
 
+.asset-display-wrap
+{
+  flex-grow: 1;
+}
+
 .collapse-content {
+  flex-grow: 0;
   @media (max-width: $break-point-tablet) {
     max-width: 100%;
     width: 100%;
@@ -18,7 +24,6 @@
 }
 
 .collapse-button {
-  outline: none;
   background: none;
   border: none;
   display: block;
@@ -34,7 +39,7 @@
   }
 
   svg {
-    stroke: $brand-color;
+    stroke: $primary-color;
     &.plus-icon {
       transform: rotate(0);
       transition: all 0.4s ease;

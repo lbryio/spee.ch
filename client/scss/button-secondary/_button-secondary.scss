@@ -1,21 +1,11 @@
-.button--secondary, .button--secondary:focus {
-  border: 0;
-  border-bottom: $button-border-width $button-border-strength $primary-color;
-  padding: 0.5em;
-  color: $primary-color;
+.button--secondary, .button--secondary:focus, .button--secondary:active  {
+  border-bottom-color: $secondary-color;
+  color: $secondary-color;
   background-color: $background-color;
-  outline: 0;
-}
-
-.button--secondary:focus{
-  border-color: $secondary-color;
-  background-color: $tertiary-color;
-}
-
-.button--secondary:hover {
-  color: $interactive-color;
 }
 
 .button--secondary:active {
-  color: $background-color;
+  $color: darken($secondary-color, 10%);
+  color: $color;
+  border-bottom-color: $color;
 }

@@ -4,22 +4,20 @@
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
-  border: 1px solid $grey-alt;
+  border: 1px solid $grey-border;
   border-radius: 6px;
   .click-to-copy {
     border: none;
     padding: 0.36em 0.5em;
     margin: 0;
-    color: black;
     background-color: transparent;
     width: calc(100% - 1em - 2px);
     font-size: 14px;
-    color: #2E2F31;
     letter-spacing: -0.6px;
     line-height: 20px;
     letter-spacing: 0;
     font-family: monospace;
-    border-right: 1px solid $grey-alt;
+    border-right: 1px solid $grey-border;
   }
   .icon-wrap {
     width: 30px;
@@ -27,7 +25,7 @@
     line-height: 34px;
     text-align: center;
     svg {
-      stroke: $brand-color;
+      stroke: $primary-color;
       width: 16px;
       height: 16px;
     }

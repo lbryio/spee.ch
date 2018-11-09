@@ -1,34 +1,16 @@
-.button-primary, .button-primary:focus, .button-primary:active {
-  border: $button-border-width $button-border-strength $primary-color;
-  margin-top: $thin-padding;
-  margin-bottom: $thin-padding;
-  padding: $thin-padding;
+.button--primary, .button--primary:focus, .button--primary:active {
+  border-color: $primary-color;
   color: $primary-color;
   background-color: $background-color;
-  outline: 0;
 }
 
-.button-primary:focus {
-  border-color: $secondary-color;
-  background-color: $tertiary-color;
-}
-
-
-.button-primary:hover {
-  border-color: $interactive-color;
+.button--primary:hover {
   color: $background-color;
-  background-color: $interactive-color;
+  background-color: $primary-color;
 }
 
-.button-primary:active{
-  border-color: $background-color;
-  color: $secondary-color;
-  background-color: $tertiary-color;
-}
-
-.button-primary--jumbo, .button-primary--jumbo:focus, .button-primary--jumbo:active {
-  width: $button-full-width;
-  padding-top: $secondary-padding;
-  padding-bottom: $secondary-padding;
-  font-size: x-large;
+.button--primary:active {
+  $color: darken($primary-color, 10%);
+  border-color: $color;
+  background-color: $color;
 }

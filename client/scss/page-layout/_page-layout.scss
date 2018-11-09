@@ -7,5 +7,21 @@
     display: flex;
     -webkit-flex-direction: column;
     flex-direction: column;
+    margin: $secondary-padding;
+  }
+}
+
+@media (max-width: $break-point-tablet) {
+  .page-layout .content { margin: $thin-padding; }
+}
+
+@media (max-width: $break-point-mobile) {
+  max-width: calc(100% - 30px);
+}
+
+//below should take some styles from _text.scss and probably elsewhere and become "markdown" or "rich" styles
+.page-layout {
+  p {
+    margin-bottom: $tertiary-padding;
   }
 }

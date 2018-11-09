@@ -3,6 +3,7 @@ import PublishDescriptionInput from '@components/PublishDescriptionInput';
 import PublishLicenseInput from '@components/PublishLicenseInput';
 import PublishNsfwInput from '@components/PublishNsfwInput';
 import ButtonSecondary from '@components/ButtonSecondary';
+import Row from '@components/Row';
 
 class PublishMetadataInputs extends React.Component {
   constructor (props) {
@@ -29,19 +30,25 @@ class PublishMetadataInputs extends React.Component {
     return (
       <div>
         {this.props.showMetadataInputs && (
-          <div>
-            <PublishDescriptionInput
-              description={this.props.description}
-              handleInput={this.handleInput}
-            />
-            <PublishLicenseInput
-              handleSelect={this.handleSelect}
-            />
-            <PublishNsfwInput
-              nsfw={this.props.nsfw}
-              handleInput={this.handleInput}
-            />
-          </div>
+          <React.Fragment>
+            <Row>
+              <PublishDescriptionInput
+                description={this.props.description}
+                handleInput={this.handleInput}
+              />
+            </Row>
+            <Row>
+              <PublishLicenseInput
+                handleSelect={this.handleSelect}
+              />
+            </Row>
+            <Row>
+              <PublishNsfwInput
+                nsfw={this.props.nsfw}
+                handleInput={this.handleInput}
+              />
+            </Row>
+          </React.Fragment>
         )}
         <ButtonSecondary
           value={this.props.showMetadataInputs ? 'less' : 'more'}
