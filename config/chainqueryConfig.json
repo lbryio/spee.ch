@@ -1,0 +1,8 @@
+{
+  "host": "chainquery.lbry.io",
+  "port": "3306",
+  "timeout": 30,
+  "database": "chainquery",
+  "username": "speechapi",
+  "password": "1304486ca42ecdbf419f667fdc02c31e7d03b1e3"
+}

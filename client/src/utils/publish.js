@@ -16,7 +16,9 @@ export const createPublishMetadata = (claim, { type }, { title, description, lic
 export const createPublishFormData = (file, thumbnail, metadata) => {
   let fd = new FormData();
   // append file
-  fd.append('file', file);
+  if (file) {
+    fd.append('file', file);
+  }
   // append thumbnail
   if (thumbnail) {
     fd.append('thumbnail', thumbnail);
@@ -31,5 +33,5 @@ export const createPublishFormData = (file, thumbnail, metadata) => {
 };
 
 export const createThumbnailUrl = (channel, channelId, claim, host) => {
-  return `${host}/${channel}:${channelId}/${claim}-thumb.png`;
+  return `${host}/${channel}:${channelId}/${claim}-thumb.jpg`;
 };

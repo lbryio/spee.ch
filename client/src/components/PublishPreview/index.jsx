@@ -9,10 +9,12 @@ import Row from '@components/Row';
 
 class PublishPreview extends React.Component {
   render () {
+    const { isUpdate, uri } = this.props;
     return (
       <div className={'publish-form'}>
         <div className={'publish-form__title'}>
           <Row>
+            {isUpdate && uri && (<p className='text--secondary'>{`Editing ${uri}`}</p>)}
             <PublishTitleInput />
           </Row>
         </div>

@@ -11,7 +11,7 @@ const createPublishParams = (filePath, name, title, description, license, nsfw, 
   }
   // provide default for license
   if (license === null || license.trim() === '') {
-    license = ' ';  // default to empty string
+    license = '';  // default to empty string
   }
   // create the basic publish params
   const publishParams = {

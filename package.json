@@ -22,14 +22,14 @@
     "test": "mocha --recursive",
     "test:no-lbc": "npm test -- --grep @usesLbc --invert",
     "test:server": "mocha --recursive './server/**/*.test.js'",
-    "transpile": "builder concurrent transpile:server transpile:client transpile:client_custom",
-    "transpile:dev": "builder concurrent transpile:server:dev transpile:client:dev transpile:client_custom:dev",
+    "transpile": "builder concurrent transpile:server transpile:client transpile:custom",
+    "transpile:dev": "builder concurrent transpile:server:dev transpile:client:dev transpile:custom:dev",
     "transpile:server": "babel server/render/src -d server/render/build",
     "transpile:server:dev": "babel server/render/src -w -d server/render/build",
     "transpile:client": "babel client/src -d client/build",
     "transpile:client:dev": "babel client/src -w -d client/build",
-    "transpile:client_custom": "babel site/client_custom/src -d site/client_custom/build",
-    "transpile:client_custom:dev": "babel site/client_custom/src -w -d site/client_custom/build"
+    "transpile:custom": "babel site/custom/src -d site/custom/build",
+    "transpile:custom:dev": "babel site/custom/src -w -d site/custom/build"
   },
   "repository": {
     "type": "git",
@@ -78,7 +78,7 @@
     "redux-saga": "^0.16.0",
     "sequelize": "^4.38.0",
     "sequelize-cli": "^4.0.0",
-    "universal-analytics": "^0.4.17",
+    "universal-analytics": "^0.4.20",
     "webpack": "^3.10.0",
     "webpack-merge": "^4.1.4",
     "webpack-node-externals": "^1.7.2",

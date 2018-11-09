@@ -1,8 +1,8 @@
 const { handleErrorResponse } = require('../../../utils/errorHandlers.js');
 const getClaimData = require('server/utils/getClaimData');
+const fetchClaimData = require('server/utils/fetchClaimData');
 const chainquery = require('chainquery');
 const db = require('server/models');
-
 /*
 
   route to return data for a claim
@@ -10,16 +10,9 @@ const db = require('server/models');
 */
 
 const claimData = async ({ ip, originalUrl, body, params }, res) => {
-  const claimName = params.claimName;
-  let claimId = params.claimId;
-  if (claimId === 'none') claimId = null;
 
   try {
-    let resolvedClaim = await chainquery.claim.queries.resolveClaim(claimName, claimId).catch(() => {});
-
-    if(!resolvedClaim) {
-      resolvedClaim = await db.Claim.resolveClaim(claimName, claimId);
-    }
+    const resolvedClaim = await fetchClaimData(params);
 
     if (!resolvedClaim) {
       return res.status(404).json({

@@ -28,7 +28,7 @@ async function createFileRecordDataAfterGet (resolveResult, getResult) {
     filePath,
     fileType,
   };
-};
+}
 
 async function createFileRecordDataAfterPublish (fileName, fileType, publishParams, publishResults) {
   const {
