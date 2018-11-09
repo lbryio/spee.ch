@@ -10,8 +10,14 @@ function logMetricsMiddleware(req, res, next) {
     let referrer = req.get('referrer');
 
     if(referrer && referrer.length > 255) {
-      // Attempt to "safely" clamp long URLs
-      referrer = /(.*?)#.*/.exec(referrer)[1];
+      try {
+        // Attempt to "safely" clamp long URLs
+        referrer = /(.*?)#.*/.exec(referrer)[1];
+      } catch(e) {
+        // Cheap forced string conversion & clamp
+        referrer = new String(referrer);
+        referrer = referrer.substr(0, 255);
+      }
 
       if(referrer.length > 255) {
         logger.warn('Request refferer exceeds 255 characters:', referrer);
