@@ -1,4 +1,5 @@
 .nav-bar {
+  margin-top: $thin-padding;
   margin-left: $primary-padding;
   margin-right: $primary-padding;
   
@@ -18,7 +19,7 @@
 .nav-bar-link {
   padding: calc(1em - 2px);
   display: inline-block;
-  font-size: 14px;
+  font-size: $text-medium;
   letter-spacing: 0.4px;
   text-transform: uppercase;
 }
