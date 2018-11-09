@@ -155,9 +155,9 @@ Spee.ch also runs a sync tool, which decodes blocks from the `LBRY` blockchain a
   * `client/scss/` contains  the CSS for the project
     *
 
-* `client_custom` is a folder which can be used to override the default components in `client/`
+* `config/custom` is a folder which can be used to override the default components in `client/`
   * The folder structure mimics that of the `client/` folder
-  * to customize spee.ch, place your own components and scss in the `client_custom/src/` and `client_custom/scss` folders.
+  * to customize spee.ch, place your own components and scss in the `config/custom/src/` and `config/custom/scss` folders.
 
 * `server/`  contains all of the server code
   * `index.js` is the entry point for the server.  It creates the [express app](https://expressjs.com/), requires the routes, syncs the database, and starts the server listening on the `PORT` designated in the config files.
