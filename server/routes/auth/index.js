@@ -6,7 +6,7 @@ const handleUserRequest = require('../../controllers/auth/user');
 
 module.exports = {
   '/signup': { method: 'post', controller: [ speechPassport.authenticate('local-signup'), handleSignupRequest ] },
-  '/login': { method: 'post', controller: handleLoginRequest },
+  '/auth': { method: 'post', controller: handleLoginRequest },
   '/logout': { controller: handleLogoutRequest },
   '/user': { controller: handleUserRequest },
 };
