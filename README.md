@@ -5,44 +5,17 @@ You can create your own custom version of spee.ch by installing this code base a
 
 ## Quickstart
 
+### Ubuntu
+[Ubuntu VPS Setup](./docs/ubuntu16vpspersonal.md)
+
 _note: this is the quickstart guide, for an in-depth step-by-step overview visit the [fullstart guide](https://github.com/lbryio/spee.ch/blob/readme-update/fullstart.md)._
 
-#### Install System Dependencies:
+#### System Dependencies:
   * [node](https://nodejs.org)
   * [MySQL](https://dev.mysql.com/doc/refman/8.0/en/installing.html)
   * [`lbry`](https://github.com/lbryio/lbry) daemon
     * note: retrieve an address from the daemon and send your wallet a few credits (or join us in the [#speech discord channel](https://discord.gg/YjYbwhS) and we will send you a few)
   * [FFmpeg](https://www.ffmpeg.org/download.html)
-
-#### Clone this repo
-```
-$ git clone https://github.com/lbryio/spee.ch.git
-```
-
-####  Change directory into your project
-```
-$ cd spee.ch
-```
-
-#### Install node dependencies
-```
-$ npm install
-```
-
-#### Create the config files using the built-in CLI
-```
-$ npm run configure
-```
-
-#### Build & start the app
-
-_note: make sure lbry is running in the background before proceeding_
-```
-$ npm run start
-```
-
-#### View in browser
- *  Visit [http://localhost:3000](http://localhost:3000) in your browser
 
 #### Customize your app
 
