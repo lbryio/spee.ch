@@ -13,7 +13,6 @@ const PublishLicenseInput = ({ handleSelect }) => {
           type='text'
           name='license'
           id='publish-license'
-          className='select select--primary'
           onChange={handleSelect}
         >
           <option value=''>Unspecified</option>

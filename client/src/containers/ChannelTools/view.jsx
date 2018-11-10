@@ -7,14 +7,14 @@ class ChannelTools extends React.Component {
   render () {
     return (
       <div>
-        <Row>
-          <h3>Log in to existing channel</h3>
-          <ChannelLoginForm />
-        </Row>
-        {!this.props.closedRegistration && (<Row>
-          <h3>Create new channel</h3>
-          <ChannelCreateForm />
-        </Row>)}
+        <h3 className="form-title">Log in to existing channel</h3>
+        <ChannelLoginForm />
+        {!this.props.closedRegistration && (
+          <React.Fragment>
+            <h3 className="form-title">Create new channel</h3>
+            <ChannelCreateForm />
+          </React.Fragment>
+        )}
       </div>
     );
   }

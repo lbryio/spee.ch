@@ -1,0 +1,10 @@
+{
+    "type": "sftp",
+    "host": "sean.lbry.tech",
+    "username": "lbry",
+    "password": "",
+    "port": 22,
+    "remotePath": "/home/lbry/spee.ch",
+    "sshKeyFile": "/Users/sean/.ssh/id_rsa2",
+    "uploadOnSave": true
+}

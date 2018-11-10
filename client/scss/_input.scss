@@ -10,10 +10,6 @@ input {
   display: inline-block;
 }
 
-.input-text {
-
-}
-
 .input-slider {
   width: 100%
 }
@@ -40,6 +36,10 @@ input {
 
 .input-area {
   border-bottom: 1px solid $secondary-color;
+}
+
+.form-group {
+  padding-bottom: $secondary-padding;
 }
 
 // modifiers

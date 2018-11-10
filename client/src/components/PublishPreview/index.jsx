@@ -19,6 +19,7 @@ class PublishPreview extends React.Component {
           </Row>
         </div>
         <HorizontalSplit
+          collapseOnMobile
           leftSide={<Dropzone />}
           rightSide={<PublishDetails />}
         />

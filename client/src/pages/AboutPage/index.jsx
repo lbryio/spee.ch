@@ -13,6 +13,7 @@ class AboutPage extends React.Component {
         pageUri={'about'}
       >
         <HorizontalSplit
+          collapseOnMobile
           leftSide={<AboutSpeechOverview />}
           rightSide={<AboutSpeechDetails />}
         />

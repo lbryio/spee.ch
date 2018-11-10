@@ -5,7 +5,6 @@ const ChannelSelectDropdown = ({ selectedChannel, handleSelection, loggedInChann
   return (
     <select
       id='channel-name-select'
-      className='select select--arrow'
       value={selectedChannel}
       onChange={handleSelection}>
       { loggedInChannelName && (

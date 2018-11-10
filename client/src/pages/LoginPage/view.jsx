@@ -20,6 +20,7 @@ class LoginPage extends React.Component {
         pageUri={'login'}
       >
         <HorizontalSplit
+          collapseOnMobile
           leftSide={<ChannelAbout />}
           rightSide={<ChannelTools />}
         />

@@ -1,16 +1,30 @@
+.asset-main {
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  align-items: space-between;
+  align-items: center;
+}
+
 .asset-display {
   display: flex;
   flex-direction: column;
-  flex: 1 0 auto;
+  flex: 1 1 auto;
   justify-content: center;
   position: relative;
   width: 100%;
   overflow: hidden;
   align-items: center;
+  min-height: 50vh;
 }
 
 .asset-title {
-  padding-top: $secondary-padding;
+  padding-bottom: $thin-padding;
+  text-align: center;
+
+  @media (min-width: $break-point-mobile) {
+    padding-top: $secondary-padding;
+  }
 }
 
 .asset-image, .asset-video {
@@ -50,7 +64,7 @@
   }
 }
 
-/*
+
 .vertical-split, .visible-content {
   flex           : 1 0 auto;
   display        : flex;
@@ -80,7 +94,6 @@
   height: 25px;
   text-align: center;
   padding: 0px;
-  padding-left: 10px;
 
   @media (max-width: $break-point-tablet) {
     padding: 0;
@@ -101,93 +114,25 @@
     }
   }
 }
- */
 
 .asset-info {
   $asset-info-width: 1000px;
   max-width: $asset-info-width;
-
-  @media (max-width: $asset-info-width) {
-    margin: 0px auto;
-    max-width: 100%;
-    width: calc(100% - 80px);
-  }
+  margin: $primary-padding;
+  max-width: 100%;
 
   @media (max-width: $break-point-tablet) {
-    width: calc(100% - 30px);
+    margin: $primary-padding $secondary-padding;
   }
 
-  .horizontal-split {
-    justify-content: center;
-
-    .column {
-      padding-top: $primary-padding;
-      padding-bottom: $primary-padding;
-
-      .row-labeled
-      {
-        margin-bottom: $secondary-padding;
-        &:last-child { margin-bottom: 0; }
-      }
-
-      &:first-child {
-        border-right: 1px solid $grey-border;
-        margin-right: -1px;
-        padding-right: 40px;
-
-        @media (max-width: $break-point-tablet) {
-          border: none;
-          margin: 0;
-          order: 2;
-          padding: 0;
-        }
-      }
-
-      &:last-child {
-        border-left: 1px solid $grey-border;
-        padding-left: 60px;
-
-        @media (max-width: $break-point-tablet) {
-          border: none;
-          margin: 0;
-          padding: 40px 0 0 0;
-        }
-      }
-    }
+  @media (max-width: $break-point-mobile) {
+    margin: $primary-padding 0;
   }
-
-  p.asset-description {
-    color: #2E2F31;
-    font-size: 14px;
-    letter-spacing: 0;
-    line-height: 18px;
-    padding-bottom: 80px;
-    white-space: pre-line;
-    width: 360px;
-
-    @media (max-width: $break-point-tablet) {
-      margin: 22px 0 60px;
-      max-width: 600px;
-      padding: 0;
-      width: 100%;
-    }
-  }
-
-  .asset-information {
-    width: 320px;
-
-    @media (max-width: $break-point-tablet) {
-      border-bottom: 1px solid $grey-border;
-      min-width: 100%;
-      padding-bottom: 30px;
-      width: 100%;
-    }
-  }
-
 }
 
 .asset-footer {
   border-top: 1px solid $grey-border;
-  padding: $tertiary-padding $primary-padding;
+  padding-top: $primary-padding;
+  margin-top: $primary-padding;
   color: $grey;
 }

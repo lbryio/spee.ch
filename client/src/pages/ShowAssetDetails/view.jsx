@@ -14,7 +14,7 @@ class ShowAssetDetails extends React.Component {
     // this.storageKey = 'vert-split-state-' + this.props.name;
     // const closed = window && window.localStorage
     //   ? !!window.localStorage.getItem(this.storageKey) : false;
-    const closed = false;
+    const closed = true;
     this.state = { closed: closed };
   }
 
@@ -35,12 +35,15 @@ class ShowAssetDetails extends React.Component {
           pageTitle={`${name} - details`}
           asset={asset}
         >
-          <AssetDisplay />
-          <AssetTitle />
-          <button className='collapse-button' onClick={this.collapse}>
-            {this.state.closed ? <Icon.PlusCircle className='plus-icon' /> : <Icon.MinusCircle />}
-          </button>
-          { !this.state.closed && <AssetInfo /> }
+          <div className="asset-main">
+            <AssetDisplay />
+            <AssetTitle />
+            
+            <button className='collapse-button' onClick={this.collapse}>
+              {this.state.closed ? <Icon.PlusCircle className='plus-icon' /> : <Icon.MinusCircle />}
+            </button>
+          </div>
+          {!this.state.closed && <AssetInfo />}
         </PageLayout>
       );
     }

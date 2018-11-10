@@ -6,6 +6,21 @@
   display       : flex;
   flex-direction : row;
   justify-content: space-between;
+
+  &.horizontal-split--mobile-collapse {
+    @media (max-width: $break-point-mobile) {
+      flex-direction: column;
+
+      .horizontal-split__column {
+        width: 100%;
+      }
+
+      .horizontal-split__column--right {
+        padding-left: 0;
+        padding-top: $secondary-padding;
+      }
+    }
+  }
 };
 
 .horizontal-split__column {
@@ -16,10 +31,18 @@
 
 .horizontal-split__column--left {
   padding-right: $primary-padding;
+
+  @media (max-width: $break-point-mobile) {
+    padding-right: $thin-padding;
+  }
 }
 
 .horizontal-split__column--right {
   padding-left: $primary-padding;
+
+  @media (max-width: $break-point-mobile) {
+    padding-left: $thin-padding;
+  }
 }
 
 @media (max-width: $break-point-tablet) {

@@ -1,7 +1,7 @@
 import React from 'react';
 
 const FormFeedbackDisplay = ({ errorMessage, defaultMessage }) => {
-  return (
+  return (errorMessage || defaultMessage) ? (
     <div className={'form-feedback'}>
       { errorMessage ? (
         <span className={'text--small text--failure'}>{errorMessage}</span>
@@ -15,7 +15,7 @@ const FormFeedbackDisplay = ({ errorMessage, defaultMessage }) => {
         </div>
       )}
     </div>
-  );
+  ) : null;
 };
 
 export default FormFeedbackDisplay;

@@ -45,7 +45,7 @@ class PublishDetails extends React.Component {
     return (
       <div>
         {isUpdate ? (asset && (
-          <Row>
+          <React.Fragment>
             <RowLabeled
               label={
                 <Label value={'Channel:'} />
@@ -56,16 +56,14 @@ class PublishDetails extends React.Component {
                 </span>
               }
             />
-          </Row>
+          </React.Fragment>
         )) : (
           <React.Fragment>
             <Row>
               <PublishUrlInput />
             </Row>
 
-            <Row>
-              <ChannelSelect />
-            </Row>
+            <ChannelSelect />
           </React.Fragment>
         )}
 
