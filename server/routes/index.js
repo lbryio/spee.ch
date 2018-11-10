@@ -1,7 +1,7 @@
 module.exports = {
+  ...require('./auth'),
   ...require('./pages'),
   ...require('./api'),
-  ...require('./auth'),
   ...require('./assets'),
   ...require('./fallback'),
 };
