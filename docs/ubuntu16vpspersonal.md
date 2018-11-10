@@ -8,7 +8,7 @@
   * Domain name with @ and www pointed at your VPS IP
   * Email Address
   * Ability to send 5+ LBRY credits to an address
-  * Noncommercial use
+  * Noncommercial use (highly suggested, but you still _could_)
   * We recommend that you fork Spee.ch so that you can customize the site.
 
 ## You'll be installing:
