@@ -8,7 +8,7 @@ You can create your own custom version of spee.ch by installing this code base a
 ### Ubuntu
 [Ubuntu VPS Setup](./docs/ubuntu16vpspersonal.md)
 
-_note: this is the quickstart guide, for an in-depth step-by-step overview visit the [fullstart guide](https://github.com/lbryio/spee.ch/blob/readme-update/fullstart.md)._
+_Note: This is our new setup. For our old setup see the [fullstart guide](./fullstart.md)._
 
 #### System Dependencies:
   * [node](https://nodejs.org)
