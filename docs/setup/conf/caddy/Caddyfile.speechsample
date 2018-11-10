@@ -1,0 +1,9 @@
+# Replace {{EXAMPLE.COM}} with 'yourdomain.com', omitting quotes
+
+www.{{EXAMPLE.COM}} {
+  redir https://{{EXAMPLE.COM}}
+}
+
+{{EXAMPLE.COM}} {
+  proxy / localhost:3000
+}
