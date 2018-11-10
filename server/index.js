@@ -62,6 +62,11 @@ function Server () {
     // Support per-request http-context
     app.use(httpContext.middleware);
 
+    // 'express.static' to serve static files from site/public directory
+    const sitePublicPath = Path.resolve(process.cwd(), 'site/public');
+    app.use(express.static(sitePublicPath));
+    logger.info(`serving static files from site static path at ${sitePublicPath}.`);
+
     // 'express.static' to serve static files from public directory
     const publicPath = Path.resolve(process.cwd(), 'public');
     app.use(express.static(publicPath));

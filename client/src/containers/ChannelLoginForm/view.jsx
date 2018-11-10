@@ -31,7 +31,7 @@ class ChannelLoginForm extends React.Component {
       }),
       credentials: 'include',
     };
-    request('login', params)
+    request('auth', params)
       .then(({success, channelName, shortChannelId, channelClaimId, message}) => {
         if (success) {
           this.props.onChannelLogin(channelName, shortChannelId, channelClaimId);
