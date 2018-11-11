@@ -53,20 +53,23 @@ module.exports = (req, res) => {
   const runSaga = (action !== false && saga !== false);
 
   const renderPage = (store) => {
-
     // Workaround, remove when a solution for async httpContext exists
     const showState = store.getState().show;
     const assetKeys = Object.keys(showState.assetList);
+<<<<<<< HEAD
     
     if(assetKeys.length !== 0) {
+=======
+    if (assetKeys.length !== 0) {
+>>>>>>> run eslint pre-hook
       res.claimId = showState.assetList[assetKeys[0]].claimId;
     } else {
       const channelKeys = Object.keys(showState.channelList);
 
-      if(channelKeys.length !== 0) {
+      if (channelKeys.length !== 0) {
         res.claimId = showState.channelList[channelKeys[0]].longId;
         res.isChannel = true;
-        }
+      }
     }
 
     // render component to a string
@@ -119,7 +122,7 @@ module.exports = (req, res) => {
           console.log(`redirecting ${req.originalUrl} to ${canonicalUrl}`);
           res.redirect(canonicalUrl);
         }
-        return renderPage(store)
+        return renderPage(store);
       });
   } else {
     const store = createStore(Reducers);

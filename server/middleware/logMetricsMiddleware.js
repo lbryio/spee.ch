@@ -27,7 +27,11 @@ function logMetricsMiddleware (req, res, next) {
 
     db.Metrics.create({
       time      : Date.now(),
+<<<<<<< HEAD
       isInternal: /node-fetch/.test(userAgent),
+=======
+      isInternal: /node\-fetch/.test(userAgent),
+>>>>>>> run eslint pre-hook
       isChannel : res.isChannel,
       claimId   : res.claimId,
       routePath : httpContext.get('routePath'),

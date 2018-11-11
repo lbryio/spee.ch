@@ -58,7 +58,11 @@ const autoblockPublishBodyMiddleware = (req, res, next) => {
     let ip = (req.headers['x-forwarded-for'] || req.connection.remoteAddress).split(/,\s?/)[0];
     const { channelName } = req.body;
 
+<<<<<<< HEAD
     if (channelName && publishingChannelWhitelist.indexOf(channelName.toLowerCase()) !== -1) {
+=======
+    if (channelName && publishingChannelWhitelist.indexOf(channelName) !== -1) {
+>>>>>>> run eslint pre-hook
       delete ipCounts[ip];
     }
   }
