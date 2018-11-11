@@ -1,0 +1,9 @@
+[Service]
+ExecStart=/usr/bin/node /opt/app/app.js
+Restart=always
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=node-app-1
+User=your_app_user_name
+Group=your_app_user_name
+Environment=NODE_ENV=production PORT=3000
