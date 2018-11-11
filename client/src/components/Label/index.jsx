@@ -8,5 +8,5 @@ const Label = ({ value }) => {
       {value}
     </label>
   );
-}
+};
 export default Label;

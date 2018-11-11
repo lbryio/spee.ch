@@ -3,30 +3,30 @@ module.exports = (sequelize, { BOOLEAN, DATE, STRING }) => {
     'Views',
     {
       time: {
-        type: DATE(6),
+        type        : DATE(6),
         defaultValue: sequelize.NOW,
       },
       isChannel: {
-        type: BOOLEAN,
+        type        : BOOLEAN,
         defaultValue: false,
       },
       claimId: {
-        type: STRING,
+        type        : STRING,
         defaultValue: null,
       },
       publisherId: {
-        type: STRING,
+        type        : STRING,
         defaultValue: null,
       },
       ip: {
-        type: STRING,
+        type        : STRING,
         defaultValue: null,
       },
     },
     {
       freezeTableName: true,
-      timestamps: false, // don't use default timestamps columns
-      indexes: [
+      timestamps     : false, // don't use default timestamps columns
+      indexes        : [
         {
           fields: ['time', 'isChannel', 'claimId', 'publisherId', 'ip'],
         },
@@ -59,8 +59,8 @@ module.exports = (sequelize, { BOOLEAN, DATE, STRING }) => {
         claimId,
       },
       distinct: true,
-      col: 'ip'
-    })
+      col     : 'ip',
+    });
   };
 
   return Views;

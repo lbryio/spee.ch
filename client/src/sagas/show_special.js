@@ -1,7 +1,7 @@
 import {call, put, select, takeLatest} from 'redux-saga/effects';
 import * as actions from '../constants/show_action_types';
 import { addNewChannelToChannelList, addRequestToRequestList, onRequestError, onRequestUpdate, updateChannelClaims } from '../actions/show';
-//import { getChannelClaims, getChannelData } from '../api/channelApi';
+// import { getChannelClaims, getChannelData } from '../api/channelApi';
 import { getSpecialAssetClaims } from '../api/specialAssetApi';
 import { selectShowState } from '../selectors/show';
 import { selectSiteHost } from '../selectors/site';

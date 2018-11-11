@@ -8,13 +8,13 @@ const getClaimIdByChannel = async (channelName, channelClaimId, claimName) => {
 
   let channelId = await chainquery.claim.queries.getLongClaimId(channelName, channelClaimId);
 
-  if(channelId === null) {
+  if (channelId === null) {
     channelId = await db.Certificate.getLongChannelId(channelName, channelClaimId);
   }
 
   let claimId = await chainquery.claim.queries.getClaimIdByLongChannelId(channelId, claimName);
 
-  if(claimId === null) {
+  if (claimId === null) {
     claimId = db.Claim.getClaimIdByLongChannelId(channelId, claimName);
   }
 
@@ -28,7 +28,7 @@ const getClaimId = async (channelName, channelClaimId, name, claimId) => {
   } else {
     let claimIdResult = await chainquery.claim.queries.getLongClaimId(name, claimId);
 
-    if(!claimIdResult) {
+    if (!claimIdResult) {
       claimIdResult = await db.Claim.getLongClaimId(name, claimId);
     }
 

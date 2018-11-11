@@ -30,7 +30,7 @@ function * parseAndUpdateIdentifierAndClaim (modifier, claim) {
 }
 
 function * parseAndUpdateClaimOnly (claim) {
-  if(/^special\:/.test(claim) === true) {
+  if (/^special\:/.test(claim) === true) {
     const assetName = /special\:(.*)/.exec(claim)[1];
     return yield call(newSpecialAssetRequest, onNewSpecialAssetRequest(assetName));
   } else {
