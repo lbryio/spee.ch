@@ -24,7 +24,7 @@ const getClaimIdByChannel = async (channelName, channelClaimId, claimName) => {
 const getClaimId = async (channelName, channelClaimId, name, claimId) => {
   logger.debug(`getClaimId: ${channelName}, ${channelClaimId}, ${name}, ${claimId})`);
   if (channelName) {
-    return await getClaimIdByChannel(channelName, channelClaimId, name);
+    return getClaimIdByChannel(channelName, channelClaimId, name);
   } else {
     let claimIdResult = await chainquery.claim.queries.getLongClaimId(name, claimId);
 

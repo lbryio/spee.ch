@@ -15,7 +15,7 @@ function logMetricsMiddleware (req, res, next) {
         referrer = /(.*?)#.*/.exec(referrer)[1];
       } catch (e) {
         // Cheap forced string conversion & clamp
-        referrer = new String(referrer);
+        referrer = String(referrer);
         referrer = referrer.substr(0, 255);
       }
 
@@ -27,7 +27,7 @@ function logMetricsMiddleware (req, res, next) {
 
     db.Metrics.create({
       time      : Date.now(),
-      isInternal: /node\-fetch/.test(userAgent),
+      isInternal: /node-fetch/.test(userAgent),
       isChannel : res.isChannel,
       claimId   : res.claimId,
       routePath : httpContext.get('routePath'),
