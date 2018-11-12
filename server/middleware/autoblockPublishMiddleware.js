@@ -2,7 +2,7 @@ const fs = require('fs');
 
 const logger = require('winston');
 const { publishing: { publishingChannelWhitelist } } = require('@config/siteConfig');
-const ipBanFile = './config/ipBan.txt';
+const ipBanFile = './site/config/ipBan.txt';
 const forbiddenMessage = '<h1>Forbidden</h1>If you are seeing this by mistake, please contact us using <a href="https://chat.lbry.io/">https://chat.lbry.io/</a>';
 
 let ipCounts = {};
@@ -58,7 +58,7 @@ const autoblockPublishBodyMiddleware = (req, res, next) => {
     let ip = (req.headers['x-forwarded-for'] || req.connection.remoteAddress).split(/,\s?/)[0];
     const { channelName } = req.body;
 
-    if (channelName && publishingChannelWhitelist.indexOf(channelName) !== -1) {
+    if (channelName && publishingChannelWhitelist.indexOf(channelName.toLowerCase()) !== -1) {
       delete ipCounts[ip];
     }
   }
