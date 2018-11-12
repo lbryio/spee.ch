@@ -19,3 +19,5 @@ public/bundle/style.css
 uploads
 
 config/
+
+deployment-config.json
