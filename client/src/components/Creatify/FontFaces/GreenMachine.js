@@ -1,4 +1,4 @@
-export default const GreenMachine = {
+module.exports = {
   container: {},
   text: {
     color: 'green',

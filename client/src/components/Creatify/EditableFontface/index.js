@@ -24,14 +24,13 @@ export default class EditableFontface extends Component {
 
     const textRender = fontFace.textRender || DEFAULT_TEXT_RENDER;
 
-    const textStyles = {
-      ...{
-        minHeight: '30px',
-        WebkitFontSmoothing: 'antialiased',
-        MozOsxFontSmoothing: 'grayscale',
-      },
-      ...(fontFace.text),
-    };
+    const textStyles = Object.assign({
+      minHeight: '30px',
+      WebkitFontSmoothing: 'antialiased',
+      MozOsxFontSmoothing: 'grayscale',
+    }, fontFace.text);
+
+    console.log(textStyles);
 
     return (
       <div style={{ position: 'relative' }}>
@@ -48,7 +47,7 @@ export default class EditableFontface extends Component {
           },
           ...(fontFace.editorStyle || {}),
         }} />
-        <div style={textStyles} title={value}>{textRender(value)}</div>
+      <div ref={me.state.fontRender} style={textStyles} title={value}>{textRender(value)}</div>
       </div>
     );
   }
@@ -63,6 +62,6 @@ export default class EditableFontface extends Component {
 };
 
 export const PRESETS = {
-  'Retro Rainbow': require('./FontFaces/RetroRainbow'),
-  'Green Machine': require('./FontFaces/GreenMachine'),
+  'Retro Rainbow': require('../FontFaces/RetroRainbow'),
+  'Green Machine': require('../FontFaces/GreenMachine'),
 }

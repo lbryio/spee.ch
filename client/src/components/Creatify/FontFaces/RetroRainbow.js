@@ -1,4 +1,4 @@
-export default const RetroRainbow = {
+module.exports = {
   container: {},
   editorStyle: {
     fontFamily: 'Arial, sans-serif',
@@ -8,11 +8,10 @@ export default const RetroRainbow = {
   text: {
     fontFamily: 'Arial, sans-serif',
     fontWeight: 'bold',
-    background: 'linear-gradient(to right, #b306a9, #ef2667, #f42e2c, #ffa509, #fdfc00, #55ac2f, #0b13fd, #a804af)',
-    textFillColor: 'transparent',
+    backgroundImage: 'linear-gradient(to right, #b306a9, #ef2667, #f42e2c, #ffa509, #fdfc00, #55ac2f, #0b13fd, #a804af)',
     backgroundClip: 'text',
     transform: 'scale(1, 1.5)',
-    WebkitTextFillColor: 'transparent',
+    color: 'transparent',
     WebkitBackgroundClip: 'text',
   },
 };
