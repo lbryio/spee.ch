@@ -67,6 +67,13 @@ try {
   slackConfig = require('./defaults/slackConfig.json');
 }
 
+let chainqueryConfig;
+try {
+  chainqueryConfig = require('../site/config/chainqueryConfig.json');
+} catch (error) {
+  chainqueryConfig = require('./defaults/chainqueryConfig.json');
+}
+
 // ask user questions and create config files
 inquirer
   .prompt(mysqlQuestions(mysqlDatabase, mysqlUsername, mysqlPassword))
@@ -196,6 +203,7 @@ inquirer
     createConfigFile('lbryConfig.json', lbryConfig);
     createConfigFile('loggerConfig.json', loggerConfig);
     createConfigFile('slackConfig.json', slackConfig);
+    createConfigFile('chainqueryConfig.json', chainqueryConfig);
   })
   .then(() => {
     console.log('\nYou\'re all done!');
