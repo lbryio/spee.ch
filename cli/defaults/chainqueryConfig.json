@@ -1,8 +1,8 @@
 {
-  "host": "localhost",
+  "host": "public.chainquery.lbry.io",
   "port": "3306",
   "timeout": 30,
   "database": "chainquery",
-  "username": "lbry",
-  "password": "root"
+  "username": "speechpublic",
+  "password": "7uITJLwZRvHBZYS3JZDykD1-7hLVkVA1jDWfcgqi6QnC"
 }
