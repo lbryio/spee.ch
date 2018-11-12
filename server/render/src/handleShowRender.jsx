@@ -20,6 +20,9 @@ const createCanonicalLink = require('../../../utils/createCanonicalLink');
 const getCanonicalUrlFromShow = show => {
   const requestId = show.requestList[show.request.id];
   const requestType = show.request.type;
+  if (!requestId || !requestType) {
+    return null;
+  }
   switch (requestType) {
     case 'ASSET_DETAILS':
       const asset = show.assetList[requestId.key];
