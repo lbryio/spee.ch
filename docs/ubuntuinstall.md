@@ -19,12 +19,12 @@
   * Https proxy server
     * Caddy for personal use
     * Exposed ports: 22, 80, 443, 3333, 4444
-    * Reverse proxies 443 to App on 3000
+    * Reverse proxies 80 redirected to 443 to App on 3000
   * Spee.ch started on port 3000
   * Lbrynet DAEMON started on ports 3333 and 4444
 
 
-# 1. Update OS and install packages
+# 1. Setup OS and install dependencies
 ## OS
 
 ### Secure your server by creating a non-root sudoer.
@@ -59,25 +59,21 @@ Log in as username@domainname or username@ip_address
 
 ## Clone speech either from your own fork, or from the lbryio/spee.ch repo.
 
-### For Developers or those with their own forked repo
+  * For Developers - our master branch
 
+  `git clone https://github.com/lbryio/spee.ch`
 
-  `git clone -b master https://github.com/lbryio/spee.ch`
-
-  SSH:
-
-  `git clone git@github.com:{{youraccount}}/spee.ch`
-
-  HTTPS:
+  * For Developers - your fork
 
   `git clone https://github.com/{{youraccount}}/spee.ch.git`
 
-### For Publishers and Content creators
+  `git clone git@github.com:{{youraccount}}/spee.ch`
 
+  * For Publishers and Content creators - stable release
 
   `git clone -b release https://github.com/lbryio/spee.ch`
 
-### Prepare the scripts
+## Prepare the scripts
 
   `chmod 750 -R ~/spee.ch/docs/setup`
 
@@ -181,9 +177,9 @@ This just allows you to run multiple things in different sessions. Useful for ma
 ## Detatch tmux session
   * `Control + b`, then `d` to leave lbrynet daemon running and exit the session
 
-  `tmux` if you want to get back into tmux
+  * `tmux` if you want to get back into tmux
 
-  `Control+b`, then `)` while in tmux session to cycle back to your lbrynet session to see output
+  * `Control+b`, then `)` while in tmux session to cycle back to your lbrynet session to see output
 
 ## Display wallet address to which to send 5+ LBC.
 
@@ -206,28 +202,31 @@ This just allows you to run multiple things in different sessions. Useful for ma
 # 6 Set up spee.ch
 
 ## Build it
-   `cd spee.ch`
+  `cd spee.ch`
 
-   ~/spee.ch:
+  ~/spee.ch:
 
-   `npm install`
+  `npm install`
 
-  `cp ~/spee.ch/docs/setup/conf/speech/chainqueryConfig.json ~/spee.ch/site/config/chainqueryConfig.json`
+  _note: if you have installed your own local chainquery instance, you will need to specify it in your own /site/config/chainqueryConfig.json_
 
-  `npm run configure` (once your wallet balance has cleared)
+  Once your wallet has a balance, run this:
+
+  `npm run configure`
+
     * Database: lbry
     * Username: root
     * Password: abcd1234
     * Port: 3000
     * Site Title: Your Site Name
-    * Enter your site's domain name: https://freezepeach.fun (this must include 'https://')
+    * Enter your site's domain name: https://example.com or http://localhost
     * Enter a directory where uploads should be stored: (/home/lbry/Uploads)
 
   `npm run start`
 
 ## Try it
 
-  Navigate to yourdomain.fun!
+  Navigate to example.com!
 
 # 7 Production
 
