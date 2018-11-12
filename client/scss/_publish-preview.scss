@@ -1,0 +1,13 @@
+.publish-form__title {
+  max-width: $width-content-constrained;
+  margin-left: auto;
+  margin-right: auto;
+
+  @media (max-width: $break-point-mobile) {
+    font-size: .8em;
+  }
+}
+
+.publish-preview-dim {
+  opacity: 0.2;
+}

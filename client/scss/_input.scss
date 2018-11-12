@@ -1,0 +1,49 @@
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0px 1000px white inset;
+}
+
+input {
+  margin: 0;
+  padding: $input-padding;
+  border: 0;
+  background-color: $background-color;
+  display: inline-block;
+}
+
+.input-slider {
+  width: 100%
+}
+
+.input-checkbox {
+  border: 1px solid black;
+  background: white;
+}
+
+.input-file {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+}
+
+.input-radio {
+  cursor: pointer;
+}
+
+// input area wrapper
+
+.input-area {
+  border-bottom: 1px solid $secondary-color;
+}
+
+.form-group {
+  padding-bottom: $secondary-padding;
+}
+
+// modifiers
+
+.input--full-width {
+  width: $input-full-width;
+}

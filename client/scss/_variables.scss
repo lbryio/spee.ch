@@ -1,0 +1,40 @@
+$base-color: white;
+$primary-color: #005da0;
+$secondary-color: $primary-color;
+$success-color: green;
+$failure-color: red;
+$grey: #9095A5;
+$help-color: $grey;
+$grey-border: #DDDFE4;
+$shadow-color: rgba(169, 173, 186, 0.2);
+
+$primary-padding: 3em;
+$secondary-padding: 2em;
+$tertiary-padding: 1em;
+$thin-padding: 0.3em;
+$full-width-thin-padding: calc(100% - 0.6em);
+
+$width-content-constrained: 1000px;
+
+$background-color: $base-color;
+$text-color: #333;
+
+$button-border-width: 1px;
+$button-border-strength: solid;
+$button-full-width: calc(100% - 2px);
+
+$input-padding: 0.3em;
+$input-full-width: calc(100% - 0.6em);
+
+$text-xx-large: 2.5em;
+$text-x-large: 2.0em;
+$text-large: 1.5em;
+$text-medium: 1.0em;
+$text-small: 0.9em;
+$text-x-small: 0.8em;
+
+$break-point-xx-large: 1400px;
+$break-point-x-large: 1290px;
+$break-point-large: 1000px;
+$break-point-tablet: 800px;
+$break-point-mobile: 500px;

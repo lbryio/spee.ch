@@ -17,3 +17,7 @@ public/bundle/Lekton-*
 public/bundle/style.css
 
 uploads
+
+config/
+
+deployment-config.json

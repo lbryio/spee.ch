@@ -84,7 +84,7 @@ class Dropzone extends React.Component {
     const { dragOver, mouseOver, dimPreview } = this.state;
     const { file, thumbnail, fileError, isUpdate, sourceUrl, fileExt } = this.props;
     return (
-      <div className="dropzone-wrapper">
+      <React.Fragment>
         {isUpdate && fileExt === 'mp4' ? (
           <p>Video updates are currently disabled. This feature will be available soon. You can edit metadata.</p>
         ) : (
@@ -145,7 +145,7 @@ class Dropzone extends React.Component {
             </div>
           </div>
         )}
-      </div>
+      </React.Fragment>
     );
   }
 };

@@ -1,0 +1,59 @@
+// set defaults
+
+h1, h2, h3, h4, p {
+  margin: 0;
+}
+
+body {
+  color: $text-color;
+  font-family: 'Circular', serif;
+  font-size: 16px;
+}
+
+h1 {
+ font-size: $text-xx-large;
+}
+
+h2 {
+  font-size: $text-x-large;
+}
+
+h3 {
+  font-size: $text-large;
+}
+
+.text--extra-large {
+  font-size: $text-xx-large;
+}
+
+.text--large {
+  font-size: $text-large;
+}
+
+.text--medium {
+  font-size: $text-medium;
+}
+
+.text--small {
+  font-size: $text-small;
+}
+
+.text--extra-small {
+  font-size: $text-x-small;
+}
+
+.text--secondary {
+  color: $help-color;
+}
+
+.text--interactive {
+  color: $primary-color;
+}
+
+.text--failure {
+  color: $failure-color;
+}
+
+.text--success {
+  color: $success-color;
+}

@@ -6,7 +6,6 @@ function NavBarChannelDropdown ({ channelName, handleSelection, defaultSelection
       <select
         type='text'
         id='nav-bar-channel-select'
-        className='select select--arrow'
         onChange={handleSelection}
         value={defaultSelection}
       >

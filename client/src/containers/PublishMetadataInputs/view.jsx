@@ -3,6 +3,7 @@ import PublishDescriptionInput from '@components/PublishDescriptionInput';
 import PublishLicenseInput from '@components/PublishLicenseInput';
 import PublishNsfwInput from '@components/PublishNsfwInput';
 import ButtonSecondary from '@components/ButtonSecondary';
+import Row from '@components/Row';
 
 class PublishMetadataInputs extends React.Component {
   constructor (props) {
@@ -29,20 +30,20 @@ class PublishMetadataInputs extends React.Component {
     const { showMetadataInputs, description, isUpdate, nsfw } = this.props;
     return (
       <div>
-        {(showMetadataInputs || isUpdate) && (
-          <div>
+  {(showMetadataInputs || isUpdate) && (
+          <React.Fragment>
             <PublishDescriptionInput
-              description={description}
+              description={this.props.description}
               handleInput={this.handleInput}
             />
             <PublishLicenseInput
               handleSelect={this.handleSelect}
             />
             <PublishNsfwInput
-              nsfw={nsfw}
+              nsfw={this.props.nsfw}
               handleInput={this.handleInput}
             />
-          </div>
+          </React.Fragment>
         )}
         {!isUpdate && (
           <ButtonSecondary

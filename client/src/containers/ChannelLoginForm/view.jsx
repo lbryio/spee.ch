@@ -49,7 +49,7 @@ class ChannelLoginForm extends React.Component {
   }
   render () {
     return (
-      <form onSubmit={this.loginToChannel}>
+      <form className="form-group" onSubmit={this.loginToChannel}>
         <ChannelLoginNameInput
           channelName={this.state.channelName}
           handleInput={this.handleInput}
@@ -58,10 +58,7 @@ class ChannelLoginForm extends React.Component {
           channelPassword={this.state.channelPassword}
           handleInput={this.handleInput}
         />
-        <FormFeedbackDisplay
-          errorMessage={this.state.error}
-          defaultMessage={'Enter the name and password for your channel'}
-        />
+        <FormFeedbackDisplay errorMessage={this.state.error} />
         <ButtonPrimary
           type={'submit'}
           value={'Authenticate'}

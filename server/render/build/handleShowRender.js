@@ -44,6 +44,10 @@ var getCanonicalUrlFromShow = function getCanonicalUrlFromShow(show) {
   var requestId = show.requestList[show.request.id];
   var requestType = show.request.type;
 
+  if (!requestId || !requestType) {
+    return null;
+  }
+
   switch (requestType) {
     case 'ASSET_DETAILS':
       var asset = show.assetList[requestId.key];
