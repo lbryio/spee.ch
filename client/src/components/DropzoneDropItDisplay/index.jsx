@@ -6,6 +6,6 @@ const DropzoneDropItDisplay = () => {
       Drop it.
     </div>
   );
-}
+};
 
 export default DropzoneDropItDisplay;

@@ -34,7 +34,7 @@ class PublishUrlInput extends React.Component {
     value = this.cleanseInput(value);
     this.updateAndValidateClaimInput(value);
   }
-  updateAndValidateClaimInput(value) {
+  updateAndValidateClaimInput (value) {
     if (value) {
       this.props.validateClaim(value);
     } else {

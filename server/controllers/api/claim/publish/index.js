@@ -125,7 +125,7 @@ const claimPublish = ({ body, files, headers, ip, originalUrl, user, tor }, res)
       if (channelName) {
         canonicalUrl = createCanonicalLink({ asset: { ...claimData, channelShortId: shortId } });
       } else {
-        canonicalUrl = createCanonicalLink({ asset: { ...claimData, shortId } })
+        canonicalUrl = createCanonicalLink({ asset: { ...claimData, shortId } });
       }
 
       res.status(200).json({

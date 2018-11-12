@@ -1,7 +1,7 @@
 import {connect} from 'react-redux';
 import View from './view';
-import {selectAsset} from "../../selectors/show";
-import {buildURI} from "../../utils/buildURI";
+import {selectAsset} from '../../selectors/show';
+import {buildURI} from '../../utils/buildURI';
 
 const mapStateToProps = props => {
   const { show, publish } = props;
@@ -11,10 +11,10 @@ const mapStateToProps = props => {
     uri = `lbry://${buildURI(asset)}`;
   }
   return {
-    disabled: publish.disabled,
-    file: publish.file,
-    status: publish.status.status,
-    isUpdate: publish.isUpdate,
+    disabled  : publish.disabled,
+    file      : publish.file,
+    status    : publish.status.status,
+    isUpdate  : publish.isUpdate,
     hasChanged: publish.hasChanged,
     uri,
   };

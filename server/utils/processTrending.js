@@ -13,7 +13,7 @@ module.exports = async () => {
     const claims = await db.Trending.getTrendingClaims();
     const claimViews = await db.Views.getUniqueViews();
 
-    if(claimViews.length <= 1) {
+    if (claimViews.length <= 1) {
       return;
     }
 
@@ -26,7 +26,7 @@ module.exports = async () => {
       standardDeviation,
     } = getInformationFromValues(viewsNumArray);
 
-    for(let i = 0; i < claimViews.length; i++) {
+    for (let i = 0; i < claimViews.length; i++) {
       let claimViewsEntry = claimViews[i];
 
       const {
@@ -41,9 +41,9 @@ module.exports = async () => {
 
       const trendingData = {
         time,
-        isChannel: claimViewsEntry.isChannel,
-        claimId: claimViewsEntry.claimId,
-        publisherId: claimViewsEntry.publisherId,
+        isChannel    : claimViewsEntry.isChannel,
+        claimId      : claimViewsEntry.claimId,
+        publisherId  : claimViewsEntry.publisherId,
         intervalViews: claimViewsEntry.views,
         weight,
         zScore,
@@ -52,7 +52,7 @@ module.exports = async () => {
 
       db.Trending.create(trendingData);
     }
-  } catch(e) {
+  } catch (e) {
     logger.error('Error processing trending content:', e);
   }
-}
+};

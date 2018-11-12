@@ -5,10 +5,10 @@ import View from './view';
 
 const mapStateToProps = ({ show, publish }) => {
   return {
-    file: publish.file,
-    isUpdate: publish.isUpdate,
+    file      : publish.file,
+    isUpdate  : publish.isUpdate,
     hasChanged: publish.hasChanged,
-    asset: selectAsset(show),
+    asset     : selectAsset(show),
   };
 };
 

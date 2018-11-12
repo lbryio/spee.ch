@@ -20,6 +20,6 @@ const ChooseChannelPublishRadio = ({ publishInChannel, toggleAnonymousPublish })
       </label>
     </div>
   );
-}
+};
 
 export default ChooseChannelPublishRadio;

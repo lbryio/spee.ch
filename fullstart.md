@@ -25,14 +25,14 @@ $ npm update
   * Create a config file called `spee.ch` in */etc/nginx/sites-available*
   * see example: [config file](https://github.com/lbryio/spee.ch/blob/master/nginx_example_config).
   * Rename all mentions of *sub.domain.com* with your subdomain name.
-  * Run this command to link the sites-available. 
+  * Run this command to link the sites-available.
 
     `$ ln -s /etc/nginx/sites-available/speech /etc/nginx/sites-enabled/speech`
 
   * Restart Nginx.
-    
+
     `$ sudo service nginx restart`
-  
+
   * Try visiting your website.
       * If Nginx is working, you should get a **502** error because there is nothing running on **3000** yet.
       * If you get the default Nginx greeting, you have not properly configured it to serve from port **3000**.
@@ -40,29 +40,29 @@ $ npm update
   *  Caddy tutorial: [https://caddyserver.com/tutorial](https://caddyserver.com/tutorial)
 ### MySql
 
-* Install MySql 
+* Install MySql
   * [Instructions](https://dev.mysql.com/doc/mysql-installation-excerpt/5.7/en)
 * Create user **root**.
 	* Note: We are going to access **mysql** as **root** for this setup, but you may want to create a separate user in the future.
   * Keep your password somewhere handy!
 * Create a database called **lbry** and make sure you can use it.
-	
+
 	  `CREATE DATABASE lbry;`
-  	
+
 	  `$ USE lbry;`
-	
+
 	  `$ exit; (or press ‘ctl + d’)`
 
 * Try logging into mysql.
-	
+
 	  `$ mysql -u username -p`
-		
+
 * If you are using a **LBRY** server, your **password** is the one provided for **ssh**.
   * Note: If it fails, try using `sudo`.
 
 ##2.  Install & Run the LBRY Daemon
 
-### Install **lbrynet** 
+### Install **lbrynet**
 _note: if you have a server from LBRY, lbrynet is already installed, you can skip to 2.4._
 ```
 $ wget --quiet -O ~/latest_daemon.zip https://lbry.io/get/lbrynet.linux.zip
@@ -75,9 +75,9 @@ $ ./lbrynet-daemon
 ```
 
 ### Detach (exit) the tmux session and leave **lbrynet** running in the background.
-	
+
 press `ctrl` + `b` then `d` to detach
-	
+
 ### Get LBC!
 
 Get a list of your wallets:
@@ -93,7 +93,7 @@ Check your balance again:
 ```
 $ ~/lbrynet-cli wallet_balance
 ```
-	
+
 You should have **LBC**!
 
 ### Install ffmpeg
@@ -128,10 +128,10 @@ $ npm run configure
 
 Check your site configs
 ```
-$ cd config/
+$ cd /site/config/
 $ nano siteConfig.json
 ```
- 	
+
 ### Build & run
 
 Run the below command to transpile, build, and start your server.
@@ -141,15 +141,15 @@ $ npm run start
 
 _**Note:** if you had to use `sudo` to login to **mysql** above, you may have issues with this step._
 
-Spee.ch should now be running ! 
+Spee.ch should now be running !
 
 Visit your site in the browser. Try publishing an image!
 
 
 ## 4. Bonus:
-    
+
 ### Install PM2 and run your server with PM2
-    
+
 Install PM2
 ```
 $ sudo npm i -g pm2
@@ -161,14 +161,3 @@ $ pm2 start server.js
 ```
 
 Visit your site and see if it is running!
-
-### Sync Your Spee.ch Instance with the full **Blockchain**
-
-Install **lbrycrdd**
-
-Install **lbry-decoder**
-
-Start **lbry-decoder**
-
-Install & run [spee.ch-sync](https://github.com/billbitt/spee.ch-sync)
-

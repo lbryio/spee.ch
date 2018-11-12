@@ -12,7 +12,7 @@ const channelShortIdRoute = async ({ ip, originalUrl, params }, res) => {
   try {
     let shortId = await chainquery.claim.queries.getShortClaimIdFromLongClaimId(params.longId, params.name).catch(() => false);
 
-    if(!shortId) {
+    if (!shortId) {
       shortId = await db.Certificate.getShortChannelIdFromLongChannelId(params.longId, params.name);
     }
 

@@ -28,7 +28,7 @@ const getClaimIdAndServeAsset = (channelName, channelClaimId, claimName, claimId
         logger.debug('Full claim id:', claimId);
         return db.Claim.findOne({
           where: {
-            name   : claimName,
+            name: claimName,
             claimId,
           },
         });
@@ -47,17 +47,15 @@ const getClaimIdAndServeAsset = (channelName, channelClaimId, claimName, claimId
       logger.debug('Outpoint:', outpoint);
       return db.Blocked.isNotBlocked(outpoint).then(() => {
         // If content was found, is approved, and not blocked - log a view.
-        if(headers && headers['user-agent'] && /LBRY/.test(headers['user-agent']) === false) {
+        if (headers && headers['user-agent'] && /LBRY/.test(headers['user-agent']) === false) {
           db.Views.create({
-            time: Date.now(),
-            isChannel: false,
-            claimId: claimDataValues.claim_id || claimDataValues.claimId,
+            time       : Date.now(),
+            isChannel  : false,
+            claimId    : claimDataValues.claim_id || claimDataValues.claimId,
             publisherId: claimDataValues.publisher_id || claimDataValues.certificateId,
             ip,
           });
         }
-
-        return;
       });
     })
     .then(() => {

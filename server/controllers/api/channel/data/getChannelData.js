@@ -4,14 +4,14 @@ const chainquery = require('chainquery');
 const getChannelData = async (channelName, channelClaimId) => {
   let longChannelClaimId = await chainquery.claim.queries.getLongClaimId(channelName, channelClaimId).catch(() => false);
 
-  if(!longChannelClaimId) {
+  if (!longChannelClaimId) {
     // Allow an error to throw here if this fails
     longChannelClaimId = await db.Certificate.getLongChannelId(channelName, channelClaimId);
   }
 
   let shortChannelClaimId = await chainquery.claim.queries.getShortClaimIdFromLongClaimId(longChannelClaimId, channelName).catch(() => false);
 
-  if(!shortChannelClaimId) {
+  if (!shortChannelClaimId) {
     shortChannelClaimId = await db.Certificate.getShortChannelIdFromLongChannelId(longChannelClaimId, channelName);
   }
 

@@ -40,7 +40,7 @@ Spee.ch is a react web app that depends on MySQL for local content, and on two o
   * [FFmpeg](https://www.ffmpeg.org/download.html)
   * [Spee.ch] (below)
   * [pm2] (optional) process manager such as pm2 to run speech server.js
-  * [http proxy server] caddy, nginx, traefik, etc to forward 443 to speech port 3000
+  * [http proxy server] caddy, nginx, traefik, etc to forward 80/443 to speech port 3000
 
 
 #### Clone this repo
@@ -67,21 +67,11 @@ $ npm install
 #### Create the config files using the built-in CLI
 _note: make sure lbrynet is running in the background before proceeding_
 
+_note: If you are opt to run a local chainquery, such as from [lbry-docker/chainquery](https://github.com/lbryio/lbry-docker/tree/master/chainquery) you will need to specify connection details at this time in:_ ~/spee.ch/docs/setup/conf/speech/chainqueryConfig.json
+
 ```
 $ npm run configure
 ```
-
-  * _note: At the moment, you will have to copy chainqueryConfig.json from:_
-    ```
-    ~/spee.ch/docs/setup/conf/speech/chainqueryConfig.json
-    ```
-
-    _to:_
-    ```
-    ~/spee.ch/site/config/chainqueryConfig.json
-    ```
-
-  * _note: The domain name in this part must be prefixed with http:// or https://_
 
 #### Build & start the app
 
