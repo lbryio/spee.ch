@@ -15,6 +15,7 @@ module.exports = (helmet, html, preloadedState) => {
             <link rel="stylesheet" href="/bundle/style.css" type="text/css">
             <!--google font-->
             <link href="https://fonts.googleapis.com/css?family=Roboto:300" rel="stylesheet">
+            <link href="https://fonts.googleapis.com/css?family=Lora" rel="stylesheet">
         </head>
         <body>
             <div id="react-app">${html}</div>

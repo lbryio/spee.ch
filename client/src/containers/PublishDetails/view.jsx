@@ -8,7 +8,6 @@ import Row from '@components/Row';
 import Label from '@components/Label';
 import RowLabeled from '@components/RowLabeled';
 import ButtonPrimaryJumbo from '@components/ButtonPrimaryJumbo';
-import ButtonTertiary from '@components/ButtonTertiary';
 import ButtonSecondary from '@components/ButtonSecondary';
 import SpaceAround from '@components/SpaceAround';
 import PublishFinePrint from '@components/PublishFinePrint';
@@ -46,7 +45,7 @@ class PublishDetails extends React.Component {
     return (
       <div>
         {isUpdate ? (asset && (
-          <Row>
+          <React.Fragment>
             <RowLabeled
               label={
                 <Label value={'Channel:'} />
@@ -57,16 +56,14 @@ class PublishDetails extends React.Component {
                 </span>
               }
             />
-          </Row>
+          </React.Fragment>
         )) : (
           <React.Fragment>
             <Row>
               <PublishUrlInput />
             </Row>
 
-            <Row>
-              <ChannelSelect />
-            </Row>
+            <ChannelSelect />
           </React.Fragment>
         )}
 
@@ -100,7 +97,7 @@ class PublishDetails extends React.Component {
 
         <Row>
           <SpaceAround>
-            <ButtonTertiary
+            <ButtonSecondary
               value={'Cancel'}
               onClickHandler={this.onCancel}
             />

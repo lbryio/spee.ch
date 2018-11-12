@@ -5,16 +5,21 @@ import PublishDetails from '@containers/PublishDetails';
 import PublishTitleInput from '@containers/PublishTitleInput';
 import Row from '@components/Row';
 
+// this class seems more like PublishForm and should probably be renamed
+
 class PublishPreview extends React.Component {
   render () {
     const { isUpdate, uri } = this.props;
     return (
-      <div>
-        <Row>
-          {isUpdate && uri && (<p className='text--extra-small'>{`Editing ${uri}`}</p>)}
-          <PublishTitleInput />
-        </Row>
+      <div className={'publish-form'}>
+        <div className={'publish-form__title'}>
+          <Row>
+            {isUpdate && uri && (<p className='text--secondary'>{`Editing ${uri}`}</p>)}
+            <PublishTitleInput />
+          </Row>
+        </div>
         <HorizontalSplit
+          collapseOnMobile
           leftSide={<Dropzone />}
           rightSide={<PublishDetails />}
         />

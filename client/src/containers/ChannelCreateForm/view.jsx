@@ -59,7 +59,7 @@ class ChannelCreateForm extends React.Component {
     return (
       <div>
         { !status ? (
-          <form onSubmit={this.handleSubmit}>
+          <form className="form-group" onSubmit={this.handleSubmit}>
             <ChannelCreateNameInput
               value={name.value}
               error={name.error}
@@ -69,10 +69,7 @@ class ChannelCreateForm extends React.Component {
               value={password.value}
               handlePasswordInput={this.handlePasswordInput}
             />
-            <FormFeedbackDisplay
-              errorMessage={formError}
-              defaultMessage={'Choose a name and password for your channel'}
-            />
+            <FormFeedbackDisplay errorMessage={formError} />
             <ButtonPrimary
               type={'submit'}
               value={'Create Channel'}
@@ -81,7 +78,7 @@ class ChannelCreateForm extends React.Component {
         </form>
         ) : (
           <div>
-            <p className={'text--small text--secondary'}>{status}</p>
+            <span className={'text--small text--secondary'}>{status}</span>
             <ProgressBar size={12} />
           </div>
         )}

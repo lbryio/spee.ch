@@ -62,7 +62,7 @@ class ProgressBar extends React.Component {
   };
   render () {
     return (
-      <div>
+      <div className="progress-bar__wrapper">
         {this.state.bars.map((bar, index) => bar.isActive ? <ActiveStatusBar key={index} /> : <InactiveStatusBar key={index}/>)}
       </div>
     );

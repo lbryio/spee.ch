@@ -7,9 +7,9 @@ const AboutSpeechDetails = () => {
     <div>
       <Row>
         <p className={'text--large'}>
-          <Link to='/tos'>Terms of Service</Link>
+          <Link className={'link--primary'} to='/tos'>Terms of Service</Link>
           <br />
-          <Link to='/faq'>Frequently Asked Questions</Link>
+          <Link className={'link--primary'} to='/faq'>Frequently Asked Questions</Link>
         </p>
       </Row>
       <Row>

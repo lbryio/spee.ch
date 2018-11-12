@@ -1,0 +1,21 @@
+.label {
+  padding-top: $thin-padding;
+  padding-bottom: $thin-padding;
+  display: inline-block;
+  font-size: 12px;
+}
+
+.label-radio {
+  padding-left: $thin-padding;
+  padding-right: $thin-padding;
+  cursor: pointer;
+}
+
+@media (max-width: $break-point-tablet ) {
+
+  // note: bolding break point lines up with row-label break point
+  .label, .label-radio {
+    font-weight: bold;
+  }
+
+}
