@@ -3,3 +3,4 @@ node_modules/
 public/bundle
 server/render/build
 test/
+server/chainquery

@@ -7,7 +7,7 @@ const claimAvailability = async (name) => {
   const claimAddresses = additionalClaimAddresses || [];
   claimAddresses.push(primaryClaimAddress);
   // find any records where the name is used
-  return await chainquery.claim
+  return chainquery.claim
     .findAll({
       attributes: ['claim_address'],
       where     : {

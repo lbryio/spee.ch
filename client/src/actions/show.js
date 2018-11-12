@@ -13,7 +13,7 @@ export function onHandleShowPageUri (params, url) {
     data: {
       ...params,
       url,
-    }
+    },
   };
 }
 
@@ -23,7 +23,7 @@ export function onHandleShowHomepage (params, url) {
     data: {
       ...params,
       url,
-    }
+    },
   };
 }
 

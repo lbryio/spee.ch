@@ -26,42 +26,40 @@ const getTorList = require('../../controllers/api/tor');
 const getBlockedList = require('../../controllers/api/blocked');
 const getOEmbedData = require('../../controllers/api/oEmbed');
 
-
-
 module.exports = {
   // homepage routes
-  '/api/homepage/data/channels': { controller: [ torCheckMiddleware, channelData ] },
+  '/api/homepage/data/channels'                           : { controller: [ torCheckMiddleware, channelData ] },
   // channel routes
-  '/api/channel/availability/:name': { controller: [ torCheckMiddleware, channelAvailability ] },
-  '/api/channel/short-id/:longId/:name': { controller: [ torCheckMiddleware, channelShortId ] },
-  '/api/channel/data/:channelName/:channelClaimId': { controller: [ torCheckMiddleware, channelData ] },
+  '/api/channel/availability/:name'                       : { controller: [ torCheckMiddleware, channelAvailability ] },
+  '/api/channel/short-id/:longId/:name'                   : { controller: [ torCheckMiddleware, channelShortId ] },
+  '/api/channel/data/:channelName/:channelClaimId'        : { controller: [ torCheckMiddleware, channelData ] },
   '/api/channel/claims/:channelName/:channelClaimId/:page': { controller: [ torCheckMiddleware, channelClaims ] },
 
   // sepcial routes
   '/api/special/:name/:page': { controller: [ torCheckMiddleware, specialClaims ] },
 
   // claim routes
-  '/api/claim/availability/:name': { controller: [ torCheckMiddleware, claimAvailability ] },
-  '/api/claim/data/:claimName/:claimId': { controller: [ torCheckMiddleware, claimData ] },
-  '/api/claim/get/:name/:claimId': { controller: [ torCheckMiddleware, claimGet ] },
-  '/api/claim/list/:name': { controller: [ torCheckMiddleware, claimList ] },
-  '/api/claim/long-id': { method: 'post', controller: [ torCheckMiddleware, claimLongId ] }, // note: should be a 'get'
-  '/api/claim/publish': { method: 'post', controller: [ torCheckMiddleware, autoblockPublishMiddleware, multipartMiddleware, autoblockPublishBodyMiddleware, claimPublish ] },
-  '/api/claim/update': { method: 'post', controller: [ torCheckMiddleware, multipartMiddleware, claimUpdate ] },
-  '/api/claim/abandon': { method: 'post', controller: [ torCheckMiddleware, multipartMiddleware, claimAbandon ] },
-  '/api/claim/resolve/:name/:claimId': { controller: [ torCheckMiddleware, claimResolve ] },
-  '/api/claim/short-id/:longId/:name': { controller: [ torCheckMiddleware, claimShortId ] },
-  '/api/claim/views/:claimId': { controller: [ torCheckMiddleware, claimViews ] },
+  '/api/claim/availability/:name'        : { controller: [ torCheckMiddleware, claimAvailability ] },
+  '/api/claim/data/:claimName/:claimId'  : { controller: [ torCheckMiddleware, claimData ] },
+  '/api/claim/get/:name/:claimId'        : { controller: [ torCheckMiddleware, claimGet ] },
+  '/api/claim/list/:name'                : { controller: [ torCheckMiddleware, claimList ] },
+  '/api/claim/long-id'                   : { method: 'post', controller: [ torCheckMiddleware, claimLongId ] }, // note: should be a 'get'
+  '/api/claim/publish'                   : { method: 'post', controller: [ torCheckMiddleware, autoblockPublishMiddleware, multipartMiddleware, autoblockPublishBodyMiddleware, claimPublish ] },
+  '/api/claim/update'                    : { method: 'post', controller: [ torCheckMiddleware, multipartMiddleware, claimUpdate ] },
+  '/api/claim/abandon'                   : { method: 'post', controller: [ torCheckMiddleware, multipartMiddleware, claimAbandon ] },
+  '/api/claim/resolve/:name/:claimId'    : { controller: [ torCheckMiddleware, claimResolve ] },
+  '/api/claim/short-id/:longId/:name'    : { controller: [ torCheckMiddleware, claimShortId ] },
+  '/api/claim/views/:claimId'            : { controller: [ torCheckMiddleware, claimViews ] },
   // file routes
   '/api/file/availability/:name/:claimId': { controller: [ torCheckMiddleware, fileAvailability ] },
   // user routes
-  '/api/user/password/': { method: 'put', controller: [ torCheckMiddleware, userPassword ] },
+  '/api/user/password/'                  : { method: 'put', controller: [ torCheckMiddleware, userPassword ] },
   // configs
-  '/api/config/site/publishing': { controller: [ torCheckMiddleware, publishingConfig ] },
+  '/api/config/site/publishing'          : { controller: [ torCheckMiddleware, publishingConfig ] },
   // tor
-  '/api/tor': { controller: [ torCheckMiddleware, getTorList ] },
+  '/api/tor'                             : { controller: [ torCheckMiddleware, getTorList ] },
   // blocked
-  '/api/blocked': { controller: [ torCheckMiddleware, getBlockedList ] },
+  '/api/blocked'                         : { controller: [ torCheckMiddleware, getBlockedList ] },
   // open embed
-  '/api/oembed': { controller: [ torCheckMiddleware, getOEmbedData ] },
+  '/api/oembed'                          : { controller: [ torCheckMiddleware, getOEmbedData ] },
 };

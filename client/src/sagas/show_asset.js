@@ -59,9 +59,9 @@ export function * newAssetRequest (action) {
   try {
     const { loggedInChannel } = yield select(selectChannelState);
 
-    if(loggedInChannel && loggedInChannel.longId) {
+    if (loggedInChannel && loggedInChannel.longId) {
       const {
-        data: claimViewData
+        data: claimViewData,
       } = yield call(getClaimViews, longId);
 
       claimViews = claimViewData[longId] || 0;
@@ -82,18 +82,18 @@ export function * updateAssetViews (action) {
 
     const channelId = loggedInChannel.longId;
 
-    for(let key in showState.assetList) {
+    for (let key in showState.assetList) {
       let asset = showState.assetList[key];
 
-      if(asset.claimData && asset.claimData.certificateId === channelId) {
+      if (asset.claimData && asset.claimData.certificateId === channelId) {
         const longId = asset.claimId;
         const assetKey = `a#${asset.name}#${longId}`;
 
         let claimViews = null;
 
-        if(longId) {
+        if (longId) {
           const {
-            data: claimViewData
+            data: claimViewData,
           } = yield call(getClaimViews, longId);
 
           claimViews = claimViewData[longId] || 0;
@@ -103,12 +103,12 @@ export function * updateAssetViews (action) {
       }
     }
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
 };
 
 export function * watchUpdateAssetViews (action) {
-  yield takeLatest(channelActions.CHANNEL_UPDATE, updateAssetViews)
+  yield takeLatest(channelActions.CHANNEL_UPDATE, updateAssetViews);
 };
 
 export function * watchNewAssetRequest () {

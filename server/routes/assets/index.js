@@ -7,5 +7,5 @@ const Sagas = require('@sagas').default;
 
 module.exports = {
   '/:identifier/:claim': { controller: serveByIdentifierAndClaim, action: Actions.onHandleShowPageUri, saga: Sagas.handleShowPageUri },
-  '/:claim': { controller: serveByClaim, action: Actions.onHandleShowPageUri, saga: Sagas.handleShowPageUri },
+  '/:claim'            : { controller: serveByClaim, action: Actions.onHandleShowPageUri, saga: Sagas.handleShowPageUri },
 };

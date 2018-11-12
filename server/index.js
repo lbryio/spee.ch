@@ -48,7 +48,7 @@ function Server () {
     app.enable('trust proxy');
 
     app.use((req, res, next) => {
-      if(req.get('User-Agent') === 'Mozilla/5.0 (Windows NT 5.1; rv:14.0) Gecko/20120405 Firefox/14.0a1') {
+      if (req.get('User-Agent') === 'Mozilla/5.0 (Windows NT 5.1; rv:14.0) Gecko/20120405 Firefox/14.0a1') {
         res.status(403).send('<h1>Forbidden</h1>If you are seeing this by mistake, please contact us using <a href="https://chat.lbry.io/">https://chat.lbry.io/</a>');
         res.end();
       } else {
@@ -182,7 +182,7 @@ function Server () {
       .then(() => {
         logger.info('Spee.ch startup is complete');
 
-        setInterval(processTrending, 30 * 60000) // 30 minutes
+        setInterval(processTrending, 30 * 60000); // 30 minutes
       })
       .catch(error => {
         if (error.code === 'ECONNREFUSED') {

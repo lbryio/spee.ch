@@ -75,7 +75,7 @@ class ChannelCreateForm extends React.Component {
               value={'Create Channel'}
               onClickHandler={this.handleSubmit}
             />
-        </form>
+          </form>
         ) : (
           <div>
             <span className={'text--small text--secondary'}>{status}</span>

@@ -7,15 +7,15 @@ const Actions = require('@actions').default;
 const Sagas = require('@sagas').default;
 
 module.exports = {
-  '/': { controller: handlePageRequest, action: Actions.onHandleShowHomepage, saga: Sagas.handleShowHomepage  },
-  '/login': { controller: handlePageRequest },
-  '/about': { controller: handlePageRequest },
-  '/tos': { controller: handlePageRequest },
-  '/faq': { controller: handlePageRequest },
-  '/trending': { controller: redirect('/popular') },
-  '/popular': { controller: handlePageRequest },
-  '/new': { controller: handlePageRequest },
-  '/edit/:claimId': { controller: handlePageRequest },
-  '/multisite': { controller: handlePageRequest },
+  '/'                                   : { controller: handlePageRequest, action: Actions.onHandleShowHomepage, saga: Sagas.handleShowHomepage  },
+  '/login'                              : { controller: handlePageRequest },
+  '/about'                              : { controller: handlePageRequest },
+  '/tos'                                : { controller: handlePageRequest },
+  '/faq'                                : { controller: handlePageRequest },
+  '/trending'                           : { controller: redirect('/popular') },
+  '/popular'                            : { controller: handlePageRequest },
+  '/new'                                : { controller: handlePageRequest },
+  '/edit/:claimId'                      : { controller: handlePageRequest },
+  '/multisite'                          : { controller: handlePageRequest },
   '/video-embed/:name/:claimId/:config?': { controller: handleVideoEmbedRequest },  // for twitter
 };

@@ -4,57 +4,52 @@ const {
 } = require('@config/siteConfig');
 
 const padSizes = {
-  small: 'padSmall',
+  small : 'padSmall',
   medium: 'padMedium',
-  large: 'padLarge',
+  large : 'padLarge',
 };
 
 const argumentProcessors = {
   'bottom': async (config) => {
     config.classNames.push('bottom');
-    return;
   },
   'right': async (config) => {
     config.classNames.push('right');
-    return;
   },
   'pad': async (config, val) => {
     config.classNames.push(padSizes[val]);
-    return;
   },
   'logoClaim': async (config, val) => {
     config.logoUrl = `${host}/${val}`;
-    return;
   },
   'link': async (config, val) => {
     config.logoLink = val;
-    return;
-  }
+  },
 };
 
 const parseLogoConfigParam = async (rawConfig) => {
-  if(rawConfig) {
+  if (rawConfig) {
     let parsedConfig = {
       classNames: ['logoLink'],
-      logoUrl: thumbnail,
+      logoUrl   : thumbnail,
     };
     let splitConfig;
     try {
       splitConfig = rawConfig.split(',');
-    } catch(e) { }
+    } catch (e) { }
 
-    if(!splitConfig) {
+    if (!splitConfig) {
       return false;
     }
 
-    for(let i = 0; i < splitConfig.length; i++) {
+    for (let i = 0; i < splitConfig.length; i++) {
       let currentArgument = splitConfig[i];
 
-      if(argumentProcessors[currentArgument]) {
+      if (argumentProcessors[currentArgument]) {
         await argumentProcessors[currentArgument](parsedConfig);
       } else {
         const splitArgument = currentArgument.split(':');
-        if(argumentProcessors[splitArgument[0]]) {
+        if (argumentProcessors[splitArgument[0]]) {
           await argumentProcessors[splitArgument[0]](parsedConfig, splitArgument[1]);
         }
       }
@@ -66,7 +61,7 @@ const parseLogoConfigParam = async (rawConfig) => {
   }
 
   return false;
-}
+};
 
 const sendVideoEmbedPage = async ({ params }, res) => {
   let {
