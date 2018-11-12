@@ -1,0 +1,61 @@
+.dropzone-wrapper {
+  // fill the parent flex container
+  flex: 1 0 auto;
+  // be a flex container for children
+  display: flex;
+  flex-direction: column;
+}
+
+.dropzone {
+  border: 2px dashed #9b9b9b;
+  // fill the parent flex container
+  flex: 1 0 auto;
+  // be a flex container for children
+  display: flex;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+}
+
+.dropzone:hover, .dropzone--active {
+  border: 2px dashed #4156C5;
+  cursor: pointer;
+}
+
+.dropzone-dropit-display, .dropzone-instructions-display {
+  padding: 1em;
+  text-align: center;
+}
+
+.dropzone-dropit-display
+{
+  color: $primary-color;
+}
+
+.dropzone-preview-wrapper {
+  position: relative;
+  width: 100%;
+  .dropzone-preview-overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+    justify-content: center;
+  }
+}
+
+.dropzone-preview-image {
+  display: block;
+  padding: 1em;
+  width: calc(100% - 2em);
+}
+
+.dropzone-instructions-display__chooser-label {
+  text-decoration: underline;
+}

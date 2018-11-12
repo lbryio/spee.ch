@@ -4,7 +4,7 @@ const ButtonPrimary  = ({ value, onClickHandler, type = 'button' }) => {
   return (
     <button
       type={type}
-      className={'button button-primary'}
+      className={'button button--primary'}
       onClick={onClickHandler}
     >
       {value}

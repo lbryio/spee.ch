@@ -9,15 +9,15 @@ const DropzoneInstructionsDisplay = ({fileError, message}) => {
   return (
     <div className={'dropzone-instructions-display'}>
       <Row>
-        <p className={'text--large'}>{message}</p>
+        <span className={'text--large'}>{message}</span>
       </Row>
       <Row>
-        <p className={'text--small'}>OR</p>
+        <span className={'text--small text--secondary'}>OR</span>
       </Row>
       { fileError ? (
         <div>
           <Row>
-            <p className={'text--large text--underline'}>CHOOSE FILE</p>
+            <span className={'text--large dropzone-instructions-display__chooser-label'}>CHOOSE FILE</span>
           </Row>
           <FormFeedbackDisplay
             errorMessage={fileError}
@@ -25,7 +25,7 @@ const DropzoneInstructionsDisplay = ({fileError, message}) => {
           />
         </div>
       ) : (
-        <p className={'text--large text--underline'}>CHOOSE FILE</p>
+        <span className={'text--large dropzone-instructions-display__chooser-label'}>CHOOSE FILE</span>
       )}
     </div>
   );

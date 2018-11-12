@@ -1,0 +1,12 @@
+.progress-bar__wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.progress-bar--inactive {
+  color: $grey;
+}
+
+.progress-bar--active {
+  color: $primary-color;
+}

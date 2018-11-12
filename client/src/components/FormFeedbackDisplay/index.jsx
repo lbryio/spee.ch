@@ -1,21 +1,21 @@
 import React from 'react';
 
 const FormFeedbackDisplay = ({ errorMessage, defaultMessage }) => {
-  return (
+  return (errorMessage || defaultMessage) ? (
     <div className={'form-feedback'}>
       { errorMessage ? (
-        <p className={'text--small text--failure'}>{errorMessage}</p>
+        <span className={'text--small text--failure'}>{errorMessage}</span>
       ) : (
         <div>
           { defaultMessage ? (
-            <p className={'text--small text--secondary'}>{defaultMessage}</p>
+            <span className={'text--small text--secondary'}>{defaultMessage}</span>
           ) : (
-            <p className={'text--small'}>&nbsp;</p>
+            <span className={'text--small'}>&nbsp;</span>
           )}
         </div>
       )}
     </div>
-  );
+  ) : null;
 };
 
 export default FormFeedbackDisplay;

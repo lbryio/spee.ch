@@ -79,12 +79,12 @@ class AssetDisplay extends React.Component {
         </div>
         }
         {(status === AVAILABLE) &&
-          <AvailableContent
-            contentType={contentType}
-            sourceUrl={sourceUrl}
-            name={name}
-            thumbnail={thumbnail}
-          />
+        <AvailableContent
+          contentType={contentType}
+          sourceUrl={sourceUrl}
+          name={name}
+          thumbnail={thumbnail}
+        />
         }
       </div>
     );

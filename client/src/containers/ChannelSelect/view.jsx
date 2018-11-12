@@ -40,16 +40,16 @@ class ChannelSelect extends React.Component {
     const { publishInChannel, channelError, selectedChannel, loggedInChannelName, publishOnlyApproved } = this.props;
     if (publishOnlyApproved) {
       return (
-        <div>
+        <React.Fragment>
           <RowLabeled
             label={<Label value={'Channel:'} />}
             content={<span>{loggedInChannelName}</span>}
           />
-        </div>
+        </React.Fragment>
       );
     }
     return (
-      <div>
+      <React.Fragment>
         <RowLabeled
           label={
             <ChooseAnonymousPublishRadio
@@ -87,7 +87,7 @@ class ChannelSelect extends React.Component {
             { (selectedChannel === CREATE) && <ChannelCreateForm /> }
           </div>
         )}
-      </div>
+      </React.Fragment>
     );
   }
 }

@@ -1,0 +1,16 @@
+.button--primary, .button--primary:focus, .button--primary:active {
+  border-color: $primary-color;
+  color: $primary-color;
+  background-color: $background-color;
+}
+
+.button--primary:hover {
+  color: $background-color;
+  background-color: $primary-color;
+}
+
+.button--primary:active {
+  $color: darken($primary-color, 10%);
+  border-color: $color;
+  background-color: $color;
+}

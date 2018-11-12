@@ -126,7 +126,7 @@ class PublishThumbnailInput extends React.Component {
               </div>
             </div>
           ) : (
-            <p className={'text--small text--secondary'}>loading... </p>
+            <span className={'text--small text--secondary'}>loading... </span>
           )
         }
         <FormFeedbackDisplay

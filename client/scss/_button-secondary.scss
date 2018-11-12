@@ -1,0 +1,11 @@
+.button--secondary, .button--secondary:focus, .button--secondary:active  {
+  border-bottom-color: $secondary-color;
+  color: $secondary-color;
+  background-color: $background-color;
+}
+
+.button--secondary:active {
+  $color: darken($secondary-color, 10%);
+  color: $color;
+  border-bottom-color: $color;
+}
