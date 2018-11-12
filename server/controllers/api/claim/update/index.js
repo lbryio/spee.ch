@@ -107,7 +107,6 @@ const claimUpdate = ({ body, files, headers, ip, originalUrl, user, tor }, res) 
       return [null, null];
     })
     .then(([fileResult, resolution]) => {
-
       metadata = Object.assign({}, {
         title      : claimRecord.title,
         description: claimRecord.description,
@@ -164,7 +163,7 @@ const claimUpdate = ({ body, files, headers, ip, originalUrl, user, tor }, res) 
       if (channelName) {
         canonicalUrl = createCanonicalLink({ asset: { ...publishResult, channelShortId: shortId } });
       } else {
-        canonicalUrl = createCanonicalLink({ asset: { ...publishResult, shortId } })
+        canonicalUrl = createCanonicalLink({ asset: { ...publishResult, shortId } });
       }
 
       if (publishResult.error) {
@@ -181,10 +180,10 @@ const claimUpdate = ({ body, files, headers, ip, originalUrl, user, tor }, res) 
         data   : {
           name,
           claimId,
-          url     : `${details.host}${canonicalUrl}`, // for backwards compatability with app
-          showUrl : `${details.host}${canonicalUrl}`,
-          serveUrl: `${details.host}${canonicalUrl}${fileExtension}`,
-          pushTo  : canonicalUrl,
+          url      : `${details.host}${canonicalUrl}`, // for backwards compatability with app
+          showUrl  : `${details.host}${canonicalUrl}`,
+          serveUrl : `${details.host}${canonicalUrl}${fileExtension}`,
+          pushTo   : canonicalUrl,
           claimData: publishResult,
         },
       });

@@ -16,7 +16,7 @@ class PopularPage extends React.Component {
     const { homeChannel } = this.props;
     return (
       <ContentPageWrapper homeChannel={homeChannel} />
-    )
+    );
   }
 };
 

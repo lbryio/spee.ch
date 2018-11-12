@@ -5,43 +5,43 @@ module.exports = (sequelize, { BOOLEAN, DATE, FLOAT, INTEGER, STRING }) => {
     'Trending',
     {
       time: { /* TODO: Historical analysis and log roll */
-        type: DATE(6),
+        type        : DATE(6),
         defaultValue: sequelize.NOW,
       },
       isChannel: {
-        type: BOOLEAN,
+        type        : BOOLEAN,
         defaultValue: false,
       },
       claimId: {
-        type: STRING,
+        type        : STRING,
         defaultValue: null,
       },
       publisherId: {
-        type: STRING,
+        type        : STRING,
         defaultValue: null,
       },
       intervalViews: {
-        type: INTEGER,
+        type        : INTEGER,
         defaultValue: 0,
       },
       weight: {
-        type: FLOAT,
+        type        : FLOAT,
         defaultValue: 0,
       },
       zScore: {
-        type: FLOAT,
+        type        : FLOAT,
         defaultValue: 0,
       },
       pValue: {
-        type: FLOAT,
+        type        : FLOAT,
         defaultValue: 0,
       },
       // TODO: Calculate t-statistics
     },
     {
       freezeTableName: true,
-      timestamps: false, // don't use default timestamps columns
-      indexes: [
+      timestamps     : false, // don't use default timestamps columns
+      indexes        : [
         {
           fields: ['claimId'],
         },
@@ -55,7 +55,7 @@ module.exports = (sequelize, { BOOLEAN, DATE, FLOAT, INTEGER, STRING }) => {
   Trending.getTrendingWeightData = async ({
     hours = 2,
     minutes = 0,
-    limit = 20
+    limit = 20,
   } = {}) => {
     let time = new Date();
     time.setHours(time.getHours() - hours);
@@ -65,9 +65,9 @@ module.exports = (sequelize, { BOOLEAN, DATE, FLOAT, INTEGER, STRING }) => {
 
     const selectString = 'DISTINCT(claimId), weight';
     const whereString = `isChannel = false and time > '${sqlTime}'`;
-    const query = `SELECT ${selectString} FROM Trending WHERE ${whereString} ORDER BY weight DESC LIMIT ${limit}`
+    const query = `SELECT ${selectString} FROM Trending WHERE ${whereString} ORDER BY weight DESC LIMIT ${limit}`;
 
-    return await sequelize.query(query, { type: sequelize.QueryTypes.SELECT });
+    return sequelize.query(query, { type: sequelize.QueryTypes.SELECT });
   };
 
   Trending.getTrendingClaims = async () => {
@@ -77,7 +77,7 @@ module.exports = (sequelize, { BOOLEAN, DATE, FLOAT, INTEGER, STRING }) => {
     const trendingClaims = trendingWeightData.reduce((claims, trendingData) => {
       trendingClaimIds.push(trendingData.claimId);
       claims[trendingData.claimId] = {
-        ...trendingData
+        ...trendingData,
       };
 
       return claims;

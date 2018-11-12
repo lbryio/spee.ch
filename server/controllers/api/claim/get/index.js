@@ -18,16 +18,16 @@ const claimGet = async ({ ip, originalUrl, params }, res) => {
 
   try {
     let claimData = await chainquery.claim.queries.resolveClaim(name, claimId).catch(() => {});
-    if(!claimData) {
+    if (!claimData) {
       claimData = await db.Claim.resolveClaim(name, claimId);
     }
 
-    if(!claimData) {
+    if (!claimData) {
       throw new Error('No matching uri found in Claim table');
     }
 
     let lbrynetResult = await getClaim(`${name}#${claimId}`);
-    if(!lbrynetResult) {
+    if (!lbrynetResult) {
       throw new Error(`Unable to Get ${name}#${claimId}`);
     }
 
@@ -38,8 +38,8 @@ const claimGet = async ({ ip, originalUrl, params }, res) => {
     try {
       await waitOn({
         resources: [ lbrynetResult.file_name ],
-        delay: 100,
-        timeout: 10000, // 10 seconds
+        delay    : 100,
+        timeout  : 10000, // 10 seconds
       });
     } catch (e) {}
 
@@ -49,7 +49,7 @@ const claimGet = async ({ ip, originalUrl, params }, res) => {
       message,
       completed,
     });
-  } catch(error) {
+  } catch (error) {
     handleErrorResponse(originalUrl, ip, error, res);
   }
 };

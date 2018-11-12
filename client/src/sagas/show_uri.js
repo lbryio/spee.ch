@@ -30,8 +30,8 @@ function * parseAndUpdateIdentifierAndClaim (modifier, claim) {
 }
 
 function * parseAndUpdateClaimOnly (claim) {
-  if(/^special\:/.test(claim) === true) {
-    const assetName = /special\:(.*)/.exec(claim)[1];
+  if (/^special:/.test(claim) === true) {
+    const assetName = /special:(.*)/.exec(claim)[1];
     return yield call(newSpecialAssetRequest, onNewSpecialAssetRequest(assetName));
   } else {
     // this could be a request for an asset or a channel page

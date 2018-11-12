@@ -20,7 +20,7 @@ const claimViews = async ({ ip, originalUrl, body, params }, res) => {
         [claimId]: viewCount,
       },
     });
-  } catch(error) {
+  } catch (error) {
     handleErrorResponse(originalUrl, ip, error, res);
   }
 };

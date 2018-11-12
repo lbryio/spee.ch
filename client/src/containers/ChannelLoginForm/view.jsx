@@ -64,7 +64,7 @@ class ChannelLoginForm extends React.Component {
           value={'Authenticate'}
           onClickHandler={this.loginToChannel}
         />
-    </form>
+      </form>
     );
   }
 }

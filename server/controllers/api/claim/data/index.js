@@ -10,7 +10,6 @@ const db = require('server/models');
 */
 
 const claimData = async ({ ip, originalUrl, body, params }, res) => {
-
   try {
     const resolvedClaim = await fetchClaimData(params);
 
@@ -25,7 +24,7 @@ const claimData = async ({ ip, originalUrl, body, params }, res) => {
       success: true,
       data   : await getClaimData(resolvedClaim),
     });
-  } catch(error) {
+  } catch (error) {
     handleErrorResponse(originalUrl, ip, error, res);
   }
 };

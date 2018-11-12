@@ -9,7 +9,7 @@ const getMean = (numArr) => {
   let total = 0;
   let length = numArr.length; // store local to reduce potential prop lookups
 
-  for(let i = 0; i < length; i++) {
+  for (let i = 0; i < length; i++) {
     total += numArr[i];
   }
 
@@ -28,17 +28,17 @@ const getInformationFromValues = (numArr) => {
   return {
     mean,
     standardDeviation: getStandardDeviation(numArr, mean),
-  }
+  };
 };
 
-const getZScore = (value, mean, sDeviation) => ( sDeviation !== 0 ? (value - mean) / sDeviation : 0 );
+const getZScore = (value, mean, sDeviation) => (sDeviation !== 0 ? (value - mean) / sDeviation : 0);
 
 const getFastPValue = (zScore) => {
-  if(zScore <= MIN_P) {
-   return 0;
+  if (zScore <= MIN_P) {
+    return 0;
   }
-  if(zScore >= MAX_P) {
-   return 1;
+  if (zScore >= MAX_P) {
+    return 1;
   }
 
   let factorialK = 1;
@@ -46,8 +46,8 @@ const getFastPValue = (zScore) => {
   let sum = 0;
   let term = 1;
 
-  while(Math.abs(term) > MAX_P_PRECISION) {
-    term = ONE_DIV_SQRT_2PI * Math.pow(-1 , k) * Math.pow(zScore , k) / (2 * k + 1) / Math.pow(2 , k) * Math.pow(zScore, k + 1) / factorialK;
+  while (Math.abs(term) > MAX_P_PRECISION) {
+    term = ONE_DIV_SQRT_2PI * Math.pow(-1, k) * Math.pow(zScore, k) / (2 * k + 1) / Math.pow(2, k) * Math.pow(zScore, k + 1) / factorialK;
     sum += term;
     k++;
     factorialK *= k;
@@ -56,7 +56,6 @@ const getFastPValue = (zScore) => {
 
   return sum;
 };
-
 
 const getWeight = (zScore, pValue) => (zScore * pValue);
 

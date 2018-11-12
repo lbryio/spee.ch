@@ -14,21 +14,21 @@ const channelClaims = async ({ ip, originalUrl, body, params }, res) => {
     page,
   } = params;
 
-  if(name === 'trending') {
+  if (name === 'trending') {
     const result = await db.Trending.getTrendingClaims();
     const claims = await Promise.all(result.map((claim) => getClaimData(claim)));
     return res.status(200).json({
       success: true,
-      data: {
-        channelName: name,
+      data   : {
+        channelName       : name,
         claims,
         longChannelClaimId: name,
-        currentPage: 1,
-        nextPage: null,
-        previousPage: null,
-        totalPages: 1,
-        totalResults: claims.length,
-      }
+        currentPage       : 1,
+        nextPage          : null,
+        previousPage      : null,
+        totalPages        : 1,
+        totalResults      : claims.length,
+      },
     });
   }
 
