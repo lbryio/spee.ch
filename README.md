@@ -1,21 +1,97 @@
 # Spee.ch
-Spee.ch is a web app that reads and publishes images and videos to and from the [LBRY](https://lbry.io/) blockchain. You are encouraged to contribute to the shared code base, or fork it and make it your own.
+Spee.ch is a web app that reads and publishes images and videos to and from the [LBRY](https://lbry.io/) blockchain. We encourage you to contribute to the shared code base, or fork it and make it your own.
 
 You can create your own custom version of spee.ch by installing this code base and then creating your own custom components and styles to override the defaults. (More details/guide on how to do that coming soon.)
 
-## Quickstart
+## Technology Overview
+Spee.ch is a react web app that depends on MySQL for local content, and on two other lbry technologies:
+  * [chainquery](https://github.com/lbryio/chainquery) - a normalized database of the blockchain data.  We've provided credentials to use a public chainquery service. You can also install it on your own server to avoid being affected by the commons.
+  * [lbrynet](https://github.com/lbryio/lbry) - a daemon that handles your wallet and transactions.
 
-### Ubuntu
-[Ubuntu VPS Setup](./docs/ubuntu16vpspersonal.md)
+## Installation
 
-_Note: This is our new setup. For our old setup see the [fullstart guide](./fullstart.md)._
+### Ubuntu Step by Step
+[Ubuntu Install Guide](./docs/ubuntuinstall.md)
 
-#### System Dependencies:
-  * [node](https://nodejs.org)
+### Quickstart Overview
+
+#### Get some information ready:
+  * mysqlusername
+  * mysqlpassword
+  * domainname or 'http://localhost'
+  * speechport = 3000
+
+#### Install and Set Up System Dependencies:
+  * [NodeJS](https://nodejs.org)
   * [MySQL](https://dev.mysql.com/doc/refman/8.0/en/installing.html)
-  * [`lbry`](https://github.com/lbryio/lbry) daemon
-    * note: retrieve an address from the daemon and send your wallet a few credits (or join us in the [#speech discord channel](https://discord.gg/YjYbwhS) and we will send you a few)
+    * localhost port 3306
+    * mysqlusername or root
+    * mysqlpassword
+    * You may need
+    ```
+    mysql> `ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'yourpassword';`
+    ```
+  * [lbrynet](https://github.com/lbryio/lbry) daemon
+    * run this as a service exposing ports 3333 and 4444
+    * _note_: once the daemon is running, issue commands in another terminal session (tmux) to retrieve an address for your wallet to recieve 5+ LBC credits (or join us in the [#speech discord channel](https://discord.gg/YjYbwhS) and we will send you a few)
+      * `./lbrynet commands` gets a list of commands
+      * `./lbrynet account_balance` gets your balance (initially 0.0)
+      * `./lbrynet address_list` gets addresses you can use to recieve LBC
   * [FFmpeg](https://www.ffmpeg.org/download.html)
+  * [Spee.ch] (below)
+  * [pm2] (optional) process manager such as pm2 to run speech server.js
+  * [http proxy server] caddy, nginx, traefik, etc to forward 443 to speech port 3000
+
+
+#### Clone this repo
+  * release version for stable production
+```
+$ git clone -b release https://github.com/lbryio/spee.ch.git
+```
+  * master version for development
+```
+$ git clone https://github.com/lbryio/spee.ch.git
+```
+  * your own fork for customization
+
+####  Change directory into your project
+```
+$ cd spee.ch
+```
+
+#### Install node dependencies
+```
+$ npm install
+```
+
+#### Create the config files using the built-in CLI
+_note: make sure lbrynet is running in the background before proceeding_
+
+```
+$ npm run configure
+```
+
+  * _note: At the moment, you will have to copy chainqueryConfig.json from:_
+    ```
+    ~/spee.ch/docs/setup/conf/speech/chainqueryConfig.json
+    ```
+
+    _to:_
+    ```
+    ~/spee.ch/site/config/chainqueryConfig.json
+    ```
+
+  * _note: The domain name in this part must be prefixed with http:// or https://_
+
+#### Build & start the app
+
+_note: make sure lbrynet is running in the background before proceeding_
+```
+$ npm run start
+```
+
+#### View in browser
+ *  Visit [http://localhost:3000](http://localhost:3000) in your browser
 
 #### Customize your app
 
@@ -23,12 +99,11 @@ Check out the [customization guide](https://github.com/lbryio/spee.ch/blob/readm
 
 #### (optional) add custom components and update the styles
 
-  * Create custom components by creating React components in `src/views/` (further instructions coming soon)
-  * Update the CSS by changing the files in `public/assets/css/` (further instructions and refactor coming soon)
+  * Create custom components by creating React components in `site/custom/src/` (further instructions coming soon)
+  * Update the CSS by changing the files in `site/custom/scss` (further instructions and refactor coming soon)
 
-#### (optional) Syncing the full blockchain
- * Start the `spee.ch-sync` tool available at [billbitt/spee.ch-sync](https://github.com/billbitt/spee.ch-sync)
- * This is not necessary, but highly recommended.  It will decode the blocks of the `LBRY` blockchain and add the claims information to your database's tables
+#### (optional) install your own chainquery
+Instructions are coming at [lbry-docker] to install your own chainquery instance using docker-compose. This will require 50GB of preferably SSD space and at least 10 minutes to download, possibly much longer.
 
 ## API
 #### /api/claim/publish
@@ -112,7 +187,7 @@ Spee.ch also runs a sync tool, which decodes blocks from the `LBRY` blockchain a
 
 
 ### Architecture
-* `cli/` contains the code for the CLI tool.  Running the tool will create `.json` config files and place them in the `config/` folder
+* `cli/` contains the code for the CLI tool.  Running the tool will create `.json` config files and place them in the `site/config/` folder
   * `configure.js` is the entry point for the CLI tool
   * `cli/defaults/` holds default config files
   * `cli/questions/` holds the questions that the CLI tool asks to build the config files
@@ -128,9 +203,9 @@ Spee.ch also runs a sync tool, which decodes blocks from the `LBRY` blockchain a
   * `client/scss/` contains  the CSS for the project
     *
 
-* `config/custom` is a folder which can be used to override the default components in `client/`
+* `site/custom` is a folder which can be used to override the default components in `client/`
   * The folder structure mimics that of the `client/` folder
-  * to customize spee.ch, place your own components and scss in the `config/custom/src/` and `config/custom/scss` folders.
+  * to customize spee.ch, place your own components and scss in the `site/custom/src/` and `site/custom/scss` folders.
 
 * `server/`  contains all of the server code
   * `index.js` is the entry point for the server.  It creates the [express app](https://expressjs.com/), requires the routes, syncs the database, and starts the server listening on the `PORT` designated in the config files.
