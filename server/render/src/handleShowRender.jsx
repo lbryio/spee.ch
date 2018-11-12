@@ -20,6 +20,11 @@ const createCanonicalLink = require('../../../utils/createCanonicalLink');
 const getCanonicalUrlFromShow = show => {
   const requestId = show.requestList[show.request.id];
   const requestType = show.request.type;
+  
+  if (!requestId || !requestType) {
+    return null;
+  }
+  
   switch (requestType) {
     case 'ASSET_DETAILS':
       const asset = show.assetList[requestId.key];
@@ -36,6 +41,7 @@ const returnSagaWithParams = (saga, params) => {
     yield call(saga, params);
   };
 };
+
 module.exports = (req, res) => {
   let context = {};
 
@@ -51,6 +57,7 @@ module.exports = (req, res) => {
     // Workaround, remove when a solution for async httpContext exists
     const showState = store.getState().show;
     const assetKeys = Object.keys(showState.assetList);
+    
     if(assetKeys.length !== 0) {
       res.claimId = showState.assetList[assetKeys[0]].claimId;
     } else {
