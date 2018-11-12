@@ -8,14 +8,6 @@
 
 .asset-display {
   display: flex;
-  flex-direction: column;
-  flex: 1 1 auto;
-  justify-content: center;
-  position: relative;
-  width: 100%;
-  overflow: hidden;
-  align-items: center;
-  min-height: 50vh;
 }
 
 .asset-title {
@@ -34,7 +26,6 @@
   margin-right: auto;
   object-fit: contain;
   object-position: center;
-  background: black;
 }
 
 /*below must die if this is intended to be shareable component! it also probably doesn't need to be*/
