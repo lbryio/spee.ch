@@ -1,13 +1,13 @@
 .asset-main {
-  height: 80vh;
+  height: 75vh;
   display: flex;
   flex-direction: column;
-  align-items: space-between;
   align-items: center;
 }
 
 .asset-display {
   display: flex;
+  min-height: 50vh
 }
 
 .asset-title {
