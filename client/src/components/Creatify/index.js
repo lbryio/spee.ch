@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Select from 'react-select'
 
 import RichDraggable from './RichDraggable';
 import EditableFontface, { PRESETS as FontPresets } from './EditableFontface';
@@ -20,12 +21,20 @@ export default class Creatify extends Component {
     this.canvas = React.createRef();
     this.contents = React.createRef();
 
+    const fontOptions = fontKeys.map(
+      (fontName) => (
+        {
+          value: fontName,
+          label: <EditableFontface fontFace={FontPresets[fontName]} value={fontName} editable="false" />,
+          fontName,
+        }
+      )
+    );
+
     this.state = {
       bounds: {},
       fontName: fontKeys[0],
-      fontOptions: fontKeys.map((fontName) => (
-        <option key={fontName} value={fontName}>{fontName}</option>
-      )),
+      fontOptions,
     };
   }
 
@@ -59,13 +68,19 @@ export default class Creatify extends Component {
       state,
     } = this;
 
+    const options = [
+      { value: 'chocolate', label: <div><b>Chocolate</b></div> },
+      { value: 'strawberry', label: 'Strawberry' },
+      { value: 'vanilla', label: 'Vanilla' },
+    ];
+
     return (
       <div style={{ flex: 1, display: 'flex' }}>
-        <button onClick={() => this.renderContents()}>Rasterize</button>
-        <canvas ref={me.canvas} width="200" height="200"></canvas>
-        <select value={state.fontName} onChange={(e) => this.onChangeFont(e)}>
-          {state.fontOptions}
-        </select>
+        <div>
+          <button onClick={() => this.renderContents()}>Rasterize</button>
+          <canvas ref={me.canvas} width="200" height="200"></canvas>
+          <Select options={state.fontOptions} onChange={(option) => this.setFont(option.fontName)} />
+        </div>
         <div ref={me.contents} style={{ flex: 1 }}>
           <RichDraggable bounds={state.bounds}>
             <EditableFontface fontFace={FontPresets[state.fontName]} value="Hello from LBRY" />
@@ -75,9 +90,9 @@ export default class Creatify extends Component {
     );
   }
 
-  onChangeFont(event) {
+  setFont(fontName) {
    this.setState({
-     fontName: event.target.value,
+     fontName,
    });
   }
 };

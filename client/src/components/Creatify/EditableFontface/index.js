@@ -19,6 +19,7 @@ export default class EditableFontface extends Component {
     } = me.state;
 
     const {
+      editable = true,
       fontFace,
     } = me.props;
 
@@ -30,23 +31,25 @@ export default class EditableFontface extends Component {
       MozOsxFontSmoothing: 'grayscale',
     }, fontFace.text);
 
-    console.log(textStyles);
+    const fontInput = (editable === true) ? (
+      <input type="text" onKeyPress={(e) => me.onKeyPress(e)} onChange={(e) => me.onChange(e)} style={{
+        ...{
+          bottom: 0,
+          opacity: 0,
+          padding: 0,
+          left: 0,
+          position: 'absolute',
+          top: 0,
+          width: '100%',
+          zIndex: 1,
+        },
+        ...(fontFace.editorStyle || {}),
+      }} />
+    ) : null;
 
     return (
       <div style={{ position: 'relative' }}>
-        <input type="text" onKeyPress={(e) => me.onKeyPress(e)} onChange={(e) => me.onChange(e)} style={{
-          ...{
-            bottom: 0,
-            opacity: 0,
-            padding: 0,
-            left: 0,
-            position: 'absolute',
-            top: 0,
-            width: '100%',
-            zIndex: 1,
-          },
-          ...(fontFace.editorStyle || {}),
-        }} />
+      {fontInput}
       <div ref={me.state.fontRender} style={textStyles} title={value}>{textRender(value)}</div>
       </div>
     );
