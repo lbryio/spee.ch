@@ -25,7 +25,7 @@ export default class Creatify extends Component {
       (fontName) => (
         {
           value: fontName,
-          label: <EditableFontface fontFace={FontPresets[fontName]} value={fontName} editable="false" />,
+          label: <EditableFontface key={fontName} fontFace={FontPresets[fontName]} value={fontName} editable="false" />,
           fontName,
         }
       )
@@ -58,7 +58,11 @@ export default class Creatify extends Component {
       (match, group) => (`-webkit-background-clip:${group};${match}`)
     );
 
-    rasterizeHTML.drawHTML(contents, canvas);
+    rasterizeHTML.drawHTML(contents, canvas).then((renderResult) => {
+
+    }, (error) => {
+
+    });
   }
 
   render() {
@@ -68,18 +72,12 @@ export default class Creatify extends Component {
       state,
     } = this;
 
-    const options = [
-      { value: 'chocolate', label: <div><b>Chocolate</b></div> },
-      { value: 'strawberry', label: 'Strawberry' },
-      { value: 'vanilla', label: 'Vanilla' },
-    ];
-
     return (
       <div style={{ flex: 1, display: 'flex' }}>
         <div>
           <button onClick={() => this.renderContents()}>Rasterize</button>
           <canvas ref={me.canvas} width="200" height="200"></canvas>
-          <Select options={state.fontOptions} onChange={(option) => this.setFont(option.fontName)} />
+          <Select isSearchable={false} options={state.fontOptions} onChange={(option) => this.setFont(option.fontName)} />
         </div>
         <div ref={me.contents} style={{ flex: 1 }}>
           <RichDraggable bounds={state.bounds}>

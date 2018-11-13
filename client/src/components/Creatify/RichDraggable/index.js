@@ -47,8 +47,6 @@ export default class RichDraggable extends Component {
       bottom: bottom - state.height,
     };
 
-    console.log(bounds);
-
     return (
       <Draggable bounds={bounds} offsetParent={body} cancel=".no-drag">
         <div ref={me.contents} style={{ padding: '10px', position: 'absolute', border: '4px dashed #ddd', cursor: 'move' }}>

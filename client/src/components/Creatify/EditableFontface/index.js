@@ -67,4 +67,5 @@ export default class EditableFontface extends Component {
 export const PRESETS = {
   'Retro Rainbow': require('../FontFaces/RetroRainbow'),
   'Green Machine': require('../FontFaces/GreenMachine'),
+  'Ocean Wave': require('../FontFaces/OceanWave'),
 }
