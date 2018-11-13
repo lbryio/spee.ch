@@ -26,7 +26,7 @@ export default class EditableFontface extends Component {
     const textRender = fontFace.textRender || DEFAULT_TEXT_RENDER;
 
     const textStyles = Object.assign({
-      minHeight: '30px',
+      minHeight: '20px',
       WebkitFontSmoothing: 'antialiased',
       MozOsxFontSmoothing: 'grayscale',
     }, fontFace.text);
@@ -67,5 +67,5 @@ export default class EditableFontface extends Component {
 export const PRESETS = {
   'Retro Rainbow': require('../FontFaces/RetroRainbow'),
   'Green Machine': require('../FontFaces/GreenMachine'),
-  'Ocean Wave': require('../FontFaces/OceanWave'),
+  'vapor wave': require('../FontFaces/VaporWave'),
 }
