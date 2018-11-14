@@ -68,4 +68,5 @@ export const PRESETS = {
   'Retro Rainbow': require('../FontFaces/RetroRainbow'),
   'Green Machine': require('../FontFaces/GreenMachine'),
   'vapor wave': require('../FontFaces/VaporWave'),
+  'The Special': require('../FontFaces/TheSpecial'),
 }

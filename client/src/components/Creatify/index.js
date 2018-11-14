@@ -4,77 +4,71 @@ import Select from 'react-select'
 import RichDraggable from './RichDraggable';
 import EditableFontface, { PRESETS as FontPresets } from './EditableFontface';
 
-// TODO: Remove `rasterizehtml` from SSR
-let rasterizeHTML = () => {};
-try {
-  if(window) {
-    rasterizeHTML = require('rasterizehtml')
-  }
-} catch(e) {}
-
 const getRasterizedCanvas = (contents, width, height) => {
   return new Promise((resolve) => {
+    // Parse to xHTML for SVG/foreignObject rendering
+    contents = new XMLSerializer().serializeToString(
+      new DOMParser().parseFromString(contents, 'text/html')
+    );
+
     // Resolves a bug in Chrome where it renders correctly, but
     // replaces the inline styles with an invalid `background-clip`.
     if(/Chrome/.test(navigator.userAgent)) {
-      contents = contents.replace(/background\-clip:(.*)[;$]/g,
-        (match, group) => (`-webkit-background-clip:${group};${match}`)
+      contents = contents.replace(/background\-clip:(\s*text\s*)[;$]/g,
+        (match, group) => (`-webkit-background-clip:text;${match}`)
       );
     }
 
     // Attempt to match font kerning with the DOM.
     contents = '<style>svg{font-kerning:normal}</style>' + contents;
+    const svgContents = `<svg xmlns="http://www.w3.org/2000/svg" width="${width * 2}" height="${height * 2}">
+<foreignObject x="0" y="0" width="${width * 2}" height="${height * 2}" externalResourcesRequired="true">
+<html xmlns="http://www.w3.org/1999/xhtml"><body>${contents}</body></html>
+</foreignObject></svg>`;
 
-    rasterizeHTML.drawHTML(contents, document.createElement('canvas'), {
-      width,
-      height,
-    }).then((renderResult) => {
-      const pixelRatio = 2;
+    const pixelRatio = 2;
 
-      // Why do this? Because Firefox doesn't always give us what we expect
-      // `background-clip: text` is very broken and does not always render in time.
-      let img = document.createElement('img');
-      let canvas = document.createElement('canvas');
+    let img = document.createElement('img');
+    let canvas = document.createElement('canvas');
 
-      img.height = canvas.height = height * pixelRatio;
-      img.width = canvas.width = width * pixelRatio;
-      canvas.style.height = `${height}px`;
-      canvas.style.width = `${width}px`;
+    img.height = canvas.height = height * pixelRatio;
+    img.width = canvas.width = width * pixelRatio;
+    canvas.style.height = `${height}px`;
+    canvas.style.width = `${width}px`;
 
-      let shadowNode = document.createElement('div');
-      Object.assign(shadowNode.style, {
-        height: 0,
-        overflow: 'hidden',
-        width: 0,
-      });
-      document.body.appendChild(shadowNode);
-
-      shadowNode.appendChild(img);
-      //document.body.appendChild(canvas);
-
-      var svg64 = btoa(unescape(encodeURIComponent(renderResult.svg)));
-      var b64Start = 'data:image/svg+xml;base64,';
-      var image64 = b64Start + svg64;
-      img.addEventListener('load', () => {
-        window.requestAnimationFrame(() => {
-          // We still can't trust Firefox's %$%&* engine, add another 5ms timeout
-          setTimeout(() => {
-            let context = canvas.getContext('2d', { alpha: false });
-            context.clearRect(0, 0, canvas.width, canvas.height);
-            context.fillStyle = 'white';
-            context.imageSmoothingEnabled = false;
-            context.scale(pixelRatio, pixelRatio);
-            context.fillRect(0, 0, canvas.width, canvas.height);
-            context.drawImage(img, 0, 0);
-
-            document.body.removeChild(shadowNode);
-
-            resolve(canvas);
-          }, 10);
-        });
-      });
-      img.src = image64;
+    let shadowNode = document.createElement('div');
+    Object.assign(shadowNode.style, {
+      height: 0,
+      overflow: 'hidden',
+      width: 0,
     });
+    document.body.appendChild(shadowNode);
+
+    shadowNode.appendChild(img);
+
+    var svg64 = btoa(unescape(encodeURIComponent(svgContents)));
+    var b64Start = 'data:image/svg+xml;base64,';
+    var image64 = b64Start + svg64;
+    img.addEventListener('load', () => {
+      window.requestAnimationFrame(() => {
+        // We still can't trust Firefox's %$%&* engine, add another 5ms timeout
+        // `background-clip: text` is very broken and does not always render in time.
+        setTimeout(() => {
+          let context = canvas.getContext('2d', { alpha: false });
+          context.clearRect(0, 0, canvas.width, canvas.height);
+          context.fillStyle = 'white';
+          context.imageSmoothingEnabled = false;
+          context.scale(pixelRatio, pixelRatio);
+          context.fillRect(0, 0, canvas.width, canvas.height);
+          context.drawImage(img, 0, 0);
+
+          document.body.removeChild(shadowNode);
+
+          resolve(canvas);
+        }, 10);
+      });
+    });
+    img.src = image64;
   });
 };
 
@@ -120,12 +114,10 @@ export default class Creatify extends Component {
 
     let contents = me.contents.current.outerHTML;
 
-    console.log(contents)
     // Cheap border/handles removal
     contents = `<style>.creatifyDecor{border-color:transparent!important;background-color:transparent!important}</style>` + contents;
 
     getRasterizedCanvas(contents, 600, 500).then((element) => {
-      console.log(element);
       document.body.appendChild(element);
     });
   }
