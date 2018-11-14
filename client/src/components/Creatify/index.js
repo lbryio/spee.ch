@@ -124,8 +124,8 @@ export default class Creatify extends Component {
 
   render() {
     const me = this;
-
     const {
+      props,
       state,
     } = this;
 
@@ -139,6 +139,7 @@ export default class Creatify extends Component {
           <RichDraggable bounds={state.bounds}>
             <EditableFontface fontFace={FontPresets[state.fontName]} value="Hello from LBRY" />
           </RichDraggable>
+          {props.children}
         </div>
       </div>
     );
