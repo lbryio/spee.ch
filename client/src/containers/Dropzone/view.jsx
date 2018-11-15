@@ -1,9 +1,14 @@
 import React from 'react';
+
 import { validateFile } from '../../utils/file';
 import Creatify from '@components/Creatify';
 import DropzonePreviewImage from '@components/DropzonePreviewImage';
 import DropzoneDropItDisplay from '@components/DropzoneDropItDisplay';
 import DropzoneInstructionsDisplay from '@components/DropzoneInstructionsDisplay';
+
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faEdit } from '@fortawesome/free-solid-svg-icons';
 
 class Dropzone extends React.Component {
   constructor (props) {
@@ -14,6 +19,7 @@ class Dropzone extends React.Component {
       mouseOver  : false,
       dimPreview : false,
       filePreview: null,
+      memeify    : false,
     };
 
     if(props.file) {
@@ -121,7 +127,7 @@ class Dropzone extends React.Component {
   }
 
   render () {
-    const { dragOver, mouseOver, dimPreview, filePreview } = this.state;
+    const { dragOver, mouseOver, dimPreview, filePreview, memeify } = this.state;
     const { file, thumbnail, fileError, isUpdate, sourceUrl, fileExt } = this.props;
 
     const hasContent = !!(file || isUpdate);
@@ -147,7 +153,7 @@ class Dropzone extends React.Component {
       sourceUrl,
     };
 
-    let memeify = file && filePreview ? (
+    const memeifyContent = memeify && file && filePreview ? (
       <Creatify flex>
         <div style={{ background: '#fff', flex: 1 }}>
           <img style={{ width: '100%' }} src={filePreview} />
@@ -186,7 +192,12 @@ class Dropzone extends React.Component {
                         message={fileExt === 'mp4' ? 'Drag & drop new thumbnail' : null}
                       />
                     ) : null }
-                    {memeify}
+                    { !memeify && (
+                      <div className={'dropzone-memeify-button'} onClick={() => this.setState({ memeify: !memeify })}>
+                        <FontAwesomeIcon icon={faEdit} /> Memeify
+                      </div>
+                    )}
+                    {memeifyContent}
                   </div>
                 </div>
               ) : (

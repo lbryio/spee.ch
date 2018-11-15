@@ -8,8 +8,10 @@ import RichDraggable from './RichDraggable';
 import EditableFontface, { PRESETS as FontPresets } from './EditableFontface';
 
 import {
-  faFont
-} from '@fortawesome/free-solid-svg-icons'
+  faEdit,
+  faFont,
+} from '@fortawesome/free-solid-svg-icons';
+library.add(faEdit);
 library.add(faFont);
 
 const getRasterizedCanvas = (contents, width, height) => {
@@ -154,8 +156,10 @@ export default class Creatify extends Component {
     return (
       <div style={{ position: 'relative', flex: props.flex === true ? 1 : props.flex, display: props.flex ? 'flex' : 'block' }}>
         <div style={{ position: 'absolute', top: 0, left: 0, right: 0, background: '#333', zIndex: 2 }}>
+          {/*
           <button onClick={() => this.renderContents()}>Rasterize</button>
           <Select isSearchable={false} options={state.fontOptions} onChange={(option) => this.setFont(option.fontName)} />
+          */}
         </div>
         <div ref={me.contents} style={{ fontSize: '22px', overflow: 'hidden', transform: 'translateZ(0)', flex: 1 }}>
           <RichDraggable bounds={state.bounds}>
