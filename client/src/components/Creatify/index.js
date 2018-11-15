@@ -8,11 +8,10 @@ import RichDraggable from './RichDraggable';
 import EditableFontface, { PRESETS as FontPresets } from './EditableFontface';
 
 import {
-  faEdit,
   faFont,
+  faMinusCircle,
+  faPlusCircle,
 } from '@fortawesome/free-solid-svg-icons';
-library.add(faEdit);
-library.add(faFont);
 
 const getRasterizedCanvas = (contents, width, height) => {
   return new Promise((resolve) => {
@@ -30,10 +29,10 @@ const getRasterizedCanvas = (contents, width, height) => {
     }
 
     // Attempt to match font kerning with the DOM.
-    contents = '<style>svg{font-kerning:normal}</style>' + contents;
+    const kerningAndPadding = '<style>svg{font-kerning:normal}body{padding:0;margin:0}</style>';
     const svgContents = `<svg xmlns="http://www.w3.org/2000/svg" width="${width * 2}" height="${height * 2}">
 <foreignObject x="0" y="0" width="${width * 2}" height="${height * 2}" externalResourcesRequired="true">
-<html xmlns="http://www.w3.org/1999/xhtml"><body>${contents}</body></html>
+<html xmlns="http://www.w3.org/1999/xhtml"><head>${kerningAndPadding}</head><body>${contents}</body></html>
 </foreignObject></svg>`;
 
     const pixelRatio = 2;
@@ -153,13 +152,22 @@ export default class Creatify extends Component {
       state,
     } = this;
 
+    // TODO: Abstract into separate package & use CSS Modules.
+    const spacerCss = { width: '.3em' };
     return (
       <div style={{ position: 'relative', flex: props.flex === true ? 1 : props.flex, display: props.flex ? 'flex' : 'block' }}>
-        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, background: '#333', zIndex: 2 }}>
-          {/*
-          <button onClick={() => this.renderContents()}>Rasterize</button>
-          <Select isSearchable={false} options={state.fontOptions} onChange={(option) => this.setFont(option.fontName)} />
-          */}
+        <div className={props.toolbarClassName} style={{ alignItems: 'center', color: '#fff', display: 'flex', padding: '.3em', position: 'absolute', top: 0, left: 0, right: 0, background: '#333', flexDirection: 'row', zIndex: 2 }}>
+          <FontAwesomeIcon icon={faPlusCircle} size="2x" />
+          <div style={spacerCss} />
+          <FontAwesomeIcon icon={faMinusCircle} size="2x" />
+          <div style={spacerCss} />
+          <div style={{ flex: 1 }}>
+            <Select style={{ flex: 1 }} isSearchable={false} options={state.fontOptions} onChange={(option) => this.setFont(option.fontName)} />
+          </div>
+          <div style={spacerCss} />
+          <div onClick={() => this.renderContents()} style={{ alignItems: 'center', alignSelf: 'stretch', color: '#fff', border: '1px solid #fff', display: 'flex', padding: '.4em' }}>
+            <span>Finish</span>
+          </div>
         </div>
         <div ref={me.contents} style={{ fontSize: '22px', overflow: 'hidden', transform: 'translateZ(0)', flex: 1 }}>
           <RichDraggable bounds={state.bounds}>

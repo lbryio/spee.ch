@@ -154,7 +154,7 @@ class Dropzone extends React.Component {
     };
 
     const memeifyContent = memeify && file && filePreview ? (
-      <Creatify flex>
+      <Creatify flex toolbarClassName={'dropzone-memeify-toolbar'}>
         <div style={{ background: '#fff', flex: 1 }}>
           <img style={{ width: '100%' }} src={filePreview} />
         </div>
@@ -168,7 +168,12 @@ class Dropzone extends React.Component {
         {isUpdate && fileExt === 'mp4' ? (
           <p>Video updates are currently disabled. This feature will be available soon. You can edit metadata.</p>
         ) : (
-          <div className='dropzone-wrapper'>
+          <div className={'dropzone-wrapper'}>
+            { hasContent && !memeify && (
+              <div className={'dropzone-memeify-button'} onClick={() => this.setState({ memeify: !memeify })}>
+                <FontAwesomeIcon icon={faEdit} /> Memeify
+              </div>
+            )}
             <form>
               <input
                 className='input-file'
@@ -182,7 +187,7 @@ class Dropzone extends React.Component {
             </form>
             <div className={dropZoneClassName} {...dropZoneHooks}>
               {hasContent ? (
-                <div className={'dropzone-preview-wrapper'}>
+                <div className={'dropzone-preview-wrapper' + (memeifyContent ? ' dropzone-preview-memeify' : '')}>
                   <DropzonePreviewImage {...dropZonePreviewProps} />
                   <div className={'dropzone-preview-overlay'}>
                     { dragOver ? <DropzoneDropItDisplay /> : null }
@@ -192,11 +197,6 @@ class Dropzone extends React.Component {
                         message={fileExt === 'mp4' ? 'Drag & drop new thumbnail' : null}
                       />
                     ) : null }
-                    { !memeify && (
-                      <div className={'dropzone-memeify-button'} onClick={() => this.setState({ memeify: !memeify })}>
-                        <FontAwesomeIcon icon={faEdit} /> Memeify
-                      </div>
-                    )}
                     {memeifyContent}
                   </div>
                 </div>
