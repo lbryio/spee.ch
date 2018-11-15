@@ -104,8 +104,10 @@ export default class Creatify extends Component {
     );
 
     this.state = {
+      activeElement: false,
       bounds: {},
       fontName: fontKeys[0],
+      elements: [],
       fontOptions,
     };
   }
@@ -125,7 +127,58 @@ export default class Creatify extends Component {
     */
   }
 
-  renderContents() {
+  setActiveElement(activeElement) {
+    this.setState({ activeElement });
+  }
+
+  addElement() {
+    const {
+      state
+    } = this;
+
+    const newElementKey = `element-${state.elements.length}-${Date.now()}`;
+
+    const newElement = (
+      <RichDraggable key={newElementKey} bounds={state.bounds} onStart={() => this.setActiveElement(newElement)}>
+        <EditableFontface fontFace={FontPresets[state.fontName]} value="Hello from LBRY" />
+      </RichDraggable>
+    );
+
+    this.setState({
+      elements: [...state.elements, newElement],
+      activeElement: newElement,
+    });
+  }
+
+  removeElement() {
+    const {
+      state
+    } = this;
+
+    const activeElementIndex = state.elements.indexOf(state.activeElement);
+
+    if(state.elements.length === 0 || activeElementIndex === -1) {
+      return;
+    }
+
+    const elements = [...state.elements];
+    elements.splice(activeElementIndex, 1)
+
+    this.setState({
+      activeElement: false,
+      elements,
+    });
+  }
+
+  async onSave() {
+    const renderedCanvas = await this.renderContentsToCanvas();
+
+    if(this.props.onSave) {
+      this.props.onSave(renderedCanvas);
+    }
+  }
+
+  async renderContentsToCanvas() {
     const me = this;
 
     const contentsElement = me.contents.current;
@@ -140,9 +193,7 @@ export default class Creatify extends Component {
     // Fix the dimensions, fixes when flex is used.
     contents = `<div style="height:${contentsHeight}px;width:${contentsWidth}px">${contents}</div>`;
 
-    getRasterizedCanvas(contents, contentsWidth, contentsHeight).then((element) => {
-      document.body.appendChild(element);
-    });
+    return await getRasterizedCanvas(contents, contentsWidth, contentsHeight);
   }
 
   render() {
@@ -157,22 +208,20 @@ export default class Creatify extends Component {
     return (
       <div style={{ position: 'relative', flex: props.flex === true ? 1 : props.flex, display: props.flex ? 'flex' : 'block' }}>
         <div className={props.toolbarClassName} style={{ alignItems: 'center', color: '#fff', display: 'flex', padding: '.3em', position: 'absolute', top: 0, left: 0, right: 0, background: '#333', flexDirection: 'row', zIndex: 2 }}>
-          <FontAwesomeIcon icon={faPlusCircle} size="2x" />
+          <FontAwesomeIcon icon={faPlusCircle} size="2x" onClick={() => this.addElement()} />
           <div style={spacerCss} />
-          <FontAwesomeIcon icon={faMinusCircle} size="2x" />
+          <FontAwesomeIcon icon={faMinusCircle} size="2x" onClick={() => this.removeElement()} />
           <div style={spacerCss} />
           <div style={{ flex: 1 }}>
             <Select style={{ flex: 1 }} isSearchable={false} options={state.fontOptions} onChange={(option) => this.setFont(option.fontName)} />
           </div>
           <div style={spacerCss} />
-          <div onClick={() => this.renderContents()} style={{ alignItems: 'center', alignSelf: 'stretch', color: '#fff', border: '1px solid #fff', display: 'flex', padding: '.4em' }}>
-            <span>Finish</span>
+          <div onClick={() => this.onSave()} style={{ alignItems: 'center', alignSelf: 'stretch', color: '#fff', border: '1px solid #fff', display: 'flex', padding: '0 0.6em' }}>
+            <span>Save</span>
           </div>
         </div>
         <div ref={me.contents} style={{ fontSize: '22px', overflow: 'hidden', transform: 'translateZ(0)', flex: 1 }}>
-          <RichDraggable bounds={state.bounds}>
-            <EditableFontface fontFace={FontPresets[state.fontName]} value="Hello from LBRY" />
-          </RichDraggable>
+          {state.elements}
           {props.children}
         </div>
       </div>

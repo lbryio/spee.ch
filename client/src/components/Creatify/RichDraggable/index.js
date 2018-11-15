@@ -48,7 +48,7 @@ export default class RichDraggable extends Component {
     };
 
     return (
-      <Draggable bounds={bounds} offsetParent={body} cancel=".no-drag">
+      <Draggable {...props} bounds={bounds} offsetParent={body} cancel=".no-drag">
         <div ref={me.contents} style={{ padding: '10px', position: 'absolute', border: '4px dashed #ddd', cursor: 'move' }} className="creatifyDecor">
           <div className="no-drag" style={{ overflow: 'hidden', position: 'relative', cursor: 'auto' }}>
             {props.children}
