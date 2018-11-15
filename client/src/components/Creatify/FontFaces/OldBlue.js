@@ -25,7 +25,7 @@ module.exports = {
             {text}
           </textPath>
         </text>
-				<text x="10" style={{ fill: 'transparent', stroke: '#1c55a0', strokeWidth: '.01em', fontWeight: 900, letterSpacing: '-0.15em' }}>
+				<text x="10" style={{ fill: 'transparent', stroke: '#1c55a0', strokeWidth: '.012em', fontWeight: 900, letterSpacing: '-0.15em' }}>
           <textPath href={`#${id}`}>
             {text}
           </textPath>
