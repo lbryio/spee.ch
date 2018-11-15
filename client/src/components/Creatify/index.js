@@ -216,7 +216,7 @@ export default class Creatify extends Component {
             <Select style={{ flex: 1 }} isSearchable={false} options={state.fontOptions} onChange={(option) => this.setFont(option.fontName)} />
           </div>
           <div style={spacerCss} />
-          <div onClick={() => this.onSave()} style={{ alignItems: 'center', alignSelf: 'stretch', color: '#fff', border: '1px solid #fff', display: 'flex', padding: '0 0.6em' }}>
+          <div onClick={() => this.onSave()} style={{ alignItems: 'center', alignSelf: 'stretch', border: '1px solid #fff', borderRadius: '4px', color: '#fff', display: 'flex', padding: '0 0.6em' }}>
             <span>Save</span>
           </div>
         </div>

@@ -126,6 +126,23 @@ class Dropzone extends React.Component {
     }
   }
 
+  selectFileFromCanvas (canvas) {
+    const destinationFormat = 'image/jpeg';
+
+    canvas.toBlob((blob) => {
+      const file = new File([blob], 'memeify.jpg', {
+        type: destinationFormat,
+      });
+
+      this.props.selectFile(file);
+
+      // TODO: Add ability to reset.
+      this.setState({
+        memeify: false,
+      });
+    }, destinationFormat, 0.95);
+  }
+
   render () {
     const { dragOver, mouseOver, dimPreview, filePreview, memeify } = this.state;
     const { file, thumbnail, fileError, isUpdate, sourceUrl, fileExt } = this.props;
@@ -154,7 +171,7 @@ class Dropzone extends React.Component {
     };
 
     const memeifyContent = memeify && file && filePreview ? (
-      <Creatify flex toolbarClassName={'dropzone-memeify-toolbar'}>
+      <Creatify flex toolbarClassName={'dropzone-memeify-toolbar'} onSave={(canvas) => this.selectFileFromCanvas(canvas)}>
         <div style={{ background: '#fff', flex: 1 }}>
           <img style={{ width: '100%' }} src={filePreview} />
         </div>
