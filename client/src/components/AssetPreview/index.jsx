@@ -17,6 +17,9 @@ const AssetPreview = ({ defaultThumbnail, claimData }) => {
     case 'image/jpg':
     case 'image/png':
     case 'image/gif':
+      if (pending) {
+        return null;
+      }
       return (
         <Link to={showUrl} className='asset-preview'>
           <div>
