@@ -54,6 +54,7 @@
     "express": "^4.16.4",
     "express-handlebars": "^3.0.0",
     "express-http-context": "^1.2.0",
+    "generate-password": "^1.4.1",
     "get-video-dimensions": "^1.0.0",
     "helmet": "^3.15.0",
     "image-size": "^0.6.3",

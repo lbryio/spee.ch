@@ -26,12 +26,13 @@ const {
 
 const {
   details: { port: PORT },
-  auth: { sessionKey },
   startup: {
     performChecks,
     performUpdates,
   },
 } = require('@config/siteConfig');
+
+const { sessionKey } = require('@private/authConfig.json');
 
 function Server () {
   this.initialize = () => {
