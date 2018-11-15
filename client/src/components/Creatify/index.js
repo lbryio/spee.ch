@@ -1,8 +1,16 @@
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+
 import React, { Component } from 'react';
 import Select from 'react-select'
 
 import RichDraggable from './RichDraggable';
 import EditableFontface, { PRESETS as FontPresets } from './EditableFontface';
+
+import {
+  faFont
+} from '@fortawesome/free-solid-svg-icons'
+library.add(faFont);
 
 const getRasterizedCanvas = (contents, width, height) => {
   return new Promise((resolve) => {
@@ -102,22 +110,36 @@ export default class Creatify extends Component {
   }
 
   componentDidMount() {
+    // TODO: Fix bounds
+    /*
     const bounds = this.contents.current.getBoundingClientRect();
 
     this.setState({
       bounds,
     });
+
+    console.log({
+      bounds
+    })
+    */
   }
 
   renderContents() {
     const me = this;
 
-    let contents = me.contents.current.outerHTML;
+    const contentsElement = me.contents.current;
+    let contents = contentsElement.outerHTML;
 
     // Cheap border/handles removal
     contents = `<style>.creatifyDecor{border-color:transparent!important;background-color:transparent!important}</style>` + contents;
 
-    getRasterizedCanvas(contents, 600, 500).then((element) => {
+    const contentsWidth = contentsElement.offsetWidth;
+    const contentsHeight = contentsElement.offsetHeight;
+
+    // Fix the dimensions, fixes when flex is used.
+    contents = `<div style="height:${contentsHeight}px;width:${contentsWidth}px">${contents}</div>`;
+
+    getRasterizedCanvas(contents, contentsWidth, contentsHeight).then((element) => {
       document.body.appendChild(element);
     });
   }
@@ -130,12 +152,12 @@ export default class Creatify extends Component {
     } = this;
 
     return (
-      <div style={{ flex: 1, display: 'flex' }}>
-        <div>
+      <div style={{ position: 'relative', flex: props.flex === true ? 1 : props.flex, display: props.flex ? 'flex' : 'block' }}>
+        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, background: '#333', zIndex: 2 }}>
           <button onClick={() => this.renderContents()}>Rasterize</button>
           <Select isSearchable={false} options={state.fontOptions} onChange={(option) => this.setFont(option.fontName)} />
         </div>
-        <div ref={me.contents} style={{ height: '600px', width: '500px', fontSize: '22px', overflow: 'hidden', transform: 'translateZ(0)' }}>
+        <div ref={me.contents} style={{ fontSize: '22px', overflow: 'hidden', transform: 'translateZ(0)', flex: 1 }}>
           <RichDraggable bounds={state.bounds}>
             <EditableFontface fontFace={FontPresets[state.fontName]} value="Hello from LBRY" />
           </RichDraggable>

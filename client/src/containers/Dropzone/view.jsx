@@ -148,17 +148,12 @@ class Dropzone extends React.Component {
     };
 
     let memeify = file && filePreview ? (
-      <Creatify>
-        <img src={filePreview} />
+      <Creatify flex>
+        <div style={{ background: '#fff', flex: 1 }}>
+          <img style={{ width: '100%' }} src={filePreview} />
+        </div>
       </Creatify>
     ) : null;
-
-    console.log({
-      file,
-      thumbnail,
-      sourceUrl,
-      filePreview,
-    });
 
     const dropZoneClassName = 'dropzone' + (dragOver ? ' dropzone--drag-over' : '');
 
