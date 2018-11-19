@@ -15,11 +15,11 @@ const AssetPreview = ({ defaultThumbnail, claimData }) => {
         <Link to={showUrl} className='asset-preview'>
           <div>
             <img
-              className={'asset-preview-image'}
+              className={'asset-preview__image'}
               src={embedUrl}
               alt={name}
             />
-            <h3 className='list-title'>{title}</h3>
+            <h3 className='asset-preview__title'>{title}</h3>
           </div>
         </Link>
       );
@@ -27,12 +27,15 @@ const AssetPreview = ({ defaultThumbnail, claimData }) => {
       return (
         <Link to={showUrl} className='asset-preview'>
           <div>
-            <img
-              className={'asset-preview-video'}
-              src={thumbnail || defaultThumbnail}
-              alt={name}
-            />
-            <h3 className='list-title'>{title}</h3>
+            <div className='asset-preview__play-wrapper'>
+              <img
+                className={'asset-preview__video'}
+                src={thumbnail || defaultThumbnail}
+                alt={name}
+              />
+              <div className='asset-preview__play-overlay'></div>
+            </div>
+            <h3 className='asset-preview__title'>{title}</h3>
           </div>
         </Link>
       );
