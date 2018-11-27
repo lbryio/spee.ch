@@ -103,7 +103,7 @@ export default (db, table, sequelize) => ({
     };
     return await table.findAll({
       where: selectWhere,
-      order: [['height', 'DESC']],
+      order: [['height', 'DESC'],['claim_id', 'ASC']],
     })
       .then(channelClaimsArray => {
         if (channelClaimsArray.length === 0) {
