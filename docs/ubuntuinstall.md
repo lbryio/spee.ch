@@ -35,7 +35,7 @@ As root# _create user and add to sudo group_
   usermod -aG sudo username
   su - username
 ```
-As username: _paste public key in authorized_keys_
+As username: *paste public key in authorized\_keys*
 ```
   `cd`
   `mkdir .ssh`
@@ -96,6 +96,7 @@ Log in as username@domainname or username@ip_address
   `cp ~/spee.ch/docs/setup/conf/caddy/Caddyfile.template ~/spee.ch/docs/setup/conf/caddy/Caddyfile`
 
   `nano ~/spee.ch/docs/setup/conf/caddy/Caddyfile`
+
    ( Change {{EXAMPLE.COM}} to YOURDOMAIN.COM )
 
   `sudo cp ~/spee.ch/docs/setup/conf/caddy/Caddyfile /opt/caddy/`
@@ -120,11 +121,17 @@ Log in as username@domainname or username@ip_address
 
   At this point, navigating to yourdomain.com should give you a 502 bad gateway error. That's good!
 
+  Now you can make sure caddy starts when the machine starts:
+
+  `sudo systemctl enable caddy`
+
+
 # 4 Set up MySQL
 
 ## Install MySQL
 
   `sudo apt-get install mysql-server -y`
+
   ( enter blank password each time if prompted)
 
   `sudo systemctl status mysql` (q to exit)
@@ -132,7 +139,7 @@ Log in as username@domainname or username@ip_address
 ## Secure Setup
 
   `sudo mysql_secure_installation`
-  * Password abcd1234
+  * Password your_mysql_password
   * No to password validation
   * Y to all other options
 
@@ -143,7 +150,7 @@ Log in as username@domainname or username@ip_address
 
   mysql>
 
-  `ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'abcd1234';`
+  `ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'your_mysql_password';`
 
   mysql>
 
@@ -153,13 +160,13 @@ Log in as username@domainname or username@ip_address
 
   Verify:
 
-  `mysql -u root -p` and then entering your password abcd1234 should give you the mysql> shell
+  `mysql -u root -p` and then entering your_mysql_password should give you the mysql> shell
 
 # 5 Get Lbrynet Daemon
 
 ## Start tmux
 
-This just allows you to run multiple things in different sessions. Useful for manually starting daemons and watching its console logs.
+tmux allows you to run multiple things in different sessions. Useful for manually starting daemons and watching its console logs.
 
   `tmux`
   * `Ctrl+b`, then `d` detaches leaving session running.
@@ -175,11 +182,17 @@ This just allows you to run multiple things in different sessions. Useful for ma
    `./lbrynet start`
 
 ## Detatch tmux session
-  * `Control + b`, then `d` to leave lbrynet daemon running and exit the session
+  `Control + b`, then `d`
 
+<<<<<<< Updated upstream
   * `tmux` if you want to get back into tmux
 
   * `Control+b`, then `)` while in tmux session to cycle back to your lbrynet session to see output
+=======
+  `tmux`
+
+  _note: `Control+b`, then `)` while in tmux session to cycle back to your lbrynet session to see output_
+>>>>>>> Stashed changes
 
 ## Display wallet address to which to send 5+ LBC.
 
@@ -214,9 +227,16 @@ This just allows you to run multiple things in different sessions. Useful for ma
 
   `npm run configure`
 
+<<<<<<< Updated upstream
+=======
+  (once your wallet balance has cleared)
+
+  `npm run configure`
+
+>>>>>>> Stashed changes
     * Database: lbry
     * Username: root
-    * Password: abcd1234
+    * Password: your_mysql_password
     * Port: 3000
     * Site Title: Your Site Name
     * Enter your site's domain name: https://example.com or http://localhost
