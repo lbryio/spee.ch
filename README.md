@@ -1,14 +1,14 @@
 # Spee.ch
-Spee.ch is a web app that reads and publishes images and videos to and from the [LBRY](https://lbry.io/) blockchain. We encourage you to contribute to the shared code base, or fork it and make it your own.
+Spee.ch is a [NodeJS](https://nodejs.org) React web app that reads and publishes images and videos to and from the [LBRY](https://lbry.io/) blockchain.
 
 You can create your own custom version of spee.ch by installing this code base and then creating your own custom components and styles to override the defaults. (More details/guide on how to do that coming soon.)
 
-## Technology Overview
-Spee.ch is a react web app that depends on MySQL for local content, and on two other lbry technologies:
+Spee.ch depends on two other lbry technologies:
   * [chainquery](https://github.com/lbryio/chainquery) - a normalized database of the blockchain data.  We've provided credentials to use a public chainquery service. You can also install it on your own server to avoid being affected by the commons.
   * [lbrynet](https://github.com/lbryio/lbry) - a daemon that handles your wallet and transactions.
+![App GIF](https://spee.ch/e/speechgif.gif)
 
-## Installation
+## Install
 
 ### Ubuntu Step by Step
 [Ubuntu Install Guide](./docs/ubuntuinstall.md)
@@ -22,9 +22,14 @@ Spee.ch is a react web app that depends on MySQL for local content, and on two o
   * speechport = 3000
 
 #### Install and Set Up System Dependencies:
+  * Firewall open ports
+    * 22
+    * 80
+    * 443
+    * 3333
+    * 4444
   * [NodeJS](https://nodejs.org)
   * [MySQL](https://dev.mysql.com/doc/refman/8.0/en/installing.html)
-    * localhost port 3306
     * mysqlusername or root
     * mysqlpassword
     * You may need
@@ -38,12 +43,13 @@ Spee.ch is a react web app that depends on MySQL for local content, and on two o
       * `./lbrynet account_balance` gets your balance (initially 0.0)
       * `./lbrynet address_list` gets addresses you can use to recieve LBC
   * [FFmpeg](https://www.ffmpeg.org/download.html)
-  * [Spee.ch] (below)
-  * [pm2] (optional) process manager such as pm2 to run speech server.js
-  * [http proxy server] caddy, nginx, traefik, etc to forward 80/443 to speech port 3000
+  * Spee.ch (below)
+  * pm2 (optional) process manager such as pm2 to run speech server.js
+  * http proxy server e.g. caddy, nginx, or traefik, to forward 80/443 to speech port 3000
+    * _note: even running on http://localhost, you must redirect http or https to port 3000_
 
 
-#### Clone this repo
+#### Clone a spee.ch repo (choose one)
   * release version for stable production
 ```
 $ git clone -b release https://github.com/lbryio/spee.ch.git
@@ -65,7 +71,8 @@ $ npm install
 ```
 
 #### Create the config files using the built-in CLI
-_note: make sure lbrynet is running in the background before proceeding_
+
+Make sure lbrynet is running in the background before proceeding.
 
 _note: If you are opt to run a local chainquery, such as from [lbry-docker/chainquery](https://github.com/lbryio/lbry-docker/tree/master/chainquery) you will need to specify connection details at this time in:_ ~/spee.ch/docs/setup/conf/speech/chainqueryConfig.json
 
@@ -75,7 +82,6 @@ $ npm run configure
 
 #### Build & start the app
 
-_note: make sure lbrynet is running in the background before proceeding_
 ```
 $ npm run start
 ```
@@ -249,3 +255,15 @@ Familiarity with the spee.ch code base and how the lbry daemon functions is requ
 
 #### level 4
 Issues with lbry (e.g. the spee.ch wallet, lbrynet configuration, etc.) that require strong familiarity with the lbry daemon and/or network to fix. Generally these issues are best suited for the `lbry` `protocol team` but are reported in this repo because they are part of the spee.ch implementation
+
+## License
+
+This project is MIT licensed. For the full license, see [LICENSE](LICENSE).
+
+## Security
+
+We take security seriously. Please contact security@lbry.io regarding any security issues. [Our GPG key is here](https://lbry.io/faq/gpg-key) if you need it.
+
+## Contact
+
+The primary contact for this project is [@skhameneh](mailto:shawn@lbry.io).

@@ -68,15 +68,35 @@ export default (db, table, sequelize) => ({
     });
   },
 
-  getAllChannelClaims: async (channelClaimId, bidState) => {
+  getAllChannelClaims: async (channelClaimId, params) => {
     logger.debug(`claim.getAllChannelClaims for ${channelClaimId}`);
-    const whereClause = bidState || {
-      [sequelize.Op.or]: [
-        { bid_state: 'Controlling' },
-        { bid_state: 'Active' },
-        { bid_state: 'Accepted' },
-      ],
+
+    const defaultWhereClauses = {
+      bid_state:
+      { [sequelize.Op.or]: ['Controlling', 'Active', 'Accepted'] }
     };
+
+    const addWhereClauses = (whereClauses, params) => {
+      /*
+       input params = { col: ['Val', 'Val']}
+       output = { col: { Op.or : [ { Op.eq: 'Value'},...]}, col2:...}
+      */
+      const cols = Object.keys(params)
+      for (let colKey in cols){
+        let col = Object.keys(params)[colKey]
+
+        whereClauses[col] = {}
+        whereClauses[col][sequelize.Op.or] = []
+        for (let itemKey in params[col] ){
+          let itemsArr = params[col]
+          whereClauses[col][sequelize.Op.or].push({ [sequelize.Op.eq]: itemsArr[itemKey] })
+        }
+      }
+      return whereClauses;
+    }
+
+    const whereClause = addWhereClauses(defaultWhereClauses, params);
+
     const selectWhere = {
       ...whereClause,
       publisher_id: channelClaimId,
