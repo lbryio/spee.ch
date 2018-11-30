@@ -46,6 +46,15 @@ class Dropzone extends React.Component {
     this.handleClick = this.handleClick.bind(this);
     this.handleFileInput = this.handleFileInput.bind(this);
     this.chooseFile = this.chooseFile.bind(this);
+
+    this.fileInput = React.createRef();
+  }
+
+  componentDidMount() {
+    if(isFacebook) {
+      // See https://github.com/lbryio/spee.ch/issues/782
+      this.fileInput.current.removeAttribute('accept');
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -200,11 +209,12 @@ class Dropzone extends React.Component {
             )}
             <form>
               <input
+                ref={this.fileInput}
                 className='input-file'
                 type='file'
                 id='file_input'
                 name='file_input'
-                {...(isFacebook ? { accept: 'image/*' } : { accept: 'video/*,image/*' })}
+                accept='video/*,image/*'
                 onChange={this.handleFileInput}
                 encType='multipart/form-data'
               />
