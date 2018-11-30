@@ -103,7 +103,7 @@ export default (db, table, sequelize) => ({
     };
     return await table.findAll({
       where: selectWhere,
-      order: [['height', 'DESC']],
+      order: [['height', 'DESC'],['claim_id', 'ASC']],
     })
       .then(channelClaimsArray => {
         if (channelClaimsArray.length === 0) {
@@ -116,7 +116,7 @@ export default (db, table, sequelize) => ({
   getClaimIdByLongChannelId: async (channelClaimId, claimName) => {
     logger.debug(`finding claim id for claim ${claimName} from channel ${channelClaimId}`);
     return await table.findAll({
-      where: { name: claimName, publisher_id: channelClaimId },
+      where: { name: claimName, publisher_id: channelClaimId, bid_state: { [sequelize.Op.or]: ['Controlling', 'Active', 'Accepted'] } },
       order: [['id', 'ASC']],
     })
     .then(result => {
