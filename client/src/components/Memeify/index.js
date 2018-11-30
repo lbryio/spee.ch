@@ -81,7 +81,7 @@ const getRasterizedCanvas = (contents, width, height) => {
   });
 };
 
-export default class Creatify extends Component {
+export default class Memeify extends Component {
   constructor(props) {
     super(props);
 
@@ -94,7 +94,7 @@ export default class Creatify extends Component {
         {
           value: fontName,
           label: (
-            <div style={{ maxHeight: '150px', maxWidth: '100%', fontSize: '16px', overflow: 'hidden' }}>
+            <div style={{ maxHeight: '150px', maxWidth: '100%', fontSize: '16px' }}>
               <EditableFontface key={fontName} fontFace={FontPresets[fontName]} preview={true} value={fontName} editable={false} blinkSelection={false} />
             </div>
           ),

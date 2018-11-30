@@ -17,6 +17,7 @@ module.exports = {
   },
 	previewOverrides: {
 		height: '2.6rem',
+		overflow: 'hidden',
 	},
   textRender: (text) => {
     const id = `curve-${text.replace(/[^A-Za-z0-9]/g, '')}-oceanwave`

@@ -64,7 +64,7 @@ export default class EditableFontface extends Component {
     ) : null;
 
     return (
-      <div style={{ position: 'relative' }}>
+      <div style={{ position: 'relative', ...(fontFace.container || {}) }}>
         <style scoped>{'@keyframes textBlink { 0% { opacity: 1 } 30% { opacity: 0.6 } 60% { opacity: 1 } }'}</style>
         {fontInput}
         <div ref={me.state.fontRender} style={textStyles} title={value}>{textRender(value)}</div>
@@ -93,6 +93,7 @@ export const PRESETS = {
   'Lazer': require('../FontFaces/Lazer'),
   'Neon': require('../FontFaces/Neon'),
   'Old Blue': require('../FontFaces/OldBlue'),
+  'Outline': require('../FontFaces/Outline'),
   'Retro Rainbow': require('../FontFaces/RetroRainbow'),
   'The Special': require('../FontFaces/TheSpecial'),
   'Vapor Wave': require('../FontFaces/VaporWave'),

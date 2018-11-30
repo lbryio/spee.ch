@@ -10,7 +10,9 @@ const charToFullWidth = char => {
 const stringToFullWidth =
 
 module.exports = {
-  container: {},
+  container: {
+		overflow: 'hidden',
+	},
   editorStyle: {},
   text: {
     fontFamily: 'Segoe UI,Helvetica,Arial',

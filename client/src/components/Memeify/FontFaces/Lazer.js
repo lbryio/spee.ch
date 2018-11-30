@@ -1,5 +1,4 @@
 module.exports = {
-  container: {},
   editorStyle: {
     fontFamily: 'helvetica, Helvetica Nue',
     fontWeight: 'bold',
@@ -19,5 +18,8 @@ module.exports = {
     whiteSpace: 'nowrap',
     WebkitBackgroundClip: 'text',
     WebkitTextStroke: '0.03em rgba(255, 255, 255, 0.6)',
+  },
+  previewOverrides: {
+    fontSize: '1.8em',
   },
 };
