@@ -4,6 +4,7 @@
   // be a flex container for children
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 
 .dropzone {
@@ -12,6 +13,7 @@
   flex: 1 0 auto;
   // be a flex container for children
   display: flex;
+  padding: 1em;
   -webkit-flex-direction: column;
   flex-direction: column;
   justify-content: center;
@@ -52,8 +54,37 @@
 
 .dropzone-preview-image {
   display: block;
-  padding: 1em;
-  width: calc(100% - 2em);
+  width: 100%;
+}
+
+.dropzone-preview-memeify {
+  margin-top: 3em;
+}
+
+.dropzone-memeify-button {
+  background: $primary-color;
+  color: #fff;
+  cursor: pointer;
+  font-size: .8em;
+  padding: 3px 6px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 3;
+}
+
+.dropzone-memeify-saveMessage {
+  padding-top: .25em;
+  position: relative;
+  top: .5em;
+}
+
+.dropzone-memeify-toolbar {
+  /* TODO: Cleanup `!important` */
+  background: $primary-color !important;
+  left: -1em !important;
+  right: -1em !important;
+  top: -4em !important;
 }
 
 .dropzone-instructions-display__chooser-label {
