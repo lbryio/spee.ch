@@ -130,7 +130,7 @@ class Dropzone extends React.Component {
     const destinationFormat = 'image/jpeg';
 
     canvas.toBlob((blob) => {
-      const file = new File([blob], 'memeify.jpg', {
+      const file = new File([blob], `memeify-${Math.random().toString(36).substring(7)}.jpg`, {
         type: destinationFormat,
       });
 
@@ -172,7 +172,7 @@ class Dropzone extends React.Component {
 
     const memeifyContent = memeify && file && filePreview ? (
       <Creatify flex toolbarClassName={'dropzone-memeify-toolbar'} onSave={(canvas) => this.selectFileFromCanvas(canvas)}>
-        <div style={{ background: '#fff', flex: 1 }}>
+        <div style={{ background: '#fff', flex: 1, pointerEvents: 'none' }}>
           <img style={{ width: '100%' }} src={filePreview} />
         </div>
       </Creatify>
@@ -186,7 +186,7 @@ class Dropzone extends React.Component {
           <p>Video updates are currently disabled. This feature will be available soon. You can edit metadata.</p>
         ) : (
           <div className={'dropzone-wrapper'}>
-            { hasContent && !memeify && (
+            { hasContent && !memeify && fileExt !== 'mp4' && (
               <div className={'dropzone-memeify-button'} onClick={() => this.setState({ memeify: !memeify })}>
                 <FontAwesomeIcon icon={faEdit} /> Memeify
               </div>
@@ -222,6 +222,7 @@ class Dropzone extends React.Component {
                   <DropzoneInstructionsDisplay fileError={fileError} />
                 )
               )}
+              {memeifyContent ? <div className={'dropzone-memeify-saveMessage'}>{`Don't forget to save before you publish.`}</div> : null}
             </div>
           </div>
         )}

@@ -15,6 +15,12 @@ module.exports = {
   text: {
     fontFamily: 'Segoe UI,Helvetica,Arial',
   },
+	previewOverrides: {
+		transform: 'rotate(39deg)',
+    height: '7rem',
+    paddingLeft: '2rem',
+	  margin: '-2rem 0',
+	},
   textRender: (text) => {
     const formattedText = text.toLowerCase().split('').map((char) => {
       const c = char.charCodeAt( 0 )

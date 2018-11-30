@@ -7,32 +7,48 @@ export default class EditableFontface extends Component {
     super(props);
 
     this.state = {
+      blinkSelection: props.blinkSelection == false ? false : true,
       value: props.value,
     };
+
+    this.textInput = React.createRef();
+  }
+
+  componentDidMount() {
+    const textInput = this.textInput.current;
+
+    if(textInput) {
+      textInput.focus();
+    }
   }
 
   render() {
     const me = this;
 
     const {
+      blinkSelection,
       value
     } = me.state;
 
     const {
       editable = true,
       fontFace,
+      preview,
     } = me.props;
 
     const textRender = fontFace.textRender || DEFAULT_TEXT_RENDER;
 
     const textStyles = Object.assign({
+      ...(blinkSelection ? {
+        animation: 'textBlink 1s infinite',
+      } : {}),
       minHeight: '20px',
       WebkitFontSmoothing: 'antialiased',
       MozOsxFontSmoothing: 'grayscale',
-    }, fontFace.text);
+    }, fontFace.text, preview ? fontFace.previewOverrides : {});
 
     const fontInput = (editable === true) ? (
-      <input type="text" onKeyPress={(e) => me.onKeyPress(e)} onChange={(e) => me.onChange(e)} style={{
+      <input ref={this.textInput} type="text" onKeyPress={(e) => me.onKeyPress(e)} onChange={(e) => me.onChange(e)} style={{
         ...{
           bottom: 0,
           opacity: 0,
@@ -49,25 +65,34 @@ export default class EditableFontface extends Component {
 
     return (
       <div style={{ position: 'relative' }}>
-      {fontInput}
-      <div ref={me.state.fontRender} style={textStyles} title={value}>{textRender(value)}</div>
+        <style scoped>{'@keyframes textBlink { 0% { opacity: 1 } 30% { opacity: 0.6 } 60% { opacity: 1 } }'}</style>
+        {fontInput}
+        <div ref={me.state.fontRender} style={textStyles} title={value}>{textRender(value)}</div>
       </div>
     );
   }
 
   onKeyPress(e) {
-    this.setState({ value: e.target.value });
+    this.setState({
+      blinkSelection: false,
+      value: e.target.value
+    });
   }
 
   onChange(e) {
-    this.setState({ value: e.target.value });
+    this.setState({
+      blinkSelection: false,
+      value: e.target.value
+    });
   }
 };
 
 export const PRESETS = {
-  'Retro Rainbow': require('../FontFaces/RetroRainbow'),
+  'Inferno': require('../FontFaces/Inferno'),
   'Green Machine': require('../FontFaces/GreenMachine'),
-  'vapor wave': require('../FontFaces/VaporWave'),
-  'The Special': require('../FontFaces/TheSpecial'),
+  'Lazer': require('../FontFaces/Lazer'),
   'Old Blue': require('../FontFaces/OldBlue'),
+  'Retro Rainbow': require('../FontFaces/RetroRainbow'),
+  'The Special': require('../FontFaces/TheSpecial'),
+  'Vapor Wave': require('../FontFaces/VaporWave'),
 }

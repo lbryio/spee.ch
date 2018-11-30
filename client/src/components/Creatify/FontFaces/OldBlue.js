@@ -15,6 +15,9 @@ module.exports = {
   text: {
     fontFamily: 'Segoe UI,Helvetica,Arial',
   },
+	previewOverrides: {
+		height: '2.6rem',
+	},
   textRender: (text) => {
     const id = `curve-${text.replace(/[^A-Za-z0-9]/g, '')}-oceanwave`
     return (

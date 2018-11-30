@@ -73,6 +73,12 @@
   z-index: 3;
 }
 
+.dropzone-memeify-saveMessage {
+  padding-top: .25em;
+  position: relative;
+  top: .5em;
+}
+
 .dropzone-memeify-toolbar {
   /* TODO: Cleanup `!important` */
   background: $primary-color !important;

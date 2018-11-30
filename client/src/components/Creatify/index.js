@@ -95,7 +95,7 @@ export default class Creatify extends Component {
           value: fontName,
           label: (
             <div style={{ maxHeight: '150px', maxWidth: '100%', fontSize: '16px', overflow: 'hidden' }}>
-              <EditableFontface key={fontName} fontFace={FontPresets[fontName]} value={fontName} editable="false" />
+              <EditableFontface key={fontName} fontFace={FontPresets[fontName]} preview={true} value={fontName} editable={false} blinkSelection={false} />
             </div>
           ),
           fontName,
@@ -140,7 +140,7 @@ export default class Creatify extends Component {
 
     const newElement = (
       <RichDraggable key={newElementKey} bounds={state.bounds} onStart={() => this.setActiveElement(newElement)}>
-        <EditableFontface fontFace={FontPresets[state.fontName]} value="Hello from LBRY" />
+        <EditableFontface fontFace={FontPresets[state.fontName]} value="Start Typing!" />
       </RichDraggable>
     );
 
