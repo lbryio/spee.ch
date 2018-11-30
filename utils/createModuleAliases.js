@@ -42,6 +42,7 @@ module.exports = () => {
 
   // aliases for configs
   moduleAliases['@config'] = resolve('site/config');
+  moduleAliases['@private'] = resolve('site/private');
 
   // create specific aliases for locally defined components in the following folders
   moduleAliases = addAliasesForCustomComponentFolder('containers', moduleAliases);
