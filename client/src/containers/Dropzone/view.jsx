@@ -11,11 +11,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 
 const isFacebook = (() => {
-  if(typeof window === 'undefined') {
+  if(typeof window === 'undefined' || typeof window.navigator.userAgent === 'undefined') {
     return false;
   }
-  const ua = window.navigator.userAgent || window.navigator.vendor || window.window.opera;
-  return ua.indexOf('FBAN') !== -1 || ua.indexOf('FBAV') !== -1;
+  return window.navigator.userAgent.indexOf('FBAN') !== -1 || window.navigator.userAgent.indexOf('FBAV') !== -1;
 })();
 
 class Dropzone extends React.Component {
@@ -205,7 +204,7 @@ class Dropzone extends React.Component {
                 type='file'
                 id='file_input'
                 name='file_input'
-                {...(isFacebook ? {} : { accept: 'video/*,image/*' })}
+                {...(isFacebook ? { accept: 'image/*' } : { accept: 'video/*,image/*' })}
                 onChange={this.handleFileInput}
                 encType='multipart/form-data'
               />
