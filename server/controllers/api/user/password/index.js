@@ -1,8 +1,7 @@
 const { handleErrorResponse } = require('../../../utils/errorHandlers.js');
 const logger = require('winston');
 const db = require('../../../../models');
-const { auth: { masterPassword } } = require('@config/siteConfig.json');
-
+const { masterPassword } = require('@private/authConfig.json');
 /*
 
   route to update a password

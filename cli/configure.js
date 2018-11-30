@@ -3,6 +3,7 @@ const fs = require('fs');
 const Path = require('path');
 const axios = require('axios');
 const ip = require('ip');
+const pwGenerator = require('generate-password');
 
 const mysqlQuestions = require(Path.resolve(__dirname, 'questions/mysqlQuestions.js'));
 const siteQuestions = require(Path.resolve(__dirname, 'questions/siteQuestions.js'));
@@ -12,11 +13,14 @@ let thumbnailChannelDefault = '@thumbnails';
 let thumbnailChannel = '';
 let thumbnailChannelId = '';
 
-const createConfigFile = (fileName, configObject) => {  // siteConfig.json , siteConfig
-  const fileLocation = Path.resolve(__dirname, `../site/config/${fileName}`);
+const createConfigFile = (fileName, configObject, topSecret) => {  // siteConfig.json , siteConfig
+  const fileLocation = topSecret
+    ? Path.resolve(__dirname, `../site/private/${fileName}`)
+    : Path.resolve(__dirname, `../site/config/${fileName}`);
+
   const fileContents = JSON.stringify(configObject, null, 2);
   fs.writeFileSync(fileLocation, fileContents, 'utf-8');
-  console.log(`Successfully created ./site/config/${fileName}\n`);
+  console.log(`Successfully created ${fileLocation}\n`);
 };
 
 // import existing configs or import the defaults
@@ -72,6 +76,27 @@ try {
   chainqueryConfig = require('../site/config/chainqueryConfig.json');
 } catch (error) {
   chainqueryConfig = require('./defaults/chainqueryConfig.json');
+}
+
+// authConfig
+let randSessionKey = pwGenerator.generate({
+  length : 20,
+  numbers: true,
+});
+
+let randMasterPass = pwGenerator.generate({
+  length : 20,
+  numbers: true,
+});
+
+let authConfig;
+try {
+  authConfig = require('../site/private/authConfig.json');
+} catch (error) {
+  authConfig = {
+    sessionKey    : randSessionKey,
+    masterPassword: randMasterPass,
+  };
 }
 
 // ask user questions and create config files
@@ -204,11 +229,14 @@ inquirer
     createConfigFile('loggerConfig.json', loggerConfig);
     createConfigFile('slackConfig.json', slackConfig);
     createConfigFile('chainqueryConfig.json', chainqueryConfig);
+    createConfigFile('authConfig.json', authConfig, true);
   })
   .then(() => {
     console.log('\nYou\'re all done!');
-    console.log('Next step: run "npm run start" to build and start your server!');
-    console.log('If you want to change any settings, you can edit the files in the "/config" folder.');
+    console.log('\nIt\'s a good idea to BACK UP YOUR MASTER PASSWORD \nin "/site/private/authConfig.json" so that you don\'t lose \ncontrol of your channel.');
+
+    console.log('\nNext step: run "npm run start" to build and start your server!');
+    console.log('If you want to change any settings, you can edit the files in the "/site" folder.');
     process.exit(0);
   })
   .catch(error => {
