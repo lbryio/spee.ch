@@ -1,5 +1,4 @@
 module.exports = {
-  container: {},
   editorStyle: {
     fontFamily: 'helvetica, Helvetica Nue',
     fontWeight: 'bold',
@@ -14,6 +13,7 @@ module.exports = {
   },
   previewOverrides: {
     fontSize: '1.5em',
+    overflow: 'hidden',
     padding: '0 1rem 0 1rem',
   },
 };

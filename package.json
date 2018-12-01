@@ -123,6 +123,7 @@
     "ndb": "^1.0.26",
     "node-sass": "^4.10.0",
     "nodemon": "^1.18.6",
+    "react-color": "^2.14.1",
     "redux-devtools": "^3.4.1",
     "regenerator-transform": "^0.13.3",
     "rollup": "^0.67.0",
