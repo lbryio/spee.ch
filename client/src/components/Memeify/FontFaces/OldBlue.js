@@ -25,12 +25,12 @@ module.exports = {
       <svg viewBox="0 0 500 50" style={{ height: '4em', fontFamily: 'Arial', fontWeight: 'bold' }}>
 				<path id={id} fill="transparent" d="M 0 50 Q 50 0 100 50 Q 150 100 200 50 Q 250 0 300 50 Q 350 100 400 50 Q 450 0 500 50 Q 550 100 600 50 " transform="scale(1 0.5) translate(0 15)" />
         <text x="10" style={{ fill: '#4dc2fe', fontWeight: 900, letterSpacing: '-0.15em', textShadow: '0.15em -0.1em #1c55a0' }}>
-          <textPath href={`#${id}`}>
+          <textPath xlinkHref={`#${id}`}>
             {text}
           </textPath>
         </text>
 				<text x="10" style={{ fill: 'transparent', stroke: '#1c55a0', strokeWidth: '.012em', fontWeight: 900, letterSpacing: '-0.15em' }}>
-          <textPath href={`#${id}`}>
+          <textPath xlinkHref={`#${id}`}>
             {text}
           </textPath>
         </text>

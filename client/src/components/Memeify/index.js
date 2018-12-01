@@ -30,7 +30,7 @@ const getRasterizedCanvas = (contents, width, height) => {
 
     // Attempt to match font kerning with the DOM.
     const kerningAndPadding = '<style>svg{font-kerning:normal}body{padding:0;margin:0}</style>';
-    const svgContents = `<svg xmlns="http://www.w3.org/2000/svg" width="${width * 2}" height="${height * 2}">
+    let svgContents = `<svg xmlns="http://www.w3.org/2000/svg" width="${width * 2}" height="${height * 2}">
 <foreignObject x="0" y="0" width="${width * 2}" height="${height * 2}" externalResourcesRequired="true">
 <html xmlns="http://www.w3.org/1999/xhtml"><head>${kerningAndPadding}</head><body>${contents}</body></html>
 </foreignObject></svg>`;
