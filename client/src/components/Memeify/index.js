@@ -28,6 +28,11 @@ const getRasterizedCanvas = (contents, width, height) => {
       );
     }
 
+    // Fix busted SVG images in Safari
+    if(/(Mac|iPhone|iPod|iPad)/i.test(navigator.platform)) {
+      contents = contents.replace(/\<img\s/g, '<xhtml:img ');
+    }
+
     // Attempt to match font kerning with the DOM.
     const kerningAndPadding = '<style>svg{font-kerning:normal}body{padding:0;margin:0}</style>';
     let svgContents = `<svg xmlns="http://www.w3.org/2000/svg" width="${width * 2}" height="${height * 2}">
