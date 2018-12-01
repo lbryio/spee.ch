@@ -1,5 +1,4 @@
 module.exports = {
-  container: {},
   editorStyle: {
     fontFamily: 'Helvetica, Arial',
     fontWeight: 'bold',

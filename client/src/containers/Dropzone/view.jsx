@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { validateFile } from '../../utils/file';
-import Creatify from '@components/Creatify';
+import Memeify from '@components/Memeify';
 import DropzonePreviewImage from '@components/DropzonePreviewImage';
 import DropzoneDropItDisplay from '@components/DropzoneDropItDisplay';
 import DropzoneInstructionsDisplay from '@components/DropzoneInstructionsDisplay';
@@ -187,11 +187,11 @@ class Dropzone extends React.Component {
     };
 
     const memeifyContent = memeify && file && filePreview ? (
-      <Creatify flex toolbarClassName={'dropzone-memeify-toolbar'} onSave={(canvas) => this.selectFileFromCanvas(canvas)}>
+      <Memeify flex toolbarClassName={'dropzone-memeify-toolbar'} onSave={(canvas) => this.selectFileFromCanvas(canvas)}>
         <div style={{ background: '#fff', flex: 1, pointerEvents: 'none' }}>
           <img style={{ width: '100%' }} src={filePreview} />
         </div>
-      </Creatify>
+      </Memeify>
     ) : null;
 
     const dropZoneClassName = 'dropzone' + (dragOver ? ' dropzone--drag-over' : '');

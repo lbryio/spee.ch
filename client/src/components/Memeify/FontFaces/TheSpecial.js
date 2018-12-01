@@ -1,7 +1,6 @@
 import React from 'react';
 
 module.exports = {
-  container: {},
   editorStyle: {
     fontFamily: 'Arial, sans-serif',
     fontWeight: 'bold',
