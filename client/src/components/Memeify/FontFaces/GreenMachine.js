@@ -1,5 +1,4 @@
 module.exports = {
-  container: {},
   editorStyle: {
     fontFamily: 'courier, Courier New',
     fontWeight: 'bold',
@@ -11,5 +10,8 @@ module.exports = {
     fontSize: '2rem',
     fontWeight: 'bold',
     textShadow: '1px 1px 2px #003605',
+  },
+  previewOverrides: {
+    fontSize: '1.6em',
   },
 };
