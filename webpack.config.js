@@ -2,6 +2,8 @@ const Path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const createModuleAliases = require('./utils/createModuleAliases.js');
 const SCSS_ROOT = Path.join(__dirname, 'client/scss/');
+const CLIENT_ROOT = Path.join(__dirname, 'client/');
+const CUSTOM_CLIENT_ROOT = Path.join(__dirname, 'site/custom/');
 
 const customAliases = createModuleAliases();
 
@@ -38,6 +40,8 @@ module.exports = {
   },
   resolve: {
     modules: [
+      CUSTOM_CLIENT_ROOT,
+      CLIENT_ROOT,
       SCSS_ROOT,
       'node_modules',
       __dirname,
