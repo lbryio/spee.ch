@@ -2,22 +2,20 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Label from '@components/Label';
 import RowLabeled from '@components/RowLabeled';
-import Row from '@components/Row';
 import SpaceBetween from '@components/SpaceBetween';
 import AssetShareButtons from '@components/AssetShareButtons';
 import ClickToCopy from '@components/ClickToCopy';
 import HorizontalSplit from '@components/HorizontalSplit';
-
 import siteConfig from '@config/siteConfig.json';
-const { details: { host } } = siteConfig;
 import createCanonicalLink from '../../../../utils/createCanonicalLink';
 import AssetInfoFooter from '../../components/AssetInfoFooter/index';
+const { details: { host } } = siteConfig;
 
 class AssetInfo extends React.Component {
   render () {
     const { editable, asset } = this.props;
     const { claimViews, claimData } = asset;
-    const { channelName, claimId, channelShortId, description, name, fileExt, contentType, host } = claimData;
+    const { channelName, claimId, channelShortId, description, name, fileExt, contentType, host, certificateId } = claimData;
 
     const canonicalUrl = createCanonicalLink({ asset: { ...claimData, shortId: asset.shortId }});
     const assetCanonicalUrl = `${host}${canonicalUrl}`;
@@ -25,7 +23,7 @@ class AssetInfo extends React.Component {
     let channelCanonicalUrl;
     if (channelName) {
       const channel = {
-        name: channelName,
+        name   : channelName,
         shortId: channelShortId,
       };
       channelCanonicalUrl = `${createCanonicalLink({channel})}`;
@@ -116,6 +114,18 @@ class AssetInfo extends React.Component {
                 }
               />
 
+              <RowLabeled
+                label={
+                  <Label value={'ID for Robots'} />
+                }
+                content={
+                  <ClickToCopy
+                    id={'short-link'}
+                    value={`${channelName}#${certificateId}/${name}`}
+                  />
+                }
+              />
+
               <SpaceBetween>
                 <a
                   className='link--primary'
@@ -132,6 +142,13 @@ class AssetInfo extends React.Component {
                 </a>
                 <a
                   className={'link--primary'}
+                  href={`https://open.lbry.io/${channelName}#${certificateId}/${name}`}
+                  download={name}
+                >
+                  LBRY URL
+                </a>
+                <a
+                  className={'link--primary'}
                   target='_blank'
                   href='https://lbry.io/dmca'
                 >
@@ -140,7 +157,7 @@ class AssetInfo extends React.Component {
               </SpaceBetween>
             </div>
           } />
-        <AssetInfoFooter/>
+        <AssetInfoFooter />
       </div>
     );
   }
