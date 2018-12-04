@@ -27,6 +27,7 @@ class AssetInfo extends React.Component {
         shortId: channelShortId,
       };
       channelCanonicalUrl = `${createCanonicalLink({channel})}`;
+      console.log(channelName)
     }
     return (
       <div className='asset-info'>
@@ -120,7 +121,7 @@ class AssetInfo extends React.Component {
                 }
                 content={
                   <ClickToCopy
-                    id={'short-link'}
+                    id={'lbry-permanent-url'}
                     value={`${channelName}#${certificateId}/${name}`}
                   />
                 }
