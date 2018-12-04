@@ -3,6 +3,8 @@
 spee.ch provides a user-friendly, custom-designed, image and video hosting site backed by a decentralized network and 
 blockchain ([LBRY](https://lbry.tech/)). Via just a small set of config files, you can spin your an entire spee.ch site back up including assets.
 
+![App GIF](https://spee.ch/e/speechgif.gif)
+
 For a completely open, unrestricted example of a spee.ch site, check out https://www.spee.ch.
 
 For a closed, custom-hosted and branded example, check out https://lbry.theantimedia.com/.
@@ -246,8 +248,6 @@ Spee.ch has a few types of URL formats that return different assets from the LBR
 Spee.ch depends on two other lbry technologies:
   * [chainquery](https://github.com/lbryio/chainquery) - a normalized database of the blockchain data.  We've provided credentials to use a public chainquery service. You can also install it on your own server to avoid being affected by the commons.
   * [lbrynet](https://github.com/lbryio/lbry) - a daemon that handles your wallet and transactions.
-![App GIF](https://spee.ch/e/speechgif.gif)
-
 
 ### Bugs
 If you find a bug or experience a problem, please report your issue here on GitHub and find us in the lbry discord!
