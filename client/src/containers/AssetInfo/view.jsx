@@ -27,7 +27,6 @@ class AssetInfo extends React.Component {
         shortId: channelShortId,
       };
       channelCanonicalUrl = `${createCanonicalLink({channel})}`;
-      console.log(channelName)
     }
     return (
       <div className='asset-info'>
