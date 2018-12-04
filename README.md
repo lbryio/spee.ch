@@ -1,7 +1,11 @@
 # Spee.ch
-Spee.ch is a [NodeJS](https://nodejs.org) React web app that reads and publishes images, videos and other assets to and from the [LBRY](https://lbry.io/) blockchain.
 
-Succinctly, via spee.ch, you can have a user-friendly, custom-designed image and video hosting site that is backed by a decentralized network. Via just a set of config files, you can spin your entire site back up including assets, with no backing up necessary.
+spee.ch provides a user-friendly, custom-designed, image and video hosting site backed by a decentralized network and 
+blockchain ([LBRY](https://lbry.tech/)). Via just a small set of config files, you can spin your an entire spee.ch site back up including assets.
+
+For a completely open, unrestricted example of a spee.ch site, check out https://www.spee.ch.
+
+For a closed, custom-hosted and branded example, check out https://lbry.theantimedia.com/.
 
 ## Installation
 
