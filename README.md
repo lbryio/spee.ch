@@ -1,19 +1,21 @@
 # Spee.ch
-Spee.ch is a [NodeJS](https://nodejs.org) React web app that reads and publishes images and videos to and from the [LBRY](https://lbry.io/) blockchain.
 
-You can create your own custom version of spee.ch by installing this code base and then creating your own custom components and styles to override the defaults. (More details/guide on how to do that coming soon.)
+spee.ch provides a user-friendly, custom-designed, image and video hosting site backed by a decentralized network and 
+blockchain ([LBRY](https://lbry.tech/)). Via just a small set of config files, you can spin your an entire spee.ch site back up including assets.
 
-Spee.ch depends on two other lbry technologies:
-  * [chainquery](https://github.com/lbryio/chainquery) - a normalized database of the blockchain data.  We've provided credentials to use a public chainquery service. You can also install it on your own server to avoid being affected by the commons.
-  * [lbrynet](https://github.com/lbryio/lbry) - a daemon that handles your wallet and transactions.
 ![App GIF](https://spee.ch/e/speechgif.gif)
 
-## Install
+For a completely open, unrestricted example of a spee.ch site, check out https://www.spee.ch.
 
-### Ubuntu Step by Step
-[Ubuntu Install Guide](./docs/ubuntuinstall.md)
+For a closed, custom-hosted and branded example, check out https://lbry.theantimedia.com/.
 
-### Quickstart Overview
+## Installation
+
+### Ubuntu Step-by-Step
+
+[Step-by-step Ubuntu Install Guide](./docs/ubuntuinstall.md)
+
+### Full Instructions
 
 #### Get some information ready:
   * mysqlusername
@@ -21,7 +23,7 @@ Spee.ch depends on two other lbry technologies:
   * domainname or 'http://localhost'
   * speechport = 3000
 
-#### Install and Set Up System Dependencies:
+#### Install and Set Up Dependencies
   * Firewall open ports
     * 22
     * 80
@@ -49,7 +51,7 @@ Spee.ch depends on two other lbry technologies:
     * _note: even running on http://localhost, you must redirect http or https to port 3000_
 
 
-#### Clone a spee.ch repo (choose one)
+#### Clone spee.ch
   * release version for stable production
 ```
 $ git clone -b release https://github.com/lbryio/spee.ch.git
@@ -95,8 +97,8 @@ Check out the [customization guide](https://github.com/lbryio/spee.ch/blob/readm
 
 #### (optional) add custom components and update the styles
 
-  * Create custom components by creating React components in `site/custom/src/` (further instructions coming soon)
-  * Update the CSS by changing the files in `site/custom/scss` (further instructions and refactor coming soon)
+  * Create custom components by creating React components in `site/custom/src/`
+  * Update or override the CSS by changing the files in `site/custom/scss`
 
 #### (optional) install your own chainquery
 Instructions are coming at [lbry-docker] to install your own chainquery instance using docker-compose. This will require 50GB of preferably SSD space and at least 10 minutes to download, possibly much longer.
@@ -222,7 +224,8 @@ Spee.ch also runs a sync tool, which decodes blocks from the `LBRY` blockchain a
   *  To run only tests that do not require LBC, run `npm run test:no-lbc`
 
 ### URL formats
-Spee.ch has a few types of URL formats that return different assets from the LBRY network.  Below is a list of all possible URLs for the content on spee.ch
+Spee.ch has a few types of URL formats that return different assets from the LBRY network.  Below is a list of all possible URLs for the content on spee.ch. You can learn more about LBRY URLs [here](https://lbry.tech/resources/uri).
+
 * retrieve the controlling `LBRY` claim:
   * https://spee.ch/`claim`
   * https://spee.ch/`claim`.`ext` (serve)
@@ -240,21 +243,14 @@ Spee.ch has a few types of URL formats that return different assets from the LBR
   * https://spee.ch/`@channel`:`channel_id`/`claim`
   * https://spee.ch/`@channel`:`channel_id`/`claim`.`ext` (serve)
 
+### Dependencies
+
+Spee.ch depends on two other lbry technologies:
+  * [chainquery](https://github.com/lbryio/chainquery) - a normalized database of the blockchain data.  We've provided credentials to use a public chainquery service. You can also install it on your own server to avoid being affected by the commons.
+  * [lbrynet](https://github.com/lbryio/lbry) - a daemon that handles your wallet and transactions.
+
 ### Bugs
 If you find a bug or experience a problem, please report your issue here on GitHub and find us in the lbry discord!
-
-### Issue tags in this repo
-#### level 1
-Issues that anyone with basic web development can handle; little-to-no experience with the spee.ch codebase is required.
-
-#### level 2
-Familiarity with web apps is required, but little-to-no familiarity with the lbry daemon is necessary
-
-#### level 3
-Familiarity with the spee.ch code base and how the lbry daemon functions is required
-
-#### level 4
-Issues with lbry (e.g. the spee.ch wallet, lbrynet configuration, etc.) that require strong familiarity with the lbry daemon and/or network to fix. Generally these issues are best suited for the `lbry` `protocol team` but are reported in this repo because they are part of the spee.ch implementation
 
 ## License
 

@@ -120,7 +120,7 @@ class AssetInfo extends React.Component {
                 }
                 content={
                   <ClickToCopy
-                    id={'short-link'}
+                    id={'lbry-permanent-url'}
                     value={`${channelName}#${certificateId}/${name}`}
                   />
                 }

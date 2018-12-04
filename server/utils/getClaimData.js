@@ -28,5 +28,6 @@ module.exports = async (data) => {
     thumbnail  : data.generated_thumbnail || data.thumbnail_url || data.thumbnail,
     outpoint   : data.transaction_hash_id || data.outpoint,
     host,
+    pending: Boolean(data.height === 0),
   });
 };

@@ -72,8 +72,7 @@ export default (db, table, sequelize) => ({
     logger.debug(`claim.getAllChannelClaims for ${channelClaimId}`);
 
     const defaultWhereClauses = {
-      bid_state:
-      { [sequelize.Op.or]: ['Controlling', 'Active', 'Accepted'] }
+      bid_state: { [sequelize.Op.or]: ['Controlling', 'Active', 'Accepted'] }
     };
 
     const addWhereClauses = (whereClauses, params) => {
@@ -168,7 +167,7 @@ export default (db, table, sequelize) => ({
   getTopFreeClaimIdByClaimName: async (name) => {
     return await table.findAll({
       // TODO: Limit 1
-      where: { name },
+      where: { name, bid_state: { [sequelize.Op.or]: ['Controlling', 'Active', 'Accepted'] }  },
       order: [['effective_amount', 'DESC'], ['height', 'ASC']],
     }).then(result => {
       if(result.length === 0) {
