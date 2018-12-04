@@ -2,8 +2,14 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import createCanonicalLink from '../../../../utils/createCanonicalLink';
 
+const ClaimPending = () => {
+  return (
+    <div className='claim-pending'>PENDING</div>
+  );
+};
+
 const AssetPreview = ({ defaultThumbnail, claimData }) => {
-  const {name, fileExt, contentType, thumbnail, title} = claimData;
+  const {name, fileExt, contentType, thumbnail, title, pending} = claimData;
   const showUrl = createCanonicalLink({asset: {...claimData}});
   const embedUrl = `${showUrl}.${fileExt}`;
   switch (contentType) {

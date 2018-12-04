@@ -46,7 +46,7 @@ class AssetDisplay extends React.Component {
   }
   render () {
     const { status, error, asset } = this.props;
-    const { name, claimData: { claimId, contentType, thumbnail, outpoint } } = asset;
+    const { name, claimData: { claimId, contentType, thumbnail, outpoint, pending } } = asset;
     // the outpoint is added to force the browser to re-download the asset after an update
     // issue: https://github.com/lbryio/spee.ch/issues/607
     let fileExt;
@@ -68,16 +68,22 @@ class AssetDisplay extends React.Component {
           <p>Curious what magic is happening here? <a className='link--primary' target='blank' href='https://lbry.io/faq/what-is-lbry'>Learn more.</a></p>
         </div>
         }
-        {(status === ERROR) &&
-        <div>
-          <Row>
-            <p>Unfortunately, we couldn't download your asset from LBRY.  You can help us out by sharing the following error message in the <a className='link--primary' href='https://chat.lbry.io' target='_blank'>LBRY discord</a>.</p>
-          </Row>
-          <Row>
-            <p id='error-message'><i>{error}</i></p>
-          </Row>
-        </div>
-        }
+        {(status === ERROR) && (
+          pending ? (
+            <div>
+              <p>This content is pending confirmation on the LBRY blockchain. It should be available in the next few minutes, please check back or refresh.</p>
+            </div>
+          ) : (
+            <div>
+              <Row>
+                <p>Unfortunately, we couldn't download your asset from LBRY.  You can help us out by sharing the following error message in the <a className='link--primary' href='https://chat.lbry.io' target='_blank'>LBRY discord</a>.</p>
+              </Row>
+              <Row>
+                <p id='error-message'><i>{error}</i></p>
+              </Row>
+            </div>
+          )
+        )}
         {(status === AVAILABLE) &&
         <AvailableContent
           contentType={contentType}
