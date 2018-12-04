@@ -38,7 +38,7 @@ const claimGet = async ({ ip, originalUrl, params }, res) => {
     try {
       await waitOn({
         resources: [ lbrynetResult.file_name ],
-        delay    : 100,
+        delay    : 500,
         timeout  : 10000, // 10 seconds
       });
     } catch (e) {}
