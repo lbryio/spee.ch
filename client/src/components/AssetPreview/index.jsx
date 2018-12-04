@@ -17,9 +17,6 @@ const AssetPreview = ({ defaultThumbnail, claimData }) => {
     case 'image/jpg':
     case 'image/png':
     case 'image/gif':
-      if (pending) {
-        return null;
-      }
       return (
         <Link to={showUrl} className='asset-preview'>
           <div>
@@ -36,7 +33,6 @@ const AssetPreview = ({ defaultThumbnail, claimData }) => {
       return (
         <Link to={showUrl} className='asset-preview'>
           <div>
-<<<<<<< HEAD
             <div className='asset-preview__play-wrapper'>
               <img
                 className={'asset-preview__video'}
@@ -46,15 +42,6 @@ const AssetPreview = ({ defaultThumbnail, claimData }) => {
               <div className='asset-preview__play-overlay'></div>
             </div>
             <h3 className='asset-preview__title'>{title}</h3>
-=======
-            {pending && <ClaimPending/>}
-            <img
-              className={'asset-preview-video'}
-              src={thumbnail || defaultThumbnail}
-              alt={name}
-            />
-            <h3 className='list-title'>{title}</h3>
->>>>>>> add pending marker
           </div>
         </Link>
       );
