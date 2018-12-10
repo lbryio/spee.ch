@@ -18,16 +18,8 @@ cache:
 
 jobs:
   include:
-    - stage: "Configure"
-      name: "Configure Spee.ch"
-
-      script:
-        - cp ./cli/defaults/* ./site/config/
-        - |
-          echo \'{ "sessionKey": "session", "masterPassword": false }\' > ./site/private/authConfig.json
-
-    - stage: "Build"
-      name: "Build Spee.ch"
+    - stage: "Setup"
+      name: "Setup Build Environment"
 
       before_install:
       #  - sudo mysql -e "use mysql; update user set authentication_string=PASSWORD('password') where User='root'; update user set plugin='mysql_native_password';FLUSH PRIVILEGES;"
@@ -41,6 +33,17 @@ jobs:
 
       install:
         - npm i
+
+    - stage: "Configure"
+      name: "Configure Spee.ch"
+
+      script:
+        - cp ./cli/defaults/* ./site/config/
+        - |
+          echo \'{ "sessionKey": "session", "masterPassword": false }\' > ./site/private/authConfig.json
+
+    - stage: "Build"
+      name: "Build Spee.ch"
 
       script:
       #  - npm run fix
