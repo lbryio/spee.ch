@@ -1,0 +1,44 @@
+sudo: true
+dist: xenial
+#addons:
+#  apt:
+#    sources:
+#      - mysql-5.7-trusty
+#    packages:
+#      - mysql-server
+#      - mysql-client
+language: node_js
+node_js:
+  - "lts/*"
+cache:
+  directories:
+    - "node_modules"
+#services:
+#  - mysql
+
+jobs:
+  include:
+    - stage: "Build"
+      name: "Build and run test environment"
+
+      before_install:
+      #  - sudo mysql -e "use mysql; update user set authentication_string=PASSWORD('password') where User='root'; update user set plugin='mysql_native_password';FLUSH PRIVILEGES;"
+      #  - sudo mysql_upgrade -u root -ppassword
+      #  - sudo service mysql restart
+      #  - mysql -u root -ppassword -e 'CREATE DATABASE IF NOT EXISTS lbry;'
+      #  - mysql -u root -ppassword -e "CREATE USER 'lbry'@'localhost' IDENTIFIED BY 'lbry';"
+      #  - mysql -u root -ppassword -e "GRANT ALL ON lbry.* TO 'lbry'@'localhost';"
+      #  - sudo service mysql restart
+        - dpkg --compare-versions `npm -v` ge 6.4.0 || npm i -g npm@^6.4.0
+
+      install:
+        - npm i
+
+      script:
+        - cp ./cli/defaults/* ./site/config/
+        - |
+          echo '{ "sessionKey": "session", "masterPassword": false }' > ./site/private/authConfig.json
+      #  - npm run fix
+        - npm run build
+        - npm start &
+        - sleep 10 # Attempt to collect output for 10 seconds
