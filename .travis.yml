@@ -31,8 +31,10 @@ jobs:
       #  - sudo service mysql restart
         - dpkg --compare-versions `npm -v` ge 6.4.0 || npm i -g npm@^6.4.0
 
-      script:
+      install:
         - npm i
+
+      script: 'true' # Disables automatic stage tests
 
     - stage: "Configure"
       name: "Configure Spee.ch"
