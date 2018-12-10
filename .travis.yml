@@ -18,8 +18,8 @@ cache:
 
 jobs:
   include:
-    - stage: "Setup"
-      name: "Setup Build Environment"
+    - stage: "Build"
+      name: "Build and run test environment"
 
       before_install:
       #  - sudo mysql -e "use mysql; update user set authentication_string=PASSWORD('password') where User='root'; update user set plugin='mysql_native_password';FLUSH PRIVILEGES;"
@@ -34,26 +34,11 @@ jobs:
       install:
         - npm i
 
-      script: 'true' # Disables automatic stage tests
-
-    - stage: "Configure"
-      name: "Configure Spee.ch"
-
       script:
         - cp ./cli/defaults/* ./site/config/
         - |
           echo \'{ "sessionKey": "session", "masterPassword": false }\' > ./site/private/authConfig.json
-
-    - stage: "Build"
-      name: "Build Spee.ch"
-
-      script:
       #  - npm run fix
         - npm run build
-
-    - stage: "Run"
-      name: "Run Test Environment"
-
-      script:
         - npm start &
         - sleep 10 # Attempt to collect output for 10 seconds
