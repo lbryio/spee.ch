@@ -37,3 +37,12 @@ jobs:
       script:
       #  - npm run fix
         - npm run build
+
+    - stage: "Setup Tests"
+      name: "Setup Test Environment"
+
+      script:
+        - cp ./cli/defaults/* ./site/config/
+        - echo '{ "sessionKey": "session", "masterPassword": false }' > ./site/private/authConfig.json
+        - npm start &
+        - sleep 10 # Attempt to collect output for 10 seconds
