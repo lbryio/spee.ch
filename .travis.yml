@@ -18,6 +18,13 @@ cache:
 
 jobs:
   include:
+    - stage: "Configure"
+      name: "Configure Spee.ch"
+
+      script:
+        - cp ./cli/defaults/* ./site/config/
+        - echo '{ "sessionKey": "session", "masterPassword": false }' > ./site/private/authConfig.json
+
     - stage: "Build"
       name: "Build Spee.ch"
 
@@ -38,11 +45,9 @@ jobs:
       #  - npm run fix
         - npm run build
 
-    - stage: "Setup Tests"
-      name: "Setup Test Environment"
+    - stage: "Run"
+      name: "Run Test Environment"
 
       script:
-        - cp ./cli/defaults/* ./site/config/
-        - echo '{ "sessionKey": "session", "masterPassword": false }' > ./site/private/authConfig.json
         - npm start &
         - sleep 10 # Attempt to collect output for 10 seconds
