@@ -37,7 +37,7 @@ jobs:
       script:
         - cp ./cli/defaults/* ./site/config/
         - |
-          echo \'{ "sessionKey": "session", "masterPassword": false }\' > ./site/private/authConfig.json
+          echo '{ "sessionKey": "session", "masterPassword": false }' > ./site/private/authConfig.json
       #  - npm run fix
         - npm run build
         - npm start &
