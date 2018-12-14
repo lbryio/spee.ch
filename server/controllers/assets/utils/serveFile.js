@@ -6,8 +6,10 @@ const serveFile = ({ filePath, fileType }, res) => {
   }
   const sendFileOptions = {
     headers: {
-      'X-Content-Type-Options': 'nosniff',
-      'Content-Type'          : fileType,
+      'X-Content-Type-Options'      : 'nosniff',
+      'Content-Type'                : fileType,
+      'Access-Control-Allow-Origin' : '*',
+      'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
     },
   };
   logger.debug(`fileOptions for ${filePath}:`, sendFileOptions);

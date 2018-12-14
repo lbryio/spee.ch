@@ -20,7 +20,7 @@ For a closed, custom-hosted and branded example, check out https://lbry.theantim
 #### Get some information ready:
   * mysqlusername
   * mysqlpassword
-  * domainname or 'http://localhost'
+  * domainname or 'http://localhost:3000'
   * speechport = 3000
 
 #### Install and Set Up Dependencies
@@ -31,10 +31,10 @@ For a closed, custom-hosted and branded example, check out https://lbry.theantim
     * 3333
     * 4444
   * [NodeJS](https://nodejs.org)
-  * [MySQL](https://dev.mysql.com/doc/refman/8.0/en/installing.html)
+  * [MySQL version 5.7 or higher](https://dev.mysql.com/doc/refman/8.0/en/installing.html)
     * mysqlusername or root
     * mysqlpassword
-    * You may need
+    * Requires mysql_native_password plugin
     ```
     mysql> `ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'yourpassword';`
     ```
@@ -89,7 +89,7 @@ $ npm run start
 ```
 
 #### View in browser
- *  Visit [http://localhost:3000](http://localhost:3000) in your browser
+ * Visit [http://localhost:3000](http://localhost:3000) in your browser
 
 #### Customize your app
 

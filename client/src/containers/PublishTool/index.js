@@ -1,14 +1,14 @@
 import {connect} from 'react-redux';
 import View from './view';
 import {selectAsset} from '../../selectors/show';
-import {buildURI} from '../../utils/buildURI';
+import {createPermanentURI} from '@clientutils/createPermanentURI';
 
 const mapStateToProps = props => {
   const { show, publish } = props;
   const asset = selectAsset(show);
   let uri;
   if (asset) {
-    uri = `lbry://${buildURI(asset)}`;
+    uri = `lbry://${createPermanentURI(asset)}`;
   }
   return {
     disabled  : publish.disabled,
