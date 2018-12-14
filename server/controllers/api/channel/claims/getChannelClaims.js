@@ -17,6 +17,12 @@ const getChannelClaims = async (channelName, channelShortId, page) => {
     channelClaims = await chainquery.claim.queries.getAllChannelClaims(channelId, params);
   }
 
+  const split = channelClaims.reduce(
+    (acc, val) => val.dataValues.height === 0 ? { ...acc, zero: acc.zero.concat(val) } : { ...acc, nonzero: acc.nonzero.concat(val) },
+    { zero: [], nonzero: [] }
+  );
+  channelClaims = split.zero.concat(split.nonzero);
+
   const processingChannelClaims = channelClaims ? channelClaims.map((claim) => getClaimData(claim)) : [];
   const processedChannelClaims = await Promise.all(processingChannelClaims);
 

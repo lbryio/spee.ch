@@ -9,6 +9,8 @@ import HorizontalSplit from '@components/HorizontalSplit';
 import siteConfig from '@config/siteConfig.json';
 import createCanonicalLink from '../../../../utils/createCanonicalLink';
 import AssetInfoFooter from '../../components/AssetInfoFooter/index';
+import { createPermanentURI } from '@clientutils/createPermanentURI';
+
 const { details: { host } } = siteConfig;
 
 class AssetInfo extends React.Component {
@@ -120,8 +122,8 @@ class AssetInfo extends React.Component {
                 }
                 content={
                   <ClickToCopy
-                    id={'short-link'}
-                    value={`${channelName}#${certificateId}/${name}`}
+                    id={'lbry-permanent-url'}
+                    value={`${createPermanentURI(asset)}`}
                   />
                 }
               />
@@ -142,7 +144,7 @@ class AssetInfo extends React.Component {
                 </a>
                 <a
                   className={'link--primary'}
-                  href={`https://open.lbry.io/${channelName}#${certificateId}/${name}`}
+                  href={`https://open.lbry.io/${createPermanentURI(asset)}`}
                   download={name}
                 >
                   LBRY URL

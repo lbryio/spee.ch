@@ -6,23 +6,23 @@
   * Ability to use SSH (putty + public key for windows users)
   * Ubuntu 16.04 or 18.04 VPS with root access
     * Your login info ready
+    * Exposed ports: 22, 80, 443, 3333, 4444
   * Domain name with @ and www pointed at your VPS IP
-    * alternatively, specify http://localhost
+    * _alternatively, specify http://localhost:3000 as domain during speech configuration_
   * Ability to send 5+ LBRY credits to an address
   * Noncommercial use
-    * _(configuration examples for nginx and certbot are included as an alternative)_
+    * _alternative configuration examples for nginx and certbot are [here](https://github.com/lbryio/spee.ch/tree/master/docs/setup/conf/nginx)_
 
 ## You'll be installing:
-  * MySQL DB
+  * MySQL DB version 5.7 or higher
     * Default Port 3306
+    * mysql_native_password plugin
   * NodeJS v8+
-  * Https proxy server
-    * Caddy for personal use
-    * Exposed ports: 22, 80, 443, 3333, 4444
-    * Reverse proxies 80 redirected to 443 to App on 3000
-  * Spee.ch started on port 3000
+  * Caddy - https reverse proxy server
+    * automatically obtains tls certificate
+    * Redirects 80 (http) to 443 (https) to Speech on 3000 
   * Lbrynet DAEMON started on ports 3333 and 4444
-
+  * Spee.ch started on port 3000
 
 # 1. Setup OS and install dependencies
 ## OS
@@ -184,15 +184,13 @@ tmux allows you to run multiple things in different sessions. Useful for manuall
 ## Detatch tmux session
   `Control + b`, then `d`
 
-<<<<<<< Updated upstream
   * `tmux` if you want to get back into tmux
 
   * `Control+b`, then `)` while in tmux session to cycle back to your lbrynet session to see output
-=======
+  
   `tmux`
 
   _note: `Control+b`, then `)` while in tmux session to cycle back to your lbrynet session to see output_
->>>>>>> Stashed changes
 
 ## Display wallet address to which to send 5+ LBC.
 
@@ -227,19 +225,17 @@ tmux allows you to run multiple things in different sessions. Useful for manuall
 
   `npm run configure`
 
-<<<<<<< Updated upstream
-=======
   (once your wallet balance has cleared)
 
   `npm run configure`
 
->>>>>>> Stashed changes
+
     * Database: lbry
     * Username: root
     * Password: your_mysql_password
     * Port: 3000
     * Site Title: Your Site Name
-    * Enter your site's domain name: https://example.com or http://localhost
+    * Enter your site's domain name: https://example.com or http://localhost:3000
     * Enter a directory where uploads should be stored: (/home/lbry/Uploads)
 
   `npm run start`
@@ -255,7 +251,7 @@ tmux allows you to run multiple things in different sessions. Useful for manuall
  npm install -g pm2
  ```
 
-### 7 Maintenance Proceedures
+### 7 Maintenance Procedures
 
 #### Change daemon
   * backup wallet (private keys!) to a safe place
