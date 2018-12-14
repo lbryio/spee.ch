@@ -20,11 +20,11 @@ const createCanonicalLink = require('../../../utils/createCanonicalLink');
 const getCanonicalUrlFromShow = show => {
   const requestId = show.requestList[show.request.id];
   const requestType = show.request.type;
-
+  
   if (!requestId || !requestType) {
     return null;
   }
-
+  
   switch (requestType) {
     case 'ASSET_DETAILS':
       const asset = show.assetList[requestId.key];
@@ -57,15 +57,16 @@ module.exports = (req, res) => {
     // Workaround, remove when a solution for async httpContext exists
     const showState = store.getState().show;
     const assetKeys = Object.keys(showState.assetList);
-    const channelKeys = Object.keys(showState.channelList);
-
-    if (assetKeys.length !== 0) {
+    
+    if(assetKeys.length !== 0) {
       res.claimId = showState.assetList[assetKeys[0]].claimId;
-    } else if (channelKeys.length !== 0) {
-      res.claimId = showState.channelList[channelKeys[0]].longId;
-      res.isChannel = true;
     } else {
-      res.status(404);
+      const channelKeys = Object.keys(showState.channelList);
+
+      if(channelKeys.length !== 0) {
+        res.claimId = showState.channelList[channelKeys[0]].longId;
+        res.isChannel = true;
+        }
     }
 
     // render component to a string
