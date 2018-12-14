@@ -50,17 +50,13 @@ function Server () {
       const webpackDevMiddleware = require('webpack-dev-middleware');
 
       const webpackClientConfig = require('../webpack/webpack.client.config')(null, { mode: 'development' });
-      const clientCompilerConfig = Object.assign({}, webpackClientConfig, {
-        mode: 'development',
-      });
-
-      console.log(clientCompilerConfig)
-
       const clientCompiler = webpack(webpackClientConfig);
 
       app.use(webpackDevMiddleware(clientCompiler, {
         publicPath: webpackClientConfig.output.publicPath,
       }));
+
+      app.use(require('webpack-hot-middleware')(clientCompiler));
     }
 
     // trust the proxy to get ip address for us

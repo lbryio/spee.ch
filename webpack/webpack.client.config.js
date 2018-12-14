@@ -14,8 +14,15 @@ module.exports = (env, argv) => {
   const isDev = argv.mode === 'development';
 
   return {
+    mode: isDev ? 'development' : 'production',
     target: 'web',
-    entry : ['@babel/polyfill', 'whatwg-fetch', './client/src/index.js'],
+    entry : [
+      'webpack-hot-middleware/client',
+      //'webpack/hot/dev-server',
+      '@babel/polyfill',
+      'whatwg-fetch',
+      './client/src/index.js',
+    ],
     output: {
       path      : Path.resolve(__dirname, '../public/bundle'),
       publicPath: '/bundle/',
@@ -66,6 +73,7 @@ module.exports = (env, argv) => {
       extensions: ['.js', '.jsx', '.scss', '.json'],
     },
     plugins: [
+      ...(isDev ? [new webpack.HotModuleReplacementPlugin()] : []),
       new ExtractCssChunks({
         filename: 'style.css', // '[name].css',
       })
