@@ -5,7 +5,7 @@ const serveByIdentifierAndClaim = require('../../controllers/assets/serveByIdent
 const Actions = require('@actions').default;
 const Sagas = require('@sagas').default;
 
-module.exports = {
+export default {
   '/:identifier/:claim': { controller: serveByIdentifierAndClaim, action: Actions.onHandleShowPageUri, saga: Sagas.handleShowPageUri },
   '/:claim'            : { controller: serveByClaim, action: Actions.onHandleShowPageUri, saga: Sagas.handleShowPageUri },
 };

@@ -1,7 +1,7 @@
 const logger = require('winston');
 
 const { sendGAServeEvent } = require('../../../utils/googleAnalytics');
-const handleShowRender = require('../../../render/build/handleShowRender.js');
+const handleShowRender = require('../../../render/handleShowRender');
 
 const lbryUri = require('../../../../utils/lbryUri.js');
 
