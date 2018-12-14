@@ -1,7 +1,7 @@
 const logger = require('winston');
 
 const db = require('../../../models');
-const chainquery = require('chainquery');
+const chainquery = require('chainquery').default;
 const isApprovedChannel = require('../../../../utils/isApprovedChannel');
 
 const getClaimId = require('../../utils/getClaimId.js');

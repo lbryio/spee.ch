@@ -2,7 +2,7 @@ const { getClaim } = require('../../../../lbrynet');
 const { createFileRecordDataAfterGet } = require('../../../../models/utils/createFileRecordData.js');
 const { handleErrorResponse } = require('../../../utils/errorHandlers.js');
 const getClaimData = require('server/utils/getClaimData');
-const chainquery = require('chainquery');
+const chainquery = require('chainquery').default;
 const db = require('../../../../models');
 const waitOn = require('wait-on');
 

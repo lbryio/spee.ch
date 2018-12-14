@@ -1,5 +1,5 @@
 const { details: { host } } = require('@config/siteConfig');
-const chainquery = require('chainquery');
+const chainquery = require('chainquery').default;
 
 module.exports = async (data) => {
   // TODO: Refactor getching the channel name out; requires invasive changes.

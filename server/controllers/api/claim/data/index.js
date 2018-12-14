@@ -1,7 +1,7 @@
 const { handleErrorResponse } = require('../../../utils/errorHandlers.js');
 const getClaimData = require('server/utils/getClaimData');
 const fetchClaimData = require('server/utils/fetchClaimData');
-const chainquery = require('chainquery');
+const chainquery = require('chainquery').default;
 const db = require('server/models');
 /*
 
