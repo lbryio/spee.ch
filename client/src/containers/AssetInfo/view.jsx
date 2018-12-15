@@ -118,7 +118,7 @@ class AssetInfo extends React.Component {
 
               <RowLabeled
                 label={
-                  <Label value={'ID for Robots'} />
+                  <Label value={'LBRY URI'} />
                 }
                 content={
                   <ClickToCopy
