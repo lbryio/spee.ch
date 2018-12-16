@@ -3,7 +3,7 @@ import { renderToString } from 'react-dom/server';
 import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import { StaticRouter } from 'react-router-dom';
-import renderFullPage from '../renderFullPage';
+import renderFullPage from './renderFullPage';
 import createSagaMiddleware from 'redux-saga';
 import { call } from 'redux-saga/effects';
 import Helmet from 'react-helmet';
@@ -15,16 +15,16 @@ import App from '@app';
 import Sagas from '@sagas';
 import Actions from '@actions';
 
-const createCanonicalLink = require('../../../utils/createCanonicalLink');
+const createCanonicalLink = require('../../utils/createCanonicalLink');
 
 const getCanonicalUrlFromShow = show => {
   const requestId = show.requestList[show.request.id];
   const requestType = show.request.type;
-  
+
   if (!requestId || !requestType) {
     return null;
   }
-  
+
   switch (requestType) {
     case 'ASSET_DETAILS':
       const asset = show.assetList[requestId.key];
@@ -42,7 +42,7 @@ const returnSagaWithParams = (saga, params) => {
   };
 };
 
-module.exports = (req, res) => {
+export default (req, res) => {
   let context = {};
 
   const {
@@ -57,7 +57,7 @@ module.exports = (req, res) => {
     // Workaround, remove when a solution for async httpContext exists
     const showState = store.getState().show;
     const assetKeys = Object.keys(showState.assetList);
-    
+
     if(assetKeys.length !== 0) {
       res.claimId = showState.assetList[assetKeys[0]].claimId;
     } else {

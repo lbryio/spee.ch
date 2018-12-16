@@ -1,4 +1,4 @@
-const handlePageRequest = require('../../controllers/pages/sendReactApp');
+import handlePageRequest from '../../controllers/pages/sendReactApp';
 const handleVideoEmbedRequest = require('../../controllers/pages/sendVideoEmbedPage');
 const redirect = require('../../controllers/utils/redirect');
 
@@ -6,7 +6,7 @@ const redirect = require('../../controllers/utils/redirect');
 const Actions = require('@actions').default;
 const Sagas = require('@sagas').default;
 
-module.exports = {
+export default {
   '/'                                   : { controller: handlePageRequest, action: Actions.onHandleShowHomepage, saga: Sagas.handleShowHomepage  },
   '/login'                              : { controller: handlePageRequest },
   '/about'                              : { controller: handlePageRequest },

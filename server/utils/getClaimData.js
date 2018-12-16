@@ -1,5 +1,5 @@
 const { details: { host } } = require('@config/siteConfig');
-const chainquery = require('chainquery');
+const chainquery = require('chainquery').default;
 const { getClaim } = require('server/lbrynet');
 
 module.exports = async (data) => {

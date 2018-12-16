@@ -9,7 +9,7 @@ const parsePublishApiRequestBody = require('../publish/parsePublishApiRequestBod
 const parsePublishApiRequestFiles = require('../publish/parsePublishApiRequestFiles.js');
 const authenticateUser = require('../publish/authentication.js');
 const createThumbnailPublishParams = require('../publish/createThumbnailPublishParams.js');
-const chainquery = require('chainquery');
+const chainquery = require('chainquery').default;
 const createCanonicalLink = require('../../../../../utils/createCanonicalLink');
 
 /*

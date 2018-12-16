@@ -1,5 +1,5 @@
 const db = require('../../../../models');
-const chainquery = require('chainquery');
+const chainquery = require('chainquery').default;
 const getClaimData = require('server/utils/getClaimData');
 const { returnPaginatedChannelClaims } = require('./channelPagination.js');
 

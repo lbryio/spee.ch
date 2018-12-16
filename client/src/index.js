@@ -10,7 +10,7 @@ import App from '@app';
 import GAListener from '@components/GAListener';
 
 // import scss so webpack will build it
-import 'all.scss';
+import '../scss/all.scss';
 
 // get the state from a global variable injected into the server-generated HTML
 const preloadedState = window.__PRELOADED_STATE__ || null;

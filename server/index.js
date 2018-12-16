@@ -45,6 +45,20 @@ function Server () {
     /* create app */
     const app = express();
 
+    if (process.env.NODE_ENV === 'development') {
+      const webpack = require('webpack');
+      const webpackDevMiddleware = require('webpack-dev-middleware');
+
+      const webpackClientConfig = require('../webpack/webpack.client.config')(null, { mode: 'development' });
+      const clientCompiler = webpack(webpackClientConfig);
+
+      app.use(webpackDevMiddleware(clientCompiler, {
+        publicPath: webpackClientConfig.output.publicPath,
+      }));
+
+      app.use(require('webpack-hot-middleware')(clientCompiler));
+    }
+
     // trust the proxy to get ip address for us
     app.enable('trust proxy');
 
