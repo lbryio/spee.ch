@@ -51,16 +51,17 @@ sequelize
 
 // manually add each model to the db object (note: make this dynamic)
 const db = {};
-db['Blocked'] = sequelize.import('Blocked', Blocked);
-db['Certificate'] = sequelize.import('Certificate', Certificate);
-db['Channel'] = sequelize.import('Channel', Channel);
-db['Claim'] = sequelize.import('Claim', Claim);
-db['File'] = sequelize.import('File', File);
-db['Metrics'] = sequelize.import('Metrics', Metrics);
-db['Tor'] = sequelize.import('Tor', Tor);
-db['Trending'] = sequelize.import('Trending', Trending);
-db['User'] = sequelize.import('User', User);
-db['Views'] = sequelize.import('Views', Views);
+
+db['Blocked'] = Blocked(sequelize, Sequelize);
+db['Certificate'] = Certificate(sequelize, Sequelize);
+db['Channel'] = Channel(sequelize, Sequelize);
+db['Claim'] = Claim(sequelize, Sequelize);
+db['File'] = File(sequelize, Sequelize);
+db['Metrics'] = Metrics(sequelize, Sequelize);
+db['Tor'] = Tor(sequelize, Sequelize);
+db['Trending'] = Trending(sequelize, Sequelize);
+db['User'] = User(sequelize, Sequelize);
+db['Views'] = Views(sequelize, Sequelize);
 
 // run model.association for each model in the db object that has an association
 logger.info('associating db models...');

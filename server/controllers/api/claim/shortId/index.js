@@ -1,6 +1,6 @@
 const { handleErrorResponse } = require('../../../utils/errorHandlers.js');
 const db = require('../../../../models');
-const chainquery = require('chainquery');
+const chainquery = require('chainquery').default;
 
 /*
 

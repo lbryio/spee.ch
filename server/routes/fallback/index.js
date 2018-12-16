@@ -1,5 +1,5 @@
-const handlePageRequest = require('../../controllers/pages/sendReactApp');
+import handlePageRequest from '../../controllers/pages/sendReactApp';
 
-module.exports = {
+export default {
   '*': { controller: handlePageRequest, action: 'fallback' },
 };

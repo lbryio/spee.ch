@@ -26,7 +26,7 @@ const getTorList = require('../../controllers/api/tor');
 const getBlockedList = require('../../controllers/api/blocked');
 const getOEmbedData = require('../../controllers/api/oEmbed');
 
-module.exports = {
+export default {
   // homepage routes
   '/api/homepage/data/channels'                           : { controller: [ torCheckMiddleware, channelData ] },
   // channel routes

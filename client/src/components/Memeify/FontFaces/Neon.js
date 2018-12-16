@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   editorStyle: {
     fontFamily: 'Helvetica, Arial',
     fontWeight: 'bold',

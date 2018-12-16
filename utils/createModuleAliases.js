@@ -1,7 +1,7 @@
 const { statSync, existsSync, readdirSync } = require('fs');
 const { join, resolve } = require('path');
-const DEFAULT_ROOT = 'client/build';
-const CUSTOM_ROOT = 'site/custom/build';
+const DEFAULT_ROOT = 'client/src';
+const CUSTOM_ROOT = 'site/custom/src';
 const DEFAULT_SCSS_ROOT = 'client/scss';
 const CUSTOM_SCSS_ROOT = 'site/custom/scss';
 
@@ -27,7 +27,7 @@ const addAliasesForCustomComponentFolder = (name, aliasObject) => {
 module.exports = () => {
   let moduleAliases = {};
 
-  moduleAliases['chainquery'] = resolve('./server/chainquery/bundle');
+  moduleAliases['chainquery'] = resolve('./server/chainquery');
   moduleAliases['server'] = resolve('./server');
 
   // aliases for configs
