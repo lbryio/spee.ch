@@ -20,11 +20,11 @@ const createCanonicalLink = require('../../utils/createCanonicalLink');
 const getCanonicalUrlFromShow = show => {
   const requestId = show.requestList[show.request.id];
   const requestType = show.request.type;
-  
+
   if (!requestId || !requestType) {
     return null;
   }
-  
+
   switch (requestType) {
     case 'ASSET_DETAILS':
       const asset = show.assetList[requestId.key];
@@ -57,7 +57,7 @@ export default (req, res) => {
     // Workaround, remove when a solution for async httpContext exists
     const showState = store.getState().show;
     const assetKeys = Object.keys(showState.assetList);
-    
+
     if(assetKeys.length !== 0) {
       res.claimId = showState.assetList[assetKeys[0]].claimId;
     } else {
@@ -98,9 +98,7 @@ export default (req, res) => {
   if (runSaga) {
     // create and apply middleware
     const sagaMiddleware = createSagaMiddleware();
-    console.log('saga')
     const middleware = applyMiddleware(sagaMiddleware);
-    console.log('sagaend')
 
     // create a new Redux store instance
     const store = createStore(Reducers, middleware);
