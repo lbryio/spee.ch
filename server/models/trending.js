@@ -1,4 +1,4 @@
-const chainquery = require('chainquery');
+const chainquery = require('chainquery').default;
 
 module.exports = (sequelize, { BOOLEAN, DATE, FLOAT, INTEGER, STRING }) => {
   const Trending = sequelize.define(

@@ -66,7 +66,7 @@ const {
   database,
   username,
   password,
-} = require('../../site/config/chainqueryConfig'); // TODO: Make '@config/siteConfig' work outside Webpack for testing/dev
+} = require('@config/chainqueryConfig');
 
 if (!database || !username || !password) {
   logger.warn('missing database, user, or password from chainqueryConfig');

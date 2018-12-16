@@ -88,13 +88,13 @@ export default class EditableFontface extends Component {
 };
 
 export const PRESETS = {
-  'Green Machine': require('../FontFaces/GreenMachine'),
-  'Inferno': require('../FontFaces/Inferno'),
-  'Lazer': require('../FontFaces/Lazer'),
-  'Neon': require('../FontFaces/Neon'),
-  'Old Blue': require('../FontFaces/OldBlue'),
-  'Outline': require('../FontFaces/Outline'),
-  'Retro Rainbow': require('../FontFaces/RetroRainbow'),
-  'The Special': require('../FontFaces/TheSpecial'),
-  'Vapor Wave': require('../FontFaces/VaporWave'),
+  'Green Machine': require('../FontFaces/GreenMachine').default,
+  'Inferno': require('../FontFaces/Inferno').default,
+  'Lazer': require('../FontFaces/Lazer').default,
+  'Neon': require('../FontFaces/Neon').default,
+  'Old Blue': require('../FontFaces/OldBlue').default,
+  'Outline': require('../FontFaces/Outline').default,
+  'Retro Rainbow': require('../FontFaces/RetroRainbow').default,
+  'The Special': require('../FontFaces/TheSpecial').default,
+  'Vapor Wave': require('../FontFaces/VaporWave').default,
 }

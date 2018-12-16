@@ -1,7 +1,5 @@
-const handleShowRender = require('../../render/build/handleShowRender.js');
+import handleShowRender from '../../render/handleShowRender';
 
-const sendReactApp = (req, res) => {
+export default (req, res) => {
   handleShowRender(req, res);
 };
-
-module.exports = sendReactApp;

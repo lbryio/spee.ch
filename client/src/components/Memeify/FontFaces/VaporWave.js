@@ -7,9 +7,7 @@ const charToFullWidth = char => {
 		: char
 }
 
-const stringToFullWidth =
-
-module.exports = {
+export default {
   container: {
 		overflow: 'hidden',
 	},

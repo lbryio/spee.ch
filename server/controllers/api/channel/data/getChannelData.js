@@ -1,5 +1,5 @@
 const db = require('server/models');
-const chainquery = require('chainquery');
+const chainquery = require('chainquery').default;
 
 const getChannelData = async (channelName, channelClaimId) => {
   let longChannelClaimId = await chainquery.claim.queries.getLongClaimId(channelName, channelClaimId).catch(() => false);

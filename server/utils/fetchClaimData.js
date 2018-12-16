@@ -1,4 +1,4 @@
-const chainquery = require('chainquery');
+const chainquery = require('chainquery').default;
 const db = require('server/models');
 
 const fetchClaimData = async (params) => {
