@@ -6,7 +6,6 @@ module.exports = async (data) => {
   // TODO: Refactor getching the channel name out; requires invasive changes.
   const certificateId = data.publisher_id || data.certificateId;
   const lbrynetUri = `${data.name}#${data.claim_id}`;
-
   let channelName = data.channelName;
 
   if (certificateId && !channelName) {
@@ -20,10 +19,11 @@ module.exports = async (data) => {
 
   let lbrynetClaimResult = null;
   let lbrynetFileExt = null;
-  if (!data.fileExt) {
-    lbrynetClaimResult = await getClaim(lbrynetUri).catch(() => { return 'invalid URI' });
-    lbrynetFileExt = lbrynetClaimResult && lbrynetClaimResult.file_name && lbrynetClaimResult.file_name.split('.').slice(-1).pop();
-  }
+
+  // if (!data.fileExt) {
+  //   lbrynetClaimResult = await getClaim(lbrynetUri).catch(() => { return 'invalid URI' });
+  //   lbrynetFileExt = lbrynetClaimResult && lbrynetClaimResult.file_name && lbrynetClaimResult.file_name.split('.').slice(-1).pop();
+  // }
 
   // TODO verify that "generated_x" does anything at all
   return ({
