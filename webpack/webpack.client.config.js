@@ -17,7 +17,7 @@ module.exports = (env, argv) => {
     mode: isDev ? 'development' : 'production',
     target: 'web',
     entry : [
-      'webpack-hot-middleware/client',
+      ...(isDev ? ['webpack-hot-middleware/client'] : []),
       //'webpack/hot/dev-server',
       '@babel/polyfill',
       'whatwg-fetch',
