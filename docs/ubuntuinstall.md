@@ -132,13 +132,14 @@ Log in as username@domainname or username@ip_address
 
   `sudo apt-get install mysql-server -y`
 
-  ( enter blank password each time if prompted)
+  ( During install, enter blank password each time if prompted. We'll set one during secure setup.)
 
   `sudo systemctl status mysql` (q to exit)
 
 ## Secure Setup
 
   `sudo mysql_secure_installation`
+  
   * Password your_mysql_password
   * No to password validation
   * Y to all other options
@@ -223,13 +224,10 @@ tmux allows you to run multiple things in different sessions. Useful for manuall
 
   Once your wallet has a balance, run this:
 
-  `npm run configure`
+  `npm run configure`    
 
-  (once your wallet balance has cleared)
-
-  `npm run configure`
-
-
+  The script will ask for the following values:
+   
     * Database: lbry
     * Username: root
     * Password: your_mysql_password
@@ -237,6 +235,8 @@ tmux allows you to run multiple things in different sessions. Useful for manuall
     * Site Title: Your Site Name
     * Enter your site's domain name: https://example.com or http://localhost:3000
     * Enter a directory where uploads should be stored: (/home/lbry/Uploads)
+     
+  `npm run build`  (or `npm run dev` to build for developing)
 
   `npm run start`
 

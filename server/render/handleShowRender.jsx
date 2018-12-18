@@ -49,9 +49,12 @@ export default (req, res) => {
     action = false,
     saga = false,
   } = httpContext.get('routeData');
+  
+  if (action === 'fallback') {
+    res.status(404);
+  }
 
   const runSaga = (action !== false && saga !== false);
-
   const renderPage = (store) => {
 
     // Workaround, remove when a solution for async httpContext exists
@@ -63,10 +66,10 @@ export default (req, res) => {
     } else {
       const channelKeys = Object.keys(showState.channelList);
 
-      if(channelKeys.length !== 0) {
+      if (channelKeys.length !== 0) {
         res.claimId = showState.channelList[channelKeys[0]].longId;
         res.isChannel = true;
-        }
+      }
     }
 
     // render component to a string
@@ -115,10 +118,16 @@ export default (req, res) => {
       .then(() => {
         // redirect if request does not use canonical url
         const canonicalUrl = getCanonicalUrlFromShow(store.getState().show);
+      
+        if (!canonicalUrl) {
+          res.status(404);
+        }
+      
         if (canonicalUrl && canonicalUrl !== req.originalUrl) {
           console.log(`redirecting ${req.originalUrl} to ${canonicalUrl}`);
           res.redirect(canonicalUrl);
         }
+      
         return renderPage(store)
       });
   } else {
