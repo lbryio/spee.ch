@@ -22,7 +22,7 @@ module.exports = async (data) => {
   let lbrynetFileExt = null;
   if (!data.fileExt) {
     lbrynetClaimResult = await getClaim(lbrynetUri).catch(() => { return 'invalid URI' });
-    lbrynetFileExt = lbrynetClaimResult && lbrynetClaimResult.file_name.split('.').slice(-1).pop();
+    lbrynetFileExt = lbrynetClaimResult && lbrynetClaimResult.file_name && lbrynetClaimResult.file_name.split('.').slice(-1).pop();
   }
 
   // TODO verify that "generated_x" does anything at all
