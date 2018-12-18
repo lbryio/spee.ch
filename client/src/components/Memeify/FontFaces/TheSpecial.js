@@ -1,6 +1,6 @@
 import React from 'react';
 
-module.exports = {
+export default {
   editorStyle: {
     fontFamily: 'Arial, sans-serif',
     fontWeight: 'bold',

@@ -1,5 +1,5 @@
 const db = require('server/models');
-const chainquery = require('chainquery');
+const chainquery = require('chainquery').default;
 
 const { handleErrorResponse } = require('server/controllers/utils/errorHandlers.js');
 

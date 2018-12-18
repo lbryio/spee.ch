@@ -60,7 +60,7 @@ module.exports = (sequelize, { STRING }) => {
   };
 
   // pre-save hook method to hash the user's password before the user's info is saved to the db.
-  User.hook('beforeCreate', (user, options) => {
+  User.addHook('beforeCreate', (user, options) => {
     logger.debug('User.beforeCreate hook...');
     return new Promise((resolve, reject) => {
       // generate a salt string to use for hashing

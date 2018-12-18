@@ -1,4 +1,4 @@
-const chainquery = require('chainquery');
+const chainquery = require('chainquery').default;
 const { publishing: { primaryClaimAddress, additionalClaimAddresses } } = require('@config/siteConfig');
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;

@@ -17,7 +17,7 @@ const parsePublishApiRequestBody = require('./parsePublishApiRequestBody.js');
 const parsePublishApiRequestFiles = require('./parsePublishApiRequestFiles.js');
 const authenticateUser = require('./authentication.js');
 
-const chainquery = require('chainquery');
+const chainquery = require('chainquery').default;
 const createCanonicalLink = require('../../../../../utils/createCanonicalLink');
 
 const CLAIM_TAKEN = 'CLAIM_TAKEN';
