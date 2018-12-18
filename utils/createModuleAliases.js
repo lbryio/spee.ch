@@ -19,7 +19,7 @@ const addAliasesForCustomComponentFolder = (name, aliasObject) => {
   for (let i = 0; i < components.length; i++) {
     let folderName = components[i];
     let aliasName = `@${name}/${folderName}`;
-    aliasObject[aliasName] = resolve(`${CUSTOM_ROOT}/${name}/${folderName}/index.js`);
+    aliasObject[aliasName] = resolve(`${CUSTOM_ROOT}/${name}/${folderName}/`);
   }
   return aliasObject;
 };
