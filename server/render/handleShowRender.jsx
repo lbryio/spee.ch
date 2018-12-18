@@ -49,6 +49,7 @@ export default (req, res) => {
     action = false,
     saga = false,
   } = httpContext.get('routeData');
+  
   if (action === 'fallback') {
     res.status(404);
   }
@@ -117,13 +118,16 @@ export default (req, res) => {
       .then(() => {
         // redirect if request does not use canonical url
         const canonicalUrl = getCanonicalUrlFromShow(store.getState().show);
+      
         if (!canonicalUrl) {
           res.status(404);
         }
+      
         if (canonicalUrl && canonicalUrl !== req.originalUrl) {
           console.log(`redirecting ${req.originalUrl} to ${canonicalUrl}`);
           res.redirect(canonicalUrl);
         }
+      
         return renderPage(store)
       });
   } else {
