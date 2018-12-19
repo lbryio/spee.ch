@@ -23,7 +23,7 @@ const getChannelClaims = async (channelName, channelShortId, page) => {
   );
   channelClaims = split.zero.concat(split.nonzero);
 
-  const processingChannelClaims = channelClaims ? channelClaims.map((claim) => getClaimData(claim)) : [];
+  const processingChannelClaims = channelClaims ? channelClaims.map((claim) => getClaimData(claim, channelName, channelShortId)) : [];
   const processedChannelClaims = await Promise.all(processingChannelClaims);
 
   return returnPaginatedChannelClaims(channelName, channelId, processedChannelClaims, page);
