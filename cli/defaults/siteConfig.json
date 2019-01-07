@@ -17,7 +17,8 @@
     "ipAddress": "",
     "host": "https://www.example.com",
     "description": "A decentralized hosting platform built on LBRY",
-    "twitter": false
+    "twitter": false,
+    "blockListEndpoint": "https://api.lbry.io/file/list_blocked"
   },
   "publishing": {
     "primaryClaimAddress": null,
