@@ -5,6 +5,7 @@ const getClaimData = require('server/utils/getClaimData');
 const chainquery = require('chainquery').default;
 const db = require('../../../../models');
 const waitOn = require('wait-on');
+const logger = require('winston');
 
 /*
 
@@ -17,32 +18,35 @@ const claimGet = async ({ ip, originalUrl, params }, res) => {
   const claimId = params.claimId;
 
   try {
-    let claimData = await chainquery.claim.queries.resolveClaim(name, claimId).catch(() => {});
-    if (!claimData) {
-      claimData = await db.Claim.resolveClaim(name, claimId);
+    let claimInfo = await chainquery.claim.queries.resolveClaim(name, claimId).catch(() => {});
+    if (claimInfo) {
+      logger.info('claim/get: claim resolved in chainquery');
     }
-
-    if (!claimData) {
-      throw new Error('No matching uri found in Claim table');
+    if (!claimInfo) {
+      claimInfo = await db.Claim.resolveClaim(name, claimId);
     }
-
+    if (!claimInfo) {
+      throw new Error('claim/get: resolveClaim: No matching uri found in Claim table');
+    }
     let lbrynetResult = await getClaim(`${name}#${claimId}`);
     if (!lbrynetResult) {
-      throw new Error(`Unable to Get ${name}#${claimId}`);
+      throw new Error(`claim/get: getClaim Unable to Get ${name}#${claimId}`);
     }
-
-    let fileData = await createFileRecordDataAfterGet(await getClaimData(claimData), lbrynetResult);
+    const claimData = await getClaimData(claimInfo);
+    if (!claimData) {
+      throw new Error('claim/get: getClaimData failed to get file blobs');
+    }
+    await waitOn({
+      resources: [ lbrynetResult.download_path ],
+      timeout  : 10000, // 10 seconds
+      window   : 500,
+    });
+    const fileData = await createFileRecordDataAfterGet(claimData, lbrynetResult);
+    if (!fileData) {
+      throw new Error('claim/get: createFileRecordDataAfterGet failed to create file in time');
+    }
     const upsertCriteria = { name, claimId };
     await db.upsert(db.File, fileData, upsertCriteria, 'File');
-
-    try {
-      await waitOn({
-        resources: [ lbrynetResult.file_name ],
-        delay    : 500,
-        timeout  : 10000, // 10 seconds
-      });
-    } catch (e) {}
-
     const { message, completed } = lbrynetResult;
     res.status(200).json({
       success: true,
@@ -53,5 +57,4 @@ const claimGet = async ({ ip, originalUrl, params }, res) => {
     handleErrorResponse(originalUrl, ip, error, res);
   }
 };
-
 module.exports = claimGet;

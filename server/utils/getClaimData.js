@@ -1,6 +1,7 @@
 const { details: { host } } = require('@config/siteConfig');
 const chainquery = require('chainquery').default;
 const { getClaim } = require('server/lbrynet');
+const { isBlocked } = require('./blockList');
 
 module.exports = async (data, chName = null, chShortId = null) => {
   // TODO: Refactor getching the channel name out; requires invasive changes.
@@ -9,6 +10,11 @@ module.exports = async (data, chName = null, chShortId = null) => {
   let lbrynetFileExt = null;
   let channelShortId = chShortId;
   let channelName = chName;
+  let blocked;
+  const outPoint = `${data.transaction_hash_id}:${data.vout}`;
+  if (isBlocked(outPoint)) {
+    blocked = true;
+  }
 
   if (!chName && certificateId && !channelName) {
     channelName = await chainquery.claim.queries.getClaimChannelName(certificateId).catch(() => {
@@ -38,8 +44,9 @@ module.exports = async (data, chName = null, chShortId = null) => {
     fileExt    : data.generated_extension || data.fileExt || lbrynetFileExt,
     description: data.description,
     thumbnail  : data.generated_thumbnail || data.thumbnail_url || data.thumbnail,
-    outpoint   : `${data.transaction_hash_id}:${data.vout}` || data.outpoint,
+    outpoint   : outPoint || data.outpoint,
     host,
     pending    : Boolean(data.height === 0),
+    blocked    : blocked,
   });
 };
