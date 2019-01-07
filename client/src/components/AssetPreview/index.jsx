@@ -2,51 +2,59 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import createCanonicalLink from '../../../../utils/createCanonicalLink';
 
-const ClaimPending = () => {
-  return (
-    <div className='claim-pending'>PENDING</div>
-  );
-};
-
 const AssetPreview = ({ defaultThumbnail, claimData }) => {
-  const {name, fileExt, contentType, thumbnail, title, pending} = claimData;
+  const {name, fileExt, contentType, thumbnail, title, blocked} = claimData;
   const showUrl = createCanonicalLink({asset: {...claimData}});
   const embedUrl = `${showUrl}.${fileExt}`;
-  switch (contentType) {
-    case 'image/jpeg':
-    case 'image/jpg':
-    case 'image/png':
-    case 'image/gif':
-      return (
-        <Link to={showUrl} className='asset-preview'>
-          <div>
+
+  /*
+  This blocked section shouldn't be necessary after pagination is reworked,
+  though it might be useful for channel_mine situations.
+  */
+
+  if (blocked) {
+    return (
+      <div className='asset-preview'>
+        <div className='asset-preview__blocked'>
+          <h3>Error 451</h3>
+          <p>This content is blocked for legal reasons.</p>
+        </div>
+        <h3 className='asset-preview__title'>Blocked Content</h3>
+      </div>
+    );
+  } else {
+    switch (contentType) {
+      case 'image/jpeg':
+      case 'image/jpg':
+      case 'image/png':
+      case 'image/gif':
+        return (
+          <Link to={showUrl} className='asset-preview'>
             <img
               className={'asset-preview__image'}
               src={embedUrl}
               alt={name}
             />
             <h3 className='asset-preview__title'>{title}</h3>
-          </div>
-        </Link>
-      );
-    case 'video/mp4':
-      return (
-        <Link to={showUrl} className='asset-preview'>
-          <div>
+          </Link>
+        );
+      case 'video/mp4':
+        return (
+          <Link to={showUrl} className='asset-preview'>
             <div className='asset-preview__play-wrapper'>
               <img
                 className={'asset-preview__video'}
                 src={thumbnail || defaultThumbnail}
                 alt={name}
               />
-              <div className='asset-preview__play-overlay'></div>
+              <div className='asset-preview__play-overlay' />
             </div>
             <h3 className='asset-preview__title'>{title}</h3>
-          </div>
-        </Link>
-      );
-    default:
-      return null;
+          </Link>
+        );
+      default:
+        return null;
+    }
   }
 };
 

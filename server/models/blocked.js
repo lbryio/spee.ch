@@ -1,5 +1,4 @@
 const logger = require('winston');
-
 const BLOCKED_CLAIM = 'BLOCKED_CLAIM';
 
 module.exports = (sequelize, { STRING }) => {
@@ -15,6 +14,14 @@ module.exports = (sequelize, { STRING }) => {
       freezeTableName: true,
     }
   );
+
+  Blocked.getBlockList = function () {
+    logger.debug('returning full block list');
+    return new Promise((resolve, reject) => {
+      this.findAll()
+        .then(list => { return resolve(list) });
+    });
+  };
 
   Blocked.isNotBlocked = function (outpoint) {
     logger.debug(`checking to see if ${outpoint} is not blocked`);
@@ -37,9 +44,10 @@ module.exports = (sequelize, { STRING }) => {
     });
   };
 
-  Blocked.refreshTable = function () {
+  Blocked.refreshTable = function (blockEndpoint) {
     let blockedList = [];
-    return fetch('https://api.lbry.io/file/list_blocked')
+
+    return fetch(blockEndpoint)
       .then(response => {
         return response.json();
       })
@@ -50,9 +58,7 @@ module.exports = (sequelize, { STRING }) => {
         if (!jsonResponse.data.outpoints) {
           throw new Error('no outpoints in list_blocked response');
         }
-        return jsonResponse.data.outpoints;
-      })
-      .then(outpoints => {
+        let outpoints = jsonResponse.data.outpoints;
         logger.debug('total outpoints:', outpoints.length);
         // prep the records
         for (let i = 0; i < outpoints.length; i++) {

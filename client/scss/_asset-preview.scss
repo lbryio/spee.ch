@@ -2,6 +2,16 @@
   position: relative;
 }
 
+.asset-preview__blocked {
+  box-sizing: border-box;
+  background: black;
+  color: white;
+  height: 80%;
+  padding: 5px;
+  //remove margin-bottom after mystery 5px on wrapper is gone.
+  margin-bottom: 5px;
+}
+
 .asset-preview__image {
   width  : 100%;
   padding: 0;
