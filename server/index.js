@@ -16,6 +16,7 @@ const createDatabaseIfNotExists = require('./models/utils/createDatabaseIfNotExi
 const { getWalletBalance } = require('./lbrynet/index');
 const configureLogging = require('./utils/configureLogging');
 const configureSlack = require('./utils/configureSlack');
+const { setupBlockList } = require('./utils/blockList');
 const speechPassport = require('./speechPassport');
 const processTrending = require('./utils/processTrending');
 
@@ -25,7 +26,7 @@ const {
 } = require('./middleware/logMetricsMiddleware');
 
 const {
-  details: { port: PORT },
+  details: { port: PORT, blockListEndpoint },
   startup: {
     performChecks,
     performUpdates,
@@ -33,6 +34,9 @@ const {
 } = require('@config/siteConfig');
 
 const { sessionKey } = require('@private/authConfig.json');
+
+// configure.js doesn't handle new keys in config.json files yet. Make sure it doens't break.
+let bLE;
 
 function Server () {
   this.initialize = () => {
@@ -166,19 +170,37 @@ function Server () {
         logger.info('Starting LBC balance:', walletBalance);
       });
   };
+
   this.performUpdates = () => {
     if (!performUpdates) {
       return;
     }
+    if (blockListEndpoint) {
+      bLE = blockListEndpoint;
+    } else if (!blockListEndpoint) {
+      if (typeof (blockListEndpoint) !== 'string') {
+        logger.warn('blockListEndpoint is null due to outdated siteConfig file. \n' +
+          'Continuing with default LBRY blocklist api endpoint. \n ' +
+          '(Specify /"blockListEndpoint" : ""/ to disable.')
+        bLE = 'https://api.lbry.io/file/list_blocked';
+      }
+    }
     logger.info(`Peforming updates...`);
-    return Promise.all([
-      db.Blocked.refreshTable(),
-      db.Tor.refreshTable(),
-    ])
-      .then(([updatedBlockedList, updatedTorList]) => {
-        logger.info('Blocked list updated, length:', updatedBlockedList.length);
+    if (!bLE) {
+      logger.info('Configured for no Block List')
+      db.Tor.refreshTable().then( (updatedTorList) => {
         logger.info('Tor list updated, length:', updatedTorList.length);
       });
+    } else {
+
+      return Promise.all([
+        db.Blocked.refreshTable(bLE),
+        db.Tor.refreshTable()])
+        .then(([updatedBlockedList, updatedTorList]) => {
+          logger.info('Blocked list updated, length:', updatedBlockedList.length);
+          logger.info('Tor list updated, length:', updatedTorList.length);
+        })
+    }
   };
   this.start = () => {
     this.initialize();
@@ -193,6 +215,9 @@ function Server () {
           this.performChecks(),
           this.performUpdates(),
         ]);
+      })
+      .then(() => {
+        return setupBlockList();
       })
       .then(() => {
         logger.info('Spee.ch startup is complete');

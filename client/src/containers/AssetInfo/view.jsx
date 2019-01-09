@@ -104,7 +104,7 @@ class AssetInfo extends React.Component {
                     {(contentType === 'video/mp4') ? (
                       <ClickToCopy
                         id={'embed-text-video'}
-                        value={`<iframe src="${host}/video-embed${canonicalUrl}" allowfullscreen="true" style="border:0" /></iframe>`}
+                        value={`<iframe src="${host}/video-embed${canonicalUrl}" allowfullscreen="true" style="border:0"></iframe>`}
                       />
                     ) : (
                       <ClickToCopy
