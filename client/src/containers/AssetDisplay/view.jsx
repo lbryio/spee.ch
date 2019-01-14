@@ -2,7 +2,7 @@ import React from 'react';
 import Row from '@components/Row';
 import ProgressBar from '@components/ProgressBar';
 import { LOCAL_CHECK, UNAVAILABLE, ERROR, AVAILABLE } from '../../constants/asset_display_states';
-import createCanonicalLink from '../../../../utils/createCanonicalLink';
+import createCanonicalLink from '@globalutils/createCanonicalLink';
 
 class AvailableContent extends React.Component {
   render () {
@@ -95,6 +95,6 @@ class AssetDisplay extends React.Component {
       </div>
     );
   }
-};
+}
 
 export default AssetDisplay;

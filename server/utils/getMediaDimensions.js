@@ -18,7 +18,7 @@ async function getMediaDimensions (fileType, filePath) {
       [ height, width ] = await getVideoHeightAndWidth(filePath);
       break;
     default:
-      logger.error('unable to create File data for unspported file type:', fileType);
+      logger.error('unable to create File dimension data for unspported file type:', fileType);
       break;
   }
   return {

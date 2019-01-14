@@ -3,7 +3,7 @@ import { selectFile, updateError, clearFile } from '../../actions/publish';
 import { selectAsset } from '../../selectors/show';
 import View from './view';
 import siteConfig from '@config/siteConfig.json';
-import createCanonicalLink from '../../../../utils/createCanonicalLink';
+import createCanonicalLink from '@globalutils/createCanonicalLink';
 
 const { assetDefaults: { thumbnail: defaultThumbnail } } = siteConfig;
 
