@@ -12,10 +12,8 @@ import * as httpContext from 'express-http-context';
 import Reducers from '@reducers';
 import GAListener from '@components/GAListener';
 import App from '@app';
-import Sagas from '@sagas';
-import Actions from '@actions';
 
-const createCanonicalLink = require('../../utils/createCanonicalLink');
+const createCanonicalLink = require('@globalutils/createCanonicalLink');
 
 const getCanonicalUrlFromShow = show => {
   const requestId = show.requestList[show.request.id];
@@ -49,19 +47,18 @@ export default (req, res) => {
     action = false,
     saga = false,
   } = httpContext.get('routeData');
-  
+
   if (action === 'fallback') {
     res.status(404);
   }
 
   const runSaga = (action !== false && saga !== false);
   const renderPage = (store) => {
-
     // Workaround, remove when a solution for async httpContext exists
     const showState = store.getState().show;
     const assetKeys = Object.keys(showState.assetList);
 
-    if(assetKeys.length !== 0) {
+    if (assetKeys.length !== 0) {
       res.claimId = showState.assetList[assetKeys[0]].claimId;
     } else {
       const channelKeys = Object.keys(showState.channelList);
@@ -118,17 +115,17 @@ export default (req, res) => {
       .then(() => {
         // redirect if request does not use canonical url
         const canonicalUrl = getCanonicalUrlFromShow(store.getState().show);
-      
+
         if (!canonicalUrl) {
           res.status(404);
         }
-      
+
         if (canonicalUrl && canonicalUrl !== req.originalUrl) {
           console.log(`redirecting ${req.originalUrl} to ${canonicalUrl}`);
           res.redirect(canonicalUrl);
         }
-      
-        return renderPage(store)
+
+        return renderPage(store);
       });
   } else {
     const store = createStore(Reducers);

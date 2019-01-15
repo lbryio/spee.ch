@@ -7,7 +7,7 @@ import AssetShareButtons from '@components/AssetShareButtons';
 import ClickToCopy from '@components/ClickToCopy';
 import HorizontalSplit from '@components/HorizontalSplit';
 import siteConfig from '@config/siteConfig.json';
-import createCanonicalLink from '../../../../utils/createCanonicalLink';
+import createCanonicalLink from '@globalutils/createCanonicalLink';
 import AssetInfoFooter from '../../components/AssetInfoFooter/index';
 import { createPermanentURI } from '@clientutils/createPermanentURI';
 
@@ -109,7 +109,7 @@ class AssetInfo extends React.Component {
                     ) : (
                       <ClickToCopy
                         id={'embed-text-image'}
-                        value={`<img src="${assetCanonicalUrl}.${fileExt}"/>`}
+                        value={`<img alt="${name}" src="${assetCanonicalUrl}.${fileExt}" />`}
                       />
                     )}
                   </div>

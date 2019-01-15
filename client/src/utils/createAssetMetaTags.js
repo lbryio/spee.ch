@@ -1,7 +1,7 @@
 import siteConfig from '@config/siteConfig.json';
 import determineContentTypeFromExtension from './determineContentTypeFromExtension';
 import createMetaTagsArray from './createMetaTagsArray';
-import createCanonicalLink from '../../../utils/createCanonicalLink';
+import createCanonicalLink from '@globalutils/createCanonicalLink';
 
 const {
   details: {

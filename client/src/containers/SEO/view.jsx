@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import createPageTitle from '../../utils/createPageTitle';
 import createMetaTags from '../../utils/createMetaTags';
 import oEmbed from '../../utils/oEmbed.js';
-import createCanonicalLink from '../../../../utils/createCanonicalLink';
+import createCanonicalLink from '@globalutils/createCanonicalLink';
 
 import siteConfig from '@config/siteConfig.json';
 const { details: { host } } = siteConfig;
