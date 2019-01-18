@@ -85,6 +85,8 @@ $ npm run configure
 #### Build & start the app
 
 ```
+$ npm run build
+
 $ npm run start
 ```
 
