@@ -264,4 +264,4 @@ We take security seriously. Please contact security@lbry.io regarding any securi
 
 ## Contact
 
-The primary contact for this project is [@skhameneh](mailto:shawn@lbry.io).
+The primary contact for this project is [@jessopb](mailto:jessop@lbry.io).
