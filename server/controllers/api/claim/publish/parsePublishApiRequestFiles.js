@@ -1,7 +1,7 @@
 const path = require('path');
 const validateFileTypeAndSize = require('./validateFileTypeAndSize.js');
 
-const parsePublishApiRequestFiles = ({file, thumbnail}, isUpdate) => {
+const parsePublishApiRequestFiles = ({ file, thumbnail }, isUpdate) => {
   // make sure a file was provided
   if (!file) {
     if (isUpdate) {
@@ -14,39 +14,39 @@ const parsePublishApiRequestFiles = ({file, thumbnail}, isUpdate) => {
       }
       return {};
     }
-    throw new Error('no file with key of [file] found in request');
+    throw new Error('No file with key of [file] found in request');
   }
   if (!file.path) {
-    throw new Error('no file path found');
+    throw new Error('No file path found');
   }
   if (!file.type) {
-    throw new Error('no file type found');
+    throw new Error('No file type found');
   }
   if (!file.size) {
-    throw new Error('no file size found');
+    throw new Error('No file size found');
   }
   // validate the file name
   if (!file.name) {
-    throw new Error('no file name found');
+    throw new Error('No file name found');
   }
   if (file.name.indexOf('.') < 0) {
-    throw new Error('no file extension found in file name');
+    throw new Error('No file extension found in file name');
   }
   if (file.name.indexOf('.') === 0) {
-    throw new Error('file name cannot start with "."');
+    throw new Error('File name cannot start with "."');
   }
   if (/'/.test(file.name)) {
-    throw new Error('apostrophes are not allowed in the file name');
+    throw new Error('Apostrophes are not allowed in the file name');
   }
 
   // validate the file
   if (file) validateFileTypeAndSize(file);
   // return results
   const obj = {
-    fileName     : file.name,
-    filePath     : file.path,
+    fileName: file.name,
+    filePath: file.path,
     fileExtension: path.extname(file.path),
-    fileType     : file.type,
+    fileType: file.type,
   };
 
   if (thumbnail) {
