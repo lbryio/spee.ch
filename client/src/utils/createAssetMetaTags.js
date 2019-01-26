@@ -4,41 +4,41 @@ import createMetaTagsArray from './createMetaTagsArray';
 import createCanonicalLink from '@globalutils/createCanonicalLink';
 
 const {
-  details: {
-    host,
-    title: siteTitle,
-    twitter,
-  },
-  assetDefaults: {
-    description: defaultDescription,
-    thumbnail: defaultThumbnail,
-  },
+  details: { host, title: siteTitle, twitter },
+  assetDefaults: { description: defaultDescription, thumbnail: defaultThumbnail },
 } = siteConfig;
 
 const VIDEO = 'VIDEO';
 const IMAGE = 'IMAGE';
 const GIF = 'GIF';
+const TEXT = 'TEXT';
 
-const determineMediaType = (contentType) => {
+const determineMediaType = contentType => {
   switch (contentType) {
     case 'image/jpg':
     case 'image/jpeg':
     case 'image/png':
+    case 'image/svg+xml':
       return IMAGE;
     case 'image/gif':
       return GIF;
     case 'video/mp4':
     case 'video/webm':
       return VIDEO;
+    case 'text/markdown':
+    case 'text/plain':
+      return TEXT;
     default:
       return '';
   }
 };
 
-const createAssetMetaTags = (asset) => {
+const createAssetMetaTags = asset => {
   const { claimData } = asset;
   const { contentType } = claimData;
-  const canonicalLink = createCanonicalLink({ asset: { ...asset.claimData, shortId: asset.shortId }});
+  const canonicalLink = createCanonicalLink({
+    asset: { ...asset.claimData, shortId: asset.shortId },
+  });
   const showUrl = `${host}${canonicalLink}`;
   const serveUrl = `${showUrl}.${claimData.fileExt}`;
 
@@ -48,14 +48,14 @@ const createAssetMetaTags = (asset) => {
   const ogThumbnail = claimData.thumbnail || defaultThumbnail;
   // {property: 'og:title'] = ogTitle},
   const metaTags = {
-    'og:title'           : ogTitle,
-    'twitter:title'      : ogTitle,
-    'og:description'     : ogDescription,
+    'og:title': ogTitle,
+    'twitter:title': ogTitle,
+    'og:description': ogDescription,
     'twitter:description': ogDescription,
-    'og:url'             : showUrl,
-    'og:site_name'       : siteTitle,
-    'twitter:site'       : twitter,
-    'fb:app_id'          : '1371961932852223',
+    'og:url': showUrl,
+    'og:site_name': siteTitle,
+    'twitter:site': twitter,
+    'fb:app_id': '1371961932852223',
   };
   if (determineMediaType(contentType) === VIDEO) {
     const videoEmbedUrl = `${host}/video-embed${canonicalLink}`;

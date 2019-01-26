@@ -1,7 +1,10 @@
 .nav-bar {
-  margin-top: $thin-padding;
-  margin-left: $primary-padding;
-  margin-right: $primary-padding;
+  box-sizing: border-box;
+  padding: $thin-padding $primary-padding;
+  background: $base-color;
+  flex: 0 1 auto;
+  width: 100%;
+  border-bottom: $subtle-border;
 
   @media (max-width: $break-point-mobile) {
     margin-left: 15px;

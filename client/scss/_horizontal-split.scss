@@ -1,55 +1,55 @@
 .horizontal-split {
   max-width: $width-content-constrained;
   width: 100%;
-  margin-left: auto;
-  margin-right: auto;
   display       : flex;
   flex-direction : row;
-  justify-content: space-between;
+  justify-content: center;
+  box-sizing: border-box;
 
   &.horizontal-split--mobile-collapse {
-    @media (max-width: $break-point-mobile) {
+    @media (max-width: $break-point-tablet) {
       flex-direction: column;
-
       .horizontal-split__column {
-        width: 100%;
       }
-
+      .horizontal-split__column--left {
+        padding-top: $thin-padding;
+      }
       .horizontal-split__column--right {
-        padding-left: 0;
-        padding-top: $secondary-padding;
+        padding-top: $thin-padding;
       }
     }
   }
 };
 
 .horizontal-split__column {
-  width: 50%;
-  flex: 1 0 auto;
+  display       : flex;
+  flex: 1 1 auto;
   box-sizing: border-box;
+  width: 100%;
 }
 
 .horizontal-split__column--left {
-  padding-right: $primary-padding;
+  padding: $tertiary-padding;
 
-  @media (max-width: $break-point-mobile) {
-    padding-right: $thin-padding;
+  @media (max-width: $break-point-tablet) {
+    padding-left: 0px;
+    padding-right: 0px;
   }
 }
 
 .horizontal-split__column--right {
-  padding-left: $primary-padding;
 
-  @media (max-width: $break-point-mobile) {
-    padding-left: $thin-padding;
+  padding: $tertiary-padding;
+
+  @media (max-width: $break-point-tablet) {
+    padding-left: 0px;
+    padding-right: 0px;
   }
 }
 
 @media (max-width: $break-point-tablet) {
 
   .horizontal-split__column {
-    display       : flex;
-    flex-direction : column;
     justify-content: space-between;
   };
 

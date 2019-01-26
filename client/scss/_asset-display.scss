@@ -1,29 +1,37 @@
 .asset-main {
-  height: 75vh;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
+.asset-document {
+  $asset-info-width: 1000px;
+  max-width: $asset-info-width;
+  width: 100%;
+  padding: $thin-padding;
+  height: fit-content;
+
+  @media (max-width: $break-point-tablet) {
+    margin: $primary-padding $secondary-padding;
+  }
+
+  @media (max-width: $break-point-mobile) {
+    margin: $primary-padding 0;
+  }
+}
 .asset-display {
-  display: flex;
-  min-height: 50vh
+  height: fit-content;
+  width: fit-content;
 }
 
 .asset-title {
   padding-bottom: $thin-padding;
   text-align: center;
-
-  @media (min-width: $break-point-mobile) {
-    padding-top: $secondary-padding;
-  }
 }
 
 .asset-image, .asset-video {
-  max-height: 100%;
-  max-width: 100%;
-  margin-left: auto;
-  margin-right: auto;
+  max-height: 95vh;
+  max-width: 95vw;
   object-fit: contain;
   object-position: center;
 }
@@ -110,7 +118,7 @@
   $asset-info-width: 1000px;
   max-width: $asset-info-width;
   margin: $primary-padding;
-  max-width: 100%;
+  width: 100%;
 
   @media (max-width: $break-point-tablet) {
     margin: $primary-padding $secondary-padding;
@@ -122,7 +130,7 @@
 }
 
 .asset-footer {
-  border-top: 1px solid $grey-border;
+  border-top: $subtle-border;
   padding-top: $primary-padding;
   margin-top: $primary-padding;
   color: $grey;

@@ -1,20 +1,15 @@
-const db = require('../../../../models');
 const chainquery = require('chainquery').default;
 const getClaimData = require('server/utils/getClaimData');
 const { returnPaginatedChannelClaims } = require('./channelPagination.js');
 
 const getChannelClaims = async (channelName, channelLongId, page) => {
-  const params = {
-    content_type: ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'video/mp4'],
-  };
-
   let channelShortId = await chainquery.claim.queries.getShortClaimIdFromLongClaimId(
     channelLongId,
     channelName
   );
   let channelClaims;
   if (channelLongId) {
-    channelClaims = await chainquery.claim.queries.getAllChannelClaims(channelLongId, params);
+    channelClaims = await chainquery.claim.queries.getAllChannelClaims(channelLongId);
   }
   /*
     Put mempool unconfirmed claims at the beginning
