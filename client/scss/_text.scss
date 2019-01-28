@@ -7,7 +7,11 @@ h1, h2, h3, h4, p {
 body {
   color: $text-color;
   font-family: 'Circular', serif;
-  font-size: 16px;
+  font-size: 14px;
+}
+
+body a {
+  color: $primary-color;
 }
 
 h1 {

@@ -1,12 +1,17 @@
 const logger = require('winston');
 const returnShortId = require('./utils/returnShortId.js');
 const isApprovedChannel = require('../../utils/isApprovedChannel');
-const { assetDefaults: { thumbnail: defaultThumbnail }, details: { host } } = require('@config/siteConfig');
-const { publishing: { serveOnlyApproved, approvedChannels } } = require('@config/siteConfig');
+const {
+  assetDefaults: { thumbnail: defaultThumbnail },
+  details: { host },
+} = require('@config/siteConfig');
+const {
+  publishing: { serveOnlyApproved, approvedChannels },
+} = require('@config/siteConfig');
 
 const NO_CLAIM = 'NO_CLAIM';
 
-function determineFileExtensionFromContentType (contentType) {
+function determineFileExtensionFromContentType(contentType) {
   switch (contentType) {
     case 'image/jpeg':
     case 'image/jpg':
@@ -17,20 +22,22 @@ function determineFileExtensionFromContentType (contentType) {
       return 'gif';
     case 'video/mp4':
       return 'mp4';
+    case 'image/svg+xml':
+      return 'svg';
     default:
       logger.debug('setting unknown file type as file extension jpg');
       return 'jpg';
   }
 }
 
-function determineThumbnail (storedThumbnail, defaultThumbnail) {
+function determineThumbnail(storedThumbnail, defaultThumbnail) {
   if (storedThumbnail === '') {
     return defaultThumbnail;
   }
   return storedThumbnail;
 }
 
-function prepareClaimData (claim) {
+function prepareClaimData(claim) {
   // logger.debug('preparing claim data based on resolved data:', claim);
   claim['thumbnail'] = determineThumbnail(claim.thumbnail, defaultThumbnail);
   claim['fileExt'] = determineFileExtensionFromContentType(claim.contentType);
@@ -38,12 +45,12 @@ function prepareClaimData (claim) {
   return claim;
 }
 
-function isLongClaimId (claimId) {
-  return (claimId && (claimId.length === 40));
+function isLongClaimId(claimId) {
+  return claimId && claimId.length === 40;
 }
 
-function isShortClaimId (claimId) {
-  return (claimId && (claimId.length < 40));
+function isShortClaimId(claimId) {
+  return claimId && claimId.length < 40;
 }
 
 module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
@@ -51,141 +58,141 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
     'Claim',
     {
       address: {
-        type   : STRING,
+        type: STRING,
         default: null,
       },
       amount: {
-        type   : DECIMAL(19, 8),
+        type: DECIMAL(19, 8),
         default: null,
       },
       claimId: {
-        type   : STRING,
+        type: STRING,
         default: null,
       },
       claimSequence: {
-        type   : INTEGER,
+        type: INTEGER,
         default: null,
       },
       decodedClaim: {
-        type   : BOOLEAN,
+        type: BOOLEAN,
         default: null,
       },
       depth: {
-        type   : INTEGER,
+        type: INTEGER,
         default: null,
       },
       effectiveAmount: {
-        type   : DECIMAL(19, 8),
+        type: DECIMAL(19, 8),
         default: null,
       },
       hasSignature: {
-        type   : BOOLEAN,
+        type: BOOLEAN,
         default: null,
       },
       height: {
-        type   : INTEGER,
+        type: INTEGER,
         default: null,
       },
       hex: {
-        type   : TEXT('long'),
+        type: TEXT('long'),
         default: null,
       },
       name: {
-        type   : STRING,
+        type: STRING,
         default: null,
       },
       nout: {
-        type   : INTEGER,
+        type: INTEGER,
         default: null,
       },
       txid: {
-        type   : STRING,
+        type: STRING,
         default: null,
       },
       validAtHeight: {
-        type   : INTEGER,
+        type: INTEGER,
         default: null,
       },
       outpoint: {
-        type   : STRING,
+        type: STRING,
         default: null,
       },
       claimType: {
-        type   : STRING,
+        type: STRING,
         default: null,
       },
       certificateId: {
-        type   : STRING,
+        type: STRING,
         default: null,
       },
       author: {
-        type   : STRING,
+        type: STRING,
         default: null,
       },
       description: {
-        type   : TEXT('long'),
+        type: TEXT('long'),
         default: null,
       },
       language: {
-        type   : STRING,
+        type: STRING,
         default: null,
       },
       license: {
-        type   : STRING,
+        type: STRING,
         default: null,
       },
       licenseUrl: {
-        type   : STRING,
+        type: STRING,
         default: null,
       },
       nsfw: {
-        type   : BOOLEAN,
+        type: BOOLEAN,
         default: null,
       },
       preview: {
-        type   : STRING,
+        type: STRING,
         default: null,
       },
       thumbnail: {
-        type   : STRING,
+        type: STRING,
         default: null,
       },
       title: {
-        type   : STRING,
+        type: STRING,
         default: null,
       },
       metadataVersion: {
-        type   : STRING,
+        type: STRING,
         default: null,
       },
       contentType: {
-        type   : STRING,
+        type: STRING,
         default: null,
       },
       source: {
-        type   : STRING,
+        type: STRING,
         default: null,
       },
       sourceType: {
-        type   : STRING,
+        type: STRING,
         default: null,
       },
       sourceVersion: {
-        type   : STRING,
+        type: STRING,
         default: null,
       },
       streamVersion: {
-        type   : STRING,
+        type: STRING,
         default: null,
       },
       valueVersion: {
-        type   : STRING,
+        type: STRING,
         default: null,
       },
       channelName: {
-        type     : STRING,
+        type: STRING,
         allowNull: true,
-        default  : null,
+        default: null,
       },
     },
     {
@@ -201,14 +208,13 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
     });
   };
 
-  Claim.getShortClaimIdFromLongClaimId = function (claimId, claimName) {
+  Claim.getShortClaimIdFromLongClaimId = function(claimId, claimName) {
     logger.debug(`Claim.getShortClaimIdFromLongClaimId for ${claimName}#${claimId}`);
     return new Promise((resolve, reject) => {
-      this
-        .findAll({
-          where: { name: claimName },
-          order: [['height', 'ASC']],
-        })
+      this.findAll({
+        where: { name: claimName },
+        order: [['height', 'ASC']],
+      })
         .then(result => {
           switch (result.length) {
             case 0:
@@ -223,15 +229,14 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
     });
   };
 
-  Claim.getAllChannelClaims = function (channelClaimId) {
+  Claim.getAllChannelClaims = function(channelClaimId) {
     logger.debug(`Claim.getAllChannelClaims for ${channelClaimId}`);
     return new Promise((resolve, reject) => {
-      this
-        .findAll({
-          where: { certificateId: channelClaimId },
-          order: [['height', 'DESC']],
-          raw  : true,  // returns an array of only data, not an array of instances
-        })
+      this.findAll({
+        where: { certificateId: channelClaimId },
+        order: [['height', 'DESC']],
+        raw: true, // returns an array of only data, not an array of instances
+      })
         .then(channelClaimsArray => {
           switch (channelClaimsArray.length) {
             case 0:
@@ -251,14 +256,13 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
     });
   };
 
-  Claim.getClaimIdByLongChannelId = function (channelClaimId, claimName) {
+  Claim.getClaimIdByLongChannelId = function(channelClaimId, claimName) {
     logger.debug(`finding claim id for claim ${claimName} from channel ${channelClaimId}`);
     return new Promise((resolve, reject) => {
-      this
-        .findAll({
-          where: { name: claimName, certificateId: channelClaimId },
-          order: [['id', 'ASC']],
-        })
+      this.findAll({
+        where: { name: claimName, certificateId: channelClaimId },
+        order: [['id', 'ASC']],
+      })
         .then(result => {
           switch (result.length) {
             case 0:
@@ -266,7 +270,9 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
             case 1:
               return resolve(result[0].claimId);
             default:
-              logger.warn(`${result.length} records found for "${claimName}" in channel "${channelClaimId}"`);
+              logger.warn(
+                `${result.length} records found for "${claimName}" in channel "${channelClaimId}"`
+              );
               return resolve(result[0].claimId);
           }
         })
@@ -276,7 +282,7 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
     });
   };
 
-  Claim.validateLongClaimId = function (name, claimId) {
+  Claim.validateLongClaimId = function(name, claimId) {
     return new Promise((resolve, reject) => {
       this.findOne({
         where: {
@@ -297,17 +303,17 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
     });
   };
 
-  Claim.getLongClaimIdFromShortClaimId = function (name, shortId) {
+  Claim.getLongClaimIdFromShortClaimId = function(name, shortId) {
     return new Promise((resolve, reject) => {
-      this
-        .findAll({
-          where: {
-            name,
-            claimId: {
-              [sequelize.Op.like]: `${shortId}%`,
-            }},
-          order: [['height', 'ASC']],
-        })
+      this.findAll({
+        where: {
+          name,
+          claimId: {
+            [sequelize.Op.like]: `${shortId}%`,
+          },
+        },
+        order: [['height', 'ASC']],
+      })
         .then(result => {
           switch (result.length) {
             case 0:
@@ -323,13 +329,12 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
     });
   };
 
-  Claim.getTopFreeClaimIdByClaimName = function (name) {
+  Claim.getTopFreeClaimIdByClaimName = function(name) {
     return new Promise((resolve, reject) => {
-      this
-        .findAll({
-          where: { name },
-          order: [['effectiveAmount', 'DESC'], ['height', 'ASC']],
-        })
+      this.findAll({
+        where: { name },
+        order: [['effectiveAmount', 'DESC'], ['height', 'ASC']],
+      })
         .then(result => {
           switch (result.length) {
             case 0:
@@ -345,7 +350,7 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
     });
   };
 
-  Claim.getLongClaimId = function (claimName, claimId) {
+  Claim.getLongClaimId = function(claimName, claimId) {
     logger.debug(`getLongClaimId(${claimName}, ${claimId})`);
     if (isLongClaimId(claimId)) {
       return this.validateLongClaimId(claimName, claimId);
@@ -356,13 +361,12 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
     }
   };
 
-  Claim.fetchClaim = function (name, claimId) {
+  Claim.fetchClaim = function(name, claimId) {
     logger.debug(`Claim.resolveClaim: ${name} ${claimId}`);
     return new Promise((resolve, reject) => {
-      this
-        .findAll({
-          where: { name, claimId },
-        })
+      this.findAll({
+        where: { name, claimId },
+      })
         .then(claimArray => {
           switch (claimArray.length) {
             case 0:
@@ -380,13 +384,15 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
     });
   };
 
-  Claim.resolveClaim = function (name, claimId) {
+  Claim.resolveClaim = function(name, claimId) {
     return new Promise((resolve, reject) => {
-      this
-        .fetchClaim(name, claimId)
+      this.fetchClaim(name, claimId)
         .then(claim => {
           logger.info('resolveClaim claims:', claim);
-          if (serveOnlyApproved && !isApprovedChannel({ longId: claim.certificateId }, approvedChannels)) {
+          if (
+            serveOnlyApproved &&
+            !isApprovedChannel({ longId: claim.certificateId }, approvedChannels)
+          ) {
             throw new Error('This content is unavailable');
           }
           return resolve(claim);
@@ -397,13 +403,12 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
     });
   };
 
-  Claim.getOutpoint = function (name, claimId) {
+  Claim.getOutpoint = function(name, claimId) {
     logger.debug(`finding outpoint for ${name}#${claimId}`);
-    return this
-      .findAll({
-        where     : { name, claimId },
-        attributes: ['outpoint'],
-      })
+    return this.findAll({
+      where: { name, claimId },
+      attributes: ['outpoint'],
+    })
       .then(result => {
         logger.debug('outpoint result');
         switch (result.length) {
@@ -421,10 +426,9 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
       });
   };
 
-  Claim.getCurrentHeight = function () {
+  Claim.getCurrentHeight = function() {
     return new Promise((resolve, reject) => {
-      return this
-        .max('height')
+      return this.max('height')
         .then(result => {
           if (result) {
             return resolve(result);

@@ -18,6 +18,7 @@ export function validateFile(file) {
     case 'image/jpeg':
     case 'image/jpg':
     case 'image/png':
+    case 'image/svg+xml':
       if (file.size > maxSizeImage) {
         throw new Error(`Sorry, images are limited to ${maxSizeImage / SIZE_MB} megabytes.`);
       }

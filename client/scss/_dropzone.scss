@@ -5,15 +5,18 @@
   display: flex;
   flex-direction: column;
   position: relative;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0px;
 }
 
 .dropzone {
-  border: 2px dashed #9b9b9b;
+  border: 2px dashed $drop-zone-border-color;
   // fill the parent flex container
   flex: 1 0 auto;
   // be a flex container for children
   display: flex;
-  padding: 1em;
+  padding: $thin-padding;
   -webkit-flex-direction: column;
   flex-direction: column;
   justify-content: center;
@@ -22,7 +25,7 @@
 }
 
 .dropzone:hover, .dropzone--active {
-  border: 2px dashed #4156C5;
+  border: 2px dashed $drop-zone-border-hover;
   cursor: pointer;
 }
 

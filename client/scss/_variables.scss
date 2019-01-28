@@ -1,40 +1,60 @@
-$base-color: white;
-$primary-color: #005da0;
+//backgrounds
+$base-color: white; //default white
+$card-color: white; //default white
+$chrome-color: lightgray; //default white (navbar)
+$background-color: $base-color;
+
+//text colors
+$primary-color: #005da0; //link default light blue #005da0
 $secondary-color: $primary-color;
+$text-color: #333;
 $success-color: green;
 $failure-color: red;
 $grey: #9095A5;
-$help-color: $grey;
-$grey-border: #DDDFE4;
-$shadow-color: rgba(169, 173, 186, 0.2);
 
+
+//borders and highlights
+$grey: #9095A5;
+$help-color: $grey;
+$subtle-border-color: #DDD;
+$highlight-border-color: #333;
+$shadow-color: rgba(169, 173, 186, 0.2);
+$subtle-border: 1px dashed $subtle-border-color;
+$grey-border: $subtle-border-color; //factor this out for all customers
+$drop-zone-border-color: #9b9b9b; //default  #9b9b9b
+$drop-zone-border-hover: #4156C5; //default  #4156C5
+
+//padding
 $primary-padding: 3em;
 $secondary-padding: 2em;
 $tertiary-padding: 1em;
 $thin-padding: 0.3em;
 $full-width-thin-padding: calc(100% - 0.6em);
+$input-padding: 0.3em;
 
 $width-content-constrained: 1000px;
-
-$background-color: $base-color;
-$text-color: #333;
 
 $button-border-width: 1px;
 $button-border-strength: solid;
 $button-full-width: calc(100% - 2px);
 
-$input-padding: 0.3em;
 $input-full-width: calc(100% - 0.6em);
+
+//text sizes
+$base-font-size: 14px;
 
 $text-xx-large: 2.5em;
 $text-x-large: 2.0em;
 $text-large: 1.5em;
-$text-medium: 1.0em;
+$text-medium: 1.2em;
 $text-small: 0.9em;
 $text-x-small: 0.8em;
 
+//@media sizes
 $break-point-xx-large: 1400px;
 $break-point-x-large: 1290px;
-$break-point-large: 1000px;
+$break-point-large: 1024px;
 $break-point-tablet: 800px;
 $break-point-mobile: 500px;
+$break-point-phone: 300px;
+$break-point-phone: 300px;

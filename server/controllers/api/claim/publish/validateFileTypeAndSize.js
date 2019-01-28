@@ -1,21 +1,18 @@
 const logger = require('winston');
 
 const {
-  publishing: {
-    maxSizeImage = 10000000,
-    maxSizeGif = 50000000,
-    maxSizeVideo = 50000000,
-  }
+  publishing: { maxSizeImage = 10000000, maxSizeGif = 50000000, maxSizeVideo = 50000000 },
 } = require('@config/siteConfig');
 
 const SIZE_MB = 1000000;
 
-const validateFileTypeAndSize = (file) => {
+const validateFileTypeAndSize = file => {
   // check file type and size
   switch (file.type) {
     case 'image/jpeg':
     case 'image/jpg':
     case 'image/png':
+    case 'image/svg+xml':
       if (file.size > maxSizeImage) {
         logger.debug('publish > file validation > .jpeg/.jpg/.png was too big');
         throw new Error(`Sorry, images are limited to ${maxSizeImage / SIZE_MB} megabytes.`);
@@ -35,7 +32,11 @@ const validateFileTypeAndSize = (file) => {
       break;
     default:
       logger.debug('publish > file validation > unrecognized file type');
-      throw new Error('The ' + file.type + ' content type is not supported.  Only, image/jpg, image/png, image/gif, and video/mp4 content types are currently supported.');
+      throw new Error(
+        'The ' +
+          file.type +
+          ' content type is not supported.  Only, image/jpg, image/png, image/gif, and video/mp4 content types are currently supported.'
+      );
   }
   return file;
 };

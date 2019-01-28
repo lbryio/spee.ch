@@ -11,18 +11,23 @@ const {
 const VIDEO = 'VIDEO';
 const IMAGE = 'IMAGE';
 const GIF = 'GIF';
+const TEXT = 'TEXT';
 
 const determineMediaType = contentType => {
   switch (contentType) {
     case 'image/jpg':
     case 'image/jpeg':
     case 'image/png':
+    case 'image/svg+xml':
       return IMAGE;
     case 'image/gif':
       return GIF;
     case 'video/mp4':
     case 'video/webm':
       return VIDEO;
+    case 'text/markdown':
+    case 'text/plain':
+      return TEXT;
     default:
       return '';
   }
