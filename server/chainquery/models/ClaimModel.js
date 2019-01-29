@@ -26,16 +26,6 @@ const getterMethods = {
         return 'jpg';
     }
   },
-
-  // TODO: Factor this out.
-  generated_thumbnail() {
-    return this.thumbnail_url || defaultThumbnail;
-  },
-
-  generated_channel() {
-    console.log(this);
-    //
-  },
 };
 
 export default (sequelize, { BOOLEAN, DATE, DECIMAL, ENUM, INTEGER, STRING, TEXT }) =>
