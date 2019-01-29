@@ -116,7 +116,7 @@ curl -F 'name=MyPictureName' -F 'file=@/path/to/myPicture.jpeg' https://spee.ch/
 ```
 Parameters:
 
-  * `name` (required)
+  * `name` (required, must be unique across the instance)
   * `file` (required) (must be type .mp4, .jpeg, .jpg, .gif, or .png)
   * `nsfw` (optional)
   * `license` (optional)
