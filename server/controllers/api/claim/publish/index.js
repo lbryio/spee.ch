@@ -3,7 +3,7 @@ const logger = require('winston');
 const { details: { host }, publishing: { disabled, disabledMessage } } = require('@config/siteConfig');
 
 const { sendGATimingEvent } = require('../../../../utils/googleAnalytics.js');
-const isApprovedChannel = require('../../../../../utils/isApprovedChannel');
+const isApprovedChannel = require('@globalutils/isApprovedChannel');
 const { publishing: { publishOnlyApproved, approvedChannels } } = require('@config/siteConfig');
 
 const { handleErrorResponse } = require('../../../utils/errorHandlers.js');
@@ -18,7 +18,7 @@ const parsePublishApiRequestFiles = require('./parsePublishApiRequestFiles.js');
 const authenticateUser = require('./authentication.js');
 
 const chainquery = require('chainquery').default;
-const createCanonicalLink = require('../../../../../utils/createCanonicalLink');
+const createCanonicalLink = require('@globalutils/createCanonicalLink');
 
 const CLAIM_TAKEN = 'CLAIM_TAKEN';
 const UNAPPROVED_CHANNEL = 'UNAPPROVED_CHANNEL';
@@ -115,7 +115,7 @@ const claimPublish = ({ body, files, headers, ip, originalUrl, user, tor }, res)
       if (channelName) {
         return chainquery.claim.queries.getShortClaimIdFromLongClaimId(claimData.certificateId, channelName);
       } else {
-        return chainquery.claim.queries.getShortClaimIdFromLongClaimId(claimId, name, claimData).catch(error => {
+        return chainquery.claim.queries.getShortClaimIdFromLongClaimId(claimId, name, claimData).catch(() => {
           return claimId.slice(0, 1);
         });
       }

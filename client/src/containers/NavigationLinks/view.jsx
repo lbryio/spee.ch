@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
 import NavBarChannelOptionsDropdown from '@components/NavBarChannelOptionsDropdown';
-import createCanonicalLink from '../../../../utils/createCanonicalLink';
+import createCanonicalLink from '@globalutils/createCanonicalLink';
 
 const VIEW = 'VIEW';
 const LOGOUT = 'LOGOUT';

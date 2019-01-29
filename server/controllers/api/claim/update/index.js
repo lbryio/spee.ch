@@ -10,7 +10,7 @@ const parsePublishApiRequestFiles = require('../publish/parsePublishApiRequestFi
 const authenticateUser = require('../publish/authentication.js');
 const createThumbnailPublishParams = require('../publish/createThumbnailPublishParams.js');
 const chainquery = require('chainquery').default;
-const createCanonicalLink = require('../../../../../utils/createCanonicalLink');
+const createCanonicalLink = require('@globalutils/createCanonicalLink');
 
 /*
   route to update a claim through the daemon
@@ -153,7 +153,7 @@ const claimUpdate = ({ body, files, headers, ip, originalUrl, user, tor }, res) 
       if (channelName) {
         return chainquery.claim.queries.getShortClaimIdFromLongClaimId(result.certificateId, channelName);
       } else {
-        return chainquery.claim.queries.getShortClaimIdFromLongClaimId(result.claimId, name, result).catch(error => {
+        return chainquery.claim.queries.getShortClaimIdFromLongClaimId(result.claimId, name, result).catch(() => {
           return result.claimId.slice(0, 1);
         });
       }

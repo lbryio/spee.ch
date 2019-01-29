@@ -3,19 +3,16 @@ const db = require('../../../models');
 const getClaimId = require('../../utils/getClaimId');
 
 const {
-  details: {
-    host,
-    title: siteTitle,
-  },
+  details: { host, title: siteTitle },
 } = require('@config/siteConfig');
 
 const getOEmbedDataForAsset = (channelName, channelClaimId, claimName, claimId) => {
   let fileData, claimData;
   let data = {
-    version      : '1.0',
+    version: '1.0',
     provider_name: siteTitle,
-    provider_url : host,
-    cache_age    : 86400, // one day in seconds
+    provider_url: host,
+    cache_age: 86400, // one day in seconds
   };
 
   return getClaimId(channelName, channelClaimId, claimName, claimId)
@@ -23,7 +20,7 @@ const getOEmbedDataForAsset = (channelName, channelClaimId, claimName, claimId) 
       claimId = fullClaimId;
       return db.Claim.findOne({
         where: {
-          name   : claimName,
+          name: claimName,
           claimId: fullClaimId,
         },
       });
@@ -43,19 +40,23 @@ const getOEmbedDataForAsset = (channelName, channelClaimId, claimName, claimId) 
     .then(fileRecord => {
       fileData = fileRecord.dataValues;
       logger.debug('file data:', fileData);
-      const serveUrl = `${host}/${fileData.claimId}/${fileData.name}.${fileData.fileType.substring(fileData.fileType.indexOf('/') + 1)}`;
+      const serveUrl = `${host}/${fileData.claimId}/${fileData.name}.${fileData.fileType.substring(
+        fileData.fileType.indexOf('/') + 1
+      )}`;
       // set the resource type
       if (fileData.fileType === 'video/mp4') {
         data['type'] = 'video';
-        data['html'] = `<video width="100%" controls poster="${claimData.thumbnail}" src="${serveUrl}"/></video>`;
+        data['html'] = `<video width="100%" controls poster="${
+          claimData.thumbnail
+        }" src="${serveUrl}"/></video>`;
       } else {
         data['type'] = 'picture';
         data['url'] = serveUrl;
       }
       // get the data
       data['title'] = claimData.title;
-      data['width'] = fileData.width || 600;
-      data['height'] = fileData.height || 400;
+      data['width'] = fileData.fileWidth || 600;
+      data['height'] = fileData.fileHeight || 400;
       data['author_name'] = siteTitle;
       data['author_url'] = host;
     })

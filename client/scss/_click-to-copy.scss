@@ -4,7 +4,7 @@
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
-  border: 1px solid $grey-border;
+  border: 1px solid $subtle-border-color;
   border-radius: 6px;
   .click-to-copy {
     border: none;
@@ -17,7 +17,7 @@
     line-height: 20px;
     letter-spacing: 0;
     font-family: monospace;
-    border-right: 1px solid $grey-border;
+    border-right: 1px solid $subtle-border-color;
   }
   .icon-wrap {
     width: 30px;

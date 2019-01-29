@@ -1,15 +1,12 @@
 import siteConfig from '@config/siteConfig.json';
 
 const {
-  publishing: {
-    maxSizeImage = 10000000,
-    maxSizeGif = 50000000,
-    maxSizeVideo = 50000000,
-  }
+  publishing: { maxSizeImage = 10000000, maxSizeGif = 50000000, maxSizeVideo = 50000000 },
 } = siteConfig;
+// TODO: central constants location
+const SIZE_MB = 1000000;
 
-
-export function validateFile (file) {
+export function validateFile(file) {
   if (!file) {
     throw new Error('no file provided');
   }
@@ -21,6 +18,7 @@ export function validateFile (file) {
     case 'image/jpeg':
     case 'image/jpg':
     case 'image/png':
+    case 'image/svg+xml':
       if (file.size > maxSizeImage) {
         throw new Error(`Sorry, images are limited to ${maxSizeImage / SIZE_MB} megabytes.`);
       }
@@ -36,6 +34,9 @@ export function validateFile (file) {
       }
       break;
     default:
-      throw new Error(file.type + ' is not a supported file type. Only, .jpeg, .png, .gif, and .mp4 files are currently supported.');
+      throw new Error(
+        file.type +
+          ' is not a supported file type. Only, .jpeg, .png, .gif, and .mp4 files are currently supported.'
+      );
   }
 }
