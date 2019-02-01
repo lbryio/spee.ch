@@ -64,7 +64,7 @@ class AssetDisplay extends React.Component {
     if (typeof contentType === 'string') {
       fileExt = contentType.split('/')[1] || 'jpg';
     }
-    const sourceUrl = `${createCanonicalLink({ asset: asset.claimData })}.${fileExt}?${outpoint}`;
+    const sourceUrl = `${createCanonicalLink({ asset: asset.claimData })}.${fileExt}?outpoint=${outpoint}`;
     return (
       <div className={'asset-display'}>
         {(status === LOCAL_CHECK) &&

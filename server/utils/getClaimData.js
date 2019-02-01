@@ -10,7 +10,14 @@ module.exports = async (data, chName = null, chShortId = null) => {
   // TODO: Refactor getching the channel name out; requires invasive changes.
   const dataVals = data.dataValues ? data.dataValues : data;
   const txid = dataVals.transaction_hash_id || dataVals.txid;
-  const nout = dataVals.vout || dataVals.nout;
+  let nout;
+
+  if (typeof dataVals.vout === 'number') {
+    nout = dataVals.vout;
+  } else {
+    nout = dataVals.nout;
+  }
+
   const outpoint = `${txid}:${nout}`;
   const certificateId = dataVals.publisher_id || dataVals.certificateId;
   const fileExt = data.generated_extension || dataVals.fileExt;
