@@ -2,13 +2,17 @@
   padding-top: $thin-padding;
   padding-bottom: $thin-padding;
   display: inline-block;
-  font-size: 12px;
+  font-weight: bold;
+  font-size: $text-medium;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .label-radio {
   padding-left: $thin-padding;
   padding-right: $thin-padding;
   cursor: pointer;
+  font-weight: bold;
 }
 
 @media (max-width: $break-point-tablet ) {

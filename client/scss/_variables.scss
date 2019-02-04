@@ -2,6 +2,7 @@
 $base-color: white; //default white
 $card-color: white; //default white
 $chrome-color: lightgray; //default white (navbar)
+$blockquote-background: #EEEEFF;
 $background-color: $base-color;
 
 //text colors
@@ -11,6 +12,7 @@ $text-color: #333;
 $success-color: green;
 $failure-color: red;
 $grey: #9095A5;
+$blockquote-text: $text-color;
 
 
 //borders and highlights

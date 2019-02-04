@@ -5,19 +5,10 @@
 }
 
 .asset-document {
-  $asset-info-width: 1000px;
-  max-width: $asset-info-width;
   width: 100%;
   padding: $thin-padding;
   height: fit-content;
-
-  @media (max-width: $break-point-tablet) {
-    margin: $primary-padding $secondary-padding;
-  }
-
-  @media (max-width: $break-point-mobile) {
-    margin: $primary-padding 0;
-  }
+  box-sizing: border-box;
 }
 .asset-display {
   height: fit-content;

@@ -4,21 +4,21 @@
 
 .row-labeled {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   flex-wrap: nowrap;
   justify-content: flex-start;
   padding-bottom: $tertiary-padding;
 }
 
 .row-labeled-label {
-  width: 30%;
+  width: 100%;
   display: flex;
   align-items: center;
   flex: 1;
 }
 .row-labeled-content {
   align-self: center;
-  width: 70%;
+  width: 100%;
 }
 
 @media (max-width: $break-point-tablet ) {
