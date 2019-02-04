@@ -16,17 +16,17 @@ module.exports = (env, argv) => {
   return {
     mode: isDev ? 'development' : 'production',
     target: 'web',
-    entry : [
+    entry: [
       ...(isDev ? ['webpack-hot-middleware/client'] : []),
-      //'webpack/hot/dev-server',
+      // 'webpack/hot/dev-server',
       '@babel/polyfill',
       'whatwg-fetch',
       './client/src/index.js',
     ],
     output: {
-      path      : Path.resolve(__dirname, '../public/bundle'),
+      path: Path.resolve(__dirname, '../public/bundle'),
       publicPath: '/bundle/',
-      filename  : 'bundle.js',
+      filename: 'bundle.js',
     },
     module: {
       rules: [
@@ -44,17 +44,22 @@ module.exports = (env, argv) => {
               loader: ExtractCssChunks.loader,
             },
             'css-loader',
-            'sass-loader',
-          ]
+            {
+              loader: 'sass-loader',
+              options: {
+                data: '@import "_variables";',
+              },
+            },
+          ],
         },
         {
           test: /\.(png|jpg|gif|otf|ttf|svg)$/,
-          use : [
+          use: [
             {
-              loader : 'url-loader',
+              loader: 'url-loader',
               options: {
                 limit: 8192,
-                name : '[name]-[hash].[ext]',
+                name: '[name]-[hash].[ext]',
               },
             },
           ],
@@ -62,21 +67,15 @@ module.exports = (env, argv) => {
       ],
     },
     resolve: {
-      modules: [
-        CUSTOM_CLIENT_ROOT,
-        CLIENT_ROOT,
-        SCSS_ROOT,
-        'node_modules',
-        __dirname,
-      ],
-      alias     : customAliases,
+      modules: [CUSTOM_CLIENT_ROOT, CLIENT_ROOT, SCSS_ROOT, 'node_modules', __dirname],
+      alias: customAliases,
       extensions: ['.js', '.jsx', '.scss', '.json'],
     },
     plugins: [
       ...(isDev ? [new webpack.HotModuleReplacementPlugin()] : []),
       new ExtractCssChunks({
         filename: 'style.css', // '[name].css',
-      })
+      }),
     ],
   };
-}
+};
