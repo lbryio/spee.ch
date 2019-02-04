@@ -37,7 +37,7 @@ class AssetInfo extends React.Component {
         { description && (
           <RowLabeled
             label={<Label value={'Description'} />}
-            content={<div className='asset-info__description'><ReactMarkdown source={description} disallowedTypes={['image']}/></div>}
+            content={<div className='asset-info__description'><ReactMarkdown className={'markdown-preview'} source={description} /></div>}
           />
         )}
         {editable && (

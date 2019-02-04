@@ -8,14 +8,14 @@
   h6 {
     font-size: inherit;
     font-weight: 600;
-    margin-bottom: var(--spacing-vertical-medium);
-    padding-top: var(--spacing-vertical-medium);
+    margin-bottom: $tertiary-padding;
+    padding-top: $tertiary-padding;
   }
 
   // Paragraphs
   p {
     font-size: 1.15rem;
-    margin-bottom: var(--spacing-vertical-medium);
+    margin-bottom: $tertiary-padding;
     white-space: pre-line;
 
     svg {
@@ -28,15 +28,24 @@
     }
   }
 
+  blockquote {
+    border-radius: 8px;
+    background: $blockquote-background;
+    padding: $tertiary-padding;
+    min-width: 60%;
+  }
+
   // Strikethrough text
   del {
   }
 
   // Tables
   table {
+    width: 100%;
     margin-bottom: 1.2rem;
-    padding: var(--spacing-vertical-medium);
     background-color: $base-color;
+    border-spacing: 0;
+    border: .5px solid $chrome-color;
 
     tr {
       td,
@@ -45,15 +54,32 @@
       th:first-of-type,
       td:last-of-type,
       th:last-of-type {
-        padding: var(--spacing-vertical-medium);
+        padding: $thin-padding $tertiary-padding;
+        text-overflow: ellipsis;
       }
+      td:last-of-type {
+        text-align: right;
+      }
+
+      th {
+        background: $chrome-color;
+      }
+
+    }
+    tr:nth-child(even){
+      background: $chrome-color;
     }
   }
 
   // Image
   img {
-    margin-bottom: var(--spacing-vertical-medium);
-    padding-top: var(--spacing-vertical-medium);
+    margin-bottom: $tertiary-padding;
+    margin-top: $tertiary-padding;
+    padding: $secondary-padding;
+    object-fit: scale-down;
+    max-width: 100%;
+    border: $subtle-border;
+    box-sizing: border-box;
   }
 
   // Horizontal Rule
@@ -77,8 +103,8 @@
   }
 
   code {
-    margin-bottom: var(--spacing-vertical-medium);
-    padding: var(--spacing-vertical-medium);
+    margin-bottom: $tertiary-padding;
+    padding: $tertiary-padding;
 
     background-color: $subtle-border-color;
     color: $text-color;
@@ -94,7 +120,7 @@
   // Lists
   ul,
   ol {
-    margin-bottom: var(--spacing-vertical-medium);
+    margin-bottom: $thin-padding;
 
     > li {
       list-style-position: outside;
@@ -106,7 +132,7 @@
   }
 
   li {
-    margin-left: var(--spacing-vertical-large);
+    margin-left: $primary-padding;
 
     p {
       display: inline-block;

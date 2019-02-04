@@ -38,7 +38,7 @@ class FileViewer extends React.Component {
       <div className={'markdown'}>
         {
           this.state.fileLoaded &&
-          <ReactMarkdown source={this.state.fileText}/>
+          <ReactMarkdown className={'markdown-preview'} source={this.state.fileText} skipHtml />
         }
         {
           !this.state.fileLoaded &&
