@@ -22,6 +22,7 @@ class AssetInfo extends React.Component {
     const canonicalUrl = createCanonicalLink({ asset: { ...claimData, shortId: asset.shortId }});
     const assetCanonicalUrl = `${host}${canonicalUrl}`;
     // Todo Issue #882 centralize all this media type detection
+    // Todo get markdown settings from siteConfig
     const embedable = contentType.split('/')[0] === 'image' || contentType === 'video/mp4';
 
     let channelCanonicalUrl;
@@ -37,7 +38,7 @@ class AssetInfo extends React.Component {
         { description && (
           <RowLabeled
             label={<Label value={'Description'} />}
-            content={<div className='asset-info__description'><ReactMarkdown className={'markdown-preview'} source={description} /></div>}
+            content={<div className='asset-info__description'><ReactMarkdown className={'markdown-preview'} skipHtml disallowedTypes={['image']} source={description} /></div>}
           />
         )}
         {editable && (

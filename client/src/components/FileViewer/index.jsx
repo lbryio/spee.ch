@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
+// TODO: get markdown settings from siteConfig
 
 class FileViewer extends React.Component {
 
