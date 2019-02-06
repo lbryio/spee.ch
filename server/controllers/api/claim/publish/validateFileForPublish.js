@@ -1,10 +1,12 @@
-import { publishing } from '@config/siteConfig.json';
+const logger = require('winston');
+
+const { publishing } = require('@config/siteConfig.json');
 
 const { fileSizeLimits } = publishing;
 
 const SIZE_MB = 1000000;
 
-export default function validateFileForPublish(file) {
+const validateFileForPublish = file => {
   let contentType = file.type;
   let mediaType = contentType ? contentType.substr(0, contentType.indexOf('/')) : '';
   let mediaTypeLimit = fileSizeLimits[mediaType] || false;
@@ -31,4 +33,6 @@ export default function validateFileForPublish(file) {
     }
   }
   return file;
-}
+};
+
+module.exports = validateFileForPublish;
