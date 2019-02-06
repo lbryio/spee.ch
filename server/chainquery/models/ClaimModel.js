@@ -1,40 +1,9 @@
 const logger = require('winston');
-
-const {
-  assetDefaults: { thumbnail: defaultThumbnail },
-  details: { host },
-} = require('@config/siteConfig');
+const mime = require('mime-types');
 
 const getterMethods = {
   generated_extension() {
-    switch (this.content_type) {
-      case 'image/jpeg':
-      case 'image/jpg':
-        return 'jpg';
-      case 'image/png':
-        return 'png';
-      case 'image/gif':
-        return 'gif';
-      case 'image/svg+xml':
-        return 'svg';
-      case 'video/mp4':
-        return 'mp4';
-      case 'text/markdown':
-        return 'md';
-      default:
-        logger.debug('setting unknown file type as file extension jpg');
-        return 'jpg';
-    }
-  },
-
-  // TODO: Factor this out.
-  generated_thumbnail() {
-    return this.thumbnail_url || defaultThumbnail;
-  },
-
-  generated_channel() {
-    console.log(this);
-    //
+    return mime.extension(this.content_type) ? mime.extension(this.content_type) : 'jpg';
   },
 };
 

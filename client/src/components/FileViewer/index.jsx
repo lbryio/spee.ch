@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
+// TODO: get markdown settings from siteConfig
 
 class FileViewer extends React.Component {
 
@@ -38,7 +39,7 @@ class FileViewer extends React.Component {
       <div className={'markdown'}>
         {
           this.state.fileLoaded &&
-          <ReactMarkdown source={this.state.fileText}/>
+          <ReactMarkdown className={'markdown-preview'} source={this.state.fileText} skipHtml />
         }
         {
           !this.state.fileLoaded &&
