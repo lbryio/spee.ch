@@ -42,11 +42,12 @@
   },
   "serving": {
     "markdownSettings": {
-      "skipHtml": true,
-      "privilegedDisallowedTypesDescriptions": ["Image"],
-      "privilegedDisallowedTypesMain": [],
-      "publicDisallowedTypesDescriptions": ["Image"],
-      "publicDisallowedTypesMain": []
+      "skipHtmlMain": false,
+      "escapeHtmlMain": false,
+      "skipHtmlDescriptions": true,
+      "escapeHtmlDescriptions": true,
+      "disallowedTypesDescriptions": ["Image"],
+      "disallowedTypesMain": []
     },
     "customFileExtensions": {
       "application/example-type": "example"

@@ -6,16 +6,28 @@
   h4,
   h5,
   h6 {
+    padding-top: $secondary-padding;
+    padding-top: $secondary-padding;
+  }
+
+  h1,
+  h2,
+  h3 {
     font-size: inherit;
-    font-weight: 600;
+    font-weight: inherit;
     margin-bottom: $tertiary-padding;
     padding-top: $tertiary-padding;
+  }
+
+  h4, h5, h6 {
+    font-size: $text-large;
+    font-weight: 600;
   }
 
   // Paragraphs
   p {
     font-size: 1.15rem;
-    margin-bottom: $tertiary-padding;
+    padding-bottom: $tertiary-padding;
     white-space: pre-line;
 
     svg {
@@ -29,10 +41,11 @@
   }
 
   blockquote {
-    border-radius: 8px;
     background: $blockquote-background;
     padding: $tertiary-padding;
     min-width: 60%;
+    margin: 0;
+    margin-bottom: $tertiary-padding;
   }
 
   // Strikethrough text
@@ -78,8 +91,11 @@
     padding: $secondary-padding;
     object-fit: scale-down;
     max-width: 100%;
-    border: $subtle-border;
     box-sizing: border-box;
+  }
+
+  iframe {
+    margin-bottom: $tertiary-padding;
   }
 
   // Horizontal Rule
