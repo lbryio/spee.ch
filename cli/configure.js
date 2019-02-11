@@ -13,7 +13,8 @@ let thumbnailChannelDefault = '@thumbnails';
 let thumbnailChannel = '';
 let thumbnailChannelId = '';
 
-const createConfigFile = (fileName, configObject, topSecret) => {  // siteConfig.json , siteConfig
+const createConfigFile = (fileName, configObject, topSecret) => {
+  // siteConfig.json , siteConfig
   const fileLocation = topSecret
     ? Path.resolve(__dirname, `../site/private/${fileName}`)
     : Path.resolve(__dirname, `../site/config/${fileName}`);
@@ -39,15 +40,8 @@ try {
   siteConfig = require('./defaults/siteConfig.json');
 }
 const {
-  details: {
-    port,
-    title,
-    host,
-  },
-  publishing: {
-    uploadDirectory,
-    channelClaimBidAmount: channelBid,
-  },
+  details: { port, title, host },
+  publishing: { uploadDirectory, channelClaimBidAmount: channelBid },
 } = siteConfig;
 
 let lbryConfig;
@@ -80,12 +74,12 @@ try {
 
 // authConfig
 let randSessionKey = pwGenerator.generate({
-  length : 20,
+  length: 20,
   numbers: true,
 });
 
 let randMasterPass = pwGenerator.generate({
-  length : 20,
+  length: 20,
   numbers: true,
 });
 
@@ -94,7 +88,7 @@ try {
   authConfig = require('../site/private/authConfig.json');
 } catch (error) {
   authConfig = {
-    sessionKey    : randSessionKey,
+    sessionKey: randSessionKey,
     masterPassword: randMasterPass,
   };
 }
@@ -111,7 +105,7 @@ inquirer
     console.log('\nRetrieving your primary claim address from LBRY...');
     return axios
       .post('http://localhost:5279', {
-        method: 'wallet_list',
+        method: 'address_list',
       })
       .then(response => {
         if (response.data) {
@@ -125,7 +119,8 @@ inquirer
           return;
         }
         throw new Error('No data received from lbrynet');
-      }).catch(error => {
+      })
+      .catch(error => {
         throw error;
       });
   })
@@ -159,7 +154,10 @@ inquirer
               }
               console.log('name:', foundChannel.name);
               console.log('claim_id:', foundChannel.claim_id);
-              if (foundChannel.name === thumbnailChannel && foundChannel.claim_id === thumbnailChannelId) {
+              if (
+                foundChannel.name === thumbnailChannel &&
+                foundChannel.claim_id === thumbnailChannelId
+              ) {
                 console.log('No update to existing thumbnail config required\n');
               } else {
                 console.log(`Replacing thumbnail channel in config...`);
@@ -174,11 +172,12 @@ inquirer
           return false;
         }
         throw new Error('No data received from lbrynet');
-      }).catch(error => {
+      })
+      .catch(error => {
         throw error;
       });
   })
-  .then((thumbnailChannelAlreadyExists) => {
+  .then(thumbnailChannelAlreadyExists => {
     // exit if a channel already exists, skip this step
     if (thumbnailChannelAlreadyExists) {
       return;
@@ -190,7 +189,7 @@ inquirer
         method: 'channel_new',
         params: {
           channel_name: thumbnailChannelDefault,
-          amount      : channelBid,
+          amount: channelBid,
         },
       })
       .then(response => {
@@ -207,7 +206,8 @@ inquirer
           return;
         }
         throw new Error('No data received from lbrynet');
-      }).catch(error => {
+      })
+      .catch(error => {
         throw error;
       });
   })
@@ -232,11 +232,15 @@ inquirer
     createConfigFile('authConfig.json', authConfig, true);
   })
   .then(() => {
-    console.log('\nYou\'re all done!');
-    console.log('\nIt\'s a good idea to BACK UP YOUR MASTER PASSWORD \nin "/site/private/authConfig.json" so that you don\'t lose \ncontrol of your channel.');
+    console.log("\nYou're all done!");
+    console.log(
+      '\nIt\'s a good idea to BACK UP YOUR MASTER PASSWORD \nin "/site/private/authConfig.json" so that you don\'t lose \ncontrol of your channel.'
+    );
 
     console.log('\nNext step: run "npm run start" to build and start your server!');
-    console.log('If you want to change any settings, you can edit the files in the "/site" folder.');
+    console.log(
+      'If you want to change any settings, you can edit the files in the "/site" folder.'
+    );
     process.exit(0);
   })
   .catch(error => {
