@@ -1,44 +1,44 @@
 import siteConfig from '@config/siteConfig.json';
 import determineContentTypeFromExtension from './determineContentTypeFromExtension';
 import createMetaTagsArray from './createMetaTagsArray';
-import createCanonicalLink from '../../../utils/createCanonicalLink';
+import createCanonicalLink from '@globalutils/createCanonicalLink';
 
 const {
-  details: {
-    host,
-    title: siteTitle,
-    twitter,
-  },
-  assetDefaults: {
-    description: defaultDescription,
-    thumbnail: defaultThumbnail,
-  },
+  details: { host, title: siteTitle, twitter },
+  assetDefaults: { description: defaultDescription, thumbnail: defaultThumbnail },
 } = siteConfig;
 
 const VIDEO = 'VIDEO';
 const IMAGE = 'IMAGE';
 const GIF = 'GIF';
+const TEXT = 'TEXT';
 
-const determineMediaType = (contentType) => {
+const determineMediaType = contentType => {
   switch (contentType) {
     case 'image/jpg':
     case 'image/jpeg':
     case 'image/png':
+    case 'image/svg+xml':
       return IMAGE;
     case 'image/gif':
       return GIF;
     case 'video/mp4':
     case 'video/webm':
       return VIDEO;
+    case 'text/markdown':
+    case 'text/plain':
+      return TEXT;
     default:
       return '';
   }
 };
 
-const createAssetMetaTags = (asset) => {
+const createAssetMetaTags = asset => {
   const { claimData } = asset;
   const { contentType } = claimData;
-  const canonicalLink = createCanonicalLink({ asset: { ...asset.claimData, shortId: asset.shortId }});
+  const canonicalLink = createCanonicalLink({
+    asset: { ...asset.claimData, shortId: asset.shortId },
+  });
   const showUrl = `${host}${canonicalLink}`;
   const serveUrl = `${showUrl}.${claimData.fileExt}`;
 
@@ -46,16 +46,19 @@ const createAssetMetaTags = (asset) => {
   const ogDescription = claimData.description || defaultDescription;
   const ogThumbnailContentType = determineContentTypeFromExtension(claimData.thumbnail);
   const ogThumbnail = claimData.thumbnail || defaultThumbnail;
+
+  console.log('asset.claimData', asset.claimData);
+
   // {property: 'og:title'] = ogTitle},
   const metaTags = {
-    'og:title'           : ogTitle,
-    'twitter:title'      : ogTitle,
-    'og:description'     : ogDescription,
+    'og:title': ogTitle,
+    'twitter:title': ogTitle,
+    'og:description': ogDescription,
     'twitter:description': ogDescription,
-    'og:url'             : showUrl,
-    'og:site_name'       : siteTitle,
-    'twitter:site'       : twitter,
-    'fb:app_id'          : '1371961932852223',
+    'og:url': showUrl,
+    'og:site_name': siteTitle,
+    'twitter:site': twitter,
+    'fb:app_id': '1371961932852223',
   };
   if (determineMediaType(contentType) === VIDEO) {
     const videoEmbedUrl = `${host}/video-embed${canonicalLink}`;
@@ -85,8 +88,6 @@ const createAssetMetaTags = (asset) => {
     // image tags
     metaTags['og:image'] = serveUrl;
     metaTags['og:image'] = serveUrl;
-    metaTags['og:image:width'] = 600;
-    metaTags['og:image:height'] = 315;
     metaTags['og:image:type'] = contentType;
     metaTags['twitter:image'] = serveUrl;
   }

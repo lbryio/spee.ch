@@ -85,6 +85,8 @@ $ npm run configure
 #### Build & start the app
 
 ```
+$ npm run build
+
 $ npm run start
 ```
 
@@ -114,7 +116,7 @@ curl -F 'name=MyPictureName' -F 'file=@/path/to/myPicture.jpeg' https://spee.ch/
 ```
 Parameters:
 
-  * `name` (required)
+  * `name` (required, must be unique across the instance)
   * `file` (required) (must be type .mp4, .jpeg, .jpg, .gif, or .png)
   * `nsfw` (optional)
   * `license` (optional)
@@ -262,4 +264,4 @@ We take security seriously. Please contact security@lbry.io regarding any securi
 
 ## Contact
 
-The primary contact for this project is [@skhameneh](mailto:shawn@lbry.io).
+The primary contact for this project is [@jessopb](mailto:jessop@lbry.io).

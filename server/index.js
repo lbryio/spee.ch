@@ -36,7 +36,7 @@ const {
 const { sessionKey } = require('@private/authConfig.json');
 
 // configure.js doesn't handle new keys in config.json files yet. Make sure it doens't break.
-let bLE;
+let finalBlockListEndpoint;
 
 function Server () {
   this.initialize = () => {
@@ -176,30 +176,29 @@ function Server () {
       return;
     }
     if (blockListEndpoint) {
-      bLE = blockListEndpoint;
+      finalBlockListEndpoint = blockListEndpoint;
     } else if (!blockListEndpoint) {
       if (typeof (blockListEndpoint) !== 'string') {
         logger.warn('blockListEndpoint is null due to outdated siteConfig file. \n' +
           'Continuing with default LBRY blocklist api endpoint. \n ' +
-          '(Specify /"blockListEndpoint" : ""/ to disable.')
-        bLE = 'https://api.lbry.io/file/list_blocked';
+          '(Specify /"blockListEndpoint" : ""/ to disable.');
+        finalBlockListEndpoint = 'https://api.lbry.io/file/list_blocked';
       }
     }
     logger.info(`Peforming updates...`);
-    if (!bLE) {
-      logger.info('Configured for no Block List')
-      db.Tor.refreshTable().then( (updatedTorList) => {
+    if (!finalBlockListEndpoint) {
+      logger.info('Configured for no Block List');
+      db.Tor.refreshTable().then((updatedTorList) => {
         logger.info('Tor list updated, length:', updatedTorList.length);
       });
     } else {
-
       return Promise.all([
-        db.Blocked.refreshTable(bLE),
+        db.Blocked.refreshTable(finalBlockListEndpoint),
         db.Tor.refreshTable()])
         .then(([updatedBlockedList, updatedTorList]) => {
           logger.info('Blocked list updated, length:', updatedBlockedList.length);
           logger.info('Tor list updated, length:', updatedTorList.length);
-        })
+        });
     }
   };
   this.start = () => {

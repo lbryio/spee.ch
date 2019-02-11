@@ -38,13 +38,16 @@ class ShowAssetDetails extends React.Component {
             asset={asset}
           >
             <div className="asset-main">
-              <AssetDisplay />
               <AssetTitle />
-              <button className='collapse-button' onClick={this.collapse}>
-                {this.state.closed ? <Icon.PlusCircle className='plus-icon' /> : <Icon.MinusCircle />}
-              </button>
+              <AssetDisplay />
+              <div>
+                <button className='collapse-button' onClick={this.collapse}>
+                  {this.state.closed ? <Icon.PlusCircle className='plus-icon' /> : <Icon.MinusCircle />}
+                </button>
+              </div>
             </div>
             {!this.state.closed && <AssetInfo />}
+
           </PageLayout>
         );
       } else {

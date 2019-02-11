@@ -18,92 +18,77 @@ const returnShortId = (claimsArray, longId) => {
     shortIdLength += 1;
     shortId = longId.substring(0, shortIdLength);
     possibleMatches = possibleMatches.filter(element => {
-      return (element.claim_id && (element.claim_id.substring(0, shortIdLength) === shortId));
+      return element.claim_id && element.claim_id.substring(0, shortIdLength) === shortId;
     });
   }
   return shortId;
 };
 
-const isLongClaimId = (claimId) => {
-  return (claimId && (claimId.length === 40));
-}
+const isLongClaimId = claimId => {
+  return claimId && claimId.length === 40;
+};
 
-const isShortClaimId = (claimId) => {
-  return (claimId && (claimId.length < 40));
-}
+const isShortClaimId = claimId => {
+  return claimId && claimId.length < 40;
+};
 
 export default (db, table, sequelize) => ({
+  getClaimChannelName: async publisher_id => {
+    return await table
+      .findAll({
+        where: { claim_id: publisher_id },
+        attributes: ['name'],
+      })
+      .then(result => {
+        if (result.length === 0) {
+          throw new Error(`no record found for ${claimId}`);
+        } else if (result.length !== 1) {
+          logger.warn(`more than one record matches ${claimId} in db.Claim`);
+        }
 
-  getClaimChannelName: async (publisher_id) => {
-    return await table.findAll({
-      where     : { claim_id: publisher_id },
-      attributes: ['name'],
-    }).then(result => {
-      if(result.length === 0) {
-        throw new Error(`no record found for ${claimId}`);
-      } else if(result.length !== 1) {
-        logger.warn(`more than one record matches ${claimId} in db.Claim`);
-      }
-
-      return result[0].name;
-    });
+        return result[0].name;
+      });
   },
 
   getShortClaimIdFromLongClaimId: async (claimId, claimName, pendingClaim) => {
     logger.debug(`claim.getShortClaimIdFromLongClaimId for ${claimName}#${claimId}`);
-    return await table.findAll({
-      where: { name: claimName },
-      order: [['height', 'ASC']],
-    }).then(result => {
-      if(result.length === 0) {
-        throw new Error('No claim(s) found with that claim name');
-      }
+    return await table
+      .findAll({
+        where: { name: claimName },
+        order: [['height', 'ASC']],
+      })
+      .then(result => {
+        if (result.length === 0) {
+          throw new Error('No claim(s) found with that claim name');
+        }
 
-      let list = result.map(claim => claim.dataValues);
-      if (pendingClaim) {
-        list = list.concat(pendingClaim);
-      }
+        let list = result.map(claim => claim.dataValues);
+        if (pendingClaim) {
+          list = list.concat(pendingClaim);
+        }
 
-      return returnShortId(list, claimId);
-    });
+        return returnShortId(list, claimId);
+      });
   },
 
-  getAllChannelClaims: async (channelClaimId, params) => {
+  getAllChannelClaims: async (channelClaimId, bidState) => {
     logger.debug(`claim.getAllChannelClaims for ${channelClaimId}`);
-
-    const defaultWhereClauses = {
-      bid_state: { [sequelize.Op.or]: ['Controlling', 'Active', 'Accepted'] }
+    const whereClause = bidState || {
+      [sequelize.Op.or]: [
+        { bid_state: 'Controlling' },
+        { bid_state: 'Active' },
+        { bid_state: 'Accepted' },
+      ],
     };
-
-    const addWhereClauses = (whereClauses, params) => {
-      /*
-       input params = { col: ['Val', 'Val']}
-       output = { col: { Op.or : [ { Op.eq: 'Value'},...]}, col2:...}
-      */
-      const cols = Object.keys(params)
-      for (let colKey in cols){
-        let col = Object.keys(params)[colKey]
-
-        whereClauses[col] = {}
-        whereClauses[col][sequelize.Op.or] = []
-        for (let itemKey in params[col] ){
-          let itemsArr = params[col]
-          whereClauses[col][sequelize.Op.or].push({ [sequelize.Op.eq]: itemsArr[itemKey] })
-        }
-      }
-      return whereClauses;
-    }
-
-    const whereClause = addWhereClauses(defaultWhereClauses, params);
-
     const selectWhere = {
       ...whereClause,
       publisher_id: channelClaimId,
     };
-    return await table.findAll({
-      where: selectWhere,
-      order: [['height', 'DESC'],['claim_id', 'ASC']],
-    })
+    return await table
+      .findAll({
+        where: selectWhere,
+        order: [['height', 'DESC'], ['claim_id', 'ASC']],
+      })
       .then(channelClaimsArray => {
         if (channelClaimsArray.length === 0) {
           return null;
@@ -114,67 +99,80 @@ export default (db, table, sequelize) => ({
 
   getClaimIdByLongChannelId: async (channelClaimId, claimName) => {
     logger.debug(`finding claim id for claim ${claimName} from channel ${channelClaimId}`);
-    return await table.findAll({
-      where: { name: claimName, publisher_id: channelClaimId, bid_state: { [sequelize.Op.or]: ['Controlling', 'Active', 'Accepted'] } },
-      order: [['id', 'ASC']],
-    })
-    .then(result => {
-      switch (result.length) {
-        case 0:
-          return null;
-        case 1:
-          return result[0].claim_id;
-        default:
-          // Does this actually happen??? (from converted code)
-          logger.warn(`${result.length} records found for "${claimName}" in channel "${channelClaimId}"`);
-          return result[0].claim_id;
-      }
-    });
+    return await table
+      .findAll({
+        where: {
+          name: claimName,
+          publisher_id: channelClaimId,
+          bid_state: { [sequelize.Op.or]: ['Controlling', 'Active', 'Accepted'] },
+        },
+        order: [['id', 'ASC']],
+      })
+      .then(result => {
+        switch (result.length) {
+          case 0:
+            return null;
+          case 1:
+            return result[0].claim_id;
+          default:
+            // Does this actually happen??? (from converted code)
+            logger.warn(
+              `${result.length} records found for "${claimName}" in channel "${channelClaimId}"`
+            );
+            return result[0].claim_id;
+        }
+      });
   },
 
   validateLongClaimId: async (name, claimId) => {
-    return await table.findOne({
-      where: {
-        name,
-        claim_id: claimId,
-      },
-    }).then(result => {
-      if (!result) {
-        return false;
-      }
-      return claimId;
-    });
+    return await table
+      .findOne({
+        where: {
+          name,
+          claim_id: claimId,
+        },
+      })
+      .then(result => {
+        if (!result) {
+          return false;
+        }
+        return claimId;
+      });
   },
 
   getLongClaimIdFromShortClaimId: async (name, shortId) => {
-    return await table.findAll({
-      where: {
-        name,
-        claim_id: {
-          [sequelize.Op.like]: `${shortId}%`,
-        }},
-      order: [['height', 'ASC']],
-    })
-    .then(result => {
-      if(result.length === 0) {
-        return null;
-      }
+    return await table
+      .findAll({
+        where: {
+          name,
+          claim_id: {
+            [sequelize.Op.like]: `${shortId}%`,
+          },
+        },
+        order: [['height', 'ASC']],
+      })
+      .then(result => {
+        if (result.length === 0) {
+          return null;
+        }
 
-      return result[0].claim_id;
-    });
+        return result[0].claim_id;
+      });
   },
 
-  getTopFreeClaimIdByClaimName: async (name) => {
-    return await table.findAll({
-      // TODO: Limit 1
-      where: { name, bid_state: { [sequelize.Op.or]: ['Controlling', 'Active', 'Accepted'] }  },
-      order: [['effective_amount', 'DESC'], ['height', 'ASC']],
-    }).then(result => {
-      if(result.length === 0) {
-        return null;
-      }
-      return result[0].claim_id;
-    })
+  getTopFreeClaimIdByClaimName: async name => {
+    return await table
+      .findAll({
+        // TODO: Limit 1
+        where: { name, bid_state: { [sequelize.Op.or]: ['Controlling', 'Active', 'Accepted'] } },
+        order: [['effective_amount', 'DESC'], ['height', 'ASC']],
+      })
+      .then(result => {
+        if (result.length === 0) {
+          return null;
+        }
+        return result[0].claim_id;
+      });
   },
 
   getLongClaimId: async (claimName, claimId) => {
@@ -191,60 +189,63 @@ export default (db, table, sequelize) => ({
 
   resolveClaim: async (name, claimId) => {
     logger.debug(`Claim.resolveClaim: ${name} ${claimId}`);
-    return table.findAll({
-      where: { name, claim_id: claimId },
-    }).then(claimArray => {
-      if(claimArray.length === 0) {
-        return null;
-      } else if(claimArray.length !== 1) {
-        logger.warn(`more than one record matches ${name}#${claimId} in db.Claim`);
-      }
+    return table
+      .findAll({
+        where: { name, claim_id: claimId },
+      })
+      .then(claimArray => {
+        if (claimArray.length === 0) {
+          return null;
+        } else if (claimArray.length !== 1) {
+          logger.warn(`more than one record matches ${name}#${claimId} in db.Claim`);
+        }
 
-      return claimArray[0];
-    });
+        return claimArray[0];
+      });
   },
 
   resolveClaimInChannel: async (claimName, channelId) => {
     logger.debug(`Claim.resolveClaimByNames: ${claimName} in ${channelId}`);
-    return table.findAll({
-      where: {
-        name: claimName,
-        publisher_id: channelId,
-      },
-    }).then(claimArray => {
-      if (claimArray.length === 0) {
-        return null;
-      } else if (claimArray.length !== 1) {
-        logger.warn(`more than one record matches ${claimName} in ${channelId}`);
-      }
+    return table
+      .findAll({
+        where: {
+          name: claimName,
+          publisher_id: channelId,
+        },
+      })
+      .then(claimArray => {
+        if (claimArray.length === 0) {
+          return null;
+        } else if (claimArray.length !== 1) {
+          logger.warn(`more than one record matches ${claimName} in ${channelId}`);
+        }
 
-      return claimArray[0];
-    });
+        return claimArray[0];
+      });
   },
 
   getOutpoint: async (name, claimId) => {
     logger.debug(`finding outpoint for ${name}#${claimId}`);
 
-    return await table.findAll({
-      where     : { name, claim_id: claimId },
-      attributes: ['transaction_hash_id'],
-    }).then(result => {
-      if(result.length === 0) {
-        throw new Error(`no record found for ${name}#${claimId}`);
-      } else if(result.length !== 1) {
-        logger.warn(`more than one record matches ${name}#${claimId} in db.Claim`);
-      }
+    return await table
+      .findAll({
+        where: { name, claim_id: claimId },
+        attributes: ['transaction_hash_id'],
+      })
+      .then(result => {
+        if (result.length === 0) {
+          throw new Error(`no record found for ${name}#${claimId}`);
+        } else if (result.length !== 1) {
+          logger.warn(`more than one record matches ${name}#${claimId} in db.Claim`);
+        }
 
-      return result[0].transaction_hash_id;
-    });
+        return result[0].transaction_hash_id;
+      });
   },
 
   getCurrentHeight: async () => {
-    return await table
-    .max('height')
-    .then(result => {
-      return (result || 100000);
+    return await table.max('height').then(result => {
+      return result || 100000;
     });
   },
-
-})
+});
