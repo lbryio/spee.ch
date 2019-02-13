@@ -16,6 +16,11 @@
     margin: $tertiary-padding 0px;
   }
 
+  h4, h5, h6 {
+    font-size: $text-large;
+    font-weight: 600;
+  }
+
   // Paragraphs
   p {
     font-size: 1.15rem;
@@ -101,6 +106,10 @@
     max-width: 90vw;
     margin-top: $tertiary-padding 0px;
     margin-bottom: $tertiary-padding 0px;
+  }
+
+  iframe {
+    margin-bottom: $tertiary-padding;
   }
 
   // Horizontal Rule
