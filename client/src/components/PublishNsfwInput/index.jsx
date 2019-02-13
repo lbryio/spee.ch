@@ -14,7 +14,7 @@ const PublishNsfwInput = ({ nsfw, handleInput }) => {
           type='checkbox'
           id='publish-nsfw'
           name='nsfw'
-          value={nsfw}
+          checked={nsfw}
           onChange={handleInput}
         />
       }
