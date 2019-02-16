@@ -13,7 +13,7 @@ const httpContext = require('express-http-context');
 const db = require('./models');
 const requestLogger = require('./middleware/requestLogger');
 const createDatabaseIfNotExists = require('./models/utils/createDatabaseIfNotExists');
-const { getWalletBalance } = require('./lbrynet/index');
+const { getAccountBalance } = require('./lbrynet/index');
 const configureLogging = require('./utils/configureLogging');
 const configureSlack = require('./utils/configureSlack');
 const { setupBlockList } = require('./utils/blockList');
@@ -27,10 +27,7 @@ const {
 
 const {
   details: { port: PORT, blockListEndpoint },
-  startup: {
-    performChecks,
-    performUpdates,
-  },
+  startup: { performChecks, performUpdates },
 } = require('@config/siteConfig');
 
 const { sessionKey } = require('@private/authConfig.json');
@@ -38,7 +35,7 @@ const { sessionKey } = require('@private/authConfig.json');
 // configure.js doesn't handle new keys in config.json files yet. Make sure it doens't break.
 let finalBlockListEndpoint;
 
-function Server () {
+function Server() {
   this.initialize = () => {
     // configure logging
     configureLogging();
@@ -53,12 +50,16 @@ function Server () {
       const webpack = require('webpack');
       const webpackDevMiddleware = require('webpack-dev-middleware');
 
-      const webpackClientConfig = require('../webpack/webpack.client.config')(null, { mode: 'development' });
+      const webpackClientConfig = require('../webpack/webpack.client.config')(null, {
+        mode: 'development',
+      });
       const clientCompiler = webpack(webpackClientConfig);
 
-      app.use(webpackDevMiddleware(clientCompiler, {
-        publicPath: webpackClientConfig.output.publicPath,
-      }));
+      app.use(
+        webpackDevMiddleware(clientCompiler, {
+          publicPath: webpackClientConfig.output.publicPath,
+        })
+      );
 
       app.use(require('webpack-hot-middleware')(clientCompiler));
     }
@@ -67,8 +68,15 @@ function Server () {
     app.enable('trust proxy');
 
     app.use((req, res, next) => {
-      if (req.get('User-Agent') === 'Mozilla/5.0 (Windows NT 5.1; rv:14.0) Gecko/20120405 Firefox/14.0a1') {
-        res.status(403).send('<h1>Forbidden</h1>If you are seeing this by mistake, please contact us using <a href="https://chat.lbry.io/">https://chat.lbry.io/</a>');
+      if (
+        req.get('User-Agent') ===
+        'Mozilla/5.0 (Windows NT 5.1; rv:14.0) Gecko/20120405 Firefox/14.0a1'
+      ) {
+        res
+          .status(403)
+          .send(
+            '<h1>Forbidden</h1>If you are seeing this by mistake, please contact us using <a href="https://chat.lbry.io/">https://chat.lbry.io/</a>'
+          );
         res.end();
       } else {
         next();
@@ -101,38 +109,45 @@ function Server () {
     app.use(requestLogger);
 
     // initialize passport
-    app.use(cookieSession({
-      name: 'session',
-      keys: [sessionKey],
-    }));
+    app.use(
+      cookieSession({
+        name: 'session',
+        keys: [sessionKey],
+      })
+    );
     app.use(speechPassport.initialize());
     app.use(speechPassport.session());
 
     // configure handlebars & register it with express app
     const viewsPath = Path.resolve(process.cwd(), 'server/views');
-    app.engine('handlebars', expressHandlebars({
-      async        : false,
-      dataType     : 'text',
-      defaultLayout: 'embed',
-      partialsDir  : Path.join(viewsPath, '/partials'),
-      layoutsDir   : Path.join(viewsPath, '/layouts'),
-    }));
+    app.engine(
+      'handlebars',
+      expressHandlebars({
+        async: false,
+        dataType: 'text',
+        defaultLayout: 'embed',
+        partialsDir: Path.join(viewsPath, '/partials'),
+        layoutsDir: Path.join(viewsPath, '/layouts'),
+      })
+    );
     app.set('views', viewsPath);
     app.set('view engine', 'handlebars');
 
     // set the routes on the app
     const routes = require('./routes');
 
-    Object.keys(routes).map((routePath) => {
+    Object.keys(routes).map(routePath => {
       let routeData = routes[routePath];
       let routeMethod = routeData.hasOwnProperty('method') ? routeData.method : 'get';
-      let controllers = Array.isArray(routeData.controller) ? routeData.controller : [routeData.controller];
+      let controllers = Array.isArray(routeData.controller)
+        ? routeData.controller
+        : [routeData.controller];
 
       app[routeMethod](
         routePath,
         logMetricsMiddleware,
         setRouteDataInContextMiddleware(routePath, routeData),
-        ...controllers,
+        ...controllers
       );
     });
 
@@ -153,22 +168,18 @@ function Server () {
   };
   this.syncDatabase = () => {
     logger.info(`Syncing database...`);
-    return createDatabaseIfNotExists()
-      .then(() => {
-        db.sequelize.sync();
-      });
+    return createDatabaseIfNotExists().then(() => {
+      db.sequelize.sync();
+    });
   };
   this.performChecks = () => {
     if (!performChecks) {
       return;
     }
     logger.info(`Performing checks...`);
-    return Promise.all([
-      getWalletBalance(),
-    ])
-      .then(([walletBalance]) => {
-        logger.info('Starting LBC balance:', walletBalance);
-      });
+    return Promise.all([getAccountBalance()]).then(([accountBalance]) => {
+      logger.info('Starting LBC balance:', accountBalance);
+    });
   };
 
   this.performUpdates = () => {
@@ -178,27 +189,29 @@ function Server () {
     if (blockListEndpoint) {
       finalBlockListEndpoint = blockListEndpoint;
     } else if (!blockListEndpoint) {
-      if (typeof (blockListEndpoint) !== 'string') {
-        logger.warn('blockListEndpoint is null due to outdated siteConfig file. \n' +
-          'Continuing with default LBRY blocklist api endpoint. \n ' +
-          '(Specify /"blockListEndpoint" : ""/ to disable.');
+      if (typeof blockListEndpoint !== 'string') {
+        logger.warn(
+          'blockListEndpoint is null due to outdated siteConfig file. \n' +
+            'Continuing with default LBRY blocklist api endpoint. \n ' +
+            '(Specify /"blockListEndpoint" : ""/ to disable.'
+        );
         finalBlockListEndpoint = 'https://api.lbry.io/file/list_blocked';
       }
     }
     logger.info(`Peforming updates...`);
     if (!finalBlockListEndpoint) {
       logger.info('Configured for no Block List');
-      db.Tor.refreshTable().then((updatedTorList) => {
+      db.Tor.refreshTable().then(updatedTorList => {
         logger.info('Tor list updated, length:', updatedTorList.length);
       });
     } else {
       return Promise.all([
         db.Blocked.refreshTable(finalBlockListEndpoint),
-        db.Tor.refreshTable()])
-        .then(([updatedBlockedList, updatedTorList]) => {
-          logger.info('Blocked list updated, length:', updatedBlockedList.length);
-          logger.info('Tor list updated, length:', updatedTorList.length);
-        });
+        db.Tor.refreshTable(),
+      ]).then(([updatedBlockedList, updatedTorList]) => {
+        logger.info('Blocked list updated, length:', updatedBlockedList.length);
+        logger.info('Tor list updated, length:', updatedTorList.length);
+      });
     }
   };
   this.start = () => {
@@ -210,10 +223,7 @@ function Server () {
         return this.startServerListening();
       })
       .then(() => {
-        return Promise.all([
-          this.performChecks(),
-          this.performUpdates(),
-        ]);
+        return Promise.all([this.performChecks(), this.performUpdates()]);
       })
       .then(() => {
         return setupBlockList();

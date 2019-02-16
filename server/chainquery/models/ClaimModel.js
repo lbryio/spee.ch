@@ -1,9 +1,17 @@
 const logger = require('winston');
 const mime = require('mime-types');
+const {
+  serving: { customFileExtensions },
+} = require('@config/siteConfig');
 
 const getterMethods = {
   generated_extension() {
-    return mime.extension(this.content_type) ? mime.extension(this.content_type) : 'jpg';
+    logger.info('trying to generate extension', this.content_type);
+    if (customFileExtensions.hasOwnProperty(this.content_type)) {
+      return customFileExtensions[this.content_type];
+    } else {
+      return mime.extension(this.content_type) ? mime.extension(this.content_type) : 'jpg';
+    }
   },
 };
 

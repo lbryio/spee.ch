@@ -1,6 +1,6 @@
 # Spee.ch
 
-spee.ch provides a user-friendly, custom-designed, image and video hosting site backed by a decentralized network and 
+spee.ch provides a user-friendly, custom-designed, image and video hosting site backed by a decentralized network and
 blockchain ([LBRY](https://lbry.tech/)). Via just a small set of config files, you can spin your an entire spee.ch site back up including assets.
 
 ![App GIF](https://spee.ch/e/speechgif.gif)
@@ -18,56 +18,64 @@ For a closed, custom-hosted and branded example, check out https://lbry.theantim
 ### Full Instructions
 
 #### Get some information ready:
-  * mysqlusername
-  * mysqlpassword
-  * domainname or 'http://localhost:3000'
-  * speechport = 3000
+
+- mysqlusername
+- mysqlpassword
+- domainname or 'http://localhost:3000'
+- speechport = 3000
 
 #### Install and Set Up Dependencies
-  * Firewall open ports
-    * 22
-    * 80
-    * 443
-    * 3333
-    * 4444
-  * [NodeJS](https://nodejs.org)
-  * [MySQL version 5.7 or higher](https://dev.mysql.com/doc/refman/8.0/en/installing.html)
-    * mysqlusername or root
-    * mysqlpassword
-    * Requires mysql_native_password plugin
-    ```
-    mysql> `ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'yourpassword';`
-    ```
-  * [lbrynet](https://github.com/lbryio/lbry) daemon
-    * run this as a service exposing ports 3333 and 4444
-    * _note_: once the daemon is running, issue commands in another terminal session (tmux) to retrieve an address for your wallet to recieve 5+ LBC credits (or join us in the [#speech discord channel](https://discord.gg/YjYbwhS) and we will send you a few)
-      * `./lbrynet commands` gets a list of commands
-      * `./lbrynet account_balance` gets your balance (initially 0.0)
-      * `./lbrynet address_list` gets addresses you can use to recieve LBC
-  * [FFmpeg](https://www.ffmpeg.org/download.html)
-  * Spee.ch (below)
-  * pm2 (optional) process manager such as pm2 to run speech server.js
-  * http proxy server e.g. caddy, nginx, or traefik, to forward 80/443 to speech port 3000
-    * _note: even running on http://localhost, you must redirect http or https to port 3000_
 
+- Firewall open ports
+  - 22
+  - 80
+  - 443
+  - 3333
+  - 4444
+- [NodeJS](https://nodejs.org)
+- [MySQL version 5.7 or higher](https://dev.mysql.com/doc/refman/8.0/en/installing.html)
+  - mysqlusername or root
+  - mysqlpassword
+  - Requires mysql_native_password plugin
+  ```
+  mysql> `ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'yourpassword';`
+  ```
+- [lbrynet](https://github.com/lbryio/lbry) daemon
+  - run this as a service exposing ports 3333 and 4444
+  - _note_: once the daemon is running, issue commands in another terminal session (tmux) to retrieve an address for your wallet to recieve 5+ LBC credits (or join us in the [#speech discord channel](https://discord.gg/YjYbwhS) and we will send you a few)
+    - `./lbrynet commands` gets a list of commands
+    - `./lbrynet account_balance` gets your balance (initially 0.0)
+    - `./lbrynet address_list` gets addresses you can use to recieve LBC
+- [FFmpeg](https://www.ffmpeg.org/download.html)
+- Spee.ch (below)
+- pm2 (optional) process manager such as pm2 to run speech server.js
+- http proxy server e.g. caddy, nginx, or traefik, to forward 80/443 to speech port 3000
+  - _note: even running on http://localhost, you must redirect http or https to port 3000_
 
 #### Clone spee.ch
-  * release version for stable production
+
+- release version for stable production
+
 ```
 $ git clone -b release https://github.com/lbryio/spee.ch.git
 ```
-  * master version for development
+
+- master version for development
+
 ```
 $ git clone https://github.com/lbryio/spee.ch.git
 ```
-  * your own fork for customization
 
-####  Change directory into your project
+- your own fork for customization
+
+#### Change directory into your project
+
 ```
 $ cd spee.ch
 ```
 
 #### Install node dependencies
+
 ```
 $ npm install
 ```
@@ -91,7 +99,8 @@ $ npm run start
 ```
 
 #### View in browser
- * Visit [http://localhost:3000](http://localhost:3000) in your browser
+
+- Visit [http://localhost:3000](http://localhost:3000) in your browser
 
 #### Customize your app
 
@@ -99,34 +108,44 @@ Check out the [customization guide](https://github.com/lbryio/spee.ch/blob/readm
 
 #### (optional) add custom components and update the styles
 
-  * Create custom components by creating React components in `site/custom/src/`
-  * Update or override the CSS by changing the files in `site/custom/scss`
+- Create custom components by creating React components in `site/custom/src/`
+- Update or override the CSS by changing the files in `site/custom/scss`
 
 #### (optional) install your own chainquery
+
 Instructions are coming at [lbry-docker] to install your own chainquery instance using docker-compose. This will require 50GB of preferably SSD space and at least 10 minutes to download, possibly much longer.
 
+## Settings
+
+There are a number of settings available for customizing the behavior of your installation.  
+_INSERT LINK TO SETTINGS.MD_
+
 ## API
+
 #### /api/claim/publish
 
 method: `POST`
 
 example:
+
 ```
 curl -F 'name=MyPictureName' -F 'file=@/path/to/myPicture.jpeg' https://spee.ch/api/claim/publish
 ```
+
 Parameters:
 
-  * `name` (required, must be unique across the instance)
-  * `file` (required) (must be type .mp4, .jpeg, .jpg, .gif, or .png)
-  * `nsfw` (optional)
-  * `license` (optional)
-  * `title` (optional)
-  * `description` (optional)
-  * `thumbnail` URL to thumbnail image, for .mp4 uploads only (optional)
-  * `channelName` channel to publish too (optional)
-  * `channelPassword` password for channel to publish too (optional, but required if `channelName` is provided)
+- `name` (required, must be unique across the instance)
+- `file` (required) (must be type .mp4, .jpeg, .jpg, .gif, or .png)
+- `nsfw` (optional)
+- `license` (optional)
+- `title` (optional)
+- `description` (optional)
+- `thumbnail` URL to thumbnail image, for .mp4 uploads only (optional)
+- `channelName` channel to publish too (optional)
+- `channelPassword` password for channel to publish too (optional, but required if `channelName` is provided)
 
 response:
+
 ```
 {
     "success": <bool>,
@@ -150,13 +169,17 @@ response:
 ```
 
 #### /api/claim/availability/:name
+
 method: `GET`
 
 example:
+
 ```
 curl https://spee.ch/api/claim/availability/doitlive
 ```
+
 response:
+
 ```
 {
     "success": <bool>,  // `true` if spee.ch successfully checked the claim availability
@@ -168,90 +191,98 @@ response:
 ## Contribute
 
 ### Stack
-The spee.ch stack is MySQL, Express.js, Node.js, and React.js.  Spee.ch also runs `lbrynet` on its server, and it uses the `lbrynet` API to make requests -- such as `publish`, `create_channel`, and `get` -- on the `LBRY` network.
 
-Spee.ch also runs a sync tool, which decodes blocks from the `LBRY` blockchain as they are mined, and stores the information in MySQL.  It stores all claims in the `Claims` table, and all channel claims in the `Certificates` table.
+The spee.ch stack is MySQL, Express.js, Node.js, and React.js. Spee.ch also runs `lbrynet` on its server, and it uses the `lbrynet` API to make requests -- such as `publish`, `create_channel`, and `get` -- on the `LBRY` network.
 
-* server
-  * [MySQL](https://www.mysql.com/)
-  * [express](https://www.npmjs.com/package/express)
-  * [node](https://nodejs.org/)
-  * [lbry](https://github.com/lbryio/lbry)
-  * [FFmpeg](https://www.ffmpeg.org/)
-* client
-  * [react](https://reactjs.org/)
-  * redux
-  * sagas
-  * scss
-  * handlebars
+Spee.ch also runs a sync tool, which decodes blocks from the `LBRY` blockchain as they are mined, and stores the information in MySQL. It stores all claims in the `Claims` table, and all channel claims in the `Certificates` table.
 
+- server
+  - [MySQL](https://www.mysql.com/)
+  - [express](https://www.npmjs.com/package/express)
+  - [node](https://nodejs.org/)
+  - [lbry](https://github.com/lbryio/lbry)
+  - [FFmpeg](https://www.ffmpeg.org/)
+- client
+  - [react](https://reactjs.org/)
+  - redux
+  - sagas
+  - scss
+  - handlebars
 
 ### Architecture
-* `cli/` contains the code for the CLI tool.  Running the tool will create `.json` config files and place them in the `site/config/` folder
-  * `configure.js` is the entry point for the CLI tool
-  * `cli/defaults/` holds default config files
-  * `cli/questions/` holds the questions that the CLI tool asks to build the config files
 
-* `client/` contains all of the client code
-  * The client side of spee.ch uses `React` and `Redux`
-  * `client/src/index.js` is the entry point for the client side js.  It checks for preloaded state, creates the store, and places the `<App />` component in the document.
-  * `client/src/app.js`  holds the `<App />` component, which contains the routes for `react-router-dom`
-  * `client/src/` contains all of the JSX code for the app. When the app is built, the content of this folder is transpiled into the `client/build/` folder.
-    * The Redux code is broken up into `actions/` `reducers/` and `selectors/`
-    * The React components are broken up into `containers/` (components that pull props directly from the Redux store), `components/` ('dumb' components), and `pages/`
-    * spee.ch also uses sagas which are in the `sagas/` folders and `channels/`
-  * `client/scss/` contains  the CSS for the project
-    *
+- `cli/` contains the code for the CLI tool. Running the tool will create `.json` config files and place them in the `site/config/` folder
 
-* `site/custom` is a folder which can be used to override the default components in `client/`
-  * The folder structure mimics that of the `client/` folder
-  * to customize spee.ch, place your own components and scss in the `site/custom/src/` and `site/custom/scss` folders.
+  - `configure.js` is the entry point for the CLI tool
+  - `cli/defaults/` holds default config files
+  - `cli/questions/` holds the questions that the CLI tool asks to build the config files
 
-* `server/`  contains all of the server code
-  * `index.js` is the entry point for the server.  It creates the [express app](https://expressjs.com/), requires the routes, syncs the database, and starts the server listening on the `PORT` designated in the config files.
-  * `server/routes/` contains all of the routes for the express app
-  * `server/controllers/` contains all of the controllers for all of the routes
-  * `server/models/` contains all of the models which the app uses to interact with the `MySQL` database.  
-    * Spee.ch uses the [sequelize](http://docs.sequelizejs.com/) ORM for communicating with the database.
+- `client/` contains all of the client code
 
-* `tests/` holds the end-to-end tests for this project
-  * Spee.ch uses `mocha` with the `chai` assertion library
-  * unit tests are located inside the project in-line with the files being tested and are designated with a `xxxx.test.js` file name
+  - The client side of spee.ch uses `React` and `Redux`
+  - `client/src/index.js` is the entry point for the client side js. It checks for preloaded state, creates the store, and places the `<App />` component in the document.
+  - `client/src/app.js` holds the `<App />` component, which contains the routes for `react-router-dom`
+  - `client/src/` contains all of the JSX code for the app. When the app is built, the content of this folder is transpiled into the `client/build/` folder.
+    - The Redux code is broken up into `actions/` `reducers/` and `selectors/`
+    - The React components are broken up into `containers/` (components that pull props directly from the Redux store), `components/` ('dumb' components), and `pages/`
+    - spee.ch also uses sagas which are in the `sagas/` folders and `channels/`
+  - `client/scss/` contains the CSS for the project \*
+
+- `site/custom` is a folder which can be used to override the default components in `client/`
+
+  - The folder structure mimics that of the `client/` folder
+  - to customize spee.ch, place your own components and scss in the `site/custom/src/` and `site/custom/scss` folders.
+
+- `server/` contains all of the server code
+
+  - `index.js` is the entry point for the server. It creates the [express app](https://expressjs.com/), requires the routes, syncs the database, and starts the server listening on the `PORT` designated in the config files.
+  - `server/routes/` contains all of the routes for the express app
+  - `server/controllers/` contains all of the controllers for all of the routes
+  - `server/models/` contains all of the models which the app uses to interact with the `MySQL` database.
+    - Spee.ch uses the [sequelize](http://docs.sequelizejs.com/) ORM for communicating with the database.
+
+- `tests/` holds the end-to-end tests for this project
+  - Spee.ch uses `mocha` with the `chai` assertion library
+  - unit tests are located inside the project in-line with the files being tested and are designated with a `xxxx.test.js` file name
 
 ### Tests
-* This package uses `mocha` with `chai` for testing.
-* Before running tests, create a `testingConfig.js` file in `devConfig/` by copying `testingConfig.example.js`   
-* To run tests:
-  *  To run all tests, including those that require LBC (like publishing), simply run `npm test`
-  *  To run only tests that do not require LBC, run `npm run test:no-lbc`
+
+- This package uses `mocha` with `chai` for testing.
+- Before running tests, create a `testingConfig.js` file in `devConfig/` by copying `testingConfig.example.js`
+- To run tests:
+  - To run all tests, including those that require LBC (like publishing), simply run `npm test`
+  - To run only tests that do not require LBC, run `npm run test:no-lbc`
 
 ### URL formats
-Spee.ch has a few types of URL formats that return different assets from the LBRY network.  Below is a list of all possible URLs for the content on spee.ch. You can learn more about LBRY URLs [here](https://lbry.tech/resources/uri).
 
-* retrieve the controlling `LBRY` claim:
-  * https://spee.ch/`claim`
-  * https://spee.ch/`claim`.`ext` (serve)
-* retrieve a specific `LBRY` claim:
-  * https://spee.ch/`claim_id`/`claim`
-  * https://spee.ch/`claim_id`/`claim`.`ext` (serve)
-* retrieve all contents for the controlling `LBRY` channel
-  * https://spee.ch/`@channel`
-* a specific `LBRY` channel
-  * https://spee.ch/`@channel`:`channel_id`
-* retrieve a specific claim within the controlling `LBRY` channel
-  * https://spee.ch/`@channel`/`claim`
-  * https://spee.ch/`@channel`/`claim`.`ext` (serve)
-* retrieve a specific claim within a specific `LBRY` channel
-  * https://spee.ch/`@channel`:`channel_id`/`claim`
-  * https://spee.ch/`@channel`:`channel_id`/`claim`.`ext` (serve)
+Spee.ch has a few types of URL formats that return different assets from the LBRY network. Below is a list of all possible URLs for the content on spee.ch. You can learn more about LBRY URLs [here](https://lbry.tech/resources/uri).
+
+- retrieve the controlling `LBRY` claim:
+  - https://spee.ch/`claim`
+  - https://spee.ch/`claim`.`ext` (serve)
+- retrieve a specific `LBRY` claim:
+  - https://spee.ch/`claim_id`/`claim`
+  - https://spee.ch/`claim_id`/`claim`.`ext` (serve)
+- retrieve all contents for the controlling `LBRY` channel
+  - https://spee.ch/`@channel`
+- a specific `LBRY` channel
+  - https://spee.ch/`@channel`:`channel_id`
+- retrieve a specific claim within the controlling `LBRY` channel
+  - https://spee.ch/`@channel`/`claim`
+  - https://spee.ch/`@channel`/`claim`.`ext` (serve)
+- retrieve a specific claim within a specific `LBRY` channel
+  - https://spee.ch/`@channel`:`channel_id`/`claim`
+  - https://spee.ch/`@channel`:`channel_id`/`claim`.`ext` (serve)
 
 ### Dependencies
 
 Spee.ch depends on two other lbry technologies:
-  * [chainquery](https://github.com/lbryio/chainquery) - a normalized database of the blockchain data.  We've provided credentials to use a public chainquery service. You can also install it on your own server to avoid being affected by the commons.
-  * [lbrynet](https://github.com/lbryio/lbry) - a daemon that handles your wallet and transactions.
+
+- [chainquery](https://github.com/lbryio/chainquery) - a normalized database of the blockchain data. We've provided credentials to use a public chainquery service. You can also install it on your own server to avoid being affected by the commons.
+- [lbrynet](https://github.com/lbryio/lbry) - a daemon that handles your wallet and transactions.
 
 ### Bugs
+
 If you find a bug or experience a problem, please report your issue here on GitHub and find us in the lbry discord!
 
 ## License

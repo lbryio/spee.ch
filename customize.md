@@ -31,7 +31,11 @@ function Logo () {
 export default Logo;
 ```
 
-Restart the server, and you should see your site with a new Logo in the top left corner!
+Rebuild and restart the server, and you should see your site with a new Logo in the top left corner!
+```
+$ npm run build
+```
+Then
 ```
 $ npm run start
 ```

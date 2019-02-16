@@ -8,7 +8,7 @@ const handleLbrynetResponse = require('./utils/handleLbrynetResponse.js');
 const { publishing } = require('@config/siteConfig');
 
 module.exports = {
-  publishClaim (publishParams) {
+  publishClaim(publishParams) {
     logger.debug(`lbryApi >> Publishing claim to "${publishParams.name}"`);
     const gaStartTime = Date.now();
     return new Promise((resolve, reject) => {
@@ -18,7 +18,13 @@ module.exports = {
           params: publishParams,
         })
         .then(response => {
-          sendGATimingEvent('lbrynet', 'publish', chooseGaLbrynetPublishLabel(publishParams), gaStartTime, Date.now());
+          sendGATimingEvent(
+            'lbrynet',
+            'publish',
+            chooseGaLbrynetPublishLabel(publishParams),
+            gaStartTime,
+            Date.now()
+          );
           handleLbrynetResponse(response, resolve, reject);
         })
         .catch(error => {
@@ -26,7 +32,7 @@ module.exports = {
         });
     });
   },
-  getClaim (uri) {
+  getClaim(uri) {
     logger.debug(`lbryApi >> Getting Claim for "${uri}"`);
     const gaStartTime = Date.now();
     return new Promise((resolve, reject) => {
@@ -47,7 +53,7 @@ module.exports = {
         });
     });
   },
-  async abandonClaim ({claimId}) {
+  async abandonClaim({ claimId }) {
     logger.debug(`lbryApi >> Abandon claim "${claimId}"`);
     const gaStartTime = Date.now();
     try {
@@ -62,7 +68,7 @@ module.exports = {
       return error;
     }
   },
-  getClaimList (claimName) {
+  getClaimList(claimName) {
     logger.debug(`lbryApi >> Getting claim_list for "${claimName}"`);
     const gaStartTime = Date.now();
     return new Promise((resolve, reject) => {
@@ -80,7 +86,7 @@ module.exports = {
         });
     });
   },
-  resolveUri (uri) {
+  resolveUri(uri) {
     logger.debug(`lbryApi >> Resolving URI for "${uri}"`);
     const gaStartTime = Date.now();
     return new Promise((resolve, reject) => {
@@ -97,9 +103,11 @@ module.exports = {
             db.Claim.findOne({ where: { claimId: uri.split('#')[1] } })
               .then(() => reject('This claim has not yet been confirmed on the LBRY blockchain'))
               .catch(() => reject(`Claim ${uri} does not exist`));
-          } else if (data.result[uri].error) {  // check for errors
+          } else if (data.result[uri].error) {
+            // check for errors
             reject(data.result[uri].error);
-          } else {  // if no errors, resolve
+          } else {
+            // if no errors, resolve
             resolve(data.result[uri]);
           }
         })
@@ -108,7 +116,7 @@ module.exports = {
         });
     });
   },
-  getDownloadDirectory () {
+  getDownloadDirectory() {
     logger.debug('lbryApi >> Retrieving the download directory path from lbry daemon...');
     const gaStartTime = Date.now();
     return new Promise((resolve, reject) => {
@@ -117,11 +125,19 @@ module.exports = {
           method: 'settings_get',
         })
         .then(({ data }) => {
-          sendGATimingEvent('lbrynet', 'getDownloadDirectory', 'SETTINGS_GET', gaStartTime, Date.now());
+          sendGATimingEvent(
+            'lbrynet',
+            'getDownloadDirectory',
+            'SETTINGS_GET',
+            gaStartTime,
+            Date.now()
+          );
           if (data.result) {
             resolve(data.result.download_directory);
           } else {
-            return new Error('Successfully connected to lbry daemon, but unable to retrieve the download directory.');
+            return new Error(
+              'Successfully connected to lbry daemon, but unable to retrieve the download directory.'
+            );
           }
         })
         .catch(error => {
@@ -130,7 +146,7 @@ module.exports = {
         });
     });
   },
-  createChannel (name) {
+  createChannel(name) {
     logger.debug(`lbryApi >> Creating channel for ${name}...`);
     const gaStartTime = Date.now();
     return new Promise((resolve, reject) => {
@@ -139,7 +155,7 @@ module.exports = {
           method: 'channel_new',
           params: {
             channel_name: name,
-            amount      : publishing.channelClaimBidAmount,
+            amount: publishing.channelClaimBidAmount,
           },
         })
         .then(response => {
@@ -151,15 +167,21 @@ module.exports = {
         });
     });
   },
-  getWalletBalance () {
+  getAccountBalance() {
     const gaStartTime = Date.now();
     return new Promise((resolve, reject) => {
       axios
         .post(lbrynetUri, {
-          method: 'wallet_balance',
+          method: 'account_balance',
         })
         .then(response => {
-          sendGATimingEvent('lbrynet', 'getWalletBalance', 'SETTINGS_GET', gaStartTime, Date.now());
+          sendGATimingEvent(
+            'lbrynet',
+            'getAccountBalance',
+            'SETTINGS_GET',
+            gaStartTime,
+            Date.now()
+          );
           handleLbrynetResponse(response, resolve, reject);
         })
         .catch(error => {

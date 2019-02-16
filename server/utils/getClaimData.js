@@ -53,6 +53,7 @@ module.exports = async (data, chName = null, chShortId = null) => {
     claimId: dataVals.claim_id || data.claimId,
     fileExt: fileExt,
     description: dataVals.description,
+    nsfw: dataVals.is_nsfw,
     thumbnail: dataVals.thumbnail_url || data.thumbnail || thumbnail,
     outpoint,
     host,
