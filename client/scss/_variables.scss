@@ -1,7 +1,7 @@
 //backgrounds
 $base-color: white; //default white
 $card-color: white; //default white
-$chrome-color: lightgray; //default white (navbar)
+$chrome-color: white; //default white (navbar)
 $blockquote-background: #EEEEFF;
 $background-color: $base-color;
 
@@ -19,7 +19,7 @@ $blockquote-text: $text-color;
 $grey: #9095A5;
 $help-color: $grey;
 $subtle-border-color: #DDD;
-$highlight-border-color: #333;
+$highlight-border-color: #777;
 $shadow-color: rgba(169, 173, 186, 0.2);
 $subtle-border: 1px dashed $subtle-border-color;
 $grey-border: $subtle-border-color; //factor this out for all customers
