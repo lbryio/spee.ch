@@ -1,13 +1,13 @@
 import React from 'react';
 
-import { validateFile } from '../../utils/file';
 import Memeify from '@components/Memeify';
 import DropzonePreviewImage from '@components/DropzonePreviewImage';
 import DropzoneDropItDisplay from '@components/DropzoneDropItDisplay';
 import DropzoneInstructionsDisplay from '@components/DropzoneInstructionsDisplay';
+import validateFileForPublish from '@globalutils/validateFileForPublish';
 
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 
 const isFacebook = (() => {
@@ -29,7 +29,7 @@ class Dropzone extends React.Component {
       memeify    : false,
     };
 
-    if(props.file) {
+    if (props.file) {
       // No side effects allowed with `getDerivedStateFromProps`, so
       // we must use `componentDidUpdate` and `constructor` routines.
       // Note: `FileReader` has an `onloadend` side-effect
@@ -133,7 +133,7 @@ class Dropzone extends React.Component {
   chooseFile (file) {
     if (file) {
       try {
-        validateFile(file); // validate the file's name, type, and size
+        validateFileForPublish(file); // validate the file's name, type, and size
       } catch (error) {
         return this.props.setFileError(error.message);
       }

@@ -5,8 +5,9 @@ class PublishPreview extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
-      imgSource       : '',
-      defaultThumbnail: '/assets/img/video_thumb_default.png',
+      imgSource            : '',
+      defaultVideoThumbnail: '/assets/img/video_thumb_default.png',
+      defaultThumbnail     : '/assets/img/Speech_Logo_Main@OG-02.jpg',
     };
   }
   componentDidMount () {
@@ -37,12 +38,13 @@ class PublishPreview extends React.Component {
     };
   }
   setPreviewImageSource (file) {
-    if (file.type !== 'video/mp4') {
+    if (this.props.thumbnail) {
+      this.setPreviewImageSourceFromFile(this.props.thumbnail);
+    } else if (file.type.substr(0, file.type.indexOf('/')) === 'image'){
       this.setPreviewImageSourceFromFile(file);
+    } else if (file.type === 'video'){
+      this.setState({imgSource: this.state.defaultVideoThumbnail});
     } else {
-      if (this.props.thumbnail) {
-        this.setPreviewImageSourceFromFile(this.props.thumbnail);
-      }
       this.setState({imgSource: this.state.defaultThumbnail});
     }
   }

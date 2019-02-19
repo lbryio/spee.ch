@@ -5,7 +5,7 @@
 }
 
 .asset-document {
-  width: 100%;
+  max-width: 1000px;
   padding: $thin-padding;
   height: fit-content;
   box-sizing: border-box;
@@ -16,15 +16,17 @@
 }
 
 .asset-title {
+  max-width: 1000px;
   padding-bottom: $thin-padding;
   text-align: center;
 }
 
 .asset-image, .asset-video {
-  max-height: 95vh;
-  max-width: 95vw;
+  max-height: 75vh;
+  max-width: 85vw;
   object-fit: contain;
   object-position: center;
+  background: black;
 }
 
 /*below must die if this is intended to be shareable component! it also probably doesn't need to be*/
@@ -111,12 +113,15 @@
   margin: $primary-padding;
   width: 100%;
 
+  @media (min-width: $break-point-tablet) {
+    padding: $primary-padding;
+  }
   @media (max-width: $break-point-tablet) {
-    margin: $primary-padding $secondary-padding;
+    padding: $tertiary-padding;
   }
 
   @media (max-width: $break-point-mobile) {
-    margin: $primary-padding 0;
+    margin: $tertiary-padding;
   }
 }
 
@@ -125,4 +130,5 @@
   padding-top: $primary-padding;
   margin-top: $primary-padding;
   color: $grey;
+  text-align: center;
 }

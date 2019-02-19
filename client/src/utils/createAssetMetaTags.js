@@ -47,8 +47,6 @@ const createAssetMetaTags = asset => {
   const ogThumbnailContentType = determineContentTypeFromExtension(claimData.thumbnail);
   const ogThumbnail = claimData.thumbnail || defaultThumbnail;
 
-  console.log('asset.claimData', asset.claimData);
-
   // {property: 'og:title'] = ogTitle},
   const metaTags = {
     'og:title': ogTitle,
