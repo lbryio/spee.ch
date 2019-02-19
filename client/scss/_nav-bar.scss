@@ -1,14 +1,23 @@
 .nav-bar {
   box-sizing: border-box;
   padding: $thin-padding $primary-padding;
-  background: $base-color;
+  background: $chrome-color;
   flex: 0 1 auto;
   width: 100%;
   border-bottom: $subtle-border;
+  color: $primary-color;
 
   @media (max-width: $break-point-mobile) {
     margin-left: 15px;
     margin-right: 15px;
+  }
+  input {
+    background: $chrome-color;
+
+  }
+  select {
+    background: $chrome-color;
+    color: $text-color;
   }
 }
 
