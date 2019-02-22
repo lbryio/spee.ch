@@ -181,7 +181,7 @@ tmux allows you to run multiple things in different sessions. Useful for manuall
 
 ## Customize SDK settings
 
-  These setting will prevent you and your users from spending your server's LBC on paid content. Full documentation is [here](https://lbry.tech/resources/daemon-settings).
+  These settings will prevent you and your users from spending your server's LBC on paid content. Full documentation is [here](https://lbry.tech/resources/daemon-settings).
   
   ~$
   `mkdir .lbrynet`
