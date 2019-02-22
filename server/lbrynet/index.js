@@ -93,7 +93,7 @@ module.exports = {
       axios
         .post(lbrynetUri, {
           method: 'resolve',
-          params: { uri },
+          params: { urls: uri },
         })
         .then(({ data }) => {
           sendGATimingEvent('lbrynet', 'resolveUri', 'RESOLVE', gaStartTime, Date.now());

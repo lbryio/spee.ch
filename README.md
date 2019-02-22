@@ -118,7 +118,7 @@ Instructions are coming at [lbry-docker] to install your own chainquery instance
 ## Settings
 
 There are a number of settings available for customizing the behavior of your installation.  
-_INSERT LINK TO SETTINGS.MD_
+[Here](https://github.com/lbryio/spee.ch/blob/master/docs/settings.md) is some documentation on them.
 
 ## API
 

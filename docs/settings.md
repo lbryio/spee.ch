@@ -39,10 +39,18 @@ PUBLISHING:
     "publishingChannelWhitelist": [],
     "channelClaimBidAmount": "0.1", - When creating a channel, how much you deposit to control the name
     "fileClaimBidAmount": "0.01", - When publishing content, how much you deposit to control the name
-    "maxSizeImage": 10000000, - You may not want people uploading 50GB files. 1000000 = 1MB
-    "maxSizeGif": 50000000,
-    "maxSizeVideo": 50000000
-
+    "fileSizeLimits": {
+      "image": 50000000,
+      "video": 50000000,
+      "audio": 50000000,
+      "text": 10000000,
+      "model": 50000000,
+      "application": 500000000,
+      "customByContentType": {
+        "application/octet-stream": 50000000
+      }
+    }
+    
 SERVING:
 
     "markdownSettings": {
@@ -80,9 +88,6 @@ SERVING:
         "html", - potentially DANGEROUS, intended for `serveOnlyApproved = true` environments, includes iframes, divs.
         "parsedHtml"
       ],
-      "disallowedTypesMain": [], - not implemented
-      "disallowedTypesDescriptions": ["image", "html"], - not implemented
-      "disallowedTypesExample": ["image", "html"] - not implemented
     },
     "customFileExtensions": { - suggest a file extension for experimental content types you may be publishing
       "application/example-type": "example"

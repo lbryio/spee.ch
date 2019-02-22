@@ -163,7 +163,7 @@ Log in as username@domainname or username@ip_address
 
   `mysql -u root -p` and then entering your_mysql_password should give you the mysql> shell
 
-# 5 Get Lbrynet Daemon
+# 5 Get Lbrynet SDK Daemon
 
 ## Start tmux
 
@@ -174,11 +174,34 @@ tmux allows you to run multiple things in different sessions. Useful for manuall
   * `tmux`, reenters tmux, then
     * `Ctrl+b`, `(` goes back to through sessions
 
-## Get the daemon
+## Get the SDK
   `wget -O ~/latest_daemon.zip https://lbry.io/get/lbrynet.linux.zip`
 
   `unzip -o -u ~/latest_daemon.zip`
 
+## Customize SDK settings
+
+  These settings will prevent you and your users from spending your server's LBC on paid content. Full documentation is [here](https://lbry.tech/resources/daemon-settings).
+  
+  ~$
+  `mkdir .lbrynet`
+  
+  `cd .lbrynet`
+  
+  `nano daemon_settings.yml`
+  
+   copy and paste in the following code (Ctrl+Shift V)
+
+  ```
+  run_reflector_server: false
+  disable_max_key_fee: false
+  max_key_fee: {amount: 0, currency: LBC}
+  use_upnp: false
+  auto_re_reflect_interval: 0
+ ```
+ 
+ `CONTROL+O` then `CONTROL+X` to save and exit
+ 
 ## Start the daemon
    `./lbrynet start`
 

@@ -46,10 +46,7 @@
       "customByContentType": {
         "application/octet-stream": 50000000
       }
-    },
-    "maxSizeImage": 10000000,
-    "maxSizeGif": 50000000,
-    "maxSizeVideo": 50000000
+    }
   },
   "serving": {
     "markdownSettings": {
@@ -92,18 +89,18 @@
       "disallowedTypesExample": ["image", "html"]
     },
     "customFileExtensions": {
-      "application/x-troff-man": ".man",
-      "application/x-troff-me": ".me",
-      "application/x-mif": ".mif",
-      "application/x-troff-ms": ".ms",
-      "application/x-troff": ".roff",
-      "application/x-python-code": ".pyc",
-      "text/x-python": ".py",
-      "application/x-pn-realaudio": ".ram",
-      "application/x-sgml": ".sgm",
-      "model/stl": ".stl",
-      "image/pict": ".pct",
-      "text/xul": ".xul",
+      "application/x-troff-man": "man",
+      "application/x-troff-me": "me",
+      "application/x-mif": "mif",
+      "application/x-troff-ms": "ms",
+      "application/x-troff": "roff",
+      "application/x-python-code": "pyc",
+      "text/x-python": "py",
+      "application/x-pn-realaudio": "ram",
+      "application/x-sgml": "sgm",
+      "model/stl": "stl",
+      "image/pict": "pct",
+      "text/xul": "xul",
       "text/x-go": "go"
     }
   },
