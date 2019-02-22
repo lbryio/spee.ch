@@ -140,7 +140,7 @@ class AssetInfo extends React.Component {
           <a
             className={'link--primary'}
             href={`${assetCanonicalUrl}.${fileExt}`}
-            download={name}
+            download={`${name}.${fileExt}`}
           >
             Download
           </a>
