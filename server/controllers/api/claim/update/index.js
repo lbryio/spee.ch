@@ -19,10 +19,11 @@ const createCanonicalLink = require('@globalutils/createCanonicalLink');
   route to update a claim through the daemon
 */
 
-const updateMetadata = ({ nsfw, license, title, description }) => {
+const updateMetadata = ({ nsfw, license, licenseUrl, title, description }) => {
   const update = {};
   if (nsfw) update['nsfw'] = nsfw;
   if (license) update['license'] = license;
+  if (licenseUrl) update['license_url'] = licenseUrl;
   if (title) update['title'] = title;
   if (description) update['description'] = description;
   return update;
@@ -65,6 +66,7 @@ const claimUpdate = ({ body, files, headers, ip, originalUrl, user, tor }, res) 
     thumbnail,
     fileExtension,
     license,
+    licenseUrl,
     name,
     nsfw,
     thumbnailFileName,
@@ -127,10 +129,11 @@ const claimUpdate = ({ body, files, headers, ip, originalUrl, user, tor }, res) 
           description: claimRecord.description,
           nsfw: claimRecord.nsfw,
           license: claimRecord.license,
+          license_url: claimRecord.license_url,
           language: 'en',
           author: details.title,
         },
-        updateMetadata({ title, description, nsfw, license })
+        updateMetadata({ title, description, nsfw, license, licenseUrl })
       );
       const publishParams = {
         name,
@@ -167,10 +170,12 @@ const claimUpdate = ({ body, files, headers, ip, originalUrl, user, tor }, res) 
       }
 
       const fp = files && files.file && files.file.path ? files.file.path : undefined;
+      logger.info(`before updatepublish`);
       return publish(publishParams, fileName, fileType, fp);
     })
     .then(result => {
       publishResult = result;
+      logger.info(`after updatepublish then`, result);
 
       if (channelName) {
         return chainquery.claim.queries.getShortClaimIdFromLongClaimId(

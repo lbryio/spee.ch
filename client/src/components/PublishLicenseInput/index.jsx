@@ -1,12 +1,13 @@
 import React from 'react';
 import RowLabeled from '@components/RowLabeled';
 import Label from '@components/Label';
+import { LICENSES } from '../../constants/publish_license_urls';
 
 const PublishLicenseInput = ({ handleSelect }) => {
   return (
     <RowLabeled
       label={
-        <Label value={'License:'} />
+        <Label value={'License'} />
       }
       content={
         <select
@@ -16,8 +17,11 @@ const PublishLicenseInput = ({ handleSelect }) => {
           onChange={handleSelect}
         >
           <option value=''>Unspecified</option>
-          <option value='Public Domain'>Public Domain</option>
-          <option value='Creative Commons'>Creative Commons</option>
+          {
+            LICENSES.map(function(item, i){
+              return <option key={item + 'license key'} value={item}>{item}</option>;
+            })
+          }
         </select>
       }
     />

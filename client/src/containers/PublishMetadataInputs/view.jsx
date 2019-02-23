@@ -1,9 +1,9 @@
 import React from 'react';
 import PublishDescriptionInput from '@components/PublishDescriptionInput';
 import PublishLicenseInput from '@components/PublishLicenseInput';
+import PublishLicenseUrlInput from '@components/PublishLicenseUrlInput';
 import PublishNsfwInput from '@components/PublishNsfwInput';
 import ButtonSecondary from '@components/ButtonSecondary';
-import Row from '@components/Row';
 
 class PublishMetadataInputs extends React.Component {
   constructor (props) {
@@ -25,12 +25,15 @@ class PublishMetadataInputs extends React.Component {
     const name = event.target.name;
     const selectedOption = event.target.selectedOptions[0].value;
     this.props.onMetadataChange(name, selectedOption);
+    if (name === 'license' && selectedOption !== 'Creative Commons'){
+      this.props.onMetadataChange('licenseUrl', '');
+    }
   }
   render () {
     const { showMetadataInputs, description, isUpdate, nsfw } = this.props;
     return (
       <div>
-  {(showMetadataInputs || isUpdate) && (
+        {(showMetadataInputs || isUpdate) && (
           <React.Fragment>
             <PublishDescriptionInput
               description={this.props.description}
@@ -39,6 +42,11 @@ class PublishMetadataInputs extends React.Component {
             <PublishLicenseInput
               handleSelect={this.handleSelect}
             />
+            { (this.props.license === 'Creative Commons') && (
+              <PublishLicenseUrlInput
+                handleSelect={this.handleSelect}
+              />
+            )}
             <PublishNsfwInput
               nsfw={this.props.nsfw}
               handleInput={this.handleInput}

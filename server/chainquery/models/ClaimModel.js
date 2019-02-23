@@ -136,6 +136,14 @@ export default (sequelize, { BOOLEAN, DATE, DECIMAL, ENUM, INTEGER, STRING, TEXT
         type: STRING,
         set() {},
       },
+      license: {
+        type: STRING,
+        set() {},
+      },
+      license_url: {
+        type: STRING,
+        set() {},
+      },
     },
     {
       freezeTableName: true,

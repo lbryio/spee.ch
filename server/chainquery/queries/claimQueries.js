@@ -51,7 +51,7 @@ export default (db, table, sequelize) => ({
   },
 
   getShortClaimIdFromLongClaimId: async (claimId, claimName, pendingClaim) => {
-    logger.debug(`claim.getShortClaimIdFromLongClaimId for ${claimName}#${claimId}`);
+    logger.info(`claim.getShortClaimIdFromLongClaimId for ${claimName}#${claimId}`);
     return await table
       .findAll({
         where: { name: claimName },

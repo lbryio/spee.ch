@@ -1,8 +1,10 @@
 const chainquery = require('chainquery').default;
+const logger = require('winston');
 const getClaimData = require('server/utils/getClaimData');
 const { returnPaginatedChannelClaims } = require('./channelPagination.js');
 
 const getChannelClaims = async (channelName, channelLongId, page) => {
+  logger.info(`getChannelClaims: ${channelName}, ${channelLongId}, ${page}`);
   let channelShortId = await chainquery.claim.queries.getShortClaimIdFromLongClaimId(
     channelLongId,
     channelName

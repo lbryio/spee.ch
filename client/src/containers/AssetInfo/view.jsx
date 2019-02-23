@@ -18,7 +18,7 @@ class AssetInfo extends React.Component {
   render () {
     const { editable, asset } = this.props;
     const { claimViews, claimData } = asset;
-    const { channelName, claimId, channelShortId, description, name, fileExt, contentType, host, certificateId } = claimData;
+    const { channelName, claimId, channelShortId, description, name, fileExt, contentType, host, certificateId, license, licenseUrl, transactionTime } = claimData;
 
     const canonicalUrl = createCanonicalLink({ asset: { ...claimData, shortId: asset.shortId }});
     const assetCanonicalUrl = `${host}${canonicalUrl}`;
@@ -71,19 +71,36 @@ class AssetInfo extends React.Component {
             }
           />
         )}
-        {claimViews ? (
-          <RowLabeled
-            label={
-              <Label value={'Views'} />
-            }
-            content={
-              <span className='text'>
-                {claimViews}
-              </span>
-            }
-          />
-        ) : null}
+        <SpaceBetween>
+          {license && (
+            <RowLabeled
+              label={
+                <Label value={'License'} />
+              }
+              content={
+                <div className='text'>
+                  {licenseUrl ? (
+                  <a className={'link--primary'} href={licenseUrl} target={'_blank'}>{license}</a>
+                    ) : (
+                    <span>{license}</span> )}
+                </div>
+              }
+            />
+          )}
 
+          {claimViews ? (
+            <RowLabeled
+              label={
+                <Label value={'Views'} />
+              }
+              content={
+                <span className='text'>
+                  {claimViews}
+                </span>
+              }
+            />
+          ) : null}
+        </SpaceBetween>
         <RowLabeled
           label={
             <Label value={'Share'} />
