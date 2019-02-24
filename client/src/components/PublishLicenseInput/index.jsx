@@ -1,9 +1,9 @@
 import React from 'react';
 import RowLabeled from '@components/RowLabeled';
 import Label from '@components/Label';
-import { LICENSES } from '../../constants/publish_license_urls';
+import { LICENSES } from '@clientConstants/publish_license_urls';
 
-const PublishLicenseInput = ({ handleSelect }) => {
+const PublishLicenseInput = ({ handleSelect, license }) => {
   return (
     <RowLabeled
       label={
@@ -14,6 +14,7 @@ const PublishLicenseInput = ({ handleSelect }) => {
           type='text'
           name='license'
           id='publish-license'
+          value={license}
           onChange={handleSelect}
         >
           <option value=''>Unspecified</option>

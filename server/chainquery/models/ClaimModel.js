@@ -6,7 +6,7 @@ const {
 
 const getterMethods = {
   generated_extension() {
-    logger.info('trying to generate extension', this.content_type);
+    logger.debug('trying to generate extension', this.content_type);
     if (customFileExtensions.hasOwnProperty(this.content_type)) {
       return customFileExtensions[this.content_type];
     } else {

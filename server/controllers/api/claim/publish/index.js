@@ -5,7 +5,7 @@ const {
   publishing: { disabled, disabledMessage },
 } = require('@config/siteConfig');
 
-const { sendGATimingEvent } = require('../../../../utils/googleAnalytics.js');
+const { sendGATimingEvent } = require('server/utils/googleAnalytics.js');
 const isApprovedChannel = require('@globalutils/isApprovedChannel');
 const {
   publishing: { publishOnlyApproved, approvedChannels },

@@ -129,7 +129,7 @@ const claimUpdate = ({ body, files, headers, ip, originalUrl, user, tor }, res) 
           description: claimRecord.description,
           nsfw: claimRecord.nsfw,
           license: claimRecord.license,
-          license_url: claimRecord.license_url,
+          licenseUrl: claimRecord.license_url,
           language: 'en',
           author: details.title,
         },
@@ -170,12 +170,10 @@ const claimUpdate = ({ body, files, headers, ip, originalUrl, user, tor }, res) 
       }
 
       const fp = files && files.file && files.file.path ? files.file.path : undefined;
-      logger.info(`before updatepublish`);
       return publish(publishParams, fileName, fileType, fp);
     })
     .then(result => {
       publishResult = result;
-      logger.info(`after updatepublish then`, result);
 
       if (channelName) {
         return chainquery.claim.queries.getShortClaimIdFromLongClaimId(

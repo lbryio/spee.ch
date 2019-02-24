@@ -1,5 +1,6 @@
 const logger = require('winston');
 const transformImage = require('./transformImage');
+
 const serveFile = async ({ filePath, fileType }, res, originalUrl) => {
   const queryObject = {};
   // TODO: replace quick/dirty try catch with better practice

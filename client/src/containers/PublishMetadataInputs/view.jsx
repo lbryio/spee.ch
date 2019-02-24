@@ -30,25 +30,27 @@ class PublishMetadataInputs extends React.Component {
     }
   }
   render () {
-    const { showMetadataInputs, description, isUpdate, nsfw } = this.props;
+    const { showMetadataInputs, description, isUpdate, nsfw, license, licenseUrl } = this.props;
     return (
       <div>
         {(showMetadataInputs || isUpdate) && (
           <React.Fragment>
             <PublishDescriptionInput
-              description={this.props.description}
+              description={description}
               handleInput={this.handleInput}
             />
             <PublishLicenseInput
               handleSelect={this.handleSelect}
+              license={license}
             />
             { (this.props.license === 'Creative Commons') && (
               <PublishLicenseUrlInput
                 handleSelect={this.handleSelect}
+                licenseUrl={licenseUrl}
               />
             )}
             <PublishNsfwInput
-              nsfw={this.props.nsfw}
+              nsfw={nsfw}
               handleInput={this.handleInput}
             />
           </React.Fragment>

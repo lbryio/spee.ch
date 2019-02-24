@@ -18,10 +18,10 @@ class ChannelSelect extends React.Component {
   componentWillMount () {
     const { loggedInChannelName, onChannelSelect, publishOnlyApproved, onPublishInChannelChange } = this.props;
     if (loggedInChannelName) {
-      this.props.onPublishInChannelChange(true);
+      onChannelSelect(loggedInChannelName);
     }
     if (publishOnlyApproved) {
-      this.props.onPublishInChannelChange(true);
+      onPublishInChannelChange(true);
     }
   }
   toggleAnonymousPublish (event) {
@@ -37,10 +37,7 @@ class ChannelSelect extends React.Component {
     this.props.onChannelSelect(selectedOption);
   }
   render () {
-    let { publishInChannel, channelError, selectedChannel, loggedInChannelName, publishOnlyApproved } = this.props;
-    if (loggedInChannelName) {
-      publishInChannel = 'checked';
-    }
+    const { publishInChannel, channelError, selectedChannel, loggedInChannelName, publishOnlyApproved } = this.props;
     if (publishOnlyApproved) {
       return (
         <React.Fragment>
