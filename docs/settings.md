@@ -26,7 +26,6 @@ PUBLISHING:
 
     "primaryClaimAddress": null, - generally supplied by your lbrynet sdk
     "uploadDirectory": "/home/lbry/Uploads", - lbrynet sdk will know your uploads are here
-    "lbrynetHome": "/home/lbry",
     "thumbnailChannel": null, - when publishing non-image content, thumbnails will go here.
     "thumbnailChannelId": null,
     "additionalClaimAddresses": [],
@@ -50,48 +49,52 @@ PUBLISHING:
         "application/octet-stream": 50000000
       }
     }
-    
-SERVING:
 
-    "markdownSettings": {
-      "skipHtmlMain": true, - false: render html, in a somewhat unpredictable way~
-      "escapeHtmlMain": true, - true: rather than render html, escape it and print it visibly
-      "skipHtmlDescriptions": true, - as above, for descriptions
-      "escapeHtmlDescriptions": true, - as above, for descriptions
-      "allowedTypesMain": [], - markdown rendered as main content
-      "allowedTypesDescriptions": [], - markdown rendered in description in content details
-      "allowedTypesExample": [ - here are examples of allowed types
-        "see react-markdown docs", `https://github.com/rexxars/react-markdown`
-        "root",
-        "text",
-        "break",
-        "paragraph",
-        "emphasis",
-        "strong",
-        "thematicBreak",
-        "blockquote",
-        "delete",
-        "link",
-        "image", - you may not have a lot of control over how these are rendered
-        "linkReference",
-        "imageReference",
-        "table",
-        "tableHead",
-        "tableBody",
-        "tableRow",
-        "tableCell",
-        "list",
-        "listItem",
-        "heading",
-        "inlineCode",
-        "code",
-        "html", - potentially DANGEROUS, intended for `serveOnlyApproved = true` environments, includes iframes, divs.
-        "parsedHtml"
-      ],
-    },
-    "customFileExtensions": { - suggest a file extension for experimental content types you may be publishing
-      "application/example-type": "example"
-    }
+SERVING:
+  
+ "dynamicFileSizing": {
+"enabled": false, - if you choose to allow your instance to serve transform images
+"maxDimension": 2000 - the maximum size you allow transform to scale
+},
+"markdownSettings": {
+"skipHtmlMain": true, - false: render html, in a somewhat unpredictable way~
+"escapeHtmlMain": true, - true: rather than render html, escape it and print it visibly
+"skipHtmlDescriptions": true, - as above, for descriptions
+"escapeHtmlDescriptions": true, - as above, for descriptions
+"allowedTypesMain": [], - markdown rendered as main content
+"allowedTypesDescriptions": [], - markdown rendered in description in content details
+"allowedTypesExample": [ - here are examples of allowed types
+"see react-markdown docs", `https://github.com/rexxars/react-markdown`
+"root",
+"text",
+"break",
+"paragraph",
+"emphasis",
+"strong",
+"thematicBreak",
+"blockquote",
+"delete",
+"link",
+"image", - you may not have a lot of control over how these are rendered
+"linkReference",
+"imageReference",
+"table",
+"tableHead",
+"tableBody",
+"tableRow",
+"tableCell",
+"list",
+"listItem",
+"heading",
+"inlineCode",
+"code",
+"html", - potentially DANGEROUS, intended for `serveOnlyApproved = true` environments, includes iframes, divs.
+"parsedHtml"
+],
+},
+"customFileExtensions": { - suggest a file extension for experimental content types you may be publishing
+"application/example-type": "example"
+}
 
 STARTUP:
 
