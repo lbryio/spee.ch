@@ -1,11 +1,13 @@
 const { getClaim } = require('../../../../lbrynet');
-const { createFileRecordDataAfterGet } = require('../../../../models/utils/createFileRecordData.js');
+const {
+  createFileRecordDataAfterGet,
+} = require('../../../../models/utils/createFileRecordData.js');
 const { handleErrorResponse } = require('../../../utils/errorHandlers.js');
 const getClaimData = require('server/utils/getClaimData');
 const chainquery = require('chainquery').default;
 const db = require('../../../../models');
-const waitOn = require('wait-on');
 const logger = require('winston');
+const awaitFileSize = require('server/utils/awaitFileSize');
 
 /*
 
@@ -36,11 +38,11 @@ const claimGet = async ({ ip, originalUrl, params }, res) => {
     if (!claimData) {
       throw new Error('claim/get: getClaimData failed to get file blobs');
     }
-    await waitOn({
-      resources: [ lbrynetResult.download_path ],
-      timeout  : 10000, // 10 seconds
-      window   : 500,
-    });
+    let fileReady = await awaitFileSize(lbrynetResult.download_path, 2000000, 10000, 250);
+
+    if (fileReady !== 'ready') {
+      throw new Error('claim/get: failed to get file after 10 seconds');
+    }
     const fileData = await createFileRecordDataAfterGet(claimData, lbrynetResult);
     if (!fileData) {
       throw new Error('claim/get: createFileRecordDataAfterGet failed to create file in time');
