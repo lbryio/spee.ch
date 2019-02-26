@@ -47,6 +47,7 @@ For a closed, custom-hosted and branded example, check out https://lbry.theantim
     - `./lbrynet account_balance` gets your balance (initially 0.0)
     - `./lbrynet address_list` gets addresses you can use to recieve LBC
 - [FFmpeg](https://www.ffmpeg.org/download.html)
+- [ImageMagick](https://packages.ubuntu.com/xenial/graphics/imagemagick)
 - Spee.ch (below)
 - pm2 (optional) process manager such as pm2 to run speech server.js
 - http proxy server e.g. caddy, nginx, or traefik, to forward 80/443 to speech port 3000
