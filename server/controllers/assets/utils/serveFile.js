@@ -1,10 +1,12 @@
 const logger = require('winston');
 const transformImage = require('./transformImage');
-const isValidQueryObject = require('../../../utils/isValidQueryObj');
+
+const isValidQueryObject = require('server/utils/isValidQueryObj');
 const {
   serving: { dynamicFileSizing },
 } = require('@config/siteConfig');
 const { enabled: dynamicEnabled } = dynamicFileSizing;
+
 const serveFile = async ({ filePath, fileType }, res, originalUrl) => {
   const queryObject = {};
   // TODO: replace quick/dirty try catch with better practice

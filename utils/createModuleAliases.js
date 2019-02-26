@@ -39,6 +39,9 @@ module.exports = () => {
   moduleAliases['@clientutils'] = resolve(`${DEFAULT_ROOT}/utils`);
   // moduleAliases['@serverutils'] = resolve('server/utils');
 
+  // aliases for constants
+  moduleAliases['@clientConstants'] = resolve(`${DEFAULT_ROOT}/constants`);
+
   // create specific aliases for locally defined components in the following folders
   moduleAliases = addAliasesForCustomComponentFolder('containers', moduleAliases);
   moduleAliases = addAliasesForCustomComponentFolder('components', moduleAliases);
@@ -52,7 +55,6 @@ module.exports = () => {
   moduleAliases['@reducers'] = resolve(`${DEFAULT_ROOT}/reducers`);
   moduleAliases['@sagas'] = resolve(`${DEFAULT_ROOT}/sagas`);
   moduleAliases['@app'] = resolve(`${DEFAULT_ROOT}/app.js`);
-
 
   // return finished aliases
   return moduleAliases;

@@ -1,6 +1,17 @@
 const logger = require('winston');
 const { details, publishing } = require('@config/siteConfig');
-const createPublishParams = (filePath, name, title, description, license, nsfw, thumbnail, channelName, channelClaimId) => {
+const createPublishParams = (
+  filePath,
+  name,
+  title,
+  description,
+  license,
+  licenseUrl,
+  nsfw,
+  thumbnail,
+  channelName,
+  channelClaimId
+) => {
   // provide defaults for title
   if (title === null || title.trim() === '') {
     title = name;
@@ -11,19 +22,24 @@ const createPublishParams = (filePath, name, title, description, license, nsfw, 
   }
   // provide default for license
   if (license === null || license.trim() === '') {
-    license = '';  // default to empty string
+    license = ''; // default to empty string
+  }
+  // provide default for licenseUrl
+  if (licenseUrl === null || licenseUrl.trim() === '') {
+    licenseUrl = ''; // default to empty string
   }
   // create the basic publish params
   const publishParams = {
     name,
     file_path: filePath,
-    bid      : publishing.fileClaimBidAmount,
-    metadata : {
+    bid: publishing.fileClaimBidAmount,
+    metadata: {
       description,
       title,
-      author  : details.title,
+      author: details.title,
       language: 'en',
       license,
+      licenseUrl,
       nsfw,
     },
     claim_address: publishing.primaryClaimAddress,
