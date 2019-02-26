@@ -261,9 +261,11 @@ Spee.ch has a few types of URL formats that return different assets from the LBR
 - retrieve the controlling `LBRY` claim:
   - https://spee.ch/`claim`
   - https://spee.ch/`claim`.`ext` (serve)
+  - https://spee.ch/`claim`.`ext`&`querystring` (serve transformed)
 - retrieve a specific `LBRY` claim:
   - https://spee.ch/`claim_id`/`claim`
   - https://spee.ch/`claim_id`/`claim`.`ext` (serve)
+  - https://spee.ch/`claim_id`/`claim`.`ext`&`querystring` (serve transformed)
 - retrieve all contents for the controlling `LBRY` channel
   - https://spee.ch/`@channel`
 - a specific `LBRY` channel
@@ -271,9 +273,15 @@ Spee.ch has a few types of URL formats that return different assets from the LBR
 - retrieve a specific claim within the controlling `LBRY` channel
   - https://spee.ch/`@channel`/`claim`
   - https://spee.ch/`@channel`/`claim`.`ext` (serve)
+  - https://spee.ch/`@channel`/`claim`.`ext`&`querystring` (serve)
 - retrieve a specific claim within a specific `LBRY` channel
   - https://spee.ch/`@channel`:`channel_id`/`claim`
   - https://spee.ch/`@channel`:`channel_id`/`claim`.`ext` (serve)
+  - https://spee.ch/`@channel`:`channel_id`/`claim`.`ext`&`querystring` (serve)
+- `querystring` can include the following transformation values separated by `&`
+  - h=`number` (defines height)
+  - w=`number` (defines width)
+  - t=`crop` or `stretch` (defines transformation - missing implies constrained proportions)
 
 ### Dependencies
 
