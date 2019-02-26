@@ -12,7 +12,8 @@ import { createPermanentURI } from '@clientutils/createPermanentURI';
 import ReactMarkdown from 'react-markdown';
 
 const { details: { host } } = siteConfig;
-
+const { serving } = siteConfig;
+const { markdownSettings: { escapeHtmlDescriptions, skipHtmlDescriptions, allowedTypesDescriptions } } = serving;
 class AssetInfo extends React.Component {
   render () {
     const { editable, asset } = this.props;
@@ -38,7 +39,17 @@ class AssetInfo extends React.Component {
         { description && (
           <RowLabeled
             label={<Label value={'Description'} />}
-            content={<div className='asset-info__description'><ReactMarkdown className={'markdown-preview'} skipHtml disallowedTypes={['image']} source={description} /></div>}
+            content={
+              <div className='asset-info__description'>
+                <ReactMarkdown
+                  className={'markdown-preview'}
+                  escapeHtml={escapeHtmlDescriptions}
+                  skipHtml={skipHtmlDescriptions}
+                  allowedTypes={allowedTypesDescriptions}
+                  source={description}
+                />
+              </div>
+            }
           />
         )}
         {editable && (
@@ -140,7 +151,7 @@ class AssetInfo extends React.Component {
           <a
             className={'link--primary'}
             href={`${assetCanonicalUrl}.${fileExt}`}
-            download={name}
+            download={`${name}.${fileExt}`}
           >
             Download
           </a>

@@ -1,5 +1,6 @@
 const path = require('path');
 const validateFileTypeAndSize = require('./validateFileTypeAndSize.js');
+const validateFileForPublish = require('./validateFileForPublish.js');
 
 const parsePublishApiRequestFiles = ({ file, thumbnail }, isUpdate) => {
   // make sure a file was provided
@@ -40,7 +41,7 @@ const parsePublishApiRequestFiles = ({ file, thumbnail }, isUpdate) => {
   }
 
   // validate the file
-  if (file) validateFileTypeAndSize(file);
+  if (file) validateFileForPublish(file);
   // return results
   const obj = {
     fileName: file.name,
