@@ -23,7 +23,7 @@ const updateMetadata = ({ nsfw, license, licenseUrl, title, description }) => {
   const update = {};
   if (nsfw) update['nsfw'] = nsfw;
   if (license) update['license'] = license;
-  if (licenseUrl) update['license_url'] = licenseUrl;
+  if (licenseUrl) update['licenseUrl'] = licenseUrl;
   if (title) update['title'] = title;
   if (description) update['description'] = description;
   return update;
@@ -81,7 +81,15 @@ const claimUpdate = ({ body, files, headers, ip, originalUrl, user, tor }, res) 
   gaStartTime = Date.now();
 
   try {
-    ({ name, nsfw, license, title, description, thumbnail } = parsePublishApiRequestBody(body));
+    ({
+      name,
+      nsfw,
+      license,
+      licenseUrl,
+      title,
+      description,
+      thumbnail,
+    } = parsePublishApiRequestBody(body));
     ({
       fileName,
       filePath,
