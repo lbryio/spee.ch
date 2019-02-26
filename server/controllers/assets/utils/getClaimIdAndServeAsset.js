@@ -15,9 +15,20 @@ const BLOCKED_CLAIM = 'BLOCKED_CLAIM';
 const NO_FILE = 'NO_FILE';
 const CONTENT_UNAVAILABLE = 'CONTENT_UNAVAILABLE';
 
-const { publishing: { serveOnlyApproved, approvedChannels } } = require('@config/siteConfig');
+const {
+  publishing: { serveOnlyApproved, approvedChannels },
+} = require('@config/siteConfig');
 
-const getClaimIdAndServeAsset = (channelName, channelClaimId, claimName, claimId, originalUrl, ip, res, headers) => {
+const getClaimIdAndServeAsset = (
+  channelName,
+  channelClaimId,
+  claimName,
+  claimId,
+  originalUrl,
+  ip,
+  res,
+  headers
+) => {
   getClaimId(channelName, channelClaimId, claimName, claimId)
     .then(fullClaimId => {
       claimId = fullClaimId;
@@ -39,19 +50,27 @@ const getClaimIdAndServeAsset = (channelName, channelClaimId, claimName, claimId
     .then(claim => {
       let claimDataValues = claim.dataValues;
 
-      if (serveOnlyApproved && !isApprovedChannel({ longId: claimDataValues.publisher_id || claimDataValues.certificateId }, approvedChannels)) {
+      if (
+        serveOnlyApproved &&
+        !isApprovedChannel(
+          { longId: claimDataValues.publisher_id || claimDataValues.certificateId },
+          approvedChannels
+        )
+      ) {
         throw new Error(CONTENT_UNAVAILABLE);
       }
 
-      let outpoint = claimDataValues.outpoint || `${claimDataValues.transaction_hash_id}:${claimDataValues.vout}`;
+      let outpoint =
+        claimDataValues.outpoint ||
+        `${claimDataValues.transaction_hash_id}:${claimDataValues.vout}`;
       logger.debug('Outpoint:', outpoint);
       return db.Blocked.isNotBlocked(outpoint).then(() => {
         // If content was found, is approved, and not blocked - log a view.
         if (headers && headers['user-agent'] && /LBRY/.test(headers['user-agent']) === false) {
           db.Views.create({
-            time       : Date.now(),
-            isChannel  : false,
-            claimId    : claimDataValues.claim_id || claimDataValues.claimId,
+            time: Date.now(),
+            isChannel: false,
+            claimId: claimDataValues.claim_id || claimDataValues.claimId,
             publisherId: claimDataValues.publisher_id || claimDataValues.certificateId,
             ip,
           });
@@ -70,7 +89,7 @@ const getClaimIdAndServeAsset = (channelName, channelClaimId, claimName, claimId
       if (!fileRecord) {
         throw NO_FILE;
       }
-      serveFile(fileRecord.dataValues, res);
+      serveFile(fileRecord.dataValues, res, originalUrl);
     })
     .catch(error => {
       if (error === NO_CLAIM) {
@@ -98,7 +117,8 @@ const getClaimIdAndServeAsset = (channelName, channelClaimId, claimName, claimId
         logger.debug('claim was blocked');
         return res.status(451).json({
           success: false,
-          message: 'In response to a complaint we received under the US Digital Millennium Copyright Act, we have blocked access to this content from our applications. For more details, see https://lbry.io/faq/dmca',
+          message:
+            'In response to a complaint we received under the US Digital Millennium Copyright Act, we have blocked access to this content from our applications. For more details, see https://lbry.io/faq/dmca',
         });
       }
       if (error === NO_FILE) {
