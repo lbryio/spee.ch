@@ -1,6 +1,12 @@
 const logger = require('winston');
 const transformImage = require('./transformImage');
 
+const isValidQueryObject = require('server/utils/isValidQueryObj');
+const {
+  serving: { dynamicFileSizing },
+} = require('@config/siteConfig');
+const { enabled: dynamicEnabled } = dynamicFileSizing;
+
 const serveFile = async ({ filePath, fileType }, res, originalUrl) => {
   const queryObject = {};
   // TODO: replace quick/dirty try catch with better practice
@@ -22,7 +28,10 @@ const serveFile = async ({ filePath, fileType }, res, originalUrl) => {
 
   let mediaType = fileType ? fileType.substr(0, fileType.indexOf('/')) : '';
   const transform =
-    mediaType === 'image' && queryObject.hasOwnProperty('h') && queryObject.hasOwnProperty('w');
+    mediaType === 'image' &&
+    queryObject.hasOwnProperty('h') &&
+    queryObject.hasOwnProperty('w') &&
+    dynamicEnabled;
 
   const sendFileOptions = {
     headers: {
@@ -33,14 +42,26 @@ const serveFile = async ({ filePath, fileType }, res, originalUrl) => {
     },
   };
   logger.debug(`fileOptions for ${filePath}:`, sendFileOptions);
-  if (transform) {
-    logger.debug(`transforming and sending file`);
+  try {
+    if (transform) {
+      if (!isValidQueryObject(queryObject)) {
+        logger.debug(`Unacceptable querystring`, { queryObject });
+        res.status(400).json({
+          success: false,
+          message: 'Querystring may not have dimensions greater than 2000',
+        });
+        res.end();
+      }
+      logger.debug(`transforming and sending file`);
 
-    let xformed = await transformImage(filePath, queryObject);
-    res.status(200).set(sendFileOptions.headers);
-    res.end(xformed, 'binary');
-  } else {
-    res.status(200).sendFile(filePath, sendFileOptions);
+      let xformed = await transformImage(filePath, queryObject);
+      res.status(200).set(sendFileOptions.headers);
+      res.end(xformed, 'binary');
+    } else {
+      res.status(200).sendFile(filePath, sendFileOptions);
+    }
+  } catch (e) {
+    logger.debug(e);
   }
 };
 
