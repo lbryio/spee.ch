@@ -1,27 +1,30 @@
-const fs = require('fs');
-const { promisify } = require('util');
+const { getFileListFileByOutpoint } = require('server/lbrynet');
+const logger = require('winston');
 
-const fsstat = promisify(fs.stat);
-const awaitFileSize = (path, sizeInBytes, timeout, interval) => {
-  return new Promise((resolve, reject) => {
-    let totalTime = 0;
-    let timer = setInterval(() => {
-      totalTime = totalTime + interval;
-      fsstat(path)
-        .then(stats => {
-          if (stats.size > sizeInBytes) {
-            clearInterval(interval);
-            resolve('ready');
-          }
-          if (totalTime > timeout) {
-            const error = new Error('File did not arrive in time');
-            error.name = 'FILE_NOT_ARRIVED';
-            reject(error);
-          }
-        })
-        .catch();
-    }, interval);
+function delay(t) {
+  return new Promise(function(resolve) {
+    setTimeout(resolve, t);
   });
+}
+
+const awaitFileSize = (outpoint, size, interval, timeout) => {
+  logger.debug('awaitFileSize');
+  let start = Date.now();
+  function checkFileList() {
+    logger.debug('checkFileList');
+    return getFileListFileByOutpoint(outpoint).then(result => {
+      logger.debug('File List Result', result);
+      if (result[0]['completed'] === true || result[0]['written_bytes'] > size) {
+        logger.debug('FILE READY');
+        return 'ready';
+      } else if (timeout !== 0 && Date.now() - start > timeout) {
+        throw new Error('Timeout on awaitFileSize');
+      } else {
+        return delay(interval).then(checkFileList);
+      }
+    });
+  }
+  return checkFileList();
 };
 
 module.exports = awaitFileSize;
