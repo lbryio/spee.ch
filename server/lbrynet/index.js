@@ -53,6 +53,26 @@ module.exports = {
         });
     });
   },
+  getFileListFileByOutpoint(outpoint) {
+    logger.debug(`lbryApi >> Getting File_List for "${outpoint}"`);
+    const gaStartTime = Date.now();
+    return new Promise((resolve, reject) => {
+      axios
+        .post(lbrynetUri, {
+          method: 'file_list',
+          params: {
+            outpoint,
+          },
+        })
+        .then(response => {
+          sendGATimingEvent('lbrynet', 'getFileList', 'FILE_LIST', gaStartTime, Date.now());
+          handleLbrynetResponse(response, resolve, reject);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  },
   async abandonClaim({ claimId }) {
     logger.debug(`lbryApi >> Abandon claim "${claimId}"`);
     const gaStartTime = Date.now();
