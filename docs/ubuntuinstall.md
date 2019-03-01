@@ -5,7 +5,7 @@
 ## Prerequisites
   * Ability to use SSH (putty + public key for windows users)
   * Ubuntu 16.04 or 18.04 VPS with root access
-    * Your login info ready
+    * Your login info ready _we tend to use 'lbry'_
     * Exposed ports: 22, 80, 443, 3333, 4444
   * Domain name with @ and www pointed at your VPS IP
     * _alternatively, specify http://localhost:3000 as domain during speech configuration_
@@ -44,13 +44,13 @@ As username: *paste public key in authorized\_keys*
 
 ### Prep
 
-Log in as username@domainname or username@ip_address
+ssh to username@domainname or username@ip_address
 
-  `sudo apt-get update -y`
-
-  `ulimit -n 8192`
-
-  `wget -qO- https://deb.nodesource.com/setup_8.x | sudo -E bash -`
+  ```
+  sudo apt-get update -y
+  ulimit -n 8192
+  wget -qO- https://deb.nodesource.com/setup_8.x | sudo -E bash -
+  ```
 
 
 ## Git, Curl, Tmux, Unzip, ffmpeg, Node
@@ -89,13 +89,12 @@ Log in as username@domainname or username@ip_address
 
 ## Set up Caddy reverse proxy and ssl
 
-  `sudo mkdir -p /opt/caddy/logs/`
-
-  `sudo mkdir -p /opt/caddy/store/`
-
-  `cp ~/spee.ch/docs/setup/conf/caddy/Caddyfile.template ~/spee.ch/docs/setup/conf/caddy/Caddyfile`
-
-  `nano ~/spee.ch/docs/setup/conf/caddy/Caddyfile`
+  ```
+  sudo mkdir -p /opt/caddy/logs/
+  sudo mkdir -p /opt/caddy/store/
+  cp ~/spee.ch/docs/setup/conf/caddy/Caddyfile.template ~/spee.ch/docs/setup/conf/caddy/Caddyfile
+  nano ~/spee.ch/docs/setup/conf/caddy/Caddyfile
+   ```
 
    ( Change {{EXAMPLE.COM}} to YOURDOMAIN.COM )
 
@@ -103,19 +102,15 @@ Log in as username@domainname or username@ip_address
 
 ## Set up Caddy to run as systemd service
 
-  `sudo cp ~/spee.ch/docs/setup/conf/caddy/caddy.service /etc/systemd/system/caddy.service`
-
-  `sudo chmod 644 /etc/systemd/system/caddy.service`
-
-  `sudo chown -R www-data:www-data /opt/caddy/`
-
-  `sudo setcap 'cap_net_bind_service=+ep' /usr/local/bin/caddy`
-
-  `sudo systemctl daemon-reload`
-
-  `sudo systemctl start caddy`
-
-  `sudo systemctl status caddy`
+  ```
+  sudo cp ~/spee.ch/docs/setup/conf/caddy/caddy.service /etc/systemd/system/caddy.service
+  sudo chmod 644 /etc/systemd/system/caddy.service
+  sudo chown -R www-data:www-data /opt/caddy/
+  sudo setcap 'cap_net_bind_service=+ep' /usr/local/bin/caddy
+  sudo systemctl daemon-reload
+  sudo systemctl start caddy
+  sudo systemctl status caddy
+  ```
 
   `q` exits
 
@@ -165,19 +160,53 @@ Log in as username@domainname or username@ip_address
 
 # 5 Get Lbrynet SDK Daemon
 
-## Start tmux
-
-tmux allows you to run multiple things in different sessions. Useful for manually starting daemons and watching its console logs.
-
-  `tmux`
-  * `Ctrl+b`, then `d` detaches leaving session running.
-  * `tmux`, reenters tmux, then
-    * `Ctrl+b`, `(` goes back to through sessions
-
 ## Get the SDK
-  `wget -O ~/latest_daemon.zip https://lbry.io/get/lbrynet.linux.zip`
 
-  `unzip -o -u ~/latest_daemon.zip`
+  We'll be putting it in /opt/lbry.
+  
+  `sudo mkdir /opt/lbry`
+  `sudo wget -O /opt/lbry/latest_daemon.zip https://lbry.io/get/lbrynet.linux.zip`
+  `sudo unzip -o -u /opt/lbry/latest_daemon.zip -d /opt/lbry`
+
+## Set up lbrynet to run as systemd service
+
+  We'll soon update the setup scripts. Meanwhile, here's an example lbrynet.service file
+  
+  ```
+  [Unit]
+Description="LBRYnet daemon"
+After=network.target
+
+# Change environment to /home/{{USERNAME}}
+[Service]
+Environment="HOME=/home/{{USERNAME}}"
+ExecStart=/opt/lbry/lbrynet start
+User={{USERNAME}}
+Group={{USERNAME}}
+Restart=on-failure
+KillMode=process
+
+[Install]
+WantedBy=multi-user.target
+
+```
+`nano /etc/systemd/system/lbrynet.service`
+
+
+Then paste the above into the file and edit replacing {{USERNAME}} with yours.
+
+Finally do the following.
+
+```
+ sudo chmod 644 /etc/systemd/system/lbrynet.service
+ sudo systemctl daemon-reload
+ sudo systemctl start lbrynet
+ sudo systemctl status lbrynet
+```
+
+You'll find your lbrynet logs in ~/.local/share/lbry/lbrynet/lbrynet.log
+
+Now let's make sure we're back in our home directory.  `cd`
 
 ## Customize SDK settings
 
@@ -194,45 +223,30 @@ tmux allows you to run multiple things in different sessions. Useful for manuall
 
   ```
   run_reflector_server: false
-  disable_max_key_fee: false
   max_key_fee: {amount: 0, currency: LBC}
   use_upnp: false
   auto_re_reflect_interval: 0
  ```
  
  `CONTROL+O` then `CONTROL+X` to save and exit
- 
-## Start the daemon
-   `./lbrynet start`
-
-## Detatch tmux session
-  `Control + b`, then `d`
-
-  * `tmux` if you want to get back into tmux
-
-  * `Control+b`, then `)` while in tmux session to cycle back to your lbrynet session to see output
-  
-  `tmux`
-
-  _note: `Control+b`, then `)` while in tmux session to cycle back to your lbrynet session to see output_
 
 ## Display wallet address to which to send 5+ LBC.
 
-  _note: These commands work when `./lbrynet start` is already running in another tmux session_
+  _note: These commands work when `lbrynet` is already running_
 
-  `./lbrynet commands` to check out the current commands
+  Let's make our lives easier and link /opt/lbry/lbrynet in /usr/local/bin
 
-  `./lbrynet address_list` to get your wallet address
+  `sudo ln -s /opt/lbry/lbrynet /usr/local/bin/lbrynet`
+
+  `lbrynet commands` to check out the current commands
+
+  `lbrynet address list` to get your wallet address
 
   `Ctrl + Shift + C` after highlighting an address to copy.
 
   Use a LBRY app or daemon to send LBC to the address. Sending LBC may take a few seconds or longer.
 
-  `./lbrynet account_balance` to check your balance after you've sent LBC.
-
-## Optional/Production: Set up lbrynet to run as a systemd service
-
-  `//coming soon`
+  `lbrynet account balance` to check your balance after you've sent LBC.
 
 # 6 Set up spee.ch
 
