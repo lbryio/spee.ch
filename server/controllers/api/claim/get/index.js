@@ -36,7 +36,7 @@ const claimGet = async ({ ip, originalUrl, params }, res) => {
     if (!claimData) {
       throw new Error('claim/get: getClaimData failed to get file blobs');
     }
-    const fileReady = await awaitFileSize(lbrynetResult.outpoint, 2000000, 10000, 250);
+    const fileReady = await awaitFileSize(lbrynetResult.outpoint, 10000000, 250, 10000);
 
     if (fileReady !== 'ready') {
       throw new Error('claim/get: failed to get file after 10 seconds');
