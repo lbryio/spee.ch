@@ -55,7 +55,7 @@ ssh to username@domainname or username@ip_address
 
 ## Git, Curl, Tmux, Unzip, ffmpeg, Node
 
-  `sudo apt-get install git curl tmux unzip ffmpeg nodejs -y`
+  `sudo apt-get install git curl tmux unzip ffmpeg nodejs imagemagick -y`
 
 ## Clone speech either from your own fork, or from the lbryio/spee.ch repo.
 
