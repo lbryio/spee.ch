@@ -5,7 +5,7 @@
 ## Prerequisites
   * Ability to use SSH (putty + public key for windows users)
   * Ubuntu 16.04 or 18.04 VPS with root access
-    * Your login info ready _we tend to use 'lbry'_
+    * Your login info ready
     * Exposed ports: 22, 80, 443, 3333, 4444
   * Domain name with @ and www pointed at your VPS IP
     * _alternatively, specify http://localhost:3000 as domain during speech configuration_
@@ -165,7 +165,9 @@ ssh to username@domainname or username@ip_address
   We'll be putting it in /opt/lbry.
   
   `sudo mkdir /opt/lbry`
+  
   `sudo wget -O /opt/lbry/latest_daemon.zip https://lbry.io/get/lbrynet.linux.zip`
+  
   `sudo unzip -o -u /opt/lbry/latest_daemon.zip -d /opt/lbry`
 
 ## Set up lbrynet to run as systemd service
@@ -190,7 +192,7 @@ KillMode=process
 WantedBy=multi-user.target
 
 ```
-`nano /etc/systemd/system/lbrynet.service`
+`sudo nano /etc/systemd/system/lbrynet.service`
 
 
 Then paste the above into the file and edit replacing {{USERNAME}} with yours.
