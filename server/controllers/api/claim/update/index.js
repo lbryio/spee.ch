@@ -19,10 +19,11 @@ const createCanonicalLink = require('@globalutils/createCanonicalLink');
   route to update a claim through the daemon
 */
 
-const updateMetadata = ({ nsfw, license, title, description }) => {
+const updateMetadata = ({ nsfw, license, licenseUrl, title, description }) => {
   const update = {};
   if (nsfw) update['nsfw'] = nsfw;
   if (license) update['license'] = license;
+  if (licenseUrl) update['licenseUrl'] = licenseUrl;
   if (title) update['title'] = title;
   if (description) update['description'] = description;
   return update;
@@ -65,6 +66,7 @@ const claimUpdate = ({ body, files, headers, ip, originalUrl, user, tor }, res) 
     thumbnail,
     fileExtension,
     license,
+    licenseUrl,
     name,
     nsfw,
     thumbnailFileName,
@@ -79,7 +81,15 @@ const claimUpdate = ({ body, files, headers, ip, originalUrl, user, tor }, res) 
   gaStartTime = Date.now();
 
   try {
-    ({ name, nsfw, license, title, description, thumbnail } = parsePublishApiRequestBody(body));
+    ({
+      name,
+      nsfw,
+      license,
+      licenseUrl,
+      title,
+      description,
+      thumbnail,
+    } = parsePublishApiRequestBody(body));
     ({
       fileName,
       filePath,
@@ -127,10 +137,11 @@ const claimUpdate = ({ body, files, headers, ip, originalUrl, user, tor }, res) 
           description: claimRecord.description,
           nsfw: claimRecord.nsfw,
           license: claimRecord.license,
+          licenseUrl: claimRecord.license_url,
           language: 'en',
           author: details.title,
         },
-        updateMetadata({ title, description, nsfw, license })
+        updateMetadata({ title, description, nsfw, license, licenseUrl })
       );
       const publishParams = {
         name,

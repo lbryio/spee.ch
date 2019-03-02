@@ -6,7 +6,7 @@ const {
 
 const getterMethods = {
   generated_extension() {
-    logger.info('trying to generate extension', this.content_type);
+    logger.debug('trying to generate extension', this.content_type);
     if (customFileExtensions.hasOwnProperty(this.content_type)) {
       return customFileExtensions[this.content_type];
     } else {
@@ -133,6 +133,14 @@ export default (sequelize, { BOOLEAN, DATE, DECIMAL, ENUM, INTEGER, STRING, TEXT
         set() {},
       },
       claim_address: {
+        type: STRING,
+        set() {},
+      },
+      license: {
+        type: STRING,
+        set() {},
+      },
+      license_url: {
         type: STRING,
         set() {},
       },

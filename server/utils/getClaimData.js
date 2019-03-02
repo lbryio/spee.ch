@@ -59,5 +59,8 @@ module.exports = async (data, chName = null, chShortId = null) => {
     host,
     pending: Boolean(dataVals.height === 0),
     blocked: blocked,
+    license: dataVals.license,
+    licenseUrl: dataVals.license_url,
+    transactionTime: dataVals.transaction_time,
   };
 };

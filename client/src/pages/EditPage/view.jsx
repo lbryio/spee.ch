@@ -9,7 +9,7 @@ class EditPage extends React.Component {
     onHandleShowPageUri(match.params);
     setUpdateTrue();
     if (asset) {
-      ['title', 'description', 'license', 'nsfw'].forEach(meta => updateMetadata(meta, asset.claimData[meta]));
+      ['title', 'description', 'license', 'licenseUrl', 'nsfw'].forEach(meta => updateMetadata(meta, asset.claimData[meta]));
     }
     setHasChanged(false);
   }
