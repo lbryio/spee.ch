@@ -49,6 +49,10 @@
     }
   },
   "serving": {
+    "dynamicFileSizing": {
+      "enabled": true,
+      "maxDimension": 2000
+    },
     "markdownSettings": {
       "skipHtmlMain": true,
       "escapeHtmlMain": true,
@@ -83,10 +87,7 @@
         "code",
         "html",
         "parsedHtml"
-      ],
-      "disallowedTypesMain": [],
-      "disallowedTypesDescriptions": ["image", "html"],
-      "disallowedTypesExample": ["image", "html"]
+      ]
     },
     "customFileExtensions": {
       "application/x-troff-man": "man",

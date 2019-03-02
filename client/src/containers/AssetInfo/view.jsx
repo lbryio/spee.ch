@@ -7,7 +7,7 @@ import AssetShareButtons from '@components/AssetShareButtons';
 import ClickToCopy from '@components/ClickToCopy';
 import siteConfig from '@config/siteConfig.json';
 import createCanonicalLink from '@globalutils/createCanonicalLink';
-import AssetInfoFooter from '../../components/AssetInfoFooter/index';
+import AssetInfoFooter from '@components/AssetInfoFooter/index';
 import { createPermanentURI } from '@clientutils/createPermanentURI';
 import ReactMarkdown from 'react-markdown';
 
@@ -18,7 +18,20 @@ class AssetInfo extends React.Component {
   render () {
     const { editable, asset } = this.props;
     const { claimViews, claimData } = asset;
-    const { channelName, claimId, channelShortId, description, name, fileExt, contentType, host, certificateId } = claimData;
+    const {
+      channelName,
+      claimId,
+      channelShortId,
+      description,
+      name,
+      fileExt,
+      contentType,
+      host,
+      certificateId,
+      license,
+      licenseUrl,
+      transactionTime
+    } = claimData;
 
     const canonicalUrl = createCanonicalLink({ asset: { ...claimData, shortId: asset.shortId }});
     const assetCanonicalUrl = `${host}${canonicalUrl}`;
@@ -55,7 +68,7 @@ class AssetInfo extends React.Component {
         {editable && (
           <RowLabeled
             label={<Label value={'Edit'} />}
-            content={<Link to={`/edit${canonicalUrl}`}>{name}</Link>}
+            content={<Link className='link--primary' to={`/edit${canonicalUrl}`}>{name}</Link>}
           />
         )}
         {channelName && (
@@ -71,19 +84,35 @@ class AssetInfo extends React.Component {
             }
           />
         )}
-        {claimViews ? (
-          <RowLabeled
-            label={
-              <Label value={'Views'} />
-            }
-            content={
-              <span className='text'>
-                {claimViews}
-              </span>
-            }
-          />
-        ) : null}
-
+        <SpaceBetween>
+          {claimViews ? (
+            <RowLabeled
+              label={
+                <Label value={'Views'} />
+              }
+              content={
+                <span className='text'>
+                  {claimViews}
+                </span>
+              }
+            />
+          ) : null}
+          {license && (
+            <RowLabeled
+              label={
+                <Label value={'License'} />
+              }
+              content={
+                <div className='text'>
+                  {licenseUrl ? (
+                    <a className={'link--primary'} href={licenseUrl} target={'_blank'}>{license}</a>
+                  ) : (
+                    <span>{license}</span> )}
+                </div>
+              }
+            />
+          )}
+        </SpaceBetween>
         <RowLabeled
           label={
             <Label value={'Share'} />
