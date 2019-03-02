@@ -19,40 +19,42 @@ if (siteConfig) {
 
 // create initial state
 const initialState = {
-  disabled          : disabledConfig,
-  disabledMessage   : disabledMessageConfig,
-  publishInChannel  : false,
-  selectedChannel   : LOGIN,
+  disabled: disabledConfig,
+  disabledMessage: disabledMessageConfig,
+  publishInChannel: false,
+  selectedChannel: LOGIN,
   showMetadataInputs: false,
-  status            : {
-    status : null,
+  status: {
+    status: null,
     message: null,
   },
   error: {
-    file   : null,
-    url    : null,
+    file: null,
+    url: null,
     channel: null,
   },
-  file    : null,
-  claim   : '',
+  file: null,
+  claim: '',
   metadata: {
-    title      : '',
+    title: '',
     description: '',
-    license    : '',
-    nsfw       : false,
+    license: '',
+    licenseUrl: '',
+    nsfw: false,
   },
-  isUpdate  : false,
+  isUpdate: false,
   hasChanged: false,
-  thumbnail : null,
+  thumbnail: null,
   thumbnailChannel,
   thumbnailChannelId,
 };
 
-export default function (state = initialState, action) {
+export default function(state = initialState, action) {
   switch (action.type) {
     case actions.FILE_SELECTED:
-      return Object.assign({}, state.isUpdate ? state : initialState, {  // note: clears to initial state
-        file      : action.data,
+      return Object.assign({}, state.isUpdate ? state : initialState, {
+        // note: clears to initial state
+        file: action.data,
         hasChanged: true,
       });
     case actions.FILE_CLEAR:
@@ -66,13 +68,13 @@ export default function (state = initialState, action) {
       });
     case actions.CLAIM_UPDATE:
       return Object.assign({}, state, {
-        claim     : action.data,
+        claim: action.data,
         hasChanged: true,
       });
     case actions.SET_PUBLISH_IN_CHANNEL:
       return Object.assign({}, state, {
         publishInChannel: action.channel,
-        hasChanged      : true,
+        hasChanged: true,
       });
     case actions.PUBLISH_STATUS_UPDATE:
       return Object.assign({}, state, {
@@ -96,7 +98,7 @@ export default function (state = initialState, action) {
     case actions.THUMBNAIL_NEW:
       return {
         ...state,
-        thumbnail : action.data,
+        thumbnail: action.data,
         hasChanged: true,
       };
     case actions.SET_UPDATE_TRUE:
@@ -112,4 +114,4 @@ export default function (state = initialState, action) {
     default:
       return state;
   }
-};
+}

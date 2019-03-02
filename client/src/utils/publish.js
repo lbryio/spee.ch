@@ -1,9 +1,16 @@
-export const createPublishMetadata = (claim, { type }, { title, description, license, nsfw }, publishInChannel, selectedChannel) => {
+export const createPublishMetadata = (
+  claim,
+  { type },
+  { title, description, license, licenseUrl, nsfw },
+  publishInChannel,
+  selectedChannel
+) => {
   let metadata = {
     name: claim,
     title,
     description,
     license,
+    licenseUrl,
     nsfw,
     type,
   };
