@@ -36,11 +36,12 @@ As root# _create user and add to sudo group_
   su - username
 ```
 As username: *paste public key in authorized\_keys*
-```
+
   `cd`
+  
   `mkdir .ssh`
+  
   `nano ~/.ssh/authorized_keys`
-```
 
 ### Prep
 
@@ -208,7 +209,11 @@ Finally do the following.
 
 You'll find your lbrynet logs in ~/.local/share/lbry/lbrynet/lbrynet.log
 
-Now let's make sure we're back in our home directory.  `cd`
+Let's make our lives easier and link /opt/lbry/lbrynet in /usr/local/bin
+
+  `sudo ln -s /opt/lbry/lbrynet /usr/local/bin/lbrynet`
+
+Now we can `lbrynet` without `/opt/lbry`. Let's make sure we're back in our home directory.  `cd`
 
 ## Customize SDK settings
 
@@ -235,10 +240,6 @@ Now let's make sure we're back in our home directory.  `cd`
 ## Display wallet address to which to send 5+ LBC.
 
   _note: These commands work when `lbrynet` is already running_
-
-  Let's make our lives easier and link /opt/lbry/lbrynet in /usr/local/bin
-
-  `sudo ln -s /opt/lbry/lbrynet /usr/local/bin/lbrynet`
 
   `lbrynet commands` to check out the current commands
 
@@ -286,15 +287,34 @@ Now let's make sure we're back in our home directory.  `cd`
 # 7 Production
 
 ## pm2 to keep your speech app running
- ```
- npm install -g pm2
- ```
+
+If your server is running in the terminal from the last section, `Control+C` it.
+
+ `sudo npm install -g pm2` _There are tutorials online for avoiding sudo for npm i -g_
+
+ `cd spee.ch`
+
+ `pm2 start npm --name speech -- run start`
+
+ While pm2 installed this way will restart the server, it will not rebuild it on changes. You'll do that manually as discussed before.
 
 ### 7 Maintenance Procedures
 
-#### Change daemon
-  * backup wallet (private keys!) to a safe place
-  * wget daemon from https://github.com/lbryio/lbry/releases
-  * wget -O ~/your_name_daemon.zip https://your_copied_file_path.zip
-  * rm ./lbrynet
-  * unzip -o -u ~/your_name_daemon.zip
+#### Update sdk daemon
+
+  * Backup wallet (private keys!) to a safe place. It should be in ~/.local/share/lbry/lbryum/wallets.
+  * `lbrynet stop`
+  * Following the instructions in 5: Get the SDK will rename the old daemon and give you the new one.
+  * `lbrynet start`
+  * `lbrynet version`
+  * `lbrynet account balance`
+
+#### Update speech
+
+ * Read the release notes to see if there are any breaking changes, address them
+ * `pm2 stop speech`
+ * `git pull origin release` (assuming you cloned release)
+ * `npm i` if necessary
+ * `npm run build`
+ * `pm2 start speech`
+ * Have an exotic energy drink
