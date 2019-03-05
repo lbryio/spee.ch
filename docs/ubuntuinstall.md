@@ -24,6 +24,8 @@
   * Lbrynet DAEMON started on ports 3333 and 4444
   * Spee.ch started on port 3000
 
+_note: throughout this guide you'll be replacing `{{xyz}}` with `yourvalue` omitting the brackets_
+
 # 1. Setup OS and install dependencies
 ## OS
 
@@ -54,9 +56,9 @@ ssh to username@domainname or username@ip_address
   ```
 
 
-## Git, Curl, Tmux, Unzip, ffmpeg, Node
+## Git, Curl, Unzip, ffmpeg, imagemagick, Node
 
-  `sudo apt-get install git curl tmux unzip ffmpeg nodejs imagemagick -y`
+  `sudo apt-get install git curl unzip ffmpeg nodejs imagemagick -y`
 
 ## Clone speech either from your own fork, or from the lbryio/spee.ch repo.
 
@@ -68,7 +70,7 @@ ssh to username@domainname or username@ip_address
 
   `git clone https://github.com/{{youraccount}}/spee.ch.git`
 
-  `git clone git@github.com:{{youraccount}}/spee.ch`
+  `git clone git@github.com:{{youraccount}}/spee.ch` 
 
   * For Publishers and Content creators - stable release
 
@@ -79,16 +81,22 @@ ssh to username@domainname or username@ip_address
   `chmod 750 -R ~/spee.ch/docs/setup`
 
 # 2 Secure the UFW firewall
+
 ## UFW
 
   `sudo ~/spee.ch/docs/setup/scripts/firewall.sh`
 
+  _if your distro isn't vanilla ubuntu 16 or 18, you may have to install it_
+
 # 3 Install Caddy to handle https and reverse proxy
+
 ##  Get Caddy
 
   `curl https://getcaddy.com | sudo bash -s personal`
 
 ## Set up Caddy reverse proxy and ssl
+
+  _Make Caddy's folders, copy the template, edit the Caddyfile, copy the caddyfile to its folder._
 
   ```
   sudo mkdir -p /opt/caddy/logs/
@@ -147,7 +155,7 @@ ssh to username@domainname or username@ip_address
 
   mysql>
 
-  `ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'your_mysql_password';`
+  `ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'yourpassword123';`
 
   mysql>
 
@@ -173,14 +181,14 @@ ssh to username@domainname or username@ip_address
 
 ## Set up lbrynet to run as systemd service
 
-  We'll soon update the setup scripts. Meanwhile, here's an example lbrynet.service file
+  We'll soon update the setup scripts. Meanwhile, here's an example lbrynet.service file. Again, fully replace {{USERNAME}}
   
   ```
   [Unit]
 Description="LBRYnet daemon"
 After=network.target
 
-# Change environment to /home/{{USERNAME}}
+# Replace {{USERNAME}} with your username, e.g. `bob` or `speechuser`
 [Service]
 Environment="HOME=/home/{{USERNAME}}"
 ExecStart=/opt/lbry/lbrynet start
@@ -220,13 +228,14 @@ Now we can `lbrynet` without `/opt/lbry`. Let's make sure we're back in our home
   These settings will prevent you and your users from spending your server's LBC on paid content. Full documentation is [here](https://lbry.tech/resources/daemon-settings).
   
   ~$
-  `mkdir .lbrynet`
   
-  `cd .lbrynet`
+  `cd ~/.local/share/lbry/lbrynet`
   
   `nano daemon_settings.yml`
   
    copy and paste in the following code (Ctrl+Shift V)
+
+  _upnp is unnecessary for a vps but may be useful behind a properly configured NAT_
 
   ```
   run_reflector_server: false
@@ -236,6 +245,13 @@ Now we can `lbrynet` without `/opt/lbry`. Let's make sure we're back in our home
  ```
  
  `CONTROL+O` then `CONTROL+X` to save and exit
+  
+  Restart lbrynet sdk:
+  
+  `sudo systemctl restart lbrynet`
+  
+  `sudo systemctl status lbrynet`
+  
 
 ## Display wallet address to which to send 5+ LBC.
 
@@ -254,6 +270,7 @@ Now we can `lbrynet` without `/opt/lbry`. Let's make sure we're back in our home
 # 6 Set up spee.ch
 
 ## Build it
+
   `cd spee.ch`
 
   ~/spee.ch:
@@ -274,7 +291,8 @@ Now we can `lbrynet` without `/opt/lbry`. Let's make sure we're back in our home
     * Port: 3000
     * Site Title: Your Site Name
     * Enter your site's domain name: https://example.com or http://localhost:3000
-    * Enter a directory where uploads should be stored: (/home/lbry/Uploads)
+    * Enter a directory where uploads should be stored: (/home/{{username}}/Uploads) *
+    _* if you're not sure, `pwd`_
      
   `npm run build`  (or `npm run dev` to build for developing)
 
