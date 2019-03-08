@@ -1,29 +1,89 @@
 .asset-preview {
-  position: relative;
+  display: flex;
+  flex-direction: column;
   background: $card-color;
-  padding: $thin-padding;
   color: $text-color;
   width: 240px;
   border: $subtle-border;
-  height: 280px;
+  height: 256px;
   &:hover {
-    border: 1px solid $highlight-border-color;
+    border-color: $highlight-border-color;
     color: $primary-color;
   }
 }
 
+.asset-preview__image {
+  height  : 180px;
+  width   : 240px;
+  overflow: hidden;
+  object-fit: cover;
+  padding: 0;
+  margin : 0;
+  box-sizing: border-box;
+
+}
+
+.asset-preview__image-box {
+  width  : 240px;
+  height : 180px;
+  padding: 0;
+  margin : 0;
+  box-sizing: border-box;
+}
+
 .asset-preview__label {
+  height: 100%;
+  padding: $thin-padding;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 7.3em;
 }
 
 .asset-preview__label-text {
-  height: 4.5em;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  box-sizing: border-box;
+  font-size: $text-small;
+  font-weight: bold;
+  height: 54px;
+}
+
+.asset-preview__label-info {
+  width: 100%;
+  height: 15px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
   overflow: hidden;
   text-overflow: ellipsis;
   box-sizing: border-box;
+  align-items: center;
+}
+
+.asset-preview__label-info-datum {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  overflow: hidden;
+  box-sizing: border-box;
+  font-size: $text-small;
+  max-width: 40%;
+}
+
+.asset-preview__label-info-datum svg{
+  height: 1.2em;
+  width: 1.2em;
+  padding: 0;
+  padding-right: $thin-padding;
+  margin: 0;
+}
+
+.asset-preview__label-info-datum .svg-icon{
+  padding: 0px;
+  margin: 0;
+  height: 15px;
 }
 
 .asset-preview__blocked {
@@ -33,23 +93,4 @@
   height: 64%;
   padding: $thin-padding;
   margin-bottom: $thin-padding;
-}
-
-.asset-preview__image {
-  width  : 240px;
-  height : 180px;
-  overflow: hidden;
-  object-fit: cover;
-  padding: 0;
-  margin : 0;
-  box-sizing: border-box;
-}
-
-h3.asset-preview__title {
-  margin: 0;
-  text-overflow: ellipsis;
-  word-wrap: break-word;
-  overflow: hidden;
-  max-height: 4em;
-  font-size: $text-large;
 }
