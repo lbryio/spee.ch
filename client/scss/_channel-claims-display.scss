@@ -1,7 +1,7 @@
 .channel-claims-display {
   width: 100%;
   display: grid;
-  grid-gap: $thin-padding;
+  grid-gap: $tertiary-padding;
   align-content: space-around;
   @media (min-width: $break-point-x-large) {
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
