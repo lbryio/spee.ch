@@ -153,7 +153,7 @@ module.exports = {
             Date.now()
           );
           if (data.result) {
-            resolve(data.result.download_directory);
+            resolve(data.result.download_dir);
           } else {
             return new Error(
               'Successfully connected to lbry daemon, but unable to retrieve the download directory.'
