@@ -23,7 +23,6 @@
   "publishing": {
     "primaryClaimAddress": null,
     "uploadDirectory": "/home/lbry/Uploads",
-    "lbrynetHome": "/CURRENTLYUNUSED",
     "thumbnailChannel": null,
     "thumbnailChannelId": null,
     "additionalClaimAddresses": [],
