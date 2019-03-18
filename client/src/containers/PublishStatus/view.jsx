@@ -38,7 +38,7 @@ class PublishStatus extends React.Component {
               <ProgressBar size={12} />
             </Row>
             <Row>
-              <p>Curious what magic is happening here? <a className='link--primary' target='blank' href='https://lbry.io/faq/what-is-lbry'>Learn more.</a></p>
+              <p>Curious what magic is happening here? <a className='link--primary' target='blank' href='https://lbry.com/faq/what-is-lbry'>Learn more.</a></p>
             </Row>
           </div>
         }
@@ -61,7 +61,7 @@ class PublishStatus extends React.Component {
               <p className={'text--strong'}>{message}</p>
             </Row>
             <Row>
-              <p>For help, post the above error text in the #speech channel on the <a className='link--primary' href='https://chat.lbry.io' target='_blank'>lbry discord</a></p>
+              <p>For help, post the above error text in the #speech channel on the <a className='link--primary' href='https://chat.lbry.com' target='_blank'>lbry discord</a></p>
             </Row>
             <Row>
               <ButtonSecondary
