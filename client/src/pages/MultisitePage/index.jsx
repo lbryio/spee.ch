@@ -7,7 +7,7 @@ const MultisiteContent = () => {
       <p className='text--pull-quote'>Introducing Spee.ch Multisite</p>
       <p>Hi there!  My name is <a href={'https://github.com/billbitt'} target={'_blank'}>Bill</a>, and I’d like to speak with you about Spee.ch.  No, not ‘speech,’ ‘<i><a href={'https://spee.ch'} target={'_blank'}>Spee.ch.</a></i>’ You know what, just read on...</p>
       <h2>A Little Background</h2>
-      <p>Wow, time flies!  A little over a year ago Spee.ch was nothing more than a glimmer in the eye of LBRY CEO Jeremy Kaufman.  At that time, the <a href={'https://lbry.io/faq/what-is-lbry'} target={'_blank'}>LBRY protocol</a> was still so early in its development, that there were no web-based applications for interacting with the LBRY blockchain. But then, something beautiful happened.  On March 29th, 2017, Jeremy sat down with Jack, and together they <a href={'https://www.youtube.com/watch?v=C9LCapt_OYw'} target={'_blank'}>live coded a single-page PHP site</a> that could publish images to the LBRY network.  And just like that, Spee.ch was born!</p>
+      <p>Wow, time flies!  A little over a year ago Spee.ch was nothing more than a glimmer in the eye of LBRY CEO Jeremy Kaufman.  At that time, the <a href={'https://lbry.com/faq/what-is-lbry'} target={'_blank'}>LBRY protocol</a> was still so early in its development, that there were no web-based applications for interacting with the LBRY blockchain. But then, something beautiful happened.  On March 29th, 2017, Jeremy sat down with Jack, and together they <a href={'https://www.youtube.com/watch?v=C9LCapt_OYw'} target={'_blank'}>live coded a single-page PHP site</a> that could publish images to the LBRY network.  And just like that, Spee.ch was born!</p>
       <p>Being that LBRY is an open source project, Jeremy ended the session by inviting community members who were interested in the project to take the reigns and see where Spee.ch could go.  I was one of the devs that did just that, and it wasn’t long before I was on a weekly call dedicated to this project with contributors from around the world.</p>
       <p>At this point in time, the vision for Spee.ch was pretty simple: create a web-based hosting service that used the LBRY network as a database for free image and video sharing.  In other words, an ‘imgur on the blockchain.’</p>
       <h2>Growth</h2>
@@ -41,7 +41,7 @@ const MultisiteContent = () => {
         <li>Where: Google Hangouts</li>
         <li>Link: <a href={'https://meet.google.com/aex-ghqg-kcs'} target={'_blank'}>meet.google.com/aex-ghqg-kcs</a></li>
         <li>System Requirements: If you have a server, please make sure you have MySql, Node and NPM installed. If you need help installing the above, or if you need a server to run your own instance on, please join the Hangout 30 minutes ahead of time and we will help get you set up =]</li>
-        <li>Questions: hello@lbry.io</li>
+        <li>Questions: hello@lbry.com</li>
       </ul>
     </div>
   );

@@ -118,7 +118,7 @@ const getClaimIdAndServeAsset = (
         return res.status(451).json({
           success: false,
           message:
-            'In response to a complaint we received under the US Digital Millennium Copyright Act, we have blocked access to this content from our applications. For more details, see https://lbry.io/faq/dmca',
+            'In response to a complaint we received under the US Digital Millennium Copyright Act, we have blocked access to this content from our applications. For more details, see https://lbry.com/faq/dmca',
         });
       }
       if (error === NO_FILE) {

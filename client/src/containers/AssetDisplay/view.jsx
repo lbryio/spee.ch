@@ -76,7 +76,7 @@ class AssetDisplay extends React.Component {
         <div>
           <p>Sit tight, we're searching the LBRY blockchain for your asset!</p>
           <ProgressBar size={12} />
-          <p>Curious what magic is happening here? <a className='link--primary' target='blank' href='https://lbry.io/faq/what-is-lbry'>Learn more.</a></p>
+          <p>Curious what magic is happening here? <a className='link--primary' target='blank' href='https://lbry.com/faq/what-is-lbry'>Learn more.</a></p>
         </div>
         }
         {(status === ERROR) && (
@@ -87,7 +87,7 @@ class AssetDisplay extends React.Component {
           ) : (
             <div>
               <Row>
-                <p>Unfortunately, we couldn't download your asset from LBRY.  You can help us out by sharing the following error message in the <a className='link--primary' href='https://chat.lbry.io' target='_blank'>LBRY discord</a>.</p>
+                <p>Unfortunately, we couldn't download your asset from LBRY.  You can help us out by sharing the following error message in the <a className='link--primary' href='https://chat.lbry.com' target='_blank'>LBRY discord</a>.</p>
               </Row>
               <Row>
                 <p id='error-message'><i>{error}</i></p>

@@ -36,7 +36,7 @@ const claimLongId = ({ ip, originalUrl, body, params }, res) => {
       return db.Blocked.isNotBlocked(outpoint);
     })
     .then(() => {
-      res.status(200).json({success: true, data: claimId});
+      res.status(200).json({ success: true, data: claimId });
     })
     .catch(error => {
       if (error === NO_CLAIM) {
@@ -54,7 +54,8 @@ const claimLongId = ({ ip, originalUrl, body, params }, res) => {
       if (error === BLOCKED_CLAIM) {
         return res.status(410).json({
           success: false,
-          message: 'In response to a complaint we received under the US Digital Millennium Copyright Act, we have blocked access to this content from our applications. For more details, see https://lbry.io/faq/dmca',
+          message:
+            'In response to a complaint we received under the US Digital Millennium Copyright Act, we have blocked access to this content from our applications. For more details, see https://lbry.com/faq/dmca',
         });
       }
       handleErrorResponse(originalUrl, ip, error, res);
