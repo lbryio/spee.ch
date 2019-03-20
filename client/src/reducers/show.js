@@ -4,19 +4,20 @@ import { LOCAL_CHECK, ERROR } from '../constants/asset_display_states';
 const initialState = {
   request: {
     error: null,
-    type : null,
-    id   : null,
+    type: null,
+    id: null,
   },
-  requestList : {},
-  channelList : {},
-  assetList   : {},
+  requestList: {},
+  channelList: {},
+  assetList: {},
   displayAsset: {
-    error : null,
+    error: null,
     status: LOCAL_CHECK,
   },
+  detailsExpanded: true,
 };
 
-export default function (state = initialState, action) {
+export default function(state = initialState, action) {
   switch (action.type) {
     // handle request
     case actions.REQUEST_ERROR:
@@ -29,7 +30,7 @@ export default function (state = initialState, action) {
       return Object.assign({}, state, {
         request: Object.assign({}, state.request, {
           type: action.data.requestType,
-          id  : action.data.requestId,
+          id: action.data.requestId,
         }),
       });
     // store requests
@@ -38,7 +39,7 @@ export default function (state = initialState, action) {
         requestList: Object.assign({}, state.requestList, {
           [action.data.id]: {
             error: action.data.error,
-            key  : action.data.key,
+            key: action.data.key,
           },
         }),
       });
@@ -47,11 +48,11 @@ export default function (state = initialState, action) {
       return Object.assign({}, state, {
         assetList: Object.assign({}, state.assetList, {
           [action.data.id]: {
-            error     : action.data.error,
-            name      : action.data.name,
-            claimId   : action.data.claimId,
-            shortId   : action.data.shortId,
-            claimData : action.data.claimData,
+            error: action.data.error,
+            name: action.data.name,
+            claimId: action.data.claimId,
+            shortId: action.data.shortId,
+            claimData: action.data.claimData,
             claimViews: action.data.claimViews,
           },
         }),
@@ -76,7 +77,7 @@ export default function (state = initialState, action) {
 
       return {
         ...state,
-        assetList  : newAssetList,
+        assetList: newAssetList,
         channelList: {
           ...state.channelList,
           [channelId]: {
@@ -107,9 +108,9 @@ export default function (state = initialState, action) {
       return Object.assign({}, state, {
         channelList: Object.assign({}, state.channelList, {
           [action.data.id]: {
-            name      : action.data.name,
-            longId    : action.data.longId,
-            shortId   : action.data.shortId,
+            name: action.data.name,
+            longId: action.data.longId,
+            shortId: action.data.shortId,
             claimsData: action.data.claimsData,
           },
         }),
@@ -117,9 +118,13 @@ export default function (state = initialState, action) {
     case actions.CHANNEL_CLAIMS_UPDATE_SUCCEEDED:
       return Object.assign({}, state, {
         channelList: Object.assign({}, state.channelList, {
-          [action.data.channelListId]: Object.assign({}, state.channelList[action.data.channelListId], {
-            claimsData: action.data.claimsData,
-          }),
+          [action.data.channelListId]: Object.assign(
+            {},
+            state.channelList[action.data.channelListId],
+            {
+              claimsData: action.data.claimsData,
+            }
+          ),
         }),
       });
     // display an asset
@@ -132,10 +137,15 @@ export default function (state = initialState, action) {
     case actions.DISPLAY_ASSET_ERROR:
       return Object.assign({}, state, {
         displayAsset: Object.assign({}, state.displayAsset, {
-          error : action.data,
+          error: action.data,
           status: ERROR,
         }),
       });
+    case actions.TOGGLE_DETAILS_EXPANDED:
+      return {
+        ...state,
+        detailsExpanded: action.data,
+      };
     default:
       return state;
   }

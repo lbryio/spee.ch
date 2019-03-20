@@ -4,12 +4,16 @@ export const selectAsset = show => {
   const request = show.requestList[requestId] || null;
   const assetList = show.assetList;
   if (request && assetList) {
-    const assetKey = request.key;  // note: just store this in the request
+    const assetKey = request.key; // note: just store this in the request
     asset = assetList[assetKey] || null;
   }
   return asset;
 };
 
-export const selectShowState = (state) => {
+export const selectShowState = state => {
   return state.show;
+};
+
+export const selectDetailsExpanded = state => {
+  return state.show.detailsExpanded;
 };

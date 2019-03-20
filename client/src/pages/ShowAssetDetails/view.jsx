@@ -11,24 +11,15 @@ class ShowAssetDetails extends React.Component {
 
   constructor (props) {
     super(props);
-    this.collapse = this.collapse.bind(this);
-    // this.storageKey = 'vert-split-state-' + this.props.name;
-    // const closed = window && window.localStorage
-    //   ? !!window.localStorage.getItem(this.storageKey) : false;
-    const closed = true;
-    this.state = { closed: closed };
+    this.toggleExpandDetails = this.toggleExpandDetails.bind(this);
   }
 
-  collapse () {
-    this.setState({ closed: !this.state.closed });
-    // if (window && window.localStorage) {
-    //   window.localStorage.setItem(this.storageKey, !this.state.closed);
-    // }
-    // document.querySelectorAll(`[data-name='${this.props.name}']`).forEach(el => el.classList.toggle('closed'));
+  toggleExpandDetails () {
+    this.props.onToggleDetailsExpanded(!this.props.detailsExpanded);
   }
 
   render () {
-    const { asset } = this.props;
+    const { asset, detailsExpanded } = this.props;
     if (asset) {
       const { claimData: { name, blocked } } = asset;
       if (!blocked) {
@@ -37,16 +28,16 @@ class ShowAssetDetails extends React.Component {
             pageTitle={`${name} - details`}
             asset={asset}
           >
-            <div className="asset-main">
+            <div className='asset-main'>
               <AssetTitle />
               <AssetDisplay />
               <div>
-                <button className='collapse-button' onClick={this.collapse}>
-                  {this.state.closed ? <Icon.PlusCircle className='plus-icon' /> : <Icon.MinusCircle />}
+                <button className='collapse-button' onClick={this.toggleExpandDetails}>
+                  {detailsExpanded ? <Icon.MinusCircle /> : <Icon.PlusCircle className='plus-icon' /> }
                 </button>
               </div>
             </div>
-            {!this.state.closed && <AssetInfo />}
+            {detailsExpanded && <AssetInfo />}
 
           </PageLayout>
         );
