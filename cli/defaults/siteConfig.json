@@ -18,12 +18,11 @@
     "host": "https://www.example.com",
     "description": "A decentralized hosting platform built on LBRY",
     "twitter": false,
-    "blockListEndpoint": "https://api.lbry.io/file/list_blocked"
+    "blockListEndpoint": "https://api.lbry.com/file/list_blocked"
   },
   "publishing": {
     "primaryClaimAddress": null,
     "uploadDirectory": "/home/lbry/Uploads",
-    "lbrynetHome": "/CURRENTLYUNUSED",
     "thumbnailChannel": null,
     "thumbnailChannelId": null,
     "additionalClaimAddresses": [],

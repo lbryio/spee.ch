@@ -300,8 +300,8 @@ This project is MIT licensed. For the full license, see [LICENSE](LICENSE).
 
 ## Security
 
-We take security seriously. Please contact security@lbry.io regarding any security issues. [Our GPG key is here](https://lbry.io/faq/gpg-key) if you need it.
+We take security seriously. Please contact security@lbry.com regarding any security issues. [Our GPG key is here](https://lbry.com/faq/gpg-key) if you need it.
 
 ## Contact
 
-The primary contact for this project is [@jessopb](mailto:jessop@lbry.io).
+The primary contact for this project is [@jessopb](mailto:jessop@lbry.com).

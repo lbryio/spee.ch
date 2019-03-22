@@ -4,6 +4,8 @@ import ProgressBar from '@components/ProgressBar';
 import { LOCAL_CHECK, UNAVAILABLE, ERROR, AVAILABLE } from '../../constants/asset_display_states';
 import createCanonicalLink from '@globalutils/createCanonicalLink';
 import FileViewer from '@components/FileViewer';
+import isBot from 'isbot';
+import Img from 'react-image';
 
 class AvailableContent extends React.Component {
   render () {
@@ -15,20 +17,23 @@ class AvailableContent extends React.Component {
       case 'image/gif':
       case 'image/svg+xml':
         return (
-          <img
-            className='asset-image'
-            src={sourceUrl}
+          <Img
+            src={[
+              sourceUrl,
+              '/assets/img/default_thumb.jpg',
+            ]}
             alt={name}
+            className={'asset-image'}
           />
         );
       case 'video/mp4':
         return (
           <video
             className='asset-video'
-            controls poster={thumbnail}
+            controls poster={!!thumbnail && thumbnail || '/assets/img/default_thumb.jpg'}
           >
             <source
-              src={sourceUrl}
+              src={!!sourceUrl && sourceUrl}
             />
             <p>Your browser does not support the <code>video</code> element.</p>
           </video>
@@ -36,14 +41,25 @@ class AvailableContent extends React.Component {
       case 'text/markdown':
 
         return (
-          <div className={'asset-document'}><FileViewer sourceUrl={sourceUrl}/></div>
+          (isBot(window.navigator.userAgent))
+            ? (
+              <img
+                className='asset-image'
+                src={'/assets/img/default_thumb.jpg'}
+                alt={'markdown available on page load'}
+              />
+            )
+            : <div className={'asset-document'}><FileViewer sourceUrl={!!sourceUrl && sourceUrl}/></div>
         );
       default:
         return (
-          <img
-            className='asset-image'
-            src={thumbnail}
+          <Img
+            src={[
+              thumbnail,
+              '/assets/img/default_thumb.jpg',
+            ]}
             alt={name}
+            className={'asset-image'}
           />
         );
     }
@@ -76,7 +92,7 @@ class AssetDisplay extends React.Component {
         <div>
           <p>Sit tight, we're searching the LBRY blockchain for your asset!</p>
           <ProgressBar size={12} />
-          <p>Curious what magic is happening here? <a className='link--primary' target='blank' href='https://lbry.io/faq/what-is-lbry'>Learn more.</a></p>
+          <p>Curious what magic is happening here? <a className='link--primary' target='blank' href='https://lbry.com/faq/what-is-lbry'>Learn more.</a></p>
         </div>
         }
         {(status === ERROR) && (
@@ -87,7 +103,7 @@ class AssetDisplay extends React.Component {
           ) : (
             <div>
               <Row>
-                <p>Unfortunately, we couldn't download your asset from LBRY.  You can help us out by sharing the following error message in the <a className='link--primary' href='https://chat.lbry.io' target='_blank'>LBRY discord</a>.</p>
+                <p>Unfortunately, we couldn't download your asset from LBRY.  You can help us out by sharing the following error message in the <a className='link--primary' href='https://chat.lbry.com' target='_blank'>LBRY discord</a>.</p>
               </Row>
               <Row>
                 <p id='error-message'><i>{error}</i></p>

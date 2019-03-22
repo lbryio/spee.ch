@@ -75,7 +75,7 @@ function Server() {
         res
           .status(403)
           .send(
-            '<h1>Forbidden</h1>If you are seeing this by mistake, please contact us using <a href="https://chat.lbry.io/">https://chat.lbry.io/</a>'
+            '<h1>Forbidden</h1>If you are seeing this by mistake, please contact us using <a href="https://chat.lbry.com/">https://chat.lbry.com/</a>'
           );
         res.end();
       } else {
@@ -195,7 +195,7 @@ function Server() {
             'Continuing with default LBRY blocklist api endpoint. \n ' +
             '(Specify /"blockListEndpoint" : ""/ to disable.'
         );
-        finalBlockListEndpoint = 'https://api.lbry.io/file/list_blocked';
+        finalBlockListEndpoint = 'https://api.lbry.com/file/list_blocked';
       }
     }
     logger.info(`Peforming updates...`);
