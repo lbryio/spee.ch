@@ -186,7 +186,7 @@ class AssetInfo extends React.Component {
           </a>
           <a
             className={'link--primary'}
-            href={`https://open.lbry.io/${createPermanentURI(asset)}`}
+            href={`https://open.lbry.com/${createPermanentURI(asset)}`}
             download={name}
           >
             LBRY URL
@@ -194,7 +194,7 @@ class AssetInfo extends React.Component {
           <a
             className={'link--primary'}
             target='_blank'
-            href='https://lbry.io/dmca'
+            href='https://lbry.com/dmca'
           >
             Report
           </a>

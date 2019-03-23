@@ -15,7 +15,7 @@ class FaqPage extends React.Component {
           </Row>
           <Row>
             <h3>What is spee.ch?</h3>
-            <p>Spee.ch is a media-hosting site that reads from and publishes content to the <a href='http://lbry.io/'>LBRY blockchain</a>.</p>
+            <p>Spee.ch is a media-hosting site that reads from and publishes content to the <a href='http://lbry.com/'>LBRY blockchain</a>.</p>
           </Row>
           <Row>
             <h3>OK But Why Should I Care?</h3>
@@ -29,7 +29,7 @@ class FaqPage extends React.Component {
             <p>It’s easy. Drag the image or video file of your choice into the center of the spee.ch homepage.</p>
             <p>Spee.ch is currently best suited for web optimized MP4 video and standard image filetypes (JPEG, PNG, GIF).</p>
             <p>If you want to refer to a piece of content repeatedly, or to build a collection of related content, you could create a channel. Channels work both for private collections and for public repositories. There’s more info about how to do this <a href='https://spee.ch/login'>on the channel page</a>.</p>
-            <p>Published files will be wiewable and embeddable with any web browser and accesible in the LBRY app. You can also use spee.ch to view free and non-NSFW content published on LBRY network from LBRY app. You just need to replace "lbry://" with "http://spee.ch/" in the URL.</p>
+            <p>Published files will be viewable and embeddable with any web browser and accesible in the LBRY app. You can also use spee.ch to view free and non-NSFW content published on LBRY network from LBRY app. You just need to replace "lbry://" with "http://spee.ch/" in the URL.</p>
           </Row>
           <Row>
             <h3>How Long Does Content Stay on Spee.ch?</h3>
@@ -38,7 +38,7 @@ class FaqPage extends React.Component {
           <Row>
             <h3>Contribute</h3>
             <p>If you have an idea for your own spee.ch-like site on top of LBRY, fork our <a href='https://github.com/lbryio/spee.ch'>github repo</a> and go to town!</p>
-            <p>If you want to improve spee.ch, join <a href='https://chat.lbry.io/'>our discord channel</a> or solve one of our <a href='https://github.com/lbryio/spee.ch/issues'>github issues</a>.</p>
+            <p>If you want to improve spee.ch, join <a href='https://chat.lbry.com/'>our discord channel</a> or solve one of our <a href='https://github.com/lbryio/spee.ch/issues'>github issues</a>.</p>
           </Row>
         </Row>
       </PageLayout>

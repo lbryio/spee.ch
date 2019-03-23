@@ -1,11 +1,25 @@
 import { connect } from 'react-redux';
-import { selectAsset } from '../../selectors/show';
+import { selectAsset, selectDetailsExpanded } from '../../selectors/show';
+import { toggleDetailsExpanded } from '../../actions/show';
+
 import View from './view';
 
-const mapStateToProps = ({ show }) => {
+const mapStateToProps = state => {
   return {
-    asset: selectAsset(show),
+    asset: selectAsset(state.show),
+    detailsExpanded: selectDetailsExpanded(state),
   };
 };
 
-export default connect(mapStateToProps, null)(View);
+const mapDispatchToProps = dispatch => {
+  return {
+    onToggleDetailsExpanded: value => {
+      dispatch(toggleDetailsExpanded(value));
+    },
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(View);

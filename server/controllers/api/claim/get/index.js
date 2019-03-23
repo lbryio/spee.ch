@@ -1,4 +1,4 @@
-const { getClaim } = require('server/lbrynet');
+const { getClaim, resolveUri } = require('server/lbrynet');
 const { createFileRecordDataAfterGet } = require('server/models/utils/createFileRecordData.js');
 const { handleErrorResponse } = require('../../../utils/errorHandlers.js');
 const getClaimData = require('server/utils/getClaimData');
@@ -6,6 +6,7 @@ const chainquery = require('chainquery').default;
 const db = require('server/models');
 const logger = require('winston');
 const awaitFileSize = require('server/utils/awaitFileSize');
+const isBot = require('isbot');
 
 /*
 
@@ -13,7 +14,7 @@ const awaitFileSize = require('server/utils/awaitFileSize');
 
 */
 
-const claimGet = async ({ ip, originalUrl, params }, res) => {
+const claimGet = async ({ ip, originalUrl, params, headers }, res) => {
   const name = params.name;
   const claimId = params.claimId;
 
@@ -27,6 +28,16 @@ const claimGet = async ({ ip, originalUrl, params }, res) => {
     }
     if (!claimInfo) {
       throw new Error('claim/get: resolveClaim: No matching uri found in Claim table');
+    }
+    if (headers && headers['user-agent'] && isBot(headers['user-agent'])) {
+      let lbrynetResolveResult = await resolveUri(`${name}#${claimId}`);
+      const { message, completed } = lbrynetResolveResult;
+      res.status(200).json({
+        success: true,
+        message,
+        completed: false,
+      });
+      return true;
     }
     let lbrynetResult = await getClaim(`${name}#${claimId}`);
     if (!lbrynetResult) {

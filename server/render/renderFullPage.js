@@ -3,7 +3,7 @@ const path = require('path');
 
 const bundlePath = path.resolve('./public/bundle/bundle.js');
 const bundleHash = md5File.sync(bundlePath);
-const shortBundleHash = bundleHash.substring(0,4);
+const shortBundleHash = bundleHash.substring(0, 4);
 
 module.exports = (helmet, html, preloadedState) => {
   // take the html and preloadedState and return the full page
@@ -14,6 +14,7 @@ module.exports = (helmet, html, preloadedState) => {
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
             <meta http-equiv="X-UA-Compatible" content="ie=edge">
+            <meta name="google-site-verification" content="U3240KfVplLZSRCcOHxGuDFQO6eVUXKeFsSD2WJvdLo" />
             <!--helmet-->
             ${helmet.title.toString()}
             ${helmet.meta.toString()}
@@ -27,7 +28,10 @@ module.exports = (helmet, html, preloadedState) => {
         <body>
             <div id="react-app">${html}</div>
             <script>
-                window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(/</g, '\\\u003c')}
+                window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(
+                  /</g,
+                  '\\\u003c'
+                )}
             </script>
             <script src="/bundle/bundle.js?${shortBundleHash}"></script>
         </body>

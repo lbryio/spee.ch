@@ -1,5 +1,5 @@
 {
-  "host": "public.chainquery.lbry.io",
+  "host": "public.chainquery.lbry.com",
   "port": "3306",
   "timeout": 30,
   "database": "chainquery",

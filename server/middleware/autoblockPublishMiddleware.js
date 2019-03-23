@@ -1,9 +1,12 @@
 const fs = require('fs');
 
 const logger = require('winston');
-const { publishing: { publishingChannelWhitelist } } = require('@config/siteConfig');
+const {
+  publishing: { publishingChannelWhitelist },
+} = require('@config/siteConfig');
 const ipBanFile = './site/config/ipBan.txt';
-const forbiddenMessage = '<h1>Forbidden</h1>If you are seeing this by mistake, please contact us using <a href="https://chat.lbry.io/">https://chat.lbry.io/</a>';
+const forbiddenMessage =
+  '<h1>Forbidden</h1>If you are seeing this by mistake, please contact us using <a href="https://chat.lbry.com/">https://chat.lbry.com/</a>';
 
 let ipCounts = {};
 let blockedAddresses = [];
@@ -13,7 +16,7 @@ if (fs.existsSync(ipBanFile)) {
     input: require('fs').createReadStream(ipBanFile),
   });
 
-  lineReader.on('line', (line) => {
+  lineReader.on('line', line => {
     if (line && line !== '') {
       blockedAddresses.push(line);
     }
@@ -30,7 +33,7 @@ const autoblockPublishMiddleware = (req, res, next) => {
     return;
   }
 
-  let count = ipCounts[ip] = (ipCounts[ip] || 0) + 1;
+  let count = (ipCounts[ip] = (ipCounts[ip] || 0) + 1);
 
   setTimeout(() => {
     if (ipCounts[ip]) {

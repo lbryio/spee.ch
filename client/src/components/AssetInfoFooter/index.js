@@ -3,9 +3,13 @@ import Row from '@components/Row';
 
 const AssetInfoFooter = ({ assetUrl, name }) => {
   return (
-    <div className='asset-footer'>
+    <div className="asset-footer">
       <p>
-        Hosted via the <a className={'link--primary'} href={'https://lbry.io/get'} target={'_blank'}>LBRY</a> blockchain
+        Hosted via the{' '}
+        <a className={'link--primary'} href={'https://lbry.com/get'} target={'_blank'}>
+          LBRY
+        </a>{' '}
+        blockchain
       </p>
     </div>
   );

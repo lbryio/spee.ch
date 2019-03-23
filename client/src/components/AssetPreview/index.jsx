@@ -2,19 +2,19 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import createCanonicalLink from '@globalutils/createCanonicalLink';
 import * as Icon from 'react-feather';
+import Img from 'react-image';
 
 const AssetPreview = ({ defaultThumbnail, claimData }) => {
-  const {name, fileExt, contentType, thumbnail, title, blocked, transactionTime} = claimData;
+  const {name, fileExt, contentType, thumbnail, title, blocked, transactionTime = 0} = claimData;
   const showUrl = createCanonicalLink({asset: {...claimData}});
   console.log(transactionTime)
   const embedUrl = `${showUrl}.${fileExt}`;
-  const ago = Date.now()/1000 - transactionTime;
+  const ago = Date.now() / 1000 - transactionTime;
   const dayInSeconds = 60 * 60 * 24;
   const monthInSeconds = dayInSeconds * 30;
-  const yearInSeconds = dayInSeconds * 365;
   let when;
 
-  if (ago < dayInSeconds) {
+  if (ago < dayInSeconds || transactionTime < 1) {
     when = 'Just today';
   } else if (ago < monthInSeconds) {
     when = `${Math.floor(ago / dayInSeconds)} d ago`;
@@ -52,10 +52,14 @@ const AssetPreview = ({ defaultThumbnail, claimData }) => {
     return (
       <Link to={showUrl} className='asset-preview'>
         <div className='asset-preview__image-box'>
-          <img
-            className={'asset-preview__image'}
-            src={thumb || defaultThumbnail}
+          <Img
+            src={[
+              thumb,
+              defaultThumbnail,
+              '/assets/img/default_thumb.jpg',
+            ]}
             alt={name}
+            className={'asset-preview__image'}
           />
         </div>
 
