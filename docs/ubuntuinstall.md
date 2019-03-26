@@ -4,7 +4,7 @@
 
 ## Prerequisites
   * Ability to use SSH (putty + public key for windows users)
-  * Ubuntu 16.04 or 18.04 VPS with root access
+  * Ubuntu 16.04 or 18.04 VPS with root access (RAM > 1GB (for the npm build process))
     * Your login info ready
     * Exposed ports: 22, 80, 443, 3333, 4444
   * Domain name with @ and www pointed at your VPS IP
@@ -61,17 +61,7 @@ ssh to username@domainname or username@ip_address
   `sudo apt-get install git curl unzip ffmpeg nodejs imagemagick -y`
 
 ## Clone speech either from your own fork, or from the lbryio/spee.ch repo.
-
-  * For Developers - our master branch
-
-  `git clone https://github.com/lbryio/spee.ch`
-
-  * For Developers - your fork
-
-  `git clone https://github.com/{{youraccount}}/spee.ch.git`
-
-  `git clone git@github.com:{{youraccount}}/spee.ch` 
-
+ 
   * For Publishers and Content creators - stable release
 
   `git clone -b release https://github.com/lbryio/spee.ch`
@@ -88,47 +78,9 @@ ssh to username@domainname or username@ip_address
 
   _if your distro isn't vanilla ubuntu 16 or 18, you may have to install it_
 
-# 3 Install Caddy to handle https and reverse proxy
+# 3 Setup your Nginx Virtual host + Certbot (For SSL Certs)
 
-##  Get Caddy
-
-  `curl https://getcaddy.com | sudo bash -s personal`
-
-## Set up Caddy reverse proxy and ssl
-
-  _Make Caddy's folders, copy the template, edit the Caddyfile, copy the caddyfile to its folder._
-
-  ```
-  sudo mkdir -p /opt/caddy/logs/
-  sudo mkdir -p /opt/caddy/store/
-  cp ~/spee.ch/docs/setup/conf/caddy/Caddyfile.template ~/spee.ch/docs/setup/conf/caddy/Caddyfile
-  nano ~/spee.ch/docs/setup/conf/caddy/Caddyfile
-   ```
-
-   ( Change {{EXAMPLE.COM}} to YOURDOMAIN.COM )
-
-  `sudo cp ~/spee.ch/docs/setup/conf/caddy/Caddyfile /opt/caddy/`
-
-## Set up Caddy to run as systemd service
-
-  ```
-  sudo cp ~/spee.ch/docs/setup/conf/caddy/caddy.service /etc/systemd/system/caddy.service
-  sudo chmod 644 /etc/systemd/system/caddy.service
-  sudo chown -R www-data:www-data /opt/caddy/
-  sudo setcap 'cap_net_bind_service=+ep' /usr/local/bin/caddy
-  sudo systemctl daemon-reload
-  sudo systemctl start caddy
-  sudo systemctl status caddy
-  ```
-
-  `q` exits
-
-  At this point, navigating to yourdomain.com should give you a 502 bad gateway error. That's good!
-
-  Now you can make sure caddy starts when the machine starts:
-
-  `sudo systemctl enable caddy`
-
+* _configuration examples for nginx and certbot are [here](https://github.com/lbryio/spee.ch/tree/master/docs/setup/conf/nginx)_
 
 # 4 Set up MySQL
 
@@ -276,6 +228,14 @@ Now we can `lbrynet` without `/opt/lbry`. Let's make sure we're back in our home
   ~/spee.ch:
 
   `npm install`
+  
+  A few dependencies are not satisfied by the automatic npm install so we manually install them
+  
+  `npm install sequelize-cli acorn redux-devtools`
+  
+  A few vulnerabilities are reported by npm which we fix
+  
+  `npm audit fix`
 
   _note: if you have installed your own local chainquery instance, you will need to specify it in your own /site/config/chainqueryConfig.json_
 
@@ -315,6 +275,23 @@ If your server is running in the terminal from the last section, `Control+C` it.
  `pm2 start npm --name speech -- run start`
 
  While pm2 installed this way will restart the server, it will not rebuild it on changes. You'll do that manually as discussed before.
+ 
+ It will also not resume the server if the VPS is rebooted. To achieve this :-
+ 
+ You can generate a startup script for your server’s init system by using PM2’s auto-detection feature.
+ 
+ `pm2 startup`
+ 
+ Copy/Paste the resultant command eg
+ 
+ `sudo env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u {{USERNAME}} --hp /home/{{USERNAME}}`
+ 
+ Save Processes for Restart on Boot
+ 
+ `pm2 save`
+ 
+ Now the Spee.ch server survives reboots
+ 
 
 ### 7 Maintenance Procedures
 

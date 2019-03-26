@@ -4,25 +4,25 @@ server {
   listen 80;
   listen [::]:80;
 
-  server_name {{DOMAIN_NAME}} {{WWW_DOMAIN_NAME}}
+  server_name {{DOMAIN_NAME}}
   include snippets/letsencrypt.conf;
   return 301 https://$host$request_uri;
 }
 
-server {
-  listen 443 ssl http2;
-  server_name {{WWW_DOMAIN_NAME}};
-  ssl_certificate /etc/letsencrypt/live/{{DOMAIN_NAME}}/fullchain.pem;
-  ssl_certificate_key /etc/letsencrypt/live/{{DOMAIN_NAME}}/privkey.pem;
-  ssl_trusted_certificate /etc/letsencrypt/live/{{DOMAIN_NAME}}/chain.pem;
-  include snippets/ssl.conf;
-  include snippets/letsencrypt.conf;
+#server {
+#  listen 443 ssl http2;
+#  server_name {{DOMAIN_NAME}};
+#  ssl_certificate /etc/letsencrypt/live/{{DOMAIN_NAME}}/fullchain.pem;
+#  ssl_certificate_key /etc/letsencrypt/live/{{DOMAIN_NAME}}/privkey.pem;
+#  ssl_trusted_certificate /etc/letsencrypt/live/{{DOMAIN_NAME}}/chain.pem;
+#  include snippets/ssl.conf;
+#  include snippets/letsencrypt.conf;
 
-  access_log /var/log/nginx/www-myspeech.access.log;
-  error_log /var/log/nginx/www-myspeech.error.log;
+#  access_log /var/log/nginx/www-myspeech.access.log;
+#  error_log /var/log/nginx/www-myspeech.error.log;
 
-  return 301 https://{{DOMAIN_NAME}}$request_uri;
-}
+#  return 301 https://{{DOMAIN_NAME}}$request_uri;
+#}
 
 server {
   #YOUR SITE HERE
