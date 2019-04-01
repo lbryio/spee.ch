@@ -1,26 +1,18 @@
 const logger = require('winston');
 const transformImage = require('./transformImage');
-
+const parseQueryString = require('server/utils/parseQuerystring');
 const isValidQueryObject = require('server/utils/isValidQueryObj');
 const {
   serving: { dynamicFileSizing },
 } = require('@config/siteConfig');
 const { enabled: dynamicEnabled } = dynamicFileSizing;
 
-const serveFile = async ({ filePath, fileType }, res, originalUrl) => {
-  const queryObject = {};
-  // TODO: replace quick/dirty try catch with better practice
-  try {
-    originalUrl
-      .split('?')[1]
-      .split('&')
-      .map(pair => {
-        if (pair.includes('=')) {
-          let parr = pair.split('=');
-          queryObject[parr[0]] = parr[1];
-        } else queryObject[pair] = true;
-      });
-  } catch (e) {}
+const serveFile = async (
+  { download_path: filePath, mime_type: fileType, total_bytes: totalBytes },
+  res,
+  originalUrl
+) => {
+  const queryObject = parseQueryString(originalUrl) || {};
 
   if (!fileType) {
     logger.error(`no fileType provided for ${filePath}`);
