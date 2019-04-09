@@ -1,25 +1,24 @@
 const chainquery = require('chainquery').default;
-const db = require('server/models');
+const { getFileListFileByOutpoint } = require('server/lbrynet');
+const publishCache = require('server/utils/publishCache');
+const logger = require('winston');
 
 const fetchClaimData = async params => {
-  let { claimId, claimName: name } = params;
-  if (claimId === 'none') claimId = null;
+  let { claimId } = params;
+  logger.debug('fetchClaimData params:', params);
 
-  const [cq, local] = await Promise.all([
-    chainquery.claim.queries.resolveClaim(name, claimId).catch(() => {}),
-    db.Claim.resolveClaim(name, claimId).catch(() => {}),
-  ]);
-  // Todo: don't use localdb to get post publish content
-  if (!cq && !local) {
-    return null;
+  if (claimId === 'none') {
+    claimId = null;
   }
-  if (cq && cq.name === name && !local) {
-    return cq;
+
+  const publishData = publishCache.get(claimId);
+  const outpoint = publishData && publishData.outpoint;
+
+  if (outpoint) {
+    return getFileListFileByOutpoint(outpoint);
+  } else {
+    return chainquery.claim.queries.resolveClaim(claimId).catch(() => null);
   }
-  if (local && local.name === name && !cq) {
-    return local;
-  }
-  return local.updatedAt > cq.modified_at ? local : cq;
 };
 
 module.exports = fetchClaimData;

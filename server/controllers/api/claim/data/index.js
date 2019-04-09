@@ -1,8 +1,7 @@
 const { handleErrorResponse } = require('../../../utils/errorHandlers.js');
 const getClaimData = require('server/utils/getClaimData');
 const fetchClaimData = require('server/utils/fetchClaimData');
-const chainquery = require('chainquery').default;
-const db = require('server/models');
+const logger = require('winston');
 /*
 
   route to return data for a claim
@@ -22,7 +21,7 @@ const claimData = async ({ ip, originalUrl, body, params }, res) => {
 
     res.status(200).json({
       success: true,
-      data   : await getClaimData(resolvedClaim),
+      data: await getClaimData(resolvedClaim),
     });
   } catch (error) {
     handleErrorResponse(originalUrl, ip, error, res);

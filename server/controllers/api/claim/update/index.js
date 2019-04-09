@@ -14,6 +14,8 @@ const authenticateUser = require('../publish/authentication.js');
 const createThumbnailPublishParams = require('../publish/createThumbnailPublishParams.js');
 const chainquery = require('chainquery').default;
 const createCanonicalLink = require('@globalutils/createCanonicalLink');
+const { getFileListFileByOutpoint } = require('server/lbrynet');
+const publishCache = require('server/utils/publishCache');
 
 /*
   route to update a claim through the daemon
@@ -69,6 +71,7 @@ const claimUpdate = ({ body, files, headers, ip, originalUrl, user, tor }, res) 
     licenseUrl,
     name,
     nsfw,
+    outpoint,
     thumbnailFileName,
     thumbnailFilePath,
     thumbnailFileType,
@@ -105,31 +108,34 @@ const claimUpdate = ({ body, files, headers, ip, originalUrl, user, tor }, res) 
   }
 
   // check channel authorization
+  //
+  // Assume that if this is an update,
+  // chainquery probably has the claim in mempool
+  // so no cache check needed
   authenticateUser(channelName, channelId, channelPassword, user)
     .then(({ channelName, channelClaimId }) => {
       if (!channelId) {
         channelId = channelClaimId;
       }
-      return chainquery.claim.queries
-        .resolveClaimInChannel(name, channelClaimId)
-        .then(claim => claim.dataValues);
+      return chainquery.claim.queries.resolveClaimInChannel(name, channelClaimId).then(claim => {
+        outpoint = claim.generated_outpoint;
+        return claim.dataValues;
+      });
     })
     .then(claim => {
       claimRecord = claim;
       if (claimRecord.content_type === 'video/mp4' && files.file) {
         thumbnailUpdate = true;
       }
-
       if (!files.file || thumbnailUpdate) {
-        return Promise.all([
-          db.File.findOne({ where: { name, claimId: claim.claim_id } }),
-          resolveUri(`${claim.name}#${claim.claim_id}`),
-        ]);
+        // return Promise.all([
+        // db.File.findOne({ where: { name, claimId: claim.claim_id } }),
+        return getFileListFileByOutpoint(outpoint);
+        // ]);
       }
-
-      return [null, null];
-    })
-    .then(([fileResult, resolution]) => {
+    }) // remove fileResult
+    .then(fileListResult => {
+      logger.verbose('fileListResult', fileListResult);
       metadata = Object.assign(
         {},
         {
@@ -151,7 +157,6 @@ const claimUpdate = ({ body, files, headers, ip, originalUrl, user, tor }, res) 
         channel_id: channelId,
         metadata,
       };
-
       if (files.file) {
         if (thumbnailUpdate) {
           // publish new thumbnail
@@ -172,8 +177,8 @@ const claimUpdate = ({ body, files, headers, ip, originalUrl, user, tor }, res) 
           publishParams['file_path'] = filePath;
         }
       } else {
-        fileName = fileResult.fileName;
-        fileType = fileResult.fileType;
+        fileName = fileListResult.file_name;
+        fileType = fileListResult.mime_type;
         publishParams['thumbnail'] = claimRecord.thumbnail_url;
       }
 
@@ -205,6 +210,8 @@ const claimUpdate = ({ body, files, headers, ip, originalUrl, user, tor }, res) 
       } else {
         canonicalUrl = createCanonicalLink({ asset: { ...publishResult, shortId } });
       }
+      publishCache.set(canonicalUrl, publishResult.claimId);
+      publishCache.set(publishResult.claimId, publishResult);
 
       if (publishResult.error) {
         res.status(400).json({

@@ -1,31 +1,37 @@
 const logger = require('winston');
 const db = require('server/models');
+const chainquery = require('chainquery').default;
 const { abandonClaim } = require('server/lbrynet');
 const deleteFile = require('../publish/deleteFile.js');
 const authenticateUser = require('../publish/authentication.js');
 
 /*
   route to abandon a claim through the daemon
+  DO AFTER THE REST WORKS
 */
 
 const claimAbandon = async (req, res) => {
-  const {claimId} = req.body;
-  const {user} = req;
+  const { claimId } = req.body;
+  const { user } = req;
   try {
+    // This must not depend on db.Claim
     const [channel, claim] = await Promise.all([
       authenticateUser(user.channelName, null, null, user),
-      db.Claim.findOne({where: {claimId}}),
+      chainquery.claim.queries.resolveClaim(claimId),
     ]);
 
-    if (!claim) throw new Error('That channel does not exist');
-    if (!channel.channelName) throw new Error('You don\'t own this channel');
+    if (!claim) throw new Error('That claim does not exist');
+    if (!channel.channelName) throw new Error("You don't own this channel");
 
-    await abandonClaim({claimId});
-    const file = await db.File.findOne({where: {claimId}});
+    await abandonClaim({ claimId });
+    // Add file_delete here.
+    // Using db.File just to get the path. Use file_list.
+    const file = await db.File.findOne({ where: { claimId } });
     await Promise.all([
       deleteFile(file.filePath),
-      db.File.destroy({where: {claimId}}),
-      db.Claim.destroy({where: {claimId}}),
+      db.File.destroy({ where: { claimId } }),
+      // Remove this
+      db.Claim.destroy({ where: { claimId } }),
     ]);
     logger.debug(`Claim abandoned: ${claimId}`);
     res.status(200).json({
