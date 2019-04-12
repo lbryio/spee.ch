@@ -1,13 +1,13 @@
+import { createFileRecordDataAfterGet } from 'server/models/utils/createFileRecordData.js';
+import { handleErrorResponse } from '../../../utils/errorHandlers.js';
+import getClaimData from 'server/utils/getClaimData';
+import chainquery from 'chainquery';
+import db from 'server/models';
+import logger from 'winston';
+import awaitFileSize from 'server/utils/awaitFileSize';
+import isBot from 'isbot';
+import publishCache from 'server/utils/publishCache';
 const { getClaim, resolveUri } = require('server/lbrynet');
-const { createFileRecordDataAfterGet } = require('server/models/utils/createFileRecordData.js');
-const { handleErrorResponse } = require('../../../utils/errorHandlers.js');
-const getClaimData = require('server/utils/getClaimData');
-const chainquery = require('chainquery').default;
-const db = require('server/models');
-const logger = require('winston');
-const awaitFileSize = require('server/utils/awaitFileSize');
-const isBot = require('isbot');
-const publishCache = require('server/utils/publishCache');
 
 const RETRY_MS = 250;
 const TIMEOUT_MS = 15000;
@@ -83,4 +83,4 @@ const claimGet = async ({ ip, originalUrl, params, headers }, res) => {
     handleErrorResponse(originalUrl, ip, error, res);
   }
 };
-module.exports = claimGet;
+export default claimGet;

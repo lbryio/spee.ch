@@ -1,5 +1,5 @@
-const { handleErrorResponse } = require('../../../utils/errorHandlers.js');
-const chainquery = require('chainquery').default;
+import { handleErrorResponse } from '../../../utils/errorHandlers.js';
+import chainquery from 'chainquery';
 
 /*
 
@@ -22,4 +22,4 @@ const claimShortId = async ({ ip, originalUrl, body, params }, res) => {
   }
 };
 
-module.exports = claimShortId;
+export default claimShortId;

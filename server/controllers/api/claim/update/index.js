@@ -1,21 +1,20 @@
-const logger = require('winston');
-const db = require('server/models');
-const {
-  details,
-  publishing: { disabled, disabledMessage, primaryClaimAddress },
-} = require('@config/siteConfig');
-const { resolveUri } = require('server/lbrynet');
-const { sendGATimingEvent } = require('../../../../utils/googleAnalytics.js');
-const { handleErrorResponse } = require('../../../utils/errorHandlers.js');
-const publish = require('../publish/publish.js');
-const parsePublishApiRequestBody = require('../publish/parsePublishApiRequestBody');
-const parsePublishApiRequestFiles = require('../publish/parsePublishApiRequestFiles.js');
-const authenticateUser = require('../publish/authentication.js');
-const createThumbnailPublishParams = require('../publish/createThumbnailPublishParams.js');
-const chainquery = require('chainquery').default;
-const createCanonicalLink = require('@globalutils/createCanonicalLink');
-const { getFileListFileByOutpoint } = require('server/lbrynet');
-const publishCache = require('server/utils/publishCache');
+import logger from 'winston';
+import { sendGATimingEvent } from '@serverutils/googleAnalytics.js';
+import { handleErrorResponse } from '../../../utils/errorHandlers.js';
+import publish from '../publish/publish.js';
+import parsePublishApiRequestBody from '../publish/parsePublishApiRequestBody';
+import parsePublishApiRequestFiles from '../publish/parsePublishApiRequestFiles.js';
+import authenticateUser from '../publish/authentication.js';
+import createThumbnailPublishParams from '../publish/createThumbnailPublishParams.js';
+import chainquery from 'chainquery';
+import { getFileListFileByOutpoint } from 'server/lbrynet';
+import publishCache from 'server/utils/publishCache';
+import createCanonicalLink from '@globalutils/createCanonicalLink';
+import isApprovedChannel from '@globalutils/isApprovedChannel';
+import { details, publishing } from '@config/siteConfig';
+const { disabled, disabledMessage, primaryClaimAddress } = publishing;
+
+//, approvedChannels, thumbnailChannel, thumbnailChannelId
 
 /*
   route to update a claim through the daemon
@@ -242,4 +241,4 @@ const claimUpdate = ({ body, files, headers, ip, originalUrl, user, tor }, res) 
     });
 };
 
-module.exports = claimUpdate;
+export default claimUpdate;

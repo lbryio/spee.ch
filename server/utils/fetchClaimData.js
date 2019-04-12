@@ -1,11 +1,9 @@
-const chainquery = require('chainquery').default;
-const { getFileListFileByOutpoint } = require('server/lbrynet');
-const publishCache = require('server/utils/publishCache');
-const logger = require('winston');
+import chainquery from 'chainquery';
+import { getFileListFileByOutpoint } from 'server/lbrynet';
+import publishCache from 'server/utils/publishCache';
 
 const fetchClaimData = async params => {
   let { claimId } = params;
-  logger.debug('fetchClaimData params:', params);
 
   if (claimId === 'none') {
     claimId = null;
@@ -21,4 +19,4 @@ const fetchClaimData = async params => {
   }
 };
 
-module.exports = fetchClaimData;
+export default fetchClaimData;

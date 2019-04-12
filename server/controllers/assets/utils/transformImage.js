@@ -1,9 +1,9 @@
-const gm = require('gm');
-const logger = require('winston');
+import gm from 'gm';
+import logger from 'winston';
+import { getImageHeightAndWidth } from '@serverutils/imageProcessing';
 const imageMagick = gm.subClass({ imageMagick: true });
-const { getImageHeightAndWidth } = require('../../../utils/imageProcessing');
 
-module.exports = function transformImage(path, queryObj) {
+export default function transformImage(path, queryObj) {
   return new Promise((resolve, reject) => {
     let { h: cHeight = null } = queryObj;
     let { w: cWidth = null } = queryObj;
@@ -39,7 +39,7 @@ module.exports = function transformImage(path, queryObj) {
       reject(e);
     }
   });
-};
+}
 
 function _cropCenter(path, cropWidth, cropHeight, originalWidth, originalHeight) {
   let oAspect = originalWidth / originalHeight;

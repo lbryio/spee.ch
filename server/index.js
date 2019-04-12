@@ -1,36 +1,33 @@
 // load modules
-const express = require('express');
-const bodyParser = require('body-parser');
-const expressHandlebars = require('express-handlebars');
-const helmet = require('helmet');
-const cookieSession = require('cookie-session');
-const http = require('http');
-const logger = require('winston');
-const Path = require('path');
-const httpContext = require('express-http-context');
+import express from 'express';
+import bodyParser from 'body-parser';
+import expressHandlebars from 'express-handlebars';
+import helmet from 'helmet';
+import cookieSession from 'cookie-session';
+import http from 'http';
+import logger from 'winston';
+import Path from 'path';
+import httpContext from 'express-http-context';
 
 // load local modules
-const db = require('./models');
-const requestLogger = require('./middleware/requestLogger');
-const createDatabaseIfNotExists = require('./models/utils/createDatabaseIfNotExists');
-const { getAccountBalance } = require('./lbrynet/index');
-const configureLogging = require('./utils/configureLogging');
-const configureSlack = require('./utils/configureSlack');
-const { setupBlockList } = require('./utils/blockList');
-const speechPassport = require('./speechPassport');
-const processTrending = require('./utils/processTrending');
+import db from './models';
+import requestLogger from './middleware/requestLogger';
+import createDatabaseIfNotExists from './models/utils/createDatabaseIfNotExists';
+import { getAccountBalance } from './lbrynet/index';
+import configureLogging from './utils/configureLogging';
+import configureSlack from './utils/configureSlack';
+import { setupBlockList } from './utils/blockList';
+import speechPassport from './speechPassport';
+import processTrending from './utils/processTrending';
 
-const {
+import {
   logMetricsMiddleware,
   setRouteDataInContextMiddleware,
-} = require('./middleware/logMetricsMiddleware');
-
-const {
-  details: { port: PORT, blockListEndpoint },
-  startup: { performChecks, performUpdates },
-} = require('@config/siteConfig');
-
-const { sessionKey } = require('@private/authConfig.json');
+} from './middleware/logMetricsMiddleware';
+import { sessionKey } from '@private/authConfig.json';
+import { details, startup } from '@config/siteConfig';
+const { port: PORT, blockListEndpoint } = details;
+const { performChecks, performUpdates } = startup;
 
 // configure.js doesn't handle new keys in config.json files yet. Make sure it doens't break.
 let finalBlockListEndpoint;
@@ -246,4 +243,4 @@ function Server() {
   };
 }
 
-module.exports = Server;
+export default Server;

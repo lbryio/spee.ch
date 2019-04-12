@@ -1,14 +1,14 @@
-const {
-  details: { host },
-  assetDefaults: { thumbnail },
-} = require('@config/siteConfig');
-const chainquery = require('chainquery').default;
-const mime = require('mime-types');
-const { isBlocked } = require('./blockList');
-const publishCache = require('server/utils/publishCache');
-const logger = require('winston');
+import chainquery from 'chainquery';
+import mime from 'mime-types';
+import { isBlocked } from './blockList';
+import publishCache from 'server/utils/publishCache';
+import logger from 'winston';
 
-module.exports = async (data, chName = null, chShortId = null) => {
+import { details, assetDefaults } from '@config/siteConfig';
+const { host } = details;
+const { thumbnail } = assetDefaults;
+
+export default async (data, chName = null, chShortId = null) => {
   // TODO: Refactor getching the channel name out; requires invasive changes.
 
   let dataFromFileList, dataFromChainquery, outpoint, certificateId;
@@ -32,10 +32,9 @@ module.exports = async (data, chName = null, chShortId = null) => {
   let channelShortId = chShortId;
   let channelName = chName;
   // TODO: Factor blocked out
-  let blocked = false;
+  let blocked;
 
   if (isBlocked(outpoint)) {
-    logger.debug('blocking content');
     blocked = true;
   }
 

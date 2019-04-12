@@ -1,25 +1,28 @@
-const logger = require('winston');
-const ua = require('universal-analytics');
-const { analytics : { googleId }, details: { title } } = require('@config/siteConfig');
+import logger from 'winston';
+import ua from 'universal-analytics';
+import { analytics, details } from '@config/siteConfig';
+
+const { googleId } = analytics;
+const { title } = details;
 
 const createServeEventParams = (headers, ip, originalUrl) => {
   return {
-    eventCategory    : 'client requests',
-    eventAction      : 'serve request',
-    eventLabel       : originalUrl,
-    ipOverride       : ip,
+    eventCategory: 'client requests',
+    eventAction: 'serve request',
+    eventLabel: originalUrl,
+    ipOverride: ip,
     userAgentOverride: headers['user-agent'],
-    documentReferrer : headers['referer'],
+    documentReferrer: headers['referer'],
   };
 };
 
 const createTimingEventParams = (category, variable, label, startTime, endTime) => {
   const duration = endTime - startTime;
   return {
-    userTimingCategory    : category,
+    userTimingCategory: category,
     userTimingVariableName: variable,
-    userTimingTime        : duration,
-    userTimingLabel       : label,
+    userTimingTime: duration,
+    userTimingLabel: label,
   };
 };
 
@@ -29,7 +32,7 @@ const sendGoogleAnalyticsEvent = (ip, params) => {
   }
   const visitorId = ip.replace(/\./g, '-');
   const visitor = ua(googleId, visitorId, { strictCidFormat: false, https: true });
-  visitor.event(params, (err) => {
+  visitor.event(params, err => {
     if (err) {
       return logger.error('Google Analytics Event Error >>', err);
     }
@@ -42,7 +45,7 @@ const sendGoogleAnalyticsTiming = (siteTitle, params) => {
     return logger.debug('Skipping analytics timing because no GoogleId present in configs');
   }
   const visitor = ua(googleId, siteTitle, { strictCidFormat: false, https: true });
-  visitor.timing(params, (err) => {
+  visitor.timing(params, err => {
     if (err) {
       return logger.error('Google Analytics Event Error >>', err);
     }
@@ -50,22 +53,19 @@ const sendGoogleAnalyticsTiming = (siteTitle, params) => {
   });
 };
 
-const sendGAServeEvent = (headers, ip, originalUrl) => {
+export const sendGAServeEvent = (headers, ip, originalUrl) => {
   const params = createServeEventParams(headers, ip, originalUrl);
   sendGoogleAnalyticsEvent(ip, params);
 };
 
-const sendGATimingEvent = (category, variable, label, startTime, endTime) => {
+export const sendGATimingEvent = (category, variable, label, startTime, endTime) => {
   const params = createTimingEventParams(category, variable, label, startTime, endTime);
   sendGoogleAnalyticsTiming(title, params);
 };
 
-const chooseGaLbrynetPublishLabel = ({ channel_name: channelName, channel_id: channelId }) => {
-  return (channelName || channelId ? 'PUBLISH_IN_CHANNEL_CLAIM' : 'PUBLISH_ANONYMOUS_CLAIM');
-};
-
-module.exports = {
-  sendGAServeEvent,
-  sendGATimingEvent,
-  chooseGaLbrynetPublishLabel,
+export const chooseGaLbrynetPublishLabel = ({
+  channel_name: channelName,
+  channel_id: channelId,
+}) => {
+  return channelName || channelId ? 'PUBLISH_IN_CHANNEL_CLAIM' : 'PUBLISH_ANONYMOUS_CLAIM';
 };

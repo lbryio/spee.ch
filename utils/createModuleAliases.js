@@ -37,7 +37,7 @@ module.exports = () => {
   // aliases for utils
   moduleAliases['@globalutils'] = resolve('utils');
   moduleAliases['@clientutils'] = resolve(`${DEFAULT_ROOT}/utils`);
-  // moduleAliases['@serverutils'] = resolve('server/utils');
+  moduleAliases['@serverutils'] = resolve('server/utils');
 
   // aliases for constants
   moduleAliases['@clientConstants'] = resolve(`${DEFAULT_ROOT}/constants`);

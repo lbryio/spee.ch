@@ -1,5 +1,5 @@
-const { sendGAServeEvent } = require('../../../utils/googleAnalytics');
-const getClaimIdAndServeAsset = require('../utils/getClaimIdAndServeAsset.js');
+import { sendGAServeEvent } from '@serverutils/googleAnalytics';
+import getClaimIdAndServeAsset from '../utils/getClaimIdAndServeAsset.js';
 
 /*
 
@@ -14,4 +14,4 @@ const serveAsset = ({ headers, ip, originalUrl, params: { claimName, claimId } }
   getClaimIdAndServeAsset(null, null, claimName, claimId, originalUrl, ip, res, headers);
 };
 
-module.exports = serveAsset;
+export default serveAsset;

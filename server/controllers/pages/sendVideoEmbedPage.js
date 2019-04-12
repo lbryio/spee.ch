@@ -1,42 +1,40 @@
-const {
-  assetDefaults: { thumbnail },
-  details: { host },
-} = require('@config/siteConfig');
-
+import { assetDefaults, details } from '@config/siteConfig';
+const { thumbnail } = assetDefaults;
+const { host } = details;
 const padSizes = {
-  small : 'padSmall',
+  small: 'padSmall',
   medium: 'padMedium',
-  large : 'padLarge',
+  large: 'padLarge',
 };
 
 const argumentProcessors = {
-  'bottom': async (config) => {
+  bottom: async config => {
     config.classNames.push('bottom');
   },
-  'right': async (config) => {
+  right: async config => {
     config.classNames.push('right');
   },
-  'pad': async (config, val) => {
+  pad: async (config, val) => {
     config.classNames.push(padSizes[val]);
   },
-  'logoClaim': async (config, val) => {
+  logoClaim: async (config, val) => {
     config.logoUrl = `${host}/${val}`;
   },
-  'link': async (config, val) => {
+  link: async (config, val) => {
     config.logoLink = val;
   },
 };
 
-const parseLogoConfigParam = async (rawConfig) => {
+const parseLogoConfigParam = async rawConfig => {
   if (rawConfig) {
     let parsedConfig = {
       classNames: ['logoLink'],
-      logoUrl   : thumbnail,
+      logoUrl: thumbnail,
     };
     let splitConfig;
     try {
       splitConfig = rawConfig.split(',');
-    } catch (e) { }
+    } catch (e) {}
 
     if (!splitConfig) {
       return false;
@@ -64,11 +62,7 @@ const parseLogoConfigParam = async (rawConfig) => {
 };
 
 const sendVideoEmbedPage = async ({ params }, res) => {
-  let {
-    claimId,
-    config,
-    name,
-  } = params;
+  let { claimId, config, name } = params;
 
   // if channel then swap name and claimId for order
   if (name[0] === '@' && name.includes(':')) {
@@ -86,4 +80,4 @@ const sendVideoEmbedPage = async ({ params }, res) => {
   res.status(200).render('embed', { host, claimId, name, logoConfig });
 };
 
-module.exports = sendVideoEmbedPage;
+export default sendVideoEmbedPage;

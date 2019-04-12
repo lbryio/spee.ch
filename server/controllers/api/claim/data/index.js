@@ -1,7 +1,7 @@
-const { handleErrorResponse } = require('../../../utils/errorHandlers.js');
-const getClaimData = require('server/utils/getClaimData');
-const fetchClaimData = require('server/utils/fetchClaimData');
-const logger = require('winston');
+import { handleErrorResponse } from '../../../utils/errorHandlers.js';
+import getClaimData from 'server/utils/getClaimData';
+import fetchClaimData from 'server/utils/fetchClaimData';
+import logger from 'winston';
 /*
 
   route to return data for a claim
@@ -28,4 +28,4 @@ const claimData = async ({ ip, originalUrl, body, params }, res) => {
   }
 };
 
-module.exports = claimData;
+export default claimData;

@@ -1,30 +1,33 @@
-const logger = require('winston');
+import logger from 'winston';
 
+import { sendGATimingEvent } from 'server/utils/googleAnalytics.js';
+
+import { handleErrorResponse } from '../../../utils/errorHandlers.js';
+
+import checkClaimAvailability from '../availability/checkClaimAvailability.js';
+
+import publish from './publish.js';
+import createPublishParams from './createPublishParams.js';
+import createThumbnailPublishParams from './createThumbnailPublishParams.js';
+import parsePublishApiRequestBody from './parsePublishApiRequestBody.js';
+import parsePublishApiRequestFiles from './parsePublishApiRequestFiles.js';
+import authenticateUser from './authentication.js';
+
+import chainquery from 'chainquery';
+import publishCache from 'server/utils/publishCache';
+import isApprovedChannel from '@globalutils/isApprovedChannel';
+import { details, publishing } from '@config/siteConfig';
+
+import createCanonicalLink from '@globalutils/createCanonicalLink';
+const { host } = details;
 const {
-  details: { host },
-  publishing: { disabled, disabledMessage },
-} = require('@config/siteConfig');
-
-const { sendGATimingEvent } = require('server/utils/googleAnalytics.js');
-const isApprovedChannel = require('@globalutils/isApprovedChannel');
-const {
-  publishing: { publishOnlyApproved, approvedChannels, thumbnailChannel, thumbnailChannelId },
-} = require('@config/siteConfig');
-
-const { handleErrorResponse } = require('../../../utils/errorHandlers.js');
-
-const checkClaimAvailability = require('../availability/checkClaimAvailability.js');
-
-const publish = require('./publish.js');
-const createPublishParams = require('./createPublishParams.js');
-const createThumbnailPublishParams = require('./createThumbnailPublishParams.js');
-const parsePublishApiRequestBody = require('./parsePublishApiRequestBody.js');
-const parsePublishApiRequestFiles = require('./parsePublishApiRequestFiles.js');
-const authenticateUser = require('./authentication.js');
-
-const chainquery = require('chainquery').default;
-const createCanonicalLink = require('@globalutils/createCanonicalLink');
-const publishCache = require('server/utils/publishCache');
+  disabled,
+  disabledMessage,
+  publishOnlyApproved,
+  approvedChannels,
+  thumbnailChannel,
+  thumbnailChannelId,
+} = publishing;
 const CLAIM_TAKEN = 'CLAIM_TAKEN';
 const UNAPPROVED_CHANNEL = 'UNAPPROVED_CHANNEL';
 
@@ -218,4 +221,4 @@ const claimPublish = ({ body, files, headers, ip, originalUrl, user, tor }, res)
     });
 };
 
-module.exports = claimPublish;
+export default claimPublish;
