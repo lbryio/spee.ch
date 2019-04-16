@@ -49,7 +49,6 @@ export default async (data, chName = null, chShortId = null) => {
   }
   if (dataFromFileList && dataFromFileList.outpoint) {
     // file_list values due to recent publish
-    console.log('ClaimName', dataFromFileList.claim_name);
     return {
       name: dataFromFileList.claim_name,
       title: dataFromFileList.metadata.title,
@@ -72,7 +71,6 @@ export default async (data, chName = null, chShortId = null) => {
     };
   } else {
     // chainquery result values
-    console.log('ClaimName', dataFromChainquery.name);
     return {
       name: dataFromChainquery.name,
       title: dataFromChainquery.title,

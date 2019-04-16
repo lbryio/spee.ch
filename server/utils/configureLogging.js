@@ -1,7 +1,7 @@
 import logger from 'winston';
 
 import config from '@config/loggerConfig';
-const { logLevel } = config;
+const { logLevel, timeStamp } = config;
 
 export default function configureLogging() {
   logger.info('configuring winston logger...');
@@ -16,7 +16,7 @@ export default function configureLogging() {
     transports: [
       new logger.transports.Console({
         level: logLevel || 'debug',
-        timestamp: false,
+        timestamp: true,
         colorize: true,
         prettyPrint: true,
         handleExceptions: true,
