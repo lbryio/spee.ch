@@ -1,10 +1,10 @@
-const db = require('server/models');
-const chainquery = require('chainquery').default;
-const logger = require('winston');
-const publishCache = require('server/utils/publishCache');
-const { handleErrorResponse } = require('server/controllers/utils/errorHandlers.js');
+import db from 'server/models';
+import chainquery from 'chainquery';
+import logger from 'winston';
+import publishCache from 'server/utils/publishCache';
+import { handleErrorResponse } from 'server/controllers/utils/errorHandlers.js';
 
-const getClaimId = require('server/controllers/utils/getClaimId.js');
+import getClaimId from 'server/controllers/utils/getClaimId.js';
 
 const NO_CHANNEL = 'NO_CHANNEL';
 const NO_CLAIM = 'NO_CLAIM';
@@ -72,4 +72,4 @@ const claimLongId = ({ ip, originalUrl, body, params }, res) => {
     });
 };
 
-module.exports = claimLongId;
+export default claimLongId;

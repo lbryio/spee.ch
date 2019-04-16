@@ -1,10 +1,10 @@
-const logger = require('winston');
-const transformImage = require('./transformImage');
-const parseQueryString = require('server/utils/parseQuerystring');
-const isValidQueryObject = require('server/utils/isValidQueryObj');
-const {
-  serving: { dynamicFileSizing },
-} = require('@config/siteConfig');
+import logger from 'winston';
+import transformImage from './transformImage';
+import parseQueryString from 'server/utils/parseQuerystring';
+import isValidQueryObject from 'server/utils/isValidQueryObj';
+import { serving } from '@config/siteConfig';
+const { dynamicFileSizing } = serving;
+
 const { enabled: dynamicEnabled } = dynamicFileSizing;
 
 const serveFile = async (
@@ -57,4 +57,4 @@ const serveFile = async (
   }
 };
 
-module.exports = serveFile;
+export default serveFile;

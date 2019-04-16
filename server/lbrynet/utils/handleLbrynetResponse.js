@@ -1,6 +1,6 @@
-const logger = require('winston');
+import logger from 'winston';
 
-const handleLbrynetResponse = ({ data }, resolve, reject) => {
+export const handleLbrynetResponse = ({ data }, resolve, reject) => {
   logger.debug('lbry api data:', data);
   if (data) {
     // check for an error
@@ -15,5 +15,3 @@ const handleLbrynetResponse = ({ data }, resolve, reject) => {
   // fallback in case it just timed out
   reject(JSON.stringify(data));
 };
-
-module.exports = handleLbrynetResponse;

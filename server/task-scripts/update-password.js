@@ -1,6 +1,6 @@
 // load dependencies
-const logger = require('winston');
-const db = require('../models');
+import logger from 'winston';
+import db from '../models';
 // configure logging
 require('../helpers/configureLogger.js')(logger);
 
@@ -11,7 +11,8 @@ logger.debug('old password:', oldPassword);
 const newPassword = process.argv[4];
 logger.debug('new password:', newPassword);
 
-db.sequelize.sync() // sync sequelize
+db.sequelize
+  .sync() // sync sequelize
   .then(() => {
     logger.info('finding user profile');
     return db.User.findOne({
@@ -24,10 +25,7 @@ db.sequelize.sync() // sync sequelize
     if (!user) {
       throw new Error('no user found');
     }
-    return Promise.all([
-      user.comparePassword(oldPassword),
-      user,
-    ]);
+    return Promise.all([user.comparePassword(oldPassword), user]);
   })
   .then(([isMatch, user]) => {
     if (!isMatch) {
@@ -39,6 +37,6 @@ db.sequelize.sync() // sync sequelize
   .then(() => {
     logger.debug('Password successfully updated');
   })
-  .catch((error) => {
+  .catch(error => {
     logger.error(error);
   });

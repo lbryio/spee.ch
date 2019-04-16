@@ -1,35 +1,35 @@
-module.exports = (sequelize, { STRING, BOOLEAN, INTEGER }) => {
+export default (sequelize, { STRING, BOOLEAN, INTEGER }) => {
   const File = sequelize.define(
     'File',
     {
       name: {
-        type     : STRING,
+        type: STRING,
         allowNull: false,
       },
       claimId: {
-        type     : STRING,
+        type: STRING,
         allowNull: false,
       },
       outpoint: {
-        type     : STRING,
+        type: STRING,
         allowNull: false,
       },
       fileHeight: {
-        type     : INTEGER,
+        type: INTEGER,
         allowNull: false,
-        default  : 0,
+        default: 0,
       },
       fileWidth: {
-        type     : INTEGER,
+        type: INTEGER,
         allowNull: false,
-        default  : 0,
+        default: 0,
       },
       fileName: {
-        type     : STRING,
+        type: STRING,
         allowNull: false,
       },
       filePath: {
-        type     : STRING,
+        type: STRING,
         allowNull: false,
       },
       fileType: {

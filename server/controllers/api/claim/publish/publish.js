@@ -1,11 +1,9 @@
-const logger = require('winston');
-const db = require('../../../../models');
-const { publishClaim } = require('../../../../lbrynet');
-const { createFileRecordDataAfterPublish } = require('server/models/utils/createFileRecordData.js');
-const {
-  createClaimRecordDataAfterPublish,
-} = require('server/models/utils/createClaimRecordData.js');
-const deleteFile = require('./deleteFile.js');
+import logger from 'winston';
+import db from '../../../../models';
+import { publishClaim } from '../../../../lbrynet';
+import { createFileRecordDataAfterPublish } from '../../../../models/utils/createFileRecordData.js';
+import { createClaimRecordDataAfterPublish } from '../../../../models/utils/createClaimRecordData.js';
+import deleteFile from './deleteFile.js';
 
 const publish = async (publishParams, fileName, fileType) => {
   let publishResults;
@@ -80,5 +78,4 @@ const publish = async (publishParams, fileName, fileType) => {
     };
   }
 };
-
-module.exports = publish;
+export default publish;

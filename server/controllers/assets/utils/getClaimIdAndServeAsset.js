@@ -1,16 +1,20 @@
-const logger = require('winston');
+import logger from 'winston';
 
-const db = require('server/models');
-const chainquery = require('chainquery').default;
-const isApprovedChannel = require('@globalutils/isApprovedChannel');
-const { getFileListFileByOutpoint, getClaim } = require('server/lbrynet');
-const getClaimId = require('../../utils/getClaimId.js');
-const { handleErrorResponse } = require('../../utils/errorHandlers.js');
-const awaitFileSize = require('server/utils/awaitFileSize');
-const serveFile = require('./serveFile.js');
-const parseQueryString = require('server/utils/parseQuerystring');
-const publishCache = require('server/utils/publishCache');
-const isBot = require('isbot');
+import db from 'server/models';
+import chainquery from 'chainquery';
+import { getFileListFileByOutpoint, getClaim } from 'server/lbrynet';
+import getClaimId from '../../utils/getClaimId.js';
+import { handleErrorResponse } from '../../utils/errorHandlers.js';
+import awaitFileSize from 'server/utils/awaitFileSize';
+import serveFile from './serveFile.js';
+import parseQueryString from 'server/utils/parseQuerystring';
+import publishCache from 'server/utils/publishCache';
+import isBot from 'isbot';
+import isApprovedChannel from '@globalutils/isApprovedChannel';
+
+import { publishing } from '@config/siteConfig';
+
+const { serveOnlyApproved, approvedChannels } = publishing;
 
 const NO_CHANNEL = 'NO_CHANNEL';
 const NO_CLAIM = 'NO_CLAIM';
@@ -21,10 +25,6 @@ const CONTENT_UNAVAILABLE = 'CONTENT_UNAVAILABLE';
 const RETRY_MS = 250;
 const TIMEOUT_MS = 15000;
 const MIN_BYTES = 15000000;
-
-const {
-  publishing: { serveOnlyApproved, approvedChannels },
-} = require('@config/siteConfig');
 
 const getClaimIdAndServeAsset = async (
   channelName,
@@ -125,4 +125,4 @@ const getClaimIdAndServeAsset = async (
   }
 };
 
-module.exports = getClaimIdAndServeAsset;
+export default getClaimIdAndServeAsset;

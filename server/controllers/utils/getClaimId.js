@@ -1,8 +1,8 @@
-const logger = require('winston');
-const db = require('../../models');
-const chainquery = require('chainquery').default;
-const publishCache = require('server/utils/publishCache');
-const createCanonicalLink = require('@globalutils/createCanonicalLink');
+import logger from 'winston';
+import db from 'server/models';
+import chainquery from 'chainquery';
+import publishCache from 'server/utils/publishCache';
+import createCanonicalLink from '@globalutils/createCanonicalLink';
 
 const getClaimIdByChannel = async (channelName, channelClaimId, claimName) => {
   logger.debug(`getClaimIdByChannel(${channelName}, ${channelClaimId}, ${claimName})`);
@@ -36,4 +36,4 @@ const getClaimId = async (channelName, channelClaimId, name, claimId) => {
   }
 };
 
-module.exports = getClaimId;
+export default getClaimId;

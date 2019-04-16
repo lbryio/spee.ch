@@ -1,6 +1,6 @@
-const logger = require('winston');
+import logger from 'winston';
 
-const { publishing } = require('@config/siteConfig.json');
+import { publishing } from '@config/siteConfig.json';
 
 const { fileSizeLimits } = publishing;
 
@@ -35,4 +35,4 @@ const validateFileForPublish = file => {
   return file;
 };
 
-module.exports = validateFileForPublish;
+export default validateFileForPublish;

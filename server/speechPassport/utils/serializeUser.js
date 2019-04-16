@@ -3,4 +3,4 @@ const serializeUser = (user, done) => {
   done(null, user);
 };
 
-module.exports = serializeUser;
+export default serializeUser;

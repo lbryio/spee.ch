@@ -1,7 +1,7 @@
-const { resolve } = require('path');
+import { resolve } from 'path';
 const WWW_SPEECH_ROOT = resolve(process.cwd());
 
-module.exports = () => {
+export default () => {
   let moduleAliases = {};
   // default aliases
   moduleAliases['@config'] = resolve(WWW_SPEECH_ROOT, 'config');

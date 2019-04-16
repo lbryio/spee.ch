@@ -1,7 +1,8 @@
-const { handleErrorResponse } = require('../../../utils/errorHandlers.js');
-const getChannelData = require('./getChannelData.js');
-const isApprovedChannel = require('../../../../../utils/isApprovedChannel');
-const { publishing: { serveOnlyApproved, approvedChannels } } = require('@config/siteConfig');
+import { handleErrorResponse } from '../../../utils/errorHandlers.js';
+import getChannelData from './getChannelData.js';
+import isApprovedChannel from '@globalutils/isApprovedChannel';
+import { publishing } from '@config/siteConfig';
+const { serveOnlyApproved, approvedChannels } = publishing;
 
 const NO_CHANNEL = 'NO_CHANNEL';
 const LONG_ID = 'longId';
@@ -20,7 +21,9 @@ const channelData = ({ ip, originalUrl, body, params }, res) => {
   if (channelClaimId === 'none') channelClaimId = null;
   const chanObj = {};
   if (channelName) chanObj.name = channelName;
-  if (channelClaimId) chanObj[(channelClaimId.length === LONG_CLAIM_LENGTH ? LONG_ID : SHORT_ID)] = channelClaimId;
+  if (channelClaimId) {
+    chanObj[channelClaimId.length === LONG_CLAIM_LENGTH ? LONG_ID : SHORT_ID] = channelClaimId;
+  }
   if (serveOnlyApproved && !isApprovedChannel(chanObj, approvedChannels)) {
     return res.status(404).json({
       success: false,
@@ -46,4 +49,4 @@ const channelData = ({ ip, originalUrl, body, params }, res) => {
     });
 };
 
-module.exports = channelData;
+export default channelData;

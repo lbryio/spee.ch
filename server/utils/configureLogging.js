@@ -1,9 +1,9 @@
-const logger = require('winston');
+import logger from 'winston';
 
-const config = require('@config/loggerConfig');
+import config from '@config/loggerConfig';
 const { logLevel } = config;
 
-function configureLogging () {
+export default function configureLogging() {
   logger.info('configuring winston logger...');
   if (!config) {
     return logger.warn('No logger config found');
@@ -14,12 +14,12 @@ function configureLogging () {
   // configure the winston logger
   logger.configure({
     transports: [
-      new (logger.transports.Console)({
-        level                          : logLevel || 'debug',
-        timestamp                      : false,
-        colorize                       : true,
-        prettyPrint                    : true,
-        handleExceptions               : true,
+      new logger.transports.Console({
+        level: logLevel || 'debug',
+        timestamp: false,
+        colorize: true,
+        prettyPrint: true,
+        handleExceptions: true,
         humanReadableUnhandledException: true,
       }),
     ],
@@ -32,5 +32,3 @@ function configureLogging () {
   logger.debug('Testing: Log Level 4');
   logger.silly('Testing: Log Level 5');
 }
-
-module.exports = configureLogging;
