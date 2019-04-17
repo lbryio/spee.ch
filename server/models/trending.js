@@ -1,47 +1,48 @@
-const chainquery = require('chainquery').default;
+import chainquery from 'chainquery';
 
-module.exports = (sequelize, { BOOLEAN, DATE, FLOAT, INTEGER, STRING }) => {
+export default (sequelize, { BOOLEAN, DATE, FLOAT, INTEGER, STRING }) => {
   const Trending = sequelize.define(
     'Trending',
     {
-      time: { /* TODO: Historical analysis and log roll */
-        type        : DATE(6),
+      time: {
+        /* TODO: Historical analysis and log roll */
+        type: DATE(6),
         defaultValue: sequelize.NOW,
       },
       isChannel: {
-        type        : BOOLEAN,
+        type: BOOLEAN,
         defaultValue: false,
       },
       claimId: {
-        type        : STRING,
+        type: STRING,
         defaultValue: null,
       },
       publisherId: {
-        type        : STRING,
+        type: STRING,
         defaultValue: null,
       },
       intervalViews: {
-        type        : INTEGER,
+        type: INTEGER,
         defaultValue: 0,
       },
       weight: {
-        type        : FLOAT,
+        type: FLOAT,
         defaultValue: 0,
       },
       zScore: {
-        type        : FLOAT,
+        type: FLOAT,
         defaultValue: 0,
       },
       pValue: {
-        type        : FLOAT,
+        type: FLOAT,
         defaultValue: 0,
       },
       // TODO: Calculate t-statistics
     },
     {
       freezeTableName: true,
-      timestamps     : false, // don't use default timestamps columns
-      indexes        : [
+      timestamps: false, // don't use default timestamps columns
+      indexes: [
         {
           fields: ['claimId'],
         },
@@ -52,16 +53,15 @@ module.exports = (sequelize, { BOOLEAN, DATE, FLOAT, INTEGER, STRING }) => {
     }
   );
 
-  Trending.getTrendingWeightData = async ({
-    hours = 2,
-    minutes = 0,
-    limit = 20,
-  } = {}) => {
+  Trending.getTrendingWeightData = async ({ hours = 2, minutes = 0, limit = 20 } = {}) => {
     let time = new Date();
     time.setHours(time.getHours() - hours);
     time.setMinutes(time.getMinutes() - minutes);
 
-    const sqlTime = time.toISOString().slice(0, 19).replace('T', ' ');
+    const sqlTime = time
+      .toISOString()
+      .slice(0, 19)
+      .replace('T', ' ');
 
     const selectString = 'DISTINCT(claimId), weight';
     const whereString = `isChannel = false and time > '${sqlTime}'`;
@@ -89,7 +89,7 @@ module.exports = (sequelize, { BOOLEAN, DATE, FLOAT, INTEGER, STRING }) => {
       },
     });
 
-    return claimData.map((claimData) => {
+    return claimData.map(claimData => {
       return Object.assign(trendingClaims[claimData.claim_id], claimData.dataValues);
     });
   };

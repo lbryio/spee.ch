@@ -1,22 +1,18 @@
-const Sequelize = require('sequelize');
-const logger = require('winston');
+import Sequelize from 'sequelize';
+import logger from 'winston';
 
-const Blocked = require('./blocked');
-const Certificate = require('./certificate');
-const Channel = require('./channel');
-const Claim = require('./claim');
-const File = require('./file');
-const Metrics = require('./metrics');
-const Tor = require('./tor');
-const Trending = require('./trending');
-const User = require('./user');
-const Views = require('./views');
+import Blocked from './blocked';
+import Certificate from './certificate';
+import Channel from './channel';
+import Claim from './claim';
+import File from './file';
+import Metrics from './metrics';
+import Tor from './tor';
+import Trending from './trending';
+import User from './user';
+import Views from './views';
 
-const {
-  database,
-  username,
-  password,
-} = require('@config/mysqlConfig');
+import { database, username, password } from '@config/mysqlConfig';
 
 if (!database || !username || !password) {
   logger.warn('missing database, user, or password from mysqlConfig');
@@ -24,16 +20,16 @@ if (!database || !username || !password) {
 
 // set sequelize options
 const sequelize = new Sequelize(database, username, password, {
-  host          : 'localhost',
-  dialect       : 'mysql',
+  host: 'localhost',
+  dialect: 'mysql',
   dialectOptions: {
     decimalNumbers: true,
   },
   logging: false,
-  pool   : {
-    max    : 5,
-    min    : 0,
-    idle   : 10000,
+  pool: {
+    max: 5,
+    min: 0,
+    idle: 10000,
     acquire: 10000,
   },
   operatorsAliases: false,
@@ -77,23 +73,24 @@ db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 // add an 'upsert' method to the db object
 db.upsert = (Model, values, condition, tableName) => {
-  return Model
-    .findOne({
-      where: condition,
-    })
+  return Model.findOne({
+    where: condition,
+  })
     .then(obj => {
-      if (obj) {  // update
+      if (obj) {
+        // update
         logger.debug(`updating record in db.${tableName}`);
         return obj.update(values);
-      } else {  // insert
+      } else {
+        // insert
         logger.debug(`creating record in db.${tableName}`);
         return Model.create(values);
       }
     })
-    .catch(function (error) {
+    .catch(function(error) {
       logger.error(`${tableName}.upsert error`, error);
       throw error;
     });
 };
 
-module.exports = db;
+export default db;

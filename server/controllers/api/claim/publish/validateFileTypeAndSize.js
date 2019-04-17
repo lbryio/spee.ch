@@ -1,4 +1,4 @@
-const logger = require('winston');
+import logger from 'winston';
 
 const {
   publishing: { maxSizeImage = 10000000, maxSizeGif = 50000000, maxSizeVideo = 50000000 },
@@ -41,4 +41,4 @@ const validateFileTypeAndSize = file => {
   return file;
 };
 
-module.exports = validateFileTypeAndSize;
+export default validateFileTypeAndSize;

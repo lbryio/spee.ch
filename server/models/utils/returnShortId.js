@@ -16,10 +16,10 @@ const returnShortId = (claimsArray, longId) => {
     shortIdLength += 1;
     shortId = longId.substring(0, shortIdLength);
     possibleMatches = possibleMatches.filter(element => {
-      return (element.claimId && (element.claimId.substring(0, shortIdLength) === shortId));
+      return element.claimId && element.claimId.substring(0, shortIdLength) === shortId;
     });
   }
   return shortId;
 };
 
-module.exports = returnShortId;
+export default returnShortId;

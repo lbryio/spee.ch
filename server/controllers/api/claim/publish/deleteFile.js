@@ -1,7 +1,7 @@
-const logger = require('winston');
-const fs = require('fs');
+import logger from 'winston';
+import fs from 'fs';
 
-const deleteFile = (filePath) => {
+const deleteFile = filePath => {
   fs.unlink(filePath, err => {
     if (err) {
       return logger.error(`error deleting temporary file ${filePath}`);
@@ -10,4 +10,4 @@ const deleteFile = (filePath) => {
   });
 };
 
-module.exports = deleteFile;
+export default deleteFile;

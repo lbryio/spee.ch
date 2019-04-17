@@ -1,5 +1,5 @@
-const { getClaimList } = require('../../../../lbrynet');
-const { handleErrorResponse } = require('../../../utils/errorHandlers.js');
+import { getClaimList } from 'server/lbrynet';
+import { handleErrorResponse } from '../../../utils/errorHandlers.js';
 
 /*
 
@@ -17,4 +17,4 @@ const claimList = ({ ip, originalUrl, params }, res) => {
     });
 };
 
-module.exports = claimList;
+export default claimList;

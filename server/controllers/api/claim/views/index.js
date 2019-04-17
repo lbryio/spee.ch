@@ -1,5 +1,5 @@
-const { handleErrorResponse } = require('../../../utils/errorHandlers.js');
-const db = require('server/models');
+import { handleErrorResponse } from '../../../utils/errorHandlers.js';
+import db from 'server/models';
 
 /*
 
@@ -16,7 +16,7 @@ const claimViews = async ({ ip, originalUrl, body, params }, res) => {
 
     res.status(200).json({
       success: true,
-      data   : {
+      data: {
         [claimId]: viewCount,
       },
     });
@@ -25,4 +25,4 @@ const claimViews = async ({ ip, originalUrl, body, params }, res) => {
   }
 };
 
-module.exports = claimViews;
+export default claimViews;
