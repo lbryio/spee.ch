@@ -1,4 +1,4 @@
-const logger = require('winston');
+import logger from 'winston';
 
 const logRequestData = (responseType, claimName, channelName, claimId) => {
   logger.debug('responseType ===', responseType);
@@ -7,4 +7,4 @@ const logRequestData = (responseType, claimName, channelName, claimId) => {
   logger.debug('claim id ===', claimId);
 };
 
-module.exports = logRequestData;
+export default logRequestData;

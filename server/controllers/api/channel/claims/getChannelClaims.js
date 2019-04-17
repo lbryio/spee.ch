@@ -1,7 +1,7 @@
-const chainquery = require('chainquery').default;
-const logger = require('winston');
-const getClaimData = require('server/utils/getClaimData');
-const { returnPaginatedChannelClaims } = require('./channelPagination.js');
+import chainquery from 'chainquery';
+import logger from 'winston';
+import getClaimData from 'server/utils/getClaimData';
+import { returnPaginatedChannelClaims } from './channelPagination.js';
 
 const getChannelClaims = async (channelName, channelLongId, page) => {
   logger.debug(`getChannelClaims: ${channelName}, ${channelLongId}, ${page}`);
@@ -33,4 +33,4 @@ const getChannelClaims = async (channelName, channelLongId, page) => {
   return returnPaginatedChannelClaims(channelName, channelShortId, processedChannelClaims, page);
 };
 
-module.exports = getChannelClaims;
+export default getChannelClaims;

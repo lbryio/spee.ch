@@ -1,6 +1,5 @@
-const { handleErrorResponse } = require('../../../utils/errorHandlers.js');
-const db = require('../../../../models');
-const chainquery = require('chainquery').default;
+import { handleErrorResponse } from '../../../utils/errorHandlers.js';
+import chainquery from 'chainquery';
 
 /*
 
@@ -9,17 +8,18 @@ const chainquery = require('chainquery').default;
 */
 
 const claimShortId = async ({ ip, originalUrl, body, params }, res) => {
+  // TODO: use new sdk partialId features when available
   try {
-    let shortId = await chainquery.claim.queries.getShortClaimIdFromLongClaimId(params.longId, params.name).catch(() => {});
+    let shortId = await chainquery.claim.queries
+      .getShortClaimIdFromLongClaimId(params.longId, params.name)
+      .catch(() => {
+        return params.longId;
+      });
 
-    if (!shortId) {
-      shortId = await db.Claim.getShortClaimIdFromLongClaimId(params.longId, params.name);
-    }
-
-    res.status(200).json({success: true, data: shortId});
+    res.status(200).json({ success: true, data: shortId });
   } catch (error) {
     handleErrorResponse(originalUrl, ip, error, res);
   }
 };
 
-module.exports = claimShortId;
+export default claimShortId;

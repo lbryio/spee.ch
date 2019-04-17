@@ -1,5 +1,5 @@
-const { handleErrorResponse } = require('../../../utils/errorHandlers.js');
-const getChannelClaims = require('./getChannelClaims.js');
+import { handleErrorResponse } from '../../../utils/errorHandlers.js';
+import getChannelClaims from './getChannelClaims.js';
 
 const NO_CHANNEL = 'NO_CHANNEL';
 
@@ -16,7 +16,7 @@ const channelClaims = ({ ip, originalUrl, body, params }, res) => {
   const page = params.page;
   getChannelClaims(channelName, channelClaimId, page)
     .then(data => {
-      res.status(200).json({success: true, data});
+      res.status(200).json({ success: true, data });
     })
     .catch(error => {
       if (error === NO_CHANNEL) {
@@ -29,4 +29,4 @@ const channelClaims = ({ ip, originalUrl, body, params }, res) => {
     });
 };
 
-module.exports = channelClaims;
+export default channelClaims;

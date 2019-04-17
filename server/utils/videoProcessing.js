@@ -1,11 +1,7 @@
-const getVideoDimensions = require('get-video-dimensions');
+import getVideoDimensions from 'get-video-dimensions';
 
-async function getVideoHeightAndWidth (filePath) {
+export async function getVideoHeightAndWidth(filePath) {
   const videoDimensions = await getVideoDimensions(filePath);
   const { height, width } = videoDimensions;
-  return [ height, width ];
+  return [height, width];
 }
-
-module.exports = {
-  getVideoHeightAndWidth,
-};

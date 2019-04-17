@@ -7,8 +7,7 @@ import Img from 'react-image';
 const AssetPreview = ({ defaultThumbnail, claimData }) => {
   const {name, fileExt, contentType, thumbnail, title, blocked, transactionTime = 0} = claimData;
   const showUrl = createCanonicalLink({asset: {...claimData}});
-  console.log(transactionTime)
-  const embedUrl = `${showUrl}.${fileExt}`;
+  const embedUrl = `${showUrl}.${fileExt}?thumbnail=true`;
   const ago = Date.now() / 1000 - transactionTime;
   const dayInSeconds = 60 * 60 * 24;
   const monthInSeconds = dayInSeconds * 30;

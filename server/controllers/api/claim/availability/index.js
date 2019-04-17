@@ -1,6 +1,6 @@
-const checkClaimAvailability = require('./checkClaimAvailability.js');
-const { sendGATimingEvent } = require('../../../../utils/googleAnalytics.js');
-const { handleErrorResponse } = require('../../../utils/errorHandlers.js');
+import checkClaimAvailability from './checkClaimAvailability.js';
+import { sendGATimingEvent } from '../../../../utils/googleAnalytics.js';
+import { handleErrorResponse } from '../../../utils/errorHandlers.js';
 
 /*
 
@@ -14,7 +14,7 @@ const claimAvailability = ({ ip, originalUrl, params: { name } }, res) => {
     .then(isAvailable => {
       let responseObject = {
         success: true,
-        data   : isAvailable,
+        data: isAvailable,
       };
       if (isAvailable) {
         responseObject['message'] = `That claim name is available`;
@@ -29,4 +29,4 @@ const claimAvailability = ({ ip, originalUrl, params: { name } }, res) => {
     });
 };
 
-module.exports = claimAvailability;
+export default claimAvailability;

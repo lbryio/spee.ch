@@ -3,4 +3,4 @@ const deserializeUser = (user, done) => {
   done(null, user);
 };
 
-module.exports = deserializeUser;
+export default deserializeUser;

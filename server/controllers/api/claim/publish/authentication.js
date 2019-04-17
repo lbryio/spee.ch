@@ -1,5 +1,5 @@
-const logger = require('winston');
-const db = require('../../../../models');
+import logger from 'winston';
+import db from 'server/models';
 
 const authenticateChannelCredentials = (channelName, channelId, userPassword) => {
   return new Promise((resolve, reject) => {
@@ -10,10 +10,9 @@ const authenticateChannelCredentials = (channelName, channelId, userPassword) =>
     if (channelName) channelFindParams['channelName'] = channelName;
     if (channelId) channelFindParams['channelClaimId'] = channelId;
     // find the channel
-    db.Channel
-      .findOne({
-        where: channelFindParams,
-      })
+    db.Channel.findOne({
+      where: channelFindParams,
+    })
       .then(channel => {
         if (!channel) {
           logger.debug('no channel found');
@@ -51,7 +50,7 @@ const authenticateUser = (channelName, channelId, channelPassword, user) => {
     // case: no channelName or channel Id are provided (anonymous), regardless of whether user token is provided
     if (!channelName && !channelId) {
       resolve({
-        channelName   : null,
+        channelName: null,
         channelClaimId: null,
       });
       return;
@@ -67,7 +66,7 @@ const authenticateUser = (channelName, channelId, channelPassword, user) => {
         return;
       }
       resolve({
-        channelName   : user.channelName,
+        channelName: user.channelName,
         channelClaimId: user.channelClaimId,
       });
       return;
@@ -81,4 +80,4 @@ const authenticateUser = (channelName, channelId, channelPassword, user) => {
   });
 };
 
-module.exports = authenticateUser;
+export default authenticateUser;

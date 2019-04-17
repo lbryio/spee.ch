@@ -1,26 +1,18 @@
-const logger = require('winston');
-const transformImage = require('./transformImage');
+import logger from 'winston';
+import transformImage from './transformImage';
+import parseQueryString from 'server/utils/parseQuerystring';
+import isValidQueryObject from 'server/utils/isValidQueryObj';
+import { serving } from '@config/siteConfig';
+const { dynamicFileSizing } = serving;
 
-const isValidQueryObject = require('server/utils/isValidQueryObj');
-const {
-  serving: { dynamicFileSizing },
-} = require('@config/siteConfig');
 const { enabled: dynamicEnabled } = dynamicFileSizing;
 
-const serveFile = async ({ filePath, fileType }, res, originalUrl) => {
-  const queryObject = {};
-  // TODO: replace quick/dirty try catch with better practice
-  try {
-    originalUrl
-      .split('?')[1]
-      .split('&')
-      .map(pair => {
-        if (pair.includes('=')) {
-          let parr = pair.split('=');
-          queryObject[parr[0]] = parr[1];
-        } else queryObject[pair] = true;
-      });
-  } catch (e) {}
+const serveFile = async (
+  { download_path: filePath, mime_type: fileType, total_bytes: totalBytes },
+  res,
+  originalUrl
+) => {
+  const queryObject = parseQueryString(originalUrl) || {};
 
   if (!fileType) {
     logger.error(`no fileType provided for ${filePath}`);
@@ -65,4 +57,4 @@ const serveFile = async ({ filePath, fileType }, res, originalUrl) => {
   }
 };
 
-module.exports = serveFile;
+export default serveFile;

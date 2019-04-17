@@ -1,12 +1,17 @@
+import { createFileRecordDataAfterGet } from 'server/models/utils/createFileRecordData.js';
+import { handleErrorResponse } from '../../../utils/errorHandlers.js';
+import getClaimData from 'server/utils/getClaimData';
+import chainquery from 'chainquery';
+import db from 'server/models';
+import logger from 'winston';
+import awaitFileSize from 'server/utils/awaitFileSize';
+import isBot from 'isbot';
+import publishCache from 'server/utils/publishCache';
 const { getClaim, resolveUri } = require('server/lbrynet');
-const { createFileRecordDataAfterGet } = require('server/models/utils/createFileRecordData.js');
-const { handleErrorResponse } = require('../../../utils/errorHandlers.js');
-const getClaimData = require('server/utils/getClaimData');
-const chainquery = require('chainquery').default;
-const db = require('server/models');
-const logger = require('winston');
-const awaitFileSize = require('server/utils/awaitFileSize');
-const isBot = require('isbot');
+
+const RETRY_MS = 250;
+const TIMEOUT_MS = 15000;
+const MIN_BYTES = 15000000;
 
 /*
 
@@ -15,49 +20,58 @@ const isBot = require('isbot');
 */
 
 const claimGet = async ({ ip, originalUrl, params, headers }, res) => {
+  logger.debug(`claim/get params`, params);
   const name = params.name;
   const claimId = params.claimId;
 
   try {
-    let claimInfo = await chainquery.claim.queries.resolveClaim(name, claimId).catch(() => {});
-    if (claimInfo) {
-      logger.info('claim/get: claim resolved in chainquery');
-    }
-    if (!claimInfo) {
-      claimInfo = await db.Claim.resolveClaim(name, claimId);
-    }
-    if (!claimInfo) {
+    let claimDataFromChainquery = await chainquery.claim.queries
+      .resolveClaim(claimId)
+      .catch(() => null);
+
+    if (!claimDataFromChainquery) {
       throw new Error('claim/get: resolveClaim: No matching uri found in Claim table');
     }
     if (headers && headers['user-agent'] && isBot(headers['user-agent'])) {
-      let lbrynetResolveResult = await resolveUri(`${name}#${claimId}`);
-      const { message, completed } = lbrynetResolveResult;
+      logger.info(`ClaimGet Bot: From user-agent: ${headers['user-agent']} for: ${claimId}`);
       res.status(200).json({
         success: true,
-        message,
+        message: 'Bot detected',
         completed: false,
       });
       return true;
     }
+    logger.info(`ClaimGet: From user-agent: ${headers['user-agent']} for: ${claimId}`);
+
     let lbrynetResult = await getClaim(`${name}#${claimId}`);
+
     if (!lbrynetResult) {
       throw new Error(`claim/get: getClaim Unable to Get ${name}#${claimId}`);
     }
-    const claimData = await getClaimData(claimInfo);
-    if (!claimData) {
-      throw new Error('claim/get: getClaimData failed to get file blobs');
-    }
-    const fileReady = await awaitFileSize(lbrynetResult.outpoint, 10000000, 250, 10000);
+
+    const claimData = await getClaimData(claimDataFromChainquery);
+    const fileReady = await awaitFileSize(lbrynetResult.outpoint, MIN_BYTES, RETRY_MS, TIMEOUT_MS);
 
     if (fileReady !== 'ready') {
       throw new Error('claim/get: failed to get file after 10 seconds');
     }
-    const fileData = await createFileRecordDataAfterGet(claimData, lbrynetResult);
+
+    const fileData = await createFileRecordDataAfterGet(claimData, lbrynetResult).catch(() => null);
     if (!fileData) {
-      throw new Error('claim/get: createFileRecordDataAfterGet failed to create file in time');
+      logger.error(
+        'claim/get: createFileRecordDataAfterGet failed to create file dimensions in time'
+      );
     }
+
     const upsertCriteria = { name, claimId };
-    await db.upsert(db.File, fileData, upsertCriteria, 'File');
+    const upsertResult = await db
+      .upsert(db.File, fileData, upsertCriteria, 'File')
+      .catch(() => null);
+
+    if (!upsertResult) {
+      logger.error('claim/get: DB file upsert failed');
+    }
+
     const { message, completed } = lbrynetResult;
     res.status(200).json({
       success: true,
@@ -68,4 +82,4 @@ const claimGet = async ({ ip, originalUrl, params, headers }, res) => {
     handleErrorResponse(originalUrl, ip, error, res);
   }
 };
-module.exports = claimGet;
+export default claimGet;

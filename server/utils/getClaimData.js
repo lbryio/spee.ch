@@ -1,26 +1,33 @@
-const {
-  details: { host },
-  assetDefaults: { thumbnail },
-} = require('@config/siteConfig');
-const chainquery = require('chainquery').default;
-// const { getClaim } = require('server/lbrynet');
-const { isBlocked } = require('./blockList');
+import chainquery from 'chainquery';
+import mime from 'mime-types';
+import { isBlocked } from './blockList';
+import publishCache from 'server/utils/publishCache';
+import logger from 'winston';
 
-module.exports = async (data, chName = null, chShortId = null) => {
+import { details, assetDefaults } from '@config/siteConfig';
+const { host } = details;
+const { thumbnail } = assetDefaults;
+
+export default async (data, chName = null, chShortId = null) => {
   // TODO: Refactor getching the channel name out; requires invasive changes.
-  const dataVals = data.dataValues ? data.dataValues : data;
-  const txid = dataVals.transaction_hash_id || dataVals.txid;
-  let nout;
 
-  if (typeof dataVals.vout === 'number') {
-    nout = dataVals.vout;
+  let dataFromFileList, dataFromChainquery, outpoint, certificateId;
+
+  if (data && data.dataValues) {
+    dataFromChainquery = data.dataValues;
+    outpoint = data.generated_outpoint;
+    certificateId = dataFromChainquery.publisher_id;
+  } else if (data && data[0] && data[0].outpoint) {
+    dataFromFileList = data[0];
+    logger.debug('USE CACHE: claimid:', dataFromFileList.claim_id);
+    outpoint = dataFromFileList.outpoint;
+
+    let publishResult = dataFromFileList.claim_id && publishCache.get(dataFromFileList.claim_id);
+    logger.debug(`getClaimData: publishResult:`, publishResult);
+    certificateId = publishResult.certificateId;
   } else {
-    nout = dataVals.nout;
+    throw new Error(`NO DATA, CLYDE`);
   }
-
-  const outpoint = `${txid}:${nout}`;
-  const certificateId = dataVals.publisher_id || dataVals.certificateId;
-  const fileExt = data.generated_extension || dataVals.fileExt;
 
   let channelShortId = chShortId;
   let channelName = chName;
@@ -40,27 +47,49 @@ module.exports = async (data, chName = null, chShortId = null) => {
       .getShortClaimIdFromLongClaimId(certificateId, channelName)
       .catch(() => null);
   }
-
-  // Find a solution for the legacy application/octet-stream file extensions
-
-  return {
-    name: dataVals.name,
-    title: dataVals.title,
-    certificateId,
-    channelName,
-    channelShortId,
-    contentType: dataVals.content_type || data.contentType,
-    claimId: dataVals.claim_id || data.claimId,
-    fileExt: fileExt,
-    description: dataVals.description,
-    nsfw: dataVals.is_nsfw,
-    thumbnail: dataVals.thumbnail_url || data.thumbnail || thumbnail,
-    outpoint,
-    host,
-    pending: Boolean(dataVals.height === 0),
-    blocked: blocked,
-    license: dataVals.license,
-    licenseUrl: dataVals.license_url,
-    transactionTime: dataVals.transaction_time,
-  };
+  if (dataFromFileList && dataFromFileList.outpoint) {
+    // file_list values due to recent publish
+    return {
+      name: dataFromFileList.claim_name,
+      title: dataFromFileList.metadata.title,
+      certificateId,
+      channelName,
+      channelShortId,
+      contentType: dataFromFileList.mime_type || dataFromFileList.media_type,
+      claimId: dataFromFileList.claim_id,
+      fileExt: mime.extension(dataFromFileList.mime_type),
+      description: dataFromFileList.metadata.description,
+      nsfw: dataFromFileList.metadata.nsfw,
+      thumbnail: dataFromFileList.metadata.thumbnail,
+      outpoint,
+      host,
+      pending: false,
+      blocked: blocked,
+      license: dataFromFileList.metadata.license,
+      licenseUrl: dataFromFileList.metadata.license_url,
+      transactionTime: 0,
+    };
+  } else {
+    // chainquery result values
+    return {
+      name: dataFromChainquery.name,
+      title: dataFromChainquery.title,
+      certificateId,
+      channelName,
+      channelShortId,
+      contentType: dataFromChainquery.content_type,
+      claimId: dataFromChainquery.claim_id,
+      fileExt: data.generated_extension,
+      description: dataFromChainquery.description,
+      nsfw: dataFromChainquery.is_nsfw,
+      thumbnail: dataFromChainquery.thumbnail_url,
+      outpoint,
+      host,
+      pending: Boolean(dataFromChainquery.height === 0),
+      blocked: blocked,
+      license: dataFromChainquery.license,
+      licenseUrl: dataFromChainquery.license_url,
+      transactionTime: dataFromChainquery.transaction_time,
+    };
+  }
 };

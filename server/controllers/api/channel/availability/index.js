@@ -1,6 +1,6 @@
-const checkChannelAvailability = require('./checkChannelAvailability.js');
-const { sendGATimingEvent } = require('../../../../utils/googleAnalytics.js');
-const { handleErrorResponse } = require('../../../utils/errorHandlers.js');
+import checkChannelAvailability from './checkChannelAvailability.js';
+import { sendGATimingEvent } from '@serverutils/googleAnalytics.js';
+import { handleErrorResponse } from '../../../utils/errorHandlers.js';
 
 /*
 
@@ -8,7 +8,7 @@ const { handleErrorResponse } = require('../../../utils/errorHandlers.js');
 
 */
 
-function addAtSymbolIfNecessary (name) {
+function addAtSymbolIfNecessary(name) {
   if (name.substring(0, 1) !== '@') {
     return `@${name}`;
   }
@@ -22,7 +22,7 @@ const channelAvailability = ({ ip, originalUrl, params: { name } }, res) => {
     .then(isAvailable => {
       let responseObject = {
         success: true,
-        data   : isAvailable,
+        data: isAvailable,
       };
       if (isAvailable) {
         responseObject['message'] = `${name} is available`;
@@ -37,4 +37,4 @@ const channelAvailability = ({ ip, originalUrl, params: { name } }, res) => {
     });
 };
 
-module.exports = channelAvailability;
+export default channelAvailability;

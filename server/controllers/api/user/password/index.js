@@ -1,7 +1,7 @@
-const { handleErrorResponse } = require('../../../utils/errorHandlers.js');
-const logger = require('winston');
-const db = require('../../../../models');
-const { masterPassword } = require('@private/authConfig.json');
+import { handleErrorResponse } from '../../../utils/errorHandlers.js';
+import logger from 'winston';
+import db from 'server/models';
+import { masterPassword } from '@private/authConfig.json';
 /*
 
   route to update a password
@@ -22,7 +22,8 @@ const updateUserPassword = ({ ip, originalUrl, body }, res) => {
   if (!userName || !oldPassword || !newPassword) {
     return res.status(400).json({
       success: false,
-      message: 'body should include userName (channel name without the @), oldPassword, & newPassword',
+      message:
+        'body should include userName (channel name without the @), oldPassword, & newPassword',
     });
   }
 
@@ -60,9 +61,9 @@ const updateUserPassword = ({ ip, originalUrl, body }, res) => {
         newPassword,
       });
     })
-    .catch((error) => {
+    .catch(error => {
       handleErrorResponse(originalUrl, ip, error, res);
     });
 };
 
-module.exports = updateUserPassword;
+export default updateUserPassword;
