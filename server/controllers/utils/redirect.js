@@ -1,7 +1,7 @@
-const redirect = route => {
+const redirect = (route) => {
   return (req, res) => {
     res.status(301).redirect(route);
   };
 };
 
-export default redirect;
+module.exports = redirect;

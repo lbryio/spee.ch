@@ -1,20 +1,19 @@
-import logger from 'winston';
-import { sendGATimingEvent } from '@serverutils/googleAnalytics.js';
-import { handleErrorResponse } from '../../../utils/errorHandlers.js';
-import publish from '../publish/publish.js';
-import parsePublishApiRequestBody from '../publish/parsePublishApiRequestBody';
-import parsePublishApiRequestFiles from '../publish/parsePublishApiRequestFiles.js';
-import authenticateUser from '../publish/authentication.js';
-import createThumbnailPublishParams from '../publish/createThumbnailPublishParams.js';
-import chainquery from 'chainquery';
-import { getFileListFileByOutpoint } from 'server/lbrynet';
-import publishCache from 'server/utils/publishCache';
-import createCanonicalLink from '@globalutils/createCanonicalLink';
-import isApprovedChannel from '@globalutils/isApprovedChannel';
-import { details, publishing } from '@config/siteConfig';
-const { disabled, disabledMessage, primaryClaimAddress } = publishing;
-
-//, approvedChannels, thumbnailChannel, thumbnailChannelId
+const logger = require('winston');
+const db = require('server/models');
+const {
+  details,
+  publishing: { disabled, disabledMessage, primaryClaimAddress },
+} = require('@config/siteConfig');
+const { resolveUri } = require('server/lbrynet');
+const { sendGATimingEvent } = require('../../../../utils/googleAnalytics.js');
+const { handleErrorResponse } = require('../../../utils/errorHandlers.js');
+const publish = require('../publish/publish.js');
+const parsePublishApiRequestBody = require('../publish/parsePublishApiRequestBody');
+const parsePublishApiRequestFiles = require('../publish/parsePublishApiRequestFiles.js');
+const authenticateUser = require('../publish/authentication.js');
+const createThumbnailPublishParams = require('../publish/createThumbnailPublishParams.js');
+const chainquery = require('chainquery').default;
+const createCanonicalLink = require('@globalutils/createCanonicalLink');
 
 /*
   route to update a claim through the daemon
@@ -70,7 +69,6 @@ const claimUpdate = ({ body, files, headers, ip, originalUrl, user, tor }, res) 
     licenseUrl,
     name,
     nsfw,
-    outpoint,
     thumbnailFileName,
     thumbnailFilePath,
     thumbnailFileType,
@@ -107,34 +105,31 @@ const claimUpdate = ({ body, files, headers, ip, originalUrl, user, tor }, res) 
   }
 
   // check channel authorization
-  //
-  // Assume that if this is an update,
-  // chainquery probably has the claim in mempool
-  // so no cache check needed
   authenticateUser(channelName, channelId, channelPassword, user)
     .then(({ channelName, channelClaimId }) => {
       if (!channelId) {
         channelId = channelClaimId;
       }
-      return chainquery.claim.queries.resolveClaimInChannel(name, channelClaimId).then(claim => {
-        outpoint = claim.generated_outpoint;
-        return claim.dataValues;
-      });
+      return chainquery.claim.queries
+        .resolveClaimInChannel(name, channelClaimId)
+        .then(claim => claim.dataValues);
     })
     .then(claim => {
       claimRecord = claim;
       if (claimRecord.content_type === 'video/mp4' && files.file) {
         thumbnailUpdate = true;
       }
+
       if (!files.file || thumbnailUpdate) {
-        // return Promise.all([
-        // db.File.findOne({ where: { name, claimId: claim.claim_id } }),
-        return getFileListFileByOutpoint(outpoint);
-        // ]);
+        return Promise.all([
+          db.File.findOne({ where: { name, claimId: claim.claim_id } }),
+          resolveUri(`${claim.name}#${claim.claim_id}`),
+        ]);
       }
-    }) // remove fileResult
-    .then(fileListResult => {
-      logger.verbose('fileListResult', fileListResult);
+
+      return [null, null];
+    })
+    .then(([fileResult, resolution]) => {
       metadata = Object.assign(
         {},
         {
@@ -156,6 +151,7 @@ const claimUpdate = ({ body, files, headers, ip, originalUrl, user, tor }, res) 
         channel_id: channelId,
         metadata,
       };
+
       if (files.file) {
         if (thumbnailUpdate) {
           // publish new thumbnail
@@ -176,8 +172,8 @@ const claimUpdate = ({ body, files, headers, ip, originalUrl, user, tor }, res) 
           publishParams['file_path'] = filePath;
         }
       } else {
-        fileName = fileListResult.file_name;
-        fileType = fileListResult.mime_type;
+        fileName = fileResult.fileName;
+        fileType = fileResult.fileType;
         publishParams['thumbnail'] = claimRecord.thumbnail_url;
       }
 
@@ -209,8 +205,6 @@ const claimUpdate = ({ body, files, headers, ip, originalUrl, user, tor }, res) 
       } else {
         canonicalUrl = createCanonicalLink({ asset: { ...publishResult, shortId } });
       }
-      publishCache.set(canonicalUrl, publishResult.claimId);
-      publishCache.set(publishResult.claimId, publishResult);
 
       if (publishResult.error) {
         res.status(400).json({
@@ -241,4 +235,4 @@ const claimUpdate = ({ body, files, headers, ip, originalUrl, user, tor }, res) 
     });
 };
 
-export default claimUpdate;
+module.exports = claimUpdate;

@@ -1,10 +1,13 @@
-import logger from 'winston';
-import returnShortId from './utils/returnShortId.js';
-import isApprovedChannel from '@globalutils/isApprovedChannel';
-import { assetDefaults, details, publishing } from '@config/siteConfig';
-const { thumbnail: defaultThumbnail } = assetDefaults;
-const { host } = details;
-const { serveOnlyApproved, approvedChannels } = publishing;
+const logger = require('winston');
+const returnShortId = require('./utils/returnShortId.js');
+const isApprovedChannel = require('../../utils/isApprovedChannel');
+const {
+  assetDefaults: { thumbnail: defaultThumbnail },
+  details: { host },
+} = require('@config/siteConfig');
+const {
+  publishing: { serveOnlyApproved, approvedChannels },
+} = require('@config/siteConfig');
 
 const NO_CLAIM = 'NO_CLAIM';
 
@@ -50,7 +53,7 @@ function isShortClaimId(claimId) {
   return claimId && claimId.length < 40;
 }
 
-export default (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
+module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
   const Claim = sequelize.define(
     'Claim',
     {

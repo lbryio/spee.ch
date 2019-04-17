@@ -1,5 +1,5 @@
-import { getFileListFileByOutpoint } from 'server/lbrynet';
-import logger from 'winston';
+const { getFileListFileByOutpoint } = require('server/lbrynet');
+const logger = require('winston');
 
 function delay(t) {
   return new Promise(function(resolve) {
@@ -27,4 +27,4 @@ const awaitFileSize = (outpoint, size, interval, timeout) => {
   return checkFileList();
 };
 
-export default awaitFileSize;
+module.exports = awaitFileSize;

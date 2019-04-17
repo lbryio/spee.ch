@@ -1,33 +1,30 @@
-import logger from 'winston';
+const logger = require('winston');
 
-import { sendGATimingEvent } from 'server/utils/googleAnalytics.js';
-
-import { handleErrorResponse } from '../../../utils/errorHandlers.js';
-
-import checkClaimAvailability from '../availability/checkClaimAvailability.js';
-
-import publish from './publish.js';
-import createPublishParams from './createPublishParams.js';
-import createThumbnailPublishParams from './createThumbnailPublishParams.js';
-import parsePublishApiRequestBody from './parsePublishApiRequestBody.js';
-import parsePublishApiRequestFiles from './parsePublishApiRequestFiles.js';
-import authenticateUser from './authentication.js';
-
-import chainquery from 'chainquery';
-import publishCache from 'server/utils/publishCache';
-import isApprovedChannel from '@globalutils/isApprovedChannel';
-import { details, publishing } from '@config/siteConfig';
-
-import createCanonicalLink from '@globalutils/createCanonicalLink';
-const { host } = details;
 const {
-  disabled,
-  disabledMessage,
-  publishOnlyApproved,
-  approvedChannels,
-  thumbnailChannel,
-  thumbnailChannelId,
-} = publishing;
+  details: { host },
+  publishing: { disabled, disabledMessage },
+} = require('@config/siteConfig');
+
+const { sendGATimingEvent } = require('server/utils/googleAnalytics.js');
+const isApprovedChannel = require('@globalutils/isApprovedChannel');
+const {
+  publishing: { publishOnlyApproved, approvedChannels },
+} = require('@config/siteConfig');
+
+const { handleErrorResponse } = require('../../../utils/errorHandlers.js');
+
+const checkClaimAvailability = require('../availability/checkClaimAvailability.js');
+
+const publish = require('./publish.js');
+const createPublishParams = require('./createPublishParams.js');
+const createThumbnailPublishParams = require('./createThumbnailPublishParams.js');
+const parsePublishApiRequestBody = require('./parsePublishApiRequestBody.js');
+const parsePublishApiRequestFiles = require('./parsePublishApiRequestFiles.js');
+const authenticateUser = require('./authentication.js');
+
+const chainquery = require('chainquery').default;
+const createCanonicalLink = require('@globalutils/createCanonicalLink');
+
 const CLAIM_TAKEN = 'CLAIM_TAKEN';
 const UNAPPROVED_CHANNEL = 'UNAPPROVED_CHANNEL';
 
@@ -72,7 +69,6 @@ const claimPublish = ({ body, files, headers, ip, originalUrl, user, tor }, res)
     thumbnailFileType,
     title,
     claimData,
-    thumbData,
     claimId;
   // record the start time of the request
   gaStartTime = Date.now();
@@ -137,27 +133,20 @@ const claimPublish = ({ body, files, headers, ip, originalUrl, user, tor }, res)
         };
         throw error;
       }
-      let promises = [];
-      promises.push(publish(publishParams, fileName, fileType, filePath));
       // publish the thumbnail, if one exists
       if (thumbnailPublishParams) {
-        promises.push(publish(thumbnailPublishParams, thumbnailFileName, thumbnailFileType));
+        publish(thumbnailPublishParams, thumbnailFileName, thumbnailFileType);
       }
       // publish the asset
-      return Promise.all(promises);
+      return publish(publishParams, fileName, fileType, filePath);
     })
     .then(publishResults => {
-      logger.debug('Publish success >', publishResults[0]);
-      if (publishResults[1]) {
-        logger.debug('Thumb Publish success >', publishResults[1]);
-        thumbData = publishResults[1];
-      }
-      claimData = publishResults[0];
-
+      logger.info('Publish success >', publishResults);
+      claimData = publishResults;
       ({ claimId } = claimData);
 
       if (channelName) {
-        logger.verbose(`api/claim/publish: claimData.certificateId ${claimData.certificateId}`);
+        logger.info(`api/claim/publish: claimData.certificateId ${claimData.certificateId}`);
         return chainquery.claim.queries.getShortClaimIdFromLongClaimId(
           claimData.certificateId,
           channelName
@@ -178,23 +167,6 @@ const claimPublish = ({ body, files, headers, ip, originalUrl, user, tor }, res)
         canonicalUrl = createCanonicalLink({ asset: { ...claimData, shortId } });
       }
 
-      // make sure we can look up the claimId until chainquery has it
-
-      let canonicalThumbUrl;
-      if (thumbData) {
-        canonicalThumbUrl = createCanonicalLink({
-          asset: {
-            channelName: thumbnailChannel,
-            channelShortId: thumbnailChannelId,
-            name: thumbData.name,
-          },
-        });
-        logger.verbose('canonicalThumbUrl', canonicalThumbUrl);
-        publishCache.set(canonicalThumbUrl, thumbData.claimId);
-        publishCache.set(thumbData.claimId, thumbData);
-      }
-      publishCache.set(canonicalUrl, claimData.claimId);
-      publishCache.set(claimData.claimId, claimData);
       res.status(200).json({
         success: true,
         message: 'publish completed successfully',
@@ -208,6 +180,7 @@ const claimPublish = ({ body, files, headers, ip, originalUrl, user, tor }, res)
           claimData,
         },
       });
+      // record the publish end time and send to google analytics
       sendGATimingEvent('end-to-end', 'publish', fileType, gaStartTime, Date.now());
     })
     .catch(error => {
@@ -221,4 +194,4 @@ const claimPublish = ({ body, files, headers, ip, originalUrl, user, tor }, res)
     });
 };
 
-export default claimPublish;
+module.exports = claimPublish;

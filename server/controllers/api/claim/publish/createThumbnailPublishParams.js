@@ -1,5 +1,5 @@
-import logger from 'winston';
-import { details, publishing } from '@config/siteConfig';
+const logger = require('winston');
+const { details, publishing } = require('@config/siteConfig');
 
 const createThumbnailPublishParams = (thumbnailFilePath, claimName, license, licenseUrl, nsfw) => {
   if (!thumbnailFilePath) {
@@ -26,4 +26,4 @@ const createThumbnailPublishParams = (thumbnailFilePath, claimName, license, lic
   };
 };
 
-export default createThumbnailPublishParams;
+module.exports = createThumbnailPublishParams;

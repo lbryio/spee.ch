@@ -1,20 +1,13 @@
-import logger from 'winston';
+const logger = require('winston');
 
-import db from 'server/models';
-import chainquery from 'chainquery';
-import { getFileListFileByOutpoint, getClaim } from 'server/lbrynet';
-import getClaimId from '../../utils/getClaimId.js';
-import { handleErrorResponse } from '../../utils/errorHandlers.js';
-import awaitFileSize from 'server/utils/awaitFileSize';
-import serveFile from './serveFile.js';
-import parseQueryString from 'server/utils/parseQuerystring';
-import publishCache from 'server/utils/publishCache';
-import isBot from 'isbot';
-import isApprovedChannel from '@globalutils/isApprovedChannel';
+const db = require('../../../models');
+const chainquery = require('chainquery').default;
+const isApprovedChannel = require('../../../../utils/isApprovedChannel');
 
-import { publishing } from '@config/siteConfig';
+const getClaimId = require('../../utils/getClaimId.js');
+const { handleErrorResponse } = require('../../utils/errorHandlers.js');
 
-const { serveOnlyApproved, approvedChannels } = publishing;
+const serveFile = require('./serveFile.js');
 
 const NO_CHANNEL = 'NO_CHANNEL';
 const NO_CLAIM = 'NO_CLAIM';
@@ -22,107 +15,118 @@ const BLOCKED_CLAIM = 'BLOCKED_CLAIM';
 const NO_FILE = 'NO_FILE';
 const CONTENT_UNAVAILABLE = 'CONTENT_UNAVAILABLE';
 
-const RETRY_MS = 250;
-const TIMEOUT_MS = 15000;
-const MIN_BYTES = 15000000;
+const {
+  publishing: { serveOnlyApproved, approvedChannels },
+} = require('@config/siteConfig');
 
-const getClaimIdAndServeAsset = async (
+const getClaimIdAndServeAsset = (
   channelName,
   channelClaimId,
   claimName,
-  partialClaimId,
+  claimId,
   originalUrl,
   ip,
   res,
   headers
 ) => {
-  let outpoint;
-  let channelId;
-  let cqResult;
-  let claimId = '';
-  try {
-    const queryObject = parseQueryString(originalUrl);
-    claimId = await getClaimId(channelName, channelClaimId, claimName, partialClaimId);
+  getClaimId(channelName, channelClaimId, claimName, claimId)
+    .then(fullClaimId => {
+      claimId = fullClaimId;
+      return chainquery.claim.queries.resolveClaim(claimName, fullClaimId).catch(() => {});
+    })
+    .then(claim => {
+      if (!claim) {
+        logger.debug('Full claim id:', claimId);
+        return db.Claim.findOne({
+          where: {
+            name: claimName,
+            claimId,
+          },
+        });
+      }
 
-    if (publishCache.get(claimId)) {
-      outpoint = publishCache.get(claimId).outpoint;
-      channelId = publishCache.get(claimId).certificateId;
-    } else {
-      cqResult = await chainquery.claim.queries.resolveClaim(claimId);
-      if (!cqResult || !cqResult.dataValues) {
-        throw new Error(NO_CLAIM);
-      }
-      outpoint = cqResult.generated_outpoint;
-      channelId = channelClaimId || cqResult.dataValues.publisher_id;
-    }
-    if (serveOnlyApproved && !isApprovedChannel({ longId: channelId }, approvedChannels)) {
-      throw new Error(CONTENT_UNAVAILABLE);
-    }
-    // This throws "BLOCKED_CLAIM" on error
-    await db.Blocked.isNotBlocked(outpoint);
+      return claim;
+    })
+    .then(claim => {
+      let claimDataValues = claim.dataValues;
 
-    let fileListResult = await getFileListFileByOutpoint(outpoint);
-    if (fileListResult && fileListResult[0]) {
-      serveFile(fileListResult[0], res, originalUrl);
-    } else if (!isBot(headers['user-agent'])) {
-      let lbrynetResult = await getClaim(`${claimName}#${claimId}`);
-      if (!lbrynetResult || !lbrynetResult.claim_id) {
-        throw new Error('LBRYNET_NO_GET');
+      if (
+        serveOnlyApproved &&
+        !isApprovedChannel(
+          { longId: claimDataValues.publisher_id || claimDataValues.certificateId },
+          approvedChannels
+        )
+      ) {
+        throw new Error(CONTENT_UNAVAILABLE);
       }
-      let fileReady = await awaitFileSize(lbrynetResult.outpoint, MIN_BYTES, RETRY_MS, TIMEOUT_MS);
-      if (fileReady !== 'ready') {
-        throw new Error('claim/get: failed to get file after 15 seconds');
+
+      let outpoint =
+        claimDataValues.outpoint ||
+        `${claimDataValues.transaction_hash_id}:${claimDataValues.vout}`;
+      logger.debug('Outpoint:', outpoint);
+      return db.Blocked.isNotBlocked(outpoint).then(() => {
+        // If content was found, is approved, and not blocked - log a view.
+        if (headers && headers['user-agent'] && /LBRY/.test(headers['user-agent']) === false) {
+          db.Views.create({
+            time: Date.now(),
+            isChannel: false,
+            claimId: claimDataValues.claim_id || claimDataValues.claimId,
+            publisherId: claimDataValues.publisher_id || claimDataValues.certificateId,
+            ip,
+          });
+        }
+      });
+    })
+    .then(() => {
+      return db.File.findOne({
+        where: {
+          claimId,
+          name: claimName,
+        },
+      });
+    })
+    .then(fileRecord => {
+      if (!fileRecord) {
+        throw NO_FILE;
       }
-      serveFile(lbrynetResult, res, originalUrl);
-    }
-    if (
-      (headers && headers['user-agent'] && /LBRY/.test(headers['user-agent']) === false) ||
-      (queryObject && !queryObject.hasOwnProperty('thumbnail'))
-    ) {
-      db.Views.create({
-        time: Date.now(),
-        isChannel: false,
-        claimId: claimId,
-        publisherId: channelId,
-        ip,
-      });
-    }
-  } catch (error) {
-    if (error === NO_CLAIM) {
-      logger.debug('no claim found');
-      return res.status(404).json({
-        success: false,
-        message: 'No matching claim id could be found for that url',
-      });
-    }
-    if (error === NO_CHANNEL) {
-      logger.debug('no channel found');
-      return res.status(404).json({
-        success: false,
-        message: 'No matching channel id could be found for that url',
-      });
-    }
-    if (error === CONTENT_UNAVAILABLE) {
-      logger.debug('unapproved channel');
-      return res.status(400).json({
-        success: false,
-        message: 'This content is unavailable',
-      });
-    }
-    if (error === BLOCKED_CLAIM) {
-      logger.debug('claim was blocked');
-      return res.status(451).json({
-        success: false,
-        message:
-          'In response to a complaint we received under the US Digital Millennium Copyright Act, we have blocked access to this content from our applications. For more details, see https://lbry.io/faq/dmca',
-      });
-    }
-    if (error === NO_FILE) {
-      logger.debug('no file available');
-      return res.status(307).redirect(`/api/claim/get/${claimName}/${claimId}`);
-    }
-    handleErrorResponse(originalUrl, ip, error, res);
-  }
+      serveFile(fileRecord.dataValues, res, originalUrl);
+    })
+    .catch(error => {
+      if (error === NO_CLAIM) {
+        logger.debug('no claim found');
+        return res.status(404).json({
+          success: false,
+          message: 'No matching claim id could be found for that url',
+        });
+      }
+      if (error === NO_CHANNEL) {
+        logger.debug('no channel found');
+        return res.status(404).json({
+          success: false,
+          message: 'No matching channel id could be found for that url',
+        });
+      }
+      if (error === CONTENT_UNAVAILABLE) {
+        logger.debug('unapproved channel');
+        return res.status(400).json({
+          success: false,
+          message: 'This content is unavailable',
+        });
+      }
+      if (error === BLOCKED_CLAIM) {
+        logger.debug('claim was blocked');
+        return res.status(451).json({
+          success: false,
+          message:
+            'In response to a complaint we received under the US Digital Millennium Copyright Act, we have blocked access to this content from our applications. For more details, see https://lbry.com/faq/dmca',
+        });
+      }
+      if (error === NO_FILE) {
+        logger.debug('no file available');
+        return res.status(307).redirect(`/api/claim/get/${claimName}/${claimId}`);
+      }
+      handleErrorResponse(originalUrl, ip, error, res);
+    });
 };
 
-export default getClaimIdAndServeAsset;
+module.exports = getClaimIdAndServeAsset;

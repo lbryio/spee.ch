@@ -1,14 +1,12 @@
-const {
-  publishing: {
-    primaryClaimAddress,
-    uploadDirectory,
-    thumbnailChannel,
-    thumbnailChannelId,
-    additionalClaimAddresses,
-    disabled,
-    disabledMessage,
-  },
-} = require('@config/siteConfig');
+const { publishing: {
+  primaryClaimAddress,
+  uploadDirectory,
+  thumbnailChannel,
+  thumbnailChannelId,
+  additionalClaimAddresses,
+  disabled,
+  disabledMessage,
+} } = require('@config/siteConfig');
 
 /*
 
@@ -28,4 +26,4 @@ const publishingConfig = (req, res) => {
   });
 };
 
-export default publishingConfig;
+module.exports = publishingConfig;
