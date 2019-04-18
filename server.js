@@ -14,11 +14,12 @@ try {
 let currentApp;
 
 try {
-  const Server = require('./server/').default;
+  const Server = require('./server/');
   currentApp = Server;
 
   const speech = new Server();
   speech.start();
+
 } catch (error) {
   console.log('server startup error:', error);
   process.exit(1);

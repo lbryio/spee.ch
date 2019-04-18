@@ -13,9 +13,6 @@ const getterMethods = {
       return mime.extension(this.content_type) ? mime.extension(this.content_type) : 'jpg';
     }
   },
-  generated_outpoint() {
-    return `${this.transaction_hash_id}:${this.vout}`;
-  },
 };
 
 export default (sequelize, { BOOLEAN, DATE, DECIMAL, ENUM, INTEGER, STRING, TEXT }) =>

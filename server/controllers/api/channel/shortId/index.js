@@ -1,6 +1,6 @@
-import { handleErrorResponse } from 'server/controllers/utils/errorHandlers.js';
-import db from 'server/models';
-import chainquery from 'chainquery';
+const { handleErrorResponse } = require('server/controllers/utils/errorHandlers.js');
+const db = require('server/models');
+const chainquery = require('chainquery').default;
 
 /*
 
@@ -10,9 +10,7 @@ route to get a short channel id from long channel Id
 
 const channelShortIdRoute = async ({ ip, originalUrl, params }, res) => {
   try {
-    let shortId = await chainquery.claim.queries
-      .getShortClaimIdFromLongClaimId(params.longId, params.name)
-      .catch(() => false);
+    let shortId = await chainquery.claim.queries.getShortClaimIdFromLongClaimId(params.longId, params.name).catch(() => false);
 
     if (!shortId) {
       shortId = await db.Certificate.getShortChannelIdFromLongChannelId(params.longId, params.name);
@@ -24,4 +22,4 @@ const channelShortIdRoute = async ({ ip, originalUrl, params }, res) => {
   }
 };
 
-export default channelShortIdRoute;
+module.exports = channelShortIdRoute;

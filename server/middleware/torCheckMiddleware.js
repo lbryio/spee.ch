@@ -1,22 +1,22 @@
-import logger from 'winston';
-import db from 'server/models';
+const logger = require('winston');
+const db = require('../models');
 
 const torCheck = (req, res, next) => {
   const { ip } = req;
   logger.debug(`tor check for: ${ip}`);
-  return db.Tor.findAll({
-    where: {
-      address: ip,
-    },
-    raw: true,
-  })
+  return db.Tor.findAll(
+    {
+      where: {
+        address: ip,
+      },
+      raw: true,
+    })
     .then(result => {
       if (result.length >= 1) {
         logger.info('Tor request blocked:', ip);
         const failureResponse = {
           success: false,
-          message:
-            'Unfortunately this api route is not currently available for tor users.  We are working on a solution that will allow tor users to use this endpoint in the future.',
+          message: 'Unfortunately this api route is not currently available for tor users.  We are working on a solution that will allow tor users to use this endpoint in the future.',
         };
         res.status(403).json(failureResponse);
       } else {
@@ -27,4 +27,5 @@ const torCheck = (req, res, next) => {
       logger.error(error);
     });
 };
-export default torCheck;
+
+module.exports = torCheck;

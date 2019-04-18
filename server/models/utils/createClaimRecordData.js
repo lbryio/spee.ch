@@ -1,37 +1,44 @@
-import db from 'server/models';
+const db = require('../index.js');
 
-export const createClaimRecordDataAfterPublish = (
-  certificateId,
-  channelName,
-  fileName,
-  fileType,
-  publishParams,
-  publishResults
-) => {
+const createClaimRecordDataAfterPublish = (certificateId, channelName, fileName, fileType, publishParams, publishResults) => {
   const {
     name,
-    metadata: { title, description, thumbnail, nsfw },
+    metadata: {
+      title,
+      description,
+      thumbnail,
+      nsfw,
+    },
     claim_address: address,
     bid: amount,
   } = publishParams;
 
-  const { claim_id: claimId, txid, nout } = publishResults;
+  const {
+    claim_id: claimId,
+    txid,
+    nout,
+  } = publishResults;
 
-  return db.Claim.getCurrentHeight().then(height => {
-    return {
-      name,
-      claimId,
-      title,
-      description,
-      address,
-      thumbnail,
-      outpoint: `${txid}:${nout}`,
-      height,
-      contentType: fileType,
-      nsfw,
-      amount,
-      certificateId,
-      channelName,
-    };
-  });
+  return db.Claim.getCurrentHeight()
+    .then(height => {
+      return {
+        name,
+        claimId,
+        title,
+        description,
+        address,
+        thumbnail,
+        outpoint   : `${txid}:${nout}`,
+        height,
+        contentType: fileType,
+        nsfw,
+        amount,
+        certificateId,
+        channelName,
+      };
+    });
+};
+
+module.exports = {
+  createClaimRecordDataAfterPublish,
 };

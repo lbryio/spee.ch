@@ -1,11 +1,11 @@
-import md5File from 'md5-file';
-import path from 'path';
+const md5File = require('md5-file');
+const path = require('path');
 
 const bundlePath = path.resolve('./public/bundle/bundle.js');
 const bundleHash = md5File.sync(bundlePath);
 const shortBundleHash = bundleHash.substring(0, 4);
 
-export default (helmet, html, preloadedState) => {
+module.exports = (helmet, html, preloadedState) => {
   // take the html and preloadedState and return the full page
   return `
     <!DOCTYPE html>

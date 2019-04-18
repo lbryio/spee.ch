@@ -1,13 +1,13 @@
-export default (sequelize, { STRING }) => {
+module.exports = (sequelize, { STRING }) => {
   const Channel = sequelize.define(
     'Channel',
     {
       channelName: {
-        type: STRING,
+        type     : STRING,
         allowNull: false,
       },
       channelClaimId: {
-        type: STRING,
+        type     : STRING,
         allowNull: false,
       },
     },

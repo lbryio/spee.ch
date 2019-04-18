@@ -1,10 +1,9 @@
-import db from 'server/models';
-import chainquery from 'chainquery';
-import logger from 'winston';
-import publishCache from 'server/utils/publishCache';
-import { handleErrorResponse } from 'server/controllers/utils/errorHandlers.js';
+const db = require('server/models');
+const chainquery = require('chainquery').default;
 
-import getClaimId from 'server/controllers/utils/getClaimId.js';
+const { handleErrorResponse } = require('server/controllers/utils/errorHandlers.js');
+
+const getClaimId = require('server/controllers/utils/getClaimId.js');
 
 const NO_CHANNEL = 'NO_CHANNEL';
 const NO_CLAIM = 'NO_CLAIM';
@@ -25,17 +24,8 @@ const claimLongId = ({ ip, originalUrl, body, params }, res) => {
   getClaimId(channelName, channelClaimId, claimName, claimId)
     .then(fullClaimId => {
       claimId = fullClaimId;
-      if (!fullClaimId) {
-        throw new Error('Unable to get fullClaimId');
-      }
-      return chainquery.claim.queries.getOutpoint(fullClaimId).catch(() => {
-        logger.debug(`failed to get claimId from chainQuery given ${claimName} and ${fullClaimId}`);
-      });
+      return chainquery.claim.queries.getOutpoint(claimName, fullClaimId).catch(() => {});
     })
-    // Remove this, replace with file_list
-    // In the event that we need the longId of a claim just published
-    // check to see if shortClaimId matches cache, then verify
-    // Should we also verify
     .then(outpointResult => {
       if (!outpointResult) {
         return db.Claim.getOutpoint(claimName, claimId);
@@ -62,14 +52,14 @@ const claimLongId = ({ ip, originalUrl, body, params }, res) => {
         });
       }
       if (error === BLOCKED_CLAIM) {
-        return res.status(451).json({
+        return res.status(410).json({
           success: false,
           message:
-            'In response to a complaint we received under the US Digital Millennium Copyright Act, we have blocked access to this content from our applications. For more details, see https://lbry.io/faq/dmca',
+            'In response to a complaint we received under the US Digital Millennium Copyright Act, we have blocked access to this content from our applications. For more details, see https://lbry.com/faq/dmca',
         });
       }
       handleErrorResponse(originalUrl, ip, error, res);
     });
 };
 
-export default claimLongId;
+module.exports = claimLongId;

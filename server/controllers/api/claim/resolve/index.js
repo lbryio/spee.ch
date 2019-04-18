@@ -1,5 +1,5 @@
-import { resolveUri } from 'server/lbrynet/index';
-import { handleErrorResponse } from '../../../utils/errorHandlers.js';
+const { resolveUri } = require('../../../../lbrynet/index');
+const { handleErrorResponse } = require('../../../utils/errorHandlers.js');
 
 /*
 
@@ -17,4 +17,4 @@ const claimResolve = ({ headers, ip, originalUrl, params }, res) => {
     });
 };
 
-export default claimResolve;
+module.exports = claimResolve;

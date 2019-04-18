@@ -1,17 +1,16 @@
-import logger from 'winston';
-import { details } from '@config/siteConfig';
-const { ipAddress } = details;
+const logger = require('winston');
+const { details: { ipAddress } } = require('@config/siteConfig');
 
-export default (sequelize, { STRING }) => {
+module.exports = (sequelize, { STRING }) => {
   const Tor = sequelize.define(
     'Tor',
     {
       address: {
-        type: STRING,
+        type     : STRING,
         allowNull: false,
       },
       fingerprint: {
-        type: STRING,
+        type     : STRING,
         allowNull: true,
       },
     },
@@ -20,7 +19,7 @@ export default (sequelize, { STRING }) => {
     }
   );
 
-  Tor.refreshTable = function() {
+  Tor.refreshTable = function () {
     let torList = [];
     return fetch(`https://check.torproject.org/api/bulk?ip=${ipAddress}&port=80`)
       .then(response => {
@@ -31,7 +30,7 @@ export default (sequelize, { STRING }) => {
         // prep the records
         for (let i = 0; i < jsonResponse.length; i++) {
           torList.push({
-            address: jsonResponse[i].Address,
+            address    : jsonResponse[i].Address,
             fingerprint: jsonResponse[i].Fingerprint,
           });
         }
@@ -48,7 +47,7 @@ export default (sequelize, { STRING }) => {
         // return the new table
         return this.findAll({
           attributes: ['address', 'fingerprint'],
-          raw: true,
+          raw       : true,
         });
       })
       .catch(error => {

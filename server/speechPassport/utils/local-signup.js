@@ -1,12 +1,10 @@
-import { createChannel } from 'server/lbrynet';
 const PassportLocalStrategy = require('passport-local').Strategy;
+const { createChannel } = require('../../lbrynet');
 const logger = require('winston');
-const db = require('server/models');
-const {
-  publishing: { closedRegistration },
-} = require('@config/siteConfig');
+const db = require('../../models');
+const { publishing: { closedRegistration } } = require('@config/siteConfig');
 
-const Strategy = new PassportLocalStrategy(
+module.exports = new PassportLocalStrategy(
   {
     usernameField: 'username',
     passwordField: 'password',
@@ -30,23 +28,19 @@ const Strategy = new PassportLocalStrategy(
         logger.verbose('userData >', userData);
         // create user record
         const channelData = {
-          channelName: `@${username}`,
+          channelName   : `@${username}`,
           channelClaimId: tx.claim_id,
         };
         logger.verbose('channelData >', channelData);
         // create certificate record
         const certificateData = {
           claimId: tx.claim_id,
-          name: `@${username}`,
+          name   : `@${username}`,
           // address,
         };
         logger.verbose('certificateData >', certificateData);
         // save user and certificate to db
-        return Promise.all([
-          db.User.create(userData),
-          db.Channel.create(channelData),
-          db.Certificate.create(certificateData),
-        ]);
+        return Promise.all([db.User.create(userData), db.Channel.create(channelData), db.Certificate.create(certificateData)]);
       })
       .then(([newUser, newChannel, newCertificate]) => {
         logger.verbose('user and certificate successfully created');
@@ -60,10 +54,7 @@ const Strategy = new PassportLocalStrategy(
       })
       .then(() => {
         logger.verbose('user and certificate successfully associated');
-        return db.Certificate.getShortChannelIdFromLongChannelId(
-          userInfo.channelClaimId,
-          userInfo.channelName
-        );
+        return db.Certificate.getShortChannelIdFromLongChannelId(userInfo.channelClaimId, userInfo.channelName);
       })
       .then(shortChannelId => {
         userInfo['shortChannelId'] = shortChannelId;
@@ -75,4 +66,3 @@ const Strategy = new PassportLocalStrategy(
       });
   }
 );
-export default Strategy;
