@@ -1,14 +1,14 @@
-import db from 'server/models';
-import {
+const db = require('server/models');
+const {
   getInformationFromValues,
   getZScore,
   getFastPValue,
   getWeight,
-} from 'server/models/utils/trendingAnalysis';
+} = require('server/models/utils/trendingAnalysis');
 
-import logger from 'winston';
+const logger = require('winston');
 
-export default async () => {
+module.exports = async () => {
   try {
     const claims = await db.Trending.getTrendingClaims();
     const claimViews = await db.Views.getUniqueViews();
@@ -20,13 +20,20 @@ export default async () => {
     const time = Date.now();
 
     // Must create statistical analytics before we can process zScores, etc
-    const viewsNumArray = claimViews.map(claimViewsEntry => claimViewsEntry.views);
-    const { mean, standardDeviation } = getInformationFromValues(viewsNumArray);
+    const viewsNumArray = claimViews.map((claimViewsEntry) => claimViewsEntry.views);
+    const {
+      mean,
+      standardDeviation,
+    } = getInformationFromValues(viewsNumArray);
 
     for (let i = 0; i < claimViews.length; i++) {
       let claimViewsEntry = claimViews[i];
 
-      const { isChannel, claimId, publisherId } = claimViewsEntry;
+      const {
+        isChannel,
+        claimId,
+        publisherId,
+      } = claimViewsEntry;
 
       const zScore = getZScore(claimViewsEntry.views, mean, standardDeviation);
       const pValue = getFastPValue(zScore);
@@ -34,9 +41,9 @@ export default async () => {
 
       const trendingData = {
         time,
-        isChannel: claimViewsEntry.isChannel,
-        claimId: claimViewsEntry.claimId,
-        publisherId: claimViewsEntry.publisherId,
+        isChannel    : claimViewsEntry.isChannel,
+        claimId      : claimViewsEntry.claimId,
+        publisherId  : claimViewsEntry.publisherId,
         intervalViews: claimViewsEntry.views,
         weight,
         zScore,

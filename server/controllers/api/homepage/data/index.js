@@ -1,6 +1,6 @@
-import { handleErrorResponse } from '../../../utils/errorHandlers.js';
+const { handleErrorResponse } = require('../../../utils/errorHandlers.js');
 
-import getChannelData from './getChannelData.js';
+const getChannelData = require('./getChannelData.js');
 
 const NO_CHANNEL = 'NO_CHANNEL';
 
@@ -32,4 +32,4 @@ const channelData = ({ ip, originalUrl, body, params }, res) => {
     });
 };
 
-export default channelData;
+module.exports = channelData;

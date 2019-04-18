@@ -1,10 +1,11 @@
-import logger from 'winston';
-import db from 'server/models';
-import getClaimId from '../../utils/getClaimId';
-import publishCache from 'server/utils/publishCache';
+const logger = require('winston');
+const db = require('../../../models');
+const getClaimId = require('../../utils/getClaimId');
+const publishCache = require('server/utils/publishCache');
 
-import { details } from '@config/siteConfig';
-const { host, title: siteTitle } = details;
+const {
+  details: { host, title: siteTitle },
+} = require('@config/siteConfig');
 
 const getOEmbedDataForAsset = (channelName, channelClaimId, claimName, claimId) => {
   let fileData, claimData;
@@ -65,4 +66,4 @@ const getOEmbedDataForAsset = (channelName, channelClaimId, claimName, claimId) 
     });
 };
 
-export default getOEmbedDataForAsset;
+module.exports = getOEmbedDataForAsset;

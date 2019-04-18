@@ -1,10 +1,10 @@
-import logger from 'winston';
+const logger = require('winston');
 
-import { handleErrorResponse } from '../../../utils/errorHandlers.js';
-import { getFileListFileByOutpoint } from 'server/lbrynet';
+const { handleErrorResponse } = require('../../../utils/errorHandlers.js');
+const { getFileListFileByOutpoint } = require('server/lbrynet');
 
-import chainquery from 'chainquery';
-import publishCache from 'server/utils/publishCache';
+const chainquery = require('chainquery').default;
+const publishCache = require('server/utils/publishCache');
 
 /*
 
@@ -37,4 +37,4 @@ const fileAvailability = async ({ ip, originalUrl, params }, res) => {
   }
 };
 
-export default fileAvailability;
+module.exports = fileAvailability;

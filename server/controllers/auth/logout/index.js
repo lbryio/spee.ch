@@ -7,4 +7,4 @@ const logout = (req, res) => {
   res.status(200).json(responseObject);
 };
 
-export default logout;
+module.exports = logout;

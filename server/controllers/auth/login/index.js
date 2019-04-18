@@ -1,4 +1,4 @@
-import speechPassport from 'server/speechPassport/index';
+const speechPassport = require('../../../speechPassport/index');
 
 const login = (req, res, next) => {
   speechPassport.authenticate('local-login', (err, user, info) => {
@@ -11,13 +11,13 @@ const login = (req, res, next) => {
         message: info.message,
       });
     }
-    req.logIn(user, err => {
+    req.logIn(user, (err) => {
       if (err) {
         return next(err);
       }
       return res.status(200).json({
-        success: true,
-        channelName: req.user.channelName,
+        success       : true,
+        channelName   : req.user.channelName,
         channelClaimId: req.user.channelClaimId,
         shortChannelId: req.user.shortChannelId,
       });
@@ -25,4 +25,4 @@ const login = (req, res, next) => {
   })(req, res, next);
 };
 
-export default login;
+module.exports = login;

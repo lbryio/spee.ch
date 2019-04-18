@@ -1,15 +1,15 @@
-import logger from 'winston';
+const logger = require('winston');
 
-import { sendGAServeEvent } from 'server/utils/googleAnalytics';
-import handleShowRender from 'server/render/handleShowRender';
+const { sendGAServeEvent } = require('../../../utils/googleAnalytics');
+const handleShowRender = require('../../../render/handleShowRender').default;
 
-import lbryUri from '@globalutils/lbryUri.js';
+const lbryUri = require('../../../../utils/lbryUri.js');
 
-import determineRequestType from '../utils/determineRequestType.js';
-import getClaimIdAndServeAsset from '../utils/getClaimIdAndServeAsset.js';
-import flipClaimNameAndId from '../utils/flipClaimNameAndId.js';
+const determineRequestType = require('../utils/determineRequestType.js');
+const getClaimIdAndServeAsset = require('../utils/getClaimIdAndServeAsset.js');
+const flipClaimNameAndId = require('../utils/flipClaimNameAndId.js');
 
-import { SHOW } from '../constants/request_types.js';
+const { SHOW } = require('../constants/request_types.js');
 
 /*
 
@@ -30,9 +30,7 @@ const serverByIdentifierAndClaim = (req, res) => {
     }
 
     ({ claimName } = lbryUri.parseClaim(params.claim));
-    ({ isChannel, channelName, channelClaimId, claimId } = lbryUri.parseIdentifier(
-      params.identifier
-    ));
+    ({ isChannel, channelName, channelClaimId, claimId } = lbryUri.parseIdentifier(params.identifier));
 
     if (!isChannel) {
       [claimId, claimName] = flipClaimNameAndId(claimId, claimName);
@@ -49,21 +47,12 @@ const serverByIdentifierAndClaim = (req, res) => {
       claimId,
     });
 
-    getClaimIdAndServeAsset(
-      channelName,
-      channelClaimId,
-      claimName,
-      claimId,
-      originalUrl,
-      ip,
-      res,
-      headers
-    );
+    getClaimIdAndServeAsset(channelName, channelClaimId, claimName, claimId, originalUrl, ip, res, headers);
 
     sendGAServeEvent(headers, ip, originalUrl);
   } catch (error) {
-    return res.status(400).json({ success: false, message: error.message });
+    return res.status(400).json({success: false, message: error.message});
   }
 };
 
-export default serverByIdentifierAndClaim;
+module.exports = serverByIdentifierAndClaim;

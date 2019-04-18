@@ -1,15 +1,14 @@
-import Sequelize from 'sequelize';
-import { database, username, password } from '@config/mysqlConfig';
+const Sequelize = require('sequelize');
+const {database, username, password} = require('@config/mysqlConfig');
 
 const createDatabaseIfNotExists = () => {
   const sequelize = new Sequelize('', username, password, {
-    dialect: 'mysql',
-    logging: false,
+    dialect         : 'mysql',
+    logging         : false,
     operatorsAliases: false,
   });
   return new Promise((resolve, reject) => {
-    sequelize
-      .query(`CREATE DATABASE IF NOT EXISTS ${database};`)
+    sequelize.query(`CREATE DATABASE IF NOT EXISTS ${database};`)
       .then(() => {
         resolve();
       })
@@ -19,4 +18,4 @@ const createDatabaseIfNotExists = () => {
   });
 };
 
-export default createDatabaseIfNotExists;
+module.exports = createDatabaseIfNotExists;

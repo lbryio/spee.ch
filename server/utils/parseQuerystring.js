@@ -1,6 +1,6 @@
 const queryObject = {};
 // TODO: replace quick/dirty try catch with better practice
-export default originalUrl => {
+module.exports = originalUrl => {
   try {
     originalUrl
       .split('?')[1]

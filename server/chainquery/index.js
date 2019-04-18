@@ -1,5 +1,5 @@
-import Sequelize from 'sequelize';
-import logger from 'winston';
+const Sequelize = require('sequelize');
+const logger = require('winston');
 
 import abnormalClaimTable from './tables/abnormalClaimTable';
 import addressTable from './tables/addressTable';
@@ -22,45 +22,51 @@ import transactionAddressQueries from './queries/transactionAddressQueries';
 import transactionQueries from './queries/transactionQueries';
 
 const DATABASE_STRUCTURE = {
-  abnormal_claim: {
+  'abnormal_claim': {
     table: abnormalClaimTable,
     queries: abnormalClaimQueries,
   },
-  address: {
+  'address': {
     table: addressTable,
     queries: addressQueries,
   },
-  block: {
+  'block': {
     table: blockTable,
     queries: blockQueries,
   },
-  claim: {
+  'claim': {
     table: claimTable,
     queries: claimQueries,
   },
-  input: {
+  'input': {
     table: inputTable,
     queries: inputQueries,
   },
-  output: {
+  'output': {
     table: outputTable,
     queries: outputQueries,
   },
-  support: {
+  'support': {
     table: supportTable,
     queries: supportQueries,
   },
-  transaction_address: {
+  'transaction_address': {
     table: transactionAddressTable,
     queries: transactionAddressQueries,
   },
-  transaction: {
+  'transaction': {
     table: transactionTable,
     queries: transactionQueries,
   },
 };
 
-const { host, port, database, username, password } = require('@config/chainqueryConfig');
+const {
+  host,
+  port,
+  database,
+  username,
+  password,
+} = require('@config/chainqueryConfig');
 
 if (!database || !username || !password) {
   logger.warn('missing database, user, or password from chainqueryConfig');
@@ -68,17 +74,17 @@ if (!database || !username || !password) {
 
 // set sequelize options
 const sequelize = new Sequelize(database, username, password, {
-  host: host,
-  import: port,
-  dialect: 'mysql',
+  host          : host,
+  import        : port,
+  dialect       : 'mysql',
   dialectOptions: {
     decimalNumbers: true,
   },
   logging: false,
-  pool: {
-    max: 5,
-    min: 0,
-    idle: 10000,
+  pool   : {
+    max    : 5,
+    min    : 0,
+    idle   : 10000,
     acquire: 10000,
   },
   operatorsAliases: false,
@@ -87,7 +93,7 @@ const sequelize = new Sequelize(database, username, password, {
 const db = {};
 const DATABASE_STRUCTURE_KEYS = Object.keys(DATABASE_STRUCTURE);
 
-for (let i = 0; i < DATABASE_STRUCTURE_KEYS.length; i++) {
+for(let i = 0; i < DATABASE_STRUCTURE_KEYS.length; i++) {
   let dbKey = DATABASE_STRUCTURE_KEYS[i];
   let currentData = DATABASE_STRUCTURE[dbKey];
 

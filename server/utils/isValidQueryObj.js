@@ -20,4 +20,5 @@ const isValidQueryObj = queryObj => {
     ((yOrigin <= maxDimension && yOrigin >= 0) || yOrigin === null)
   );
 };
-export default isValidQueryObj;
+
+module.exports = isValidQueryObj;

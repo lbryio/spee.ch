@@ -1,13 +1,16 @@
-import db from 'server/models';
+const db = require('../../../../models');
 
 const getChannelData = (channelName, channelClaimId) => {
   return new Promise((resolve, reject) => {
     let longChannelClaimId;
     // 1. get the long channel Id (make sure channel exists)
-    db.Certificate.getLongChannelId(channelName, channelClaimId)
+    db.Certificate
+      .getLongChannelId(channelName, channelClaimId)
       .then(fullClaimId => {
         longChannelClaimId = fullClaimId;
-        return db.Certificate.getShortChannelIdFromLongChannelId(fullClaimId, channelName);
+        return db
+          .Certificate
+          .getShortChannelIdFromLongChannelId(fullClaimId, channelName);
       })
       .then(shortChannelClaimId => {
         resolve({
@@ -22,4 +25,4 @@ const getChannelData = (channelName, channelClaimId) => {
   });
 };
 
-export default getChannelData;
+module.exports = getChannelData;

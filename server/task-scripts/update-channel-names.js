@@ -1,18 +1,17 @@
 // load dependencies
-import logger from 'winston';
-import db from 'server/models';
+const logger = require('winston');
+const db = require('../models');
 require('../helpers/configureLogger.js')(logger);
 
 let totalClaims = 0;
 let totalClaimsNoCertificate = 0;
 
-db.sequelize
-  .sync() // sync sequelize
+db.sequelize.sync() // sync sequelize
   .then(() => {
     logger.info('finding claims with no channels');
     return db.Claim.findAll({
       where: {
-        channelName: null,
+        channelName  : null,
         certificateId: {
           $ne: null,
         },
@@ -22,9 +21,10 @@ db.sequelize
   .then(claimsArray => {
     totalClaims = claimsArray.length;
     const claimsUpdatePromises = claimsArray.map(claim => {
-      return db.Certificate.findOne({
-        where: { claimId: claim.get('certificateId') },
-      })
+      return db.Certificate
+        .findOne({
+          where: { claimId: claim.get('certificateId') },
+        })
         .then(certificate => {
           // if a certificate is found...
           if (certificate) {
@@ -49,6 +49,6 @@ db.sequelize
     logger.info('total claims found with no matching certificate record', totalClaimsNoCertificate);
     logger.debug('all done');
   })
-  .catch(error => {
+  .catch((error) => {
     logger.error(error);
   });
