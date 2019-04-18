@@ -1,9 +1,9 @@
-import logger from 'winston';
-import db from 'server/models';
-import chainquery from 'chainquery';
-import { abandonClaim } from 'server/lbrynet';
-import deleteFile from '../publish/deleteFile.js';
-import authenticateUser from '../publish/authentication.js';
+const logger = require('winston');
+const db = require('server/models');
+const chainquery = require('chainquery').default;
+const { abandonClaim } = require('server/lbrynet');
+const deleteFile = require('../publish/deleteFile.js');
+const authenticateUser = require('../publish/authentication.js');
 
 /*
   route to abandon a claim through the daemon
@@ -47,4 +47,4 @@ const claimAbandon = async (req, res) => {
   }
 };
 
-export default claimAbandon;
+module.exports = claimAbandon;

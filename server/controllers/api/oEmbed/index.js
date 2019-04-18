@@ -1,14 +1,12 @@
-import logger from 'winston';
-import lbryUri from '@globalutils/lbryUri';
+const logger = require('winston');
+const lbryUri = require('../../../../utils/lbryUri');
 
-import getOEmbedDataForChannel from './getOEmbedDataForChannel';
-import getOEmbedDataForAsset from './getOEmbedDataForAsset';
-import parseSpeechUrl from './parseSpeechUrl';
+const getOEmbedDataForChannel = require('./getOEmbedDataForChannel');
+const getOEmbedDataForAsset = require('./getOEmbedDataForAsset');
+const parseSpeechUrl = require('./parseSpeechUrl');
 
 const getOEmbedData = (req, res) => {
-  const {
-    query: { url, format },
-  } = req;
+  const { query: { url, format } } = req;
   logger.debug('req url', url);
   logger.debug('req format', format);
 
@@ -38,7 +36,7 @@ const getOEmbedData = (req, res) => {
           return res.status(200).json(data);
         }
       })
-      .catch(error => {
+      .catch((error) => {
         return res.status(404).json({
           success: false,
           message: error,
@@ -56,7 +54,7 @@ const getOEmbedData = (req, res) => {
           return res.status(200).json(data);
         }
       })
-      .catch(error => {
+      .catch((error) => {
         return res.status(404).json({
           success: false,
           message: error,
@@ -65,4 +63,4 @@ const getOEmbedData = (req, res) => {
   }
 };
 
-export default getOEmbedData;
+module.exports = getOEmbedData;

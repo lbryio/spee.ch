@@ -1,9 +1,9 @@
-function isApprovedChannel(channel, channels) {
+function isApprovedChannel (channel, channels) {
   const { name, shortId: short, longId: long } = channel;
   return Boolean(
     (long && channels.find(chan => chan.longId === long)) ||
-      (name && short && channels.find(chan => chan.name === name && chan.shortId === short))
+    (name && short && channels.find(chan => chan.name === name && chan.shortId === short))
   );
 }
 
-export default isApprovedChannel;
+module.exports = isApprovedChannel;

@@ -1,8 +1,8 @@
-import logger from 'winston';
-import { getImageHeightAndWidth } from './imageProcessing';
-import { getVideoHeightAndWidth } from './videoProcessing';
+const logger = require('winston');
+const { getImageHeightAndWidth } = require('./imageProcessing');
+const { getVideoHeightAndWidth } = require('./videoProcessing');
 
-export default async function getMediaDimensions(fileType, filePath) {
+async function getMediaDimensions (fileType, filePath) {
   let height = 0;
   let width = 0;
   switch (fileType) {
@@ -11,11 +11,11 @@ export default async function getMediaDimensions(fileType, filePath) {
     case 'image/png':
     case 'image/gif':
       logger.debug('creating File data for an image');
-      [height, width] = await getImageHeightAndWidth(filePath);
+      [ height, width ] = await getImageHeightAndWidth(filePath);
       break;
     case 'video/mp4':
       logger.debug('creating File data for a video');
-      [height, width] = await getVideoHeightAndWidth(filePath);
+      [ height, width ] = await getVideoHeightAndWidth(filePath);
       break;
     default:
       logger.error('unable to create File dimension data for unspported file type:', fileType);
@@ -26,3 +26,5 @@ export default async function getMediaDimensions(fileType, filePath) {
     width,
   };
 }
+
+module.exports = getMediaDimensions;

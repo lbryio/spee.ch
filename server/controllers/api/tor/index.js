@@ -1,5 +1,5 @@
-import logger from 'winston';
-import db from 'server/models';
+const logger = require('winston');
+const db = require('../../../models');
 
 /*
 
@@ -13,7 +13,7 @@ const getTorList = (req, res) => {
       logger.debug('number of records', result.length);
       res.status(200).json(result);
     })
-    .catch(error => {
+    .catch((error) => {
       logger.error(error);
       res.status(500).json({
         success: false,
@@ -22,4 +22,4 @@ const getTorList = (req, res) => {
     });
 };
 
-export default getTorList;
+module.exports = getTorList;

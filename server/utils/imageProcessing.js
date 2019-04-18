@@ -1,6 +1,6 @@
-import sizeOf from 'image-size';
+const sizeOf = require('image-size');
 
-export const getImageHeightAndWidth = filePath => {
+const getImageHeightAndWidth = (filePath) => {
   return new Promise((resolve, reject) => {
     try {
       const { height, width } = sizeOf(filePath);
@@ -9,4 +9,8 @@ export const getImageHeightAndWidth = filePath => {
       reject(error);
     }
   });
+};
+
+module.exports = {
+  getImageHeightAndWidth,
 };

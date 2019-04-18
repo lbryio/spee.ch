@@ -1,14 +1,14 @@
-import logger from 'winston';
+const logger = require('winston');
 
-import { sendGAServeEvent } from '@serverutils/googleAnalytics';
-import handleShowRender from 'server/render/handleShowRender';
+const { sendGAServeEvent } = require('../../../utils/googleAnalytics');
+const handleShowRender = require('../../../render/handleShowRender').default;
 
-import lbryUri from '@globalutils/lbryUri.js';
+const lbryUri = require('../../../../utils/lbryUri.js');
 
-import determineRequestType from '../utils/determineRequestType.js';
-import getClaimIdAndServeAsset from '../utils/getClaimIdAndServeAsset.js';
+const determineRequestType = require('../utils/determineRequestType.js');
+const getClaimIdAndServeAsset = require('../utils/getClaimIdAndServeAsset.js');
 
-import { SHOW } from '../constants/request_types.js';
+const { SHOW } = require('../constants/request_types.js');
 
 /*
 
@@ -41,8 +41,8 @@ const serveByClaim = (req, res) => {
 
     sendGAServeEvent(headers, ip, originalUrl);
   } catch (error) {
-    return res.status(400).json({ success: false, message: error.message });
+    return res.status(400).json({success: false, message: error.message});
   }
 };
 
-export default serveByClaim;
+module.exports = serveByClaim;

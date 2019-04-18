@@ -1,6 +1,6 @@
-import path from 'path';
-import validateFileTypeAndSize from './validateFileTypeAndSize.js';
-import validateFileForPublish from './validateFileForPublish.js';
+const path = require('path');
+const validateFileTypeAndSize = require('./validateFileTypeAndSize.js');
+const validateFileForPublish = require('./validateFileForPublish.js');
 
 const parsePublishApiRequestFiles = ({ file, thumbnail }, isUpdate) => {
   // make sure a file was provided
@@ -59,4 +59,4 @@ const parsePublishApiRequestFiles = ({ file, thumbnail }, isUpdate) => {
   return obj;
 };
 
-export default parsePublishApiRequestFiles;
+module.exports = parsePublishApiRequestFiles;

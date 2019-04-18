@@ -1,4 +1,4 @@
-import NodeCache from 'node-cache';
+const NodeCache = require('node-cache');
 const CACHE_TIMEOUT_IN_SECONDS = 10;
 const publishCache = new NodeCache({ stdTTL: CACHE_TIMEOUT_IN_SECONDS });
 /*
@@ -18,4 +18,4 @@ const publishCache = new NodeCache({ stdTTL: CACHE_TIMEOUT_IN_SECONDS });
 
  */
 
-export default publishCache;
+module.exports = publishCache;

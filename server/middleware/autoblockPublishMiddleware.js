@@ -1,8 +1,9 @@
-import fs from 'fs';
+const fs = require('fs');
 
-import logger from 'winston';
-import { publishing } from '@config/siteConfig';
-const { publishingChannelWhitelist } = publishing;
+const logger = require('winston');
+const {
+  publishing: { publishingChannelWhitelist },
+} = require('@config/siteConfig');
 const ipBanFile = './site/config/ipBan.txt';
 const forbiddenMessage =
   '<h1>Forbidden</h1>If you are seeing this by mistake, please contact us using <a href="https://chat.lbry.com/">https://chat.lbry.com/</a>';
@@ -22,7 +23,7 @@ if (fs.existsSync(ipBanFile)) {
   });
 }
 
-export const autoblockPublishMiddleware = (req, res, next) => {
+const autoblockPublishMiddleware = (req, res, next) => {
   let ip = (req.headers['x-forwarded-for'] || req.connection.remoteAddress).split(/,\s?/)[0];
 
   if (blockedAddresses.indexOf(ip) !== -1) {
@@ -55,7 +56,7 @@ export const autoblockPublishMiddleware = (req, res, next) => {
   }
 };
 
-export const autoblockPublishBodyMiddleware = (req, res, next) => {
+const autoblockPublishBodyMiddleware = (req, res, next) => {
   if (req.body && publishingChannelWhitelist) {
     let ip = (req.headers['x-forwarded-for'] || req.connection.remoteAddress).split(/,\s?/)[0];
     const { channelName } = req.body;
@@ -65,4 +66,9 @@ export const autoblockPublishBodyMiddleware = (req, res, next) => {
     }
   }
   next();
+};
+
+module.exports = {
+  autoblockPublishMiddleware,
+  autoblockPublishBodyMiddleware,
 };

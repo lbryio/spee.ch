@@ -1,17 +1,17 @@
 'use strict';
-import bcrypt from 'bcrypt';
-import logger from 'winston';
+const bcrypt = require('bcrypt');
+const logger = require('winston');
 
-export default (sequelize, { STRING }) => {
+module.exports = (sequelize, { STRING }) => {
   const User = sequelize.define(
     'User',
     {
       userName: {
-        type: STRING,
+        type     : STRING,
         allowNull: false,
       },
       password: {
-        type: STRING,
+        type     : STRING,
         allowNull: false,
       },
     },
@@ -24,11 +24,11 @@ export default (sequelize, { STRING }) => {
     User.hasOne(db.Channel);
   };
 
-  User.prototype.comparePassword = function(password) {
+  User.prototype.comparePassword = function (password) {
     return bcrypt.compare(password, this.password);
   };
 
-  User.prototype.changePassword = function(newPassword) {
+  User.prototype.changePassword = function (newPassword) {
     return new Promise((resolve, reject) => {
       // generate a salt string to use for hashing
       bcrypt.genSalt((saltError, salt) => {
@@ -46,7 +46,8 @@ export default (sequelize, { STRING }) => {
             return;
           }
           // replace the current password with the new hash
-          this.update({ password: hash })
+          this
+            .update({password: hash})
             .then(() => {
               resolve();
             })

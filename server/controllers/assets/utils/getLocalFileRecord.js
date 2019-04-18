@@ -1,14 +1,15 @@
-import db from 'server/models';
+const db = require('../../../models');
 
 const NO_FILE = 'NO_FILE';
 
 const getLocalFileRecord = (claimId, name) => {
-  return db.File.findOne({ where: { claimId, name } }).then(file => {
-    if (!file) {
-      return NO_FILE;
-    }
-    return file.dataValues;
-  });
+  return db.File.findOne({where: {claimId, name}})
+    .then(file => {
+      if (!file) {
+        return NO_FILE;
+      }
+      return file.dataValues;
+    });
 };
 
-export default getLocalFileRecord;
+module.exports = getLocalFileRecord;

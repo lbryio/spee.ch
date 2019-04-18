@@ -1,12 +1,12 @@
-import logger from 'winston';
+const logger = require('winston');
 const BLOCKED_CLAIM = 'BLOCKED_CLAIM';
 
-export default (sequelize, { STRING }) => {
+module.exports = (sequelize, { STRING }) => {
   const Blocked = sequelize.define(
     'Blocked',
     {
       outpoint: {
-        type: STRING,
+        type     : STRING,
         allowNull: false,
       },
     },
@@ -15,16 +15,15 @@ export default (sequelize, { STRING }) => {
     }
   );
 
-  Blocked.getBlockList = function() {
+  Blocked.getBlockList = function () {
     logger.debug('returning full block list');
     return new Promise((resolve, reject) => {
-      this.findAll().then(list => {
-        return resolve(list);
-      });
+      this.findAll()
+        .then(list => { return resolve(list) });
     });
   };
 
-  Blocked.isNotBlocked = function(outpoint) {
+  Blocked.isNotBlocked = function (outpoint) {
     logger.debug(`checking to see if ${outpoint} is not blocked`);
     return new Promise((resolve, reject) => {
       this.findOne({
@@ -45,7 +44,7 @@ export default (sequelize, { STRING }) => {
     });
   };
 
-  Blocked.refreshTable = function(blockEndpoint) {
+  Blocked.refreshTable = function (blockEndpoint) {
     let blockedList = [];
 
     return fetch(blockEndpoint)

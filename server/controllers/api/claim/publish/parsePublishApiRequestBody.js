@@ -36,4 +36,4 @@ const parsePublishApiRequestBody = ({
   };
 };
 
-export default parsePublishApiRequestBody;
+module.exports = parsePublishApiRequestBody;

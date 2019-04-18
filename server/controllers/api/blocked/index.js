@@ -1,5 +1,5 @@
-import logger from 'winston';
-import db from 'server/models';
+const logger = require('winston');
+const db = require('../../../models');
 
 const updateBlockedList = (req, res) => {
   db.Blocked.refreshTable()
@@ -19,4 +19,4 @@ const updateBlockedList = (req, res) => {
     });
 };
 
-export default updateBlockedList;
+module.exports = updateBlockedList;

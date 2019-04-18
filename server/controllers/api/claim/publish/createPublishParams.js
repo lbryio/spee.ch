@@ -1,5 +1,5 @@
-import logger from 'winston';
-import { details, publishing } from '@config/siteConfig';
+const logger = require('winston');
+const { details, publishing } = require('@config/siteConfig');
 const createPublishParams = (
   filePath,
   name,
@@ -59,4 +59,4 @@ const createPublishParams = (
   return publishParams;
 };
 
-export default createPublishParams;
+module.exports = createPublishParams;
