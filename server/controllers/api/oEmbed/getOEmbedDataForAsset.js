@@ -1,7 +1,6 @@
 const logger = require('winston');
 const db = require('../../../models');
 const getClaimId = require('../../utils/getClaimId');
-const publishCache = require('server/utils/publishCache');
 
 const {
   details: { host, title: siteTitle },

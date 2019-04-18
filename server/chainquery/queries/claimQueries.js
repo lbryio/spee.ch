@@ -187,18 +187,19 @@ export default (db, table, sequelize) => ({
     }
   },
 
-  resolveClaim: async claimId => {
-    logger.debug(`Claim.resolveClaim: ${claimId}`);
+  resolveClaim: async (name, claimId) => {
+    logger.debug(`Claim.resolveClaim: ${name} ${claimId}`);
     return table
       .findAll({
-        where: { claim_id: claimId },
+        where: { name, claim_id: claimId },
       })
       .then(claimArray => {
         if (claimArray.length === 0) {
           return null;
         } else if (claimArray.length !== 1) {
-          logger.warn(`more than one record matches${claimId} in db.Claim`);
+          logger.warn(`more than one record matches ${name}#${claimId} in db.Claim`);
         }
+
         return claimArray[0];
       });
   },
@@ -222,22 +223,23 @@ export default (db, table, sequelize) => ({
         return claimArray[0];
       });
   },
-  getOutpoint: async claimId => {
-    logger.debug(`finding outpoint for ${claimId}`);
+
+  getOutpoint: async (name, claimId) => {
+    logger.debug(`finding outpoint for ${name}#${claimId}`);
 
     return await table
       .findAll({
-        where: { claim_id: claimId },
-        attributes: ['transaction_hash_id', 'vout'],
+        where: { name, claim_id: claimId },
+        attributes: ['transaction_hash_id'],
       })
       .then(result => {
         if (result.length === 0) {
-          throw new Error(`no record found for ${claimId}`);
+          throw new Error(`no record found for ${name}#${claimId}`);
         } else if (result.length !== 1) {
-          logger.warn(`more than one record matches ${claimId} in db.Claim`);
+          logger.warn(`more than one record matches ${name}#${claimId} in db.Claim`);
         }
 
-        return `${result[0].transaction_hash_id}:${result[0].vout}`;
+        return result[0].transaction_hash_id;
       });
   },
 
