@@ -388,7 +388,9 @@ module.exports = (sequelize, { STRING, BOOLEAN, INTEGER, TEXT, DECIMAL }) => {
     return new Promise((resolve, reject) => {
       this.fetchClaim(name, claimId)
         .then(claim => {
-          logger.info('resolveClaim claims:', claim);
+          logger.debug(
+            `resolveClaim: ${name}, ${claimId}, -> certificateId: ${claim && claim.certificateId}`
+          );
           if (
             serveOnlyApproved &&
             !isApprovedChannel({ longId: claim.certificateId }, approvedChannels)

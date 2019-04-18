@@ -38,7 +38,7 @@ const rando = () => {
 
 const claimUpdate = ({ body, files, headers, ip, originalUrl, user, tor }, res) => {
   // logging
-  logger.info('Claim update request:', {
+  logger.debug('Claim update request:', {
     ip,
     headers,
     body,

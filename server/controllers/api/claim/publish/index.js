@@ -141,12 +141,12 @@ const claimPublish = ({ body, files, headers, ip, originalUrl, user, tor }, res)
       return publish(publishParams, fileName, fileType, filePath);
     })
     .then(publishResults => {
-      logger.info('Publish success >', publishResults);
+      logger.debug('Publish success >', publishResults);
       claimData = publishResults;
       ({ claimId } = claimData);
 
       if (channelName) {
-        logger.info(`api/claim/publish: claimData.certificateId ${claimData.certificateId}`);
+        logger.debug(`api/claim/publish: claimData.certificateId ${claimData.certificateId}`);
         return chainquery.claim.queries.getShortClaimIdFromLongClaimId(
           claimData.certificateId,
           channelName
