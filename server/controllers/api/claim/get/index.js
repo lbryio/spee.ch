@@ -32,16 +32,17 @@ const claimGet = async ({ ip, originalUrl, params, headers }, res) => {
     if (!claimDataFromChainquery) {
       throw new Error('claim/get: resolveClaim: No matching uri found in Claim table');
     }
+
     if (headers && headers['user-agent'] && isBot(headers['user-agent'])) {
-      logger.info(`ClaimGet Bot: From user-agent: ${headers['user-agent']} for: ${claimId}`);
+      let lbrynetResolveResult = await resolveUri(`${name}#${claimId}`);
+      const { message, completed } = lbrynetResolveResult;
       res.status(200).json({
         success: true,
-        message: 'Bot detected',
+        message,
         completed: false,
       });
       return true;
     }
-    logger.info(`ClaimGet: From user-agent: ${headers['user-agent']} for: ${claimId}`);
 
     let lbrynetResult = await getClaim(`${name}#${claimId}`);
 
@@ -58,7 +59,7 @@ const claimGet = async ({ ip, originalUrl, params, headers }, res) => {
 
     const fileData = await createFileRecordDataAfterGet(claimData, lbrynetResult).catch(() => null);
     if (!fileData) {
-      logger.error(
+      logger.info(
         'claim/get: createFileRecordDataAfterGet failed to create file dimensions in time'
       );
     }
@@ -69,7 +70,7 @@ const claimGet = async ({ ip, originalUrl, params, headers }, res) => {
       .catch(() => null);
 
     if (!upsertResult) {
-      logger.error('claim/get: DB file upsert failed');
+      logger.info('claim/get: DB file upsert failed');
     }
 
     const { message, completed } = lbrynetResult;
