@@ -8,6 +8,7 @@ import createSagaMiddleware from 'redux-saga';
 import { call } from 'redux-saga/effects';
 import Helmet from 'react-helmet';
 import * as httpContext from 'express-http-context';
+import logger from 'winston';
 
 import Reducers from '@reducers';
 import GAListener from '@components/GAListener';
@@ -92,6 +93,7 @@ export default (req, res) => {
     const preloadedState = store.getState();
 
     // send the rendered page back to the client
+
     res.send(renderFullPage(helmet, html, preloadedState));
   };
 
@@ -121,8 +123,8 @@ export default (req, res) => {
         }
 
         if (canonicalUrl && canonicalUrl !== req.originalUrl) {
-          console.log(`redirecting ${req.originalUrl} to ${canonicalUrl}`);
-          res.redirect(canonicalUrl);
+          logger.verbose(`redirecting ${req.originalUrl} to ${canonicalUrl}`);
+          return res.redirect(canonicalUrl);
         }
 
         return renderPage(store);
