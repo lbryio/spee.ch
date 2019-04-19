@@ -3,7 +3,7 @@ const logger = require('winston');
 const config = require('@config/loggerConfig');
 const { logLevel } = config;
 
-function configureLogging () {
+function configureLogging() {
   logger.info('configuring winston logger...');
   if (!config) {
     return logger.warn('No logger config found');
@@ -14,12 +14,12 @@ function configureLogging () {
   // configure the winston logger
   logger.configure({
     transports: [
-      new (logger.transports.Console)({
-        level                          : logLevel || 'debug',
-        timestamp                      : false,
-        colorize                       : true,
-        prettyPrint                    : true,
-        handleExceptions               : true,
+      new logger.transports.Console({
+        level: logLevel || 'debug',
+        timestamp: true,
+        colorize: true,
+        prettyPrint: true,
+        handleExceptions: true,
         humanReadableUnhandledException: true,
       }),
     ],
