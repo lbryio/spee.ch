@@ -12,24 +12,32 @@ const publish = async (publishParams, fileName, fileType) => {
   let channel;
   let fileRecord;
   let newFile = Boolean(publishParams.file_path);
+  let publishResultsOutput;
 
   try {
     publishResults = await publishClaim(publishParams);
+    publishResultsOutput = publishResults && publishResults.outputs && publishResults.outputs[0];
+
     logger.verbose(`Successfully published ${publishParams.name} ${fileName}`, publishResults);
-    const outpoint = `${publishResults.outputs[0].txid}:${publishResults.outputs[0].nout}`;
+    const outpoint = `${publishResultsOutput.txid}:${publishResultsOutput.nout}`;
     // get the channel information
-    if (publishParams.channel_name) {
-      logger.debug(`this claim was published in channel: ${publishParams.channel_name}`);
-      channel = await db.Channel.findOne({
-        where: {
-          channelName: publishParams.channel_name,
-        },
-      });
-    } else {
-      channel = null;
-    }
-    const certificateId = channel ? channel.channelClaimId : null;
-    const channelName = channel ? channel.channelName : null;
+    // if (publishParams.channel_name) {
+    //   logger.debug(`this claim was published in channel: ${publishParams.channel_name}`);
+    //   channel = await db.Channel.findOne({
+    //     where: {
+    //       channelName: publishParams.channel_name,
+    //     },
+    //   });
+    // } else {
+    //   channel = null;
+    // }
+
+    const certificateId = publishResultsOutput.signing_channel
+      ? publishResultsOutput.signing_channel.claim_id
+      : null;
+    const channelName = publishResultsOutput.signing_channel
+      ? publishResultsOutput.signing_channel.name
+      : null;
 
     const claimRecord = await createClaimRecordDataAfterPublish(
       certificateId,
@@ -37,7 +45,7 @@ const publish = async (publishParams, fileName, fileType) => {
       fileName,
       fileType,
       publishParams,
-      publishResults
+      publishResultsOutput
     );
     const { claimId } = claimRecord;
     const upsertCriteria = { name: publishParams.name, claimId };
@@ -48,7 +56,7 @@ const publish = async (publishParams, fileName, fileType) => {
         fileName,
         fileType,
         publishParams,
-        publishResults
+        publishResultsOutput
       );
     } else {
       fileRecord = await db.File.findOne({ where: { claimId } }).then(result => result.dataValues);

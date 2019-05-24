@@ -6,16 +6,19 @@ const createClaimRecordDataAfterPublish = (
   fileName,
   fileType,
   publishParams,
-  publishResults
+  publishResultsOutput
 ) => {
   const {
     name,
-    metadata: { title, description, thumbnail, nsfw },
+    title,
+    description,
+    thumbnail,
+    nsfw,
     claim_address: address,
     bid: amount,
   } = publishParams;
 
-  const { claim_id: claimId, txid, nout } = publishResults;
+  const { claim_id: claimId, txid, nout } = publishResultsOutput;
 
   return db.Claim.getCurrentHeight().then(height => {
     return {

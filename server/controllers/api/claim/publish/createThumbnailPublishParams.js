@@ -7,6 +7,15 @@ const createThumbnailPublishParams = (thumbnailFilePath, claimName, license, lic
   }
   logger.debug(`Creating Thumbnail Publish Parameters`);
   // create the publish params
+
+  if (license === null || license.trim() === '') {
+    license = ''; // default to empty string
+  }
+  // provide default for licenseUrl
+  if (licenseUrl === null || licenseUrl.trim() === '') {
+    licenseUrl = ''; // default to empty string
+  }
+
   return {
     name: `${claimName}-thumb`,
     file_path: thumbnailFilePath,
