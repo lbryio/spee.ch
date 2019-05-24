@@ -188,8 +188,8 @@ inquirer
       .post('http://localhost:5279', {
         method: 'channel_new',
         params: {
-          channel_name: thumbnailChannelDefault,
-          amount: channelBid,
+          name: thumbnailChannelDefault,
+          bid: channelBid,
         },
       })
       .then(response => {
@@ -197,7 +197,6 @@ inquirer
           if (response.data.error) {
             throw new Error(response.data.error.message);
           }
-
           thumbnailChannel = thumbnailChannelDefault;
           thumbnailChannelId = response.data.result.claim_id;
           siteConfig['publishing']['thumbnailChannel'] = thumbnailChannel;
@@ -237,7 +236,9 @@ inquirer
       '\nIt\'s a good idea to BACK UP YOUR MASTER PASSWORD \nin "/site/private/authConfig.json" so that you don\'t lose \ncontrol of your channel.'
     );
 
-    console.log('\nNext step: run "npm run start" to build and start your server!');
+    console.log(
+      '\nNext step: run "npm run build" (or "npm run dev") to compiles, and "npm run start" to start your server!'
+    );
     console.log(
       'If you want to change any settings, you can edit the files in the "/site" folder.'
     );

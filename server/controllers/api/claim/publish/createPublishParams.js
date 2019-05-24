@@ -33,24 +33,24 @@ const createPublishParams = (
     name,
     file_path: filePath,
     bid: publishing.fileClaimBidAmount,
-    metadata: {
-      description,
-      title,
-      author: details.title,
-      language: 'en',
-      license,
-      licenseUrl,
-      nsfw,
-    },
+    description,
+    title,
+    author: details.title,
+    languages: ['en'],
+    license,
+    license_url: licenseUrl,
+    tags: [],
     claim_address: publishing.primaryClaimAddress,
   };
   // add thumbnail to channel if video
   if (thumbnail) {
-    publishParams['metadata']['thumbnail'] = thumbnail;
+    publishParams['thumbnail_url'] = thumbnail;
+  }
+  if (nsfw) {
+    publishParams.tags.push = 'mature';
   }
   // add channel details if publishing to a channel
-  if (channelName && channelClaimId) {
-    publishParams['channel_name'] = channelName;
+  if (channelClaimId) {
     publishParams['channel_id'] = channelClaimId;
   }
   // log params

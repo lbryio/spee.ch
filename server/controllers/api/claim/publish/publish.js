@@ -16,7 +16,7 @@ const publish = async (publishParams, fileName, fileType) => {
   try {
     publishResults = await publishClaim(publishParams);
     logger.verbose(`Successfully published ${publishParams.name} ${fileName}`, publishResults);
-    const outpoint = `${publishResults.output.txid}:${publishResults.output.nout}`;
+    const outpoint = `${publishResults.outputs[0].txid}:${publishResults.outputs[0].nout}`;
     // get the channel information
     if (publishParams.channel_name) {
       logger.debug(`this claim was published in channel: ${publishParams.channel_name}`);

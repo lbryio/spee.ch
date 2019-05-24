@@ -1,5 +1,5 @@
-import {connect} from 'react-redux';
-import {updateMetadata} from '../../actions/publish';
+import { connect } from 'react-redux';
+import { updateMetadata } from '../../actions/publish';
 import View from './view';
 
 const mapStateToProps = ({ publish }) => {
@@ -16,4 +16,7 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(View);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(View);

@@ -138,7 +138,7 @@ const claimUpdate = ({ body, files, headers, ip, originalUrl, user, tor }, res) 
           nsfw: claimRecord.nsfw,
           license: claimRecord.license,
           licenseUrl: claimRecord.license_url,
-          language: 'en',
+          languages: ['en'],
           author: details.title,
         },
         updateMetadata({ title, description, nsfw, license, licenseUrl })
