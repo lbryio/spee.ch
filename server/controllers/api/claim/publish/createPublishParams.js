@@ -47,7 +47,7 @@ const createPublishParams = (
     publishParams['thumbnail_url'] = thumbnail;
   }
   if (nsfw) {
-    publishParams.tags = 'mature';
+    publishParams.tags = ['mature'];
   }
   // add channel details if publishing to a channel
   if (channelName && channelClaimId) {
