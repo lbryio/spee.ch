@@ -5,6 +5,7 @@ export const createPublishMetadata = (
   publishInChannel,
   selectedChannel
 ) => {
+  // this metadata stuff needs to be removed...
   let metadata = {
     name: claim,
     title,

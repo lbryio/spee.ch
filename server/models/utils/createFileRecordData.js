@@ -1,22 +1,11 @@
 const getMediaDimensions = require('../../utils/getMediaDimensions.js');
 
-async function createFileRecordDataAfterGet (resolveResult, getResult) {
-  const {
-    name,
-    claimId,
-    outpoint,
-    contentType: fileType,
-  } = resolveResult;
+async function createFileRecordDataAfterGet(resolveResult, getResult) {
+  const { name, claimId, outpoint, contentType: fileType } = resolveResult;
 
-  const {
-    file_name: fileName,
-    download_path: filePath,
-  } = getResult;
+  const { file_name: fileName, download_path: filePath } = getResult;
 
-  const {
-    height: fileHeight,
-    width: fileWidth,
-  } = await getMediaDimensions(fileType, filePath);
+  const { height: fileHeight, width: fileWidth } = await getMediaDimensions(fileType, filePath);
 
   return {
     name,
@@ -30,22 +19,17 @@ async function createFileRecordDataAfterGet (resolveResult, getResult) {
   };
 }
 
-async function createFileRecordDataAfterPublish (fileName, fileType, publishParams, publishResults) {
-  const {
-    name,
-    file_path: filePath,
-  } = publishParams;
+async function createFileRecordDataAfterPublish(
+  fileName,
+  fileType,
+  publishParams,
+  publishResultsOutput
+) {
+  const { name, file_path: filePath } = publishParams;
 
-  const {
-    claim_id: claimId,
-    txid,
-    nout,
-  } = publishResults;
+  const { claim_id: claimId, txid, nout } = publishResultsOutput;
 
-  const {
-    height: fileHeight,
-    width: fileWidth,
-  } = await getMediaDimensions(fileType, filePath);
+  const { height: fileHeight, width: fileWidth } = await getMediaDimensions(fileType, filePath);
 
   return {
     name,
