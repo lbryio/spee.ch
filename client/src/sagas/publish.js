@@ -9,11 +9,22 @@ import { selectShowState, selectAsset } from '../selectors/show';
 import { validateChannelSelection, validateNoPublishErrors } from '../utils/validate';
 import { createPublishMetadata, createPublishFormData, createThumbnailUrl } from '../utils/publish';
 import { makePublishRequestChannel } from '../channels/publish';
-
-function * publishFile (action) {
+// yep
+function* publishFile(action) {
   const { history } = action.data;
   const publishState = yield select(selectPublishState);
-  const { publishInChannel, selectedChannel, file, claim, metadata, thumbnailChannel, thumbnailChannelId, thumbnail, isUpdate, error: publishToolErrors } = publishState;
+  const {
+    publishInChannel,
+    selectedChannel,
+    file,
+    claim,
+    metadata,
+    thumbnailChannel,
+    thumbnailChannelId,
+    thumbnail,
+    isUpdate,
+    error: publishToolErrors,
+  } = publishState;
   const { loggedInChannel } = yield select(selectChannelState);
   const { host } = yield select(selectSiteState);
 
@@ -39,7 +50,7 @@ function * publishFile (action) {
   // create metadata
   publishMetadata = createPublishMetadata(
     isUpdate ? asset.name : claim,
-    isUpdate ? {type: asset.claimData.contentType} : file,
+    isUpdate ? { type: asset.claimData.contentType } : file,
     metadata,
     publishInChannel,
     selectedChannel
@@ -49,7 +60,12 @@ function * publishFile (action) {
   }
   if (thumbnail) {
     // add thumbnail to publish metadata
-    publishMetadata['thumbnail'] = createThumbnailUrl(thumbnailChannel, thumbnailChannelId, claim, host);
+    publishMetadata['thumbnail'] = createThumbnailUrl(
+      thumbnailChannel,
+      thumbnailChannelId,
+      claim,
+      host
+    );
   }
   // create form data for main publish
   publishFormData = createPublishFormData(file, thumbnail, publishMetadata);
@@ -57,7 +73,7 @@ function * publishFile (action) {
   publishChannel = yield call(makePublishRequestChannel, publishFormData, isUpdate);
 
   while (true) {
-    const {loadStart, progress, load, success, error: publishError} = yield take(publishChannel);
+    const { loadStart, progress, load, success, error: publishError } = yield take(publishChannel);
     if (publishError) {
       return yield put(updatePublishStatus(publishStates.FAILED, publishError.message));
     }
@@ -67,7 +83,7 @@ function * publishFile (action) {
         yield put({
           type: 'ASSET_UPDATE_CLAIMDATA',
           data: {
-            id       : `a#${success.data.name}#${success.data.claimId}`,
+            id: `a#${success.data.name}#${success.data.claimId}`,
             claimData: success.data.claimData,
           },
         });
@@ -91,6 +107,6 @@ function * publishFile (action) {
   }
 }
 
-export function * watchPublishStart () {
+export function* watchPublishStart() {
   yield takeLatest(actions.PUBLISH_START, publishFile);
-};
+}
