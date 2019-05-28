@@ -138,7 +138,7 @@ const claimUpdate = ({ body, files, headers, ip, originalUrl, user, tor }, res) 
           nsfw: claimRecord.nsfw,
           license: claimRecord.license,
           licenseUrl: claimRecord.license_url,
-          language: 'en',
+          languages: ['en'],
           author: details.title,
         },
         updateMetadata({ title, description, nsfw, license, licenseUrl })
@@ -149,8 +149,18 @@ const claimUpdate = ({ body, files, headers, ip, originalUrl, user, tor }, res) 
         claim_address: primaryClaimAddress,
         channel_name: channelName,
         channel_id: channelId,
-        metadata,
+        title,
+        description,
+        author: details.title,
+        languages: ['en'],
+        license: license || '',
+        license_url: licenseUrl || '',
+        tags: [],
       };
+
+      if (nsfw) {
+        publishParams.tags = ['mature'];
+      }
 
       if (files.file) {
         if (thumbnailUpdate) {
@@ -185,14 +195,14 @@ const claimUpdate = ({ body, files, headers, ip, originalUrl, user, tor }, res) 
 
       if (channelName) {
         return chainquery.claim.queries.getShortClaimIdFromLongClaimId(
-          result.certificateId,
+          publishResult.certificateId,
           channelName
         );
       } else {
         return chainquery.claim.queries
-          .getShortClaimIdFromLongClaimId(result.claimId, name, result)
+          .getShortClaimIdFromLongClaimId(publishResult.claimId, name, publishResult)
           .catch(() => {
-            return result.claimId.slice(0, 1);
+            return publishResult.claimId.slice(0, 1);
           });
       }
     })

@@ -172,10 +172,10 @@ module.exports = {
     return new Promise((resolve, reject) => {
       axios
         .post(lbrynetUri, {
-          method: 'channel_new',
+          method: 'channel_create',
           params: {
-            channel_name: name,
-            amount: publishing.channelClaimBidAmount,
+            name: name,
+            bid: publishing.channelClaimBidAmount,
           },
         })
         .then(response => {

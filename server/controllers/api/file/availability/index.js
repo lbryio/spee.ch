@@ -14,7 +14,7 @@ const chainquery = require('chainquery').default;
 const fileAvailability = ({ ip, originalUrl, params }, res) => {
   const name = params.name;
   const claimId = params.claimId;
-  logger.debug(`fileAvailability params: name:${name} claimId:${claimId}`);
+  logger.verbose(`fileAvailability params: name:${name} claimId:${claimId}`);
   // TODO: we probably eventually want to check the publishCache for the claimId too,
   //  and shop the outpoint to file_list.
   return chainquery.claim.queries

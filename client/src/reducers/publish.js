@@ -40,7 +40,7 @@ const initialState = {
     description: '',
     license: '',
     licenseUrl: '',
-    nsfw: false,
+    tags: [],
   },
   isUpdate: false,
   hasChanged: false,

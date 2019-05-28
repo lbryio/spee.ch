@@ -7,19 +7,25 @@ const createThumbnailPublishParams = (thumbnailFilePath, claimName, license, lic
   }
   logger.debug(`Creating Thumbnail Publish Parameters`);
   // create the publish params
+
+  if (license === null || license.trim() === '') {
+    license = ''; // default to empty string
+  }
+  // provide default for licenseUrl
+  if (licenseUrl === null || licenseUrl.trim() === '') {
+    licenseUrl = ''; // default to empty string
+  }
+
   return {
     name: `${claimName}-thumb`,
     file_path: thumbnailFilePath,
     bid: publishing.fileClaimBidAmount,
-    metadata: {
-      title: `${claimName} thumbnail`,
-      description: `a thumbnail for ${claimName}`,
-      author: details.title,
-      language: 'en',
-      license,
-      licenseUrl,
-      nsfw,
-    },
+    title: `${claimName} thumbnail`,
+    description: `a thumbnail for ${claimName}`,
+    author: details.title,
+    languages: ['en'],
+    license,
+    license_url: licenseUrl,
     claim_address: publishing.primaryClaimAddress,
     channel_name: publishing.thumbnailChannel,
     channel_id: publishing.thumbnailChannelId,
