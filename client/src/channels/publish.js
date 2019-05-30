@@ -23,14 +23,29 @@ export const makePublishRequestChannel = (fd, isUpdate) => {
     // set state change handler
     xhr.onreadystatechange = () => {
       if (xhr.readyState === 4) {
-        const response = JSON.parse(xhr.response);
-        if ((xhr.status === 200) && response.success) {
-          emitter({success: response});
-          emitter(END);
-        } else {
-          emitter({error: new Error(response.message)});
-          emitter(END);
-        }
+	      switch (xhr.status) {
+	        case 413:
+	          emitter({error: new Error("Unfortunately it appears this web server " +
+	            "has been misconfigured, please inform the service administrators " +
+	            "that they must set their nginx/apache request size maximums higher " +
+	            "than their file size limits.")});
+	          emitter(END);
+	          break;
+	        case 200:
+            var response = JSON.parse(xhr.response);
+            if (response.success) {
+              emitter({success: response});
+              emitter(END);
+            } else {
+              emitter({error: new Error(response.message)});
+              emitter(END);
+            }
+	          break;
+	        default:
+	          emitter({error: new Error("Received an unexpected response from " +
+              "server: " + xhr.status)});
+	          emitter(END);
+	      }
       }
     };
     // open and send
