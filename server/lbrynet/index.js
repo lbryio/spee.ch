@@ -73,13 +73,14 @@ module.exports = {
         });
     });
   },
-  async abandonClaim({ claimId }) {
-    logger.debug(`lbryApi >> Abandon claim "${claimId}"`);
+  async abandonClaim({ outpoint }) {
+    logger.debug(`lbryApi >> Abandon claim "${outpoint}"`);
     const gaStartTime = Date.now();
+    const [txid, nout] = outpoint.split(':');
     try {
       const abandon = await axios.post(lbrynetUri, {
-        method: 'claim_abandon',
-        params: { claim_id: claimId },
+        method: 'stream_abandon',
+        params: { txid: txid, nout: Number(nout) },
       });
       sendGATimingEvent('lbrynet', 'abandonClaim', 'ABANDON_CLAIM', gaStartTime, Date.now());
       return abandon.data;
