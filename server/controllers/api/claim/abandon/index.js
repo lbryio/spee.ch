@@ -9,28 +9,28 @@ const authenticateUser = require('../publish/authentication.js');
 */
 
 const claimAbandon = async (req, res) => {
-  const {claimId} = req.body;
-  const {user} = req;
+  const { outpoint } = req.body;
+  const { user } = req;
   try {
     const [channel, claim] = await Promise.all([
       authenticateUser(user.channelName, null, null, user),
-      db.Claim.findOne({where: {claimId}}),
+      db.Claim.findOne({ where: { outpoint } }),
     ]);
 
     if (!claim) throw new Error('That channel does not exist');
-    if (!channel.channelName) throw new Error('You don\'t own this channel');
+    if (!channel.channelName) throw new Error("You don't own this channel");
 
-    await abandonClaim({claimId});
-    const file = await db.File.findOne({where: {claimId}});
+    await abandonClaim({ outpoint });
+    const file = await db.File.findOne({ where: { outpoint } });
     await Promise.all([
       deleteFile(file.filePath),
-      db.File.destroy({where: {claimId}}),
-      db.Claim.destroy({where: {claimId}}),
+      db.File.destroy({ where: { outpoint } }),
+      db.Claim.destroy({ where: { outpoint } }),
     ]);
-    logger.debug(`Claim abandoned: ${claimId}`);
+    logger.debug(`Claim abandoned: ${outpoint}`);
     res.status(200).json({
       success: true,
-      message: `Claim with id ${claimId} abandonded`,
+      message: `Claim with outpoint ${outpoint} abandonded`,
     });
   } catch (error) {
     logger.error('abandon claim error:', error);

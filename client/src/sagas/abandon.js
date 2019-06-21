@@ -5,17 +5,19 @@ import { updatePublishStatus, clearFile } from '../actions/publish';
 import { removeAsset } from '../actions/show';
 import { doAbandonClaim } from '../api/assetApi';
 
-function * abandonClaim (action) {
+function* abandonClaim(action) {
   const { claimData, history } = action.data;
-  const { claimId } = claimData;
+  const { outpoint } = claimData;
 
-  const confirm = window.confirm('Are you sure you want to abandon this claim? This action cannot be undone.');
+  const confirm = window.confirm(
+    'Are you sure you want to abandon this claim? This action cannot be undone.'
+  );
   if (!confirm) return;
 
   yield put(updatePublishStatus(publishStates.ABANDONING, 'Your claim is being abandoned...'));
 
   try {
-    yield call(doAbandonClaim, claimId);
+    yield call(doAbandonClaim, outpoint);
   } catch (error) {
     return console.log('abandon error:', error.message);
   }
@@ -25,6 +27,6 @@ function * abandonClaim (action) {
   return history.push('/');
 }
 
-export function * watchAbandonClaim () {
+export function* watchAbandonClaim() {
   yield takeLatest(actions.ABANDON_CLAIM, abandonClaim);
-};
+}
