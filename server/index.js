@@ -20,10 +20,7 @@ const { setupBlockList } = require('./utils/blockList');
 const speechPassport = require('./speechPassport');
 const processTrending = require('./utils/processTrending');
 
-const {
-  logMetricsMiddleware,
-  setRouteDataInContextMiddleware,
-} = require('./middleware/logMetricsMiddleware');
+const { setRouteDataInContextMiddleware } = require('./middleware/httpContextMiddleware');
 
 const {
   details: { port: PORT, blockListEndpoint },
@@ -145,7 +142,7 @@ function Server() {
 
       app[routeMethod](
         routePath,
-        logMetricsMiddleware,
+        // logMetricsMiddleware,
         setRouteDataInContextMiddleware(routePath, routeData),
         ...controllers
       );
