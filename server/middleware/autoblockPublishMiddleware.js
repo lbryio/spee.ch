@@ -5,11 +5,13 @@ const {
   publishing: { publishingChannelWhitelist },
 } = require('@config/siteConfig');
 const ipBanFile = './site/config/ipBan.txt';
+const ipWhitelist = './site/config/ipWhitelist.txt';
 const forbiddenMessage =
   '<h1>Forbidden</h1>If you are seeing this by mistake, please contact us using <a href="https://chat.lbry.com/">https://chat.lbry.com/</a>';
 const maxPublishesInTenMinutes = 20;
 let ipCounts = {};
 let blockedAddresses = [];
+let whitelistedAddresses = [];
 
 if (fs.existsSync(ipBanFile)) {
   const lineReader = require('readline').createInterface({
@@ -23,9 +25,28 @@ if (fs.existsSync(ipBanFile)) {
   });
 }
 
+// If a file called ipWhitelist.txt exists
+// Please comment above each whitelisted IP why/who/when etc
+// # Jim because he's awesome - January 2018
+if (fs.existsSync(ipWhitelist)) {
+  const lineReader = require('readline').createInterface({
+    input: require('fs').createReadStream(ipWhitelist),
+  });
+
+  lineReader.on('line', line => {
+    if (line && line !== '' && line[0] !== '#') {
+      whitelistedAddresses.push(line);
+    }
+  });
+}
+
 const autoblockPublishMiddleware = (req, res, next) => {
   let ip = (req.headers['x-forwarded-for'] || req.connection.remoteAddress).split(/,\s?/)[0];
 
+  if (whitelistedAddresses.indexOf(ip) !== -1) {
+    next();
+    return;
+  }
   if (blockedAddresses.indexOf(ip) !== -1) {
     res.status(403).send(forbiddenMessage);
     res.end();
