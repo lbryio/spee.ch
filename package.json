@@ -74,7 +74,7 @@
     "react-select": "^2.1.1",
     "redux": "^4.0.1",
     "redux-saga": "^0.16.2",
-    "sequelize": "^4.41.1",
+    "sequelize": "^5.3.0",
     "sequelize-cli": "^4.0.0",
     "universal-analytics": "^0.4.20",
     "webpack-merge": "^4.1.4",
