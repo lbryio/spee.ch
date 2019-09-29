@@ -3,6 +3,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const expressHandlebars = require('express-handlebars');
 const helmet = require('helmet');
+const cors = require('cors');
 const cookieSession = require('cookie-session');
 const http = require('http');
 const logger = require('winston');
@@ -82,7 +83,24 @@ function Server() {
 
     // set HTTP headers to protect against well-known web vulnerabilties
     app.use(helmet());
-
+    // open cors for lbry.tv lbry.tech localhost lbry.com
+    var whitelist = [
+      'https://lbry.com',
+      'https://lbry.tech',
+      'https://lbry.tv',
+      'http://localhost',
+      'http://localhost:1337',
+    ];
+    var corsOptions = {
+      origin: function(origin, callback) {
+        if (whitelist.indexOf(origin) !== -1) {
+          callback(null, true);
+        } else {
+          callback(new Error('Not allowed by CORS'));
+        }
+      },
+    };
+    app.use(cors(corsOptions));
     // Support per-request http-context
     app.use(httpContext.middleware);
 
