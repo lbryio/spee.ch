@@ -18,7 +18,8 @@
     "host": "https://www.example.com",
     "description": "A decentralized hosting platform built on LBRY",
     "twitter": false,
-    "blockListEndpoint": "https://api.lbry.com/file/list_blocked"
+    "blockListEndpoint": "https://api.lbry.com/file/list_blocked",
+    "corsWhitelist": []
   },
   "publishing": {
     "primaryClaimAddress": null,

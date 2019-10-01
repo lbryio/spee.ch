@@ -3,6 +3,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const expressHandlebars = require('express-handlebars');
 const helmet = require('helmet');
+const cors = require('cors');
 const cookieSession = require('cookie-session');
 const http = require('http');
 const logger = require('winston');
@@ -23,7 +24,7 @@ const processTrending = require('./utils/processTrending');
 const { setRouteDataInContextMiddleware } = require('./middleware/httpContextMiddleware');
 
 const {
-  details: { port: PORT, blockListEndpoint },
+  details: { port: PORT, blockListEndpoint, corsWhitelist, host },
   startup: { performChecks, performUpdates },
 } = require('@config/siteConfig');
 
@@ -82,7 +83,37 @@ function Server() {
 
     // set HTTP headers to protect against well-known web vulnerabilties
     app.use(helmet());
+    // open cors for site/config:host (current instance)
+    var originWhitelist = [
+      host
+    ];
+    // whitelist is found in site/config:details:
+    // enter corsWhitelist: ["*"] to allow all
+    // enter your domains otherwise:["https://example.com", ...]
+    if ( corsWhitelist && corsWhitelist.length ) {
+      originWhitelist = originWhitelist.concat(corsWhitelist);
+    }
 
+    var corsOptions = originWhitelist && originWhitelist.includes('*')
+    ? {
+      "origin": "*",
+      "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
+      "preflightContinue": false,
+      "optionsSuccessStatus": 204
+    }
+    : {
+      origin: function(origin, callback) {
+        if ((origin === undefined) || originWhitelist.indexOf(origin) !== -1) {
+          callback(null, true);
+        } else {
+          let error = new Error(`CORS has blocked this website from access. Contact an administrator from ${host} if you feel this is in error.`);
+          error.code = "ECORS"
+          callback(error);
+        }
+      },
+    };
+
+    app.use(cors(corsOptions));
     // Support per-request http-context
     app.use(httpContext.middleware);
 
@@ -147,6 +178,16 @@ function Server() {
         ...controllers
       );
     });
+
+    app.use( (error, req, res, next) => {
+      if (error.code === 'ECORS'){
+        res.status(403);
+        res.send({message: error})
+      } else {
+        res.status(520);
+        res.send({ message: error });
+      }
+    })
 
     this.app = app;
   };
