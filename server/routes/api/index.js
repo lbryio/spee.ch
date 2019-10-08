@@ -25,6 +25,7 @@ const publishingConfig = require('../../controllers/api/config/site/publishing')
 const getTorList = require('../../controllers/api/tor');
 const getBlockedList = require('../../controllers/api/blocked');
 const getOEmbedData = require('../../controllers/api/oEmbed');
+const cors = require('cors');
 
 export default {
   // homepage routes
@@ -43,10 +44,10 @@ export default {
   '/api/claim/data/:claimName/:claimId'  : { controller: [ torCheckMiddleware, claimData ] },
   '/api/claim/get/:name/:claimId'        : { controller: [ torCheckMiddleware, claimGet ] },
   '/api/claim/list/:name'                : { controller: [ torCheckMiddleware, claimList ] },
-  '/api/claim/long-id'                   : { method: 'post', controller: [ torCheckMiddleware, claimLongId ] }, // note: should be a 'get'
-  '/api/claim/publish'                   : { method: 'post', controller: [ torCheckMiddleware, autoblockPublishMiddleware, multipartMiddleware, autoblockPublishBodyMiddleware, claimPublish ] },
-  '/api/claim/update'                    : { method: 'post', controller: [ torCheckMiddleware, multipartMiddleware, claimUpdate ] },
-  '/api/claim/abandon'                   : { method: 'post', controller: [ torCheckMiddleware, multipartMiddleware, claimAbandon ] },
+  '/api/claim/long-id'                   : { method: 'post', controller: [ cors(), torCheckMiddleware, claimLongId ] }, // note: should be a 'get'
+  '/api/claim/publish'                   : { method: 'post', controller: [ cors(), torCheckMiddleware, autoblockPublishMiddleware, multipartMiddleware, autoblockPublishBodyMiddleware, claimPublish ] },
+  '/api/claim/update'                    : { method: 'post', controller: [ cors(), torCheckMiddleware, multipartMiddleware, claimUpdate ] },
+  '/api/claim/abandon'                   : { method: 'post', controller: [ cors(), torCheckMiddleware, multipartMiddleware, claimAbandon ] },
   '/api/claim/resolve/:name/:claimId'    : { controller: [ torCheckMiddleware, claimResolve ] },
   '/api/claim/short-id/:longId/:name'    : { controller: [ torCheckMiddleware, claimShortId ] },
   '/api/claim/views/:claimId'            : { controller: [ torCheckMiddleware, claimViews ] },
@@ -55,7 +56,7 @@ export default {
   // user routes
   '/api/user/password/'                  : { method: 'put', controller: [ torCheckMiddleware, userPassword ] },
   // configs
-  '/api/config/site/publishing'          : { controller: [ torCheckMiddleware, publishingConfig ] },
+  '/api/config/site/publishing'          : { controller: [ cors(), torCheckMiddleware, publishingConfig ] },
   // tor
   '/api/tor'                             : { controller: [ torCheckMiddleware, getTorList ] },
   // blocked
