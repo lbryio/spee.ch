@@ -194,7 +194,7 @@ class AssetInfo extends React.Component {
           <a
             className={'link--primary'}
             target='_blank'
-            href='https://lbry.com/dmca'
+           href={`https://lbry.com/dmca/${claimId}`}
           >
             Report
           </a>
