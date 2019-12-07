@@ -105,7 +105,7 @@ $ npm run start
 
 #### Customize your app
 
-Check out the [customization guide](https://github.com/lbryio/spee.ch/blob/readme-update/customize.md) to change your app's appearance and components
+Check out the [customization guide](https://github.com/lbryio/spee.ch/blob/master/customize.md) to change your app's appearance and components
 
 #### (optional) add custom components and update the styles
 
