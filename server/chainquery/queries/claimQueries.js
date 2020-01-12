@@ -201,6 +201,10 @@ export default (db, table, sequelize) => ({
         }
 
         return claimArray[0];
+      })
+      .catch(error => {
+        logger.verbose(`resolveClaim failed: ${error}`)
+        reject(error);
       });
   },
 
