@@ -13,8 +13,10 @@ const awaitFileSize = (outpoint, size, interval, timeout) => {
   function checkFileList() {
     logger.debug('checkFileList');
     return getFileListFileByOutpoint(outpoint).then(result => {
-      logger.debug('File List Result', result);
-      if (result[0]['completed'] === true || result[0]['written_bytes'] > size) {
+      const { items: fileInfos } = result;
+      const fileInfo = fileInfos[0];
+      logger.debug('File List Result', fileInfo);
+      if (fileInfo.completed === true || fileInfo.written_bytes > size) {
         logger.debug('FILE READY');
         return 'ready';
       } else if (timeout !== 0 && Date.now() - start > timeout) {
