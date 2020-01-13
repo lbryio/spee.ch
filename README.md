@@ -3,6 +3,8 @@
 spee.ch provides a user-friendly, custom-designed, image and video hosting site backed by a decentralized network and
 blockchain ([LBRY](https://lbry.tech/)). Via just a small set of config files, you can spin your an entire spee.ch site back up including assets.
 
+**Please note: the spee.ch code base and setup instructions are no longer actively maintained now that we have lbry.tv. Proceed at your own caution. Setup will require dev ops skills.**
+
 ![App GIF](https://spee.ch/e/speechgif.gif)
 
 For a completely open, unrestricted example of a spee.ch site, check out https://www.spee.ch.
@@ -105,7 +107,7 @@ $ npm run start
 
 #### Customize your app
 
-Check out the [customization guide](https://github.com/lbryio/spee.ch/blob/readme-update/customize.md) to change your app's appearance and components
+Check out the [customization guide](https://github.com/lbryio/spee.ch/blob/master/customize.md) to change your app's appearance and components
 
 #### (optional) add custom components and update the styles
 
