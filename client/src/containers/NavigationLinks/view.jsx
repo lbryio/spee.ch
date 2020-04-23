@@ -33,14 +33,14 @@ class NavigationLinks extends React.Component {
     const { channelName, showPublish, closedRegistration } = this.props;
     return (
       <div className='navigation-links'>
-        {showPublish && <NavLink
-          className='nav-bar-link link--nav'
-          activeClassName='link--nav-active'
-          to='/'
-          exact
-        >
-          Publish
-        </NavLink>}
+        {/*{showPublish && <NavLink*/}
+        {/*  className='nav-bar-link link--nav'*/}
+        {/*  activeClassName='link--nav-active'*/}
+        {/*  to='/'*/}
+        {/*  exact*/}
+        {/*>*/}
+        {/*  Publish*/}
+        {/*</NavLink>}*/}
         <NavLink
           className='nav-bar-link link--nav'
           activeClassName='link--nav-active'
@@ -48,24 +48,24 @@ class NavigationLinks extends React.Component {
         >
           About
         </NavLink>
-        { channelName ? (
-          <NavBarChannelOptionsDropdown
-            channelName={this.props.channelName}
-            handleSelection={this.handleSelection}
-            defaultSelection={this.props.channelName}
-            VIEW={VIEW}
-            LOGOUT={LOGOUT}
-          />
-        ) : !closedRegistration && (
-          <NavLink
-            id='nav-bar-login-link'
-            className='nav-bar-link link--nav'
-            activeClassName='link--nav-active'
-            to='/login'
-          >
-            Channel
-          </NavLink>
-        )}
+        {/*{ channelName ? (*/}
+        {/*  <NavBarChannelOptionsDropdown*/}
+        {/*    channelName={this.props.channelName}*/}
+        {/*    handleSelection={this.handleSelection}*/}
+        {/*    defaultSelection={this.props.channelName}*/}
+        {/*    VIEW={VIEW}*/}
+        {/*    LOGOUT={LOGOUT}*/}
+        {/*  />*/}
+        {/*) : !closedRegistration && (*/}
+        {/*  <NavLink*/}
+        {/*    id='nav-bar-login-link'*/}
+        {/*    className='nav-bar-link link--nav'*/}
+        {/*    activeClassName='link--nav-active'*/}
+        {/*    to='/login'*/}
+        {/*  >*/}
+        {/*    Channel*/}
+        {/*  </NavLink>*/}
+        {/*)}*/}
       </div>
     );
   }

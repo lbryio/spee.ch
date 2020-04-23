@@ -16,7 +16,7 @@ import EditPage from '@pages/EditPage';
 const App = () => {
   return (
     <Switch>
-      <Route exact path='/' component={HomePage} />
+      <Route exact path='/' component={AboutPage} />
       <Route exact path='/about' component={AboutPage} />
       <Route exact path='/tos' component={TosPage} />
       <Route exact path='/faq' component={FaqPage} />
