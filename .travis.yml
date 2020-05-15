@@ -1,4 +1,3 @@
-sudo: true
 dist: xenial
 #addons:
 #  apt:
@@ -9,7 +8,7 @@ dist: xenial
 #      - mysql-client
 language: node_js
 node_js:
-  - "lts/*"
+  - "lts/dubnium"
 cache:
   directories:
     - "node_modules"
