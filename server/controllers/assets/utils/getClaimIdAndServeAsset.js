@@ -64,18 +64,19 @@ const getClaimIdAndServeAsset = (
         claimDataValues.outpoint ||
         `${claimDataValues.transaction_hash_id}:${claimDataValues.vout}`;
       logger.debug('Outpoint:', outpoint);
-      return db.Blocked.isNotBlocked(outpoint).then(() => {
+      return db.Blocked.isNotBlocked(outpoint)
+        // .then(() => {
         // If content was found, is approved, and not blocked - log a view.
-        if (headers && headers['user-agent'] && /LBRY/.test(headers['user-agent']) === false) {
-          db.Views.create({
-            time: Date.now(),
-            isChannel: false,
-            claimId: claimDataValues.claim_id || claimDataValues.claimId,
-            publisherId: claimDataValues.publisher_id || claimDataValues.certificateId,
-            ip,
-          });
-        }
-      });
+        // if (headers && headers['user-agent'] && /LBRY/.test(headers['user-agent']) === false) {
+        //   db.Views.create({
+        //     time: Date.now(),
+        //     isChannel: false,
+        //     claimId: claimDataValues.claim_id || claimDataValues.claimId,
+        //     publisherId: claimDataValues.publisher_id || claimDataValues.certificateId,
+        //     ip,
+        //   });
+        // }
+       // });
     })
     .then(() => {
       return db.File.findOne({
