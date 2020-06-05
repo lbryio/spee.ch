@@ -82,6 +82,7 @@ export default (db, table, sequelize) => ({
     };
     const selectWhere = {
       ...whereClause,
+      claim_type: 1,
       publisher_id: channelClaimId,
     };
     return await table
