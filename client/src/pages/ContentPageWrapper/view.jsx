@@ -3,7 +3,7 @@ import ErrorPage from '@pages/ErrorPage';
 import ShowAssetLite from '@pages/ShowAssetLite';
 import ShowAssetDetails from '@pages/ShowAssetDetails';
 import ShowChannel from '@pages/ShowChannel';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Redirect } from 'react-router-dom';
 
 import {
   CHANNEL,
@@ -23,7 +23,14 @@ class ContentPageWrapper extends React.Component {
     }
   }
   render () {
-    const { error, requestType } = this.props;
+    const { error, requestType, match } = this.props;
+    const { params } = match;
+    const { claim, identifier } = params;
+    if (identifier) {
+      return <Redirect to={`https://lbry.tv/${identifier}/${claim}`} />
+    } else {
+      return <Redirect to={`https://lbry.tv/${claim}`} />
+    }
     if (error) {
       return (
         <ErrorPage error={error} />
