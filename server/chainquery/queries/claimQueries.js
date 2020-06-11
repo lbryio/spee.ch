@@ -104,6 +104,7 @@ export default (db, table, sequelize) => ({
       .findAll({
         where: {
           name: claimName,
+          claim_type: 1,
           publisher_id: channelClaimId,
           bid_state: { [sequelize.Op.or]: ['Controlling', 'Active', 'Accepted'] },
         },
@@ -215,6 +216,7 @@ export default (db, table, sequelize) => ({
       .findAll({
         where: {
           name: claimName,
+          claim_type: 1,
           publisher_id: channelId,
         },
       })
